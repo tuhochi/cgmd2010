@@ -1,0 +1,10 @@
+#Main page of the wiki
+
+= Introduction =
+
+This wiki is to be edited by anyone who solved a common problem with Android and OpenGL or has to share information with other team members.
+
+
+= Details =
+
+Add your content by creating a new page or editing an existing one as appropiriate.
