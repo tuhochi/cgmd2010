@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      android:versionCode="1"
+      android:versionName="1.0" package="at.ac.tuwien.cg.cgmd.bifth2010">
+    <application android:icon="@drawable/l00_icon" android:label="@string/l00_app_name">
+        <activity android:name=".framework.EntryPoint"
+                  android:label="@string/l00_app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".framework.MenuActivity"
+                  android:label="@string/l00_app_name">
+        </activity>
+        
+        <activity android:name=".framework.MapActivity"
+                  android:label="@string/l00_app_name">
+        </activity>
+        
+        <activity android:name=".level01.GLActivity"
+                  android:label="level01">
+        </activity>
+        <activity android:name=".level02.GlActivity"
+                  android:label="level02">
+        </activity>
+
+    </application>
+    <uses-sdk android:minSdkVersion="4" />
+
+</manifest> 

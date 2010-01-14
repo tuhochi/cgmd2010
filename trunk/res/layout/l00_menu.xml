@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" android:orientation="vertical">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_TextViewMenu" android:text="Menu Activity"></TextView>
+
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Start Game" android:id="@+id/l00_TextViewStart"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonStart"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Help" android:id="@+id/l00_TextViewHelp"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonHelp"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Credits" android:id="@+id/l00_TextViewCredits"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonCredits"></ImageButton>
+</LinearLayout>
