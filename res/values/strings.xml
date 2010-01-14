@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="l00_hello">EntryPoint Activity</string>
+    <string name="l00_app_name">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
+    
+    <string name="l01_hello">Level01 Hello World </string>
+    <string name="l02_hello">Level02 Hello World </string>
+    
+</resources>

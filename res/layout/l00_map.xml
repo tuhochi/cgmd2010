@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical" android:id="@+id/l00_LinearLayout" android:layout_height="fill_parent" android:layout_width="fill_parent">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Map Activity" android:id="@+id/l00_TextViewStatus"></TextView>
+
+<!-- TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 1" android:id="@+id/l00_Level1"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel01"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 2" android:id="@+id/l00_Level2"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel02"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 3" android:id="@+id/l00_Level3"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel03"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 4" android:id="@+id/l00_Level4"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel04"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 5" android:id="@+id/l00_Level5"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ImageButtonLevel5" android:minWidth="20pt"></ImageButton-->
+
+
+<Button android:text="Button" android:id="@+id/l00_Button01" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+
+
+</LinearLayout>
