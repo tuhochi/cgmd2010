@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-use this file to describe the used resources that are licensed under CC
-fields:
- type: [texture, sound, 3D model, photo, music]
- name: a name for the resource provided by the author
- author: the name of the author
- url: a url to the resource
- usage: indicate how and where it was used
- license: the used license 
- acknowledgement: the text that the author requires to be printed
- -->
+	<!--
+		use this file to describe the used resources that are licensed under CC. 
+		Fields: 
+		* type: [texture, sound, 3D model, photo, music] 
+		* name: a name for the resource provided by the author 
+		* author: the name of the author
+		* url: a url to the resource usage: indicate how and where it was used
+		* license: the used license 
+		* acknowledgement: the text that the author requires to be printed
+	-->
 
-<credit 
-type = "texture"
-name = "vintage grunge textures"
-author = "princess-of-shadows"
-url = "http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-usage = "map texture"  
-license = "CC"
-/>
+<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
+	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
+	usage="map texture" license="CC" />
+
+<svg version="1.2" baseProfile="tiny" id="Layer_1"
+	xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	x="0px" y="0px" width="360.711px" height="177.389px" viewBox="0 0 360.711 177.389"
+	xml:space="preserve">
+<polyline fill="none" stroke="#000000"
+	points="15.448,45.071 60.02,0.5 122.876,0.5 100.02,83.357 30.305,83.357 0.305,60.214 " />
+<path fill="none" stroke="#000000"
+	d="M258.305,90.214c0,0-9.715-27.428,12.571-38.286s56.572-5.714,62.286,6.286
+	s38.856,42.856,9.143,61.714s-83.429-4.571-98.857-4.571s-29.714-55.429-38.285-31.429s-55.428,44-28.571,55.429
+	s85.715,58.286,104.571,26.857s46.859-4.478,39.429-21.715s70.953-23.902,25.19-0.522" />
+</svg>
