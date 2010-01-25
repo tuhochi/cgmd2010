@@ -5,5 +5,10 @@
     
     <string name="l01_hello">Level01 Hello World </string>
     <string name="l02_hello">Level02 Hello World </string>
+    <string name="l03_hello">Level03 Hello World </string>
+    <string name="l04_hello">Level04 Hello World </string>
+    <string name="l05_hello">Level05 Hello World </string>
+    <string name="l06_hello">Level06 Hello World </string>
+    <string name="l07_hello">Level07 Hello World </string>
     
 </resources>

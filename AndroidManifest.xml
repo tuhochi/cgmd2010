@@ -16,7 +16,7 @@
         </activity>
         
         <activity android:name=".framework.MapActivity"
-                  android:label="@string/l00_app_name">
+                  android:label="@string/l00_app_name" android:screenOrientation="landscape">
         </activity>
         
         <activity android:name=".level01.GLActivity"
@@ -25,6 +25,22 @@
         <activity android:name=".level02.GlActivity"
                   android:label="level02">
         </activity>
+        <activity android:name=".level03.GlActivity"
+                  android:label="level03">
+        </activity>
+        <activity android:name=".level04.GlActivity"
+                  android:label="level04">
+        </activity>
+        <activity android:name=".level05.GlActivity"
+                  android:label="level05">
+        </activity>
+        <activity android:name=".level06.GlActivity"
+                  android:label="level06">
+        </activity>
+        <activity android:name=".level07.GlActivity"
+                  android:label="level07">
+        </activity>
+        
 
     </application>
     <uses-sdk android:minSdkVersion="4" />
