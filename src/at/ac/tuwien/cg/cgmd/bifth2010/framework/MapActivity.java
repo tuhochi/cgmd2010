@@ -38,7 +38,7 @@ public class MapActivity extends Activity {
 	private ImageButton mPlayer = null;
 	
 	
-    @Override
+    
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
@@ -131,7 +131,9 @@ public class MapActivity extends Activity {
 			int iId = v.getId();
 			switch(iId) {
 			case R.id.l00_ImageButtonLevel00:
-				//don't do anything
+				Intent levelIntent = new Intent();
+				levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.framework.GlTestActivity.class.getName());
+				startActivityForResult(levelIntent, 0);
 				break;
 				
 			/*case R.id.l00_ImageButtonLevel01:

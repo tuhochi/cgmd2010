@@ -8,16 +8,11 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import at.ac.tuwien.cg.cgmd.bifth2010.CommonFunctions;
 
 public class Rectangle {
-	// vertices
-	private float[] mVertices = new float[12];
-	// indices
-	private short[] mIndices = { 0, 1, 2, 0, 2, 3 };
 	// texture coordinates
-	private float[] mTextureCoordinates;	
-	// vertex buffer
 	private FloatBuffer mVertexBuffer;
 	// index buffer
 	private ShortBuffer mIndexBuffer;
@@ -25,41 +20,49 @@ public class Rectangle {
 	private FloatBuffer mTextureCoordinateBuffer;
 	
 	private int mTextureId = -1;
+	private float mWidth = 0;
+	private float mHeight = 0;
 
 
 
 	public Rectangle(float fWidth, float fHeight)
 	{
+		mWidth = fWidth;
+		mHeight = fHeight;
+		float[] vertices = new float[12];
 		//bottom left
-		mVertices[0] = fWidth * -0.5f;
-		mVertices[1] = fHeight * -0.5f;
-		mVertices[2] = 0.f;
+		vertices[0] = fWidth * -0.5f;
+		vertices[1] = fHeight * -0.5f;
+		vertices[2] = 0.f;
 		//bottom right
-		mVertices[3] = fWidth * 0.5f;
-		mVertices[4] = fHeight * -0.5f;
-		mVertices[5] = 0.f;
+		vertices[3] = fWidth * 0.5f;
+		vertices[4] = fHeight * -0.5f;
+		vertices[5] = 0.f;
 		//top right
-		mVertices[6] = fWidth * 0.5f;
-		mVertices[7] = fHeight * 0.5f;
-		mVertices[8] = 0.f;
+		vertices[6] = fWidth * 0.5f;
+		vertices[7] = fHeight * 0.5f;
+		vertices[8] = 0.f;
 		//top left
-		mVertices[9] = fWidth * -0.5f;
-		mVertices[10]= fHeight * 0.5f;
-		mVertices[11]= 0.f;
+		vertices[9] = fWidth * -0.5f;
+		vertices[10]= fHeight * 0.5f;
+		vertices[11]= 0.f;
 		
 		
 		// float is 4 bytes
-		ByteBuffer vbb = ByteBuffer.allocateDirect(mVertices.length * 4);
+		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
 		mVertexBuffer = vbb.asFloatBuffer();
-		mVertexBuffer.put(mVertices);
+		mVertexBuffer.put(vertices);
 		mVertexBuffer.position(0);
 
+		// indices
+		short[] indices = { 0, 1, 2, 0, 2, 3 };
+
 		// short is 2 bytes
-		ByteBuffer ibb = ByteBuffer.allocateDirect(mIndices.length * 2);
+		ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * 2);
 		ibb.order(ByteOrder.nativeOrder());
 		mIndexBuffer = ibb.asShortBuffer();
-		mIndexBuffer.put(mIndices);
+		mIndexBuffer.put(indices);
 		mIndexBuffer.position(0);
 	};
 
@@ -96,7 +99,7 @@ public class Rectangle {
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureCoordinateBuffer);
 		
 		//call the draw method
-		gl.glDrawElements(GL10.GL_TRIANGLES, mIndices.length, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
 
 		//disable the buffer
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -107,27 +110,50 @@ public class Rectangle {
 	
 	public void setTexture(GL10 gl, Resources cResources, int iId) {
 		mTextureId = CommonFunctions.loadTexture(gl, cResources, iId);
-		
-		mTextureCoordinates = new float[8];
-		//bottom left
-		mTextureCoordinates[0] = 0.f;
-		mTextureCoordinates[1] = 0.f;
-		//bottom right
-		mTextureCoordinates[2] = 1.f;
-		mTextureCoordinates[3] = 0.f;
-		//top right
-		mTextureCoordinates[4] = 1.f;
-		mTextureCoordinates[5] = 1.f;
-		//top left
-		mTextureCoordinates[6] = 0.f;
-		mTextureCoordinates[7] = 1.f;
-		
-		ByteBuffer tcbb = ByteBuffer.allocateDirect(mTextureCoordinates.length * 4);
-		tcbb.order(ByteOrder.nativeOrder());
-		mTextureCoordinateBuffer = tcbb.asFloatBuffer();
-		mTextureCoordinateBuffer.put(mTextureCoordinates);
-		mTextureCoordinateBuffer.position(0);
-		
+		if(mTextureId>=0) {
+			initTextureCoordinateBuffer();
+		}
+	}
+	
+	public void setTexture(GL10 gl, Bitmap bm) {
+		mTextureId = CommonFunctions.loadTexture(gl, bm);
+		if(mTextureId>=0) {
+			initTextureCoordinateBuffer();
+		}
 	}
 
+	
+	private void initTextureCoordinateBuffer() {
+		float[] textureCoordinates = new float[8];
+		//flipping the y-coordinate here
+		//bottom left
+		textureCoordinates[0] = 0.f;
+		textureCoordinates[1] = 1.f;
+		//bottom right
+		textureCoordinates[2] = 1.f;
+		textureCoordinates[3] = 1.f;
+		//top right
+		textureCoordinates[4] = 1.f;
+		textureCoordinates[5] = 0.f;
+		//top left
+		textureCoordinates[6] = 0.f;
+		textureCoordinates[7] = 0.f;
+		
+		ByteBuffer tcbb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
+		tcbb.order(ByteOrder.nativeOrder());
+		mTextureCoordinateBuffer = tcbb.asFloatBuffer();
+		mTextureCoordinateBuffer.put(textureCoordinates);
+		mTextureCoordinateBuffer.position(0);
+	}
+
+
+
+	public float getHeight() {
+		
+		return 0;
+	}
+
+
+
+	
 }

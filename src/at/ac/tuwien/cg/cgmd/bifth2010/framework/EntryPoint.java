@@ -26,22 +26,24 @@ public class EntryPoint extends Activity {
         setContentView(R.layout.l00_main);
         mTextView = (TextView) findViewById(R.id.l00_TextViewEntry);
         
+        
         //TODO: showing the splash screen
         //TODO: starting the service
         //TODO: starting the menu activity
         Intent intentMenu = new Intent();
         //intentMenu.setClassName(Constants.PACKAGE_NAME, MenuActivity.class.getName());
-        intentMenu.setClassName(Constants.PACKAGE_NAME, MapActivity.class.getName());
+        intentMenu.setClassName(Constants.PACKAGE_NAME, AboutActivity.class.getName());
+        //intentMenu.setClassName(Constants.PACKAGE_NAME, MapActivity.class.getName());
 		startActivity(intentMenu);
     }
     
     @Override
     protected void onRestart() {
-    	super.onResume();
+    	super.onRestart();
     	
     	//TODO: stopping the service
     	//TODO: show exit screen
     	Toast.makeText(this, "EntryPointActivity restarted -> we will finish", Toast.LENGTH_LONG).show();
-    	finish();
+    	//finish();
     }
 }
