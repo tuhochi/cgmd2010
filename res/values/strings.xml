@@ -11,4 +11,6 @@
     <string name="l06_hello">Level06 Hello World </string>
     <string name="l07_hello">Level07 Hello World </string>
     
+<string name="nameofthegame">The Big Incredible and Funny Treasure Hunt</string>
+<string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string>
 </resources>

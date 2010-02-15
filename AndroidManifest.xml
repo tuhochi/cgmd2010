@@ -15,6 +15,15 @@
                   android:label="@string/l00_app_name">
         </activity>
         
+        <activity android:name=".framework.CreditsActivity"
+                  android:label="@string/l00_app_name">
+        </activity>
+        
+        
+        <activity android:name=".framework.AboutActivity"
+                  android:label="@string/l00_app_name" android:screenOrientation="sensor" android:configChanges="keyboard|keyboardHidden|orientation">
+        </activity>
+        
         <activity android:name=".framework.MapActivity"
                   android:label="@string/l00_app_name" android:screenOrientation="landscape">
         </activity>
@@ -42,7 +51,8 @@
         </activity>
         
 
-    </application>
+    <activity android:name=".framework.GlTestActivity"></activity>
+</application>
     <uses-sdk android:minSdkVersion="4" />
 
 </manifest> 

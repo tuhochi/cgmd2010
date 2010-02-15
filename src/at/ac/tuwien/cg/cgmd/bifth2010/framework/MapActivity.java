@@ -14,7 +14,9 @@ import android.view.View.OnClickListener;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.Path.PathPoint;
@@ -35,7 +37,8 @@ public class MapActivity extends Activity {
 	//private String mDebugText;
 	private Path mPath = new Path();
 	private float mProgress = 0;
-	private ImageButton mPlayer = null;
+	private ImageView mPlayer = null;
+	private RelativePositionLayout mLayout = null;
 	
 	
     
@@ -54,10 +57,10 @@ public class MapActivity extends Activity {
         FrameLayout fl = (FrameLayout) findViewById(R.id.l00_FrameLayout);
         
         AbsoluteLayout absoluteLayout = (AbsoluteLayout) findViewById(R.id.l00_AbsoluteLayout);
-        RelativePositionLayout relativePositionLayout = new RelativePositionLayout(this);
+        mLayout = new RelativePositionLayout(this);
   
-        relativePositionLayout.setBackgroundResource(R.drawable.l00_map_landscape);
-        Drawable d = relativePositionLayout.getBackground();;
+        mLayout.setBackgroundResource(R.drawable.l00_map_landscape);
+        Drawable d = mLayout.getBackground();;
         int iSize = absoluteLayout.getChildCount();
 
         // we convert the layouting coordinates into relative coordinates and exchange the absolute view with a relativepositioning view 
@@ -75,14 +78,17 @@ public class MapActivity extends Activity {
         	absoluteLayout.removeView(v);
         	lp.x = (int) fX;
         	lp.y = (int) fY;
-        	relativePositionLayout.addView(v);        	
+        	if(! ( (v.getId()==R.id.l00_ImageButtonWayPoint01) || (v.getId()==R.id.l00_ImageButtonWayPoint02) || (v.getId()==R.id.l00_ImageButtonWayPoint03) || (v.getId()==R.id.l00_ImageButtonWayPoint04) ) ) {
+        		mLayout.addView(v);
+        	}
         }
         Log.d(CLASS_TAG, s);
         
         fl.removeView(absoluteLayout);
-        fl.addView(relativePositionLayout);
+        fl.addView(mLayout);
         
-        mPlayer = (ImageButton) findViewById(R.id.l00_ImageButtonPlayer);
+        
+        mPlayer = (ImageView) findViewById(R.id.l00_ImageButtonPlayer);
         
         ImageButton l00 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel00);
         ImageButton l01 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel01);
@@ -92,6 +98,8 @@ public class MapActivity extends Activity {
         ImageButton l05 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel05);
         ImageButton l06 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel06);
         ImageButton l07 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel07);
+        
+        mLayout.findViewById(R.id.l00_ImageButtonLevel01).setBackgroundResource(R.drawable.l00_coin64);
         
         l00.setOnClickListener(mLevelClickListener);
         l01.setOnClickListener(mLevelClickListener);
@@ -109,6 +117,25 @@ public class MapActivity extends Activity {
     private Handler mUiUpdateHandler = new Handler(){
     	
     	public void handleMessage(android.os.Message msg) {
+    		if(msg.what==2) {
+    			mLayout.findViewById(R.id.l00_ImageButtonLevel02).setBackgroundResource(R.drawable.l00_coin64);
+    		}
+    		else if(msg.what==3) {
+    			mLayout.findViewById(R.id.l00_ImageButtonLevel03).setBackgroundResource(R.drawable.l00_coin64);
+    		}
+    		else if(msg.what==4) {
+    			mLayout.findViewById(R.id.l00_ImageButtonLevel04).setBackgroundResource(R.drawable.l00_coin64);
+    		}
+    		else if(msg.what==5) {
+    			mLayout.findViewById(R.id.l00_ImageButtonLevel05).setBackgroundResource(R.drawable.l00_coin64);
+    		}
+    		else if(msg.what==6) {
+    			mLayout.findViewById(R.id.l00_ImageButtonLevel06).setBackgroundResource(R.drawable.l00_coin64);
+    		} 
+    		else if(msg.what==7) {
+    			mLayout.findViewById(R.id.l00_ImageButtonLevel07).setBackgroundResource(R.drawable.l00_coin64);
+    		}
+    		
     		PathPoint p = mPath.interpolate(mProgress);
     		AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) mPlayer.getLayoutParams();
         	lp.x = (int) p.mX;
@@ -123,71 +150,73 @@ public class MapActivity extends Activity {
 
     	@Override
 		public void onClick(View v) {
-    		
-    		int iLastLevel = (int)mProgress;
-    		mProgress += ((float)10)/100;
+    		int iMaxAllowedLevel = (int)mProgress+1;
     		mUiUpdateHandler.sendEmptyMessage(0);
     		
 			int iId = v.getId();
+			Intent levelIntent = new Intent();
+			
 			switch(iId) {
 			case R.id.l00_ImageButtonLevel00:
-				Intent levelIntent = new Intent();
 				levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.framework.GlTestActivity.class.getName());
 				startActivityForResult(levelIntent, 0);
 				break;
 				
-			/*case R.id.l00_ImageButtonLevel01:
-				if(mProgress>=0) {
-					Intent levelIntent = new Intent();
+			case R.id.l00_ImageButtonLevel01:
+				if(iMaxAllowedLevel>=1) {
 					levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level01.GLActivity.class.getName());
 					startActivityForResult(levelIntent, 1);
-				}
+				} 
 				break;
 			case R.id.l00_ImageButtonLevel02:
-				if(mProgress>=0) {
-					Intent levelIntent = new Intent();
+				if(iMaxAllowedLevel>=2) {
 					levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level02.GlActivity.class.getName());
 					startActivityForResult(levelIntent, 2);
+				} else {
+					Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 				}
 				break;
 			case R.id.l00_ImageButtonLevel03:
-				if(mProgress>=0) {
-					Intent levelIntent = new Intent();
+				if(iMaxAllowedLevel>=3) {
 					levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level03.GlActivity.class.getName());
 					startActivityForResult(levelIntent, 3);
+				} else {
+					Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 				}
 				break;
 			case R.id.l00_ImageButtonLevel04:
-				if(mProgress>=0) {
-					Intent levelIntent = new Intent();
+				if(iMaxAllowedLevel>=4) {
 					levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level04.GlActivity.class.getName());
 					startActivityForResult(levelIntent, 4);
+				} else {
+					Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 				}
 				break;
 			case R.id.l00_ImageButtonLevel05:
-				if(mProgress>=0) {
-					Intent levelIntent = new Intent();
+				if(iMaxAllowedLevel>=5) {
 					levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level05.GlActivity.class.getName());
 					startActivityForResult(levelIntent, 5);
+				} else {
+					Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 				}
 				break;
 			case R.id.l00_ImageButtonLevel06:
-				if(mProgress>=0) {
-					Intent levelIntent = new Intent();
+				if(iMaxAllowedLevel>=6) {
 					levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level06.GlActivity.class.getName());
 					startActivityForResult(levelIntent, 6);
+				} else {
+					Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 				}
 				break;
 			case R.id.l00_ImageButtonLevel07:
-				if(mProgress>=0) {
-					Intent levelIntent = new Intent();
+				if(iMaxAllowedLevel>=7) {
 					levelIntent.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level07.GlActivity.class.getName());
 					startActivityForResult(levelIntent, 7);
+				} else {
+					Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 				}
 				break;
-*/
 			};
-			
 		}
     };
     
@@ -209,22 +238,9 @@ public class MapActivity extends Activity {
     			//TODO
     			//finish game    			
     		} else if (iNewLevel>iLastLevel) {
-    			//TODO
-    			//add new level
+    			
     		}
-    		
-    		
     	}
     }
     
-    private OnClickListener mLevelClickListener02 = new OnClickListener(){
-
-		@Override
-		public void onClick(View v) {
-			Intent intentMap = new Intent();
-	        intentMap.setClassName(Constants.PACKAGE_NAME, at.ac.tuwien.cg.cgmd.bifth2010.level02.GlActivity.class.getName());
-			startActivity(intentMap);
-		}
-    	
-    };
 }
