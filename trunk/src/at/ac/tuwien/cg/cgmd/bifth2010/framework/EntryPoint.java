@@ -32,8 +32,9 @@ public class EntryPoint extends Activity {
         //TODO: starting the menu activity
         Intent intentMenu = new Intent();
         //intentMenu.setClassName(Constants.PACKAGE_NAME, MenuActivity.class.getName());
-        intentMenu.setClassName(Constants.PACKAGE_NAME, AboutActivity.class.getName());
-        //intentMenu.setClassName(Constants.PACKAGE_NAME, MapActivity.class.getName());
+        //intentMenu.setClassName(Constants.PACKAGE_NAME, AboutActivity.class.getName());
+        //intentMenu.setClassName(Constants.PACKAGE_NAME, TextureTest.class.getName());
+        intentMenu.setClassName(Constants.PACKAGE_NAME, MapActivity.class.getName());
 		startActivity(intentMenu);
     }
     

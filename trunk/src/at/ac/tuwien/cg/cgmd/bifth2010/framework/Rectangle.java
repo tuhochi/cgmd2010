@@ -150,7 +150,7 @@ public class Rectangle {
 
 	public float getHeight() {
 		
-		return 0;
+		return mHeight;
 	}
 
 

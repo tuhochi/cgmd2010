@@ -20,6 +20,7 @@ import org.xml.sax.helpers.ParserFactory;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
@@ -30,6 +31,9 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.GLWrapper;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.animation.Transformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -46,87 +50,11 @@ public class AboutActivity extends Activity {
 	
 	ArrayList<Label3D> mLabels = new ArrayList<Label3D>(); 
 
-	private class Credit {
-		public String mType = null; 
-		public String mName = null; 
-		public String mAuthor = null;
-		public String mUrl = null;
-		public String mLicense = null; 
-		public String mAcknowledgement = null;
-		public String mUsage = null;
-	};
-	
-	private class CreditsParser extends DefaultHandler {
-		private final String CREDITSPARSER = "CreditsParser";
-		private String mText = "";
-		private Credit mCredit = null;
-		private ArrayList<Credit> mCredits = new ArrayList<Credit>(); 
 
-		public void startElement(String uri, String localName, String qName, Attributes attributes) {
-			if(localName.equalsIgnoreCase("credit")) {
-				mCredit = new Credit();
-				mCredit.mType = attributes.getValue("type");
-				mCredit.mAcknowledgement = attributes.getValue("acknowledgement");
-				mCredit.mAuthor = attributes.getValue("author");
-				mCredit.mLicense = attributes.getValue("license");
-				mCredit.mName = attributes.getValue("name");
-				mCredit.mUrl = attributes.getValue("url");
-				mCredit.mUsage  = attributes.getValue("usage");
-				
-			} else {
-				Log.e(CREDITSPARSER, "unknown opening tag in credits file: "+localName);
-			}
-			
-		}
-		
-		public void endElement(String uri, String localName, String qName) {
-			if(localName.equalsIgnoreCase("credit")) {
-				if(mCredit!=null){
-					mCredits.add(mCredit);
-				}
-				mCredit = null;
-			}
-				
-		}
-		
-		public void characters(char[] ch, int start, int length) {
-			this.mText  += new String(ch, start, length);
-		}
-		
-		public ArrayList<Credit> getArrayList() {
-			return mCredits;
-		}
-		
 
-	};
-	
-	CreditsParser mCreditsParser = new CreditsParser(); 
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		AssetManager a = getAssets();
-		try {
-			InputStream is = a.open("credits.xml");
-			SAXParserFactory spf = null;
-			SAXParser sp = null;
-			spf = SAXParserFactory.newInstance();
-			if (spf != null) {
-				sp = spf.newSAXParser();
-
-				sp.parse(is, mCreditsParser);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		mGLSurfaceView = new GLSurfaceView(this);
 
@@ -188,6 +116,16 @@ public class AboutActivity extends Activity {
 		super.onConfigurationChanged(newConfig);
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.l00_about, menu);
+	    MenuItem menuItemCredits = menu.findItem(R.id.l00_credits);
+	    menuItemCredits.setIntent(new Intent(this, CreditsActivity.class));
+	    
+	    return true;
+	}
+	
 	private class MyRenderer implements GLSurfaceView.Renderer {
 
 		float mAngle=0;
@@ -227,8 +165,10 @@ public class AboutActivity extends Activity {
 			
 			gl.glColor4f(1,1,1,1);
 			for(Label3D label:mLabels) {
+				float fH = label.getHeight()*0.5f;
+				gl.glTranslatef(0, -fH, 0);
 				label.draw(gl);
-				gl.glTranslatef(0, label.getHeight(), 0);
+				gl.glTranslatef(0, -fH, 0);
 			}
 			
 			mAngle += 1.2f;
@@ -248,7 +188,11 @@ public class AboutActivity extends Activity {
 		
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+			//the glEnable(GL10.GL_TEXTURE_2D) call here fixes an android bug (textures are not correctly displayed after resume)
+			//do not remove it!
+			gl.glEnable(GL10.GL_TEXTURE_2D);
+			
+			
 			gl.glViewport(0, 0, width, height);
 			float ratio = (float) width / height;
 			gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -277,37 +221,31 @@ public class AboutActivity extends Activity {
 			p.setTextSize(24);
 			p.setTextAlign(Align.CENTER);
 			
-			String[] s1 = new String[6];
+			String[] s1 = new String[13];
 			s1[0]= getResources().getString(R.string.nameofthegame);
 			s1[1]="was created by students at";
 			s1[2]="Vienna University of Technology.";
 			s1[3]="";
-			s1[4]="";
-			s1[5]="Credits:";
+			s1[4]="TODO TODO TODO TODO TODO TODO";
+			s1[5]="TODO TODO TODO TODO TODO TODO";
+			s1[6]="TODO TODO TODO TODO TODO TODO";
+			s1[7]="TODO TODO TODO TODO TODO TODO";
+			s1[8]="TODO TODO TODO TODO TODO TODO";
+			s1[9]="TODO TODO TODO TODO TODO TODO";
+			s1[10]="TODO TODO TODO TODO TODO TODO";
+			s1[11]="";
+			s1[12]="For Credits press Menu!";
 			Label3D label = new Label3D(3.5f);
 			label.setText(gl, p, s1, 6);
 			mLabels.add(label);
-			
 			 
-			ArrayList<Credit> list = mCreditsParser.getArrayList();
-			String[] authors = new String[list.size()];
-			int i=0;
-			for(Credit c:list){
-				authors[i] = c.mAuthor;
-				i++;
-			}
-			Label3D label2 = new Label3D(3.5f);
-			label2.setText(gl, p, authors, 6);
-			mLabels.add(label2);	
-			
-			
-			
 			gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
 			gl.glClearColor(0,0,0,1);
 			gl.glEnable(GL10.GL_CULL_FACE);
 			gl.glShadeModel(GL10.GL_SMOOTH);
 			gl.glEnable(GL10.GL_DEPTH_TEST);
+			gl.glEnable(GL10.GL_TEXTURE_2D);
 
 			float height = 0;
 			for(Label3D l:mLabels) {
@@ -315,7 +253,6 @@ public class AboutActivity extends Activity {
 			}
 			
 			mBannerHeight = height;
-			
 
 		}
 
