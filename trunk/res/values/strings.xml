@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="l00_hello">EntryPoint Activity</string>
-    <string name="l00_app_name">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
     
-    <string name="l01_hello">Level01 Hello World </string>
+    <string name="l00_nameofthegame_full">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
+    
+    <string name="l00_nameofthegame_middle">The Big Incredible and Funny Treasure Hunt</string><string name="l00_nameofthegame_short">BIFTH</string><string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string><string name="l01_hello">Level01 Hello World </string>
     <string name="l02_hello">Level02 Hello World </string>
     <string name="l03_hello">Level03 Hello World </string>
     <string name="l04_hello">Level04 Hello World </string>
@@ -11,6 +11,7 @@
     <string name="l06_hello">Level06 Hello World </string>
     <string name="l07_hello">Level07 Hello World </string>
     
-<string name="nameofthegame">The Big Incredible and Funny Treasure Hunt</string>
-<string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string>
+
+
+
 </resources>

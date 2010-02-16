@@ -222,7 +222,7 @@ public class AboutActivity extends Activity {
 			p.setTextAlign(Align.CENTER);
 			
 			String[] s1 = new String[13];
-			s1[0]= getResources().getString(R.string.nameofthegame);
+			s1[0]= getResources().getString(R.string.l00_nameofthegame_middle);
 			s1[1]="was created by students at";
 			s1[2]="Vienna University of Technology.";
 			s1[3]="";

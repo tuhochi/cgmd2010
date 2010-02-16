@@ -112,6 +112,8 @@ public class CreditsActivity extends Activity {
 		ArrayList<Credit> list = mCreditsParser.getCreditsList();
 
 		HashSet<String> authors = new HashSet<String>();
+		
+		ArrayList<String> artworks = new ArrayList<String>();
 		ArrayList<String> textures = new ArrayList<String>();
 		ArrayList<String> sounds = new ArrayList<String>();
 		ArrayList<String> models = new ArrayList<String>();
@@ -136,10 +138,10 @@ public class CreditsActivity extends Activity {
 						text+="(\""+ credit.mAcknowledgement + "\").";
 					}
 					textures.add(text);
-				} else if(credit.mType.equalsIgnoreCase("sound")) {
+				} else if(credit.mType.equalsIgnoreCase("artwork")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the texture(s) \""+ credit.mName + "\". ";
+						text+=" shared the artwork(s) \""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
 						text+="Distributed under the license \""+ credit.mLicense + "\". ";
@@ -147,7 +149,19 @@ public class CreditsActivity extends Activity {
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
 					}
-					textures.add(text);
+					artworks.add(text);
+				} else if(credit.mType.equalsIgnoreCase("sound")) {
+					String text = credit.mAuthor;
+					if(credit.mName!=null) {
+						text+=" shared the sound(s) \""+ credit.mName + "\". ";
+					} 
+					if(credit.mLicense!=null) {
+						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+					}
+					if(credit.mAcknowledgement!=null) {
+						text+="(\""+ credit.mAcknowledgement + "\").";
+					}
+					sounds.add(text);
 				} else if(credit.mType.equalsIgnoreCase("music")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
@@ -248,6 +262,13 @@ public class CreditsActivity extends Activity {
 			alltext += "\nTextures:\n\n";
 			for(String t0 : textures) {
 				alltext+=t0+"\n";
+			}
+		}
+
+		if(!artworks.isEmpty()){
+			alltext += "\nArtworks:\n\n";
+			for(String a1 : artworks) {
+				alltext+=a1+"\n";
 			}
 		}
 
