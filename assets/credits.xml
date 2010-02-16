@@ -2,7 +2,7 @@
 	<!--
 		use this file to describe the used resources (licensed under CC, special permission, etc.). 
 		Fields: 
-		* type: [texture, sound, 3D model, photo, music, text] 
+		* type: [texture, sound, 3D model, photo, artwork, music, text] 
 		* name: the name of the resource (provided by the author) 
 		* author: the name of the author
 		* url: a url to the resource 
@@ -15,105 +15,6 @@
 	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
 	usage="map texture" license="CC" />
 
-	
-<credit type="texture" name="textures" author="shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
-	
-	
-<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
-	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
-	usage="map texture" license="CC" />
 	
 </credits>
 	

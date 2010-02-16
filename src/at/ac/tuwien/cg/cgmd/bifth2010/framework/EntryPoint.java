@@ -30,21 +30,16 @@ public class EntryPoint extends Activity {
         //TODO: showing the splash screen
         //TODO: starting the service
         //TODO: starting the menu activity
-        Intent intentMenu = new Intent();
-        //intentMenu.setClassName(Constants.PACKAGE_NAME, MenuActivity.class.getName());
-        //intentMenu.setClassName(Constants.PACKAGE_NAME, AboutActivity.class.getName());
-        //intentMenu.setClassName(Constants.PACKAGE_NAME, TextureTest.class.getName());
-        intentMenu.setClassName(Constants.PACKAGE_NAME, MapActivity.class.getName());
-		startActivity(intentMenu);
+        Intent intent = new Intent(this, MenuActivity.class);
+        //Intent intent = new Intent(this, AboutActivity.class);
+        //Intent intent = new Intent(this, TextureTest.class);
+        //Intent intent = new Intent(this, MapActivity.class);
+        //Intent intent = new Intent(this, HelpActivity.class);
+        //Intent intent = new Intent(this, CreditsActivity.class);
+        
+        startActivity(intent);
+		finish();
     }
     
-    @Override
-    protected void onRestart() {
-    	super.onRestart();
-    	
-    	//TODO: stopping the service
-    	//TODO: show exit screen
-    	Toast.makeText(this, "EntryPointActivity restarted -> we will finish", Toast.LENGTH_LONG).show();
-    	//finish();
-    }
+  
 }
