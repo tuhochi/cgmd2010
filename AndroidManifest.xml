@@ -22,7 +22,14 @@
         <activity android:name=".framework.HelpActivity"
                   android:label="@string/l00_nameofthegame_full">
         </activity>
+       
+        <activity android:name=".level00.HelpActivity"
+                  android:label="@string/l00_nameofthegame_full">
+        </activity>
         
+        <activity android:name=".level00.TestActivity"
+                  android:label="@string/l00_nameofthegame_full">
+        </activity>
         
         <activity android:name=".framework.AboutActivity"
                   android:label="@string/l00_nameofthegame_full" android:screenOrientation="sensor" android:configChanges="keyboard|keyboardHidden|orientation">
@@ -57,6 +64,6 @@
 
     <activity android:name=".framework.GlTestActivity"></activity>
 </application>
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="3"/>
 
 </manifest> 
