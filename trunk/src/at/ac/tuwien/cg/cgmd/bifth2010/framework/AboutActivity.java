@@ -95,12 +95,15 @@ public class AboutActivity extends Activity {
 		}
 
 	}
+	
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		if(mGLSurfaceView!=null)
 			mGLSurfaceView.onResume();
+		
+		// TODO play music if sound is allowed
 	}
 
 	@Override
@@ -108,6 +111,8 @@ public class AboutActivity extends Activity {
 		super.onPause();
 		if(mGLSurfaceView!=null)
 			mGLSurfaceView.onPause();
+		
+		// TODO Pause music if it's running
 	}
 	
 	@Override
