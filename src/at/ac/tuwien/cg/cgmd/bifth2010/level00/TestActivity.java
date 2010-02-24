@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
-public class TestActivity extends Activity {
+public class TestActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,4 +18,6 @@ public class TestActivity extends Activity {
 		setResult(Activity.RESULT_OK, data);
 		finish();
 	}
+	
+	
 }

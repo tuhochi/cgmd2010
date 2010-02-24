@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content" android:orientation="vertical"
+	android:layout_width="fill_parent" android:padding="5pt">
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Use this activity to debug your level"></TextView>
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/l00_TextViewHelp"
+		android:layout_marginTop="5pt" android:text="Debug Help Activity"></TextView>
+	<LinearLayout android:id="@+id/LinearLayout01"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugHelpActivity" android:hint="id"
+			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Start"
+			android:minWidth="30pt" android:id="@+id/l00_ButtonStartHelp"></Button>
+	</LinearLayout><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Debug Level Activity"></TextView><LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number" android:hint="id" android:maxWidth="15pt" android:minWidth="15pt" android:id="@+id/l00_EditViewDebugLevelActivity"></EditText>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Start" android:minWidth="30pt" android:id="@+id/l00_ButtonStartLevel"></Button><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Result: none" android:id="@+id/l00_TextViewLevelResult"></TextView>
+	</LinearLayout>
+
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Debug Levels For Map Activity"></TextView>
+	<LinearLayout android:id="@+id/LinearLayout02"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity01" android:hint="id"
+			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity02" android:hint="id"
+			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity03" android:hint="id"
+			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity04" android:hint="id"
+			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity05" android:hint="id"
+			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity06" android:hint="id"
+			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+	
+
+</LinearLayout>
+
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ButtonStartMenu" android:text="Start Menu Activity"></Button>
+</LinearLayout>

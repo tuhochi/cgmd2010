@@ -42,6 +42,7 @@ public class AboutActivity extends Activity {
 
 	private static final String CLASS_TAG = AboutActivity.class.getName();
 	private static final boolean FLAG_DEBUG_OPENGL = false;
+	protected static final String EXTRA_MUSIC_ON = "music";
 
 	private GLSurfaceView mGLSurfaceView=null;
 	

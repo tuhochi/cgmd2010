@@ -25,10 +25,20 @@
        
         <activity android:name=".level00.HelpActivity"
                   android:label="@string/l00_nameofthegame_full">
+                <intent-filter>
+                	<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level00.LAUNCH_HELP" />
+                	<category android:name="android.intent.category.DEFAULT" />
+            	</intent-filter>
+                  
         </activity>
         
         <activity android:name=".level00.TestActivity"
                   android:label="@string/l00_nameofthegame_full">
+                  
+                <intent-filter>
+                	<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level00.LAUNCH_LEVEL" />
+                	<category android:name="android.intent.category.DEFAULT" />
+            	</intent-filter>
         </activity>
         
         <activity android:name=".framework.AboutActivity"

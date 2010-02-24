@@ -1,21 +1,25 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.framework;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
-import android.media.SoundPool;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import at.ac.tuwien.cg.cgmd.bifth2010.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
@@ -25,31 +29,37 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class MenuActivity extends Activity {
     
+	
 	private static final String CLASS_TAG = MenuActivity.class.getSimpleName();
-	public static final String SHAREDPREFERENCES_FRAMEWORK_SETTINGS = "l00_settings";
+	
+	/**
+	 * the name of the preference file that stores global user settings 
+	 */
+	public static final String SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE = "l00_settings";
+
+	/**
+	 * global user setting of type boolean that determines wether sound and music is allowed 
+	 */
 	public static final String PREFERENCE_MUSIC = "music";
+
+	private static final String LOOP_URI = "android.resource://at.ac.tuwien.cg.cgmd.bifth2010/" + R.raw.l00_menu;
 	
-	SoundPool mSoundPool = null;
-	private int mSoundLoopId = -1;
 	
+	private MediaPlayer mAudioPlayer = null;
 	private CheckBox mCheckboxMusic = null; 
-	
     private OnCheckedChangeListener mSoundSettingChangedListener = new OnCheckedChangeListener(){
 
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 			//save application state
-			SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS, 0);
+			SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
 			boolean bMusic = settings.getBoolean(PREFERENCE_MUSIC, true);
 		    if(bMusic!=isChecked){
 		    	//the state actually changed by user interaction
-
 				SharedPreferences.Editor editor = settings.edit();
 			    editor.putBoolean(PREFERENCE_MUSIC, isChecked);
 			    editor.commit();
-
-			    
 		    	String m = "Music is ";
 		    	if(isChecked){
 		    		m+="on ";
@@ -58,25 +68,34 @@ public class MenuActivity extends Activity {
 		    	}
 		    	m+="now.";
 		    	Toast.makeText(getApplicationContext(), m, Toast.LENGTH_LONG).show();
-		    	if((isChecked)&&(mSoundLoopId>=0)&&(mSoundPool!=null)){
+		    	if((isChecked)&&(mAudioPlayer!=null)){
 		       		//play music if sound is allowed
-		       		mSoundPool.setLoop(mSoundLoopId, -1);
-		       		int iIsPlaying = mSoundPool.play(mSoundLoopId, 1, 1, 1, -1, 1);
-		       		Log.d(CLASS_TAG, "Is playing: "+iIsPlaying);
+		    		mAudioPlayer.start();
+		    				       		
 		       	}
-		    	if((!isChecked)&&(mSoundLoopId>=0)&&(mSoundPool!=null)){
-		       		//stop music if sound is allowed
-		       		mSoundPool.stop(mSoundLoopId);
+		    	if((!isChecked)&&(mAudioPlayer!=null)){
+		       		//stop music if sound is playing and not allowed
+		    		if(mAudioPlayer.isPlaying()){
+		    			mAudioPlayer.pause();
+		    		}
 		       	}
 				//TODO turn music off/on
 		    }
-
-			
 		}    	
     };
-
-
-
+    
+	private OnPreparedListener mSoundPreparedListener = new OnPreparedListener(){
+		@Override
+		public void onPrepared(MediaPlayer mp) {
+			mAudioPlayer.setLooping(true);
+			SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
+			boolean bMusic = settings.getBoolean(PREFERENCE_MUSIC, true);
+		    if(bMusic){
+		    	//play music if sound is allowed
+		    	mAudioPlayer.start();
+		    }
+		}
+    };
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,9 +114,20 @@ public class MenuActivity extends Activity {
         mCheckboxMusic = (CheckBox) findViewById(R.id.l00_CheckBoxSound);
         mCheckboxMusic.setOnCheckedChangeListener(mSoundSettingChangedListener );
         
-        mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-        mSoundLoopId  = mSoundPool.load(this, R.raw.l00_menu, 1);
-        
+        mAudioPlayer = MediaPlayer.create(this, R.raw.l00_menu);
+        mAudioPlayer.setOnPreparedListener(mSoundPreparedListener );
+        mAudioPlayer.setOnErrorListener(new OnErrorListener(){
+
+			@Override
+			public boolean onError(MediaPlayer mp, int what, int extra) {
+				//on any error we create a new media player
+				mAudioPlayer.release();
+				mAudioPlayer = MediaPlayer.create(MenuActivity.this, R.raw.l00_menu);
+		        mAudioPlayer.setOnPreparedListener(mSoundPreparedListener );
+		        mAudioPlayer.setOnErrorListener(this);
+				return true;
+			}
+        });
         
     }
     
@@ -105,13 +135,17 @@ public class MenuActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
+			SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
+			boolean bMusic = settings.getBoolean(PREFERENCE_MUSIC, true);
 			if(v.getId()== R.id.l00_ButtonNewGame){
 				Intent intentMap = new Intent(getApplicationContext(), MapActivity.class);
 				intentMap.putExtra(MapActivity.EXTRA_STARTNEW, true);
+				intentMap.putExtra(MapActivity.EXTRA_MUSIC_ON, bMusic);
 				startActivity(intentMap);
 			} else if(v.getId()== R.id.l00_ButtonContinueGame){
 				Intent intentMap = new Intent(getApplicationContext(), MapActivity.class);
 				intentMap.putExtra(MapActivity.EXTRA_STARTNEW, false);
+				intentMap.putExtra(MapActivity.EXTRA_MUSIC_ON, bMusic);
 				startActivity(intentMap);
 			}  else if(v.getId()== R.id.l00_ButtonCredits){
 				Intent intentCredits = new Intent(getApplicationContext(), CreditsActivity.class);
@@ -121,6 +155,7 @@ public class MenuActivity extends Activity {
 				startActivity(intentHelp);
 			}  else if(v.getId()== R.id.l00_ButtonAbout){
 				Intent intentAbout = new Intent(getApplicationContext(), AboutActivity.class);
+				intentAbout.putExtra(AboutActivity.EXTRA_MUSIC_ON, bMusic);
 				startActivity(intentAbout);
 			} 
 		}
@@ -131,24 +166,41 @@ public class MenuActivity extends Activity {
     @Override
 	protected void onResume() {
         //Restore preferences
-        SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS, 0);
+        SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
         boolean bMusic = settings.getBoolean(PREFERENCE_MUSIC, true);
+        //set user interface accordingly
        	mCheckboxMusic.setChecked(bMusic);
-       	if((bMusic)&&(mSoundLoopId>=0)&&(mSoundPool!=null)){
-       		//play music if sound is allowed
-       		mSoundPool.setLoop(mSoundLoopId, -1);
-       		mSoundPool.play(mSoundLoopId, 1, 1, 1, -1, 1);
+       	if(mAudioPlayer!=null){
+       		//prepare mediaplayer for audio replay
+       		mAudioPlayer.reset();
+       		Uri uri = Uri.parse(LOOP_URI);
+       		try {
+				mAudioPlayer.setDataSource(this, uri);
+				mAudioPlayer.prepareAsync();
+			} catch (IllegalArgumentException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			} catch (IOException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			}
        	}
-
-		
 		super.onResume();
 	}
 	
 	@Override
 	protected void onPause() {
 		//Stop music if it's running
-		if(mSoundPool!=null){
-			mSoundPool.stop(mSoundLoopId);
+		if(mAudioPlayer!=null){
+			if(mAudioPlayer.isPlaying()){
+				mAudioPlayer.pause();
+			}
 		}
 		super.onPause();
 	}
@@ -156,12 +208,45 @@ public class MenuActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		//Stop music if it's running
-		if(mSoundPool!=null){
-			mSoundPool.stop(mSoundLoopId);
-			mSoundPool.release();
-			mSoundPool=null;
+		if(mAudioPlayer!=null){
+			if(mAudioPlayer.isPlaying()){
+				mAudioPlayer.stop();
+			}
+			mAudioPlayer.release();
+			mAudioPlayer=null;
 		}
 		super.onDestroy();
 	}
+
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 0, 0, "Debugging On/Off");
+	    return true;
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		if(featureId==0){
+			SharedPreferences state = getSharedPreferences(EntryPoint.SHAREDPREFERENCES_FRAMEWORK_DEBUGSETTINGS, 0);
+			boolean bEnabled = state.getBoolean(EntryPoint.PREFERENCE_DEBUG_ENABLED, false);
+			SharedPreferences.Editor editor = state.edit();
+			bEnabled = !bEnabled;
+			editor.putBoolean(EntryPoint.PREFERENCE_DEBUG_ENABLED, bEnabled);
+			editor.commit();
+			String msg = "Debugging is now ";
+			if(bEnabled){
+				msg+="enabled!";
+			}else {
+				msg+="disabled!";
+			}
+			Toast.makeText(MenuActivity.this, msg, Toast.LENGTH_LONG).show();
+			if(bEnabled){
+				//this will bring us back to the entry point activity
+				finish();
+			}
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
+
 
 }
