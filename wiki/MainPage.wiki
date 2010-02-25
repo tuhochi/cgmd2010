@@ -4,6 +4,8 @@
 
 This wiki is to be edited by anyone who solved a common problem with Android and OpenGL or has to share information with other team members.
 
+= Links =
+You can find some useful links on the [Links links page].
 
 = Details =
 
