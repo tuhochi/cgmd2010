@@ -1,0 +1,21 @@
+Here you can find some useful links for the project. If you find some links, please add them to this page!
+
+= Links =
+
+== Android ==
+
+  * *[http://developer.android.com/guide/index.html Android Developer Guide]:* Recommended reading!
+  * *[http://developer.android.com/resources/samples/ApiDemos/index.html Sample Code]:* Especially the API Demos are very useful! You can also find the sample code in your Android installation directory (\platforms\android-X.X\samples).
+  * *[http://developer.android.com/videos/index.html Android Videos]*
+  * *[http://developer.android.com/guide/developing/tools/emulator.html Android Emulator:]* Including "Controlling the Emulator"
+  * *[http://code.google.com/intl/de-AT/events/io/2009/sessions/WritingRealTimeGamesAndroid.html Google I/O 2009 - Writing Real-Time Games for Android:]* Very good introduction in writing games on Android. Video and slides (PDF) are available!
+  * *[http://android-dls.com/wiki/index.php?title=Android_FAQ Android FAQ]*
+  * *[http://source.android.com/submit-patches/code-style-guide Android Code Style Rules]*
+  * *[http://openhandsetmagazine.com/2008/01/tips-how-to-install-apk-files-on-android-emulator/ How to install apk files on Android Emulator:]* If you want to try out some Android applications...
+
+== OpenGL ES ==
+  * *[http://www.khronos.org/opengles/ OpenGL ES Specification]*
+
+== SVN ==
+
+  * *[http://svnbook.red-bean.com/index.de.html SVN book]*
