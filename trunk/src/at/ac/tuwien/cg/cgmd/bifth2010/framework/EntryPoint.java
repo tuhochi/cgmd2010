@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,17 +24,19 @@ public class EntryPoint extends Activity {
 
 	private static final String PREFERENCE_LEVEL = "level_id";
 
-	private static final String PREFERENCE_LEVEL_01 = "level01_id";
+	public static final String PREFERENCE_LEVEL_01 = "level01_id";
 
-	private static final String PREFERENCE_LEVEL_02 = "level02_id";
+	public static final String PREFERENCE_LEVEL_02 = "level02_id";
 
-	private static final String PREFERENCE_LEVEL_03 = "level03_id";
+	public static final String PREFERENCE_LEVEL_03 = "level03_id";
 
-	private static final String PREFERENCE_LEVEL_04 = "level04_id";
+	public static final String PREFERENCE_LEVEL_04 = "level04_id";
 
-	private static final String PREFERENCE_LEVEL_05 = "level05_id";
+	public static final String PREFERENCE_LEVEL_05 = "level05_id";
 
-	private static final String PREFERENCE_LEVEL_06 = "level06_id";
+	public static final String PREFERENCE_LEVEL_06 = "level06_id";
+
+	private static final String  PREFERENCE_DEBUG_ALWAYSSTARTLEVEL = "alwaysstart";
 
 	public static final String SHAREDPREFERENCES_FRAMEWORK_DEBUGSETTINGS = "l00_debug_settings";
 
@@ -53,6 +57,13 @@ public class EntryPoint extends Activity {
 	EditText mEditTextLevelId04 = null;
 	EditText mEditTextLevelId05 = null;
 	EditText mEditTextLevelId06 = null;
+	CheckBox mCheckBoxAlwasStartLevel = null;
+
+	private Handler uiHandler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			mTextView.setText("Result: "+msg.what);
+		};
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,101 +78,119 @@ public class EntryPoint extends Activity {
 		mEditTextLevelId05 = (EditText) findViewById(R.id.l00_EditViewDebugLevelActivity05);
 		mEditTextLevelId06 = (EditText) findViewById(R.id.l00_EditViewDebugLevelActivity06);
 
+		mCheckBoxAlwasStartLevel = (CheckBox) findViewById(R.id.l00_CheckBoxAlwaysStartLevel);
+		mTextView = (TextView) findViewById(R.id.l00_TextViewLevelResult);
+
+		Button help = (Button) findViewById(R.id.l00_ButtonStartHelp);
+		help.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				int iHelp = -1; 
+				String sHelp = mEditTextHelpId.getText().toString();
+				try{
+					iHelp = Integer.parseInt(sHelp);
+					if(iHelp<0){
+						Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
+					} else {
+						SessionState s = new SessionState();
+						s.setLevel(0);
+						s.setProgress(0);
+						String sAction = Constants.getHelpActionString(iHelp);
+						Intent levelIntent = new Intent();
+						levelIntent.setAction(sAction);
+						levelIntent.putExtras(s.asBundle());
+						try{
+							startActivityForResult(levelIntent, 1);
+						} catch (ActivityNotFoundException e){
+							Toast.makeText(EntryPoint.this, "The activity was not found! Did you declare it in the AndroidManifestFile.xml like required?", Toast.LENGTH_LONG).show();
+						}
+					}
+
+				} catch (NumberFormatException e){
+					Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
+				}
+
+
+			}
+
+		});
+		Button level = (Button) findViewById(R.id.l00_ButtonStartLevel);
+
+		level.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				int iLevel = -1; 
+				String sLevel = mEditTextLevelId.getText().toString();
+				try{
+					iLevel = Integer.parseInt(sLevel);
+					if(iLevel<0){
+						Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
+					} else {
+						SessionState s = new SessionState();
+						s.setLevel(0);
+						s.setProgress(0);
+						String sAction = Constants.getLevelActionString(iLevel);
+						Intent levelIntent = new Intent();
+						levelIntent.setAction(sAction);
+						levelIntent.putExtras(s.asBundle());
+						try{
+							startActivityForResult(levelIntent, 1);
+						} catch (ActivityNotFoundException e){
+							Toast.makeText(EntryPoint.this, "The activity was not found! Did you declare it in the AndroidManifestFile.xml like required?", Toast.LENGTH_LONG).show();
+						}
+					}
+				} catch (NumberFormatException e){
+					Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
+				}
+			}
+
+		});
+
+		Button menu = (Button) findViewById(R.id.l00_ButtonStartMenu);
+
+		menu.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(EntryPoint.this, MenuActivity.class);
+				startActivity(intent);					
+			}
+
+		});
+
 
 		SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_DEBUGSETTINGS, 0);
 		boolean bDebug = state.getBoolean(PREFERENCE_DEBUG_ENABLED, false);
 
+		boolean bAlwaysStartLevel = state.getBoolean(PREFERENCE_DEBUG_ALWAYSSTARTLEVEL, false);
+		mCheckBoxAlwasStartLevel.setChecked(bAlwaysStartLevel);
 
 		if(!bDebug){
 			Intent intent = new Intent(this, MenuActivity.class);
 			startActivity(intent);
-			
+
 		} else {
-
-
-			mTextView = (TextView) findViewById(R.id.l00_TextViewLevelResult);
-			Button help = (Button) findViewById(R.id.l00_ButtonStartHelp);
-			help.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					int iHelp = -1; 
-					String sHelp = mEditTextHelpId.getText().toString();
+			if(bAlwaysStartLevel){
+				int iLevel = state.getInt(PREFERENCE_LEVEL, -1);
+				if(iLevel<0){
+					Toast.makeText(EntryPoint.this, "Not a valid level id! Cannot autostart it! Enter a valid level id!", Toast.LENGTH_LONG).show();
+				} else {
+					SessionState s = new SessionState();
+					s.setLevel(0);
+					s.setProgress(0);
+					String sAction = Constants.getLevelActionString(iLevel);
+					Intent levelIntent = new Intent();
+					levelIntent.setAction(sAction);
+					levelIntent.putExtras(s.asBundle());
 					try{
-						iHelp = Integer.parseInt(sHelp);
-						if(iHelp<0){
-							Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
-						} else {
-							SessionState s = new SessionState();
-							s.setLevel(0);
-							s.setProgress(0);
-							String sAction = Constants.getHelpActionString(iHelp);
-							Intent levelIntent = new Intent();
-							levelIntent.setAction(sAction);
-							levelIntent.putExtras(s.asBundle());
-							try{
-								startActivityForResult(levelIntent, 1);
-							} catch (ActivityNotFoundException e){
-								Toast.makeText(EntryPoint.this, "The activity was not found! Did you declare it in the AndroidManifestFile.xml like required?", Toast.LENGTH_LONG).show();
-							}
-						}
-
-					} catch (NumberFormatException e){
-						Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
-					}
-
-
-				}
-
-			});
-			Button level = (Button) findViewById(R.id.l00_ButtonStartLevel);
-
-			level.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					int iLevel = -1; 
-					String sLevel = mEditTextLevelId.getText().toString();
-					try{
-						iLevel = Integer.parseInt(sLevel);
-						if(iLevel<0){
-							Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
-						} else {
-							SessionState s = new SessionState();
-							s.setLevel(0);
-							s.setProgress(0);
-							String sAction = Constants.getLevelActionString(iLevel);
-							Intent levelIntent = new Intent();
-							levelIntent.setAction(sAction);
-							levelIntent.putExtras(s.asBundle());
-							try{
-								startActivityForResult(levelIntent, 1);
-							} catch (ActivityNotFoundException e){
-								Toast.makeText(EntryPoint.this, "The activity was not found! Did you declare it in the AndroidManifestFile.xml like required?", Toast.LENGTH_LONG).show();
-							}
-						}
-					} catch (NumberFormatException e){
-						Toast.makeText(EntryPoint.this, "Not a valid id! Enter a level id!", Toast.LENGTH_LONG).show();
+						startActivityForResult(levelIntent, 1);
+					} catch (ActivityNotFoundException e){
+						Toast.makeText(EntryPoint.this, "The activity was not found! Did you declare it in the AndroidManifestFile.xml like required?", Toast.LENGTH_LONG).show();
 					}
 				}
-
-			});
-			
-			Button menu = (Button) findViewById(R.id.l00_ButtonStartMenu);
-
-			menu.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(EntryPoint.this, MenuActivity.class);
-					startActivity(intent);					
-				}
-			
-			});
-
-
-
-		
+			}
 		}
 
 		//TODO: showing the splash screen
@@ -184,6 +213,9 @@ public class EntryPoint extends Activity {
 		super.onPause();
 		SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_DEBUGSETTINGS, 0);
 		SharedPreferences.Editor editor = state.edit();
+
+		boolean bAlwaysStart = mCheckBoxAlwasStartLevel.isChecked();
+		editor.putBoolean(PREFERENCE_DEBUG_ALWAYSSTARTLEVEL, bAlwaysStart);
 
 		int iHelp = -1;
 		int iLevel = -1;
@@ -257,6 +289,26 @@ public class EntryPoint extends Activity {
 		editor.putInt(PREFERENCE_LEVEL_06, iLevel6);
 
 		editor.commit();
+
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if(resultCode==Activity.RESULT_OK){
+			SessionState state = new SessionState(data.getExtras());
+			int iProgress = state.getProgress();
+			uiHandler.sendEmptyMessage(iProgress);
+			if(iProgress<=0){
+				Toast.makeText(this, "Did you forget to set the progress-result of your activity, or was it just 0 in this case?", Toast.LENGTH_LONG).show();
+
+			} else {
+				Toast.makeText(this, "You set the result of your ativity correctly! This will be used to increase the progress of the user.", Toast.LENGTH_LONG).show();
+			}
+		}else {
+			Toast.makeText(this, "Either you didn't set any result for your activity, or the resultCode wasn't set to Activity.RESULT_OK.", Toast.LENGTH_LONG).show();
+		}
 
 	}
 
