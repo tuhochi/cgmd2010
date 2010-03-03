@@ -138,9 +138,24 @@ public class MenuActivity extends Activity {
 			SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
 			boolean bMusic = settings.getBoolean(PREFERENCE_MUSIC, true);
 			if(v.getId()== R.id.l00_ButtonNewGame){
+				
+				
 				Intent intentMap = new Intent(getApplicationContext(), MapActivity.class);
 				intentMap.putExtra(MapActivity.EXTRA_STARTNEW, true);
 				intentMap.putExtra(MapActivity.EXTRA_MUSIC_ON, bMusic);
+				SharedPreferences state = getSharedPreferences(EntryPoint.SHAREDPREFERENCES_FRAMEWORK_DEBUGSETTINGS, 0);
+				if(state.getBoolean(EntryPoint.PREFERENCE_DEBUG_ENABLED, false)){
+					int[] iLevel = {-1,-1,-1,-1,-1,-1};
+					iLevel[0] = state.getInt(EntryPoint.PREFERENCE_LEVEL_01, -1);
+					iLevel[1] = state.getInt(EntryPoint.PREFERENCE_LEVEL_02, -1);
+					iLevel[2] = state.getInt(EntryPoint.PREFERENCE_LEVEL_03, -1);
+					iLevel[3] = state.getInt(EntryPoint.PREFERENCE_LEVEL_04, -1);
+					iLevel[4] = state.getInt(EntryPoint.PREFERENCE_LEVEL_05, -1);
+					iLevel[5] = state.getInt(EntryPoint.PREFERENCE_LEVEL_06, -1);
+					intentMap.putExtra(MapActivity.EXTRA_DEBUG_LEVELASSIGNMENT, iLevel);
+				}
+				
+				
 				startActivity(intentMap);
 			} else if(v.getId()== R.id.l00_ButtonContinueGame){
 				Intent intentMap = new Intent(getApplicationContext(), MapActivity.class);

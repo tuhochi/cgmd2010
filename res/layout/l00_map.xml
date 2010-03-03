@@ -26,7 +26,7 @@
 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonWayPoint04" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="30px" android:layout_y="210px" android:maxWidth="35px" android:maxHeight="35px"></ImageButton>
 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel07" android:background="@drawable/l00_levelicon_questionmark" android:layout_y="140px" android:layout_x="20px" android:maxWidth="35px" android:maxHeight="35px"></ImageButton>
 
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonPlayer" android:layout_x="53px" android:layout_y="113px" android:background="@drawable/l00_rabit_40"></ImageView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonPlayer" android:layout_x="53px" android:layout_y="113px" android:background="@drawable/l00_red"></ImageView>
 
 
 </AbsoluteLayout>

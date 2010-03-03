@@ -3,8 +3,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.framework;
 
 import java.io.IOException;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -19,6 +21,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.CycleInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -220,7 +227,11 @@ public class MapActivity extends Activity {
 				Intent levelIntent = new Intent();
 				levelIntent.setAction(sAction);
 				levelIntent.putExtras(s.asBundle());
-				startActivityForResult(levelIntent, 1);
+				try{
+					startActivityForResult(levelIntent, 1);
+				} catch(ActivityNotFoundException e) {
+					Toast.makeText(MapActivity.this, "Level not found!", Toast.LENGTH_SHORT).show();
+				}
 			} else { 
 				if(mMusicOn) {
 					//play "level-unallowed"-sound
@@ -331,6 +342,8 @@ public class MapActivity extends Activity {
 			mPlayer.invalidate();
 		};
 	};
+
+	private String INSTANCESTATE_IS_RESTARTING = "restarting";
 	///////////////////////////////////////////////
 
 
@@ -345,9 +358,13 @@ public class MapActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		boolean bRestart = false;
+		if(savedInstanceState!=null){
+			bRestart = savedInstanceState.getBoolean(INSTANCESTATE_IS_RESTARTING, false);
+		}
 		Intent callingIntent = getIntent();
 		if(callingIntent!=null) {
-			if(callingIntent.getBooleanExtra(EXTRA_STARTNEW, false)){
+			if((!bRestart)&&(callingIntent.getBooleanExtra(EXTRA_STARTNEW, false))){
 				//init the game state
 				int[] iLevelAssignment = callingIntent.getIntArrayExtra(EXTRA_DEBUG_LEVELASSIGNMENT);
 				initGameState(iLevelAssignment);	
@@ -413,7 +430,14 @@ public class MapActivity extends Activity {
 
 
 		mPlayer = (ImageView) findViewById(R.id.l00_ImageButtonPlayer);
-
+		Animation animation = new AlphaAnimation(0.9f,0.6f);
+		animation.setInterpolator(new AccelerateInterpolator());
+		animation.setRepeatMode(Animation.REVERSE);
+		animation.setRepeatCount(Animation.INFINITE);
+		animation.setDuration(800);
+		
+		mPlayer.setAnimation(animation);
+		animation.start();
 
 		ImageButton l00 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel00);
 		ImageButton l01 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel01);
@@ -460,6 +484,17 @@ public class MapActivity extends Activity {
 	protected void onStart() {
 		mUiUpdateHandler.sendEmptyMessage(MESSAGE_UPDATE_UI);
 		super.onStart();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(INSTANCESTATE_IS_RESTARTING, true);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -626,11 +661,16 @@ public class MapActivity extends Activity {
 		if(levelAssignment!=null) {
 			for(int i=0; i<Constants.NUMBER_OF_LEVELS_TO_PLAY; i++) {
 				if(levelAssignment.length>i){
-					mLevelAssignment[i]=levelAssignment[i];
+					if(levelAssignment[i]>=0) {
+						mLevelAssignment[i]=levelAssignment[i];
+					}
 				}
-				editor.putInt(PREFERENCE_LEVELASSIGNMENT+(i+1),mLevelAssignment[i]);
+				
 			}
 		} 
+		for(int i=0; i<Constants.NUMBER_OF_LEVELS_TO_PLAY; i++) {
+			editor.putInt(PREFERENCE_LEVELASSIGNMENT+(i+1),mLevelAssignment[i]);
+		}
 		editor.commit();
 	}
 
