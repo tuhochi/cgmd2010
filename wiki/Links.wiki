@@ -14,6 +14,8 @@ Here you can find some useful links for the project. If you find some links, ple
   * *[http://openhandsetmagazine.com/2008/01/tips-how-to-install-apk-files-on-android-emulator/ How to install apk files on Android Emulator:]* If you want to try out some Android applications...
 
 == OpenGL ES ==
+
+  * *NeHe Android Ports: [http://insanitydesign.com/wp/projects/nehe-android-ports/ 1] [http://code.google.com/p/nehe-android/ 2]*
   * *[http://www.khronos.org/opengles/ OpenGL ES Specification]*
 
 == SVN ==
