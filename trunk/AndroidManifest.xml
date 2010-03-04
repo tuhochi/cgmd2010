@@ -32,7 +32,7 @@
                   
         </activity>
         
-        <activity android:name=".level00.TestActivity"
+        <activity android:name=".level00.TestLevelActivity"
                   android:label="@string/l00_nameofthegame_full">
                   
                 <intent-filter>
@@ -49,30 +49,8 @@
                   android:label="@string/l00_nameofthegame_full" android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|orientation">
         </activity>
         
-        <activity android:name=".level01.GLActivity"
-                  android:label="level01">
-        </activity>
-        <activity android:name=".level02.GlActivity"
-                  android:label="level02">
-        </activity>
-        <activity android:name=".level03.GlActivity"
-                  android:label="level03">
-        </activity>
-        <activity android:name=".level04.GlActivity"
-                  android:label="level04">
-        </activity>
-        <activity android:name=".level05.GlActivity"
-                  android:label="level05">
-        </activity>
-        <activity android:name=".level06.GlActivity"
-                  android:label="level06">
-        </activity>
-        <activity android:name=".level07.GlActivity"
-                  android:label="level07">
-        </activity>
-        
-
-    <activity android:name=".framework.GlTestActivity"></activity>
+    <activity android:name=".level00.GlTestActivity"></activity>
+    
 </application>
     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
 <supports-screens

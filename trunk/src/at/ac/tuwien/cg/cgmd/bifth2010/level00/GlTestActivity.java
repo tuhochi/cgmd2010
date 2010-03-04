@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.framework;
+package at.ac.tuwien.cg.cgmd.bifth2010.level00;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
