@@ -1,11 +1,7 @@
-#summary One-sentence summary of this page.
-
-= Introduction =
-
-This page summarizes frequently asked questions and answers to them related to OpenGL ES, Android development related to the VL computer graphics on mobile devices.
+#A summary of frequently asked questions and answers to them. The Questions are related to OpenGL ES, Android development, and the VL computer graphics on mobile devices, Vienna University of Technology.
 
 ----
-=FAQ=
+
 == Does the Android Emulator support OpenGL ES 2.0? ==
 
 Not at the moment (March 2010)! The official note on this issue reads:
