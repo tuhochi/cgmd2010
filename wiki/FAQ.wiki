@@ -1,0 +1,15 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This page summarizes frequently asked questions and answers to them related to OpenGL ES, Android development related to the VL computer graphics on mobile devices.
+
+----
+=FAQ=
+== Does the Android Emulator support OpenGL ES 2.0? ==
+
+Not at the moment (March 2010)! The official note on this issue reads:
+"The Android emulator does not support OpenGL ES 2.0 hardware emulation at this time. Running and testing code that uses this API requires a real device with such capabilities."
+
+== Can we use OpenGL ES 2.0 in the Lab? ==
+Although we will buy Android hardware that is capable of doing OpenGL ES 2.0, it is not recommended to use it in the Lab. You will have only very limited access to the hardware and that will probably not be enough to debug your whole code.
