@@ -1,0 +1,4 @@
+[MainPage Main page]
+[FAQ FAQ page]
+[Links Links page]
+[http://www.informatik-forum.at/forumdisplay.php?f=1373 Forum]
