@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -408,15 +409,20 @@ public class MapActivity extends Activity {
 		float fW = 480;
 		float fH = 270;
 		String s ="";
+		absoluteLayout.measure((int)fW, (int)fH);
+		absoluteLayout.layout(0, 0, (int)fW, (int)fH);
 		for(int i=0; i<iSize; i++) {
 			View v = absoluteLayout.getChildAt(0);
 			AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v.getLayoutParams(); 
-			float fX = ((float)lp.x) / fW * 100.f;
-			float fY = ((float)lp.y) / fH * 100.f;
+			
+			float fX = ((float)lp.x+(float)v.getMeasuredWidth()*0.5f) / fW * 100.f;
+			float fY = ((float)lp.y+(float)v.getMeasuredHeight()*0.5f) / fH * 100.f;
 
 			s += "Point p = new PathPoint(" + Float.toString(fX) + ", " + Float.toString(fY) + ")";  
-
 			absoluteLayout.removeView(v);
+			
+			Rect r = new Rect();
+			v.getDrawingRect(r);
 			lp.x = (int) fX;
 			lp.y = (int) fY;
 			if(! ( (v.getId()==R.id.l00_ImageButtonWayPoint01) || (v.getId()==R.id.l00_ImageButtonWayPoint02) || (v.getId()==R.id.l00_ImageButtonWayPoint03) || (v.getId()==R.id.l00_ImageButtonWayPoint04) ) ) {
