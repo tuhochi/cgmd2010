@@ -24,9 +24,6 @@ public class GlTestActivity extends Activity {
         FrameLayout fl = new FrameLayout(this);
         fl.addView(sf);
         setContentView(fl);
-        
-        
-        
     }
     
     private class MyRenderer implements GLSurfaceView.Renderer {

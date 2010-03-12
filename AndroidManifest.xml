@@ -51,6 +51,10 @@
         
     <activity android:name=".level00.GlTestActivity"></activity>
     
+<activity android:name=".level22.HelpActivity"><intent-filter><action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level22.LAUNCH_HELP"></action>
+<category android:name="android.intent.category.DEFAULT"></category>
+</intent-filter>
+</activity>
 </application>
     <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
 <supports-screens
