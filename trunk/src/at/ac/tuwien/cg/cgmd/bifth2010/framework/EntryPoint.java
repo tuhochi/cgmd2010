@@ -101,7 +101,7 @@ public class EntryPoint extends Activity {
 						levelIntent.setAction(sAction);
 						levelIntent.putExtras(s.asBundle());
 						try{
-							startActivityForResult(levelIntent, 1);
+							startActivity(levelIntent);
 						} catch (ActivityNotFoundException e){
 							Toast.makeText(EntryPoint.this, "The activity was not found! Did you declare it in the AndroidManifestFile.xml like required?", Toast.LENGTH_LONG).show();
 						}
