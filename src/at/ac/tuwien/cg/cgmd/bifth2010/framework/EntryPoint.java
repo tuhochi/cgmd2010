@@ -297,8 +297,11 @@ public class EntryPoint extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if(resultCode==Activity.RESULT_OK){
-			SessionState state = new SessionState(data.getExtras());
-			int iProgress = state.getProgress();
+			int iProgress = -1;
+			if(data!=null){
+				SessionState state = new SessionState(data.getExtras());
+				iProgress = state.getProgress();
+			}
 			uiHandler.sendEmptyMessage(iProgress);
 			if(iProgress<=0){
 				Toast.makeText(this, "Did you forget to set the progress-result of your activity, or was it just 0 in this case?", Toast.LENGTH_LONG).show();
