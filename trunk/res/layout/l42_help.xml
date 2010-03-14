@@ -72,7 +72,7 @@
 				android:paddingLeft="@dimen/l42_HelpActivity_TextPaddingLeft"
 				android:paddingTop="@dimen/l42_HelpActivity_TextPaddingTop"
 				android:paddingRight="@dimen/l42_HelpActivity_TextPaddingRight"
-				android:paddingBottom="40dip"
+				android:paddingBottom="@dimen/l42_HelpActivity_BottomPadding"
 				android:textSize="@dimen/l42_HelpActivity_TextSize"
 				android:text="@string/l42_HelpActivity_Text4"
 				android:textColor="@color/l42_HelpActivityTextColor"/>
