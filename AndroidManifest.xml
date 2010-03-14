@@ -72,7 +72,8 @@
 		</activity>
 		
 		<activity
-			android:name=".level23.HelpActivity">
+			android:name=".level23.HelpActivity"
+			android:label="@string/l23_nameofthegame_full">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level23.LAUNCH_HELP"></action>
 				<category android:name="android.intent.category.DEFAULT"></category>
