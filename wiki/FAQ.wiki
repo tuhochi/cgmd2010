@@ -1,3 +1,5 @@
+<wiki:toc max_depth="1" />
+
 A summary of frequently asked questions and answers to them. The Questions are related to OpenGL ES, Android development, and the VL computer graphics on mobile devices, Vienna University of Technology.
 
 ----
@@ -9,3 +11,7 @@ Not at the moment (March 2010)! The official note on this issue reads:
 
 == Can we use OpenGL ES 2.0 in the Lab? ==
 Although we will buy Android hardware that is capable of doing OpenGL ES 2.0, it is not recommended to use it in the Lab. You will have only very limited access to the hardware and that will probably not be enough to debug your whole code.
+
+== Where can we find a modelloader for our level? ==
+
+Group 17 provide an *[http://www.informatik-forum.at/showthread.php?79216-OBJ-Loader obj-modelloader]*. But you can use any other free modelloader that is compatible with the license of our game.
