@@ -1,6 +1,6 @@
-<wiki:toc max_depth="1" />
-
 A summary of frequently asked questions and answers to them. The Questions are related to OpenGL ES, Android development, and the VL computer graphics on mobile devices, Vienna University of Technology.
+
+<wiki:toc max_depth="2" />
 
 ----
 
