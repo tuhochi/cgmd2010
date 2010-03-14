@@ -52,6 +52,30 @@
 				android:textSize="@dimen/l42_HelpActivity_TextSize"
 				android:text="@string/l42_HelpActivity_Text2"
 				android:textColor="@color/l42_HelpActivityTextColor"/>
+				
+			<!--Paragraph 3-->
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="@dimen/l42_HelpActivity_TextPaddingLeft"
+				android:paddingTop="@dimen/l42_HelpActivity_TextPaddingTop"
+				android:paddingRight="@dimen/l42_HelpActivity_TextPaddingRight"
+				android:paddingBottom="@dimen/l42_HelpActivity_TextPaddingBottom"
+				android:textSize="@dimen/l42_HelpActivity_TextSize"
+				android:text="@string/l42_HelpActivity_Text3"
+				android:textColor="@color/l42_HelpActivityTextColor"/>
+				
+			<!--Paragraph 4-->
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="@dimen/l42_HelpActivity_TextPaddingLeft"
+				android:paddingTop="@dimen/l42_HelpActivity_TextPaddingTop"
+				android:paddingRight="@dimen/l42_HelpActivity_TextPaddingRight"
+				android:paddingBottom="40dip"
+				android:textSize="@dimen/l42_HelpActivity_TextSize"
+				android:text="@string/l42_HelpActivity_Text4"
+				android:textColor="@color/l42_HelpActivityTextColor"/>
 		</LinearLayout>
 	</ScrollView>
 </LinearLayout>
