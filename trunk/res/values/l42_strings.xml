@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l42_nameofthegame_full">Signanz</string>
+<string name="l42_HelpActivity_Title">Signanzorbit</string>
+<string name="l42_HelpActivity_Text1">Bla Bla Bla Absatz 1</string>
+<string name="l42_HelpActivity_Text2">Bla Bla Bla Absatz 2</string>
 </resources>
