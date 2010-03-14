@@ -89,6 +89,14 @@
 		</activity>
 		
 		<activity
+			android:name=".level36.HelpActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level36.LAUNCH_HELP"></action>
+				<category android:name="android.intent.category.DEFAULT"></category>
+			</intent-filter>
+		</activity>
+		
+		<activity
 			android:name=".level42.HelpActivity"
 			android:label="@string/l42_nameofthegame_full">
 			<intent-filter>
