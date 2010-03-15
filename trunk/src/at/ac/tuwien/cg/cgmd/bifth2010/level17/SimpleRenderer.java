@@ -187,8 +187,10 @@ public class SimpleRenderer extends GLSurfaceView implements Renderer {
 		Matrix4x4 projection = new Matrix4x4();
 		projection.fromFloatArray(matrixGrabber.mProjection);
 		Matrix4x4 modelViewProjection = Matrix4x4.mult(modelView, projection);
+		Matrix4x4 invModelViewProjection = modelViewProjection.InvertedCopy();
 		Vector4 playerPos4dim = new Vector4(playerPos);
 		Vector4 screenSpacePos = modelViewProjection.transformPoint(playerPos4dim);
+		Vector4 reprojectedPos = invModelViewProjection.transformPoint(screenSpacePos);
 		screenSpacePos.homogenize();
 		// screenSpacePos.y now contains the screen space depth of the player position
 		// TODO: calculate picking position in screen space
