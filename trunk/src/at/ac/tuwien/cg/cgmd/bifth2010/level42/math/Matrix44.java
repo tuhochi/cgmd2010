@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector4;
@@ -132,6 +132,33 @@ public class Matrix44
 	public Matrix44 addRotateZ(float alpha)
 	{
 		Matrix44 newM = new Matrix44().setRotateZ(alpha).mult(this);
+		setFromArray(newM.m);
+		return this;
+	}
+	
+	/*
+	 * Sets this to a RotateMatrix around axis with angle alpha
+	 * @return this;
+	 */
+	public Matrix44 setRotate(Vector3 axis, float alpha)
+	{
+		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
+
+		m[0][0] =  axis.x * axis.x + (1 - axis.x * axis.x) * cosa;	m[0][1] = axis.x * axis.y * (1 - cosa) - axis.z * sina; 	m[0][2] = axis.x * axis.z * (1 - cosa) + axis.y * sina;		m[0][3] = 0;
+		m[1][0] =  axis.x * axis.y * (1 - cosa) + axis.z * sina;	m[1][1] = axis.y * axis.y + (1 - axis.y * axis.y) * cosa;	m[1][2] = axis.y * axis.z * (1 - cosa) - axis.x * sina;		m[1][3] = 0;
+		m[2][0] =  axis.x * axis.z * (1 - cosa) - axis.y * sina;	m[2][1] = axis.y * axis.z * (1 - cosa) + axis.x * sina;		m[2][2] = axis.z * axis.z + (1 - axis.z * axis.z) * cosa;	m[2][3] = 0;
+		m[3][0] =     0; 											m[3][1] =     0; 											m[3][2] =     0;											m[3][3] = 1;
+
+		return this;
+	}
+	
+	/*
+	 * Generates a RotateMatrix around axis with angle alpha and sets this=RotateMatrix*this
+	 * @return this;
+	 */
+	public Matrix44 addRotate(Vector3 axis, float alpha)
+	{
+		Matrix44 newM = new Matrix44().setRotate(axis,alpha).mult(this);
 		setFromArray(newM.m);
 		return this;
 	}
