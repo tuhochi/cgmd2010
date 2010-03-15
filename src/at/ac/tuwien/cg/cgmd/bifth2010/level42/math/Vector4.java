@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 public class Vector4
 {
