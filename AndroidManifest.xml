@@ -142,6 +142,14 @@
 		</activity>
 		
 		<activity
+			android:name=".level55.HelpActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level55.LAUNCH_HELP" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
 			android:name=".level88.HelpActivity">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level88.LAUNCH_HELP"></action>
