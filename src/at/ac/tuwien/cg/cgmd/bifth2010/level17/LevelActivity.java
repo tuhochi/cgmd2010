@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.opengl.GLSurfaceView;
+import javax.microedition.khronos.opengles.GL;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
@@ -16,11 +18,23 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  */
 public class LevelActivity extends Activity{
 
+	/** The OpenGL View */
+	private SimpleRenderer mSimpleRenderer;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//set a layout
-		setContentView(R.layout.l00_testlevel);
+
+		//Create an Instance of SimpleRenderer
+		mSimpleRenderer = new SimpleRenderer(this);
+		mSimpleRenderer.setGLWrapper(new GLSurfaceView.GLWrapper() {
+            public GL wrap(GL gl) {
+                return new MatrixTrackingGL(gl);
+            }});
+		//Set the SimpleRenderer as View to this Activity
+		setContentView(mSimpleRenderer);
+		
+		/*
 		//get the button specified in the layout
 		Button buttonFinish = (Button) findViewById(R.id.l00_ButtonFinish);
 		//set a onClickListener to react to the user's click
@@ -37,7 +51,25 @@ public class LevelActivity extends Activity{
 				LevelActivity.this.finish();
 			}
 			
-		});
+		});*/
+	}
+
+	/**
+	 * Remember to resume the glSurface
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mSimpleRenderer.onResume();
+	}
+
+	/**
+	 * Also pause the glSurface
+	 */
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mSimpleRenderer.onPause();
 	}
 	
 }

@@ -125,4 +125,12 @@ public class Vector4
 	{
 		System.out.println (this.toString());
 	}
+	
+	public void homogenize()
+	{
+		x = x/w;
+		y = y/w;
+		z = z/w;
+		w = 1.0f;
+	}
 }

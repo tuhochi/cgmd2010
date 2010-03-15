@@ -152,4 +152,15 @@ public class Matrix4x4
 
 		return array;
 	}
+	
+	public void fromFloatArray(float[] array)
+	{
+		for(int i = 0; i < 4; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
+				m[i][j] = array[i*4 + j];
+			}
+		}
+	}
 }
