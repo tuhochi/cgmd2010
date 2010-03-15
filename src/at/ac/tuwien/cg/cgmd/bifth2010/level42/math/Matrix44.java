@@ -1,8 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector4;
-
 public class Matrix44
 {
 	public float m[][];
