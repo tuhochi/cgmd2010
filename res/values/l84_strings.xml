@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="l84_help_title">Uberawesome Level 84</string>
+    <string name="l84_help_title">Ich werfe meine Juwelen in den Kanal</string>
+    <string name="l84_help_subtitle">
+    	Als Sie eines Tages eine ruhige Straße entlang wandern, 
+    	verspüren Sie plötzlich den akuten Drang, Ihre <b>Juwelensammlung loszuwerden.</b> 
+    	Die Straße verfügt glücklicherweise über <b>zahlreiche Kanaldeckel</b>, deren 
+    	Öffnungen jedoch <b>verschieden geformt</b> sind. <b>Kurzum: Nicht jedes Juwel 
+    	passt überall rein</b>. Falls aber doch, muss es beim Abwurf noch <b>passend 
+    	ausgerichtet</b> sein!</string>
+    <string name="l84_help_contenttitle">Detailbeschreibung:</string>
+    <string name="l84_help_content">
+    	Sie wandern in Richtung des rechten Spielfeldrandes. Nach der Reihe finden Sie verschieden 
+    	gegossene Kanaldeckel und müssen somit den entsprechenden Edelstein erwischen. DAS GESCHIEHT SO: 
+    	Am linken Bildschirmrand haben Sie Ihre verschiedenen Juwelentypen im Überblick (4 an der Zahl) - 
+    	die sich in Ihrer grundlegenden Form unterscheiden. Wählen Sie den aktuell passenden Typ durch 
+    	Berührung aus. 
+    	Doch damit ist es nicht getan: Das Juwel fliegt nun in Richtung Erde/Kanaldeckel - muss aber noch 
+    	in seiner Orientierung beeinflusst werden (Sie haben dazu spezielles Jedi-Training absolviert). 
+    	Drehen Sie Ihr Device solange, bis der Stein passt. Der Stein fällt grundsätzlich langsam, wenn Sie 
+    	aber überzeugt sind, dass alles passt, können Sie auch den Fall beschleunigen (ev. Tap?). Nach jedem 
+    	geworfenen Stein wandern Sie weiter in der Hoffnung, ihr Vermögen den Kanal runterzuspülen ...
+    </string> 
 </resources>
