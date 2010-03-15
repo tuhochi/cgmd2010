@@ -1,51 +1,91 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 
 
-public class OBJModel
+public class OBJModel implements Serializable
 {
-	
-    private VertexBuffer mVertexBuffer;
-    private VertexBuffer	mTexCoordBuffer;
-    private VertexBuffer mNormalsBuffer;
-    //private ShortBuffer mIndexBuffer;
-    private VertexBuffer mIndexBuffer;
+    /**
+	 * Auto Generated serialVersionID
+	 */
+	private static final long serialVersionUID = -762515591771882029L;
+	private List<Vector3> mVertices = new ArrayList<Vector3>();
+	private List<Vector2> mTextureCoords = new ArrayList<Vector2>();
+    private List<Vector3> mNormals = new ArrayList<Vector3>();
+    private List<Short> mIndices = new ArrayList<Short>();
+    
     private int mNumVertices;
-	
 	
 	public OBJModel()
 	{}	
 	
 	public OBJModel(List<Vector3> vertices, List<Vector2> texCoords, List<Vector3> normals, List<Short> indices)
 	{
-		
-        mVertexBuffer = new VertexBuffer(VertexBufferType.Position);
-        mVertexBuffer.setData(vertices);
-        mTexCoordBuffer = new VertexBuffer(VertexBufferType.TextureCoordinate);
-        mTexCoordBuffer.setData(texCoords);
-        mNormalsBuffer = new VertexBuffer(VertexBufferType.Normal);
-        mNormalsBuffer.setData(normals);
-        mIndexBuffer = new VertexBuffer(VertexBufferType.Index);
-        mIndexBuffer.setData(indices);
-        mNumVertices = indices.size();
+		mVertices = vertices;
+		mTextureCoords = texCoords;
+		mNormals = normals;
+		mIndices = indices;
+		mNumVertices = indices.size();
 	}
 	
-	public void draw(GL10 gl) {
-        gl.glFrontFace(GL10.GL_CCW);
-        mVertexBuffer.set(gl);
-        mTexCoordBuffer.set(gl);
-        gl.glDrawElements(GL10.GL_TRIANGLES, mNumVertices, GL10.GL_UNSIGNED_SHORT, mIndexBuffer.getBuffer());
+	public void write(String file)
+	{
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this);
+			oos.close();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static OBJModel read(String fileName, Context context)
+	{
+		OBJModel model = null;
+    	try {
+    		InputStream fis = context.getAssets().open(fileName);
+			ObjectInputStream stream = new ObjectInputStream(fis);
+			model = (OBJModel)stream.readObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return model;
+	}
+	
+    public List<Vector3> getVertices() {
+		return mVertices;
+	}
+
+	public List<Vector2> getTextureCoords() {
+		return mTextureCoords;
+	}
+
+	public List<Vector3> getNormals() {
+		return mNormals;
+	}
+
+	public List<Short> getIndices() {
+		return mIndices;
+	}
+
+	public int getNumVertices() {
+		return mNumVertices;
 	}
 	
 	public static OBJModel load(String fileName, Context context )
