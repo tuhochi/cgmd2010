@@ -17,12 +17,12 @@
 		<EditText android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:inputType="number"
 			android:id="@+id/l00_EditViewDebugHelpActivity" android:hint="id"
-			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+			android:maxWidth="20pt" android:minWidth="20pt"></EditText>
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="Start"
 			android:minWidth="30pt" android:id="@+id/l00_ButtonStartHelp"></Button>
 	</LinearLayout><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Debug Level Activity"></TextView><LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
-		<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number" android:hint="id" android:maxWidth="15pt" android:minWidth="15pt" android:id="@+id/l00_EditViewDebugLevelActivity"></EditText>
+		<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number" android:hint="id" android:id="@+id/l00_EditViewDebugLevelActivity" android:minWidth="20pt" android:maxWidth="20pt"></EditText>
 		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Start" android:minWidth="30pt" android:id="@+id/l00_ButtonStartLevel"></Button><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Result: none" android:id="@+id/l00_TextViewLevelResult"></TextView>
 	
 </LinearLayout><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_CheckBoxAlwaysStartLevel" android:text="Always automagically start the above specified level"></CheckBox>
@@ -34,27 +34,27 @@
 		<EditText android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:inputType="number"
 			android:id="@+id/l00_EditViewDebugLevelActivity01" android:hint="id"
-			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+			android:maxWidth="20pt" android:minWidth="20pt"></EditText>
 		<EditText android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:inputType="number"
 			android:id="@+id/l00_EditViewDebugLevelActivity02" android:hint="id"
-			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+			android:maxWidth="20pt" android:minWidth="20pt"></EditText>
 		<EditText android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:inputType="number"
 			android:id="@+id/l00_EditViewDebugLevelActivity03" android:hint="id"
-			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+			android:maxWidth="20pt" android:minWidth="20pt"></EditText>
 		<EditText android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:inputType="number"
 			android:id="@+id/l00_EditViewDebugLevelActivity04" android:hint="id"
-			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+			android:maxWidth="20pt" android:minWidth="20pt"></EditText>
 		<EditText android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:inputType="number"
 			android:id="@+id/l00_EditViewDebugLevelActivity05" android:hint="id"
-			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+			android:maxWidth="20pt" android:minWidth="20pt"></EditText>
 		<EditText android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:inputType="number"
 			android:id="@+id/l00_EditViewDebugLevelActivity06" android:hint="id"
-			android:maxWidth="15pt" android:minWidth="15pt"></EditText>
+			android:maxWidth="20pt" android:minWidth="20pt"></EditText>
 	
 
 </LinearLayout>
