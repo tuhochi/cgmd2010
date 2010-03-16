@@ -8,13 +8,13 @@
 	<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content">
 		<TableLayout android:id="@+id/TableLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
 			<TableRow>
-				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_title" android:textSize="10pt" android:layout_marginBottom="10pt"></TextView>
+				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_title" android:textSize="10pt" android:layout_marginBottom="10pt" android:typeface="serif" android:textColor="@color/l84_colorBlack"></TextView>
 			</TableRow>
 			<TableRow>
-				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_subtitle" android:textStyle="bold" android:layout_marginBottom="10pt"></TextView>
+				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_subtitle" android:textStyle="bold" android:layout_marginBottom="10pt" android:typeface="serif" android:textColor="@color/l84_colorBlack"></TextView>
 			</TableRow>
 			<TableRow>
-				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_content"></TextView>
+				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_content" android:textColor="@color/l84_colorBlack" android:typeface="serif"></TextView>
 			</TableRow>
 		</TableLayout>	
 	</ScrollView>
