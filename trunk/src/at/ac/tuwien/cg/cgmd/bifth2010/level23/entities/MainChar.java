@@ -47,6 +47,21 @@ public class MainChar implements SceneEntity {
 		createTexCoordBuffer();
 	}
 	
+	public Vector2 getPosition() {
+		return this.position; 
+	}
+	
+	public Vector3 getTranslation() {
+		return this.translation; 
+	}
+	
+	public float getWidth() {
+		return this.width; 
+	}
+	
+	public float getHeight() {
+		return this.height; 
+	}
 	private void createVertexBuffer()
 	{
 		float x = position.x;
@@ -120,6 +135,7 @@ public class MainChar implements SceneEntity {
 	public void moveLeftRight(float translate)
 	{
 		translation.x += translate;
+		position.x += translate; 
 	}
 	
 	public void moveUpDown(float translate)
@@ -146,6 +162,7 @@ public class MainChar implements SceneEntity {
 		
 		
 		glTranslatef(translation.x, translation.y, translation.z);
+		resetTranslation(); 
 		
 		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		glDrawElements(GL10.GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indexBuffer);
