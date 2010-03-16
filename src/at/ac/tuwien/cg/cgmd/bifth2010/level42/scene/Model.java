@@ -1,10 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+
+//static imports
+import static android.opengl.GLES10.*;
 
 public class Model
 {
@@ -12,7 +12,7 @@ public class Model
 	FloatBuffer vertices, normals, texcoords;
 	int numVertices;
 	int vertexLength;
-//	int vboID;
+	Integer vboID;
 	
 	public Model()
 	{
@@ -22,21 +22,26 @@ public class Model
 		texcoords = null;
 		numVertices = 0;
 		vertexLength = 3;
+		vboID = null;
 	}
 	
-	public void render(GL10 gl, int rendermode)
+	public void render(int rendermode)
 	{
 		switch(rendermode)
 		{
-		case Scene.RENDERMODE_VBO: break;
+		case Scene.RENDERMODE_VBO:
+			/*
+			 * implement vbo rendering
+			 */
+			break;
 		case Scene.RENDERMODE_VERTEXARRAY:
 			if(vertices != null)
-				gl.glVertexPointer(vertexLength, GL10.GL_FLOAT, 0, vertices);
+				glVertexPointer(vertexLength, GL_FLOAT, 0, vertices);
 			if(normals != null)
-				gl.glNormalPointer(GL10.GL_FLOAT, 0, normals);
+				glNormalPointer(GL_FLOAT, 0, normals);
 			if(texcoords != null)
-				gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texcoords);
-			gl.glDrawArrays(GL10.GL_TRIANGLES, 0, numVertices);
+				glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+			glDrawArrays(GL_TRIANGLES, 0, numVertices);
 			break;
 		}
 	}
