@@ -124,6 +124,7 @@
 			</intent-filter>
 		</activity>
 		
+		
 		<activity
 			android:name=".level36.HelpActivity">
 			<intent-filter>
@@ -138,6 +139,8 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
+		
+		<activity android:name=".level36.GlActivity"/>
 		
 		<activity
 			android:name=".level42.HelpActivity"
