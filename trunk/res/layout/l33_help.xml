@@ -27,6 +27,71 @@
 				android:paddingRight="@dimen/l33_help_headPadding"
 				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_main">
 			</TextView>
+			
+			<!--entry1_head-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:text="@string/l33_help_entry1_head" android:gravity="center">
+			</TextView>
+			
+			<!--entry1-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_entry1" android:gravity="left">
+			</TextView>
+			
+			<!--entry2_head-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:text="@string/l33_help_entry2_head" android:gravity="center">
+			</TextView>
+			
+			<!--entry2-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_entry2" android:gravity="left">
+			</TextView>
+			
+			<!--entry3_head-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:text="@string/l33_help_entry3_head" android:gravity="center">
+			</TextView>
+			
+			<!--entry3-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_entry3" android:gravity="left">
+			</TextView>
+			
+			<!--entry4_head-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:text="@string/l33_help_entry4_head" android:gravity="center">
+			</TextView>
+			
+			<!--entry4-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_entry4" android:gravity="left">
+			</TextView>
+			
+			<!--entry5_head-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:text="@string/l33_help_entry5_head" android:gravity="center">
+			</TextView>
+			
+			<!--entry5-->
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_entry5" android:gravity="left">
+			</TextView>
 				
 				
 				
