@@ -415,8 +415,8 @@ public class MapActivity extends Activity {
 			View v = absoluteLayout.getChildAt(0);
 			AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v.getLayoutParams(); 
 			
-			float fX = ((float)lp.x+(float)v.getMeasuredWidth()*0.5f) / fW * 1000.f;
-			float fY = ((float)lp.y+(float)v.getMeasuredHeight()*0.5f) / fH * 1000.f;
+			float fX = ((float)lp.x+(float)v.getMeasuredWidth()*0.5f) / fW * 100.f;
+			float fY = ((float)lp.y+(float)v.getMeasuredHeight()*0.5f) / fH * 100.f;
 
 			//s += "Point p = new PathPoint(" + Float.toString(fX) + ", " + Float.toString(fY) + ")";  
 			absoluteLayout.removeView(v);

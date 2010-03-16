@@ -70,8 +70,8 @@ public class RelativePositionLayout extends AbsoluteLayout {
                 AbsoluteLayout.LayoutParams lp = 
                         (AbsoluteLayout.LayoutParams) child.getLayoutParams(); 
 
-                int childLeft = getPaddingLeft() + (lp.x*(r-l)/1000) - (int)((float)child.getMeasuredWidth()/2.f);  
-                int childTop = getPaddingTop() + (lp.y*(b-t)/1000) - (int)((float)child.getMeasuredHeight()/2.f);
+                int childLeft = getPaddingLeft() + (lp.x*(r-l)/100) - (int)((float)child.getMeasuredWidth()/2.f);  
+                int childTop = getPaddingTop() + (lp.y*(b-t)/100) - (int)((float)child.getMeasuredHeight()/2.f);
                  child.layout(childLeft, childTop, 
                         childLeft + child.getMeasuredWidth(), 
                         childTop + child.getMeasuredHeight()); 
