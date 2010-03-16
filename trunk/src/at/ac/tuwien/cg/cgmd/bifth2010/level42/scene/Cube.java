@@ -22,16 +22,16 @@ public class Cube extends Model
 		 * |     |/
 		 * 1-----2
 		 */
-		Vector3 v1 = new Vector3(-1,-1,-1);
-		Vector3 v2 = new Vector3( 1,-1,-1);
-		Vector3 v3 = new Vector3( 1, 1,-1);
-		Vector3 v4 = new Vector3(-1, 1,-1);
-		Vector3 v5 = new Vector3(-1,-1, 1);
-		Vector3 v6 = new Vector3( 1,-1, 1);
-		Vector3 v7 = new Vector3( 1, 1, 1);
-		Vector3 v8 = new Vector3(-1, 1, 1);
-		Vector3 n1 = new Vector3( 0, 0,-1); // front
-		Vector3 n2 = new Vector3( 0, 0, 1); // back
+		Vector3 v1 = new Vector3(-1,-1, 1);
+		Vector3 v2 = new Vector3( 1,-1, 1);
+		Vector3 v3 = new Vector3( 1, 1, 1);
+		Vector3 v4 = new Vector3(-1, 1, 1);
+		Vector3 v5 = new Vector3(-1,-1,-1);
+		Vector3 v6 = new Vector3( 1,-1,-1);
+		Vector3 v7 = new Vector3( 1, 1,-1);
+		Vector3 v8 = new Vector3(-1, 1,-1);
+		Vector3 n1 = new Vector3( 0, 0, 1); // front
+		Vector3 n2 = new Vector3( 0, 0,-1); // back
 		Vector3 n3 = new Vector3( 0, 1, 0); // top
 		Vector3 n4 = new Vector3( 0,-1, 0); // bottom
 		Vector3 n5 = new Vector3(-1, 0, 0); // left

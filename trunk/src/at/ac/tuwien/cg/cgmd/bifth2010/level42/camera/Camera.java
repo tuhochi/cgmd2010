@@ -63,8 +63,8 @@ public class Camera
 	public void setMousePosition(int x,int y)
 	{
 		//calc difference to last position
-		float diffx = (float)x-lastPosition[0];
-		float diffy = (float)y-lastPosition[1];
+		float diffx = lastPosition[0]-(float)x;
+		float diffy = lastPosition[1]-(float)y;
 		//store last position
 		lastPosition[0] = (float)x;
 		lastPosition[1] = (float)y;
@@ -77,8 +77,6 @@ public class Camera
 		if(altitude<=minAltitude)
 			altitude = minAltitude;
 		
-		Log.i("alt",String.valueOf(altitude));
-		Log.i("current",String.valueOf(currentAltitude));
 	}
 	
 	public float getDistance() {
@@ -107,48 +105,40 @@ public class Camera
 		viewPosition = targetPosition;
 		
 		//calc the current altitude
-		currentAltitude = 90-radToDeg((float)Math.acos(Vector3.dotProduct(Vector3.normalize(inverseViewVec),new Vector3(0.0f,1.0f,0.0f))));
+		currentAltitude = 90.0f-radToDeg((float)Math.acos(Vector3.dotProduct(new Vector3(0.0f,1.0f,0.0f),Vector3.normalize(inverseViewVec))));
 		
 		//iterate 
 		float azimuthDiff = azimuth - currentAzimuth;
 		float altitudeDiff = altitude - currentAltitude;
 		float distanceDiff = distance - currentDistance;
 
-		//calc the iteration step 
-		azimuthDiff*=motionFactor * 30; 
-		altitudeDiff*=motionFactor * 30;
-		distanceDiff*=motionFactor * 30;
+		// calc the iteration step
+		azimuthDiff *= motionFactor * 30.0f;
+		altitudeDiff *= motionFactor * 30.0f;
+		distanceDiff *= motionFactor * 30.0f;
 
-		//create the axis for the vertical rotation (altitude)
+		Matrix44 qx = Matrix44.getRotate(new Vector3(0.0f, 1.0f, 0.0f), Camera.degToRad(azimuthDiff));
+		inverseViewVec.transform(qx);
+
+		// create the axis for the vertical rotation (altitude)
 		Vector3 viewVecXZProjection = inverseViewVec;
-		viewVecXZProjection.y=0;
+		viewVecXZProjection.y = 0.0f;
 		viewVecXZProjection.normalize();
 
-		//normal of the XZ projection and the y axis = rotation axis
-		Vector3 qyAxis = Vector3.crossProduct(viewVecXZProjection,new Vector3(0.0f,1.0f,0.0f));
+		// normal of the XZ projection and the y axis = rotation axis
+		Vector3 qyAxis = Vector3.crossProduct(new Vector3(0.0f, 1.0f, 0.0f),viewVecXZProjection);
 		qyAxis.normalize();
 
-		//rotatate view vec (grad)	
-		Matrix44 qx = Matrix44.getRotate(new Vector3(0.0f,1.0f,0.0f), Camera.degToRad(-azimuthDiff));
-		Matrix44 qy = qx.getRotate(qyAxis, Camera.degToRad(altitudeDiff));
-		
-		inverseViewVec.transform(qx);
-		inverseViewVec.transform(qy);
+		// rotatate view vec (grad)
+		Matrix44 qy = Matrix44.getRotate(qyAxis, Camera.degToRad(altitudeDiff));
 
+		inverseViewVec.transform(qy);
 		inverseViewVec.normalize();
 
-		//update current angle data
+		// update current angle data
 		currentAzimuth += azimuthDiff;
-		currentAltitude += altitudeDiff;
 		currentDistance += distanceDiff;
-		
-		Log.i("Alt",String.valueOf(altitude));
-		Log.i("currAlt",String.valueOf(currentAltitude));
-		Log.i("diffAlt",String.valueOf(currentAltitude));
-		Log.i("newdiffAlt",String.valueOf(90-radToDeg((float)Math.acos(Vector3.dotProduct(Vector3.normalize(inverseViewVec),new Vector3(0.0f,1.0f,0.0f))))));
-		
 		eyePosition = Vector3.add(viewPosition,Vector3.multiply(inverseViewVec,currentDistance));
-		
 	}
 
 	

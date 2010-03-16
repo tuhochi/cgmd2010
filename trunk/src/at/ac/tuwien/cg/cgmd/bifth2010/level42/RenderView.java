@@ -24,9 +24,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	private Scene scene;
 	private Camera cam;
 	
-	private float light_ambient[] = {0.9f,0.9f,0.9f,1.0f};
+	private float light_ambient[] = {0.5f,0.5f,0.5f,1.0f};
 	private float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
-	private float light_position[] = {-3.0f,2.0f,2.0f,1.0f};
+	private float light_position[] = {-3.0f,2.0f,5.0f,1.0f};
 	
 	public RenderView(Context context) {
 		super(context);
@@ -53,14 +53,18 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		initGLSettings();
 		
 		//setup light
+		glEnable(GL_LIGHT0);
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
 		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient,0);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse,0);
+		
 	}
 	
 	private void initGLSettings(){
 		
 		glShadeModel(GL_SMOOTH);
+		glEnable(GL_LIGHTING);
+	
 		glClearColor(0.0f, 0.0f, 0.0f, 0.5f); 
 		glEnable(GL_DEPTH_TEST);
 		glClearDepthf(1.0f);
@@ -78,7 +82,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		cam.look(gl);
 		scene.render();
 		
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse,0);
+		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
 
 	}
 
