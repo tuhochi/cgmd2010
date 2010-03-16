@@ -130,6 +130,15 @@
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level42.LAUNCH_LEVEL" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
+                      </activity>
+
+		<activity
+			android:name=".level44.HelpActivity"
+			android:label="@string/l44_nameofthegame_full">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level44.LAUNCH_HELP" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
 		</activity>
 		
 		<activity
@@ -188,4 +197,5 @@
 		android:largeScreens="true"
 		android:normalScreens="true" android:smallScreens="false"
 		android:anyDensity="true" />
-</manifest> 
+</manifest>
+
