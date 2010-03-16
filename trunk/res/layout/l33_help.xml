@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" android:layout_width="fill_parent"
+	android:orientation="vertical">
+
+	<ScrollView android:background="@drawable/l00_menuebackground"
+		android:layout_height="fill_parent" android:layout_width="fill_parent">
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent">
+
+			<!--Headline-->
+			<TextView android:gravity="center" android:textStyle="bold"
+				android:layout_height="wrap_content" android:text="@string/l33_help_headline"
+				android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:textSize="@dimen/l33_help_headSize" android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding">
+			</TextView>
+
+			<!--Main-->
+			<TextView android:gravity="center" android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+				android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_main">
+			</TextView>
+				
+				
+				
+				
+				
+				
+		</LinearLayout>
+
+
+	
+</ScrollView>
+
+</LinearLayout>
