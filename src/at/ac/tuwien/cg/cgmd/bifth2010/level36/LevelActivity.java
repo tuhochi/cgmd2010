@@ -1,7 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level36;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,8 +9,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
- * This activity demonstrates the basic interaction with the framework. When the Finish button is pressed the a result is set and the activity is finished. 
- * @author Peter
+ * 
+ * @author Gruppe 36
  *
  */
 public class LevelActivity extends Activity{
@@ -24,7 +23,7 @@ public class LevelActivity extends Activity{
 		//get the button specified in the layout
 		Button buttonFinish = (Button) findViewById(R.id.l36_ButtonFinish);
 		//set a onClickListener to react to the user's click
-		buttonFinish.setOnClickListener(new OnClickListener(){
+		buttonFinish.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				//the SessionState is a convenience class to set a result
@@ -36,8 +35,14 @@ public class LevelActivity extends Activity{
 				//we finish this activity
 				LevelActivity.this.finish();
 			}
-			
 		});
 	}
 	
+	protected void onPause() {
+		
+	}
+	
+	protected void onResume() {
+		
+	}
 }
