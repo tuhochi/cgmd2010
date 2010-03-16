@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent"
+  	android:layout_height="fill_parent"
+  	android:orientation="vertical">
+  	
+	<ScrollView 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:background="@drawable/l00_menuebackground">
+		
+			<LinearLayout  
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+				
+					<TextView 
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:textStyle="bold"
+						android:paddingLeft="@dimen/l50_help_TitlePadding"
+						android:paddingTop="@dimen/l50_help_TitlePadding"
+						android:paddingRight="@dimen/l50_help_TitlePadding"
+						android:paddingBottom="@dimen/l50_help_TitlePadding"
+						android:textSize="@dimen/l50_help_TitleSize"
+						android:text="@string/l50_GameName"
+						android:textColor="@color/l50_help_black"/>
+						
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l50_help_HelpActivityPadding"
+						android:paddingTop="@dimen/l50_help_HelpActivityPadding"
+						android:paddingRight="@dimen/l50_help_HelpActivityPadding"
+						android:paddingBottom="@dimen/l50_help_HelpActivityPadding"
+						android:textSize="@dimen/l50_help_HelpActivitySize"
+						android:text="@string/l50_HelpActivity1"
+						android:textColor="@color/l50_help_black"/>
+			
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l50_help_HelpActivityPadding"
+						android:paddingTop="@dimen/l50_help_HelpActivityPadding"
+						android:paddingRight="@dimen/l50_help_HelpActivityPadding"
+						android:paddingBottom="@dimen/l50_help_HelpActivityPadding"
+						android:textSize="@dimen/l50_help_HelpActivitySize"
+						android:text="@string/l50_HelpActivity2"
+						android:textColor="@color/l50_help_black"/>
+					
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l50_help_HelpActivityPadding"
+						android:paddingTop="@dimen/l50_help_HelpActivityPadding"
+						android:paddingRight="@dimen/l50_help_HelpActivityPadding"
+						android:paddingBottom="@dimen/l50_help_HelpActivityPadding"
+						android:textSize="@dimen/l50_help_HelpActivitySize"
+						android:text="@string/l50_HelpActivity3"
+						android:textColor="@color/l50_help_black"/>
+				
+			</LinearLayout>
+	</ScrollView>
 </LinearLayout>

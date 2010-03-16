@@ -6,7 +6,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * The HelpActivity for level 50. 
- * @author Group 55
+ * @author Group 50
  */
 public class HelpActivity extends Activity {
 
