@@ -37,12 +37,4 @@ public class LevelActivity extends Activity{
 			}
 		});
 	}
-	
-	protected void onPause() {
-		
-	}
-	
-	protected void onResume() {
-		
-	}
 }
