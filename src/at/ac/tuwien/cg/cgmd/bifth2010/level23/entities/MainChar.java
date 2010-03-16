@@ -119,12 +119,12 @@ public class MainChar implements SceneEntity {
 	
 	public void moveLeftRight(float translate)
 	{
-		translation.y += translate;
+		translation.x += translate;
 	}
 	
 	public void moveUpDown(float translate)
 	{
-		translation.x += translate;
+		translation.y += translate;
 	}
 	
 	public void moveBackFront(float translate)
