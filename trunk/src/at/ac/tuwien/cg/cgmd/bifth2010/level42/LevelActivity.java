@@ -10,6 +10,7 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.l42_level);
+		//setContentView(R.layout.l42_level);
+		setContentView(new GLRenderer(this));
 	}
 }
