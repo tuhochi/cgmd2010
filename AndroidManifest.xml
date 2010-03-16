@@ -182,6 +182,13 @@
 			</intent-filter>
 		</activity>
 		
+	<activity android:name=".level66.HelpActivity" android:screenOrientation="landscape" android:label="@string/l66_nameofthegame_full">
+		<intent-filter>
+			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level66.LAUNCH_HELP"></action>
+			<category android:name="android.intent.category.DEFAULT"></category>
+		</intent-filter>
+	</activity>
+
 	<activity android:name=".level77.LevelActivity"><intent-filter><action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_LEVEL"></action>
 <category android:name="android.intent.category.DEFAULT"></category>
 </intent-filter>
