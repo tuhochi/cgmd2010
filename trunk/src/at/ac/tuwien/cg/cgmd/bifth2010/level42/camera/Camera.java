@@ -2,12 +2,15 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.camera;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLU;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
-public class Camera {
+//static imports
+import static android.opengl.GLU.*;
+
+public class Camera
+{
 
 	
 	private Vector3 viewPosition, eyePosition, upVector, orientationVec, 
@@ -53,7 +56,7 @@ public class Camera {
 	
 	public void look(GL10 gl)
 	{
-		GLU.gluLookAt(gl,eyePosition.x, eyePosition.y, eyePosition.z,
+		gluLookAt(gl,eyePosition.x, eyePosition.y, eyePosition.z,
 			viewPosition.x, viewPosition.y, viewPosition.z, upVector.x, upVector.y, upVector.z);
 	}
 	

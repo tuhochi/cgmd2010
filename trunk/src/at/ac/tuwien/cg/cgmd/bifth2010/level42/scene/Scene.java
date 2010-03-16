@@ -2,7 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import java.util.ArrayList;
 
-import javax.microedition.khronos.opengles.GL10;
+//static imports
+import static android.opengl.GLES10.*;
 
 public class Scene
 {
@@ -12,15 +13,25 @@ public class Scene
 	
 	private ArrayList<Model> entities;
 	
-	public void render(GL10 gl)
+	public Scene()
 	{
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-		//gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		entities = new ArrayList<Model>();
+	}
+	
+	public void render()
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		for(Model m : entities)
-			m.render(gl, rendermode);
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
-		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			m.render(rendermode);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	}
+	
+	public void addModel(Model model)
+	{
+		entities.add(model);
 	}
 }
