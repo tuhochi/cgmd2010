@@ -5,7 +5,7 @@
 <string name="l77_paragraph01">Ein Stapel wertvoller Blöcke schiebt sich nach oben. Durch klicken und ziehen
  eines Blockes kannst du seine vertikale Position im Stapel verändern. Wenn 3 oder mehr gleichfarbige Blöcke
  eine Linie bilden werden die wertvollen Blöcke zerstört und du verlierst Gold.</string>
-<string name="l77_paragraph02">Wenn du mehr als 3 Blöcke auf einmal zerstörst hast du eine Kombination geschafft und du verlierst mehr Gold. Versuche so viele Steine wie möglich gleichzeitig aufzulösen.</string>
+ <string name="l77_paragraph02">Wenn du mehr als 3 Blöcke auf einmal zerstörst hast du eine Kombination geschafft und du verlierst mehr Gold. Versuche so viele Steine wie möglich gleichzeitig aufzulösen.</string>
 <string name="l77_paragraph03">Wenn über den Steinen die du auflöst weitere Steine liegen, fallen diese herunter. 
 Wenn ein heruntergefallener Block wieder mit den Nachbarblöcken eine gleichfarbige Linie bildet hast du eine Kette geschafft und verlierst noch mehr Gold. 
 Versuche so viele Ketten wie möglich hintereinander zu schaffen.</string>
