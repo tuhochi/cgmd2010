@@ -11,7 +11,10 @@
 				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_title" android:textSize="10pt" android:layout_marginBottom="10pt" android:typeface="serif" android:textColor="@color/l84_colorBlack"></TextView>
 			</TableRow>
 			<TableRow>
-				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_subtitle" android:textStyle="bold" android:layout_marginBottom="10pt" android:typeface="serif" android:textColor="@color/l84_colorBlack"></TextView>
+			 <ImageView android:layout_width="205px" android:layout_height="135px" android:background="@drawable/l84_helpjewels" android:layout_gravity="center_horizontal" android:fadingEdge="horizontal" android:fadingEdgeLength="5pt"></ImageView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_subtitle" android:textStyle="bold" android:layout_marginBottom="10pt" android:typeface="serif" android:textColor="@color/l84_colorBlack" android:layout_marginTop="10pt"></TextView>
 			</TableRow>
 			<TableRow>
 				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_content" android:textColor="@color/l84_colorBlack" android:typeface="serif"></TextView>
