@@ -200,6 +200,13 @@
 			</intent-filter>
 		</activity>
 		
+		<activity android:label="@string/l83_title" android:name=".level83.HelpActivity">
+		  <intent-filter>
+		        <action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level83.LAUNCH_HELP"></action>
+		        <category android:name="android.intent.category.DEFAULT"></category>
+		      </intent-filter>
+		</activity>
+		
 		<activity
 			android:name=".level88.HelpActivity">
 			<intent-filter>
