@@ -21,11 +21,11 @@
 			</TextView>
 
 			<!--Main-->
-			<TextView android:gravity="center" android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
+			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
 				android:paddingBottom="@dimen/l33_help_headPadding"
 				android:paddingLeft="@dimen/l33_help_headPadding"
 				android:paddingRight="@dimen/l33_help_headPadding"
-				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_main">
+				android:paddingTop="@dimen/l33_help_headPadding" android:text="@string/l33_help_main" android:gravity="left">
 			</TextView>
 			
 			<!--entry1_head-->
