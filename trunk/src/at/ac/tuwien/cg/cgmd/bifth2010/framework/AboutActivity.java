@@ -213,7 +213,7 @@ public class AboutActivity extends Activity {
 			
 			
 			mCoin = new Cylinder(0.5f, 0.10f, (short) 10);
-			mCoin.setTexture(gl, getResources(), R.drawable.l00_coin64);
+			mCoin.setTexture(gl, getResources(), R.drawable.l00_coin);
 			mCoin.setColor(0.85f, 0.68f, 0.22f, 1.f);
 			
 			

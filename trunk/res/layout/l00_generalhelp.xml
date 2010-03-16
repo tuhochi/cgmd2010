@@ -12,11 +12,11 @@
 
 
 <TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/l00_buttonBackground" android:text="@string/l00_help_part03"></TextView><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center_horizontal"><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_margin="15dip">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
 </LinearLayout><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_margin="15dip">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
 </LinearLayout><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_margin="15dip">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
 </LinearLayout></LinearLayout>
 </LinearLayout>
 	
