@@ -11,9 +11,8 @@ public class LevelActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mGLSurfaceView = new GLSurfaceView(this);
-        mGLSurfaceView.setRenderer(new Renderer());
-        setContentView(mGLSurfaceView);
+		Renderer renderer = new Renderer(this);
+        setContentView(renderer);
 
 	}
 }
