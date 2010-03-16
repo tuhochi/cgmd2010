@@ -408,17 +408,17 @@ public class MapActivity extends Activity {
 		// we convert the layouting coordinates into relative coordinates and exchange the absolute view with a relativepositioning view 
 		float fW = 480;
 		float fH = 270;
-		String s ="";
+		//String s ="";
 		absoluteLayout.measure((int)fW, (int)fH);
 		absoluteLayout.layout(0, 0, (int)fW, (int)fH);
 		for(int i=0; i<iSize; i++) {
 			View v = absoluteLayout.getChildAt(0);
 			AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v.getLayoutParams(); 
 			
-			float fX = ((float)lp.x+(float)v.getMeasuredWidth()*0.5f) / fW * 100.f;
-			float fY = ((float)lp.y+(float)v.getMeasuredHeight()*0.5f) / fH * 100.f;
+			float fX = ((float)lp.x+(float)v.getMeasuredWidth()*0.5f) / fW * 1000.f;
+			float fY = ((float)lp.y+(float)v.getMeasuredHeight()*0.5f) / fH * 1000.f;
 
-			s += "Point p = new PathPoint(" + Float.toString(fX) + ", " + Float.toString(fY) + ")";  
+			//s += "Point p = new PathPoint(" + Float.toString(fX) + ", " + Float.toString(fY) + ")";  
 			absoluteLayout.removeView(v);
 			
 			Rect r = new Rect();
@@ -429,7 +429,7 @@ public class MapActivity extends Activity {
 				mLayout.addView(v);
 			}
 		}
-		Log.d(CLASS_TAG, s);
+		//Log.d(CLASS_TAG, s);
 
 		fl.removeView(absoluteLayout);
 		fl.addView(mLayout);
@@ -454,7 +454,7 @@ public class MapActivity extends Activity {
 		ImageButton l06 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel06);
 		ImageButton l07 = (ImageButton) findViewById(R.id.l00_ImageButtonLevel07);
 
-		mLayout.findViewById(R.id.l00_ImageButtonLevel01).setBackgroundResource(R.drawable.l00_coin40);
+		mLayout.findViewById(R.id.l00_ImageButtonLevel01).setBackgroundResource(R.drawable.l00_coin);
 
 		l00.setOnClickListener(mLevelClickListener);
 		l01.setOnClickListener(mLevelClickListener);

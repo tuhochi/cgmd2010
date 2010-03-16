@@ -24,7 +24,7 @@ public final class Constants {
 
 	public static int getLevelIconResource(int id) {
 		if(id==0) {
-			return R.drawable.l00_coin40;
+			return R.drawable.l00_coin;
 		}
 		//TODO add hardcoded level id to icon id mapping here
 		//else if (id==1){

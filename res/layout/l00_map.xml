@@ -13,7 +13,7 @@
 <AbsoluteLayout android:id="@+id/l00_AbsoluteLayout" android:layout_height="fill_parent" android:layout_width="fill_parent">
 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Map Activity" android:id="@+id/l00_TextViewFps"></TextView>
 
-<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel00" android:background="@drawable/l00_levelicon_start" android:layout_x="53px" android:layout_y="113px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel00" android:background="@drawable/l00_levelicon_start" android:layout_x="53px" android:layout_y="110px"></ImageButton>
 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel01" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="110px" android:layout_y="30px" android:maxWidth="35px" android:maxHeight="35px"></ImageButton>
 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel02" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="300px" android:layout_y="40px" android:maxWidth="35px" android:maxHeight="35px"></ImageButton>
 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel03" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="110px" android:layout_y="115px" android:maxWidth="35px" android:maxHeight="35px"></ImageButton>

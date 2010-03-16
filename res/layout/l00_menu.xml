@@ -7,23 +7,23 @@
 
 <TableLayout android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_gravity="center_vertical|center_horizontal|center" android:gravity="center_vertical|center_horizontal">
 <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40" android:layout_gravity="center_vertical"></ImageView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
 <Button android:id="@+id/l00_ButtonContinueGame" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Continue Game" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt"></Button>
 </TableRow><TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40" android:layout_gravity="center_vertical"></ImageView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
 <Button android:id="@+id/l00_ButtonNewGame" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="New Game" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt"></Button>
 </TableRow>
 
 <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40" android:layout_gravity="center_vertical"></ImageView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
 <Button android:id="@+id/l00_ButtonHelp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Help" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt"></Button>
 </TableRow>
 <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40" android:layout_gravity="center_vertical"></ImageView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
 <Button android:id="@+id/l00_ButtonAbout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="About" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt"></Button>
 </TableRow>
 <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin40" android:layout_gravity="center_vertical" android:visibility="visible"></ImageView>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical" android:visibility="visible"></ImageView>
 <Button android:id="@+id/l00_ButtonCredits" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Credits" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt" android:soundEffectsEnabled="false" android:ellipsize="none"></Button>
 </TableRow>
 
