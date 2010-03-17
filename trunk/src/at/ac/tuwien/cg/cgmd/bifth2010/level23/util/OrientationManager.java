@@ -16,16 +16,15 @@ public class OrientationManager {
 	private static SensorManager sensorManager;
 	private static OrientationListener orientationListener; 
 	private static boolean isListening, isSupported; 
-	
-	enum Side { 
-		LEFT, RIGHT, TOP, BOTTOM;
-		}
+	private static int LEFT = 0; 
+	private static int RIGHT = 1; 
+	private static int currentSide = -1; 
+	private static int oldSide = -1; 
 	
 	// create SensorEventListener, which listens to the events from the orientation sensor
 	
 	private static SensorEventListener orientationSensorEventListener = new SensorEventListener() {
-		private Side currentSide = null; 
-		private Side oldSide = null; 
+	
 		private float roll; 
 		
 		
@@ -42,22 +41,21 @@ public class OrientationManager {
 			Log.i("roll:",String.valueOf(roll));
 			// roll angle not clear, has to be tested
 			if (roll > 45)
-				currentSide = Side.RIGHT; 
+				currentSide = RIGHT; 
 			else if (roll < -45) 
-				currentSide = Side.LEFT; 
+				currentSide =LEFT; 
 			
 			// call listener dependent of which side is up 
-			if (currentSide != null) {
-				switch(currentSide) {
-				case LEFT: orientationListener.onRollLeft(); 
-					break; 
-				case RIGHT: orientationListener.onRollRight(); 
-					break; 
-				}
-				
-				oldSide = currentSide; 
-				
+			if (currentSide != -1) {
+				if (currentSide ==LEFT)
+					orientationListener.onRollLeft(); 
+				if (currentSide == RIGHT)
+					orientationListener.onRollRight();  
 			}
+				
+			oldSide = currentSide; 
+				
+			
 		}
 
 		@Override
@@ -67,8 +65,10 @@ public class OrientationManager {
 		}
 	};
 
+
 	// start listener
 	public static void registerListener(OrientationListener listener) {
+	
 		sensorManager = (SensorManager)LevelActivity.getContext().getSystemService(Context.SENSOR_SERVICE);
 		List<Sensor> supportedSensors = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
 		if (supportedSensors.size() > 0)
@@ -77,7 +77,7 @@ public class OrientationManager {
 			isSupported = false; 
 		
 		//if not supported by device
-		if (supportedSensors.size() <= 0)
+		if (!isSupported)
 			return; 
 		
 		orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
