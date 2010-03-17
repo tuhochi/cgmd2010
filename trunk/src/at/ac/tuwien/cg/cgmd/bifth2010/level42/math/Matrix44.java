@@ -2,7 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 public class Matrix44
 {
-	public float m[][];
+	public float m[][] = new float[4][4];
+	private float m16[] = new float[16];
+	private Matrix44 temp = new Matrix44();
 
 	public Matrix44()
 	{
@@ -11,8 +13,16 @@ public class Matrix44
 	
 	public Matrix44(Matrix44 other)
 	{
-		m = new float[4][4];
 		setFromArray(other.m);
+	}
+	
+	public float[] getArray16()
+	{
+		int i = 0;
+		for(int c=0; c<4; c++)
+			for(int r=0; r<4; r++)
+				m16[i++] = m[r][c];
+		return m16;
 	}
 	
 	private void setFromArray(float[][] other)
@@ -24,7 +34,9 @@ public class Matrix44
 	
 	public void setIdentity()
 	{
-		m = new float[][] { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		for(int r=0; r<4; r++)
+			for(int c=0; c<4; c++)
+				m[r][c] = (r==c) ? 1 : 0;
 	}
 	
 	/*
@@ -54,8 +66,8 @@ public class Matrix44
 	 */
 	public Matrix44 addScale(float sx, float sy, float sz)
 	{
-		Matrix44 newM = getScale(sx, sy, sz).mult(this);
-		setFromArray(newM.m);
+		temp.setScale(sx, sy, sz).mult(this);
+		setFromArray(temp.m);
 		return this;
 	}
 
@@ -87,8 +99,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotateX(float alpha)
 	{
-		Matrix44 newM = getRotateX(alpha).mult(this);
-		setFromArray(newM.m);
+		temp.setRotateX(alpha).mult(this);
+		setFromArray(temp.m);
 		return this;
 	}
 
@@ -120,8 +132,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotateY(float alpha)
 	{
-		Matrix44 newM = getRotateY(alpha).mult(this);
-		setFromArray(newM.m);
+		temp.setRotateY(alpha).mult(this);
+		setFromArray(temp.m);
 		return this;
 	}
 
@@ -153,8 +165,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotateZ(float alpha)
 	{
-		Matrix44 newM = getRotateZ(alpha).mult(this);
-		setFromArray(newM.m);
+		temp.setRotateZ(alpha).mult(this);
+		setFromArray(temp.m);
 		return this;
 	}
 	
@@ -187,8 +199,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotate(Vector3 axis, float alpha)
 	{
-		Matrix44 newM = getRotate(axis, alpha).mult(this);
-		setFromArray(newM.m);
+		temp.setRotate(axis, alpha).mult(this);
+		setFromArray(temp.m);
 		return this;
 	}
 	
@@ -219,8 +231,8 @@ public class Matrix44
 	 */
 	public Matrix44 addTranslate(float tx, float ty, float tz)
 	{
-		Matrix44 newM = getTranslate(tx, ty, tz).mult(this);
-		setFromArray(newM.m);
+		temp.setTranslate(tx, ty, tz).mult(this);
+		setFromArray(temp.m);
 		return this;
 	}
 	
@@ -261,25 +273,28 @@ public class Matrix44
 	/*
 	 * @return this*in
 	 */
-	public Vector3 transformPoint(Vector3 in)
+	public void transformPoint(Vector3 in)
 	{
-		Vector3 result = new Vector3();
-		result.x = m[0][0]*in.x + m[0][1]*in.y + m[0][2]*in.z;
-		result.y = m[1][0]*in.x + m[1][1]*in.y + m[1][2]*in.z;
-		result.z = m[2][0]*in.x + m[2][1]*in.y + m[2][2]*in.z;
-		return result;
+		float x = m[0][0]*in.x + m[0][1]*in.y + m[0][2]*in.z;
+		float y = m[1][0]*in.x + m[1][1]*in.y + m[1][2]*in.z;
+		float z = m[2][0]*in.x + m[2][1]*in.y + m[2][2]*in.z;
+		in.x = x;
+		in.y = y;
+		in.z = z;
 	}
 	
 	/*
 	 * @return this*in
 	 */
-	public Vector4 transformPoint(Vector4 in)
+	public void transformPoint(Vector4 in)
 	{
-		Vector4 result = new Vector4();
-		result.x = m[0][0]*in.x + m[0][1]*in.y + m[0][2]*in.z + m[0][3]*in.w;
-		result.y = m[1][0]*in.x + m[1][1]*in.y + m[1][2]*in.z + m[1][3]*in.w;
-		result.z = m[2][0]*in.x + m[2][1]*in.y + m[2][2]*in.z + m[2][3]*in.w;
-		result.w = m[3][0]*in.x + m[3][1]*in.y + m[3][2]*in.z + m[3][3]*in.w;
-		return result;
+		float x = m[0][0]*in.x + m[0][1]*in.y + m[0][2]*in.z + m[0][3]*in.w;
+		float y = m[1][0]*in.x + m[1][1]*in.y + m[1][2]*in.z + m[1][3]*in.w;
+		float z = m[2][0]*in.x + m[2][1]*in.y + m[2][2]*in.z + m[2][3]*in.w;
+		float w = m[3][0]*in.x + m[3][1]*in.y + m[3][2]*in.z + m[3][3]*in.w;
+		in.x = x;
+		in.y = y;
+		in.z = z;
+		in.w = w;
 	}
 }

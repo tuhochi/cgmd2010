@@ -17,11 +17,6 @@ public class Vector4
 		this.w = w;
 	}
 	
-	private void copy(Vector4 other)
-	{
-		copy(other.x, other.y, other.z, other.w);
-	}
-	
 	public Vector4(float x, float y, float z)
 	{
 		this(x,y,z,1);
@@ -173,13 +168,6 @@ public class Vector4
 		x /= s;
 		y /= s;
 		z /= s;
-		return this;
-	}
-	
-	public Vector4 transform(Matrix44 m)
-	{
-		Vector4 newV = m.transformPoint(this);
-		copy(newV);
 		return this;
 	}
 	
