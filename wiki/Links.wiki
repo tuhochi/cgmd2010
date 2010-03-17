@@ -25,6 +25,10 @@ Here you can find some useful links for the project. If you find some links, ple
   * *Nehe Android Ports: [http://insanitydesign.com/wp/projects/nehe-android-ports/ 1] [http://code.google.com/p/nehe-android/ 2]*
   * *[http://www.khronos.org/opengles/ OpenGL ES Specification]*
 
+== Books / Literature (Android & OpenGL ES) ==
+
+  * *[http://dpunkt.de/buecher/3436.html Arno Becker / Marcus Pant: Android - Grundlagen und Programmierung (German) - Free Download!]*
+
 == SVN ==
 
   * *[http://svnbook.red-bean.com/index.de.html SVN book]*
