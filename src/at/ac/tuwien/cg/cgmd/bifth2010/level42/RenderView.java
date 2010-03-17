@@ -40,7 +40,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		this.context = context;
 		
 		scene = new Scene();
-		scene.addModel(new Cube());
+		
 		cam = new Camera(10.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,1000.0f);
 	}
 	
@@ -74,6 +74,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
 		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient,0);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse,0);
+		
+		scene.addModel(new Cube());
 		
 	}
 	
