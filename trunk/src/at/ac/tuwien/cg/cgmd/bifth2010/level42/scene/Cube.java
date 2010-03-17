@@ -191,7 +191,7 @@ public class Cube extends Model
         							new Color4(0.1f, 0.1f, 0.1f),
         							new Color4(0.9f, 0.1f, 0.1f),
         							new Color4(0.1f, 0.1f, 0.1f),
-        							R.drawable.l42_box);
+        							R.drawable.l42_box_without_alpha);
         //transformation.addRotateX(90);
         transformation.addRotateY(90);
 	}

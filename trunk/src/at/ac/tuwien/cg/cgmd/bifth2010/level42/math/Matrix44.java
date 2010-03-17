@@ -4,7 +4,7 @@ public class Matrix44
 {
 	public float m[][] = new float[4][4];
 	private float m16[] = new float[16];
-	private Matrix44 temp = new Matrix44();
+	private Matrix44 temp;
 
 	public Matrix44()
 	{
@@ -66,6 +66,8 @@ public class Matrix44
 	 */
 	public Matrix44 addScale(float sx, float sy, float sz)
 	{
+		if(temp == null)
+			temp = new Matrix44();
 		temp.setScale(sx, sy, sz).mult(this);
 		setFromArray(temp.m);
 		return this;
@@ -99,6 +101,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotateX(float alpha)
 	{
+		if(temp == null)
+			temp = new Matrix44();
 		temp.setRotateX(alpha).mult(this);
 		setFromArray(temp.m);
 		return this;
@@ -132,6 +136,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotateY(float alpha)
 	{
+		if(temp == null)
+			temp = new Matrix44();
 		temp.setRotateY(alpha).mult(this);
 		setFromArray(temp.m);
 		return this;
@@ -165,6 +171,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotateZ(float alpha)
 	{
+		if(temp == null)
+			temp = new Matrix44();
 		temp.setRotateZ(alpha).mult(this);
 		setFromArray(temp.m);
 		return this;
@@ -199,6 +207,8 @@ public class Matrix44
 	 */
 	public Matrix44 addRotate(Vector3 axis, float alpha)
 	{
+		if(temp == null)
+			temp = new Matrix44();
 		temp.setRotate(axis, alpha).mult(this);
 		setFromArray(temp.m);
 		return this;
@@ -231,6 +241,8 @@ public class Matrix44
 	 */
 	public Matrix44 addTranslate(float tx, float ty, float tz)
 	{
+		if(temp == null)
+			temp = new Matrix44();
 		temp.setTranslate(tx, ty, tz).mult(this);
 		setFromArray(temp.m);
 		return this;
