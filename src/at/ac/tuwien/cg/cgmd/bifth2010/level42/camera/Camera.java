@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.camera;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 

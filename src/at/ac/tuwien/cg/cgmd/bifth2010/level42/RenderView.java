@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -13,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Cube;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 // static imports
 import static android.opengl.GLES10.*;
@@ -28,7 +30,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	private float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
 	private float light_position[] = {-3.0f,2.0f,5.0f,1.0f};
 	
-	public RenderView(Context context) {
+	public RenderView(Context context)
+	{
 		super(context);
 		setFocusable(true);
 		requestFocus();
@@ -46,10 +49,24 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		this(context);
 	}
 	
+	private void initGLSettings()
+	{
+		glShadeModel(GL_SMOOTH);
+		glEnable(GL_LIGHTING);
+	
+		glClearColor(0.0f, 0.0f, 0.0f, 0.5f); 
+		glEnable(GL_DEPTH_TEST);
+		glClearDepthf(1.0f);
+		glEnable(GL_TEXTURE_2D);
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
+	}
 
 	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
+	public void onSurfaceCreated(GL10 gl, EGLConfig config)
+	{
+		// check for GLES11
+		Config.GLES11 = (gl instanceof GL11);
+		
 		initGLSettings();
 		
 		//setup light
@@ -60,20 +77,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 	}
 	
-	private void initGLSettings(){
-		
-		glShadeModel(GL_SMOOTH);
-		glEnable(GL_LIGHTING);
-	
-		glClearColor(0.0f, 0.0f, 0.0f, 0.5f); 
-		glEnable(GL_DEPTH_TEST);
-		glClearDepthf(1.0f);
-		glEnable(GL_TEXTURE_2D);
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
-	}
-	
 	@Override
-	public void onDrawFrame(GL10 gl) {
+	public void onDrawFrame(GL10 gl)
+	{
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
@@ -87,7 +93,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	}
 
 	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
+	public void onSurfaceChanged(GL10 gl, int width, int height)
+	{
 		
 		//thx to l17!!
 		
@@ -108,7 +115,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	}
 	
 	@Override
-	public boolean onTouchEvent(final MotionEvent event) {
+	public boolean onTouchEvent(final MotionEvent event)
+	{
 		queueEvent(new Runnable(){
 			public void run() {
 				if(event.getAction() == MotionEvent.ACTION_DOWN)

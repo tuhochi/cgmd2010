@@ -8,13 +8,26 @@ public class LevelActivity extends Activity
 {
 	public static final String TAG = "Signanzorbit";
 	
+	private static LevelActivity instance;
+	
 	private RenderView renderView;
 	
+	public LevelActivity()
+	{
+		super();
+		instance = this;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l42_level);
-		renderView = (RenderView)findViewById(R.id.l42_RenderView);
+		renderView = (RenderView)findViewById(R.id.l42_RenderView); // seems to be null?!
+	}
+
+	public static LevelActivity getInstance()
+	{
+		return instance;
 	}
 }

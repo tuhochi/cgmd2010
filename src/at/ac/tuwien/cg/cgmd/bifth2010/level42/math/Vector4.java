@@ -39,7 +39,7 @@ public class Vector4
 
 	public Vector4()
 	{
-		this(0,0,0,0);
+		this(0,0,0,1);
 	}
 	
 	public Vector4 add(Vector4 other)
