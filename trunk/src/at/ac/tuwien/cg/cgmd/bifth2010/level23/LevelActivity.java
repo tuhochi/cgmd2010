@@ -17,14 +17,11 @@ public class LevelActivity extends Activity implements OrientationListener {
 		renderer = new Renderer(this);
         setContentView(renderer);
         CONTEXT = this; 
-
+        OrientationManager.registerListener(this);
 	}
 	
 	public void onResume() {
 		super.onResume(); 
-		if (OrientationManager.isSupported()) 
-			OrientationManager.registerListener(this);
-		
 	}
 	
 	public void onDestroy() {

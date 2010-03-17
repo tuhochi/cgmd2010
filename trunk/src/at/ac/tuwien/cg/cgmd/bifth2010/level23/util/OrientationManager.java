@@ -36,7 +36,9 @@ public class OrientationManager {
 		
 		// 0: azimuth, 1: pitch, 2: roll
 		public void onSensorChanged(SensorEvent evt) {
+			
 			roll = evt.values[2]; 
+			System.out.println(roll);
 			Log.i("roll:",String.valueOf(roll));
 			// roll angle not clear, has to be tested
 			if (roll > 45)
@@ -45,7 +47,7 @@ public class OrientationManager {
 				currentSide = Side.LEFT; 
 			
 			// call listener dependent of which side is up 
-			if (currentSide != null && !currentSide.equals(oldSide)) {
+			if (currentSide != null) {
 				switch(currentSide) {
 				case LEFT: orientationListener.onRollLeft(); 
 					break; 
@@ -67,8 +69,8 @@ public class OrientationManager {
 
 	// start listener
 	public static void registerListener(OrientationListener listener) {
-		List<Sensor> supportedSensors = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
 		sensorManager = (SensorManager)LevelActivity.getContext().getSystemService(Context.SENSOR_SERVICE);
+		List<Sensor> supportedSensors = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
 		if (supportedSensors.size() > 0)
 			isSupported = true; 
 		else
@@ -78,9 +80,10 @@ public class OrientationManager {
 		if (supportedSensors.size() <= 0)
 			return; 
 		
-		orientationSensor = supportedSensors.get(0); 
+		orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 		isListening = sensorManager.registerListener(orientationSensorEventListener, orientationSensor, SensorManager.SENSOR_DELAY_GAME);
 		orientationListener = listener; 
+		
 	}
 	
 	//end listener
