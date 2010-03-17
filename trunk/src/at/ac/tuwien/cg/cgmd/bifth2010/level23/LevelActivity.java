@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 
 public class LevelActivity extends Activity implements OrientationListener {
 
@@ -15,7 +16,21 @@ public class LevelActivity extends Activity implements OrientationListener {
 		super.onCreate(savedInstanceState);
 		renderer = new Renderer(this);
         setContentView(renderer);
+        CONTEXT = this; 
 
+	}
+	
+	public void onResume() {
+		super.onResume(); 
+		if (OrientationManager.isSupported()) 
+			OrientationManager.registerListener(this);
+		
+	}
+	
+	public void onDestroy() {
+		super.onDestroy();
+		if (OrientationManager.isListening()) 
+			OrientationManager.unregisterListener();
 	}
 
 	@Override

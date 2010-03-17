@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 
 public class OrientationManager {
@@ -14,7 +15,7 @@ public class OrientationManager {
 	private static Sensor orientationSensor; 
 	private static SensorManager sensorManager;
 	private static OrientationListener orientationListener; 
-	private static boolean isListening; 
+	private static boolean isListening, isSupported; 
 	
 	enum Side { 
 		LEFT, RIGHT, TOP, BOTTOM;
@@ -29,12 +30,14 @@ public class OrientationManager {
 		
 		
 		// required method dummies
-		public void onAccuracyChanged(int sensor) {}
+		public void onAccuracyChanged(int sensor) {
+			
+		}
 		
 		// 0: azimuth, 1: pitch, 2: roll
 		public void onSensorChanged(SensorEvent evt) {
 			roll = evt.values[2]; 
-			
+			Log.i("roll:",String.valueOf(roll));
 			// roll angle not clear, has to be tested
 			if (roll > 45)
 				currentSide = Side.RIGHT; 
@@ -66,6 +69,10 @@ public class OrientationManager {
 	public static void registerListener(OrientationListener listener) {
 		List<Sensor> supportedSensors = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
 		sensorManager = (SensorManager)LevelActivity.getContext().getSystemService(Context.SENSOR_SERVICE);
+		if (supportedSensors.size() > 0)
+			isSupported = true; 
+		else
+			isSupported = false; 
 		
 		//if not supported by device
 		if (supportedSensors.size() <= 0)
@@ -89,6 +96,10 @@ public class OrientationManager {
 	}
 	
 	public static boolean isListening() {
-		return isListening(); 
+		return isListening; 
+	}
+	
+	public static boolean isSupported() {
+		return isSupported; 
 	}
 }
