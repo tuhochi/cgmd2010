@@ -140,13 +140,21 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	public void handleOnTouchMovement(final MotionEvent evt) {
 		queueEvent(new Runnable(){
 			public void run() {
-				if (evt.getRawX() <  mainChar.getPosition().x) {
+				if (evt.getRawX() <  mainChar.getPosition().x && isInboundsAfterStep(false)) {
 					mainChar.moveLeftRight(-stepWidth);
-				} else if (evt.getRawX() > (mainChar.getPosition().x + mainChar.getWidth() )) {
+				} else if (evt.getRawX() > (mainChar.getPosition().x + mainChar.getWidth() ) && isInboundsAfterStep(true)) {
 					mainChar.moveLeftRight(stepWidth);
 				}
 			}
 		});
 	}
+	
+	public void handleRollMovement(boolean toRight) {
+		if (toRight && isInboundsAfterStep(true))
+			mainChar.moveLeftRight(stepWidth); 
+		else if(isInboundsAfterStep(false))
+			mainChar.moveLeftRight(-stepWidth);
+	}
+	
 
 }

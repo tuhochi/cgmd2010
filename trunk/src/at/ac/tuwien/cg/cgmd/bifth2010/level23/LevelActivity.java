@@ -1,18 +1,42 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23;
 
 import android.app.Activity;
-import android.opengl.GLSurfaceView;
+import android.content.Context;
 import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Renderer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 
-public class LevelActivity extends Activity {
+public class LevelActivity extends Activity implements OrientationListener {
 
-	private GLSurfaceView mGLSurfaceView;
-
+	private Renderer renderer; 
+	private static Context CONTEXT; 
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Renderer renderer = new Renderer(this);
+		renderer = new Renderer(this);
         setContentView(renderer);
 
+	}
+
+	@Override
+	public void onOrientationChanged(float azimuth, float pitch, float roll) {
+		// handle notification that the orientation has changed (as for now, for roll only) 
+		// maybe we could use it later?! 
+	}
+
+	@Override
+	public void onRollLeft() {
+		renderer.handleRollMovement(false); 
+		
+	}
+
+	@Override
+	public void onRollRight() {
+		renderer.handleRollMovement(true);
+		
+	}
+	
+	public static Context getContext() {
+		return CONTEXT;
 	}
 }
