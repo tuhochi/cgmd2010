@@ -10,7 +10,13 @@ public class Hair {
 	
 	private Vector2 position;
 	private Color color;
-	private Texture texture;
+	
+	public static Textures texture;
+	public static int hair_01_texture_id = R.drawable.l11_pedestrian_hair_01;
+	//public static int hair_02_texture_id = R.drawable.l11_pedestrian_hair_02;
+	//public static int hair_03_texture_id = R.drawable.l11_pedestrian_hair_03;
+	
+	private int hair_type;
 	
 	public Hair(GL10 gl, Context context) {
 		//texture = new Texture(gl, R.drawable.l11_pedestrian_hair, context);
@@ -26,6 +32,16 @@ public class Hair {
 	
 	public void draw(GL10 gl) {
 		
+		if (hair_type == 0) {	
+			//this.texture.setTexture(hair_01_texture_id);
+			
+	//	} else if () {
+			//this.texture.setTexture(hair_02_texture_id);
+			
+	//	} else if () }
+			//this.texture.setTexture(hair_03_texture_id);
+			
+		}
 	}
 	
 }
