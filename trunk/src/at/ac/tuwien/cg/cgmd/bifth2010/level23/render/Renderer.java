@@ -10,10 +10,12 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.CommonFunctions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
-import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
+
 
 public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 
@@ -24,6 +26,8 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	private boolean lastDirection; 
 	private int stepWidth = 5; 
 	private MotionEvent lastMotionEvent = null; 
+	private float accTime;
+	
 	public Renderer(Context context)
 	{
 		
@@ -39,6 +43,14 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
+		TimeUtil.getInstance().update();
+		accTime += TimeUtil.getInstance().getDt()/1000;
+		if(accTime > 5)
+		{
+			System.out.println(TimeUtil.getInstance().getFPS());
+			accTime = 0;
+		}
+		
 		gl.glClearColor(1,0,0,0);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -60,17 +72,17 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		//setup the Viewport with an Orthogonal View 1 unit = 1 pixel
 		//0 0 is bottom left
-		gl.glOrthof(0, width, 0, height, 0.01f, 10);
+		gl.glOrthof(0, width, 0, height, -10.0f, 1000);
 		gl.glViewport(0, 0, width, height);		
 	}
 
 	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-		
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
+	{
+		int resID = context.getResources().getIdentifier("l17_crate", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 	}
-	
-	
+		
 	public boolean onKeyDown(int key, KeyEvent evt) {
 		switch(key) {
 		case KeyEvent.KEYCODE_0: //left
@@ -104,9 +116,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		}
 		else if (evt.getAction() == MotionEvent.ACTION_UP) {
 			released = true;
-		}
-		
-		
+		}		
 		
 		return true; 
 	}
