@@ -15,16 +15,26 @@ public class GameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // set to fullscreen and no bars
         requestWindowFeature(Window.FEATURE_NO_TITLE); 
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
     	
+    	// create level
+    	_level = new Level(480, 320);
+    	
         _gameView = new GameView(this);
         setContentView(_gameView);
         
-       // _level = new Level();
+      
         //_level.start();
+         
         
+    }
+    
+    public Level getLevel() {
+    	return _level;
     }
     
     
