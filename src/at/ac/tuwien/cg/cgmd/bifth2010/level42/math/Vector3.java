@@ -17,11 +17,6 @@ public class Vector3
 		this.z = z;
 	}
 	
-	private void copy(Vector3 other)
-	{
-		copy (other.x, other.y, other.z);
-	}
-	
 	public Vector3(Vector3 other)
 	{
 		this(other.x, other.y, other.z);
@@ -113,13 +108,6 @@ public class Vector3
 		x /= s;
 		y /= s;
 		z /= s;
-		return this;
-	}
-	
-	public Vector3 transform(Matrix44 m)
-	{
-		Vector3 newV = m.transformPoint(this);
-		copy(newV);
 		return this;
 	}
 	

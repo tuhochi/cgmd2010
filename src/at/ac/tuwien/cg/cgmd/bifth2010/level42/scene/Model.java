@@ -31,6 +31,8 @@ public class Model
 	
 	public void render(int rendermode)
 	{
+		glPushMatrix();
+		glMultMatrixf(transformation.getArray16(), 0);
 		materialManager.bindMaterial(materialName);
 		switch(rendermode)
 		{
@@ -52,6 +54,7 @@ public class Model
 			glDrawArrays(GL_TRIANGLES, 0, numVertices);
 			break;
 		}
+		glPopMatrix();
 	}
 	
 	public Matrix44 getTransformation()

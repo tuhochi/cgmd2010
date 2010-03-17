@@ -117,7 +117,7 @@ public class Camera
 		distanceDiff *= motionFactor * 30.0f;
 
 		Matrix44 qx = Matrix44.getRotate(new Vector3(0.0f, 1.0f, 0.0f), Camera.degToRad(azimuthDiff));
-		inverseViewVec.transform(qx);
+		qx.transformPoint(inverseViewVec);
 
 		// create the axis for the vertical rotation (altitude)
 		Vector3 viewVecXZProjection = inverseViewVec;
@@ -131,7 +131,7 @@ public class Camera
 		// rotatate view vec (grad)
 		Matrix44 qy = Matrix44.getRotate(qyAxis, Camera.degToRad(altitudeDiff));
 
-		inverseViewVec.transform(qy);
+		qy.transformPoint(inverseViewVec);
 		inverseViewVec.normalize();
 
 		// update current angle data
