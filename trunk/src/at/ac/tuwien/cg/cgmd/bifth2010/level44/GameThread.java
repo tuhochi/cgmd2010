@@ -13,10 +13,16 @@ public class GameThread extends Thread {
 	
 	public void run() {
 		while (!quit) {
-			head.setWingAngle((float)(Math.sin(System.currentTimeMillis()/100)*45));
-			head.setRotation((float)(10-Math.sin(System.currentTimeMillis()/1000.)*20));
+			scene.queueEvent(new Runnable() {
+				public void run() {
+					head.setPosition((float)(scene.getWidth()/2 + scene.getWidth()/5*Math.sin((double)(System.currentTimeMillis()/10000.))), (float)(scene.getHeight()/3));
+					head.setScale((float)(.5+.5*Math.abs(Math.sin((double)(System.currentTimeMillis()/5000.)))));
+					head.setWingAngle((float)(Math.sin((double)(System.currentTimeMillis()/100.))*45));
+					head.setRotation((float)(10-Math.sin((double)(System.currentTimeMillis()/1000.))*20));
+				}
+			});
 			try {
-				sleep(50);
+				sleep(10);
 			} catch (InterruptedException ie) {}
 		}
 	}
