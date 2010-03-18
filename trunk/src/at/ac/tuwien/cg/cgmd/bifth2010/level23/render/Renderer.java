@@ -19,14 +19,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 
+	public static int screenWidth;
+	public static int screenHeight;
+	
 	private ArrayList<SceneEntity> sceneEntities;
 	private Context context; 
 	private MainChar mainChar; 
 	private boolean released = true; 
-	private boolean lastDirection; 
 	private int stepWidth = 5; 
 	private MotionEvent lastMotionEvent = null; 
 	private float accTime;
+	
+	private boolean useSensor = false;
+	
+	private int mainCharMoveDir;
 	
 	public Renderer(Context context)
 	{
@@ -44,6 +50,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	public void onDrawFrame(GL10 gl) 
 	{
 		TimeUtil.getInstance().update();
+		
 		accTime += TimeUtil.getInstance().getDt()/1000;
 		if(accTime > 5)
 		{
@@ -51,6 +58,16 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 			accTime = 0;
 		}
 		
+		if(!useSensor)
+		{
+			if (!released)
+				handleOnTouchMovement(lastMotionEvent);
+			else
+				mainCharMoveDir = MainChar.NO_MOVEMENT;
+		}
+		
+		mainChar.update(TimeUtil.getInstance().getDt(),mainCharMoveDir);
+				
 		gl.glClearColor(1,0,0,0);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -61,8 +78,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		for(SceneEntity entity : sceneEntities)
 			entity.render();
 
-		if (!released)
-			handleOnTouchMovement(lastMotionEvent);
+		
 		
 		//check if needed for all parts of the scene (hud?)
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -72,6 +88,8 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		//setup the Viewport with an Orthogonal View 1 unit = 1 pixel
 		//0 0 is bottom left
+		screenWidth = width;
+		screenHeight = height;
 		gl.glOrthof(0, width, 0, height, -10.0f, 1000);
 		gl.glViewport(0, 0, width, height);		
 	}
@@ -83,13 +101,14 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 	}
 		
+	@Override
 	public boolean onKeyDown(int key, KeyEvent evt) {
 		switch(key) {
 		case KeyEvent.KEYCODE_0: //left
-			mainChar.moveLeftRight(-stepWidth);
+//			mainChar.setMoveDirection(MainChar.MOVE_LEFT);
 			break; 
 		case KeyEvent.KEYCODE_1: //right
-			mainChar.moveLeftRight(stepWidth);
+//			mainChar.setMoveDirection(MainChar.MOVE_RIGHT);
 			break;
 		case KeyEvent.KEYCODE_2: //down
 			mainChar.moveUpDown(-stepWidth);
@@ -101,17 +120,19 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		return true; 
 	}
 
+	@Override
 	public boolean onKeyUp(int key, KeyEvent evt) {
 		
 		//do something when the key is released
 		return true; 
 	}
 	
+	@Override
 	public boolean onTouchEvent(final MotionEvent evt) {
 		if (evt.getAction() == MotionEvent.ACTION_DOWN) {
 			released = false;
 			lastMotionEvent = evt; 
-			handleOnTouchMovement(evt);
+//			handleOnTouchMovement(evt);
 		
 		}
 		else if (evt.getAction() == MotionEvent.ACTION_UP) {
@@ -121,39 +142,28 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		return true; 
 	}
 	
-
-	public boolean isInboundsAfterStep(boolean toRight) {
-		if (toRight) {
-	    	if (mainChar.getPosition().x + mainChar.getWidth() + stepWidth <= 400) { //application width instead of fixed value
-	    		return true; 
-	    	}
-		}
-		
-		else {
-			if (mainChar.getPosition().x - stepWidth > 0)
-				return true; 
-		}
-		
-		return false; 
-	}	
-	
 	public void handleOnTouchMovement(final MotionEvent evt) {
 		queueEvent(new Runnable(){
 			public void run() {
-				if (evt.getRawX() <  mainChar.getPosition().x && isInboundsAfterStep(false)) {
-					mainChar.moveLeftRight(-stepWidth);
-				} else if (evt.getRawX() > (mainChar.getPosition().x + mainChar.getWidth() ) && isInboundsAfterStep(true)) {
-					mainChar.moveLeftRight(stepWidth);
+				if (evt.getRawX() <  mainChar.getPosition().x) {
+					mainCharMoveDir = MainChar.MOVE_LEFT;
+				} else if (evt.getRawX() > (mainChar.getPosition().x + mainChar.getWidth() )) {
+					mainCharMoveDir = MainChar.MOVE_RIGHT;
+				}
+				else
+				{
+					mainCharMoveDir = MainChar.NO_MOVEMENT;
 				}
 			}
 		});
 	}
 	
-	public void handleRollMovement(boolean toRight) {
-		if (toRight && isInboundsAfterStep(true))
-			mainChar.moveLeftRight(stepWidth); 
-		else if(isInboundsAfterStep(false))
-			mainChar.moveLeftRight(-stepWidth);
+	public void handleRollMovement(int moveDir) 
+	{
+	
+		
+		if(useSensor)
+			mainCharMoveDir = moveDir;
 	}
 	
 

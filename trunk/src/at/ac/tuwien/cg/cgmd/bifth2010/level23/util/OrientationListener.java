@@ -9,5 +9,7 @@ public interface OrientationListener {
 	
 	//Phone is rolling to the left (phone's x-axis relative to horizontal axis) 
 	public void onRollLeft();
+	
+	public void isInDeadZone();
 
 }

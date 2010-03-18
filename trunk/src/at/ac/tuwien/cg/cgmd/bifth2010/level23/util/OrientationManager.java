@@ -19,7 +19,6 @@ public class OrientationManager {
 	private static int LEFT = 0; 
 	private static int RIGHT = 1; 
 	private static int currentSide = -1; 
-	private static int oldSide = -1; 
 	
 	// create SensorEventListener, which listens to the events from the orientation sensor
 	
@@ -27,35 +26,36 @@ public class OrientationManager {
 	
 		private float roll; 
 		
-		
-		// required method dummies
-		public void onAccuracyChanged(int sensor) {
-			
-		}
-		
 		// 0: azimuth, 1: pitch, 2: roll
 		public void onSensorChanged(SensorEvent evt) {
 			
 			roll = evt.values[2]; 
-			System.out.println(roll);
+			
 			Log.i("roll:",String.valueOf(roll));
 			// roll angle not clear, has to be tested
-			if (roll > 45)
-				currentSide = RIGHT; 
-			else if (roll < -45) 
-				currentSide =LEFT; 
+			if (roll > 15)
+			{
+				currentSide = LEFT; 
+			}
+			else 
+				if (roll < -15) 
+				{
+				currentSide = RIGHT;
+				}
+			
+			if(roll <15 && roll > - 15)
+				currentSide=-1;
+			
 			
 			// call listener dependent of which side is up 
 			if (currentSide != -1) {
 				if (currentSide ==LEFT)
-					orientationListener.onRollLeft(); 
+					orientationListener.onRollLeft();
 				if (currentSide == RIGHT)
 					orientationListener.onRollRight();  
 			}
-				
-			oldSide = currentSide; 
-				
-			
+			else
+				orientationListener.isInDeadZone();
 		}
 
 		@Override
