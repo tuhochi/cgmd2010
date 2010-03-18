@@ -18,7 +18,6 @@ public class Game extends GLSurfaceView implements Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		System.out.println("GlActivity onDrawFrame");
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 	}
