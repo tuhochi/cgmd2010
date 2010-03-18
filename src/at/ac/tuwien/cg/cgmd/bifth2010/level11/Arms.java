@@ -18,9 +18,12 @@ public class Arms {
 	private Color color_arm, color_skin = new Color();
 	private Vector2 position, position_leftarm, position_rightarm;
 	float angle;
+	float arm_position;
 	
 	public Arms(GL10 gl, Context context) {
-		Log.i(LOG_TAG, "Arms()");
+		//Log.i(LOG_TAG, "Arms()");
+		
+		arm_position = 0.0f;
 		
 		color_arm = new Color();
 		color_skin = new Color();
@@ -38,15 +41,16 @@ public class Arms {
 		
 	}
 	
-	public void update(Vector2 pos, float angle) {
-		Log.i(LOG_TAG, "update()");
+	public void update(Vector2 pos, float angle, float arm_pos) {
+		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
 		this.angle = angle;
+		this.arm_position = 4.0f*arm_pos;
 	
 	}
 	
 	public void draw(GL10 gl) {
-		Log.i(LOG_TAG, "draw()");
+		//Log.i(LOG_TAG, "draw()");
 		
 
 		gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
@@ -57,12 +61,16 @@ public class Arms {
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(position.x, position.y+10, 0.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(-arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		left_arm.draw(gl);
 		
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(position.x, position.y-10, 0.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		right_arm.draw(gl);
 		
@@ -72,12 +80,16 @@ public class Arms {
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(position.x, position.y+10, 0.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(-arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		left_hand.draw(gl);
 		
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(position.x, position.y-10, 0.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		right_hand.draw(gl);
 		

@@ -46,6 +46,7 @@ public class Pedestrian {
 		arms = new Arms(gl, context);
 		
 		this.angle = 0.0f;
+		this.moveSpeed = 4.0f;
 		
 		this.setColors();
 	}
@@ -65,26 +66,17 @@ public class Pedestrian {
 		// define skin color
 		switch (i) {
 			case 0:
-				System.out.println("caucasian");
-				Log.i(LOG_TAG, "caucasian");
 				color_skin = Color.caucasian;
 			case 1:
-				System.out.println("caucasian");
-				Log.i(LOG_TAG, "caucasian");
 				color_skin = Color.caucasian;
 				break;
 			case 2:
-				System.out.println("asian");
-				Log.i(LOG_TAG, "asian");
 				color_skin = Color.asian;
 				break;
 			case 3:
-				Log.i(LOG_TAG, "african");
 				color_skin = Color.african;
 				break;
 			default:
-				System.out.println("caucasian rand");
-				Log.i(LOG_TAG, "caucasian rand");
 				color_skin = Color.caucasian;
 				break;
 		}
@@ -129,9 +121,10 @@ public class Pedestrian {
 		arms.setColor(color_shirt, color_skin);
 	}
 	
-	public void update() {
-		legs.update(position, angle);
-		arms.update(position, angle);
+	public void update(float time) {
+		
+		legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+		arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
 		torso.update(position, angle);
 		head.update(position, angle);
 		hair.update(position, angle);

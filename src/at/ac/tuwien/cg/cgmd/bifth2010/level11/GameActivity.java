@@ -43,6 +43,7 @@ public class GameActivity extends Activity {
 		super.onPause();
 		_gameView.onPause();
 		_level.pause(true);
+		_level.suspend();
 	}
 
 	@Override
@@ -50,6 +51,7 @@ public class GameActivity extends Activity {
 		super.onResume();
 		_gameView.onResume();
 		_level.pause(false);
+		_level.resume();
 	}
 
 }

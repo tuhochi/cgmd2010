@@ -31,7 +31,7 @@ public class Hair {
 	}
 	
 	public void update(Vector2 pos, float angle) {
-		Log.i(LOG_TAG, "update()");
+		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
 		this.angle = angle;
 	
