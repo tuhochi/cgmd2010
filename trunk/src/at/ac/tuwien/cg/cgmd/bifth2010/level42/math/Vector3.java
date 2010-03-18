@@ -79,7 +79,16 @@ public class Vector3
 	
 	public static Vector3 crossProduct (Vector3 a, Vector3 b)
 	{
-		return (new Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x));
+		Vector3 result = new Vector3();
+		crossProduct(a, b, result);
+		return result;
+	}
+	
+	public static void crossProduct(Vector3 a, Vector3 b, Vector3 result)
+	{
+		result.x = a.y*b.z - a.z*b.y;
+		result.y = a.z*b.x - a.x*b.z;
+		result.z = a.x*b.y - a.y*b.x;
 	}
 	
 	public Vector3 multiply(float s)
