@@ -26,8 +26,8 @@ public class SceneEntity
 	{
 		glPushMatrix();
 		glMultMatrixf(transformation.getArray16(), 0);
-		int numGeoms = models.size();
-		for(int i=0; i<numGeoms; i++)
+		int numModels = models.size();
+		for(int i=0; i<numModels; i++)
 			models.get(i).render(rendermode);
 		glPopMatrix();
 	}
