@@ -17,6 +17,11 @@ public class Vector3
 		this.z = z;
 	}
 	
+	public void copy(Vector3 other)
+	{
+		copy(other.x, other.y, other.z);
+	}
+	
 	public Vector3(Vector3 other)
 	{
 		this(other.x, other.y, other.z);

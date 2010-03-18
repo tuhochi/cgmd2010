@@ -22,6 +22,10 @@ public class Camera
 	private float distance,currentDistance;
 	private float[] lastPosition;
 	
+	private Matrix44 qx,qy;
+	
+	//temp vectors
+	private Vector3 yAxis,qyAxis,tempInverseViewVec,viewVecXZProjection;
 	
 	public Camera(	float distance,float minAltitude,float maxAltitude,
 					float initAzimuth, float initAltitude, float motionFactor,
@@ -41,7 +45,13 @@ public class Camera
 		this.minDistance = minDistance;
 		this.maxDistance = maxDistance;
 		
-
+		this.yAxis = new Vector3(0.0f,1.0f,0.0f);
+		this.qx = new Matrix44();
+		this.qy = new Matrix44();
+		this.qyAxis = new Vector3();
+		this.viewVecXZProjection = new Vector3();
+		this.tempInverseViewVec = new Vector3();
+		
 		//init position
 		eyePosition = new Vector3(0.0f,0.0f,distance);
 		lastPosition = new float[2];
@@ -103,56 +113,56 @@ public class Camera
 		//set view position
 		viewPosition = targetPosition;
 		
-		//calc the current altitude
-		currentAltitude = 90.0f-radToDeg((float)Math.acos(Vector3.dotProduct(new Vector3(0.0f,1.0f,0.0f),Vector3.normalize(inverseViewVec))));
-		
 		//iterate 
 		float azimuthDiff = azimuth - currentAzimuth;
 		float altitudeDiff = altitude - currentAltitude;
 		float distanceDiff = distance - currentDistance;
 
-		// calc the iteration step
-		azimuthDiff *= motionFactor * 30.0f;
-		altitudeDiff *= motionFactor * 30.0f;
-		distanceDiff *= motionFactor * 30.0f;
-
-		Matrix44 qx = Matrix44.getRotate(new Vector3(0.0f, 1.0f, 0.0f), Camera.degToRad(azimuthDiff));
-		qx.transformPoint(inverseViewVec);
-
-		// create the axis for the vertical rotation (altitude)
-		Vector3 viewVecXZProjection = inverseViewVec;
-		viewVecXZProjection.y = 0.0f;
-		viewVecXZProjection.normalize();
-
-		// normal of the XZ projection and the y axis = rotation axis
-		Vector3 qyAxis = Vector3.crossProduct(new Vector3(0.0f, 1.0f, 0.0f),viewVecXZProjection);
-		qyAxis.normalize();
-
-		// rotatate view vec (grad)
-		Matrix44 qy = Matrix44.getRotate(qyAxis, Camera.degToRad(altitudeDiff));
-
-		qy.transformPoint(inverseViewVec);
-		inverseViewVec.normalize();
-
-		// update current angle data
-		currentAzimuth += azimuthDiff;
-		currentDistance += distanceDiff;
-		eyePosition = Vector3.add(viewPosition,Vector3.multiply(inverseViewVec,currentDistance));
+		if(azimuthDiff!=0.0f||altitudeDiff!=0.0){
+			
+			// calc the iteration step
+			azimuthDiff *= motionFactor * 30.0f;
+			altitudeDiff *= motionFactor * 30.0f;
+			distanceDiff *= motionFactor * 30.0f;
+	
+			//reset
+			qx.setIdentity();
+			//rotate around the y axis
+			qx.setRotate(yAxis,(float)Math.toRadians(azimuthDiff));
+			qx.transformPoint(inverseViewVec);
+	
+			// create the axis for the vertical rotation (altitude)
+			viewVecXZProjection.copy(inverseViewVec);
+			viewVecXZProjection.y = 0.0f;
+			viewVecXZProjection.normalize();
+	
+			// normal of the XZ projection and the y axis = rotation axis
+			Vector3.crossProduct(yAxis,viewVecXZProjection,qyAxis);
+			qyAxis.normalize();
+	
+			// rotatate view vec (grad)
+			qy.setIdentity();
+			qy.setRotate(qyAxis,(float)Math.toRadians(altitudeDiff));
+	
+			qy.transformPoint(inverseViewVec);
+			inverseViewVec.normalize();
+	
+			// update current angle data
+			currentAzimuth += azimuthDiff;
+			currentAltitude += altitudeDiff;
+			currentDistance += distanceDiff;
+			
+			
+			//eyePosition = viewPosition + inverseViewVec * currentDistance
+			eyePosition.copy(viewPosition);
+			tempInverseViewVec.copy(inverseViewVec);
+			eyePosition.add(tempInverseViewVec.multiply(currentDistance));
+		}
 	}
 
 	
 	public void setLastPosition(int x, int y) {
 		this.lastPosition[0] = x;
 		this.lastPosition[1] = y;
-	}
-
-	private static float radToDeg(float rad)
-	{
-		return (rad*180.0f)/((float)Math.PI);
-	}
-	
-	private static float degToRad(float deg)
-	{
-		return (deg*((float)Math.PI))/180.0f;
 	}
 }
