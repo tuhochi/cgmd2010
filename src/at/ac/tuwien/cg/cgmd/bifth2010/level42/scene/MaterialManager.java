@@ -54,8 +54,8 @@ public class MaterialManager
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m.ambient.asArray, 0);
 	        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, m.diffuse.asArray, 0);
 	        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m.specular.asArray, 0);
+	        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m.ks);
 	        glBindTexture(GL_TEXTURE_2D, m.texId);
-	        Log.d(LevelActivity.TAG, "m.texId: " + m.texId);
 	        boundMaterialName = name;
 		}
 	}
@@ -64,24 +64,24 @@ public class MaterialManager
 	 * adds a material
 	 * @return the name of the new material
 	 */
-	public String addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, int textureResourceID)
+	public String addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, int textureResourceID)
 	{
 		if(materials.containsKey(name))
 			Log.w(LevelActivity.TAG, "Material '" + name + "' already exists, replacing...");
-		materials.put(name, new Material(name, ambient, diffuse, specular, textureResourceID));
+		materials.put(name, new Material(name, ambient, diffuse, specular, ks, textureResourceID));
 		return name;
 	}
 	
 	/*
 	 * @return creates the material if it doesn't exist yet and returns it
 	 */
-	public Material getMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, int textureResourceID)
+	public Material getMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, int textureResourceID)
 	{
 		if(materials.containsKey(name))
 			return materials.get(name);
 		else
 		{
-			Material m = new Material(name, ambient, diffuse, specular, textureResourceID);
+			Material m = new Material(name, ambient, diffuse, specular, ks, textureResourceID);
 			materials.put(name, m);
 			return m;
 		}
@@ -93,14 +93,16 @@ public class MaterialManager
 		public final Color4 ambient;
 		public final Color4 diffuse;
 		public final Color4 specular;
+		public final float ks;
 		public final int texId;
 		
-		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, int textureResourceID)
+		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, int textureResourceID)
 		{
 			this.name = name;
 			this.ambient = ambient;
 			this.diffuse = diffuse;
 			this.specular = specular;
+			this.ks = ks;
 			
 			Bitmap tex = loadTexture(textureResourceID);
 			if(tex != null)
@@ -108,7 +110,6 @@ public class MaterialManager
 				int[] textures = new int[1];
 				glGenTextures(1, textures, 0);
 				texId = textures[0];
-				Log.d(LevelActivity.TAG, "texId=" + texId);
 				glBindTexture(GL_TEXTURE_2D, texId);
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

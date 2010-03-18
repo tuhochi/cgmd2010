@@ -26,19 +26,9 @@ public class Scene
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		
-		
-		//material test
-		float matAmbient[] = new float[] { 0.1f, 0.1f, 0.1f, 1.0f };
-		float matDiffuse[] = new float[] { 0.9f, 0.1f, 0.1f, 1.0f };
-		
-//		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient, 0);
-//        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse, 0);
-        /// 
         
 		for(Model m : entities)
 			m.render(rendermode);
-		
 		
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
