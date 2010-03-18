@@ -1,11 +1,16 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
+import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.util.Log;
 
 public class Pedestrian {
 
+    private static final String LOG_TAG = Pedestrian.class.getSimpleName();
+    
 	private Hair hair;
 	private Head head;
 	private Torso torso;
@@ -22,6 +27,8 @@ public class Pedestrian {
 	private float grabSpeed;
 	private float fightingRadius;
 	private float moveSpeed;
+	private float angle;
+
 	
 	public Pedestrian(GL10 gl, Context context) {
 		this( 30.0f,10.0f,1.0f, 1.0f, gl, context);
@@ -36,15 +43,102 @@ public class Pedestrian {
 		hair = new Hair(gl, context);
 		torso = new Torso(gl, context);
 		legs = new Legs(gl, context);
-		arms = new Arms(gl, context, new Color(), new Color());
+		arms = new Arms(gl, context);
+		
+		this.angle = 0.0f;
+		
+		this.setColors();
+	}
+	
+	public void setColors() {
+	
+		Random rand = new Random();
+
+		Color color_skin = new Color();
+		Color color_hair = new Color();
+		Color color_shirt = new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), 1.0f);
+		Color color_pants = new Color();
+		
+		int i = rand.nextInt(4);
+		
+
+		// define skin color
+		switch (i) {
+			case 0:
+				System.out.println("caucasian");
+				Log.i(LOG_TAG, "caucasian");
+				color_skin = Color.caucasian;
+			case 1:
+				System.out.println("caucasian");
+				Log.i(LOG_TAG, "caucasian");
+				color_skin = Color.caucasian;
+				break;
+			case 2:
+				System.out.println("asian");
+				Log.i(LOG_TAG, "asian");
+				color_skin = Color.asian;
+				break;
+			case 3:
+				Log.i(LOG_TAG, "african");
+				color_skin = Color.african;
+				break;
+			default:
+				System.out.println("caucasian rand");
+				Log.i(LOG_TAG, "caucasian rand");
+				color_skin = Color.caucasian;
+				break;
+		}
+		
+		// define hair color
+		int j = rand.nextInt(3);
+		
+		switch (j) {
+			case 0:
+				color_hair = Color.black;
+				break;
+			case 1:
+				color_hair = Color.brown;
+				break;
+			case 2:
+				color_hair = Color.blonde;
+				break;
+			default:
+				color_hair = Color.black;
+				break;
+		}
+		
+		// define  pants color
+		int k = rand.nextInt(2);
+		
+		switch (k) {
+			case 0:
+				color_pants = Color.black;
+				break;
+			case 1:
+				color_pants = Color.brown;
+				break;
+			default:
+				color_pants = Color.brown;
+				break;
+		}
+		
+		head.setColor(color_skin);
+		hair.setColor(color_hair);
+		torso.setColor(color_shirt);
+		legs.setColor(color_pants);
+		arms.setColor(color_shirt, color_skin);
 	}
 	
 	public void update() {
-		
+		legs.update(position, angle);
+		arms.update(position, angle);
+		torso.update(position, angle);
+		head.update(position, angle);
+		hair.update(position, angle);
 	}
 	
 	public void setPosition(Vector2 pos) {
-		position = pos;
+		this.position = pos;
 	}
 	
 	public Vector2 getPosition(){
@@ -53,11 +147,22 @@ public class Pedestrian {
 	
 	public void draw(GL10 gl) {
 		
+		
+		//gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
+		
+		
+		
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glDisable(GL10.GL_CULL_FACE);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
 		legs.draw(gl);
 		arms.draw(gl);
 		torso.draw(gl);
 		head.draw(gl);
 		hair.draw(gl);
+		
+		gl.glDisable(GL10.GL_BLEND);
 		
 	}
 	public float getAttractionRadius(){

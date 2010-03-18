@@ -92,7 +92,8 @@ public class GameRenderer implements Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
 		Log.i(LOG_TAG, "onDrawFrame()");
-		
+
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		//Clear Screen And Depth Buffer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
 		gl.glLoadIdentity();					//Reset The Current Modelview Matrix

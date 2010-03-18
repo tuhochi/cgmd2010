@@ -59,9 +59,12 @@ public class Level extends Thread {
 		this.gl = gl;
 		this.context = context;
 		
-		initTextures();
+		this.initTextures();
+		
+		this.generatePedestrians(6, 40);
 		
 		background = new Square();
+		
 	}
 	
 	public void initTextures() {
@@ -79,8 +82,9 @@ public class Level extends Thread {
     	textures.add(R.drawable.l11_pedestrian_hand);
     	textures.add(R.drawable.l11_pedestrian_leg);
     	textures.add(R.drawable.l11_pedestrian_torso);
+    	textures.add(R.drawable.l11_pedestrian_shadow);
     	textures.add(R.drawable.l11_pedestrian_head);
-    	textures.add(R.drawable.l11_pedestrian_hair);
+    	textures.add(R.drawable.l11_pedestrian_hair_01);
     	
     	textures.loadTextures();
     	
@@ -91,16 +95,13 @@ public class Level extends Thread {
 	
 	public void run() {
 		
-
-		//background.loadGLTexture(gl, context);
-		
 		while (isRunning) {
 			while (isPaused && isRunning) {
-				try {
+				/*try {
 					sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}
+				}*/
 			}
 			update();
 		}
@@ -113,7 +114,9 @@ public class Level extends Thread {
 	}
 	private void update() {
 		synchronized(this){
-			
+			for (int i=0; i < pedestrianList.size(); i++) {
+				((Pedestrian)pedestrianList.get(i)).update();
+			}
 		}
 	}
 	private void generatePedestrians(int amount, float minDist){
@@ -141,16 +144,25 @@ public class Level extends Thread {
 		// draw floor background image
 		textures.setTexture(R.drawable.l11_street_bg);
 
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		gl.glLoadIdentity();
 		gl.glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 		gl.glTranslatef(160.0f, -240.0f, 0.0f);
 		gl.glScalef(320.0f, 480.0f, 1.0f);
 		background.draw(gl);
 		
-		//for (int i=0; i < pedestrianList.size(); i++) {
-		//	((Pedestrian)pedestrianList.get(i)).draw(gl);
-		//}
+		//gl.glEnable(GL10.GL_BLEND);
+		//gl.glDisable(GL10.GL_CULL_FACE);
+	
+		//gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
+		//gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		
+		for (int i=0; i < pedestrianList.size(); i++) {
+			((Pedestrian)pedestrianList.get(i)).draw(gl);
+		}
+
+		gl.glDisable(GL10.GL_BLEND);
 	}
 	
 }
