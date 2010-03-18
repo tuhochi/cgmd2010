@@ -184,7 +184,7 @@ public class Matrix44
 	 */
 	public Matrix44 setRotate(Vector3 axis, float alpha)
 	{
-		axis = Vector3.normalize(axis);
+		axis.normalize();
 		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
 		m[0][0] =  axis.x * axis.x + (1 - axis.x * axis.x) * cosa;	m[0][1] = axis.x * axis.y * (1 - cosa) - axis.z * sina; 	m[0][2] = axis.x * axis.z * (1 - cosa) + axis.y * sina;		m[0][3] = 0;
 		m[1][0] =  axis.x * axis.y * (1 - cosa) + axis.z * sina;	m[1][1] = axis.y * axis.y + (1 - axis.y * axis.y) * cosa;	m[1][2] = axis.y * axis.z * (1 - cosa) - axis.x * sina;		m[1][3] = 0;
