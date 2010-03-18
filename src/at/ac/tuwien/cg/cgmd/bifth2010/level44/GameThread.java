@@ -14,8 +14,9 @@ public class GameThread extends Thread {
 	public void run() {
 		while (!quit) {
 			head.setWingAngle((float)(Math.sin(System.currentTimeMillis()/100)*45));
+			head.setRotation((float)(10-Math.sin(System.currentTimeMillis()/1000.)*20));
 			try {
-				sleep(100);
+				sleep(50);
 			} catch (InterruptedException ie) {}
 		}
 	}
