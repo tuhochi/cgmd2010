@@ -4,6 +4,11 @@ public class Vector4
 {
 	public float x,y,z,w;
 	
+	public Vector4(float xyzw)
+	{
+		copy(xyzw,xyzw,xyzw, xyzw);
+	}
+	
 	public Vector4(float x, float y, float z, float w)
 	{
 		copy(x,y,z,w);
@@ -210,5 +215,11 @@ public class Vector4
 	{
 		homogenize();
 		return (float)Math.sqrt(x*x + y*y + z*z);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "(" + x + "," + y + "," + z + "," + w + ")";
 	}
 }

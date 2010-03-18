@@ -4,6 +4,7 @@ import static android.opengl.GLES10.*;
 
 import java.nio.FloatBuffer;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 
 public class Geometry
@@ -12,6 +13,7 @@ public class Geometry
 	MaterialManager materialManager;
 	Material material;
 	FloatBuffer vertices, normals, texcoords;
+	AxisAlignedBox3 boundingBox;
 	int numVertices;
 	int vboID;
 	
@@ -20,15 +22,17 @@ public class Geometry
 		numVertices = 0;
 		vboID = -1;
 		materialManager = MaterialManager.getInstance();
+		boundingBox = new AxisAlignedBox3();
 	}
 	
-	public Geometry(Material material, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, int numVertices)
+	public Geometry(Material material, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, int numVertices)
 	{
 		this();
 		this.material = material;
 		this.vertices = vertices;
 		this.normals = normals;
 		this.texcoords = texcoords;
+		this.boundingBox = boundingBox;
 		this.numVertices = numVertices;
 		
 		/*

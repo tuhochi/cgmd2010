@@ -2,7 +2,12 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 public class Vector2
 {
-public float x,y;
+	public float x,y;
+
+	public Vector2(float xy)
+	{
+		copy(xy,xy);
+	}
 	
 	public Vector2(float x, float y)
 	{
@@ -117,5 +122,11 @@ public float x,y;
 	public float length()
 	{
 		return (float)Math.sqrt(x*x + y*y);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "(" + x + "," + y + ")";
 	}
 }

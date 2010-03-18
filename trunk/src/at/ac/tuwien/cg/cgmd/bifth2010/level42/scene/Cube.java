@@ -184,6 +184,9 @@ public class Cube extends Geometry
         texcoords.position(0);
 
         numVertices = 36;
+        
+        for(int i=0; i<numVertices; i++)
+        	boundingBox.include(vs[i]);
 
         material = materialManager.addMaterial(
         		"StripeBox",

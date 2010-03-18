@@ -5,6 +5,11 @@ public class Vector3
 {
 	public float x,y,z;
 	
+	public Vector3(float xyz)
+	{
+		copy(xyz,xyz,xyz);
+	}
+	
 	public Vector3(float x, float y, float z)
 	{
 		copy(x,y,z);
@@ -145,5 +150,11 @@ public class Vector3
 	public float length()
 	{
 		return (float)Math.sqrt(x*x + y*y + z*z);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "(" + x + "," + y + "," + z + ")";
 	}
 }
