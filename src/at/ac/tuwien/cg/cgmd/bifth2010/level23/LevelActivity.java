@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
@@ -38,14 +39,17 @@ public class LevelActivity extends Activity implements OrientationListener {
 
 	@Override
 	public void onRollLeft() {
-		renderer.handleRollMovement(false); 
-		
+		renderer.handleRollMovement(MainChar.MOVE_LEFT); 		
 	}
 
 	@Override
 	public void onRollRight() {
-		renderer.handleRollMovement(true);
-		
+		renderer.handleRollMovement(MainChar.MOVE_RIGHT);		
+	}
+	
+	@Override
+	public void isInDeadZone() {
+		renderer.handleRollMovement(MainChar.NO_MOVEMENT);		
 	}
 	
 	public static Context getContext() {

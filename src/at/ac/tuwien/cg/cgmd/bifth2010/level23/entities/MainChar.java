@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Renderer;
 
 
 public class MainChar implements SceneEntity {
@@ -23,6 +24,14 @@ public class MainChar implements SceneEntity {
 	private ShortBuffer indexBuffer;
 	private FloatBuffer texCoordBuffer;
 	private int textureID = -1;
+	
+	public static final int MOVE_LEFT = -1;
+	public static final int MOVE_RIGHT = 1;
+	public static final int NO_MOVEMENT = 0;
+	//units per millisecond
+	public static final float MOVE_SPEED = 0.5f;
+	
+	private int moveDirection = 0;
 		
 	public MainChar()
 	{
@@ -46,7 +55,21 @@ public class MainChar implements SceneEntity {
 		createIndexBuffer();
 		createTexCoordBuffer();
 	}
-	
+		
+	/**
+	 * @return the moveDirection
+	 */
+	public int getMoveDirection() {
+		return moveDirection;
+	}
+
+	/**
+	 * @param moveDirection the moveDirection to set
+	 */
+	public void setMoveDirection(int moveDirection) {
+		this.moveDirection = moveDirection;
+	}
+
 	public Vector2 getPosition() {
 		return this.position; 
 	}
@@ -132,12 +155,12 @@ public class MainChar implements SceneEntity {
 		this.textureID = texID;
 	}
 	
-	public void moveLeftRight(float translate)
-	{
-		translation.x += translate;
-		position.x += translate; 
-	}
-	
+//	public void moveLeftRight(float translate)
+//	{
+//		translation.x += translate;
+//		position.x += translate; 
+//	}
+//	
 	public void moveUpDown(float translate)
 	{
 		translation.y += translate;
@@ -153,6 +176,43 @@ public class MainChar implements SceneEntity {
 		translation.x = 0f;
 		translation.y = 0f;
 		translation.z = 0f;
+	}
+	
+	public boolean isInboundsAfterStep(int moveDir, float stepWidth) {
+		if (moveDir > 0)
+		{
+	    	if (position.x + width + stepWidth <= Renderer.screenWidth) //application width instead of fixed value
+	    	{ 
+	    		return true; 
+	    	}
+		}
+		else 
+		{
+			if (position.x + stepWidth >= 0.0f)
+				return true; 
+		}
+		
+		return false; 
+	}	
+	
+	public void update(float dt, int moveDir)
+	{
+		if(moveDir == 0 || moveDir >0 && position.x == Renderer.screenWidth - width 
+				|| moveDir<1 && position.x == 0)
+			return;
+		
+		float step = dt * MOVE_SPEED * moveDir;
+		
+		if(!isInboundsAfterStep(moveDir,step))
+		{
+			if(moveDir > 0 && position.x != Renderer.screenWidth - width)
+				step = Renderer.screenWidth - width - position.x;
+			if(moveDir < 0 && position.x != 0.0f)
+				step = -position.x;
+		}
+		
+		translation.x = step;
+		position.x += translation.x;
 	}
 	
 	@Override
