@@ -15,6 +15,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Cube;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 // static imports
 import static android.opengl.GLES10.*;
@@ -25,6 +26,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	private Context context;
 	private Scene scene;
 	private Camera cam;
+	private TimeManager timer; 
 	
 	private float light_ambient[] = {0.5f,0.5f,0.5f,1.0f};
 	private float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
@@ -39,8 +41,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		this.context = context;
 		
+		timer = new TimeManager();
 		scene = new Scene();
-		
 		cam = new Camera(10.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,1000.0f);
 	}
 	
@@ -89,6 +91,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		cam.updatePosition(new Vector3(0.0f,0.0f,0.0f), 1.0f);
 		cam.look(gl);
 		scene.render();
+		timer.update();
 		
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
 
