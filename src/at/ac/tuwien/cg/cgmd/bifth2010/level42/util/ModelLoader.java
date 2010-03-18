@@ -41,7 +41,8 @@ for(numGeometries)
 {
 	geometryName			String			Name of this Geometry (must be unique)
 	materialName			String			Material of this Geometry
-	hasTexture				boolean			If this Geometry has a Texture
+	boundingBoxMin			float[3]		Minimum Point of the bounding box
+	boundingBoxMax			float[3]		Maximum Point of the bounding box
 	numVertices				int				Number of Vertices of this Geometry
 	for(numVertices)	
 	{
@@ -51,12 +52,10 @@ for(numGeometries)
 	{
 		normal				float[3]		A Normal
 	}
-	if(hasTexture)
+	numTexcoords			int				Number of Texcoords (either 0 or == numVertices)
+	for(numTexcoords)
 	{
-		for(numVertices)
-		{
-			texcoord		float[2]		A Texcoord
-		}
+		texcoord			float[2]		A Texcoord
 	}
 }
 
