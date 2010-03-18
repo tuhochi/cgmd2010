@@ -35,7 +35,7 @@ public class Scene
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 	
-	public void addSceneEntity(SceneEntity sceneEntity)
+	public void add(SceneEntity sceneEntity)
 	{
 		sceneEntities.add(sceneEntity);
 	}

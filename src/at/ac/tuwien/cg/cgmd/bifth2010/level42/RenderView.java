@@ -80,15 +80,18 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse,0);
 
 
+		/*
+		 * Dummy Test Scene
+		 */
 		scene = new Scene();
 		SceneEntity sceneEntity = new SceneEntity();
 		Model model = new Model();
 		Geometry cube = new Cube();
-		model.addGeometry(cube);
-		model.getTransformation().addRotateX((float)Math.PI/4);
-		model.getTransformation().addRotateY((float)Math.PI/4);
-		sceneEntity.addModel(model);
-		scene.addSceneEntity(sceneEntity);
+		model.add(cube);
+		sceneEntity.add(model);
+		sceneEntity.getTransformation().addRotateX((float)Math.PI/4);
+		sceneEntity.getTransformation().addRotateY((float)Math.PI/4);
+		scene.add(sceneEntity);
 	}
 	
 	@Override

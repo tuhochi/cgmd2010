@@ -45,7 +45,7 @@ public class Model
 		this.transformation = transformation;
 	}
 	
-	public void addGeometry(Geometry geometry)
+	public void add(Geometry geometry)
 	{
 		geometries.add(geometry);
 	}

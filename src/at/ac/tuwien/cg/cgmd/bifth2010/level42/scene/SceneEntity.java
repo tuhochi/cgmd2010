@@ -38,7 +38,7 @@ public class SceneEntity
 		this.transformation = transformation;
 	}
 	
-	public void addModel(Model model)
+	public void add(Model model)
 	{
 		models.add(model);
 	}
