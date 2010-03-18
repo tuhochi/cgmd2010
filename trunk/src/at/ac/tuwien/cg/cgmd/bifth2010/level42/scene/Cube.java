@@ -3,12 +3,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
-public class Cube extends Model
+public class Cube extends Geometry
 {
 	public Cube()
 	{
@@ -185,15 +184,13 @@ public class Cube extends Model
         texcoords.position(0);
 
         numVertices = 36;
-        
-        materialName = materialManager.addMaterial(
-        							"StripeBox",
-        							Color4.GRAY30,		// ambient
-        							Color4.WHITE,		// diffuse
-        							Color4.GRAY30,		// specular
-        							0.5f,				// shininess
-        							R.drawable.l42_box_without_alpha);
-        transformation.addRotateX((float)Math.PI/4);
-        transformation.addRotateY((float)Math.PI/4);
+
+        material = materialManager.addMaterial(
+        		"StripeBox",
+        		Color4.GRAY30,		// ambient
+        		Color4.WHITE,		// diffuse
+        		Color4.GRAY30,		// specular
+        		0.5f,				// shininess
+        "l42_box_without_alpha");
 	}
 }

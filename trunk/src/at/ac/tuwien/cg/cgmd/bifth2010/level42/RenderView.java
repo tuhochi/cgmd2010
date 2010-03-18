@@ -13,7 +13,10 @@ import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Cube;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Geometry;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Model;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
@@ -42,7 +45,6 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		this.context = context;
 		
 		timer = new TimeManager();
-		scene = new Scene();
 		cam = new Camera(10.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,1000.0f);
 	}
 	
@@ -76,9 +78,17 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
 		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient,0);
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse,0);
-		
-		scene.addModel(new Cube());
-		
+
+
+		scene = new Scene();
+		SceneEntity sceneEntity = new SceneEntity();
+		Model model = new Model();
+		Geometry cube = new Cube();
+		model.addGeometry(cube);
+		model.getTransformation().addRotateX((float)Math.PI/4);
+		model.getTransformation().addRotateY((float)Math.PI/4);
+		sceneEntity.addModel(model);
+		scene.addSceneEntity(sceneEntity);
 	}
 	
 	@Override

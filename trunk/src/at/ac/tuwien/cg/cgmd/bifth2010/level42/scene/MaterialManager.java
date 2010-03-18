@@ -46,42 +46,48 @@ public class MaterialManager
 		return materials.get(name);	
 	}
 	
+	public void bindMaterial(Material material)
+	{
+		if(!material.name.equals(boundMaterialName))
+		{
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient.asArray, 0);
+	        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse.asArray, 0);
+	        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular.asArray, 0);
+	        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.ks);
+	        glBindTexture(GL_TEXTURE_2D, material.texId);
+	        boundMaterialName = material.name;
+		}
+	}
+	
 	public void bindMaterial(String name)
 	{
-		if(materials.containsKey(name) && !boundMaterialName.equals(name))
-		{
-			Material m = materials.get(name);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, m.ambient.asArray, 0);
-	        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, m.diffuse.asArray, 0);
-	        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, m.specular.asArray, 0);
-	        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, m.ks);
-	        glBindTexture(GL_TEXTURE_2D, m.texId);
-	        boundMaterialName = name;
-		}
+		if(materials.containsKey(name))
+			bindMaterial(materials.get(name));
 	}
 	
 	/*
 	 * adds a material
 	 * @return the name of the new material
 	 */
-	public String addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, int textureResourceID)
+	public Material addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, String textureFilename)
 	{
 		if(materials.containsKey(name))
 			Log.w(LevelActivity.TAG, "Material '" + name + "' already exists, replacing...");
-		materials.put(name, new Material(name, ambient, diffuse, specular, ks, textureResourceID));
-		return name;
+		Material m = new Material(name, ambient, diffuse, specular, ks, textureFilename);
+		materials.put(name, m);
+		return m;
 	}
 	
 	/*
 	 * @return creates the material if it doesn't exist yet and returns it
 	 */
-	public Material getMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, int textureResourceID)
+	public Material getMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, String textureFilename)
 	{
 		if(materials.containsKey(name))
 			return materials.get(name);
 		else
 		{
-			Material m = new Material(name, ambient, diffuse, specular, ks, textureResourceID);
+			Material m = new Material(name, ambient, diffuse, specular, ks, textureFilename);
 			materials.put(name, m);
 			return m;
 		}
@@ -96,7 +102,7 @@ public class MaterialManager
 		public final float ks;
 		public final int texId;
 		
-		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, int textureResourceID)
+		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, String textureFilename)
 		{
 			this.name = name;
 			this.ambient = ambient;
@@ -104,7 +110,7 @@ public class MaterialManager
 			this.specular = specular;
 			this.ks = ks;
 			
-			Bitmap tex = loadTexture(textureResourceID);
+			Bitmap tex = loadTexture(textureFilename);
 			if(tex != null)
 			{
 				int[] textures = new int[1];
@@ -112,7 +118,7 @@ public class MaterialManager
 				texId = textures[0];
 				glBindTexture(GL_TEXTURE_2D, texId);
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 				
 				if(Config.GLES11)
 				{
@@ -131,9 +137,9 @@ public class MaterialManager
 				texId = 0;
 		}
 		
-		private Bitmap loadTexture(int resourceID)
+		private Bitmap loadTexture(String filename)
 		{
-			InputStream is = LevelActivity.getInstance().getResources().openRawResource(resourceID);
+			InputStream is = LevelActivity.getInstance().getResources().openRawResource(LevelActivity.getInstance().getResources().getIdentifier(filename, "drawable", "at.ac.tuwien.cg.cgmd.bifth2010"));
 			Bitmap bitmap = null;
 			try
 			{
@@ -141,7 +147,7 @@ public class MaterialManager
 			}
 			catch(Throwable t)
 			{
-				Log.e(LevelActivity.TAG, "Could not load Texture: " + resourceID);
+				Log.e(LevelActivity.TAG, "Could not load Texture: " + filename);
 				bitmap = null;
 			}
 			finally

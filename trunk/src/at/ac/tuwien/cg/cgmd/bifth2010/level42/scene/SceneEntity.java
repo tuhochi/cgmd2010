@@ -1,38 +1,31 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
+import static android.opengl.GLES10.glMultMatrixf;
+import static android.opengl.GLES10.glPopMatrix;
+import static android.opengl.GLES10.glPushMatrix;
+
 import java.util.ArrayList;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 
-//static imports
-import static android.opengl.GLES10.*;
-
-public class Model
+public class SceneEntity
 {
 	Matrix44 transformation;
-	ArrayList<Geometry> geometries;
+	ArrayList<Model> models;
 	
-	public Model()
+	public SceneEntity()
 	{
 		transformation = new Matrix44();
-		geometries = new ArrayList<Geometry>();
-	}
-	
-	public Model(Model other)
-	{
-		transformation = new Matrix44(other.transformation);
-		int numGeoms = other.geometries.size();
-		for(int i=0; i<numGeoms; i++)
-			geometries.add(other.geometries.get(i));
+		models = new ArrayList<Model>();
 	}
 	
 	public void render(int rendermode)
 	{
 		glPushMatrix();
 		glMultMatrixf(transformation.getArray16(), 0);
-		int numGeoms = geometries.size();
+		int numGeoms = models.size();
 		for(int i=0; i<numGeoms; i++)
-			geometries.get(i).render(rendermode);
+			models.get(i).render(rendermode);
 		glPopMatrix();
 	}
 	
@@ -45,8 +38,8 @@ public class Model
 		this.transformation = transformation;
 	}
 	
-	public void addGeometry(Geometry geometry)
+	public void addModel(Model model)
 	{
-		geometries.add(geometry);
+		models.add(model);
 	}
 }
