@@ -12,12 +12,12 @@ import java.io.InputStream;
 import java.lang.Integer;
 import android.opengl.GLUtils;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class Textures {
 	private static final String LOG_TAG = Textures.class.getSimpleName();
 	
-	private java.util.HashMap <Integer, Integer> textureMap; 
+	public static java.util.HashMap <Integer, Integer> textureMap; 
+	public static Textures tex;
 	private int[] textureFiles;
 	private GL10 gl;
 	private Context context;
@@ -25,6 +25,8 @@ public class Textures {
 	
 	public Textures(GL10 gl,Context context) {
 		Log.i(LOG_TAG, "Textures()");
+		
+		this.tex = this;
 		
 		this.gl = gl;
 		this.context = context;

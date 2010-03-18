@@ -28,7 +28,7 @@ public class GameActivity extends Activity {
         setContentView(_gameView);
         
       
-        //_level.start();
+        _level.start();
          
         
     }
@@ -42,13 +42,14 @@ public class GameActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 		_gameView.onPause();
+		_level.pause(true);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		_gameView.onResume();
+		_level.pause(false);
 	}
 
-	
 }
