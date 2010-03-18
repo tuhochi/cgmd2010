@@ -188,11 +188,12 @@ public class Cube extends Model
         
         materialName = materialManager.addMaterial(
         							"StripeBox",
-        							new Color4(0.1f, 0.1f, 0.1f),
-        							new Color4(0.9f, 0.1f, 0.1f),
-        							new Color4(0.1f, 0.1f, 0.1f),
+        							Color4.GRAY30,		// ambient
+        							Color4.WHITE,		// diffuse
+        							Color4.GRAY30,		// specular
+        							0.5f,				// shininess
         							R.drawable.l42_box_without_alpha);
-        //transformation.addRotateX(90);
-        transformation.addRotateY(90);
+        transformation.addRotateX((float)Math.PI/4);
+        transformation.addRotateY((float)Math.PI/4);
 	}
 }

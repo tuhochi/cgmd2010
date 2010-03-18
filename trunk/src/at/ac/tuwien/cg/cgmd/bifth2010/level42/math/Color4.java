@@ -6,6 +6,7 @@ public class Color4
 	public final float[] asArray;
 	
 	public static final Color4 BLACK = new Color4(0,0,0);
+	public static final Color4 GRAY30 = new Color4(0.3f,0.3f,0.3f);
 	public static final Color4 WHITE = new Color4(1,1,1);
 	public static final Color4 RED = new Color4(1,0,0);
 	public static final Color4 GREEN = new Color4(0,1,0);
