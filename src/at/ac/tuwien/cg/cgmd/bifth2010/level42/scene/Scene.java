@@ -12,12 +12,12 @@ public class Scene
 	public static final int RENDERMODE_VERTEXARRAY = 0;
 	public static final int RENDERMODE_VBO = 1;
 	
-	private ArrayList<Model> entities;
+	private ArrayList<SceneEntity> sceneEntities;
 	private int rendermode;
 	
 	public Scene()
 	{
-		entities = new ArrayList<Model>();
+		sceneEntities = new ArrayList<SceneEntity>();
 		rendermode = Config.GLES11 ? RENDERMODE_VBO : RENDERMODE_VERTEXARRAY;
 	}
 	
@@ -27,7 +27,7 @@ public class Scene
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         
-		for(Model m : entities)
+		for(SceneEntity m : sceneEntities)
 			m.render(rendermode);
 		
 		glDisableClientState(GL_VERTEX_ARRAY);
@@ -35,8 +35,8 @@ public class Scene
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 	
-	public void addModel(Model model)
+	public void addSceneEntity(SceneEntity sceneEntity)
 	{
-		entities.add(model);
+		sceneEntities.add(sceneEntity);
 	}
 }
