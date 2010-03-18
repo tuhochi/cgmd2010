@@ -39,8 +39,10 @@ public class Level extends Thread {
 	private GL10 gl;
 	private Context context;
 	
+	private Timing timing;
+	
 	public Level(float sizeX, float sizeY) {
-		Log.i(LOG_TAG, "Level(float, float)");
+		//Log.i(LOG_TAG, "Level(float, float)");
 		
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
@@ -49,26 +51,28 @@ public class Level extends Thread {
 		
 		this.isRunning = true;
 		this.isPaused = false;
+		
+		timing = new Timing();
 
 	}
 	
 	
 	public void init(GL10 gl, Context context) {
-		Log.i(LOG_TAG, "init()");
+		//Log.i(LOG_TAG, "init()");
 		 
 		this.gl = gl;
 		this.context = context;
 		
 		this.initTextures();
 		
-		this.generatePedestrians(6, 40);
+		this.generatePedestrians(5, 40);
 		
 		background = new Square();
 		
 	}
 	
 	public void initTextures() {
-		Log.i(LOG_TAG, "initTextures()");
+		//Log.i(LOG_TAG, "initTextures()");
 
 		if(this.context == null || this.gl == null)
 		{
@@ -112,12 +116,13 @@ public class Level extends Thread {
 	public synchronized void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
 	}
-	private void update() {
-		synchronized(this){
+	private synchronized void update() {
+		//synchronized(this){
+			timing.update();
 			for (int i=0; i < pedestrianList.size(); i++) {
-				((Pedestrian)pedestrianList.get(i)).update();
+				((Pedestrian)pedestrianList.get(i)).update(timing.getCurrTime());
 			}
-		}
+		//}
 	}
 	private void generatePedestrians(int amount, float minDist){
 		Random rand = new Random();

@@ -19,17 +19,12 @@ public class Color {
 	
 	
 	public Color() {
-		Log.i(LOG_TAG, "Color()");
+		//Log.i(LOG_TAG, "Color()");
 		
 		this.r = 1.0f;
 		this.g = 1.0f;
 		this.b = 1.0f;
 		this.a = 1.0f;
-	}
-	
-	public void init() {
-		
-		Log.i(LOG_TAG, "init()");
 	}
 	
 	public Color(float r, float g, float b, float a) {

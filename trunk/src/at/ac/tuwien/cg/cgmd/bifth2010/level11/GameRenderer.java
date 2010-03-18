@@ -31,7 +31,7 @@ public class GameRenderer implements Renderer {
 	private Level level;
 	
 	public GameRenderer(Context context) {
-		Log.i(LOG_TAG, "GameRenderer()");
+		//Log.i(LOG_TAG, "GameRenderer()");
 		
 		this.context = context;
 		this.level = ((GameActivity) context).getLevel();
@@ -41,7 +41,7 @@ public class GameRenderer implements Renderer {
 	
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        Log.i(LOG_TAG, "onSurfaceCreated()");
+        //Log.i(LOG_TAG, "onSurfaceCreated()");
         
         this._gl = gl;
         
@@ -80,7 +80,7 @@ public class GameRenderer implements Renderer {
 
 	@Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
-		Log.i(LOG_TAG, "onSurfaceChanged()");
+		//Log.i(LOG_TAG, "onSurfaceChanged()");
 		
         _width = w;
         _height = h;
@@ -91,7 +91,7 @@ public class GameRenderer implements Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-		Log.i(LOG_TAG, "onDrawFrame()");
+		//Log.i(LOG_TAG, "onDrawFrame()");
 
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		//Clear Screen And Depth Buffer

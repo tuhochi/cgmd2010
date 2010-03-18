@@ -37,19 +37,4 @@ public class GameView extends GLSurfaceView {
         }
         return true;
     }
-    
-   /* public GameView(Context context) {
-        super(context);
-        _renderer = new GameRenderer();
-        setRenderer(_renderer);
-    }
-
-	public boolean onTouchEvent(final MotionEvent event) {
-	    queueEvent(new Runnable() {
-	        public void run() {
-	            //_renderer.setColor(event.getX() / getWidth(), event.getY() / getHeight(), 1.0f);
-	        }
-	    });
-	    return true;
-	}*/
 }

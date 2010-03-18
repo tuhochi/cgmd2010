@@ -24,7 +24,7 @@ public class Textures {
 	private int[] textures;
 	
 	public Textures(GL10 gl,Context context) {
-		Log.i(LOG_TAG, "Textures()");
+		//Log.i(LOG_TAG, "Textures()");
 		
 		this.tex = this;
 		
@@ -39,7 +39,7 @@ public class Textures {
 	 * @param resource
 	 */
 	public void add(int resource) {
-		Log.i(LOG_TAG, "add()");
+		//Log.i(LOG_TAG, "add()");
 		
 		if(textureFiles==null) {
 			textureFiles = new int[1];
@@ -64,7 +64,7 @@ public class Textures {
 	 * 
 	 */
 	public void loadTextures() {
-		Log.i(LOG_TAG, "loadTextures()");
+		//Log.i(LOG_TAG, "loadTextures()");
 		
 		// generate one texture pointer...
 		int[] temp_texture = new int[textureFiles.length]; 
@@ -111,7 +111,7 @@ public class Textures {
 	}
 	
 	public void setTexture(int id) {
-		Log.i(LOG_TAG, "setTexture()");
+		//Log.i(LOG_TAG, "setTexture()");
 		
 		try {
 			int textureid = this.textureMap.get(new Integer(id)).intValue();
