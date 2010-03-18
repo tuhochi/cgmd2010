@@ -141,8 +141,6 @@
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".level36.GlActivity"/>
-		
 		<activity
 			android:name=".level42.HelpActivity"
 			android:label="@string/l42_nameofthegame_full">
