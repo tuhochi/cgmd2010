@@ -8,6 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 public class RabbitHead extends Container {
 	private Item leftWing;
 	private Item rightWing;
+	private Item coinBucket;
 	
 	public RabbitHead(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
@@ -21,13 +22,25 @@ public class RabbitHead extends Container {
 		rightWing.setCenter(0, 64);
 		rightWing.setPosition(0, -10);
 		
+		coinBucket = new CoinBucket(texture);
+		coinBucket.setPosition(0, 50);
+
 		addChild(leftWing);
 		addChild(rightWing);
+		addChild(coinBucket);
 	}
 	
 	public void setWingAngle(float angle) {
 		leftWing.setRotation(-angle);
 		rightWing.setRotation(angle);
+	}
+
+	@Override
+	public void setRotation(float angle) {
+		super.setRotation(angle);
+
+		/* Simulate gravity for the coin bucket */
+		coinBucket.setRotation(-angle/2);
 	}
 
 }

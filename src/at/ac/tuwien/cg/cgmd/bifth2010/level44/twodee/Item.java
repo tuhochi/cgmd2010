@@ -10,6 +10,7 @@ public class Item {
 	private float width;
 	private float height;
 	private float angle;
+	private float scale;
 
 	private TexturePart texturePart;
 	private FloatBuffer vtxCoords;
@@ -29,6 +30,7 @@ public class Item {
 		this.x = x;
 		this.y = y;
 		this.angle = 0;
+		this.scale = 1;
 		
 		/* Center the item at (0, 0) by default */
 		recalculateVtxCoords();
@@ -37,6 +39,10 @@ public class Item {
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
 	}
 	
 	public void setCenter(float cx, float cy) {
@@ -50,6 +56,10 @@ public class Item {
 	protected void onBeforeDraw(GL10 gl) {
 		/* Override this in subclasses to draw children, etc... */
 	}
+
+	protected void onAfterDraw(GL10 gl) {
+		/* Override this in subclasses to draw children, etc... */
+	}
 	
 	public void draw(GL10 gl) {
 		System.err.println("drawing item: " + this.toString());
@@ -59,6 +69,7 @@ public class Item {
 		
 		gl.glTranslatef(x, y, 0);
 		gl.glRotatef(angle, 0, 0, 1); /* rotate clockwise on the z=0 2D plane */
+		gl.glScalef(scale, scale, 1); /* scale everything with the given scale factor */
 		
 		/* Draw any attached objects here (i.e. children) */
 		onBeforeDraw(gl);
@@ -79,6 +90,9 @@ public class Item {
 		/* Draw two triangles with our 4 coordinates */
 		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 		
+		/* Draw more attached objects here */
+		onAfterDraw(gl);
+
 		/* Disable vertex array and texture array after drawing */
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
