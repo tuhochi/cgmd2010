@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level00.TestLevelActivity;
@@ -12,6 +14,12 @@ public class LevelActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		/* Fullscreen window without title */
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		Window window = getWindow();
+		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		scene = new GameScene(this);
 		setContentView(scene);
 		//setContentView(R.layout.l44_help);
