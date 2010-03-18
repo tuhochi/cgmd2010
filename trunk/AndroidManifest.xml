@@ -171,7 +171,8 @@
   		</activity>
   		
    	 	<activity
-   			android:name=".level11.GameActivity">
+   			android:name=".level11.GameActivity"
+   			android:screenOrientation="landscape">
    			<intent-filter>
     			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level11.LAUNCH_LEVEL"></action>
     			<category android:name="android.intent.category.DEFAULT"></category>
