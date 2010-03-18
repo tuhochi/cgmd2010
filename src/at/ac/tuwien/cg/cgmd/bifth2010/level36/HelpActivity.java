@@ -8,6 +8,7 @@ public class HelpActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		System.out.println("Helpactivity onCreate");
 		setContentView(R.layout.l36_help);
 	}
 }
