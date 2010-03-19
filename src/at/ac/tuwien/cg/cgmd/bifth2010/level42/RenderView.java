@@ -81,6 +81,11 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse,0);
 
 
+		// client states
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		
 		/*
 		 * Dummy Test Scene
 		 */

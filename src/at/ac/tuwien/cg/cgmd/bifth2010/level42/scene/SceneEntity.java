@@ -11,6 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 
 public class SceneEntity
 {
+	String name;
 	Matrix44 transformation;
 	ArrayList<Model> models;
 	AxisAlignedBox3 boundingBox;
@@ -45,5 +46,15 @@ public class SceneEntity
 	{
 		models.add(model);
 		boundingBox.include(model.boundingBox);
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 }
