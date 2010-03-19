@@ -42,6 +42,11 @@ public class Vector3
 		this(arr[0],arr[1],arr[2]);
 	}
 	
+	public float[] getArray3()
+	{
+		return new float[] {x,y,z};
+	}
+	
 	public Vector3 add(Vector3 other)
 	{
 		x += other.x;

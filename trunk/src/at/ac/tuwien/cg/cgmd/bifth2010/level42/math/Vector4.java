@@ -47,6 +47,11 @@ public class Vector4
 		this(arr[0],arr[1],arr[2],arr[3]);
 	}
 	
+	public float[] getArray4()
+	{
+		return new float[] {x,y,z,w};
+	}
+	
 	public Vector4 add(Vector4 other)
 	{
 		homogenize();
