@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES11;
@@ -139,7 +140,8 @@ public class MaterialManager
 		
 		private Bitmap loadTexture(String filename)
 		{
-			InputStream is = LevelActivity.getInstance().getResources().openRawResource(LevelActivity.getInstance().getResources().getIdentifier(filename, "drawable", "at.ac.tuwien.cg.cgmd.bifth2010"));
+			Context context = LevelActivity.getInstance();
+			InputStream is = context.getResources().openRawResource(context.getResources().getIdentifier(filename, "drawable", "at.ac.tuwien.cg.cgmd.bifth2010"));
 			Bitmap bitmap = null;
 			try
 			{

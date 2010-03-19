@@ -38,7 +38,6 @@ public class Geometry
 		/*
 		 * TODO:Generate VBOs
 		 */
-		vboID = -1;
 	}
 	
 	public void render(int rendermode)

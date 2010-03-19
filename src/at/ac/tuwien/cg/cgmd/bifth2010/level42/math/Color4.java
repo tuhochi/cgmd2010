@@ -38,4 +38,9 @@ public class Color4
 	{
 		this(0,0,0,1);
 	}
+	
+	public Color4(float[] arr)
+	{
+		this(arr[0],arr[1],arr[2],arr[3]);
+	}
 }
