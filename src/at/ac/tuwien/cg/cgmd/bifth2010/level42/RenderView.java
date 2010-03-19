@@ -18,6 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Model;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 // static imports
@@ -83,15 +84,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		/*
 		 * Dummy Test Scene
 		 */
-		scene = new Scene();
-		SceneEntity sceneEntity = new SceneEntity();
-		Model model = new Model();
-		Geometry cube = new Cube();
-		model.add(cube);
-		sceneEntity.add(model);
-		sceneEntity.getTransformation().addRotateX((float)Math.PI/4);
-		sceneEntity.getTransformation().addRotateY((float)Math.PI/4);
-		scene.add(sceneEntity);
+		scene = SceneLoader.getInstance().readScene("l42_cube");
 	}
 	
 	@Override

@@ -23,6 +23,7 @@ public class Model
 	
 	public Model(Model other)
 	{
+		geometries = new ArrayList<Geometry>();
 		transformation = new Matrix44(other.transformation);
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
 		int numGeoms = other.geometries.size();
