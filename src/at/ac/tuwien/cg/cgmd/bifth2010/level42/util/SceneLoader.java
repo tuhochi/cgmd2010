@@ -24,7 +24,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 
 /*
-# AndroidModel format (*.amo) layout. The whole thing is usually gZipped.
+# AndroidModel format (*.amo) layout. The whole thing is usually GZIPed.
 # Entities:
 #	- Material
 #		A Material is a set of ambient, diffuse and specular colors, a ks and an
