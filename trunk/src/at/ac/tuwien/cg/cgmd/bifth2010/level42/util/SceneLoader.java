@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
@@ -111,6 +112,11 @@ for(numSceneEntities)
 	numModls				int				Number of Models in this SceneEntity
 	for(numModls)
 	{
+		for(numModls-1)						List should be sorted from smallest to biggest distance!
+		{
+			direction		float[3]		vector pointing from the current Model to the other Model
+			model			String			Name of the other Model
+		}
 		modelTransformation	float[16]		Transformation matrix of this Model (regarding the Scene Entity)
 		model				String			A Model, identified by its name
 	}
@@ -259,6 +265,21 @@ public class SceneLoader
 				int numModls = dis.readInt();
 				for(int j=0; j<numModls; j++)
 				{
+					ArrayList<Pair<Vector3, Model>> distances = new ArrayList<Pair<Vector3,Model>>();
+					
+					for(int k=0; k<(numModls-1); k++)
+					{
+						readFloatArray(temp3, dis);
+						Vector3 direction = new Vector3(temp3);
+						
+						String modelName = dis.readUTF();
+						Model model = models.get(modelName);
+						if(model == null)
+							throw new IOException("SceneEntity " + name + " specifies an invalid Model in the distances section" + modelName);
+						
+						distances.add(new Pair<Vector3,Model>(direction,model));
+					}
+					
 					readFloatArray(temp16, dis);
 					Matrix44 modelTransformation = new Matrix44(temp16);
 					
@@ -269,10 +290,12 @@ public class SceneLoader
 					//Model gets copied because it holds its own transformation, still references the same Geometry
 					Model m = new Model(models.get(modelName));
 					m.setTransformation(modelTransformation);
+					m.setDistances(distances);
 					sceneEntity.add(m);
 				}
 				
 				sceneEntity.setTransformation(sceneTransformation);
+				sceneEntity.setName(name);
 				
 				scene.add(sceneEntity);
 			}
