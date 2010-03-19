@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l88_help_title">Bank Heist Bunny</string>
-<string name="l88_help_part2">Als vermeintlicher Bankräuber muss sich der Hase darum kümmern, soviel Gold wie möglich zu verstecken. Ziel des Games ist es, soviele verschiedene Verstecke wie möglich aufzusuchen, um dort Gold zu verstecken, ohne von der Polizei erwischt zu werden. Die Verstecke gibt es in unterschiedlichen Größenordnungen: klein, mittel, groß. Wichtig ist diese Unterscheidung für die Menge von Gold, die dort deponiert werden kann. Doch auch für die Erreichbarkeit gilt – je größer ein Versteck, umso schwieriger ist es zu erreichen. </string>
-<string name="l88_help_part1">„Vorsicht! Die Bullen sind hinter uns her – Schnell weg mit der Beute!“ </string>
-<string name="l88_help_part3">Das Spiel endet, sobald man alles Gold versteckt hat oder von der Polizei erwischt wurde. </string>
-<string name="l88_help_part4">Zusätzlich gibt es mehrere Spielereignisse wie eine Garage, wo man sich vor der Polizei verstecken kann, Gold ausgibt jedoch keine Punkte für den Score bekommt; Straßensperren, wo man die Polizei schmieren muss jedoch wieder keine Punkte für den Score bekommt; Waschanlagen, Abkürzungen die die Polizei nicht nehmen kann; Parkhäuser, wo man sich andere Autos klauen kann und somit von der Polizei für einen kurzen Augenblick nicht behelligt wird. </string>
-<string name="l88_help_part5">Die Steuerung der Spielfigur wird mithilfe der Cursortasten oben, unten, links, rechts erreicht.</string>
+<string name="l88_help_part2">As an assumed bank robber the bunny has the challenge, to conceal as much gold as possible. Goal of the game is, as many hide-outs to find to conceal the gold, without getting caught by the police. The hide-outs have different sizes: small, medium, large. Important is this difference for the amount of gold to be concealed at this place. Yet for the accessibility it counts, if the hide-out is larger it is more difficult to reach this place.</string>
+<string name="l88_help_part1">"Attention! Cops search for us - conceal the goods!"</string>
+<string name="l88_help_part3">The game ends, if there is no gold left or if you get caught.</string>
+<string name="l88_help_part4">Additionally there are different gameevents like a garage which helps to hide from the police, to loose gold but not getting any score; roadblocks, you can drive through and loose gold without getting a score; washing-bays, as an shortcut; parking decks, to get a new car and be invincible for a short amount of time.</string>
+<string name="l88_help_part5">To control the game use the cursor buttons up, down, left, right.</string>
 </resources>
