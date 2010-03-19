@@ -30,6 +30,11 @@ public class Vector2
 		this(0,0);
 	}
 	
+	public Vector2(float[] arr)
+	{
+		this(arr[0],arr[1]);
+	}
+	
 	public Vector2 add(Vector2 other)
 	{
 		x += other.x;

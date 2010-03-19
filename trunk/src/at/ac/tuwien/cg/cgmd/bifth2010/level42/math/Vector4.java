@@ -42,6 +42,11 @@ public class Vector4
 		this(0,0,0,1);
 	}
 	
+	public Vector4(float[] arr)
+	{
+		this(arr[0],arr[1],arr[2],arr[3]);
+	}
+	
 	public Vector4 add(Vector4 other)
 	{
 		homogenize();

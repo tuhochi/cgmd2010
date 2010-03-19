@@ -37,6 +37,11 @@ public class Vector3
 		this(0,0,0);
 	}
 	
+	public Vector3(float[] arr)
+	{
+		this(arr[0],arr[1],arr[2]);
+	}
+	
 	public Vector3 add(Vector3 other)
 	{
 		x += other.x;

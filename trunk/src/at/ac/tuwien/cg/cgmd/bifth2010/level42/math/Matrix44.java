@@ -16,6 +16,14 @@ public class Matrix44
 		setFromArray(other.m);
 	}
 	
+	public Matrix44(float[] m16)
+	{
+		int i = 0;
+		for(int c=0; c<4; c++)
+			for(int r=0; r<4; r++)
+				m[r][c] = m16[i++];
+	}
+	
 	public float[] getArray16()
 	{
 		int i = 0;
