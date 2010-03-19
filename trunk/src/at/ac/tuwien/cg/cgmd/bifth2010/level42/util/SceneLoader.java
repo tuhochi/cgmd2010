@@ -134,6 +134,7 @@ public class SceneLoader
 	
 	public Scene readScene(String filename)
 	{
+		long startTime = System.currentTimeMillis();
 		DataInputStream dis = null;
 		Scene scene = new Scene();
 		Context context = LevelActivity.getInstance();
@@ -265,7 +266,7 @@ public class SceneLoader
 					if(!models.containsKey(modelName))
 						throw new IOException("SceneEntity " + name + " specifies an invalid Model " + modelName);
 					
-					//Model gets copied because it holds its own transformation, but still references the same Geometry
+					//Model gets copied because it holds its own transformation, still references the same Geometry
 					Model m = new Model(models.get(modelName));
 					m.setTransformation(modelTransformation);
 					sceneEntity.add(m);
@@ -286,6 +287,12 @@ public class SceneLoader
 		{
 			if(dis != null)
 				try{dis.close();}catch(IOException e){}
+		}
+		
+		if(scene != null)
+		{
+			long duration = System.currentTimeMillis()-startTime;
+			Log.i(LevelActivity.TAG, "Successfully read Scene '" + filename + "' in " + duration + " ms");
 		}
 		
 		return scene;
