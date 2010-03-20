@@ -300,9 +300,13 @@ public class Matrix44
 	 */
 	public void transformPoint(Vector3 in)
 	{
-		float x = m[0][0]*in.x + m[0][1]*in.y + m[0][2]*in.z;
-		float y = m[1][0]*in.x + m[1][1]*in.y + m[1][2]*in.z;
-		float z = m[2][0]*in.x + m[2][1]*in.y + m[2][2]*in.z;
+		float x = m[0][0]*in.x + m[0][1]*in.y + m[0][2]*in.z + m[0][3];
+		float y = m[1][0]*in.x + m[1][1]*in.y + m[1][2]*in.z + m[1][3];
+		float z = m[2][0]*in.x + m[2][1]*in.y + m[2][2]*in.z + m[2][3];
+		float w = m[3][0]*in.x + m[3][1]*in.y + m[3][2]*in.z + m[3][3];
+		x /= w;
+		y /= w;
+		z /= w;
 		in.x = x;
 		in.y = y;
 		in.z = z;
