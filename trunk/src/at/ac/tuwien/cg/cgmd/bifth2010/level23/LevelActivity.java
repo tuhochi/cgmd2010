@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
@@ -15,6 +17,13 @@ public class LevelActivity extends Activity implements OrientationListener {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// thx @ lvl 11
+		/* Fullscreen window without title */
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+	 	Window window = getWindow();
+	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		renderer = new Renderer(this);
         setContentView(renderer);
         CONTEXT = this; 
