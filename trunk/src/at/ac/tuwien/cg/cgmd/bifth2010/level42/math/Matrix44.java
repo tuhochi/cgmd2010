@@ -47,6 +47,11 @@ public class Matrix44
 				m[r][c] = (r==c) ? 1 : 0;
 	}
 	
+	public void copy(Matrix44 other)
+	{
+		setFromArray(other.m);
+	}
+	
 	/*
 	 * Sets this to be a scale matrix
 	 * @return this
