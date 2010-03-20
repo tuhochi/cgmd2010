@@ -65,7 +65,7 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Default setup taken from nehe android port tutorial
-		quad.loadGLTexture(gl, this.context,true);
+		quad.loadGLTexture(gl, this.context);
 		
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
@@ -74,7 +74,6 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 		gl.glClearDepthf(1.0f);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glDepthFunc(GL10.GL_LEQUAL);
-	
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	
 	
