@@ -10,7 +10,17 @@ public class TimeManager {
 	float fps;
 	long fpsT0;
 	boolean fpsChanged;
+	
+	private static TimeManager instance;
 
+	public static TimeManager getInstance()
+	{
+		if(instance==null)
+			instance = new TimeManager();
+		
+		return instance;
+	}
+	
 	public TimeManager()
 	{
 		t0 = System.currentTimeMillis();

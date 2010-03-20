@@ -12,12 +12,12 @@ public class Camera
 {
 
 	
-	private Vector3 viewPosition, eyePosition, upVector, orientationVec, 
+	private Vector3 viewPosition, eyePosition, upVector,  
 					inverseViewVec;
 	
 	private float 	minAltitude,maxAltitude, azimuth, altitude, 
 					currentAzimuth, currentAltitude, motionFactor,
-					minDistance,maxDistance,focalLength;
+					minDistance,maxDistance;
 
 	private float distance,currentDistance;
 	private float[] lastPosition;
@@ -31,8 +31,7 @@ public class Camera
 					float initAzimuth, float initAltitude, float motionFactor,
 					float minDistance, float maxDistance)
 	{
-		
-		orientationVec = new Vector3(0.0f,0.0f,-1.0f);
+
 		this.distance = distance;
 		this.currentDistance = distance;
 		this.azimuth=initAzimuth;
@@ -118,7 +117,7 @@ public class Camera
 		float altitudeDiff = altitude - currentAltitude;
 		float distanceDiff = distance - currentDistance;
 
-		if(azimuthDiff!=0.0f||altitudeDiff!=0.0){
+		if(azimuthDiff!=0||altitudeDiff!=0||distanceDiff!=0){
 			
 			// calc the iteration step
 			azimuthDiff *= motionFactor * 30.0f;

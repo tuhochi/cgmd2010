@@ -12,11 +12,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Cube;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Geometry;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Model;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.OrbitManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
@@ -31,6 +29,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	private Scene scene;
 	private Camera cam;
 	private TimeManager timer; 
+	private OrbitManager orbitManager;
 	
 	private float light_ambient[] = {0.5f,0.5f,0.5f,1.0f};
 	private float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
@@ -45,14 +44,16 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		this.context = context;
 		
-		timer = new TimeManager();
-		cam = new Camera(10.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,1000.0f);
+		timer = TimeManager.getInstance();
+		orbitManager = OrbitManager.getInstance();
+		cam = new Camera(20.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 	}
 	
 	public RenderView(Context context, AttributeSet attr)
 	{
 		this(context);
 	}
+	
 	
 	private void initGLSettings()
 	{
@@ -90,20 +91,27 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		 * Dummy Test Scene
 		 */
 		scene = SceneLoader.getInstance().readScene("l42_cube");
+		Orbit orbit = new Orbit(6,0,10,1,4,0,0,45,0,0,0);
+		orbitManager.addOrbit(scene.getSceneEntity(0).getName(),orbit);
+
 	}
 	
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
+		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+		
+		timer.update();
+		orbitManager.updateOrbits(timer.getDeltaTsec());
 		cam.updatePosition(new Vector3(0.0f,0.0f,0.0f), 1.0f);
 		cam.look(gl);
-		scene.render();
-		timer.update();
 		
+		scene.render();
+
 		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
 
 	}
@@ -147,20 +155,21 @@ public class RenderView extends GLSurfaceView implements Renderer {
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
 	
-		if (keyCode == KeyEvent.KEYCODE_1)
+		if (keyCode == KeyEvent.KEYCODE_DPAD_UP)
 			queueEvent(new Runnable() {
 				public void run() {
-					//cam.setDistance(instance.getCam().getDistance() - 10.0f);
+					cam.setDistance(cam.getDistance() - 10.0f);
 				}
 			});
 
-		if (keyCode == KeyEvent.KEYCODE_2)
+		if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN)
 			queueEvent(new Runnable() {
 				public void run() {
-					//cam.setDistance(mRenderer.getCam().getDistance() + 10.0f);
+					cam.setDistance(cam.getDistance() + 10.0f);
 				}
 			});
 
 		return false;
 	}
+	
 }
