@@ -25,6 +25,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		renderer = new Renderer(this);
+		renderer.setOrientationListener(this);
         setContentView(renderer);
         CONTEXT = this; 
         OrientationManager.registerListener(this);

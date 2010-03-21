@@ -7,13 +7,17 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.CommonFunctions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 
@@ -29,6 +33,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	private int stepWidth = 5; 
 	private MotionEvent lastMotionEvent = null; 
 	private float accTime;
+	private OrientationListener orientationListener; 
 	
 	private boolean useSensor = false;
 	
@@ -43,7 +48,8 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		mainChar = new MainChar(50,50,new Vector2(100,0));
 		sceneEntities = new ArrayList<SceneEntity>();
 		sceneEntities.add(mainChar);
-		
+		// so that the key events can fire
+        setFocusable(true);
 	}
 	
 	@Override
@@ -103,27 +109,42 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		
 	@Override
 	public boolean onKeyDown(int key, KeyEvent evt) {
+		
+		
 		switch(key) {
-		case KeyEvent.KEYCODE_0: //left
-//			mainChar.setMoveDirection(MainChar.MOVE_LEFT);
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+			mainCharMoveDir = MainChar.MOVE_LEFT;
+			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break; 
-		case KeyEvent.KEYCODE_1: //right
-//			mainChar.setMoveDirection(MainChar.MOVE_RIGHT);
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			mainCharMoveDir = MainChar.MOVE_RIGHT;
+			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break;
-		case KeyEvent.KEYCODE_2: //down
+		/*case KeyEvent.KEYCODE_2: //down
 			mainChar.moveUpDown(-stepWidth);
 			break;
 		case KeyEvent.KEYCODE_3: //up
 			mainChar.moveUpDown(stepWidth);
+			break;*/
+		case KeyEvent.KEYCODE_S: 
+			useSensor = !useSensor; 
+			
+			if (useSensor)
+				OrientationManager.registerListener(orientationListener);
+			else
+				OrientationManager.unregisterListener();
+			
+			Log.i("useSensor", String.valueOf(useSensor));
 			break;
 		}
+		
 		return true; 
 	}
 
 	@Override
 	public boolean onKeyUp(int key, KeyEvent evt) {
 		
-		//do something when the key is released
+		mainCharMoveDir = MainChar.NO_MOVEMENT;
 		return true; 
 	}
 	
@@ -166,5 +187,8 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 			mainCharMoveDir = moveDir;
 	}
 	
+	public void setOrientationListener(OrientationListener listener) {
+		orientationListener = listener; 
+	}
 
 }
