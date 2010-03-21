@@ -1,5 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -8,17 +11,21 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class BoozyRenderer extends GLSurfaceView implements Renderer{
 
-	private Quad quad;
+	private Quad avatar;
 	private Context context;
 	
-	float x = 0;
-	float y = 0;
+	private List<Quad> gameObjects;
 	
+
 	float charMoveY = 0.0f;
 	float charMoveX = 0.0f;
+	
+	
+	
 	
 	public BoozyRenderer(Context context){
 		super(context);
@@ -27,7 +34,14 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 		this.requestFocus();
 		this.setFocusableInTouchMode(true);
 		this.context = context;
-		quad = new Quad();
+		
+		gameObjects = new LinkedList<Quad>();
+		
+		avatar = new Quad();
+		gameObjects.add(avatar);
+		avatar.setObjectType("player");
+		gameObjects.add(new Quad());
+		gameObjects.get(1).setPos(3, 4);
 		
 	}
 	
@@ -36,13 +50,55 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		
+		//Limits the avatar to the screen boundaries (very diry ugly and hacky)
+
+		if(!(avatar.X()+avatar.getSpeedX() < 3.5 && avatar.X()+avatar.getSpeedX() > -3.5)){
+			avatar.setSpeedX(0);
+		}
 		
-		y += charMoveY;
-		x += charMoveX;
-		gl.glTranslatef(x, y, -15.0f);
-		quad.draw(gl);
-		//gl.glTranslatef(10, 10, -15.0f);
-		//quad.draw(gl);
+		if(!(avatar.Y()+avatar.getSpeedY() < 5.2 && avatar.Y()+avatar.getSpeedY() > -5.2)){
+			avatar.setSpeedY(0);
+		}
+	
+		
+		//Basic aabb collision detection
+		
+		for (int i = 0; i < gameObjects.size(); i++){
+		
+			for (int j = i+1; j < gameObjects.size(); j++){
+				Quad collidorA = gameObjects.get(i);
+				Quad collidorB = gameObjects.get(j);
+	
+				if (collidorA.getMinX() > collidorB.getMaxX() ||
+					collidorA.getMaxX() < collidorB.getMinX() ||
+					collidorA.getMinY() > collidorB.getMaxY() ||
+					collidorA.getMaxY() < collidorB.getMinY()
+					){
+					//No collision
+					
+				}else{
+					//Collision
+					collidorA.setPos(collidorA.X()-collidorA.getSpeedX(),collidorA.Y()-collidorA.getSpeedY());
+					collidorB.setPos(collidorB.X()-collidorB.getSpeedX(),collidorB.Y()-collidorB.getSpeedY());
+					
+					//Set speed to avoid getting stuck
+					//Behaviour definiton goes here lat0r
+					collidorA.setSpeedX(0);
+					collidorA.setSpeedY(0);
+					collidorB.setSpeedX(0);
+					collidorB.setSpeedY(0);
+					}
+				}
+			}
+		
+		
+		for (int i = 0; i < gameObjects.size(); i++){
+			gameObjects.get(i).update();
+			gameObjects.get(i).draw(gl);
+			
+		}
+		
+		
 		
 	}
 
@@ -65,8 +121,8 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Default setup taken from nehe android port tutorial
-		quad.loadGLTexture(gl, this.context);
-		
+		avatar.loadGLTexture(gl, this.context,R.drawable.l00_rabit_256);
+		gameObjects.get(1).loadGLTexture(gl, this.context, R.drawable.l00_levelicon_start);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
@@ -91,20 +147,20 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 			
 			
 			if (currentY < upAreaY){
-				charMoveY = 0.01f;
-				charMoveX = 0;
+				avatar.setSpeedY(0.01f);
+				avatar.setSpeedX(0);
 			}else if(currentY > downAreaY){
-				charMoveY = -0.01f;
-				charMoveX = 0;
+				avatar.setSpeedY(-0.01f);
+				avatar.setSpeedX(0);
 			}else if(currentX < leftAreaX){
-				charMoveX = -0.01f;
-				charMoveY = 0;
+				avatar.setSpeedX(-0.01f);
+				avatar.setSpeedY(0);
 			}else if(currentX > rightAreaX){
-				charMoveX = 0.01f;
-				charMoveY = 0;
+				avatar.setSpeedX(0.01f);
+				avatar.setSpeedY(0);
 			}else{
-				charMoveX = 0;
-				charMoveY = 0;
+				avatar.setSpeedX(0);
+				avatar.setSpeedY(0);
 			}
 			
 			

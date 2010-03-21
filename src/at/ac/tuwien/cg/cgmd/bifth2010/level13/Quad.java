@@ -5,10 +5,11 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,8 +17,25 @@ import android.opengl.GLUtils;
 
 public class Quad {
 
+	//Vertex and texure Coords
+	
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer textureBuffer;
+	
+	
+	//Type of the object
+	
+	private String objectType;
+	
+	//Current x and y position of the quad
+	
+	private float x = 0;
+	private float y = 0;
+	
+	//Movement speed
+	
+	private float speedX = 0;
+	private float speedY = 0;
 	
 	
 	private int[] textures = new int[1];
@@ -54,10 +72,75 @@ public class Quad {
 		
 	}
 	
+	public void setPos(float x, float y){
+		this.x = x;
+		this.y = y;
+		
+	}
+	
+	public float getSpeedX(){
+		return this.speedX;
+	}
+	
+	public float getSpeedY(){
+		return this.speedY;
+	}
+	
+	
+	public void setSpeedX(float speedX){
+		this.speedX = speedX;
+	}
+	
+	public void setSpeedY(float speedY){
+		this.speedY = speedY;
+	}
+	
+	public void setObjectType(String type){
+		
+		this.objectType = type;	
+	}
+	
+	public String getObjectType(){
+		return this.objectType;
+	}
+	
+
+	public float getMinX(){
+		return this.x - 1.0f;	
+	}
+	
+	public float getMaxX(){
+		return this.x+1.0f;
+	}
+	
+	public float getMinY(){
+		return this.y-1.0f;
+	}
+
+	public float getMaxY(){
+		return this.y+1.0f;
+	}
+	
+	
+	public float X(){
+		return this.x;
+	}
+	
+	public float Y(){
+		return this.y;
+	}
+	
+	
+	public void update(){
+		this.x += speedX;
+		this.y += speedY;
+	}
 	
 	
 	public void draw(GL10 gl){
 		
+		gl.glLoadIdentity();
+		gl.glTranslatef(x, y, -15.0f);
 		
 		gl.glEnable(GL10.GL_BLEND);
 		
@@ -77,17 +160,15 @@ public class Quad {
 		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, vertices.length/3);
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisable(GL10.GL_BLEND);
+		
+	
 	}
 	
 	
 
 	
-	public void loadGLTexture(GL10 gl, Context context){
-		InputStream is = context.getResources().openRawResource(R.drawable.l00_rabit_256);
-
-		
-	
-		
+	public void loadGLTexture(GL10 gl, Context context,int textureId){
+		InputStream is = context.getResources().openRawResource(textureId);
 		
 		Bitmap bmp = null;
 		
