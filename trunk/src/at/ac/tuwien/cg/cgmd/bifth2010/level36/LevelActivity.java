@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level36;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
@@ -10,13 +11,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  *
  */
 public class LevelActivity extends Activity{
-	private Game scene;
+	private View scene;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		System.out.println("LevelActivity onCreate");
+		Log.v("LevelActivity", "onCreate");
 		super.onCreate(savedInstanceState);
-		scene = new Game(this);
+		scene = new View(this);
 		setContentView(scene);
 	}
 	
@@ -25,6 +26,7 @@ public class LevelActivity extends Activity{
 	 * @param score
 	 */
 	private void finish(int score) {
+		Log.v("LevelActivity", "finish");
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
 		//we set the progress the user has made (must be between 0-100)

@@ -6,12 +6,13 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 
-public class Game extends GLSurfaceView implements Renderer {
+public class View extends GLSurfaceView implements Renderer {
 	
-	public Game(Context context) {
+	public View(Context context) {
 		super(context);
-		System.out.println("GlActivity Konstrukt");
+		Log.v("View", "Konstrukt");
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
 	}
@@ -24,12 +25,11 @@ public class Game extends GLSurfaceView implements Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		System.out.println("GlActivity onSurfaceChanged");
+		Log.v("View", "onSurfaceChanged");
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		System.out.println("GlActivity onSurfaceCreated");
-
+		Log.v("View", "onSurfaceCreated");
 	}
 }
