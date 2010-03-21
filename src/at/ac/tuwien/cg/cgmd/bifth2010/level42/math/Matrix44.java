@@ -267,6 +267,8 @@ public class Matrix44
 	 */
 	public Matrix44 mult(Matrix44 right)
 	{
+		if(temp == null)
+			temp = new Matrix44();
 		temp.copy(this);
 		m[0][0] = temp.m[0][0]*right.m[0][0] + temp.m[0][1]*right.m[1][0] + temp.m[0][2]*right.m[2][0] + temp.m[0][3]*right.m[3][0];
 		m[0][1] = temp.m[0][0]*right.m[0][1] + temp.m[0][1]*right.m[1][1] + temp.m[0][2]*right.m[2][1] + temp.m[0][3]*right.m[3][1];
