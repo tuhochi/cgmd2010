@@ -1,11 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 
 public class OrbitManager {
 	
-	private HashMap<String,Orbit> map;
+	private  ArrayList<Orbit> list;
 	private static OrbitManager instance;
 	
 	public static OrbitManager getInstance()
@@ -17,23 +16,24 @@ public class OrbitManager {
 	
 	public OrbitManager()
 	{
-		map = new HashMap<String, Orbit>();
+		list =  new ArrayList<Orbit>();
 	}
 	
-	public void addOrbit(String entity,Orbit orbit)
+	public void addOrbit(Orbit orbit)
 	{
-		map.put(entity,orbit);
+		list.add(orbit);
 	}
 	
-	public Orbit getOrbit(String entity)
+	public Orbit getOrbit(int index)
 	{
-		return map.get(entity);
+		return list.get(index);
 	}
 	
 	public void updateOrbits(float dt)
 	{
-		Iterator<Orbit> it = map.values().iterator();
-		while(it.hasNext())
-			it.next().updatePos(dt);
+		for(int i=0; i<list.size();i++)
+		{
+			list.get(i).updatePos(dt);
+		}
 	}
 }

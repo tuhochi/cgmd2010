@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
 public class Orbit {
 
@@ -11,14 +12,16 @@ public class Orbit {
 					qx,qy,qz,
 					tx,ty,tz;
 	private Vector3 pos;
-	private Matrix44 orbitTransform,transform;
+	private Matrix44 orbitTransform,transform,tempTransform;
+	private SceneEntity entity;
 	
 	//temp vars
 	private float sinu,cosu,sinv,cosv,step,twoPI;
 	
-	public Orbit(float speed, float v, float a, float b, float c,  float qx,
+	public Orbit(SceneEntity entity, float speed, float v, float a, float b, float c,  float qx,
 			float qy,float qz,float tx,float ty,float tz) 
 	{
+		this.entity = entity;
 		this.speed = speed;
 		this.a = a;
 		this.b = b;
@@ -45,6 +48,7 @@ public class Orbit {
 		//set transform matrix for ellipsoid
 		transform = new Matrix44();
 		orbitTransform = new Matrix44();
+		tempTransform = new Matrix44();
 		
 		orbitTransform.addRotateX((float)Math.toRadians(this.qx));
 		orbitTransform.addRotateY((float)Math.toRadians(this.qy));
@@ -60,11 +64,15 @@ public class Orbit {
 		if(u==twoPI)
 			u=0;
 
+		
 		calcPos();
+		//update transformation in the entity
+		entity.setTransformation(transform);
 	}
 	
 	private void calcPos()
 	{
+		//evaluate ellipsoid
 		cosu = (float)Math.cos(u);
 		sinu = (float)Math.sin(u);
 		
@@ -72,10 +80,14 @@ public class Orbit {
 		pos.y = b * cosu * sinv;
 		pos.z = c * sinu;
 
-		transform.setIdentity();
-		transform.addTranslate(pos.x,pos.y, pos.z);
-		transform.mult(orbitTransform);
+		//translate position on ellipsoid
+		transform.setTranslate(pos.x,pos.y, pos.z);
 		
+		//transformation of the ellipsoid
+		tempTransform.copy(orbitTransform);
+		tempTransform.mult(transform);
+		
+		transform.copy(tempTransform);
 	}
 
 
