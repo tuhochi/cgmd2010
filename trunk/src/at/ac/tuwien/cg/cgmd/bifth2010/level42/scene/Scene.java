@@ -19,8 +19,9 @@ public class Scene
 	
 	public void render()
 	{
-		SceneEntity m; 
-		for(int i=0;i<sceneEntities.size();i++)
+		SceneEntity m;
+		int size = sceneEntities.size();
+		for(int i=0;i<size;i++)
 		{
 			m = sceneEntities.get(i);
 			m.render(rendermode);
