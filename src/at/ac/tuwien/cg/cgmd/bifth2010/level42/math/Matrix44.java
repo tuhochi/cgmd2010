@@ -267,23 +267,23 @@ public class Matrix44
 	 */
 	public Matrix44 mult(Matrix44 right)
 	{
-		Matrix44 left = new Matrix44(this);
-		m[0][0] = left.m[0][0]*right.m[0][0] + left.m[0][1]*right.m[1][0] + left.m[0][2]*right.m[2][0] + left.m[0][3]*right.m[3][0];
-		m[0][1] = left.m[0][0]*right.m[0][1] + left.m[0][1]*right.m[1][1] + left.m[0][2]*right.m[2][1] + left.m[0][3]*right.m[3][1];
-		m[0][2] = left.m[0][0]*right.m[0][2] + left.m[0][1]*right.m[1][2] + left.m[0][2]*right.m[2][2] + left.m[0][3]*right.m[3][2];
-		m[0][3] = left.m[0][0]*right.m[0][3] + left.m[0][1]*right.m[1][3] + left.m[0][2]*right.m[2][3] + left.m[0][3]*right.m[3][3];
-		m[1][0] = left.m[1][0]*right.m[0][0] + left.m[1][1]*right.m[1][0] + left.m[1][2]*right.m[2][0] + left.m[1][3]*right.m[3][0];
-		m[1][1] = left.m[1][0]*right.m[0][1] + left.m[1][1]*right.m[1][1] + left.m[1][2]*right.m[2][1] + left.m[1][3]*right.m[3][1];
-		m[1][2] = left.m[1][0]*right.m[0][2] + left.m[1][1]*right.m[1][2] + left.m[1][2]*right.m[2][2] + left.m[1][3]*right.m[3][2];
-		m[1][3] = left.m[1][0]*right.m[0][3] + left.m[1][1]*right.m[1][3] + left.m[1][2]*right.m[2][3] + left.m[1][3]*right.m[3][3];
-		m[2][0] = left.m[2][0]*right.m[0][0] + left.m[2][1]*right.m[1][0] + left.m[2][2]*right.m[2][0] + left.m[2][3]*right.m[3][0];
-		m[2][1] = left.m[2][0]*right.m[0][1] + left.m[2][1]*right.m[1][1] + left.m[2][2]*right.m[2][1] + left.m[2][3]*right.m[3][1];
-		m[2][2] = left.m[2][0]*right.m[0][2] + left.m[2][1]*right.m[1][2] + left.m[2][2]*right.m[2][2] + left.m[2][3]*right.m[3][2];
-		m[2][3] = left.m[2][0]*right.m[0][3] + left.m[2][1]*right.m[1][3] + left.m[2][2]*right.m[2][3] + left.m[2][3]*right.m[3][3];
-		m[3][0] = left.m[3][0]*right.m[0][0] + left.m[3][1]*right.m[1][0] + left.m[3][2]*right.m[2][0] + left.m[3][3]*right.m[3][0];
-		m[3][1] = left.m[3][0]*right.m[0][1] + left.m[3][1]*right.m[1][1] + left.m[3][2]*right.m[2][1] + left.m[3][3]*right.m[3][1];
-		m[3][2] = left.m[3][0]*right.m[0][2] + left.m[3][1]*right.m[1][2] + left.m[3][2]*right.m[2][2] + left.m[3][3]*right.m[3][2];
-		m[3][3] = left.m[3][0]*right.m[0][3] + left.m[3][1]*right.m[1][3] + left.m[3][2]*right.m[2][3] + left.m[3][3]*right.m[3][3];
+		temp.copy(this);
+		m[0][0] = temp.m[0][0]*right.m[0][0] + temp.m[0][1]*right.m[1][0] + temp.m[0][2]*right.m[2][0] + temp.m[0][3]*right.m[3][0];
+		m[0][1] = temp.m[0][0]*right.m[0][1] + temp.m[0][1]*right.m[1][1] + temp.m[0][2]*right.m[2][1] + temp.m[0][3]*right.m[3][1];
+		m[0][2] = temp.m[0][0]*right.m[0][2] + temp.m[0][1]*right.m[1][2] + temp.m[0][2]*right.m[2][2] + temp.m[0][3]*right.m[3][2];
+		m[0][3] = temp.m[0][0]*right.m[0][3] + temp.m[0][1]*right.m[1][3] + temp.m[0][2]*right.m[2][3] + temp.m[0][3]*right.m[3][3];
+		m[1][0] = temp.m[1][0]*right.m[0][0] + temp.m[1][1]*right.m[1][0] + temp.m[1][2]*right.m[2][0] + temp.m[1][3]*right.m[3][0];
+		m[1][1] = temp.m[1][0]*right.m[0][1] + temp.m[1][1]*right.m[1][1] + temp.m[1][2]*right.m[2][1] + temp.m[1][3]*right.m[3][1];
+		m[1][2] = temp.m[1][0]*right.m[0][2] + temp.m[1][1]*right.m[1][2] + temp.m[1][2]*right.m[2][2] + temp.m[1][3]*right.m[3][2];
+		m[1][3] = temp.m[1][0]*right.m[0][3] + temp.m[1][1]*right.m[1][3] + temp.m[1][2]*right.m[2][3] + temp.m[1][3]*right.m[3][3];
+		m[2][0] = temp.m[2][0]*right.m[0][0] + temp.m[2][1]*right.m[1][0] + temp.m[2][2]*right.m[2][0] + temp.m[2][3]*right.m[3][0];
+		m[2][1] = temp.m[2][0]*right.m[0][1] + temp.m[2][1]*right.m[1][1] + temp.m[2][2]*right.m[2][1] + temp.m[2][3]*right.m[3][1];
+		m[2][2] = temp.m[2][0]*right.m[0][2] + temp.m[2][1]*right.m[1][2] + temp.m[2][2]*right.m[2][2] + temp.m[2][3]*right.m[3][2];
+		m[2][3] = temp.m[2][0]*right.m[0][3] + temp.m[2][1]*right.m[1][3] + temp.m[2][2]*right.m[2][3] + temp.m[2][3]*right.m[3][3];
+		m[3][0] = temp.m[3][0]*right.m[0][0] + temp.m[3][1]*right.m[1][0] + temp.m[3][2]*right.m[2][0] + temp.m[3][3]*right.m[3][0];
+		m[3][1] = temp.m[3][0]*right.m[0][1] + temp.m[3][1]*right.m[1][1] + temp.m[3][2]*right.m[2][1] + temp.m[3][3]*right.m[3][1];
+		m[3][2] = temp.m[3][0]*right.m[0][2] + temp.m[3][1]*right.m[1][2] + temp.m[3][2]*right.m[2][2] + temp.m[3][3]*right.m[3][2];
+		m[3][3] = temp.m[3][0]*right.m[0][3] + temp.m[3][1]*right.m[1][3] + temp.m[3][2]*right.m[2][3] + temp.m[3][3]*right.m[3][3];
 		return this;
 	}
 	
