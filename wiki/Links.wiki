@@ -12,7 +12,10 @@ Here you can find some useful links for the project. If you find some links, ple
     * [http://developer.android.com/guide/practices/design/performance.html Designing for Performance]
     * [http://developer.android.com/guide/practices/design/responsiveness.html Designing for Responsiveness]
     * [http://developer.android.com/guide/practices/design/seamlessness.html Designing for Seamlessness]
-  * *[http://developer.android.com/resources/samples/ApiDemos/index.html Sample Code]:* Especially the API Demos are very useful! You can also find the sample code in your Android installation directory (\sdk-path\platforms\android-X.X\samples).
+  * *[http://developer.android.com/resources/samples/ApiDemos/index.html Sample Code]:* Especially the API Demos are very useful! You can also find the sample code in your 
+Android installation directory (\sdk-path\platforms\android-X.X\samples).
+
+  * *[http://www.replicaisland.net/ Replica Island (Open Source Android Game) developed by a Google employee]*
   * *[http://developer.android.com/videos/index.html Android Videos]*
   * *[http://developer.android.com/guide/developing/tools/emulator.html Android Emulator:]* Including "Controlling the Emulator"
   * *[http://code.google.com/intl/de-AT/events/io/2009/sessions/WritingRealTimeGamesAndroid.html Google I/O 2009 - Writing Real-Time Games for Android:]* Very good introduction in writing games on Android. Video and slides (PDF) are available!
