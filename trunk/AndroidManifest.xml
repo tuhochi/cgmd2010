@@ -153,7 +153,8 @@
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".level36.LevelActivity">
+		<activity 
+			android:name=".level36.LevelActivity">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level36.LAUNCH_LEVEL" />
 				<category android:name="android.intent.category.DEFAULT" />
