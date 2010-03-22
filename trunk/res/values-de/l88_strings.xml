@@ -6,4 +6,8 @@
 <string name="l88_help_part3">Das Spiel endet, sobald man alles Gold versteckt hat oder von der Polizei erwischt wurde. </string>
 <string name="l88_help_part4">Zusätzlich gibt es mehrere Spielereignisse wie eine Garage, wo man sich vor der Polizei verstecken kann, Gold ausgibt jedoch keine Punkte für den Score bekommt; Straßensperren, wo man die Polizei schmieren muss jedoch wieder keine Punkte für den Score bekommt; Waschanlagen, Abkürzungen die die Polizei nicht nehmen kann; Parkhäuser, wo man sich andere Autos klauen kann und somit von der Polizei für einen kurzen Augenblick nicht behelligt wird. </string>
 <string name="l88_help_part5">Die Steuerung der Spielfigur wird mithilfe der Cursortasten oben, unten, links, rechts erreicht.</string>
+<string name="l88_mode_ready">Bank Heist Bunny \nDruecke rauf um das Level zu beginnen</string>
+<string name="l88_mode_pause">Paused \nDruecke rauf um weiterzuspielen</string>
+<string name="l88_mode_loose">Spiel vorbei\nScore: </string>
+<string name="l88_layout_text"></string>
 </resources>
