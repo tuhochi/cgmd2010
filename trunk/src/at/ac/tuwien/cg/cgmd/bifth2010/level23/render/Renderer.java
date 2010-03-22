@@ -38,6 +38,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	private boolean useSensor = false;
 	
 	private int mainCharMoveDir;
+	private int lastKeyMovement;
 	
 	public Renderer(Context context)
 	{
@@ -71,6 +72,8 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 			else
 				mainCharMoveDir = MainChar.NO_MOVEMENT;
 		}
+		
+		fetchKeyMoveData();
 		
 		mainChar.update(TimeUtil.getInstance().getDt(),mainCharMoveDir);
 				
@@ -110,14 +113,15 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	@Override
 	public boolean onKeyDown(int key, KeyEvent evt) {
 		
-		
+		System.out.println("key");
 		switch(key) {
+		
 		case KeyEvent.KEYCODE_DPAD_LEFT:
-			mainCharMoveDir = MainChar.MOVE_LEFT;
+			lastKeyMovement = MainChar.MOVE_LEFT;
 			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break; 
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			mainCharMoveDir = MainChar.MOVE_RIGHT;
+			lastKeyMovement = MainChar.MOVE_RIGHT;
 			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break;
 		/*case KeyEvent.KEYCODE_2: //down
@@ -128,11 +132,11 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 			break;*/
 		case KeyEvent.KEYCODE_S: 
 			useSensor = !useSensor; 
-			
+			System.out.println("sensor");
 			if (useSensor)
 				OrientationManager.registerListener(orientationListener);
 			else
-				OrientationManager.unregisterListener();
+				OrientationManager.unregisterListener(orientationListener);
 			
 			Log.i("useSensor", String.valueOf(useSensor));
 			break;
@@ -144,7 +148,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	@Override
 	public boolean onKeyUp(int key, KeyEvent evt) {
 		
-		mainCharMoveDir = MainChar.NO_MOVEMENT;
+//		mainCharMoveDir = MainChar.NO_MOVEMENT;
 		return true; 
 	}
 	
@@ -189,6 +193,15 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	
 	public void setOrientationListener(OrientationListener listener) {
 		orientationListener = listener; 
+	}
+	
+	public void fetchKeyMoveData()
+	{
+		if(lastKeyMovement!=0)
+		{
+			mainCharMoveDir = lastKeyMovement;
+			lastKeyMovement = 0;
+		}
 	}
 
 }
