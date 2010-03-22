@@ -209,8 +209,18 @@
   		<activity 
   			android:name=".level33.HelpActivity"
   			android:label="@string/l33_GameName">
+  			android:screenOrientation="landscape">
 		<intent-filter>
 			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level33.LAUNCH_HELP"></action>
+			<category android:name="android.intent.category.DEFAULT"></category>
+		</intent-filter>
+		</activity>
+		
+		<activity 
+  			android:name=".level33.LevelActivity"
+  			android:label="@string/l33_GameName">
+		<intent-filter>
+			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level33.LAUNCH_LEVEL"></action>
 			<category android:name="android.intent.category.DEFAULT"></category>
 		</intent-filter>
 		</activity>
