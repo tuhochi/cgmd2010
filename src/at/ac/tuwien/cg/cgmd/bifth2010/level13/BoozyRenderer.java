@@ -1,7 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -15,18 +17,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class BoozyRenderer extends GLSurfaceView implements Renderer{
 
-	private Quad avatar;
+	private GameObject avatar;
+	private GameObject beer;
 	private Context context;
-	
-	private List<Quad> gameObjects;
-	
+	Random rnd ;
+	private List<GameObject> gameObjects;
 
-	float charMoveY = 0.0f;
-	float charMoveX = 0.0f;
-	
-	
-	
-	
 	public BoozyRenderer(Context context){
 		super(context);
 		//this.context = context;
@@ -35,13 +31,64 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 		this.setFocusableInTouchMode(true);
 		this.context = context;
 		
-		gameObjects = new LinkedList<Quad>();
+		gameObjects = new LinkedList<GameObject>();
+		rnd = new Random();
+		avatar = new Player();
 		
-		avatar = new Quad();
+		
+		beer = new Beer();
+		beer.setPos(3, 4);
+		gameObjects.add(beer);
+		
+		for (int i = 0; i < 10; i++){
+			
+			GameObject beerObj = new Beer();
+			float posX = 1.5f+rnd.nextFloat()*2;
+			float posY = 1.5f+rnd.nextFloat()*3;
+			boolean xPositive = rnd.nextBoolean();
+			boolean yPositive = rnd.nextBoolean();
+			
+			
+			//beer.setPos(3, 4);
+			if (xPositive)
+				posX *= -1;
+			if (yPositive)
+				posY *= -1;
+			beerObj.setPos(posX, posY);
+			gameObjects.add(beerObj);
+		}
+		
 		gameObjects.add(avatar);
-		avatar.setObjectType("player");
-		gameObjects.add(new Quad());
-		gameObjects.get(1).setPos(3, 4);
+	
+		
+	
+		//gameObjects.add(beer);
+		
+		
+		
+		
+		
+	}
+	
+	public void generateRandomMoneyLossEvent(GameObject obj){
+		
+	
+		
+			GameObject gameObj = obj;
+		
+		float posX = 1.5f+rnd.nextFloat()*2;
+		float posY = 1.5f+rnd.nextFloat()*3;
+		boolean xPositive = rnd.nextBoolean();
+		boolean yPositive = rnd.nextBoolean();
+		
+		
+		//beer.setPos(3, 4);
+		if (xPositive)
+			posX *= -1;
+		if (yPositive)
+			posY *= -1;
+		gameObj.setPos(posX, posY);
+		gameObj.setActive(true);
 		
 	}
 	
@@ -62,13 +109,17 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 	
 		
 		//Basic aabb collision detection
-		
-		for (int i = 0; i < gameObjects.size(); i++){
-		
-			for (int j = i+1; j < gameObjects.size(); j++){
-				Quad collidorA = gameObjects.get(i);
-				Quad collidorB = gameObjects.get(j);
 	
+		for (int i = 0; i < gameObjects.size(); i++){
+			GameObject collidorA = gameObjects.get(i);
+
+			
+			for (int j = i+1; j < gameObjects.size(); j++){
+				
+				
+				GameObject collidorB = gameObjects.get(j);
+
+				if (collidorB.getActive()&& collidorA.getActive()){
 				if (collidorA.getMinX() > collidorB.getMaxX() ||
 					collidorA.getMaxX() < collidorB.getMinX() ||
 					collidorA.getMinY() > collidorB.getMaxY() ||
@@ -78,29 +129,54 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 					
 				}else{
 					//Collision
+					//Collision Handling <--- refactor to class
+			
+	
+					//if (collidorB instanceof Beer && collidorA instanceof Beer){}
+					
+					if((collidorA instanceof Beer && collidorB instanceof Player) ||
+							(collidorB instanceof Beer && collidorA instanceof Player) ){
+						if (collidorA instanceof Beer)
+							collidorA.setActive(false);
+						else
+							collidorB.setActive(false);
+					}
+					/*
 					collidorA.setPos(collidorA.X()-collidorA.getSpeedX(),collidorA.Y()-collidorA.getSpeedY());
 					collidorB.setPos(collidorB.X()-collidorB.getSpeedX(),collidorB.Y()-collidorB.getSpeedY());
 					
 					//Set speed to avoid getting stuck
-					//Behaviour definiton goes here lat0r
+					
 					collidorA.setSpeedX(0);
 					collidorA.setSpeedY(0);
 					collidorB.setSpeedX(0);
 					collidorB.setSpeedY(0);
-					}
+				*/
+		
+				}
+				
+			}
 				}
 			}
-		
-		
-		for (int i = 0; i < gameObjects.size(); i++){
-			gameObjects.get(i).update();
-			gameObjects.get(i).draw(gl);
 			
+		for (int i = 0; i < gameObjects.size(); i++){
+			GameObject cObj = gameObjects.get(i);
+			
+			if (cObj.getActive()){
+				//check if object is still active
+			
+				cObj.update();
+				
+				cObj.draw(gl);
+			}else{
+				generateRandomMoneyLossEvent(cObj);
+				}
+			}
 		}
 		
 		
 		
-	}
+	
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -121,8 +197,16 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		// Default setup taken from nehe android port tutorial
-		avatar.loadGLTexture(gl, this.context,R.drawable.l00_rabit_256);
-		gameObjects.get(1).loadGLTexture(gl, this.context, R.drawable.l00_levelicon_start);
+		//avatar.loadGLTexture(gl, this.context,R.drawable.l00_rabit_256);
+		//beer.loadGLTexture(gl, this.context, R.drawable.l13_beer);
+		for(int i = 0; i < gameObjects.size();i++){
+			GameObject curObj = gameObjects.get(i);
+			if (curObj instanceof Player)
+				curObj.loadGLTexture(gl, this.context, R.drawable.l00_rabit_256);
+			else if (curObj instanceof Beer)
+				curObj.loadGLTexture(gl, this.context, R.drawable.l13_beer);
+		}
+		//gameObjects.get(1).loadGLTexture(gl, this.context, R.drawable.l00_levelicon_start);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
@@ -147,16 +231,16 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 			
 			
 			if (currentY < upAreaY){
-				avatar.setSpeedY(0.01f);
+				avatar.setSpeedY(0.1f);
 				avatar.setSpeedX(0);
 			}else if(currentY > downAreaY){
-				avatar.setSpeedY(-0.01f);
+				avatar.setSpeedY(-0.1f);
 				avatar.setSpeedX(0);
 			}else if(currentX < leftAreaX){
-				avatar.setSpeedX(-0.01f);
+				avatar.setSpeedX(-0.1f);
 				avatar.setSpeedY(0);
 			}else if(currentX > rightAreaX){
-				avatar.setSpeedX(0.01f);
+				avatar.setSpeedX(0.1f);
 				avatar.setSpeedY(0);
 			}else{
 				avatar.setSpeedX(0);
