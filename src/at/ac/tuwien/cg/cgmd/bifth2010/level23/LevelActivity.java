@@ -37,8 +37,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 	
 	public void onDestroy() {
 		super.onDestroy();
-		if (OrientationManager.isListening()) 
-			OrientationManager.unregisterListener();
+//		if (OrientationManager.isListening()) 
+//			OrientationManager.unregisterListener();
 	}
 
 	@Override

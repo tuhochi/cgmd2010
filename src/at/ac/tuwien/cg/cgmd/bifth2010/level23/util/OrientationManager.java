@@ -87,11 +87,11 @@ public class OrientationManager {
 	}
 	
 	//end listener
-	public static void unregisterListener() {
+	public static void unregisterListener(OrientationListener listener) {
 		isListening = false; 
 		try {
 			if (sensorManager != null && orientationSensorEventListener != null)
-				sensorManager.unregisterListener(orientationSensorEventListener);
+				sensorManager.unregisterListener(orientationSensorEventListener, orientationSensor);
 			
 		} catch (Throwable t) {
 			// handle exception here
