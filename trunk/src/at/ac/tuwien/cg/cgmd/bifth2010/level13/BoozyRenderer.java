@@ -72,7 +72,7 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 	
 	public void generateRandomMoneyLossEvent(GameObject obj){
 		
-	
+	//TODO: Random event generation
 		
 			GameObject gameObj = obj;
 		
