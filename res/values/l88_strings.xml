@@ -6,4 +6,8 @@
 <string name="l88_help_part3">The game ends, if there is no gold left or if you get caught.</string>
 <string name="l88_help_part4">Additionally there are different gameevents like a garage which helps to hide from the police, to loose gold but not getting any score; roadblocks, you can drive through and loose gold without getting a score; washing-bays, as an shortcut; parking decks, to get a new car and be invincible for a short amount of time.</string>
 <string name="l88_help_part5">To control the game use the cursor buttons up, down, left, right.</string>
+<string name="l88_mode_ready">Bank Heist Bunny \nPress up to play</string>
+<string name="l88_mode_pause">Paused \nPress Up to resume</string>
+<string name="l88_mode_loose">Game Over\nScore: </string>
+<string name="l88_layout_text"></string>
 </resources>
