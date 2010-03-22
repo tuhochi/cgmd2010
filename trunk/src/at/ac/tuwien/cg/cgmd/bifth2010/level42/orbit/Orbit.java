@@ -61,10 +61,9 @@ public class Orbit {
 	public void updatePos(float dt)
 	{
 		u+=(speed*step*dt);
-		if(u==twoPI)
-			u=0;
+		if(u>=twoPI)
+			u-=twoPI;
 
-		
 		calcPos();
 		//update transformation in the entity
 		entity.setTransformation(transform);
