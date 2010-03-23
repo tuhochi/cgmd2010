@@ -30,7 +30,7 @@ public abstract class GameObject {
 	
 	private Vector2 pos;
 	private Vector2 speed;
-
+	private float rotation;
 	
 	//Movement speed
 	
@@ -101,6 +101,9 @@ public abstract class GameObject {
 		this.active = active;
 	}
 	
+	public void rotate(float angle){
+		rotation+=angle;
+	}
 	
 	
 	public void setObjectType(String type){
@@ -148,7 +151,7 @@ public abstract class GameObject {
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(pos.x, pos.y, -15.0f);
-		
+		gl.glRotatef(rotation,0, 0, 1);
 		gl.glEnable(GL10.GL_BLEND);
 		
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);

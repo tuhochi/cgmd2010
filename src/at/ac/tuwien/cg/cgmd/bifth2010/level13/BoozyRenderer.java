@@ -38,7 +38,7 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 	
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		
+		/*
 		if (bControl.isDrunk()){
 			if(colorWheel == true){
 				colorWheel = false;
@@ -47,9 +47,9 @@ public class BoozyRenderer extends GLSurfaceView implements Renderer{
 				colorWheel = true;
 				gl.glClearColor(1.0f, 0.0f, 0.0f, 0.5f);
 			}
-		
+
 		}
-		
+		*/
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		bControl.run(gl);
