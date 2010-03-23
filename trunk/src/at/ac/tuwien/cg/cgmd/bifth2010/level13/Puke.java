@@ -1,10 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
 public class Puke extends GameObject{
-	int age = 20;
+	int age = 100;
 	
 	public void reset() {
-		age = 20;
+		age = 30;
 		
 	}
 	

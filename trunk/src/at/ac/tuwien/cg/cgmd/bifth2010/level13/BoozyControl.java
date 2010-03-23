@@ -24,6 +24,7 @@ public class BoozyControl {
 	private Random rnd ;
 	
 	private int beerTicker = 0;
+	private int pukeTimer = 15;
 	private boolean dry = true;
 	
 	public boolean isDrunk(){
@@ -57,12 +58,14 @@ public class BoozyControl {
 	}
 	
 	public void activatePuke(){
-		for (int i = 0; i < pukeObjects.size(); i++){
+		for (int i = 0; i < pukeObjects.size();i++){
 			if (pukeObjects.get(i).getActive() == false){
 				pukeObjects.get(i).setActive(true);
 				pukeObjects.get(i).reset();
 				pukeObjects.get(i).setPos(avatar.getPos().x, avatar.getPos().y);
+				break;
 			}
+		
 		}
 	}
 	
@@ -133,7 +136,15 @@ public class BoozyControl {
 				}
 			}
 		
+		if (pukeTimer > 0)
+			pukeTimer--;
+		if(!dry){
+		if(pukeTimer == 0){
+			activatePuke();
+		    pukeTimer = 15;
+		}
 		gameTime -= 1;
+		}
 		if (gameTime == 0){
 			//Exit
 		
@@ -195,9 +206,8 @@ public class BoozyControl {
 					avatar.setSpeed(0.1f, 0);	
 				}else if(currentX > rightAreaX){
 					avatar.setSpeed(-0.1f, 0);
-					
 				}
-					activatePuke();
+				
 			
 				
 				
