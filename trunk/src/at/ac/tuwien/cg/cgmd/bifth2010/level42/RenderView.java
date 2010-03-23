@@ -91,7 +91,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		 * Dummy Test Scene
 		 */
 		scene = SceneLoader.getInstance().readScene("l42_cube");
-		Orbit orbit = new Orbit(scene.getSceneEntity(0),6,0,10,1,4,0,0,45,0,0,0);
+		Orbit orbit = new Orbit(scene.getSceneEntity(0),6,0,0.75f,Orbit.DIRECTION_NEGATIVE,
+								10,1,4,0,0,45,0,0,0);
 		orbitManager.addOrbit(orbit);
 
 	}
