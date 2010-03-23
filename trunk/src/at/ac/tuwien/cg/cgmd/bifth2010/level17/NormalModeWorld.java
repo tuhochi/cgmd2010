@@ -25,16 +25,11 @@ public class NormalModeWorld implements World {
     private GLTextures mTextures;
     private LevelActivity mContext;
     private Renderable mQuad;
-    private float mTouchAngle = 0;
-    private float mBottleAngle = 0;
-    private float mBottleAngleSpeed = 0;
-    private float[] mTouchAngles = {0,0,0,0,0,0,0,0,0,0};
-    private int mActualPos = 0;
+    private float mRotAngle = 0;
     private Handler mHandler;
     
     public NormalModeWorld(LevelActivity context, Handler handler)
     {
-
         Date date = new Date();
         mTime = date.getTime();
         mOldTime = mTime;
@@ -51,9 +46,9 @@ public class NormalModeWorld implements World {
         mTime = date.getTime();
         mElapsedSeconds = (mTime - mOldTime) / 1000.0f;
 
-        mBottleAngle += mElapsedSeconds;
+        mRotAngle += mElapsedSeconds;
     	
-        mRotation = Matrix4x4.RotateZ(mBottleAngle);
+        mRotation = Matrix4x4.RotateZ(mRotAngle);
 	}
 	
 	public synchronized void draw(GL10 gl)
@@ -75,8 +70,6 @@ public class NormalModeWorld implements World {
 	
 	public synchronized void init(GL10 gl)
 	{
-
-        
         mTextures = new GLTextures(gl, mContext);
         mTextures.add(R.drawable.l17_crate);
         mTextures.loadTextures();
@@ -104,10 +97,11 @@ public class NormalModeWorld implements World {
     
     public synchronized void fingerDown(Vector2 pos)
     {
+    	mNewTouchPos = new Vector2(pos);
     }   
     
     public synchronized void fingerUp(Vector2 pos)
-    
     {
+    	mNewTouchPos = new Vector2(pos);
     }
 }
