@@ -19,18 +19,20 @@ public class LevelActivity extends Activity {
 	   // boozyRenderer.setRenderer(new BoozyRenderer(this));
 		setContentView(boozyRenderer);
 		
-		
+	
 		
 		SessionState sState = new SessionState();
 		
-		sState.setProgress(15);
-		setResult(RESULT_OK,sState.asIntent());
+		sState.setProgress(13);
+	
 		
-		//LevelActivity.this.finish();
+		setResult(RESULT_OK,sState.asIntent());
+	
 		
 		
 	}	
 
+    
     
     @Override
     protected void onResume() {
@@ -43,4 +45,12 @@ public class LevelActivity extends Activity {
     	super.onPause();
     	boozyRenderer.onPause();
     }
+
+    @Override
+    protected void onDestroy() {
+    	// TODO Auto-generated method stub
+    	super.onDestroy();
+    	
+    }
+
 }
