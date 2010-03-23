@@ -6,11 +6,14 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.GLU;
 import android.os.Handler;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLTextures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixGrabber;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJModel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJRenderable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
@@ -26,11 +29,25 @@ public class NormalModeWorld implements World {
     private Matrix4x4 mRotation = new Matrix4x4();
     private GLTextures mTextures;
     private LevelActivity mContext;
-    private Renderable mQuad;
     private float mRotAngle = 0;
     private Handler mHandler;
+
+	// camera variables
+	private Vector3 mEye = new Vector3(0f, 15f, 0f);
+	private Vector3 mFocus = new Vector3(0f, 0f, 0f);
+	private Vector3 mUp = new Vector3(1f, 0f, 0f);
+	
+	// player position information
+	private Vector3 mPlayerPos = new Vector3(0f, 0f, 0f);
+	private Vector3 mPlayerTarget = new Vector3(0f, 0f, 0f);
+	
+	// used to grab the current view and projection matrices
+	private MatrixGrabber mMatrixGrabber = new MatrixGrabber();
+	
+	//just as long as obj files don't work
+	private Cube cube;	
     
-    private Renderable mObject;
+    //private Renderable mObject;
     
     public NormalModeWorld(LevelActivity context, Handler handler)
     {
@@ -60,18 +77,23 @@ public class NormalModeWorld implements World {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         gl.glEnable(GL10.GL_BLEND);	
         gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
-        gl.glTranslatef(0,0,-3.0f);
-        
-        gl.glScalef(0.02f,0.02f,0.02f);
-        
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glEnable(GL10.GL_TEXTURE_2D);
+        
+		gl.glLoadIdentity();					//Reset The Current Modelview Matrix
+		
+		//Set ModelView Matrix
+		GLU.gluLookAt(gl, mEye.x, mEye.y, mEye.z, mFocus.x, mFocus.y, mFocus.z, mUp.x, mUp.y, mUp.z);
+		
+		//Drawing
+		gl.glTranslatef(mPlayerPos.x, mPlayerPos.y, mPlayerPos.z);			//Move z units into the screen
+		cube.draw(gl, 1);					//Draw the Cube	
+        
+        //gl.glScalef(0.02f,0.02f,0.02f);
         mTextures.setTexture(R.drawable.l17_crate); 
         gl.glMultMatrixf(mRotation.toFloatArray(), 0);
-        //mQuad.draw(gl);
-        mObject.draw(gl);
+        //mObject.draw(gl);
         gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
@@ -84,19 +106,26 @@ public class NormalModeWorld implements World {
         Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.l17_crate);
         
         float imgAspect = (float)bmp.getWidth() / (float)bmp.getHeight();
-        mQuad = new Quad(imgAspect * 2.0f, 2.0f);
         
-        mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
+        //mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
+		cube = new Cube();
 	}
 
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-         gl.glViewport(0, 0, width, height);
+		if(height == 0) { 						//Prevent A Divide By Zero By
+			height = 1; 						//Making Height Equal One
+		}
 
-         float ratio = (float) width / height;
-         gl.glMatrixMode(GL10.GL_PROJECTION);
-         gl.glLoadIdentity();
-         gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+		gl.glViewport(0, 0, width, height); 	//Reset The Current Viewport
+		gl.glMatrixMode(GL10.GL_PROJECTION); 	//Select The Projection Matrix
+		gl.glLoadIdentity(); 					//Reset The Projection Matrix
+
+		//Calculate The Aspect Ratio Of The Window
+		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
+
+		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
+		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
     }
 	
     public synchronized void fingerMove(Vector2 pos)
