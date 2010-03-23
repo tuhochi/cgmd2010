@@ -10,10 +10,13 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
-import android.opengl.Matrix;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixGrabber;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector4;
 
 /**
  * This is a port of the {@link http://nehe.gamedev.net} OpenGL 

@@ -13,7 +13,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.CommonFunctions;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;

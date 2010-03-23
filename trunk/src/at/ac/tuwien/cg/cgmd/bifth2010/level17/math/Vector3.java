@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level17;
+package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
 
 public class Vector3
 {

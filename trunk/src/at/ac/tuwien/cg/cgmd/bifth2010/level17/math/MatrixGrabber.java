@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package at.ac.tuwien.cg.cgmd.bifth2010.level17;
+package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
 
 import javax.microedition.khronos.opengles.GL10;
 
-class MatrixGrabber {
+
+public class MatrixGrabber {
     public MatrixGrabber() {
         mModelView = new float[16];
         mProjection = new float[16];
