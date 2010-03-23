@@ -1,16 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.opengles.GL;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
+import android.app.Activity;
+import android.opengl.GLSurfaceView;
+import android.os.Bundle;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.*;
 /**
  * This activity demonstrates the basic interaction with the framework. When the Finish button is pressed the a result is set and the activity is finished. 
  * @author Peter

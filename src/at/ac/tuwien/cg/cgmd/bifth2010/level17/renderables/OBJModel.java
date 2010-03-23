@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level17;
+package at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
 
 public class OBJModel implements Serializable

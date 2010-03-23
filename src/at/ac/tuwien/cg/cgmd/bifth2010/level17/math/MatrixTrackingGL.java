@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package at.ac.tuwien.cg.cgmd.bifth2010.level17;
+package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
 
 
 import android.util.Log;
@@ -41,7 +41,7 @@ import javax.microedition.khronos.opengles.GL11Ext;
  * as compared to the way the math is implemented by the OpenGL ES
  * driver.
  */
-class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
+public class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     private GL10 mgl;
     private GL10Ext mgl10Ext;
     private GL11 mgl11;

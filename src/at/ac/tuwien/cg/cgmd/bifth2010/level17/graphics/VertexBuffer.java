@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level17;
+package at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -8,6 +8,10 @@ import java.nio.ShortBuffer;
 import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector4;
 
 public class VertexBuffer {
 	private FloatBuffer mBuffer;

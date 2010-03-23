@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level17;
+package at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics;
 import javax.microedition.khronos.opengles.*; 
 
 import android.content.Context; 

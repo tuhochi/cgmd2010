@@ -1,8 +1,10 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level17;
+package at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBuffer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBufferType;
 
 public class OBJRenderable {
 
