@@ -25,6 +25,8 @@ public class GLView extends GLSurfaceView {
          
          setRenderer(mRenderer);
          
+
+         
          //mWindowSize = size;
          
          mGame = new GameThread(this, world);
