@@ -83,7 +83,7 @@
 		</activity>
 		
 		<activity
-			android:name=".level17.HelpActivity">
+			android:name=".level17.HelpActivity"
 			android:label="@string/l17_nameofthegame_full">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level17.LAUNCH_HELP"></action>
