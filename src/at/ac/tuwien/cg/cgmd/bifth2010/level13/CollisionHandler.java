@@ -9,7 +9,7 @@ public class CollisionHandler {
 	static int beerPlayerCollisions = 0;
 	
 	
-	public static int checkBeerPlayerCollision(){
+	public static int checkBeerPlayerCollisionCount(){
 		
 		return beerPlayerCollisions;
 		
