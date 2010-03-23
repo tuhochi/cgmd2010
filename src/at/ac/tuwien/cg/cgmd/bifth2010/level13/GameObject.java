@@ -28,13 +28,13 @@ public abstract class GameObject {
 	
 	//Current x and y position of the quad
 	
-	private float x = 0;
-	private float y = 0;
+	private Vector2 pos;
+	private Vector2 speed;
+
 	
 	//Movement speed
 	
-	private float speedX = 0;
-	private float speedY = 0;
+
 	private boolean active = true;
 	
 	private int[]  textures = new int[1];
@@ -55,6 +55,8 @@ public abstract class GameObject {
 	
 	
 	public GameObject(){
+		pos = new Vector2(0,0);
+		speed = new Vector2(0,0);
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length*4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexBuffer = byteBuf.asFloatBuffer();
@@ -66,25 +68,31 @@ public abstract class GameObject {
 		textureBuffer = byteBuf.asFloatBuffer();
 		textureBuffer.put(texture);
 		textureBuffer.position(0);
-		
-		
-		
+
 	}
 	
+
+	//use this for resetting the pos of the object
 	public void setPos(float x, float y){
-		this.x = x;
-		this.y = y;
-		
+		pos.setXY(x, y);
 	}
 	
-	public float getSpeedX(){
-		return this.speedX;
+	public Vector2 getSpeed(){
+		return speed;
 	}
 	
-	public float getSpeedY(){
-		return this.speedY;
+	public void setSpeed(float x,float y){
+		speed.setXY(x, y);
 	}
 	
+	public Vector2 getPos(){
+		return pos;
+	}
+	
+	public void stop(){
+		speed.setXY(0, 0);
+	}
+
    public boolean getActive(){
 		return active;
 	}
@@ -93,13 +101,7 @@ public abstract class GameObject {
 		this.active = active;
 	}
 	
-	public void setSpeedX(float speedX){
-		this.speedX = speedX;
-	}
 	
-	public void setSpeedY(float speedY){
-		this.speedY = speedY;
-	}
 	
 	public void setObjectType(String type){
 		
@@ -112,41 +114,40 @@ public abstract class GameObject {
 	
 
 	public float getMinX(){
-		return this.x - 1.0f;	
+		return pos.x - 1.0f;	
 	}
 	
 	public float getMaxX(){
-		return this.x+1.0f;
+		return pos.x+1.0f;
 	}
 	
 	public float getMinY(){
-		return this.y-1.0f;
+		return pos.y-1.0f;
 	}
 
 	public float getMaxY(){
-		return this.y+1.0f;
+		return pos.y+1.0f;
 	}
 	
 	
 	public float X(){
-		return this.x;
+		return pos.x;
 	}
 	
 	public float Y(){
-		return this.y;
+		return pos.y;
 	}
 	
 	
 	public void update(){
-		this.x += speedX;
-		this.y += speedY;
+		pos.add(speed);
 	}
 	
 	
 	public void draw(GL10 gl){
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(x, y, -15.0f);
+		gl.glTranslatef(pos.x, pos.y, -15.0f);
 		
 		gl.glEnable(GL10.GL_BLEND);
 		
