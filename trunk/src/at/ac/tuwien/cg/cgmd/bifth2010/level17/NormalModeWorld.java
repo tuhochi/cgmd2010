@@ -23,7 +23,7 @@ public class NormalModeWorld implements World {
     private long mTime;
     private Matrix4x4 mRotation = new Matrix4x4();
     private GLTextures mTextures;
-    private NormalModeActivity mContext;
+    private LevelActivity mContext;
     private Renderable mQuad;
     private float mTouchAngle = 0;
     private float mBottleAngle = 0;
@@ -32,7 +32,7 @@ public class NormalModeWorld implements World {
     private int mActualPos = 0;
     private Handler mHandler;
     
-    public NormalModeWorld(NormalModeActivity context, Handler handler)
+    public NormalModeWorld(LevelActivity context, Handler handler)
     {
 
         Date date = new Date();
