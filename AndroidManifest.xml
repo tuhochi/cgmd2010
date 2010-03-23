@@ -6,7 +6,7 @@
 	
 	<application
 		android:icon="@drawable/l00_icon"
-		android:label="@string/l00_nameofthegame_full">
+		android:label="@string/l00_nameofthegame_full" android:debuggable="true">
 		
 		<activity
 			android:name=".framework.EntryPoint"
