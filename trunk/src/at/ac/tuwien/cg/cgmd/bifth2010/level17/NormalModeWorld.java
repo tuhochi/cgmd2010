@@ -11,6 +11,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLTextures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJModel;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJRenderable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Renderable;
 
@@ -27,6 +29,8 @@ public class NormalModeWorld implements World {
     private Renderable mQuad;
     private float mRotAngle = 0;
     private Handler mHandler;
+    
+    private Renderable mObject;
     
     public NormalModeWorld(LevelActivity context, Handler handler)
     {
@@ -59,12 +63,15 @@ public class NormalModeWorld implements World {
         gl.glLoadIdentity();
         gl.glTranslatef(0,0,-3.0f);
         
+        gl.glScalef(0.02f,0.02f,0.02f);
+        
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glEnable(GL10.GL_TEXTURE_2D);
         mTextures.setTexture(R.drawable.l17_crate); 
         gl.glMultMatrixf(mRotation.toFloatArray(), 0);
-        mQuad.draw(gl);
+        //mQuad.draw(gl);
+        mObject.draw(gl);
         gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
@@ -78,6 +85,8 @@ public class NormalModeWorld implements World {
         
         float imgAspect = (float)bmp.getWidth() / (float)bmp.getHeight();
         mQuad = new Quad(imgAspect * 2.0f, 2.0f);
+        
+        mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
 	}
 
 

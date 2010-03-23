@@ -6,7 +6,7 @@ import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBuffer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBufferType;
 
-public class OBJRenderable {
+public class OBJRenderable implements Renderable {
 
     private VertexBuffer mVertexBuffer;
     private VertexBuffer mTexCoordBuffer;
