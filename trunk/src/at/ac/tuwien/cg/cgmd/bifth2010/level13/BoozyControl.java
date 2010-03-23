@@ -134,6 +134,8 @@ public class BoozyControl {
 			}else if(cObj instanceof Beer){
 				generateRandomMoneyLossEvent(cObj);
 				}
+			if(!dry)
+				cObj.rotate(20);
 			}
 		
 		if (pukeTimer > 0)
