@@ -97,7 +97,7 @@ public class BoozyControl {
 		CollisionHandler.handleScreenBoundaryCheck(avatar);
 		CollisionHandler.responseLoop(gameObjects);
 		
-		beerTicker+= 5*CollisionHandler.checkBeerPlayerCollision();
+		beerTicker+= 5*CollisionHandler.checkBeerPlayerCollisionCount();
 		
 		if(dry == false)
 			beerTicker--;
@@ -196,9 +196,9 @@ public class BoozyControl {
 				}else if(currentX > rightAreaX){
 					avatar.setSpeed(-0.1f, 0);
 					
-				}else{
-					activatePuke();
 				}
+					activatePuke();
+			
 				
 				
 			}
