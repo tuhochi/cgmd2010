@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 /**
  * 
@@ -35,6 +37,11 @@ public class LevelActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//set fullscreen
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		Window window = getWindow();
+		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		setContentView(new MyView(this));
 		paint = new Paint();
 		paint.setAntiAlias(true);
