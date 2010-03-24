@@ -24,6 +24,13 @@ public class Vector3
 		y = v.y;
 		z = v.z;
 	}
+	
+	public Vector3 (Vector4 v)
+	{
+		x = v.x/v.w;
+		y = v.y/v.w;
+		z = v.z/v.w;
+	}
 
 	/**
 	 * Return a new vector representing the cross product of two vectors.
