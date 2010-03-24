@@ -10,17 +10,17 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level88;
 public class Coordinate {
 
 	//nur in 2D
-	public int l88x;
-	public int l88y;
+	public int x;
+	public int y;
 	
 	
 	public Coordinate(int newX, int newY) {
-		l88x = newX;
-		l88y = newY;
+		x = newX;
+		y = newY;
 	}
 	
 	public boolean equals(Coordinate other){
-		if(l88x == other.l88x && l88y == other.l88y){
+		if(x == other.x && y == other.y){
 			return true;
 		}
 		
@@ -29,7 +29,7 @@ public class Coordinate {
 	
 	//Fuer Debugingzwecke
 	public String toString(){
-		return "Coordinates: (" + l88x + "," + l88y + ")";
+		return "Coordinates: (" + x + "," + y + ")";
 	}
 	
 }

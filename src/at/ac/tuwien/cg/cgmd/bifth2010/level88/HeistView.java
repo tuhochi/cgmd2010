@@ -24,13 +24,13 @@ public class HeistView extends View{
 	 * Paramter um die Groeﬂe und Sichtweite der Tiles zu bestimmen
 	 * Width/Height in Pixel
 	 */
-	protected static int l88TileSize;
+	protected static int TileSize;
 	
-	protected static int l88XTileCount;
-	protected static int l88YTileCount;
+	protected static int XTileCount;
+	protected static int YTileCount;
 	
-	private static int l88XOffset;
-	private static int l88YOffset;
+	private static int XOffset;
+	private static int YOffset;
 	
 	
 	
