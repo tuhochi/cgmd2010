@@ -23,12 +23,7 @@ public class SceneGraph {
 	// init with gl
 	public void init(GL10 gl) {
 		camera= new Camera();
-		
-		
-
 		g = new Cube(gl);
-
-		
 		this.init=true;
 	}
 
