@@ -157,6 +157,11 @@ public class Vector3
 		return new Vector3(a).normalize();
 	}
 	
+	public static float getAngle(Vector3 a, Vector3 b)
+	{
+		return (float)Math.acos((Vector3.dotProduct(a, b)/(a.length()*b.length())));
+	}
+	
 	public float length()
 	{
 		return (float)Math.sqrt(x*x + y*y + z*z);

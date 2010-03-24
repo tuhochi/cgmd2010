@@ -14,6 +14,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.OrbitManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.ObjectOrientation;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
@@ -91,10 +93,19 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		 * Dummy Test Scene
 		 */
 		scene = SceneLoader.getInstance().readScene("l42_cube");
-		Orbit orbit = new Orbit(scene.getSceneEntity(0),6,0,0.75f,Orbit.DIRECTION_NEGATIVE,
-								10,1,4,0,0,45,0,0,0);
-		orbitManager.addOrbit(orbit);
-
+		
+		ObjectOrientation transf = new ObjectOrientation(0,0,45,0,0,0,1,1,1);
+		
+		Orbit orbit1 = new Orbit(scene.getSceneEntity(0),6,0,Orbit.DIRECTION_POSITIVE,
+								10,1,4,transf);
+		
+		SatelliteTransformation sat1 = new SatelliteTransformation(0, 1, 0, null);
+		orbit1.setSatTrans(sat1);
+		
+		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(0,-1,0),new Vector3(0,0,-1),Orbit.STARTPOINT_B,5,3,3);
+		
+		orbitManager.addOrbit(orbit1);
+		orbitManager.addOrbit(orbit2);
 	}
 	
 	@Override
