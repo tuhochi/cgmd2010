@@ -25,15 +25,15 @@ public class HeistLevel extends HeistView{
 	private static final String TAG = "BunnyHeist";
 	
 	//Welcher Mode
-	private int l88Mode = READY;
+	private int Mode = READY;
 	private static final int READY = 0;
 	private static final int PAUSE = 1;
 	private static final int RUNNING = 2;
 	private static final int LOOSE = 3;
 	
 	//Richtung in die der Wagen unterwegs ist
-	private int l88Direction = NORTH;
-	private int l88DirectionNext = NORTH;
+	private int Direction = NORTH;
+	private int DirectionNext = NORTH;
 	private static final int NORTH = 1;
 	private static final int SOUTH = 2;
 	private static final int WEST = 3;
@@ -46,23 +46,23 @@ public class HeistLevel extends HeistView{
 	private static final int GREEN = 3;
 	
 	//Vars fuer den Score und einen moeglichen BewegungsDelay
-	private long l88Score = 0;
-	private long l88Delay = 0;
+	private long Score = 0;
+	private long Delay = 0;
 	
 	//speichert die absulute Zeit wann die letzte Bewegung war und ob man sich wieder weiter
 	//bewegen kann
-	private long l88MoveLast;
+	private long MoveLast;
 	
 	//Var um den User gewisse Ausgaben anzuzeigen
 	private TextView status;
 	
 	
 	//the location of the hide-outs
-	private ArrayList<Coordinate> l88Hides = new ArrayList<Coordinate>();
+	private ArrayList<Coordinate> Hides = new ArrayList<Coordinate>();
 	
 	
 	//ein simpler Handler fuer die Animation/Bewegung.
-	private RefreshHandler l88RedrawHandler = new RefreshHandler();
+	private RefreshHandler RedrawHandler = new RefreshHandler();
 	
 	//Hier die Klassendefinition des Handlers
 	class RefreshHandler extends Handler{
@@ -104,12 +104,12 @@ public class HeistLevel extends HeistView{
 
 
 	private void initNewLevel(){
-		l88Hides.clear();
+		Hides.clear();
 		
-		l88DirectionNext = NORTH;
+		DirectionNext = NORTH;
 		
-		l88Score = 0;
-		l88Delay = 500;
+		Score = 0;
+		Delay = 500;
 		
 		//zwei Verstecke fuer den Beginn an einer beliebigen Stelle
 		addRandomHide();
@@ -158,7 +158,7 @@ public class HeistLevel extends HeistView{
 		
 		if(keyCode == KeyEvent.KEYCODE_DPAD_UP){
 			//At the start of the level, we should start the new one
-			if(l88Mode == READY | l88Mode == LOOSE){
+			if(Mode == READY | Mode == LOOSE){
 				initNewLevel();
 				setMode(RUNNING);
 				update();
@@ -166,37 +166,37 @@ public class HeistLevel extends HeistView{
 			}
 			
 			//if the game was paused, continue
-			if(l88Mode == PAUSE){
+			if(Mode == PAUSE){
 				setMode(RUNNING);
 				update();
 				return true;
 			}
 			
 			//Change direction
-			if(l88Direction != SOUTH){
-				l88DirectionNext = NORTH;
+			if(Direction != SOUTH){
+				DirectionNext = NORTH;
 			}
 			
 			return true;
 		}
 		
 		if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
-			if(l88Direction != NORTH){
-				l88DirectionNext = SOUTH;
+			if(Direction != NORTH){
+				DirectionNext = SOUTH;
 			}
 			return true;
 		}
 		
 		if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT){
-			if(l88Direction != EAST){
-				l88DirectionNext = WEST;
+			if(Direction != EAST){
+				DirectionNext = WEST;
 			}
 			return true;
 		}
 		
 		if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
-			if(l88Direction != WEST){
-				l88DirectionNext = EAST;
+			if(Direction != WEST){
+				DirectionNext = EAST;
 			}
 			return true;
 		}
@@ -207,8 +207,8 @@ public class HeistLevel extends HeistView{
 	
 	private void setMode(int newMode) {
 		// TODO Auto-generated method stub
-		int oldMode = l88Mode;
-		l88Mode = newMode;
+		int oldMode = Mode;
+		Mode = newMode;
 		
 		if(newMode == RUNNING & oldMode != RUNNING){
 			status.setVisibility(View.INVISIBLE);
@@ -225,7 +225,7 @@ public class HeistLevel extends HeistView{
 			str = res.getText(R.string.l88_mode_ready);
 		}
 		else if(newMode == LOOSE){
-			str = res.getText(R.string.l88_mode_loose) + Long.toString(l88Score);
+			str = res.getText(R.string.l88_mode_loose) + Long.toString(Score);
 		}
 		
 		status.setText(str);
