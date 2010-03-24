@@ -9,14 +9,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 
 public class SceneGraph {
 
+	public static Level level;
 	Boolean init = false;
 	
 	Geometry g;// private ArrayList<GeometryGroup> renderables;
 	
 	Camera camera;
 	
-	public SceneGraph() {
-
+	public SceneGraph(Level level) {
+		this.level=level;
 	}
 
 	// init with gl
@@ -24,21 +25,7 @@ public class SceneGraph {
 		camera= new Camera();
 		
 		
-//        g = new Geometry( gl, 6, true, false, false );           
-//        
-//        g.color( 0, 1, 0, 1 );
-//        g.vertex( 0f, -0.5f, -5 );
-//        g.color( 0, 1, 0, 1 );
-//        g.vertex( 1f, -0.5f, -5 );
-//        g.color( 0, 1, 0, 1 );
-//        g.vertex( 0.5f, 0.5f, -5 );
-//        
-//        g.color( 1, 0, 0, 1 );
-//        g.vertex( -0.5f, -0.5f, -2 );
-//        g.color( 1, 0, 0, 1 );
-//        g.vertex( 0.5f, -0.5f, -2 );
-//        g.color( 1, 0, 0, 1 );
-//        g.vertex( 0, 0.5f, -2);
+
 		g = new Cube(gl);
 
 		
@@ -88,7 +75,7 @@ public class SceneGraph {
 	}
 
 	public void updateLogic() {
-		// TODO
+		// do something with the level here!
 
 	}
 

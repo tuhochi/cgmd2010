@@ -7,6 +7,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3;
 
 public class Geometry {
@@ -43,10 +44,10 @@ public class Geometry {
 
 	public static int geometryCount = 0;
 
-	public Geometry(){
-		
+	public Geometry() {
+
 	}
-	
+
 	public Geometry(GL10 gl, int numVertices, boolean hasColors,
 			boolean hasTextureCoordinates, boolean hasNormals) {
 		this.gl = gl;
@@ -217,7 +218,7 @@ public class Geometry {
 		gl.glDrawArrays(getPrimitiveType(type), offset, numVertices);
 		lastGeometry = this;
 	}
-	
+
 	public void render() {
 		render(Type.Triangles, 0, numVertices);
 	}
@@ -227,9 +228,9 @@ public class Geometry {
 	}
 
 	public void vertex(Vector3 v) {
-		vertex(v.x,v.y,v.z);
+		vertex(v.x, v.y, v.z);
 	}
-	
+
 	public void vertex(float x, float y, float z) {
 		init = true;
 		int offset = index * 3;
@@ -237,6 +238,10 @@ public class Geometry {
 		vertices[offset + 1] = y;
 		vertices[offset + 2] = z;
 		index++;
+	}
+
+	public void color(Color c) {
+		this.color(c.r, c.g, c.b, c.a);
 	}
 
 	public void color(float r, float g, float b, float a) {
