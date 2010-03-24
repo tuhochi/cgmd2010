@@ -9,7 +9,7 @@ public class Camera {
 	
     float eyeX=0;
     float eyeY=0;
-    float eyeZ=30;
+    float eyeZ=2;
 	
     float viewX=0;
     float viewY=0;
