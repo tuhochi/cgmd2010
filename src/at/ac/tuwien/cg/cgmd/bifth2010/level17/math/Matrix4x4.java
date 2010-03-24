@@ -159,9 +159,23 @@ public class Matrix4x4
 		{
 			for(int j = 0; j < 4; j++)
 			{
-				m[i][j] = array[i*4 + j];
+				m[i][j] = array[j*4 + i];
 			}
 		}
+	}
+
+	public String toString ()
+	{
+		String ret = "";
+		for(int i = 0; i < 4; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
+				ret += m[i][j] + ", ";
+			}
+		}
+		
+		return ret;
 	}
 	
 	public Matrix4x4 InvertedCopy()

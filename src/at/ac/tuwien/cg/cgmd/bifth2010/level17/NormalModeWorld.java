@@ -8,19 +8,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLU;
 import android.os.Handler;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLTextures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixGrabber;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Picker;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJModel;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJRenderable;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Renderable;
 
 public class NormalModeWorld implements World {
 
+	private static final String LOG_TAG = "World";
+	
     private Vector2 mTouchPos = new Vector2();
     private Vector2 mNewTouchPos = null;
     private float mElapsedSeconds;
@@ -42,7 +41,7 @@ public class NormalModeWorld implements World {
 	private Vector3 mPlayerTarget = new Vector3(0f, 0f, 0f);
 	
 	// used to grab the current view and projection matrices
-	private MatrixGrabber mMatrixGrabber = new MatrixGrabber();
+	private Picker mPicker = new Picker();
 	
 	//just as long as obj files don't work
 	private Cube cube;	
@@ -70,6 +69,13 @@ public class NormalModeWorld implements World {
         mRotAngle += mElapsedSeconds;
     	
         mRotation = Matrix4x4.RotateZ(mRotAngle);
+        
+        if (mNewTouchPos != null)
+        {
+        	mPlayerPos = mPicker.GetWorldPosition(mNewTouchPos);
+        	Log.d(LOG_TAG, "Final World Coordinates:" + mPlayerPos.toString());
+        	mNewTouchPos = null;
+        }
 	}
 	
 	public synchronized void draw(GL10 gl)
@@ -126,6 +132,12 @@ public class NormalModeWorld implements World {
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
 		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
+		//Set ModelView Matrix
+		GLU.gluLookAt(gl, mEye.x, mEye.y, mEye.z, mFocus.x, mFocus.y, mFocus.z, mUp.x, mUp.y, mUp.z);
+		
+		// update Picker 
+		mPicker.CameraChanged(gl);
+		mPicker.SetReferencePosition(mPlayerPos);
     }
 	
     public synchronized void fingerMove(Vector2 pos)
