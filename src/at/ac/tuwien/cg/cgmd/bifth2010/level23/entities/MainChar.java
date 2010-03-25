@@ -29,7 +29,7 @@ public class MainChar implements SceneEntity {
 	public static final int MOVE_RIGHT = 1;
 	public static final int NO_MOVEMENT = 0;
 	//units per millisecond
-	public static final float MOVE_SPEED = 0.5f;
+	public static final float MOVE_SPEED = 0.1f;
 	
 	private int moveDirection = 0;
 		
@@ -181,7 +181,7 @@ public class MainChar implements SceneEntity {
 	public boolean isInboundsAfterStep(int moveDir, float stepWidth) {
 		if (moveDir > 0)
 		{
-	    	if (position.x + width + stepWidth <= Renderer.screenWidth) //application width instead of fixed value
+	    	if (position.x + width + stepWidth <= Renderer.rightBounds) //application width instead of fixed value
 	    	{ 
 	    		return true; 
 	    	}
@@ -197,7 +197,7 @@ public class MainChar implements SceneEntity {
 	
 	public void update(float dt, int moveDir)
 	{
-		if(moveDir == 0 || moveDir >0 && position.x == Renderer.screenWidth - width 
+		if(moveDir == 0 || moveDir >0 && position.x == Renderer.rightBounds - width 
 				|| moveDir<1 && position.x == 0)
 			return;
 		
@@ -205,8 +205,8 @@ public class MainChar implements SceneEntity {
 		
 		if(!isInboundsAfterStep(moveDir,step))
 		{
-			if(moveDir > 0 && position.x != Renderer.screenWidth - width)
-				step = Renderer.screenWidth - width - position.x;
+			if(moveDir > 0 && position.x != Renderer.rightBounds - width)
+				step = Renderer.rightBounds - width - position.x;
 			if(moveDir < 0 && position.x != 0.0f)
 				step = -position.x;
 		}

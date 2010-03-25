@@ -22,15 +22,18 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 
 public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
-
-	public static int screenWidth;
-	public static int screenHeight;
+	
+	public static float screenWidth;
+	public static float screenHeight;
+	public static float aspectRatio;
+	
+	public static float rightBounds=100.0f;
+	public static float topBounds=100.0f;
 	
 	private ArrayList<SceneEntity> sceneEntities;
 	private Context context; 
 	private MainChar mainChar; 
 	private boolean released = true; 
-	private int stepWidth = 5; 
 	private MotionEvent lastMotionEvent = null; 
 	private float accTime;
 	private OrientationListener orientationListener; 
@@ -46,7 +49,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		super(context);
 		this.context = context; 
 		setRenderer(this); 
-		mainChar = new MainChar(50,50,new Vector2(100,0));
+		mainChar = new MainChar(10.0f,10.0f,new Vector2(0,0));
 		sceneEntities = new ArrayList<SceneEntity>();
 		sceneEntities.add(mainChar);
 		// so that the key events can fire
@@ -97,9 +100,14 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		//setup the Viewport with an Orthogonal View 1 unit = 1 pixel
 		//0 0 is bottom left
+		
 		screenWidth = width;
 		screenHeight = height;
-		gl.glOrthof(0, width, 0, height, -10.0f, 1000);
+		aspectRatio = screenHeight/screenWidth;
+		topBounds *= aspectRatio;
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
+		gl.glOrthof(0.0f, rightBounds, 0.0f, topBounds, -1.0f, 1.0f);
 		gl.glViewport(0, 0, width, height);		
 	}
 
@@ -113,16 +121,15 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	@Override
 	public boolean onKeyDown(int key, KeyEvent evt) {
 		
-		System.out.println("key");
 		switch(key) {
 		
 		case KeyEvent.KEYCODE_DPAD_LEFT:
 			lastKeyMovement = MainChar.MOVE_LEFT;
-			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
+//			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break; 
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			lastKeyMovement = MainChar.MOVE_RIGHT;
-			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
+//			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break;
 		/*case KeyEvent.KEYCODE_2: //down
 			mainChar.moveUpDown(-stepWidth);
@@ -132,13 +139,12 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 			break;*/
 		case KeyEvent.KEYCODE_S: 
 			useSensor = !useSensor; 
-			System.out.println("sensor");
 			if (useSensor)
 				OrientationManager.registerListener(orientationListener);
 			else
 				OrientationManager.unregisterListener(orientationListener);
 			
-			Log.i("useSensor", String.valueOf(useSensor));
+//			Log.i("useSensor", String.valueOf(useSensor));
 			break;
 		}
 		
@@ -170,9 +176,9 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	public void handleOnTouchMovement(final MotionEvent evt) {
 		queueEvent(new Runnable(){
 			public void run() {
-				if (evt.getRawX() <  mainChar.getPosition().x) {
+				if (evt.getRawX()*100.0f/screenWidth <  mainChar.getPosition().x) {
 					mainCharMoveDir = MainChar.MOVE_LEFT;
-				} else if (evt.getRawX() > (mainChar.getPosition().x + mainChar.getWidth() )) {
+				} else if (evt.getRawX()*100.0f/screenWidth > (mainChar.getPosition().x + mainChar.getWidth() )) {
 					mainCharMoveDir = MainChar.MOVE_RIGHT;
 				}
 				else

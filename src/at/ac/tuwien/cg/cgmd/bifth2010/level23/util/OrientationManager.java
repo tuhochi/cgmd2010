@@ -31,7 +31,7 @@ public class OrientationManager {
 			
 			roll = evt.values[2]; 
 			
-			Log.i("roll:",String.valueOf(roll));
+//			Log.i("roll:",String.valueOf(roll));
 			// roll angle not clear, has to be tested
 			if (roll > 15)
 			{
