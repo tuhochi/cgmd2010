@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
@@ -23,8 +24,8 @@ public class Orbit {
 	public static final int STARTPOINT_B = 1;
 	
 	//temp vars
-	private float sinu,cosu,sinv,cosv,step,twoPI;
-	private Vector3 xAxis,yAxis,zAxis,projection;
+	private float sinu,cosu,sinv,cosv,step;
+	private Vector3 projection;
 	
 	public Orbit(	SceneEntity entity, float speed, float t,int direction,
 					float a, float b, float c, 
@@ -105,9 +106,6 @@ public class Orbit {
 	private void init()
 	{
 		//temp var init
-		xAxis = new Vector3(1,0,0);
-		yAxis = new Vector3(0,1,0);
-		zAxis = new Vector3(0,0,1);
 		tempTransform = new Matrix44();
 		projection = new Vector3();
 		
@@ -118,14 +116,13 @@ public class Orbit {
 	
 	private void precalc()
 	{
-		twoPI = (float)(Math.PI*2);
 		//precalc sin/cos
 		sinv = (float)Math.sin(v);
 		cosv = (float)Math.cos(v);
 
 		//calc start
-		u = (float)((t*twoPI)-Math.PI);
-		step = twoPI/100;
+		u = (float)((t*Constants.TWOPI)-Math.PI);
+		step = Constants.TWOPI/100;
 	}
 	
 	private void extractOrientation(Vector3 vecToCenter)
@@ -134,17 +131,17 @@ public class Orbit {
 		projection.copy(vecToCenter);
 		projection.y = 0;
 		projection.normalize();
-		this.orientation.qx = (projection.length()!=0)?(float)Math.toDegrees(Vector3.getAngle(xAxis, projection)):0;
+		this.orientation.qx = (projection.length()!=0)?Vector3.getAngle(Constants.X_AXIS, projection):0;
 		
 		projection.copy(vecToCenter);
 		projection.z = 0;
 		projection.normalize();
-		this.orientation.qy = (projection.length()!=0)?(float)Math.toDegrees(Vector3.getAngle(yAxis, projection)):0;
+		this.orientation.qy = (projection.length()!=0)?Vector3.getAngle(Constants.Y_AXIS, projection):0;
 		
 		projection.copy(vecToCenter);
 		projection.x = 0;
 		projection.normalize();
-		this.orientation.qz = (projection.length()!=0)?(float)Math.toDegrees(Vector3.getAngle(zAxis, projection)):0;
+		this.orientation.qz = (projection.length()!=0)?Vector3.getAngle(Constants.Z_AXIS, projection):0;
 		
 		//get translation
 		this.orientation.tx = vecToCenter.x;
@@ -161,13 +158,13 @@ public class Orbit {
 		if(direction == DIRECTION_POSITIVE)
 		{
 			u+=(speed*step*dt);
-			if(u>=twoPI)
-				u-=twoPI;
+			if(u>=Constants.TWOPI)
+				u-=Constants.TWOPI;
 		}else if(direction == DIRECTION_NEGATIVE)
 		{
 			u-=(speed*step*dt);
-			if(u<=-twoPI)
-				u+=twoPI;
+			if(u<=-Constants.TWOPI)
+				u+=Constants.TWOPI;
 		}
 
 		if(satTrans!=null)

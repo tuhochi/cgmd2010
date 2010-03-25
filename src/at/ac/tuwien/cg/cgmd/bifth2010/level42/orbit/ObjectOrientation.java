@@ -15,9 +15,9 @@ public class ObjectOrientation {
 		
 		initValues();
 		
-		this.qx = qx;
-		this.qy = qy;
-		this.qz = qz;
+		this.qx = (float) Math.toRadians(qx);
+		this.qy = (float) Math.toRadians(qy);
+		this.qz = (float) Math.toRadians(qz);
 		this.tx = tx;
 		this.ty = ty;
 		this.tz = tz;
@@ -33,9 +33,9 @@ public class ObjectOrientation {
 		
 		initValues();
 		
-		this.qx = qx;
-		this.qy = qy;
-		this.qz = qz;
+		this.qx = (float) Math.toRadians(qx);
+		this.qy = (float) Math.toRadians(qy);
+		this.qz = (float) Math.toRadians(qz);
 
 		transform = new Matrix44();
 		update();
@@ -44,9 +44,9 @@ public class ObjectOrientation {
 	public ObjectOrientation(float qx, float qy, float qz, float tx, float ty, float tz) {
 		
 		initValues();
-		this.qx = qx;
-		this.qy = qy;
-		this.qz = qz;
+		this.qx = (float) Math.toRadians(qx);
+		this.qy = (float) Math.toRadians(qy);
+		this.qz = (float) Math.toRadians(qz);
 		this.tx = tx;
 		this.ty = ty;
 		this.tz = tz;
@@ -85,9 +85,9 @@ public class ObjectOrientation {
 	{
 		transform.setIdentity();
 		
-		transform.addRotateX((float)Math.toRadians(qx));
-		transform.addRotateY((float)Math.toRadians(qy));
-		transform.addRotateZ((float)Math.toRadians(qz));
+		transform.addRotateX(qx);
+		transform.addRotateY(qy);
+		transform.addRotateZ(qz);
 		
 		transform.addScale(sx, sy, sz);
 		
