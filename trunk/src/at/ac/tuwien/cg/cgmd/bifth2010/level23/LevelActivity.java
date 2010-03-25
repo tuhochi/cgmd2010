@@ -17,7 +17,6 @@ public class LevelActivity extends Activity implements OrientationListener {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		// thx @ lvl 11
 		/* Fullscreen window without title */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -37,8 +36,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 	
 	public void onDestroy() {
 		super.onDestroy();
-//		if (OrientationManager.isListening()) 
-//			OrientationManager.unregisterListener();
+		if (OrientationManager.isListening()) 
+			OrientationManager.unregisterListener(this);
 	}
 
 	@Override
