@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.camera;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
@@ -25,7 +26,7 @@ public class Camera
 	private Matrix44 qx,qy;
 	
 	//temp vectors
-	private Vector3 yAxis,qyAxis,tempInverseViewVec,viewVecXZProjection;
+	private Vector3 qyAxis,tempInverseViewVec,viewVecXZProjection;
 	
 	public Camera(	float distance,float minAltitude,float maxAltitude,
 					float initAzimuth, float initAltitude, float motionFactor,
@@ -44,7 +45,6 @@ public class Camera
 		this.minDistance = minDistance;
 		this.maxDistance = maxDistance;
 		
-		this.yAxis = new Vector3(0.0f,1.0f,0.0f);
 		this.qx = new Matrix44();
 		this.qy = new Matrix44();
 		this.qyAxis = new Vector3();
@@ -127,7 +127,7 @@ public class Camera
 			//reset
 			qx.setIdentity();
 			//rotate around the y axis
-			qx.setRotate(yAxis,(float)Math.toRadians(azimuthDiff));
+			qx.setRotate(Constants.Y_AXIS,(float)Math.toRadians(azimuthDiff));
 			qx.transformPoint(inverseViewVec);
 	
 			// create the axis for the vertical rotation (altitude)
@@ -136,7 +136,7 @@ public class Camera
 			viewVecXZProjection.normalize();
 	
 			// normal of the XZ projection and the y axis = rotation axis
-			Vector3.crossProduct(yAxis,viewVecXZProjection,qyAxis);
+			Vector3.crossProduct(Constants.Y_AXIS,viewVecXZProjection,qyAxis);
 			qyAxis.normalize();
 	
 			// rotatate view vec (grad)
