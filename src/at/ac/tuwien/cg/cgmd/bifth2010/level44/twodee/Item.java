@@ -61,6 +61,10 @@ public class Item {
 		this.angle = angle;
 	}
 	
+	public float getRotation() {
+		return angle;
+	}
+	
 	protected void onBeforeDraw(GL10 gl) {
 		/* Override this in subclasses to draw children, etc... */
 	}
