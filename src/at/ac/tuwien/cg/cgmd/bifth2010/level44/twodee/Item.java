@@ -40,6 +40,14 @@ public class Item {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public void setX(float x) {
+		this.x = x;
+	}
+	
+	public void setY(float y) {
+		this.y = y;
+	}
 
 	public void setScale(float scale) {
 		this.scale = scale;
