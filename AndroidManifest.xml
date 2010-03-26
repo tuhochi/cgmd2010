@@ -146,7 +146,7 @@
 		
 		<activity
 			android:name=".level84.LevelActivity"
-			android:label="@string/l84_helptitle">
+			android:label="@string/l84_help_title">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level84.LAUNCH_LEVEL" />
 				<category android:name="android.intent.category.DEFAULT" />
