@@ -25,6 +25,8 @@ public class SceneGraph {
 		camera= new Camera();
 		g = new Cube(gl);
 		this.init=true;
+		
+		//gl.glFrustumf(-10,10,-10, 10, -2.1f,2);
 	}
 
 	

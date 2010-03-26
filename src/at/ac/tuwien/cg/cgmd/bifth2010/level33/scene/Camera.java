@@ -29,8 +29,8 @@ public class Camera {
         eyeY=GameView.lastTouch.y;
 
         
-        float aspectRatio = (float)GameView.width / GameView.height;
-        GLU.gluPerspective( gl, 45, aspectRatio, 1f, 100 );
+        float aspectRatio = (float)GameView.width / GameView.height;// TODO: wenn hier 1 dann sieht man den deckel
+        GLU.gluPerspective( gl, 45, aspectRatio, 0.1f, 100 );
         
     	gluLookAt(gl,eyeX, eyeY, eyeZ, viewX, viewY, viewZ, upX, upY, upZ  );// momentan nur zum probieren, danach von oben
 
