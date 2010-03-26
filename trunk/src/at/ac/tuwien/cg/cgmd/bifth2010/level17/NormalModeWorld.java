@@ -4,17 +4,18 @@ import java.util.Date;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLU;
 import android.os.Handler;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLTextures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Picker;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJModel;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJRenderable;
 
 public class NormalModeWorld implements World {
 
@@ -46,8 +47,16 @@ public class NormalModeWorld implements World {
 	//just as long as obj files don't work
 	private Cube cube;	
     
-    //private Renderable mObject;
+    //the Level to render and collide against
+	private Level mLevel;
+	
+	private OBJRenderable mObject;
+	
+	private boolean mPause = true;
+	
+	
     
+	
     public NormalModeWorld(LevelActivity context, Handler handler)
     {
         Date date = new Date();
@@ -60,6 +69,8 @@ public class NormalModeWorld implements World {
     
 	public synchronized void update()
 	{
+		if(mPause)
+			return;
         mOldTime = mTime;
         
         Date date = new Date();
@@ -76,31 +87,38 @@ public class NormalModeWorld implements World {
         	Log.d(LOG_TAG, "Final World Coordinates:" + mPlayerPos.toString());
         	mNewTouchPos = null;
         }
+        
+        mLevel.update(mElapsedSeconds);
 	}
 	
 	public synchronized void draw(GL10 gl)
 	{
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-        gl.glEnable(GL10.GL_BLEND);	
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-        gl.glEnable(GL10.GL_TEXTURE_2D);
+
+		MatrixTrackingGL trackGl = (MatrixTrackingGL)gl;
+		trackGl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
+		trackGl.glMatrixMode(GL10.GL_MODELVIEW);
+		trackGl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		trackGl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		trackGl.glEnable(GL10.GL_TEXTURE_2D);
+		trackGl.glEnable(GL10.GL_CULL_FACE);
         
-		gl.glLoadIdentity();					//Reset The Current Modelview Matrix
+		trackGl.glLoadIdentity();					//Reset The Current Modelview Matrix
 		
 		//Set ModelView Matrix
-		GLU.gluLookAt(gl, mEye.x, mEye.y, mEye.z, mFocus.x, mFocus.y, mFocus.z, mUp.x, mUp.y, mUp.z);
+		GLU.gluLookAt(trackGl, mEye.x, mEye.y, mEye.z, mFocus.x, mFocus.y, mFocus.z, mUp.x, mUp.y, mUp.z);
 		
 		//Drawing
-		gl.glTranslatef(mPlayerPos.x, mPlayerPos.y, mPlayerPos.z);			//Move z units into the screen
-		cube.draw(gl, 1);					//Draw the Cube	
-        
-        //gl.glScalef(0.02f,0.02f,0.02f);
-        mTextures.setTexture(R.drawable.l17_crate); 
-        gl.glMultMatrixf(mRotation.toFloatArray(), 0);
-        //mObject.draw(gl);
-        gl.glDisable(GL10.GL_TEXTURE_2D);
+		mTextures.setTexture(R.drawable.l17_crate);
+		trackGl.glPushMatrix();
+		trackGl.glTranslatef(mPlayerPos.x, mPlayerPos.y, mPlayerPos.z);			//Move z units into the screen
+		cube.draw(trackGl, 1);					//Draw the Cube	
+		trackGl.glPopMatrix();
+		
+
+		//mObject.draw(trackGl);
+		mLevel.draw(trackGl);
+
+        trackGl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
 	public synchronized void init(GL10 gl)
@@ -108,13 +126,11 @@ public class NormalModeWorld implements World {
         mTextures = new GLTextures(gl, mContext);
         mTextures.add(R.drawable.l17_crate);
         mTextures.loadTextures();
+        mLevel = new Level();
         
-        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.l17_crate);
-        
-        float imgAspect = (float)bmp.getWidth() / (float)bmp.getHeight();
-        
-        //mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
+        mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
 		cube = new Cube();
+		mPause = false;
 	}
 
 

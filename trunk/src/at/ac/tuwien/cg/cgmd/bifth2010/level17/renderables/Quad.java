@@ -49,7 +49,7 @@ public class Quad implements Renderable {
 
     public void draw(GL10 gl)
     {
-    	gl.glFrontFace(GL10.GL_CW);
+    	gl.glFrontFace(GL10.GL_CCW);
     	mVertexBuffer.set(gl);
     	mTexCoordBuffer.set(gl);
     	gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, mIndexBuffer.getBuffer());

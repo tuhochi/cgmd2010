@@ -1,7 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
