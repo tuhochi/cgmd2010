@@ -7,12 +7,12 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Container;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Item;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
-	Container rootItem;
+	Item rootItem;
 	GameThread gameThread;
 	
 	public GameScene(Context context) {

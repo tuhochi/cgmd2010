@@ -8,6 +8,8 @@ public class TexturePart {
 	private float y1;
 	private float x2;
 	private float y2;
+	private float width = -1.f;
+	private float height = -1.f;
 	private Mirror mirror;
 	
 	private FloatBuffer texCoords;
@@ -30,6 +32,17 @@ public class TexturePart {
 		this.x2 = x2;
 		this.y2 = y2;
 		this.mirror = Mirror.NONE;
+		
+		recalculateTexCoords();
+	}
+	
+	public TexturePart(Texture texture, Mirror mirror, float x1, float y1, float x2, float y2) {
+		this.texture = texture;
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.mirror = mirror;
 		recalculateTexCoords();
 	}
 	
@@ -39,7 +52,12 @@ public class TexturePart {
 	 * @return The width of the unscaled texture part.
 	 */
 	public float getWidth() {
-		return Math.abs(x2-x1);
+		// added incredible performance boost: lazy loading of width --myellow
+		if (width < 0) {
+			width = Math.abs(x2-x1);
+		}
+		
+		return width;
 	}
 	
 	/**
@@ -48,7 +66,12 @@ public class TexturePart {
 	 * @return The height of the unscaled texture part.
 	 */
 	public float getHeight() {
-		return Math.abs(y2-y1);
+		// added incredible performance boost: lazy loading of height --myellow
+		if (height < 0) {
+			height = Math.abs(y2-y1);
+		}
+		
+		return height;
 	}
 	
 	/**
@@ -118,6 +141,6 @@ public class TexturePart {
 			xb/w, yb/h, /* lower right */
 		};
 		
-		texCoords =Util.floatArrayToBuffer(coords);
+		texCoords = Util.floatArrayToBuffer(coords);
 	}
 }
