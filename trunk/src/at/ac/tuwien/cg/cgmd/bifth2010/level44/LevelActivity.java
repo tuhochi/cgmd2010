@@ -1,15 +1,21 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level00.TestLevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputListener;
 
 public class LevelActivity extends Activity {
 	private GameScene scene;
+	private GestureDetector gestureDetector;
+	private View.OnTouchListener gestureListener;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -20,10 +26,23 @@ public class LevelActivity extends Activity {
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                         WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+		
 		scene = new GameScene(this);
 		setContentView(scene);
 		//setContentView(R.layout.l44_help);
 		//finishLevel(90);
+		
+		Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		gestureDetector = new GestureDetector(new InputListener(scene, display.getWidth(), display.getHeight()));
+        gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+            	System.err.println("onTouch");
+                if (gestureDetector.onTouchEvent(event)) {
+                    return true;
+                }
+                return false;
+            }
+        };
 	}
 	
 	private void finishLevel(int score) {
@@ -59,4 +78,11 @@ public class LevelActivity extends Activity {
 		}
 	}
 	
+	 @Override
+	    public boolean onTouchEvent(MotionEvent event) {
+	        if (gestureDetector.onTouchEvent(event))
+		        return true;
+		    else
+		    	return false;
+	    }
 }

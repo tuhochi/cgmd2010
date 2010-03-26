@@ -1,5 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -7,13 +10,15 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Item;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
-	Item rootItem;
-	GameThread gameThread;
+	private Item rootItem;
+	private GameThread gameThread;
+	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
 	
 	public GameScene(Context context) {
 		super(context);
@@ -26,7 +31,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		System.err.println("onDrawFrame");
+		//System.err.println("onDrawFrame");
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -64,7 +69,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 		
-		rootItem = new RabbitHead(mainTexture);
+		rootItem = new Rabbit(mainTexture);
 		rootItem.setPosition(getWidth()/2, getHeight()/2);
 		
 		//((RabbitHead)rootItem).setWingAngle(50);
@@ -75,7 +80,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private void restartGameThread() {
 		stopGameThread();
 		if (rootItem != null) {
-			gameThread = new GameThread(this, (RabbitHead)rootItem);
+			gameThread = new GameThread(this, (Rabbit)rootItem);
 			gameThread.start();
 		}
 	}
@@ -99,4 +104,15 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		restartGameThread();
 	}
 
+	public void clearInputQueue() {
+		inputQueue.clear();
+	}
+	
+	public void addInputGesture(InputGesture gesture) {
+		inputQueue.add(gesture);
+	}
+	
+	public InputGesture getNextInputGesture() {
+		return inputQueue.poll();
+	}
 }

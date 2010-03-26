@@ -5,12 +5,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Item;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Mirror;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 
-public class RabbitHead extends Container {
+public class Rabbit extends Container {
 	private Item leftWing;
 	private Item rightWing;
 	private Item coinBucket;
 	
-	public RabbitHead(Texture texture) {
+	public Rabbit(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
 		setCenter(84, 64);
 		
@@ -32,6 +32,14 @@ public class RabbitHead extends Container {
 	
 	public void setWingAngle(float angle) {
 		leftWing.setRotation(-angle);
+		rightWing.setRotation(angle);
+	}
+	
+	public void setLeftWingAngle(float angle) {
+		leftWing.setRotation(-angle);
+	}
+	
+	public void setRightWingAngle(float angle) {
 		rightWing.setRotation(angle);
 	}
 
