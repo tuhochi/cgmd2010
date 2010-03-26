@@ -33,10 +33,14 @@ public class Geometry {
 	private int normalHandle = -1;
 	private FloatBuffer normalBuffer;
 
-	private int index = 0;
+	private int indexVertex = 0;
+	private int indexColor = 0;
+	private int indexNormal = 0;
+	private int indexTexCoords = 0;
+	
 	private int numVertices = 0;
 
-	private boolean init = true;
+	private boolean init = false;
 
 	private static Geometry lastGeometry;
 
@@ -149,9 +153,9 @@ public class Geometry {
 			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 		}
 
-		numVertices = index;
-		index = 0;
-		init = false;
+		numVertices = indexVertex;
+		reset();
+		init = true;
 	}
 
 	private int getPrimitiveType(Type type) {
@@ -168,10 +172,10 @@ public class Geometry {
 
 	public void render(Type type, int offset, int numVertices) {
 		boolean wasInit = init;
-		if (init)
+		if (!init)
 			update();
 
-		if (this == lastGeometry && !wasInit) {
+		if (this == lastGeometry && wasInit) {
 			gl.glDrawArrays(getPrimitiveType(type), offset, numVertices);
 			return;
 		} else {
@@ -232,12 +236,12 @@ public class Geometry {
 	}
 
 	public void vertex(float x, float y, float z) {
-		init = true;
-		int offset = index * 3;
+		init = false;
+		int offset = indexVertex * 3;
 		vertices[offset] = x;
 		vertices[offset + 1] = y;
 		vertices[offset + 2] = z;
-		index++;
+		indexVertex++;
 	}
 
 	public void color(Color c) {
@@ -245,27 +249,30 @@ public class Geometry {
 	}
 
 	public void color(float r, float g, float b, float a) {
-		init = true;
-		int offset = index * 4;
+		init = false;
+		int offset = indexColor * 4;
 		colors[offset] = r;
 		colors[offset + 1] = g;
 		colors[offset + 2] = b;
 		colors[offset + 3] = a;
+		indexColor++;
 	}
 
 	public void normal(float x, float y, float z) {
-		init = true;
-		int offset = index * 3;
+		init = false;
+		int offset = indexNormal * 3;
 		normals[offset] = x;
 		normals[offset + 1] = y;
 		normals[offset + 2] = z;
+		indexNormal++;
 	}
 
 	public void texCoord(float s, float t) {
-		init = true;
-		int offset = index * 2;
+		init = false;
+		int offset = indexTexCoords * 2;
 		texCoords[offset] = s;
 		texCoords[offset + 1] = t;
+		indexTexCoords++;
 	}
 
 	public int getMaximumVertices() {
@@ -273,8 +280,11 @@ public class Geometry {
 	}
 
 	public void reset() {
-		init = true;
-		index = 0;
+		indexVertex = 0;
+		indexColor = 0;
+		indexNormal = 0;
+		indexTexCoords = 0;
+		init = false;
 	}
 
 	public void dispose() {
