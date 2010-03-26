@@ -26,11 +26,11 @@ public class NormalModeWorld implements World {
     private float mElapsedSeconds;
     private long mOldTime;
     private long mTime;
-    private Matrix4x4 mRotation = new Matrix4x4();
     private GLTextures mTextures;
     private LevelActivity mContext;
     private float mRotAngle = 0;
-    private Handler mHandler;
+    @SuppressWarnings("unused")
+	private Handler mHandler;
 
 	// camera variables
 	private Vector3 mEye = new Vector3(0f, 15f, 0f);
@@ -79,8 +79,6 @@ public class NormalModeWorld implements World {
 
         mRotAngle += mElapsedSeconds;
     	
-        mRotation = Matrix4x4.RotateZ(mRotAngle);
-        
         if (mNewTouchPos != null)
         {
         	mPlayerPos = mPicker.GetWorldPosition(mNewTouchPos);
