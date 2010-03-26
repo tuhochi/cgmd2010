@@ -42,6 +42,14 @@ public class Rabbit extends Container {
 	public void setRightWingAngle(float angle) {
 		rightWing.setRotation(angle);
 	}
+	
+	public void flapLeftWing() {
+		//TODO
+	}
+	
+	public void flapRightWing() {
+		//TODO
+	}
 
 	@Override
 	public void setRotation(float angle) {
