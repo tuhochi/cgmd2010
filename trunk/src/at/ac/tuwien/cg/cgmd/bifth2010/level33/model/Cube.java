@@ -35,17 +35,18 @@ public class Cube extends Geometry {
 		 //   I/       I/
 		 //   1--------2
 		 
-		
+		 this.color(g);this.color(g);this.color(g); this.color(g);this.color(g);this.color(g);
+		 this.vertex( v0 ); this.vertex( v1 ); this.vertex( v4 );	
+		 this.vertex( v1 ); this.vertex( v4 ); this.vertex( v5 );	
 
+		 this.color(g);this.color(g);this.color(g); this.color(g);this.color(g);this.color(g);
+		 this.vertex( v2 ); this.vertex( v3 ); this.vertex( v6 );	
+		 this.vertex( v3 ); this.vertex( v6 ); this.vertex( v7 );
 
 		 this.color(r);this.color(r);this.color(r); this.color(r);this.color(r);this.color(r);
 		 this.vertex( v0 ); this.vertex( v3 ); this.vertex( v1 );	
 		 this.vertex( v3 ); this.vertex( v2 ); this.vertex( v1 );	
-		 
-		 this.color(g);this.color(g);this.color(g); this.color(g);this.color(g);this.color(g);
-		 this.vertex( v2 ); this.vertex( v3 ); this.vertex( v6 );	
-		 this.vertex( v3 ); this.vertex( v6 ); this.vertex( v7 );
-		 
+
 		 this.color(b);this.color(b);this.color(b); this.color(b);this.color(b);this.color(b);
 		 this.vertex( v0 ); this.vertex( v3 ); this.vertex( v7 );	
 		 this.vertex( v0 ); this.vertex( v4 ); this.vertex( v7 );	
@@ -53,10 +54,6 @@ public class Cube extends Geometry {
 		 this.color(r);this.color(r);this.color(r); this.color(r);this.color(r);this.color(r);
 		 this.vertex( v4 ); this.vertex( v5 ); this.vertex( v7 );	
 		 this.vertex( v5 ); this.vertex( v6 ); this.vertex( v7 );	
-		 
-		 this.color(g);this.color(g);this.color(g); this.color(g);this.color(g);this.color(g);
-		 this.vertex( v0 ); this.vertex( v1 ); this.vertex( v4 );	
-		 this.vertex( v1 ); this.vertex( v4 ); this.vertex( v5 );	
 		 
 		 this.color(b);this.color(b);this.color(b); this.color(b);this.color(b);this.color(b);
 		 this.vertex( v1 ); this.vertex( v2 ); this.vertex( v6 );	
