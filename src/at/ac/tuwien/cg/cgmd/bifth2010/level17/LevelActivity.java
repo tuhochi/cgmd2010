@@ -1,26 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 
@@ -31,12 +20,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 public class LevelActivity extends Activity {
 	
 	private Vector2 mWindowSize;
-	private static final int INSERT_ID = Menu.FIRST;
-	private TextView mOutputText;
 	private GLView mNormalModeView;
 	private final Handler mHandler = new Handler();
 	private NormalModeWorld mWorld;
-	private List<String> mTasks = new ArrayList<String>();
 	
 	
     @Override
@@ -54,12 +40,6 @@ public class LevelActivity extends Activity {
         mNormalModeView = new GLView(this, mWindowSize, mWorld);
         mGLSurfaceView = mNormalModeView;
         setContentView(mGLSurfaceView);
-        
-        mOutputText = new TextView(this);
-        mOutputText.setText("");
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        addContentView(mOutputText, params);
-        loadTasks("tasks.txt");
     }
 
     @Override
@@ -96,36 +76,6 @@ public class LevelActivity extends Activity {
     	
     	return super.onTouchEvent(event);
     }
-    
-    public void bottleStopped()
-    {
-    	int rand = (int)Math.floor(Math.random() * mTasks.size());
-    	mOutputText.setText(mTasks.get(rand));
-    }
-    
-    public void loadTasks(String fileName)
-    {
-    	InputStream is;
-		try {
-			is = getAssets().open(fileName);
-	        is.available();
-	        InputStreamReader isr = new InputStreamReader(is);            
-	        BufferedReader textReader = new BufferedReader(isr);
-	        String line = textReader.readLine();
-	        while (line != null)
-	        {
-	        	mTasks.add(line);
-	        	line = textReader.readLine();
-	        }
-            textReader.close();
-            isr.close();
-            is.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-    
 
     private GLSurfaceView mGLSurfaceView;
 }

@@ -6,7 +6,6 @@ import javax.microedition.khronos.opengles.GL;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.GameThread;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.SimpleRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.World;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;

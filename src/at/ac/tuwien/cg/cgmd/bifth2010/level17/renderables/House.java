@@ -23,7 +23,6 @@ public class House implements Renderable
      */
     public House(float width, float height, float depth)
     {
-    	float onef = 1.0f;
 
     	Vector3 vertices[] = {						//Vertices according to faces
     			new Vector3(-width / 2.0f, -height / 2.0f, depth / 2.0f), //v0
