@@ -8,7 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
 
-public class House implements Renderable
+public class HouseModel implements Renderable
 {
 
 	private VertexBuffer mVertexBuffer;
@@ -21,7 +21,7 @@ public class House implements Renderable
      * @param height height of the cube
      * @param depth depth of the cube
      */
-    public House(float width, float height, float depth)
+    public HouseModel(float width, float height, float depth)
     {
 
     	Vector3 vertices[] = {						//Vertices according to faces

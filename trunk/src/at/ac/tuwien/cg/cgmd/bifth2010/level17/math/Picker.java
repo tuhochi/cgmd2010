@@ -18,8 +18,8 @@ public class Picker
 	
 	// used to grab the current view and projection matrices
 	private MatrixGrabber mMatrixGrabber = new MatrixGrabber();
-	private int mScreenWidth;
-	private int mScreenHeight;
+	/*private int mScreenWidth;
+	private int mScreenHeight;*/
 	private Matrix4x4 mViewProjection = new Matrix4x4();
 	private Matrix4x4 mInvViewProjection = new Matrix4x4();
 	private float mLastDepth;
