@@ -201,7 +201,7 @@ public class Cube {
 	 */
 	public void draw(GL10 gl, int filter) {
 		//Bind the texture according to the set texture filter
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[filter]);
+		//gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[filter]);
 
 		//Enable the vertex, texture and normal state
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);

@@ -655,6 +655,10 @@ public class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
         mgl.glTranslatef(x, y, z);
         if ( _check) check();
     }
+    
+    public void glTranslatef(Vector3 pos) {
+        glTranslatef(pos.x, pos.y, pos.z);
+    }
 
     public void glTranslatex(int x, int y, int z) {
         mCurrent.glTranslatex(x, y, z);
