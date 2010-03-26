@@ -118,6 +118,6 @@ public class TexturePart {
 			xb/w, yb/h, /* lower right */
 		};
 		
-		texCoords = Util.floatArrayToBuffer(coords);
+		texCoords =Util.floatArrayToBuffer(coords);
 	}
 }
