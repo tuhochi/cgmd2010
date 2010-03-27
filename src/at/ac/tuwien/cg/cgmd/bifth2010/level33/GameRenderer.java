@@ -35,12 +35,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 		gl.glViewport(0, 0, width, height);
 		glMatrixMode(GL_PROJECTION); 
 		glLoadIdentity(); 	
-		gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
-
-//		glMatrixMode(GL_MODELVIEW); 	//Select The Modelview Matrix
-//		glLoadIdentity(); 					//Reset The Modelview Matrix
-//	        
-	    
+		gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);	    
 
 	}
 
