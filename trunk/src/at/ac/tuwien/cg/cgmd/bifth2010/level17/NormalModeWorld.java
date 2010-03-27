@@ -33,7 +33,7 @@ public class NormalModeWorld implements World {
 	private Handler mHandler;
 
 	// camera variables
-	private Vector3 mEye = new Vector3(0f, 15f, 0f);
+	private Vector3 mEye = new Vector3(0f, 30f, 0f);
 	private Vector3 mFocus = new Vector3(0f, 0f, 0f);
 	private Vector3 mUp = new Vector3(1f, 0f, 0f);
 	
@@ -93,6 +93,14 @@ public class NormalModeWorld implements World {
 	{
 
 		MatrixTrackingGL trackGl = (MatrixTrackingGL)gl;
+		trackGl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		float[] color = {1.0f,1.0f,1.0f,1.0f};
+		trackGl.glFogfv(GL10.GL_FOG_COLOR, color, 0);
+		trackGl.glFogf(GL10.GL_FOG_START, 50.0f);
+		trackGl.glFogf(GL10.GL_FOG_END, 70.0f);
+		trackGl.glFogf(GL10.GL_FOG_DENSITY, 0.5f);
+		trackGl.glFogx(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
+		trackGl.glEnable(GL10.GL_FOG);
 		trackGl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
 		trackGl.glMatrixMode(GL10.GL_MODELVIEW);
 		trackGl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
@@ -108,7 +116,7 @@ public class NormalModeWorld implements World {
 		//Drawing
 		mTextures.setTexture(R.drawable.l17_crate);
 		trackGl.glPushMatrix();
-		trackGl.glTranslatef(mPlayerPos.x, mPlayerPos.y, mPlayerPos.z);			//Move z units into the screen
+		trackGl.glTranslatef(mPlayerPos);			//Move z units into the screen
 		cube.draw(trackGl, 1);					//Draw the Cube	
 		trackGl.glPopMatrix();
 		
