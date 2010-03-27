@@ -16,6 +16,19 @@ public class Vector2 {
 	public Vector2(float x, float y) {
 		set(x, y);
 	}
+	public Vector2 add(Vector2 other)
+	{
+		this.x += other.x;
+		this.y += other.y;
+		return this;
+		
+	}
+	public Vector2 subtract(Vector2 other)
+	{
+		this.x -= other.x;
+		this.y -= other.y;
+		return this;
+	}
 
 	public static float dotProduct(Vector2 v1, Vector2 v2) {
 		return (v1.x * v2.x + v1.y * v2.y);

@@ -6,7 +6,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3;
 
 public class Cube extends Geometry {
-	float one = 0.2f;
+	float one = 1.0f/2;
 	Vector3 v0 = new Vector3(-one, -one, -one);
 	Vector3 v1 = new Vector3(one, -one, -one);
 	Vector3 v2 = new Vector3(one,  one, -one);

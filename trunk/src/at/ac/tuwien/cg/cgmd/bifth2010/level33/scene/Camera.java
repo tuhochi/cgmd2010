@@ -11,9 +11,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
 
 public class Camera {
 	
-    float eyeX=0;
-    float eyeY=0;
-    float eyeZ=1.5f;
+	public final static float standardZoom= 10.f;// standart Game zoom
+	public final static float outZoom = 50.f;// overview Zoom
+	public static float zoom = standardZoom;
+	
+    float eyeX=0.5f;
+    float eyeY=0.5f;
+    float eyeZ;
 	
     float viewX=0;
     float viewY=0;
@@ -32,13 +36,16 @@ public class Camera {
     
 	public void lookAt(GL10 gl) {
       		
-        eyeX=GameView.lastTouch.x;
-        eyeY=GameView.lastTouch.y;
-                
+//        eyeX=(GameView.lastTouch.x*2)-1;
+//        eyeY=(GameView.lastTouch.y*2)-1;
+        eyeZ=zoom;
+        
       	gluLookAt(gl,eyeX, eyeY, eyeZ, viewX, viewY, viewZ, upX, upY, upZ  );// momentan nur zum probieren, danach von oben
 
-       
+	}
 
+	public void setDistance(int i) {
+		eyeZ=i;	
 	}
 
 }
