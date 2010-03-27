@@ -2,45 +2,115 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.GestureDetector.OnGestureListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Level;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 
-public class GameView extends GLSurfaceView {
+public class GameView extends GLSurfaceView implements OnGestureListener  {
 
-	public static GameRenderer renderer;// Game's Renderer Loop
-	public static SceneGraph sceneGraph;
-	public static Vector2 lastTouch = new Vector2();
+	private GestureDetector gestureScanner; // needed for advanced Gestures
+	public static GameRenderer renderer;	// Game's Renderer Loop
+	public static SceneGraph sceneGraph;	// Graph with Game Objects
+	public static Vector2 resolution;		// resolution of the screen
+	public static Vector2 lastTouch = new Vector2(1,1);	// coordinates of the last touch [0 1] 
+	public static Vector2 diffTouch = new Vector2();	// difference to the last touch
 	public static boolean running = true;
+	public boolean isLongPress = true;
 	
-
+	long stopTime = 0;
+	
 	public GameView(Context context) {
 		super(context);
-
+		gestureScanner = new GestureDetector(this);
 		
 		Level level = new Level();// init new Level here!
-				
 		sceneGraph = new SceneGraph(level);
 		renderer = new GameRenderer();
 		setRenderer(renderer);
 
-	
 	}
 
-	public boolean onTouchEvent(final MotionEvent event) {
-		queueEvent(new Runnable() {
-			public void run() {
-				lastTouch.set(event.getX() / getWidth(), event.getY()
-						/ getHeight());
-			}
-		});
+	/**
+	 * the onTouchEvent handle the advanced Gesture Scanner
+	 */
+	public boolean onTouchEvent(final MotionEvent e) {
+		
+		
+//		queueEvent(new Runnable() {
+//			public void run() {
+//				diffTouch.set(e.getX() / getWidth(), e.getY()/ getHeight());
+//				diffTouch.subtract(lastTouch);
+//				lastTouch.set(e.getX() / getWidth(), e.getY()/ getHeight());	
+//			}
+//		});
+		
+
+		return gestureScanner.onTouchEvent(e);
+	}
+
+
+	@Override
+	public boolean onDown(final MotionEvent e) {
 		return true;
 	}
 
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		
+		if(isLongPress){
+
+		SceneGraph.zoomOutView=!SceneGraph.zoomOutView;
+		
+		if(SceneGraph.zoomOutView)
+			SceneGraph.camera.zoom=Camera.outZoom;
+		else
+			SceneGraph.camera.zoom=Camera.standardZoom;
+		
+		System.out.println("onLongPress");
+		}
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void onShowPress(final MotionEvent e) {
+	
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+		System.out.println("onSingleTapUp");
+		return true;
+	}
+
+	
 	public void startGame() {
 		// TODO Auto-generated method stub
 
+		
+		
 	}
 
+	
+	
 }
+
+
