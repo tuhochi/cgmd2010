@@ -14,23 +14,18 @@ public class GameView extends GLSurfaceView {
 	public static Vector2 lastTouch = new Vector2();
 	public static boolean running = true;
 	
-	public static int width;
-	public static int height;
 
 	public GameView(Context context) {
 		super(context);
-		
+
 		
 		Level level = new Level();// init new Level here!
-		
-		
+				
 		sceneGraph = new SceneGraph(level);
 		renderer = new GameRenderer();
 		setRenderer(renderer);
-		this.width=this.getWidth();
-		this.height=this.getHeight();
-		
 
+	
 	}
 
 	public boolean onTouchEvent(final MotionEvent event) {

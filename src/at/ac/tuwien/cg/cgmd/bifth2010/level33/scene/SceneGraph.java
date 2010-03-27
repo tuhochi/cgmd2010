@@ -1,5 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 
+import static android.opengl.GLES10.GL_MODELVIEW;
+import static android.opengl.GLES10.glLoadIdentity;
+import static android.opengl.GLES10.glMatrixMode;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
@@ -53,8 +57,11 @@ public class SceneGraph {
 		// updateLogic
 		updateLogic();
 		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		
 		// upadate Camera
-		camera.update(gl);
+		camera.lookAt(gl);
 
 		// the main game shod start here
 	
