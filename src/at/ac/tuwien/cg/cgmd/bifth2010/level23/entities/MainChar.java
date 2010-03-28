@@ -197,7 +197,9 @@ public class MainChar implements SceneEntity {
 	
 	public void update(float dt, int moveDir)
 	{
-		if(moveDir == 0 || moveDir >0 && position.x == RenderView.getInstance().getRightBounds() - width 
+		RenderView renderer =RenderView.getInstance();
+		
+		if(moveDir == 0 || moveDir >0 && position.x == renderer.getRightBounds() - width 
 				|| moveDir<1 && position.x == 0)
 			return;
 		
@@ -205,8 +207,8 @@ public class MainChar implements SceneEntity {
 		
 		if(!isInboundsAfterStep(moveDir,step))
 		{
-			if(moveDir > 0 && position.x != RenderView.getInstance().getRightBounds() - width)
-				step = RenderView.getInstance().getRightBounds() - width - position.x;
+			if(moveDir > 0 && position.x != renderer.getRightBounds() - width)
+				step = renderer.getRightBounds() - width - position.x;
 			if(moveDir < 0 && position.x != 0.0f)
 				step = -position.x;
 		}
@@ -226,7 +228,6 @@ public class MainChar implements SceneEntity {
 		}
 		
 		glTranslatef(position.x, 0, 0);
-		resetTranslation(); 
 		
 		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);

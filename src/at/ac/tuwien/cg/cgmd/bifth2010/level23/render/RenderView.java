@@ -73,12 +73,15 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		TimeUtil.getInstance().update();
+		TimeUtil timer = TimeUtil.getInstance();
+		float dt = timer.getDt();
 		
-		accTime += TimeUtil.getInstance().getDt()/1000;
+		timer.update();
+		
+		accTime += timer.getDt()/1000;
 		if(accTime > 5)
 		{
-			System.out.println(TimeUtil.getInstance().getFPS());
+			System.out.println(timer.getFPS());
 			accTime = 0;
 		}
 		
@@ -92,14 +95,13 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		fetchKeyMoveData();
 		
-		mainChar.update(TimeUtil.getInstance().getDt(),mainCharMoveDir);
-		background.update(TimeUtil.getInstance().getDt());
+		mainChar.update(dt,mainCharMoveDir);
+		background.update(dt);
 				
-		gl.glClearColor(0,0,0,0);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
-		for(SceneEntity entity : sceneEntities)
-			entity.render();
+		background.render();
+		mainChar.render();
 		
 		//check if needed for all parts of the scene (hud?)
 	}
@@ -116,7 +118,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		gl.glOrthof(0.0f, rightBounds, 0.0f, topBounds, -1.0f, 1.0f);
-		gl.glViewport(0, 0, width, height);		
+		gl.glViewport(0, 0, width, height);	
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();		
 	}
 
 	@Override
@@ -135,10 +139,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		sceneEntities.add(background);
 		sceneEntities.add(mainChar);
 		
-		int resID = context.getResources().getIdentifier("l17_crate", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		int resID = context.getResources().getIdentifier("l42_crate", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg1", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		System.out.println("resId:" + resID);
 		background.addTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg2", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		background.addTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
