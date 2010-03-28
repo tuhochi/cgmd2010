@@ -18,6 +18,9 @@ public class L84RenderManager implements Renderer {
 	Square sq = new Square();
 	float rotation = 4.0f;
 	
+	/**
+	 * main draw method
+	 */
 	@Override
 	public void onDrawFrame(GL10 arg0) {
 		arg0.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -33,6 +36,10 @@ public class L84RenderManager implements Renderer {
 		
 	}
 
+	/**
+	 * called when size/orientation changes
+	 *    
+	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		gl.glViewport(0, 0, width, height);
@@ -43,6 +50,10 @@ public class L84RenderManager implements Renderer {
 		gl.glLoadIdentity();	
 	}
 
+	/**
+	 * called when activity is started
+	 * here also the textures should be loaded 
+	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
