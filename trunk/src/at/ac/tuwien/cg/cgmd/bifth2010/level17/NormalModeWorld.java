@@ -31,6 +31,8 @@ public class NormalModeWorld implements World {
     private float mRotAngle = 0;
     @SuppressWarnings("unused")
 	private Handler mHandler;
+    
+    private Vector3 mWorldTouchPos = null;
 
 	// camera variables
 	private Vector3 mEye = new Vector3(0f, 30f, 0f);
@@ -80,15 +82,21 @@ public class NormalModeWorld implements World {
         mElapsedSeconds = (mTime - mOldTime) / 1000.0f;
 
         mRotAngle += mElapsedSeconds;
-    	
+    	Vector3 moveDelta = new Vector3();
         if (mNewTouchPos != null)
         {
         	mPlayerPos = mPicker.GetWorldPosition(mNewTouchPos);
+        	if(mWorldTouchPos != null)
+        	{
+        		moveDelta = Vector3.diff(mPlayerPos, mWorldTouchPos);
+        		moveDelta.y = 0;
+        	}
+        	mWorldTouchPos = mPlayerPos;
         	Log.d(LOG_TAG, "Final World Coordinates:" + mPlayerPos.toString());
         	mNewTouchPos = null;
         }
         
-        mLevel.update(mElapsedSeconds);
+        mLevel.update(mElapsedSeconds, moveDelta);
 	}
 	
 	public synchronized void draw(GL10 gl)
@@ -172,6 +180,7 @@ public class NormalModeWorld implements World {
     public synchronized void fingerDown(Vector2 pos)
     {
     	mNewTouchPos = new Vector2(pos);
+    	mWorldTouchPos =  mPicker.GetWorldPosition(mNewTouchPos);
     }   
     
     public synchronized void fingerUp(Vector2 pos)
