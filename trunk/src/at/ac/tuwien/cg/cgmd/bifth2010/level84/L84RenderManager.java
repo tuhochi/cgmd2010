@@ -16,7 +16,7 @@ import android.opengl.GLSurfaceView.Renderer;
 public class L84RenderManager implements Renderer {
 
 	Square sq = new Square();
-	float rotation = 5.0f;
+	float rotation = 4.0f;
 	
 	@Override
 	public void onDrawFrame(GL10 arg0) {
@@ -53,6 +53,8 @@ public class L84RenderManager implements Renderer {
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 			
+		//TODO: load textures
+		
 	}
 
 	private class Square {
@@ -72,7 +74,11 @@ public class L84RenderManager implements Renderer {
 
 		// Our index buffer.
 		private ShortBuffer indexBuffer;
+		
+		private FloatBuffer textureBuffer;
 
+		private int mTextureId = -1;
+		
 		public Square() {
 			// a float is 4 bytes, therefore we multiply the number if
 			// vertices with 4.
@@ -102,6 +108,15 @@ public class L84RenderManager implements Renderer {
 			// What faces to remove with the face culling.
 			gl.glCullFace(GL10.GL_BACK); // OpenGL docs
 
+			//texturing
+			if(mTextureId>=0){
+				gl.glEnable(GL10.GL_TEXTURE_2D);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureId);
+			} else {
+				gl.glDisable(GL10.GL_TEXTURE_2D);
+			}
+
+			
 			// Enabled the vertices buffer for writing and to be used during
 			// rendering.
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);// OpenGL docs.
@@ -110,9 +125,16 @@ public class L84RenderManager implements Renderer {
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, // OpenGL docs
 	                                 vertexBuffer);
 
+			//enable the texture coordinates
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			//set the texture coordinate format and offset
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+			
 			gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,// OpenGL docs
 					  GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
+			
+			
 			// Disable the vertices buffer.
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY); // OpenGL docs
 			// Disable face culling.
