@@ -28,15 +28,17 @@ public class Background implements SceneEntity
 	
 	public Background()
 	{
+		renderView = RenderView.getInstance();
 		textureIDs = new ArrayList<Integer>();		
 		generateTiles();
 		createIndexBuffer();
 		createTexCoordBuffer();
-		renderView = RenderView.getInstance();
+		
 	}
 	
 	private void generateTiles()
 	{
+		
 		float[] vertices = new float[12];
 		float tb = renderView.getTopBounds();
 		float rb = renderView.getRightBounds(); 
