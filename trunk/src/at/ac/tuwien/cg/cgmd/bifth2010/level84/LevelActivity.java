@@ -12,16 +12,13 @@ public class LevelActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.l84_level);
+		//setContentView(R.layout.l84_level);
 		//FrameLayout mFrameLayout = (FrameLayout) findViewById(R.id.l84_FrameLayout01);
 
-//		GLSurfaceView openglview = (GLSurfaceView) findViewById(R.id.l84_openglview); 
-		//openglview = new GLSurfaceView(this);
-	//	openglview.setRenderer(new L84RenderManager());
-		//mFrameLayout.addView(openglview);
-		//setContentView(openglview);
-
-		
+		//GLSurfaceView openglview = (GLSurfaceView) findViewById(R.id.l84_openglview); 
+		GLSurfaceView openglview = new GLSurfaceView(this);
+		openglview.setRenderer(new L84RenderManager());
+		setContentView(openglview);
 		
 	}
 		
