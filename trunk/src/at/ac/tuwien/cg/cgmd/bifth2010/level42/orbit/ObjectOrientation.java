@@ -8,7 +8,7 @@ public class ObjectOrientation {
 					tx,ty,tz,
 					sx,sy,sz;
 	
-	private Matrix44 transform;
+	public Matrix44 transform;
 
 	public ObjectOrientation(float qx, float qy, float qz, float tx, float ty,
 			float tz, float sx, float sy, float sz) {

@@ -97,12 +97,13 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		ObjectOrientation transf = new ObjectOrientation(0,0,45,0,0,0,1,1,1);
 		
 		Orbit orbit1 = new Orbit(scene.getSceneEntity(0),6,0,Orbit.DIRECTION_POSITIVE,
-								10,1,4,transf);
+								20,7,transf);
 		
 		SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0, null);
 		orbit1.setSatTrans(sat1);
 		
-		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(0,-1,0),new Vector3(0,0,-1),Orbit.STARTPOINT_B,5,3,3);
+		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(-3,-3,0),new Vector3(3,3,0),
+								new Vector3(0,0,-1),10,5);
 		
 		orbitManager.addOrbit(orbit1);
 		orbitManager.addOrbit(orbit2);

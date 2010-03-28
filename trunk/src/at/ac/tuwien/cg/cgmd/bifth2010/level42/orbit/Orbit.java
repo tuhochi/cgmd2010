@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -8,27 +9,28 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 public class Orbit {
 
 	private float 	speed,t,
-					a,b,c,
-					v,u;
+					a,b,
+					u;
 	private int direction;
-	private Vector3 pos;
+	private Vector3 pos,entityPos,centerPos,centerVec,toCenterVec,directionVec;
 	private Matrix44 transform,tempTransform;
 	private ObjectOrientation orientation;
 	private SceneEntity entity;
 	private SatelliteTransformation satTrans;
+	private boolean up,inverted;
 	
 	public static final int DIRECTION_POSITIVE = 0;
 	public static final int DIRECTION_NEGATIVE = 1;
 	
 	public static final int STARTPOINT_A = 0;
-	public static final int STARTPOINT_B = 1;
+	public static final int STARTPOINT_C = 1;
 	
 	//temp vars
 	private float sinu,cosu,sinv,cosv,step;
-	private Vector3 projection;
+	private Vector3 projection,normalVec;
 	
 	public Orbit(	SceneEntity entity, float speed, float t,int direction,
-					float a, float b, float c, 
+					float a, float b, 
 					ObjectOrientation orientation
 				) 
 	{
@@ -42,8 +44,6 @@ public class Orbit {
 		
 		this.a = a;
 		this.b = b;
-		this.c = c;
-		this.v = 0;
 
 		precalc();
 	}
@@ -51,9 +51,9 @@ public class Orbit {
 	
 	
 	public Orbit(	SceneEntity entity,
-					Vector3 vecToCenter,Vector3 directionVec,
-					int startpoint, float otherAxis, float c,
-					float speed	)
+					Vector3 entityPos,Vector3 centerPos,Vector3 directionVec,
+					float b, float speed	
+				)
 	{
 		//init vars and temp calcs
 		init();
@@ -62,43 +62,34 @@ public class Orbit {
 		this.entity = entity;
 		this.speed = speed;
 		this.orientation = new ObjectOrientation();
-		this.v = 0;
-	
-		switch(startpoint){
-			case STARTPOINT_A:
-					//main axis
-					this.a = vecToCenter.length();
-					this.b = otherAxis;
-					this.c = c;
-					//get orientation
-					extractOrientation(vecToCenter);
-					
-					if(Vector3.getAngle(vecToCenter,directionVec)>0){
-						this.direction = Orbit.DIRECTION_POSITIVE;
-						this.t = 0.25f;
-					}else{
-						this.direction = Orbit.DIRECTION_NEGATIVE;
-						this.t = 0.25f;
-					}
-					
-				break;
-			case STARTPOINT_B:
-					//main axis
-					this.a = otherAxis;
-					this.b = vecToCenter.length();
-					this.c = c;
-					//get orientation
-					extractOrientation(vecToCenter);
-					
-					if(Vector3.getAngle(vecToCenter,directionVec)>0){
-						this.direction = Orbit.DIRECTION_POSITIVE;
-						this.t = 0.0f;
-					}else{
-						this.direction = Orbit.DIRECTION_NEGATIVE;
-						this.t = 0.0f;
-					}
-				break;
+		
+		this.entityPos = entityPos;
+		this.centerPos = centerPos;
+		this.centerVec = Vector3.subtract(entityPos,centerPos);
+		this.toCenterVec = Vector3.subtract(centerPos,entityPos);
+		this.directionVec = directionVec;
+		
+		this.normalVec = Vector3.crossProduct(directionVec,toCenterVec);
+		this.normalVec.normalize();
+		
+		this.inverted = false;
+		this.up = true;
+		if( Vector3.getAngle(normalVec,Constants.Y_AXIS)>((float)Math.PI/2)){
+			this.up = false;
 		}
+				
+		//main axis
+		this.a = centerVec.length();
+		this.b = b;
+
+		//get orientation
+		extractOrientation();
+
+		if(up)
+			this.direction = (!inverted)?Orbit.DIRECTION_POSITIVE:Orbit.DIRECTION_NEGATIVE;
+		else
+			this.direction = (!inverted)?Orbit.DIRECTION_NEGATIVE:Orbit.DIRECTION_POSITIVE;
+				
 		
 		precalc();
 	}
@@ -116,40 +107,39 @@ public class Orbit {
 	
 	private void precalc()
 	{
-		//precalc sin/cos
-		sinv = (float)Math.sin(v);
-		cosv = (float)Math.cos(v);
-
 		//calc start
-		u = (float)((t*Constants.TWOPI)-Math.PI);
+		u = (float)(t*Constants.TWOPI);
 		step = Constants.TWOPI/100;
 	}
 	
-	private void extractOrientation(Vector3 vecToCenter)
+	private void extractOrientation()
 	{
-		//get rotations
-		projection.copy(vecToCenter);
+
+		Vector3 crossEbenen = Vector3.crossProduct(normalVec, Constants.Y_AXIS);
+		crossEbenen.normalize();
+	
+		//get translation
+		this.orientation.reset();
+
+		projection.copy(centerVec);
 		projection.y = 0;
 		projection.normalize();
-		this.orientation.qx = (projection.length()!=0)?Vector3.getAngle(Constants.X_AXIS, projection):0;
 		
-		projection.copy(vecToCenter);
-		projection.z = 0;
-		projection.normalize();
-		this.orientation.qy = (projection.length()!=0)?Vector3.getAngle(Constants.Y_AXIS, projection):0;
+		float basicOrientation = (projection.length()!=0)?Vector3.getAngle(Constants.X_AXIS, projection):0;
+		orientation.transform.addRotateY(basicOrientation);
 		
-		projection.copy(vecToCenter);
-		projection.x = 0;
-		projection.normalize();
-		this.orientation.qz = (projection.length()!=0)?Vector3.getAngle(Constants.Z_AXIS, projection):0;
+		if(crossEbenen.length()!=0){
+			float normalVecRot = -Vector3.getAngle(normalVec,Constants.Y_AXIS);
+			if(normalVecRot>((float)Math.PI/2)){
+				inverted = true;
+				//orientation.transform.addRotateY((float)Math.PI);
+			}
+			orientation.transform.addRotate(crossEbenen,normalVecRot);
+		}
+	
 		
-		//get translation
-		this.orientation.tx = vecToCenter.x;
-		this.orientation.ty = vecToCenter.y;
-		this.orientation.tz = vecToCenter.z;
-
-		//build matrix
-		orientation.update();
+		orientation.transform.addTranslate(centerPos.x, centerPos.y, centerPos.z);
+	
 	}
 	
 	public void updatePos(float dt)
@@ -181,9 +171,9 @@ public class Orbit {
 		cosu = (float)Math.cos(u);
 		sinu = (float)Math.sin(u);
 		
-		pos.x = a * sinu * cosv;
-		pos.y = b * sinu * sinv;
-		pos.z = c * cosu;
+		pos.x = a * cosu;
+		pos.y = 0;
+		pos.z = b * sinu;
 
 		//translate position on ellipsoid
 		transform.setTranslate(pos.x,pos.y, pos.z);
