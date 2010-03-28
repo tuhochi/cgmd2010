@@ -6,14 +6,15 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Renderer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 
 public class LevelActivity extends Activity implements OrientationListener {
 
-	private Renderer renderer; 
+	private RenderView renderer; 
 	private static Context CONTEXT; 
+	private static LevelActivity instance;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -24,11 +25,19 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-		renderer = new Renderer(this);
+	 	;
+		renderer = new RenderView(this);
 		renderer.setOrientationListener(this);
         setContentView(renderer);
         CONTEXT = this; 
         OrientationManager.registerListener(this);
+        
+        instance = this;
+	}
+	
+	public static LevelActivity getInstance()
+	{
+		return instance;
 	}
 	
 	@Override
