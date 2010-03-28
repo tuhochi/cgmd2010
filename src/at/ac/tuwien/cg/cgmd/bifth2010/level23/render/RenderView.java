@@ -139,7 +139,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		sceneEntities.add(background);
 		sceneEntities.add(mainChar);
 		
-		int resID = context.getResources().getIdentifier("l42_crate", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		int resID = context.getResources().getIdentifier("l17_crate", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg1", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		background.addTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
