@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:orientation="horizontal">
-</LinearLayout>
+<FrameLayout
+ android:id="@+id/l84_FrameLayout01"
+ xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent">
+ <android.opengl.GLSurfaceView android:id="@+id/l84_openglview" android:layout_width="fill_parent" android:layout_height="fill_parent"></android.opengl.GLSurfaceView>
+ <TableLayout android:id="@+id/l84_TableLayout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical">
+<Button
+	android:text="01"
+ 	android:id="@+id/l84_GemButton01"
+  	android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+</Button>
+<Button
+	android:text="02"
+ 	android:id="@+id/l84_GemButton02"
+  	android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+</Button>
+<Button
+	android:text="03"
+ 	android:id="@+id/l84_GemButton03"
+  	android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+</Button>
+<Button
+	android:text="04"
+ 	android:id="@+id/l84_GemButton04"
+  	android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+</Button>
+</TableLayout>
+</FrameLayout>
