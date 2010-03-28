@@ -225,7 +225,6 @@ public class MainChar implements SceneEntity {
 		glTranslatef(position.x, 0, 0);
 		
 		if(textureID != -1)
-			System.out.println("texture");
 		{	glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
 		}		
