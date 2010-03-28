@@ -222,12 +222,13 @@ public class MainChar implements SceneEntity {
 	{
 		glPushMatrix();
 		
+		glTranslatef(position.x, 0, 0);
+		
 		if(textureID != -1)
+			System.out.println("texture");
 		{	glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
-		}
-		
-		glTranslatef(position.x, 0, 0);
+		}		
 		
 		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
