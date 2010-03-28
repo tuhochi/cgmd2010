@@ -10,7 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Renderer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
 
 public class MainChar implements SceneEntity {
@@ -100,15 +100,15 @@ public class MainChar implements SceneEntity {
 		vertices[3] = width + x;
 		vertices[4] = 0f + y;
 		vertices[5] = 0f;
-		//top right
-		vertices[6] = width + x;
-		vertices[7] = height + y;
-		vertices[8] = 0f;
 		//top left
-		vertices[9] = 0f + x;
-		vertices[10]= height + y;
-		vertices[11]= 0f;
-		
+		vertices[6] = 0f + x;
+		vertices[7]= height + y;
+		vertices[8]= 0f;
+		//top right
+		vertices[9] = width + x;
+		vertices[10] = height + y;
+		vertices[11] = 0f;
+				
 		ByteBuffer vertexBBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
 		vertexBBuffer.order(ByteOrder.nativeOrder());
 		vertexBuffer = vertexBBuffer.asFloatBuffer();
@@ -118,7 +118,7 @@ public class MainChar implements SceneEntity {
 	
 	private void createIndexBuffer()
 	{
-		short[] indices = { 0, 1, 2, 0, 2, 3 };
+		short[] indices = { 0, 1, 2, 3 };
 		ByteBuffer indexBBuffer = ByteBuffer.allocateDirect(indices.length * 2);
 		indexBBuffer.order(ByteOrder.nativeOrder());
 		indexBuffer = indexBBuffer.asShortBuffer();
@@ -136,13 +136,13 @@ public class MainChar implements SceneEntity {
 		//bottom right
 		textureCoordinates[2] = 1.f;
 		textureCoordinates[3] = 1.f;
-		//top right
-		textureCoordinates[4] = 1.f;
-		textureCoordinates[5] = 0.f;
 		//top left
-		textureCoordinates[6] = 0.f;
+		textureCoordinates[4] = 0.f;
+		textureCoordinates[5] = 0.f;
+		//top right
+		textureCoordinates[6] = 1.f;
 		textureCoordinates[7] = 0.f;
-		
+				
 		ByteBuffer tcbb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
 		tcbb.order(ByteOrder.nativeOrder());
 		texCoordBuffer = tcbb.asFloatBuffer();
@@ -181,7 +181,7 @@ public class MainChar implements SceneEntity {
 	public boolean isInboundsAfterStep(int moveDir, float stepWidth) {
 		if (moveDir > 0)
 		{
-	    	if (position.x + width + stepWidth <= Renderer.rightBounds) //application width instead of fixed value
+	    	if (position.x + width + stepWidth <= RenderView.getInstance().getRightBounds()) //application width instead of fixed value
 	    	{ 
 	    		return true; 
 	    	}
@@ -197,7 +197,7 @@ public class MainChar implements SceneEntity {
 	
 	public void update(float dt, int moveDir)
 	{
-		if(moveDir == 0 || moveDir >0 && position.x == Renderer.rightBounds - width 
+		if(moveDir == 0 || moveDir >0 && position.x == RenderView.getInstance().getRightBounds() - width 
 				|| moveDir<1 && position.x == 0)
 			return;
 		
@@ -205,8 +205,8 @@ public class MainChar implements SceneEntity {
 		
 		if(!isInboundsAfterStep(moveDir,step))
 		{
-			if(moveDir > 0 && position.x != Renderer.rightBounds - width)
-				step = Renderer.rightBounds - width - position.x;
+			if(moveDir > 0 && position.x != RenderView.getInstance().getRightBounds() - width)
+				step = RenderView.getInstance().getRightBounds() - width - position.x;
 			if(moveDir < 0 && position.x != 0.0f)
 				step = -position.x;
 		}
@@ -218,20 +218,19 @@ public class MainChar implements SceneEntity {
 	@Override
 	public void render() 
 	{
-		glEnable(GL10.GL_TEXTURE_2D);
+		glPushMatrix();
 		
+		if(textureID != -1)
+		{	glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+		}
 		
-		glTranslatef(translation.x, translation.y, translation.z);
+		glTranslatef(position.x, 0, 0);
 		resetTranslation(); 
 		
 		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-		glDrawElements(GL10.GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indexBuffer);
+		glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
 		
-		if(textureID != -1)
-		{
-			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
-		}
+		glPopMatrix();
 	}
 }

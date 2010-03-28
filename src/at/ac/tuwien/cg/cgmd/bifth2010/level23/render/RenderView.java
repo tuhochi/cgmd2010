@@ -1,6 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
 
+import static android.opengl.GLES10.glEnable;
+import static android.opengl.GLES10.glEnableClientState;
+
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -8,12 +11,16 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.opengl.GLDebugHelper;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.CommonFunctions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
@@ -21,18 +28,21 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 
-public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
+public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer {
 	
-	public static float screenWidth;
-	public static float screenHeight;
-	public static float aspectRatio;
+	private float screenWidth;
+	private float screenHeight;
+	private float aspectRatio;
 	
-	public static float rightBounds=100.0f;
-	public static float topBounds=100.0f;
+	private float rightBounds=100.0f;
+	private float topBounds=100.0f;
+	
+	private static RenderView instance;
 	
 	private ArrayList<SceneEntity> sceneEntities;
 	private Context context; 
 	private MainChar mainChar; 
+	private Background background;
 	private boolean released = true; 
 	private MotionEvent lastMotionEvent = null; 
 	private float accTime;
@@ -43,17 +53,21 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 	private int mainCharMoveDir;
 	private int lastKeyMovement;
 	
-	public Renderer(Context context)
+	public RenderView(Context context)
 	{
 		
 		super(context);
 		this.context = context; 
 		setRenderer(this); 
-		mainChar = new MainChar(10.0f,10.0f,new Vector2(0,0));
-		sceneEntities = new ArrayList<SceneEntity>();
-		sceneEntities.add(mainChar);
 		// so that the key events can fire
         setFocusable(true);
+        sceneEntities = new ArrayList<SceneEntity>();
+        instance=this;
+	}
+	
+	public static RenderView getInstance()
+	{
+		return instance;
 	}
 	
 	@Override
@@ -79,21 +93,15 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		fetchKeyMoveData();
 		
 		mainChar.update(TimeUtil.getInstance().getDt(),mainCharMoveDir);
+		background.update(TimeUtil.getInstance().getDt());
 				
-		gl.glClearColor(1,0,0,0);
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		//check if needed for all parts of the scene (hud?)
-		//add textures etc.
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glClearColor(0,0,0,0);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		for(SceneEntity entity : sceneEntities)
 			entity.render();
-
-		
 		
 		//check if needed for all parts of the scene (hud?)
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 
 	@Override
@@ -104,7 +112,7 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 		screenWidth = width;
 		screenHeight = height;
 		aspectRatio = screenHeight/screenWidth;
-		topBounds *= aspectRatio;
+		topBounds = rightBounds*aspectRatio;
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		gl.glOrthof(0.0f, rightBounds, 0.0f, topBounds, -1.0f, 1.0f);
@@ -113,9 +121,27 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
-	{
+	{	
+		setupGL(gl);
+		
+		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
+		
+		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
+		topBounds = rightBounds*aspectRatio;
+		
+		mainChar = new MainChar(10.0f,10.0f,new Vector2(0,0));
+		background = new Background();
+		
+		sceneEntities.add(background);
+		sceneEntities.add(mainChar);
+		
 		int resID = context.getResources().getIdentifier("l17_crate", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
+		resID = context.getResources().getIdentifier("l23_bg1", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		System.out.println("resId:" + resID);
+		background.addTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
+		resID = context.getResources().getIdentifier("l23_bg2", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		background.addTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 	}
 		
 	@Override
@@ -208,6 +234,84 @@ public class Renderer extends GLSurfaceView implements GLSurfaceView.Renderer {
 			mainCharMoveDir = lastKeyMovement;
 			lastKeyMovement = 0;
 		}
+	}
+	
+	/**
+	 * @return the screenWidth
+	 */
+	public float getScreenWidth() {
+		return screenWidth;
+	}
+
+	/**
+	 * @param screenWidth the screenWidth to set
+	 */
+	public void setScreenWidth(float screenWidth) {
+		this.screenWidth = screenWidth;
+	}
+
+	/**
+	 * @return the screenHeight
+	 */
+	public float getScreenHeight() {
+		return screenHeight;
+	}
+
+	/**
+	 * @param screenHeight the screenHeight to set
+	 */
+	public void setScreenHeight(float screenHeight) {
+		this.screenHeight = screenHeight;
+	}
+
+	/**
+	 * @return the aspectRatio
+	 */
+	public float getAspectRatio() {
+		return aspectRatio;
+	}
+
+	/**
+	 * @param aspectRatio the aspectRatio to set
+	 */
+	public void setAspectRatio(float aspectRatio) {
+		this.aspectRatio = aspectRatio;
+	}
+
+	/**
+	 * @return the rightBounds
+	 */
+	public float getRightBounds() {
+		return rightBounds;
+	}
+
+	/**
+	 * @param rightBounds the rightBounds to set
+	 */
+	public void setRightBounds(float rightBounds) {
+		this.rightBounds = rightBounds;
+	}
+
+	/**
+	 * @return the topBounds
+	 */
+	public float getTopBounds() {
+		return topBounds;
+	}
+
+	/**
+	 * @param topBounds the topBounds to set
+	 */
+	public void setTopBounds(float topBounds) {
+		this.topBounds = topBounds;
+	}
+	
+	private void setupGL(GL10 gl)
+	{
+		gl.glDepthFunc(GL10.GL_LEQUAL);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
 
 }
