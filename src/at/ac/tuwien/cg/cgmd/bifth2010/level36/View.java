@@ -9,10 +9,10 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 
 public class View extends GLSurfaceView implements Renderer {
-	
+
 	public View(Context context) {
 		super(context);
-		Log.v("View", "Konstrukt");
+		Log.v("View", "Konstruktor");
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
 	}
@@ -20,7 +20,6 @@ public class View extends GLSurfaceView implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
 	}
 
 	@Override
