@@ -144,7 +144,7 @@ public class NormalModeWorld implements World {
         mTextures.loadTextures();
         mLevel = new Level();
         
-        mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
+        //mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
 		cube = new Cube();
 		mPause = false;
 	}
