@@ -197,7 +197,7 @@ public class MainChar implements SceneEntity {
 	
 	public void update(float dt, int moveDir)
 	{
-		RenderView renderer =RenderView.getInstance();
+		RenderView renderer = RenderView.getInstance();
 		
 		if(moveDir == 0 || moveDir >0 && position.x == renderer.getRightBounds() - width 
 				|| moveDir<1 && position.x == 0)
