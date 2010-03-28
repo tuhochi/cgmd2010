@@ -83,8 +83,8 @@ public class Picker
     	Log.d(LOG_TAG, "Device Coordinates: " + pickerCoordinates.toString());
 		// calculate picking position in screen space
 		Vector3 screenSpace = new Vector3();
-		screenSpace.y = Device2ScreenSpace(pickerCoordinates.x);
-		screenSpace.x = Device2ScreenSpace(pickerCoordinates.y);
+		screenSpace.y = -Device2ScreenSpace(pickerCoordinates.y);
+		screenSpace.x = Device2ScreenSpace(pickerCoordinates.x);
     	Log.d(LOG_TAG, "Screen Coordinates: " + screenSpace.toString());
 		// set the same depth as in screenSpacePos.y
 		screenSpace.z = mLastDepth;

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLTextures;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Picker;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
@@ -21,7 +20,8 @@ public class NormalModeWorld implements World {
 
 	private static final String LOG_TAG = "World";
 	
-    private Vector2 mTouchPos = new Vector2();
+    @SuppressWarnings("unused")
+	private Vector2 mTouchPos = new Vector2();
     private Vector2 mNewTouchPos = null;
     private float mElapsedSeconds;
     private long mOldTime;
@@ -39,6 +39,7 @@ public class NormalModeWorld implements World {
 	
 	// player position information
 	private Vector3 mPlayerPos = new Vector3(0f, 0f, 0f);
+	@SuppressWarnings("unused")
 	private Vector3 mPlayerTarget = new Vector3(0f, 0f, 0f);
 	
 	// used to grab the current view and projection matrices
@@ -50,6 +51,7 @@ public class NormalModeWorld implements World {
     //the Level to render and collide against
 	private Level mLevel;
 	
+	@SuppressWarnings("unused")
 	private OBJRenderable mObject;
 	
 	private boolean mPause = true;
@@ -96,8 +98,8 @@ public class NormalModeWorld implements World {
 		trackGl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		float[] color = {1.0f,1.0f,1.0f,1.0f};
 		trackGl.glFogfv(GL10.GL_FOG_COLOR, color, 0);
-		trackGl.glFogf(GL10.GL_FOG_START, 50.0f);
-		trackGl.glFogf(GL10.GL_FOG_END, 70.0f);
+		trackGl.glFogf(GL10.GL_FOG_START, 70.0f);
+		trackGl.glFogf(GL10.GL_FOG_END, 130.0f);
 		trackGl.glFogf(GL10.GL_FOG_DENSITY, 0.5f);
 		trackGl.glFogx(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
 		trackGl.glEnable(GL10.GL_FOG);
@@ -150,7 +152,7 @@ public class NormalModeWorld implements World {
 		gl.glLoadIdentity(); 					//Reset The Projection Matrix
 
 		//Calculate The Aspect Ratio Of The Window
-		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
+		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 200.0f);
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
 		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
