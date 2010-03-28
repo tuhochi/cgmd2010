@@ -18,6 +18,7 @@ public class Level {
 	private List<HouseInfo> mFadeHouses = new ArrayList<HouseInfo>();
 	private Vector3 mSpeed = new Vector3(0, 40.0f, 0);
 	private float mBlockSize = 5.0f;
+	private float mNextHouse = 0;
 	
 	/**
 	 * Level Class for Rendering Houses and other Objects.
@@ -84,36 +85,37 @@ public class Level {
 	 * Update Function for the level at the moment it moves the level upwards for every frame
 	 * @param elapsedSeconds the time since the last update call
 	 */
-	public void update(float elapsedSeconds)
+	public void update(float elapsedSeconds, Vector3 moveDelta)
 	{
 		mPosition = Vector3.add(mPosition, Vector3.mult(mSpeed, elapsedSeconds));	
+		mPosition = Vector3.add(mPosition, moveDelta);
+		mNextHouse -= elapsedSeconds;
+		if(mNextHouse < 0)
+		{
+			HouseInfo newHouse = new HouseInfo();
+			int size = (int)(Math.floor(Math.random() * 5.0));
+			size = (size==5)?4:size;
+			newHouse.setHouseSize(size);
+			int xpos = (int)(Math.floor(Math.random() * 9.0)) - 4;
+			int ypos = (int)(Math.floor(Math.random() * 5.0)) - 2;
+			Vector3 newPos = new Vector3(xpos * mBlockSize - mPosition.x, -mPosition.y - 100.0f - (newHouse.getHouseSize() * mBlockSize / 2.0f), ypos * mBlockSize - mPosition.z);
+			newPos.x -= newPos.x % mBlockSize;
+			newPos.z -= newPos.z % mBlockSize;
+			newHouse.setPosition(newPos);
+			mHouses.add(newHouse);
+			mNextHouse = (float)Math.random() * 0.1f;
+		}
 		
 		List<HouseInfo> remove = new ArrayList<HouseInfo>();
-		List<HouseInfo> add = new ArrayList<HouseInfo>();
 		
 		for (HouseInfo house : mHouses) {
-			if(house.getPosition().y + mPosition.y  + (house.getHouseSize() * mBlockSize / 2.0f)> 0)
-			{
+			if(house.getPosition().y + mPosition.y  + (house.getHouseSize() * mBlockSize / 2.0f)> 20.0f)
 				remove.add(house);
-				HouseInfo newHouse = new HouseInfo();
-				int size = (int)(Math.floor(Math.random() * 5.0));
-				size = (size==5)?4:size;
-				newHouse.setHouseSize(size);
-
-				int xpos = (int)(Math.floor(Math.random() * 5.0)) - 2;
-				xpos = (xpos==3)?2:xpos;
-				int ypos = (int)(Math.floor(Math.random() * 3.0)) - 1;
-				ypos = (ypos==2)?1:ypos;
-				newHouse.setPosition(new Vector3(xpos * mBlockSize, -mPosition.y - 100.0f - (house.getHouseSize() * mBlockSize / 2.0f), ypos * mBlockSize));
-				add.add(newHouse);
-			}
 		}
 		
 		mHouses.removeAll(remove);
 		mFadeHouses.addAll(remove);
-		mHouses.addAll(add);
 		remove.clear();
-		add.clear();
 		
 		for (HouseInfo house : mFadeHouses) {
 			if(house.getPosition().y + mPosition.y  + (house.getHouseSize() * mBlockSize / 2.0f) > 10.0f)
