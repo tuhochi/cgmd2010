@@ -21,6 +21,7 @@ public class Background implements SceneEntity
 	private FloatBuffer texCoordBuffer;
 	private float scrollSpeed = 0.05f;
 	private float positionY;
+	private RenderView renderView; 
 	
 	//hack only needed now for only 2 textures
 	private boolean switchTexture = false;
@@ -31,28 +32,30 @@ public class Background implements SceneEntity
 		generateTiles();
 		createIndexBuffer();
 		createTexCoordBuffer();
+		renderView = RenderView.getInstance();
 	}
 	
 	private void generateTiles()
 	{
 		float[] vertices = new float[12];
-		
+		float tb = renderView.getTopBounds();
+		float rb = renderView.getRightBounds(); 
 		//origin = 0 0
 		//bottom left
 		vertices[0] = 0f;
 		vertices[1] = 0f;
-		vertices[2] = 0.f;
+		vertices[2] = 0f;
 		//bottom right
-		vertices[3] = RenderView.getInstance().getRightBounds();
+		vertices[3] = rb;
 		vertices[4] = 0f;
 		vertices[5] = 0f;
 		//top left
 		vertices[6] = 0f;
-		vertices[7]= RenderView.getInstance().getTopBounds();
+		vertices[7]= tb;
 		vertices[8]= 0f;
 		//top right
-		vertices[9] = RenderView.getInstance().getRightBounds();
-		vertices[10] = RenderView.getInstance().getTopBounds();
+		vertices[9] = rb;
+		vertices[10] = tb;
 		vertices[11] = 0f;
 				
 		ByteBuffer vertexBBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -66,19 +69,19 @@ public class Background implements SceneEntity
 		//origin = 0 0
 		//bottom left
 		vertices[0] = 0f;
-		vertices[1] = RenderView.getInstance().getTopBounds();
+		vertices[1] = tb;
 		vertices[2] = 0f;
 		//bottom right
-		vertices[3] = RenderView.getInstance().getRightBounds();
-		vertices[4] = RenderView.getInstance().getTopBounds();
+		vertices[3] = rb;
+		vertices[4] = tb;
 		vertices[5] = 0f;
 		//top left
 		vertices[6] = 0f;
-		vertices[7]= RenderView.getInstance().getTopBounds()*2;
+		vertices[7]= tb*2;
 		vertices[8]= 0f;
 		//top right
-		vertices[9] = RenderView.getInstance().getRightBounds();
-		vertices[10] = RenderView.getInstance().getTopBounds()*2;
+		vertices[9] = rb;
+		vertices[10] = tb*2;
 		vertices[11] = 0f;
 				
 		vertexBBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -132,9 +135,9 @@ public class Background implements SceneEntity
 	{
 		positionY -= dt*scrollSpeed;
 		
-		if(positionY <= RenderView.getInstance().getTopBounds()*-1)
+		if(positionY <= renderView.getTopBounds()*-1)
 		{
-			positionY += RenderView.getInstance().getTopBounds(); 
+			positionY += renderView.getTopBounds(); 
 			switchTexture = !switchTexture;
 		}
 	}
