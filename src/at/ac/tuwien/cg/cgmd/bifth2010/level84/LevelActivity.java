@@ -3,15 +3,26 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.widget.FrameLayout;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class LevelActivity extends Activity {
 
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		GLSurfaceView view = new GLSurfaceView(this);
-		view.setRenderer(new L84RenderManager());
-		setContentView(view);
+
+		setContentView(R.layout.l84_level);
+		//FrameLayout mFrameLayout = (FrameLayout) findViewById(R.id.l84_FrameLayout01);
+
+//		GLSurfaceView openglview = (GLSurfaceView) findViewById(R.id.l84_openglview); 
+		//openglview = new GLSurfaceView(this);
+	//	openglview.setRenderer(new L84RenderManager());
+		//mFrameLayout.addView(openglview);
+		//setContentView(openglview);
+
+		
+		
 	}
 		
 }

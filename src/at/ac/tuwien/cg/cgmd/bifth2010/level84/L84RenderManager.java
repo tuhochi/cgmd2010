@@ -136,11 +136,12 @@ public class L84RenderManager implements Renderer {
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, // OpenGL docs
 	                                 vertexBuffer);
 
+			/*
 			//enable the texture coordinates
 			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			//set the texture coordinate format and offset
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-			
+			*/
 			gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,// OpenGL docs
 					  GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
