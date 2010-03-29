@@ -1,10 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
-import javax.microedition.khronos.egl.EGL10;
+//import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 class Renderer implements MyOpenGLView.Renderer {
+	
+	Level level;
 	
     public Renderer() {  
     }
@@ -18,9 +20,9 @@ class Renderer implements MyOpenGLView.Renderer {
     	//gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
-    //	level.update(Timer.dT);
+    	level.update(Timer.dT);
     	
-    //	level.render(gl);
+    	level.render(gl);
     	
     	
     //	StateManager.current_state.update(Timer.dT);
@@ -29,7 +31,7 @@ class Renderer implements MyOpenGLView.Renderer {
     //	StateManager.render(gl);
     }
 
-    /*public int[] getConfigSpec() {
+  /*  public int[] getConfigSpec() {
         int[] configSpec = {
                 EGL10.EGL_RED_SIZE,      8,
                 EGL10.EGL_GREEN_SIZE,    8,
@@ -83,7 +85,9 @@ class Renderer implements MyOpenGLView.Renderer {
          
          Texture.setGL(gl);
          
-        // mainLevel.init();//gl);
+         level=new Level();
+         
+         level.init(gl);
     }
     
 	/*public boolean onTouch(View arg0, MotionEvent arg1) {
@@ -98,6 +102,5 @@ class Renderer implements MyOpenGLView.Renderer {
     	}
     	return true;
 	}*/
-	
-	//Asdf mainLevel;
+
 }
