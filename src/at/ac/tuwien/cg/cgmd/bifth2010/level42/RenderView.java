@@ -8,7 +8,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
@@ -93,7 +92,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		/*
 		 * Dummy Test Scene
 		 */
-		scene = SceneLoader.getInstance().readScene("l42_cube");
+		scene = SceneLoader.getInstance().readScene("l42_spheres10x960");
 		
 		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(-3,3,0),new Vector3(3,-3,0),
 								new Vector3(0,0,-5),5);

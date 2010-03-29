@@ -6,11 +6,14 @@ import java.nio.FloatBuffer;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 
 public class Geometry
 {
 	public static final int VERTEX_LENGTH = 3;
+	
 	MaterialManager materialManager;
+	OGLManager oglManager;
 	Material material;
 	FloatBuffer vertices, normals, texcoords;
 	AxisAlignedBox3 boundingBox;
@@ -22,6 +25,7 @@ public class Geometry
 		numVertices = 0;
 		vboID = -1;
 		materialManager = MaterialManager.getInstance();
+		oglManager = OGLManager.getInstance();
 		boundingBox = new AxisAlignedBox3();
 	}
 	
@@ -43,6 +47,8 @@ public class Geometry
 	public void render(int rendermode)
 	{
 		materialManager.bindMaterial(material);
+		oglManager.clientState(vertices != null, normals != null, texcoords != null);
+		
 		switch(rendermode)
 		{
 		case Scene.RENDERMODE_VBO:
@@ -60,6 +66,7 @@ public class Geometry
 				glNormalPointer(GL_FLOAT, 0, normals);
 			if(texcoords != null)
 				glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+			
 			glDrawArrays(GL_TRIANGLES, 0, numVertices);
 			break;
 		}
