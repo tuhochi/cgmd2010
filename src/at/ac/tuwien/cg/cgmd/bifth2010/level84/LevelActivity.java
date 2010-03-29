@@ -13,11 +13,10 @@ public class LevelActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		//setContentView(R.layout.l84_level);
 		GLSurfaceView openglview = new GLSurfaceView(this);
 		openglview.setRenderer(new L84RenderManager());
-		//addContentView(openglview,null);
 		setContentView(openglview);
-//		setContentView(R.layout.l84_level);
 	}
 
 	@Override
