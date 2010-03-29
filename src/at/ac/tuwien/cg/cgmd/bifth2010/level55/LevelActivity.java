@@ -13,6 +13,8 @@ public class LevelActivity extends Activity {
 		
 		 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); 
 	     requestWindowFeature(Window.FEATURE_NO_TITLE);
+	     
+	     
 		
 		mGLSurfaceView = new MyOpenGLView(this);
         mGLSurfaceView.setRenderer(new Renderer());        
