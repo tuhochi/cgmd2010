@@ -27,8 +27,15 @@ public class SceneGraph {
 	static float deltaTime;
 	static long lastFrameStart;
 	
-	public final static byte GEOMETRY_SURFACE_NORMAL =0;
-	public final static byte GEOMETRY_WALL_NORMAL =1;
+	public final static byte GEOMETRY_WALL = 0;
+	public final static byte GEOMETRY_WAY = 1;
+	public final static byte GEOMETRY_STONE = 2;
+	public final static byte GEOMETRY_BARREL = 3;
+	public final static byte GEOMETRY_TRASH = 4;
+	public final static byte GEOMETRY_MAP = 5;
+	public final static byte GEOMETRY_SPRING = 6;
+	
+
 
 	public static boolean zoomOutView = false; // if false use standard zoom for playing, if true zoom out
 

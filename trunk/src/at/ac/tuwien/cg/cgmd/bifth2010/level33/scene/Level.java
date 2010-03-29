@@ -28,33 +28,47 @@ public class Level {
 	 */
 	private void generateLevel() {
 
-		// dimension
+		
+		// HARDCODED WORLD
 		worldDim = new Vector2i(5, 7);
-
-		// generate radndom wold
 		world = new int[worldDim.area()];
-
-		// for (int i=0; i<(worldDimX*worldDimY);i++)
-		// world[i] = Math.abs( rand.nextInt()) % 2;
-
-		// start with hardcoded World
 		int x = 0;
-
-		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;
-		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;
-		world[x++] = 1;		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;
-		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;
-		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;		world[x++] = 1;
-		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;
-		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;
-
+		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
 		gameCharacterPosition = new Vector2f(1, 1);
-
+		// HARDCODED WORLD END
+		
+		
+		
+//		LevelGenration levelGenration = new LevelGenration(5, 0, 0.4,2 ,6 , 4,3 ,3 );
+//		
+//		worldDim = new Vector2i(5, 5);
+//		world = levelGenration.startCreation();
+//		
+//		System.out.println(world.length);
+//		
+//		gameCharacterPosition = new Vector2f(1,1);
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// setup surface
-		surface = SceneGraph.GEOMETRY_SURFACE_NORMAL;
+		surface = SceneGraph.GEOMETRY_WAY;
 
 		// setup wall
-		wall = SceneGraph.GEOMETRY_WALL_NORMAL;
+		wall = SceneGraph.GEOMETRY_WALL;
+			
+		
 	}
 
 	public void updateLogic() {
@@ -118,7 +132,7 @@ public class Level {
 			return false;
 		
 		// if to is no wall!
-		if(world[to.y*worldDim.x+to.x]==wall)
+		if(world[to.y*worldDim.x+to.x]==this.wall)
 			return false;
 		
 		//test if horizontal or vertical way is possible
