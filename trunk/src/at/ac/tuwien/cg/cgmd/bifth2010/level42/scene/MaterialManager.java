@@ -22,11 +22,13 @@ public class MaterialManager
 	
 	private HashMap<String, Material> materials;
 	private String boundMaterialName;
+	private boolean textureEnabled;
 	
 	private MaterialManager()
 	{
 		materials = new HashMap<String, Material>();
 		boundMaterialName = "";
+		textureEnabled = true;
 	}
 	
 	public static MaterialManager getInstance()
@@ -55,7 +57,14 @@ public class MaterialManager
 	        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse.asArray, 0);
 	        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular.asArray, 0);
 	        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.ks);
-	        glBindTexture(GL_TEXTURE_2D, material.texId);
+	        if(textureEnabled && material.texId == -1)
+	        	glDisable(GL_TEXTURE_2D);
+	        if(material.texId != -1)
+	        {
+	        	if(!textureEnabled)
+	        		glEnable(GL_TEXTURE_2D);
+	        	glBindTexture(GL_TEXTURE_2D, material.texId);
+	        }
 	        boundMaterialName = material.name;
 		}
 	}
@@ -111,31 +120,36 @@ public class MaterialManager
 			this.specular = specular;
 			this.ks = ks;
 			
-			Bitmap tex = loadTexture(textureFilename);
-			if(tex != null)
+			if(!textureFilename.equals(""))
 			{
-				int[] textures = new int[1];
-				glGenTextures(1, textures, 0);
-				texId = textures[0];
-				glBindTexture(GL_TEXTURE_2D, texId);
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-				
-				if(Config.GLES11)
+				Bitmap tex = loadTexture(textureFilename);
+				if(tex != null)
 				{
-					glTexParameterf(GL_TEXTURE_2D, GLES11.GL_GENERATE_MIPMAP, GL_TRUE);
-					texImage2D(GL_TEXTURE_2D, 0, tex, 0);
+					int[] textures = new int[1];
+					glGenTextures(1, textures, 0);
+					texId = textures[0];
+					glBindTexture(GL_TEXTURE_2D, texId);
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+
+					if(Config.GLES11)
+					{
+						glTexParameterf(GL_TEXTURE_2D, GLES11.GL_GENERATE_MIPMAP, GL_TRUE);
+						texImage2D(GL_TEXTURE_2D, 0, tex, 0);
+					}
+					else
+					{
+						buildMipmap(tex);
+					}		
+
+					//Clean up
+					tex.recycle();
 				}
 				else
-				{
-					buildMipmap(tex);
-				}		
-				
-				//Clean up
-				tex.recycle();
+					texId = -1;
 			}
 			else
-				texId = 0;
+				texId = -1;
 		}
 		
 		private Bitmap loadTexture(String filename)
