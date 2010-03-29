@@ -4,6 +4,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+import android.view.Display;
+import android.view.WindowManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+
 class Renderer implements MyOpenGLView.Renderer {
 	
 	Level level;
@@ -56,7 +61,9 @@ class Renderer implements MyOpenGLView.Renderer {
      //    float ratio = (float) width / height;
          gl.glMatrixMode(GL10.GL_PROJECTION);
          gl.glLoadIdentity();
-         gl.glOrthof(0.0f, 480.0f, 320.0f, 0.0f, 0.0f, 5.0f);
+         
+         //gl.glOrthof(0.0f, 480.0f, 320.0f, 0.0f, 0.0f, 5.0f);
+         gl.glOrthof(0.0f, width, height, 0.0f, 0.0f, 5.0f);
          //gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
     }
 
