@@ -12,8 +12,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Cube;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GameCharacter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 
 public class SceneGraph {
@@ -21,6 +21,7 @@ public class SceneGraph {
 	public static Level level;
 
 	static Geometry g; // private ArrayList<GeometryGroup> renderables;
+	static Geometry c;
 	public static Camera camera;
 	
 	static float deltaTime;
@@ -50,6 +51,7 @@ public class SceneGraph {
 	public static void init(GL10 gl) {
 		SceneGraph.camera = new Camera();
 		g = new Cube(gl);
+		c = new GameCharacter(gl);
 		
 	}
 
@@ -110,27 +112,30 @@ public class SceneGraph {
 		
 		glMatrixMode(GL_MODELVIEW);
 		
-		
-		for(int x=0;x<level.worldDimX;x++){
-			for(int y=0;y<level.worldDimX;y++){
+		// render world
+		for(int y=0;y<level.worldDim.y;y++){
+			for(int x=0;x<level.worldDim.x;x++){
 				
 				
 				//if wall
-				if(level.world[x*level.worldDimX+y]==level.wall)
+				int id=y*level.worldDim.x+x;
+				if(level.world[id]==level.wall)
 				{
 					glPushMatrix();
-					
-					gl.glTranslatef(x-(level.worldDimX/2), y-(level.worldDimY/2), 0);
-					
-					g.render();
-					
-					
+					gl.glTranslatef(x-(level.worldDim.x/2),(level.worldDim.y/2)-y, 0);
+					g.render();					
 					glPopMatrix();
 				}
-				
-				
 			} 
 		}
+		// render GameCaracter
+		
+		glPushMatrix();
+		gl.glTranslatef(level.gameCharacterPosition.x-(level.worldDim.x/2),(level.worldDim.y/2)-level.gameCharacterPosition.y, 0);
+		c.render();					
+		glPopMatrix();
+		
+		
 
 		
 	}

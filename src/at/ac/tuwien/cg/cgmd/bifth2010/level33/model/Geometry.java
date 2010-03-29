@@ -247,7 +247,10 @@ public class Geometry {
 	public void color(Color c) {
 		this.color(c.r, c.g, c.b, c.a);
 	}
-
+	public void color(float r, float g, float b) {
+		this.color(r, g, b, 1);
+	}
+	
 	public void color(float r, float g, float b, float a) {
 		init = false;
 		int offset = indexColor * 4;

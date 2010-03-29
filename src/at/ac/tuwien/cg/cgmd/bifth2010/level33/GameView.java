@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Level;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
@@ -15,9 +15,9 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 	private GestureDetector gestureScanner; // needed for advanced Gestures
 	public static GameRenderer renderer;	// Game's Renderer Loop
 	public static SceneGraph sceneGraph;	// Graph with Game Objects
-	public static Vector2 resolution;		// resolution of the screen
-	public static Vector2 lastTouch = new Vector2(1,1);	// coordinates of the last touch [0 1] 
-	public static Vector2 diffTouch = new Vector2();	// difference to the last touch
+	public static Vector2f resolution;		// resolution of the screen
+	public static Vector2f lastTouch = new Vector2f(1,1);	// coordinates of the last touch [0 1] 
+	public static Vector2f diffTouch = new Vector2f();	// difference to the last touch
 	public static boolean running = true;
 	public boolean isLongPress = true;
 	
