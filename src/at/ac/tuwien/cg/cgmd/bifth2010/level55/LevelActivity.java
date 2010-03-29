@@ -19,11 +19,11 @@ public class LevelActivity extends Activity {
         setContentView(mGLSurfaceView);
         
         
-     /*   SessionState s = new SessionState();
+       SessionState s = new SessionState();
 		//we set the progress the user has made (must be between 0-100)
 		s.setProgress(10);
 		//we call the activity's setResult method 
-		setResult(Activity.RESULT_OK, s.asIntent());*/
+		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 	
 	
