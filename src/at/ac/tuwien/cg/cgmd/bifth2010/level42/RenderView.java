@@ -18,6 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.OrbitManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
@@ -85,9 +86,6 @@ public class RenderView extends GLSurfaceView implements Renderer {
 
 
 		// client states
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		
 		/*
 		 * Dummy Test Scene
