@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Ellipse;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
@@ -8,11 +9,21 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
 public class Orbit implements Movement {
 
-	private float 	speed,t,u,step,orbitAngle;
+	private float 	speed,t,u,step,orbitAngle,
+	
+					//orbit transformation
+					transformSpeed,
+					transformAngle=0,transformStep=0,transformDiff=0,transformIteration=0,
+					centerDiffFactor=0,centerDiffStep=0,centerDiff=0,centerDiffIteration=0,
+					directionDiffFactor=0,directionDiffStep=0,directionDiff=0,directionDiffIteration=0;
 
 	private Vector3 position,entityPos,centerPos,centerVec,toCenterVec,
-					normalVec,directionVec,orbitAxis;
-	private Matrix44 transform,objectOrbitTransform;
+					normalVec,directionVec,orbitAxis,
+					
+					//orbit transformation
+					newEntityPos,newCenterPos,newCenterVec,newToCenterVec,newDirectionVec,newNormalVec,
+					transformAxis;
+	private Matrix44 transform,objectOrbitTransform,orbitTransform;
 
 	private SceneEntity entity;
 	private SatelliteTransformation satTrans;
@@ -35,9 +46,18 @@ public class Orbit implements Movement {
 		this.normalVec = Vector3.crossProduct(toCenterVec, directionVec).normalize();
 		this.directionVec = directionVec;
 		
+		this.newEntityPos = new Vector3(entityPos);
+		this.newCenterPos = new Vector3(centerPos);
+		this.newCenterVec = new Vector3(centerVec);
+		this.newDirectionVec = new Vector3(directionVec);
+		this.newNormalVec = new Vector3(normalVec);
+		this.newToCenterVec = new Vector3(toCenterVec);
+
 		//init
 		transform = new Matrix44();
 		position = new Vector3();
+		transformAxis = new Vector3();
+		orbitTransform = new Matrix44();
 		t = 0;
 		u = 0;
 		
@@ -73,6 +93,33 @@ public class Orbit implements Movement {
 		if(satTrans!=null)
 			satTrans.update(dt,speed);
 		
+		//check for orbit transformation
+		if(Math.abs(transformDiff)<Math.abs(transformAngle))
+		{
+			Log.i("muh","rotate");
+			transformIteration = transformStep * dt * transformSpeed;
+			orbitTransform.setRotate(transformAxis, transformIteration);
+			orbitTransform.transformPoint(centerVec);
+			orbitTransform.transformPoint(directionVec);
+			transformDiff+=transformIteration;
+		}
+		
+		if(Math.abs(centerDiff)<Math.abs(centerDiffFactor))
+		{
+			Log.i("muh","a");
+			centerDiffIteration = centerDiffStep * dt * transformSpeed;
+			centerDiff += centerDiffIteration;
+			centerVec.multiply( 1 + centerDiffIteration);
+		}
+		
+		if(Math.abs(directionDiff)<Math.abs(directionDiffFactor))
+		{
+			Log.i("muh","b");
+			directionDiffIteration = directionDiffStep * dt * transformSpeed;
+			directionDiff += directionDiffIteration;
+			directionVec.multiply( 1 + directionDiffIteration);
+		}
+		
 		//calc position on ellipse - build transformation matrix
 		evaluatePos();
 		
@@ -99,8 +146,45 @@ public class Orbit implements Movement {
 		transform.addTranslate(position.x,position.y,position.z);
 	}
 
+	public void transformOrbit(	Vector3 newEntityPos,Vector3 newCenterPos,
+								Vector3 newDirectionVec, float transformSpeed)
+	{
+		this.transformSpeed = transformSpeed;
+		
+		//store new constellation
+		this.newEntityPos.copy(newEntityPos);
+		this.newCenterPos.copy(newCenterPos);
+		
+		this.newCenterVec.copy(newEntityPos);
+		this.newCenterVec.subtract(newCenterPos);
+		
+		this.newToCenterVec.copy(newCenterPos);
+		this.newToCenterVec.subtract(newEntityPos);
+		
+		this.newDirectionVec.copy(newDirectionVec);
+		
+		Vector3.crossProduct(newToCenterVec, newDirectionVec,newNormalVec);
+		newNormalVec.normalize();
+		
+
+		//calc main rotation axis
+		transformAxis = Vector3.crossProduct(normalVec,newNormalVec).normalize();
+		transformAngle = (transformAxis.length()!=0)?Vector3.getAngle(normalVec,newNormalVec):0;
+		transformStep = transformAngle/Constants.TWOPI;
+		transformDiff = 0;
+		
+		centerDiffFactor = (newCenterVec.length()/centerVec.length()) - 1;
+		centerDiffStep = centerDiffFactor/100;
+		centerDiff = 0;
+		
+		directionDiffFactor = (newDirectionVec.length()/directionVec.length()) - 1;
+		directionDiffStep = directionDiffFactor/100;
+		directionDiff = 0;
+		
+	}
 	public void decA(){
-		ellipse.a.subtract(new Vector3(1,0,0));
+		transformOrbit(	Vector3.subtract(entityPos,new Vector3(1,-2,-5)),
+						centerPos, directionVec,5);
 	}
 	public void setSatTrans(SatelliteTransformation satTrans) {
 		this.satTrans = satTrans;

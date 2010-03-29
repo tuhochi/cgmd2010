@@ -60,6 +60,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	
 	private void initGLSettings()
 	{
+		glEnable(GL_CULL_FACE);
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_LIGHTING);
 	
@@ -92,7 +93,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		/*
 		 * Dummy Test Scene
 		 */
-		scene = SceneLoader.getInstance().readScene("l42_spheres10x960");
+		scene = SceneLoader.getInstance().readScene("l42_cube");
 		
 		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(-3,3,0),new Vector3(3,-3,0),
 								new Vector3(0,0,-5),5);
