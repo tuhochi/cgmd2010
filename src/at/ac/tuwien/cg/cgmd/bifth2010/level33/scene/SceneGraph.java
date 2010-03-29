@@ -31,12 +31,6 @@ public class SceneGraph {
 	public final static byte GEOMETRY_WALL_NORMAL =1;
 
 	public static boolean zoomOutView = false; // if false use standard zoom for playing, if true zoom out
-	
-//	private FloatBuffer m16 = FloatBuffer.wrap(new float[]{
-//            3, 0, 0, 0,
-//            0, 0, 0, 0,
-//            0, 0, 0, 0,
-//            0, 0, 0, 1});
 
 	public SceneGraph(Level level) {
 		this.level = level;
@@ -83,7 +77,7 @@ public class SceneGraph {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 
 		// updateLogic
-		updateLogic();
+		level.updateLogic();
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -102,9 +96,6 @@ public class SceneGraph {
 
 	}
 
-	public void updateLogic() {
-
-	}
 
 	private void renderScene(GL10 gl) {
 		//this.level
@@ -128,15 +119,12 @@ public class SceneGraph {
 				}
 			} 
 		}
-		// render GameCaracter
 		
+		// render GameCaracter
 		glPushMatrix();
 		gl.glTranslatef(level.gameCharacterPosition.x-(level.worldDim.x/2),(level.worldDim.y/2)-level.gameCharacterPosition.y, 0);
 		c.render();					
 		glPopMatrix();
-		
-		
-
 		
 	}
 

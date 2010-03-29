@@ -19,7 +19,6 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 	public static Vector2f lastTouch = new Vector2f(1,1);	// coordinates of the last touch [0 1] 
 	public static Vector2f diffTouch = new Vector2f();	// difference to the last touch
 	public static boolean running = true;
-	public boolean isLongPress = true;
 	
 	long stopTime = 0;
 	
@@ -39,14 +38,21 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 	 */
 	public boolean onTouchEvent(final MotionEvent e) {
 		
+		lastTouch.set(e.getX() / getWidth(), e.getY()/ getHeight());
 		
-//		queueEvent(new Runnable() {
-//			public void run() {
-//				diffTouch.set(e.getX() / getWidth(), e.getY()/ getHeight());
-//				diffTouch.subtract(lastTouch);
-//				lastTouch.set(e.getX() / getWidth(), e.getY()/ getHeight());	
-//			}
-//		});
+//		// if Level is zoomed out
+//		if(SceneGraph.zoomOutView){
+//			queueEvent(new Runnable() {
+//				public void run() {
+//						
+//				}
+//			});
+//		}
+//		// GamePlay
+//		else{
+//			
+//			
+//		}
 		
 
 		return gestureScanner.onTouchEvent(e);
@@ -67,8 +73,6 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-		
-		if(isLongPress){
 
 		SceneGraph.zoomOutView=!SceneGraph.zoomOutView;
 		
@@ -78,7 +82,6 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 			SceneGraph.camera.zoom=Camera.standardZoom;
 		
 		System.out.println("onLongPress");
-		}
 	}
 
 	@Override

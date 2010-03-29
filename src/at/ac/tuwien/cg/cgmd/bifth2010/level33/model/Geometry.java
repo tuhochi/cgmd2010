@@ -8,7 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 
 public class Geometry {
 	public enum Type {
@@ -231,7 +231,7 @@ public class Geometry {
 		render(type, 0, numVertices);
 	}
 
-	public void vertex(Vector3 v) {
+	public void vertex(Vector3f v) {
 		vertex(v.x, v.y, v.z);
 	}
 
