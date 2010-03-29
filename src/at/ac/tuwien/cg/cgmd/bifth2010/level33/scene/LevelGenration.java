@@ -38,7 +38,7 @@ public class LevelGenration {
 	 * Creates a random Level-Matrix
 	 * 
 	 */
-	private int[] startCreation() {
+	int[] startCreation() {
 		
 		int levelSize=rows*columns;
 		levelField = new int[levelSize];
@@ -50,7 +50,7 @@ public class LevelGenration {
 		
 		//init Lvl
 		for(int i=0; i<levelSize; i++)
-			levelField[i]=0;
+			levelField[i]=SceneGraph.GEOMETRY_WALL;
 		int startField = rg.nextInt(levelSize);
 		levelField[startField]=1;
 		createdWays[0]=startField;
@@ -237,22 +237,22 @@ public class LevelGenration {
 
 		if(goodieMode.equals("Stone"))
 		{
-			levelField[levelFieldIndex]=2;
+			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_STONE;
 		}else
 		if(goodieMode.equals("Map"))
 		{
-			levelField[levelFieldIndex]=5;
+			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_MAP;
 		}else
 		if(goodieMode.equals("Trash"))
 		{
-			levelField[levelFieldIndex]=4;
+			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_TRASH;
 		}else
 		if(goodieMode.equals("Spring"))
 		{
-			levelField[levelFieldIndex]=6;
+			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_SPRING;
 		}else
 		if(goodieMode.equals("Barrel")){
-			levelField[levelFieldIndex]=3;
+			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_BARREL;
 		}
 		createdWays[wayPointIndex]=-1;
 	}
