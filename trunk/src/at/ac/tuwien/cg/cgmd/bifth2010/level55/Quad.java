@@ -1,4 +1,4 @@
-package wk.games.freeze;
+package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
 public class Quad extends Mesh {
 
