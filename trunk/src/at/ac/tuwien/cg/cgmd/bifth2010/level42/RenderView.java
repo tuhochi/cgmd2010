@@ -8,13 +8,14 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMovement;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.OrbitManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.ObjectOrientation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
@@ -94,19 +95,19 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		 */
 		scene = SceneLoader.getInstance().readScene("l42_cube");
 		
-		ObjectOrientation transf = new ObjectOrientation(0,0,45,0,0,0,1,1,1);
-		
-		Orbit orbit1 = new Orbit(scene.getSceneEntity(0),6,0,Orbit.DIRECTION_POSITIVE,
-								20,7,transf);
-		
+		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(-3,3,0),new Vector3(3,-3,0),
+								new Vector3(0,0,-5),5);
+	
 		SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0, null);
-		orbit1.setSatTrans(sat1);
+		orbit2.setSatTrans(sat1);
 		
-		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(-3,-3,0),new Vector3(3,3,0),
-								new Vector3(0,0,-1),10,5);
+		DirectionalMovement mov1 = new DirectionalMovement(	scene.getSceneEntity(0),
+															new Vector3(-3,3,10),
+															new Vector3(0,0,-1),0.1f);
 		
-		orbitManager.addOrbit(orbit1);
+		orbitManager.addOrbit(mov1);
 		orbitManager.addOrbit(orbit2);
+	
 	}
 	
 	@Override
@@ -172,6 +173,14 @@ public class RenderView extends GLSurfaceView implements Renderer {
 			queueEvent(new Runnable() {
 				public void run() {
 					cam.setDistance(cam.getDistance() - 10.0f);
+				}
+			});
+		
+		if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT)
+			queueEvent(new Runnable() {
+				public void run() {
+					Orbit temp = (Orbit)orbitManager.getOrbit(1);
+					temp.decA();
 				}
 			});
 

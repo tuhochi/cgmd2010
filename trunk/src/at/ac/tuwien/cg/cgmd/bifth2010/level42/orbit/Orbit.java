@@ -1,194 +1,107 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Ellipse;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
-public class Orbit {
+public class Orbit implements Movement {
 
-	private float 	speed,t,
-					a,b,
-					u;
-	private int direction;
-	private Vector3 pos,entityPos,centerPos,centerVec,toCenterVec,directionVec;
-	private Matrix44 transform,tempTransform;
-	private ObjectOrientation orientation;
+	private float 	speed,t,u,step,orbitAngle;
+
+	private Vector3 position,entityPos,centerPos,centerVec,toCenterVec,
+					normalVec,directionVec,orbitAxis;
+	private Matrix44 transform,objectOrbitTransform;
+
 	private SceneEntity entity;
 	private SatelliteTransformation satTrans;
-	private boolean up,inverted;
-	
-	public static final int DIRECTION_POSITIVE = 0;
-	public static final int DIRECTION_NEGATIVE = 1;
-	
-	public static final int STARTPOINT_A = 0;
-	public static final int STARTPOINT_C = 1;
-	
-	//temp vars
-	private float sinu,cosu,sinv,cosv,step;
-	private Vector3 projection,normalVec;
-	
-	public Orbit(	SceneEntity entity, float speed, float t,int direction,
-					float a, float b, 
-					ObjectOrientation orientation
-				) 
-	{
-		init();	
-		
-		this.entity = entity;
-		this.speed = speed;
-		this.t = t;
-		this.direction = direction;
-		this.orientation = orientation;
-		
-		this.a = a;
-		this.b = b;
-
-		precalc();
-	}
-	
+	private Ellipse ellipse;
 	
 	
 	public Orbit(	SceneEntity entity,
-					Vector3 entityPos,Vector3 centerPos,Vector3 directionVec,
-					float b, float speed	
+					Vector3 entityPos,Vector3 centerPos,
+					Vector3 directionVec,
+					float speed	
 				)
 	{
-		//init vars and temp calcs
-		init();
-		
-		//init
 		this.entity = entity;
 		this.speed = speed;
-		this.orientation = new ObjectOrientation();
 		
 		this.entityPos = entityPos;
 		this.centerPos = centerPos;
 		this.centerVec = Vector3.subtract(entityPos,centerPos);
-		this.toCenterVec = Vector3.subtract(centerPos,entityPos);
+		this.toCenterVec =  Vector3.subtract(centerPos,entityPos);
+		this.normalVec = Vector3.crossProduct(toCenterVec, directionVec).normalize();
 		this.directionVec = directionVec;
 		
-		this.normalVec = Vector3.crossProduct(directionVec,toCenterVec);
-		this.normalVec.normalize();
-		
-		this.inverted = false;
-		this.up = true;
-		if( Vector3.getAngle(normalVec,Constants.Y_AXIS)>((float)Math.PI/2)){
-			this.up = false;
-		}
-				
-		//main axis
-		this.a = centerVec.length();
-		this.b = b;
-
-		//get orientation
-		extractOrientation();
-
-		if(up)
-			this.direction = (!inverted)?Orbit.DIRECTION_POSITIVE:Orbit.DIRECTION_NEGATIVE;
-		else
-			this.direction = (!inverted)?Orbit.DIRECTION_NEGATIVE:Orbit.DIRECTION_POSITIVE;
-				
-		
-		precalc();
-	}
-	
-	private void init()
-	{
-		//temp var init
-		tempTransform = new Matrix44();
-		projection = new Vector3();
-		
-		//set transform matrix for ellipsoid
+		//init
 		transform = new Matrix44();
-		pos = new Vector3();
-	}
-	
-	private void precalc()
-	{
-		//calc start
-		u = (float)(t*Constants.TWOPI);
-		step = Constants.TWOPI/100;
-	}
-	
-	private void extractOrientation()
-	{
-
-		Vector3 crossEbenen = Vector3.crossProduct(normalVec, Constants.Y_AXIS);
-		crossEbenen.normalize();
-	
-		//get translation
-		this.orientation.reset();
-
-		projection.copy(centerVec);
-		projection.y = 0;
-		projection.normalize();
+		position = new Vector3();
+		t = 0;
+		u = 0;
 		
-		float basicOrientation = (projection.length()!=0)?Vector3.getAngle(Constants.X_AXIS, projection):0;
-		orientation.transform.addRotateY(basicOrientation);
+		//generate ellipse from vec
+		ellipse = new Ellipse(centerPos,centerVec,directionVec);
 		
-		if(crossEbenen.length()!=0){
-			float normalVecRot = -Vector3.getAngle(normalVec,Constants.Y_AXIS);
-			if(normalVecRot>((float)Math.PI/2)){
-				inverted = true;
-				//orientation.transform.addRotateY((float)Math.PI);
-			}
-			orientation.transform.addRotate(crossEbenen,normalVecRot);
-		}
-	
+		//calc init parameter and stepsize
+		preCalc();
 		
-		orientation.transform.addTranslate(centerPos.x, centerPos.y, centerPos.z);
-	
 	}
-	
-	public void updatePos(float dt)
+		
+	private void preCalc()
 	{
-	
-		if(direction == DIRECTION_POSITIVE)
-		{
-			u+=(speed*step*dt);
-			if(u>=Constants.TWOPI)
-				u-=Constants.TWOPI;
-		}else if(direction == DIRECTION_NEGATIVE)
-		{
-			u-=(speed*step*dt);
-			if(u<=-Constants.TWOPI)
-				u+=Constants.TWOPI;
-		}
+		//calc start parameter
+		this.u = (float)(t*Constants.TWOPI);
+		//todo: relative to size?!
+		this.step = Constants.TWOPI/ellipse.perimeter;
+		
+		//change the orientation between orbit and object
+		orbitAxis = Vector3.crossProduct(normalVec,Constants.Y_AXIS).normalize();
+		orbitAngle = Vector3.getAngle(normalVec, Constants.Y_AXIS);
+		objectOrbitTransform = Matrix44.getRotate(orbitAxis, -orbitAngle);
+	}
+		
+	public void update(float dt)
+	{
+		//inc parameter
+		u+=(speed*step*dt);
+		if(u>=Constants.TWOPI)
+			u-=Constants.TWOPI;
 
+		//update sat transformation
 		if(satTrans!=null)
 			satTrans.update(dt,speed);
 		
-		calcPos();
+		//calc position on ellipse - build transformation matrix
+		evaluatePos();
+		
 		//update transformation in the entity
 		entity.setTransformation(transform);
 	}
 	
-	private void calcPos()
+	private void evaluatePos()
 	{
-		//evaluate ellipsoid
-		cosu = (float)Math.cos(u);
-		sinu = (float)Math.sin(u);
+		//evaluate ellipse
+		position = ellipse.getPoint(u);
+				
+		//reset transformation
+		transform.setIdentity();
 		
-		pos.x = a * cosu;
-		pos.y = 0;
-		pos.z = b * sinu;
-
-		//translate position on ellipsoid
-		transform.setTranslate(pos.x,pos.y, pos.z);
+		//change orientation relative to the orbit
+		transform.mult(objectOrbitTransform);
 		
+		//object transf.
 		if(satTrans!=null)
 			transform.mult(satTrans.getTransform());
 		
 		//transformation of the ellipsoid
-		tempTransform.copy(orientation.getTransform());
-		tempTransform.mult(transform);
-		
-		transform.copy(tempTransform);
+		transform.addTranslate(position.x,position.y,position.z);
 	}
 
-
+	public void decA(){
+		ellipse.a.subtract(new Vector3(1,0,0));
+	}
 	public void setSatTrans(SatelliteTransformation satTrans) {
 		this.satTrans = satTrans;
 	}

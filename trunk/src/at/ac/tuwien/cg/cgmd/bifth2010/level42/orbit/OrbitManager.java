@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class OrbitManager {
 	
-	private  ArrayList<Orbit> list;
+	private  ArrayList<Movement> list;
 	private static OrbitManager instance;
 	
 	public static OrbitManager getInstance()
@@ -16,15 +16,15 @@ public class OrbitManager {
 	
 	public OrbitManager()
 	{
-		list =  new ArrayList<Orbit>();
+		list =  new ArrayList<Movement>();
 	}
 	
-	public void addOrbit(Orbit orbit)
+	public void addOrbit(Movement orbit)
 	{
 		list.add(orbit);
 	}
 	
-	public Orbit getOrbit(int index)
+	public Movement getOrbit(int index)
 	{
 		return list.get(index);
 	}
@@ -33,7 +33,7 @@ public class OrbitManager {
 	{
 		for(int i=0; i<list.size();i++)
 		{
-			list.get(i).updatePos(dt);
+			list.get(i).update(dt);
 		}
 	}
 }
