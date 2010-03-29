@@ -2,10 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.model;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLU;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3;
-
 public class GameCharacter extends Geometry {
 	
 	float one = 1.0f/2;

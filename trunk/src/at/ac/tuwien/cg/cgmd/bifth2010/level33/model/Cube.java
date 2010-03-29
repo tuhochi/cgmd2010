@@ -3,18 +3,18 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.model;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 
 public class Cube extends Geometry {
 	float one = 1.0f/2;
-	Vector3 v0 = new Vector3(-one, -one, -one);
-	Vector3 v1 = new Vector3(one, -one, -one);
-	Vector3 v2 = new Vector3(one,  one, -one);
-	Vector3 v3 = new Vector3(-one,  one, -one);
-	Vector3 v4 = new Vector3(-one, -one,  one);
-	Vector3 v5 = new Vector3(one, -one,  one);
-	Vector3 v6 = new Vector3(one,  one,  one);
-	Vector3 v7 = new Vector3(-one,  one,  one);
+	Vector3f v0 = new Vector3f(-one, -one, -one);
+	Vector3f v1 = new Vector3f(one, -one, -one);
+	Vector3f v2 = new Vector3f(one,  one, -one);
+	Vector3f v3 = new Vector3f(-one,  one, -one);
+	Vector3f v4 = new Vector3f(-one, -one,  one);
+	Vector3f v5 = new Vector3f(one, -one,  one);
+	Vector3f v6 = new Vector3f(one,  one,  one);
+	Vector3f v7 = new Vector3f(-one,  one,  one);
 	
 	Color b = new Color(0,0,1);
 	Color r = new Color(1,0,0);
