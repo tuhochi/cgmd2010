@@ -6,7 +6,7 @@ import static android.opengl.GLES10.glLoadIdentity;
 import static android.opengl.GLES10.glMatrixMode;
 import static android.opengl.GLES10.glViewport;
 import static android.opengl.GLU.gluPerspective;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -38,7 +38,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
-		GameView.resolution = new Vector2(width, height);
+		GameView.resolution = new Vector2f(width, height);
 
 	}
 
