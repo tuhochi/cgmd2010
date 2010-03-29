@@ -8,6 +8,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
@@ -18,7 +19,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.OrbitManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
@@ -74,7 +74,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		// check for GLES11
-		Config.GLES11 = (gl instanceof GL11);
+		boolean gles11 = (gl instanceof GL11);
+		Config.GLES11 = gles11;
+		Log.i(LevelActivity.TAG, "OpenGL ES " + (gles11 ? "1.1" : "1.0") + " found!");
 		
 		initGLSettings();
 		
