@@ -45,6 +45,7 @@ public class LevelHandler {
 		
 		
 		
+
 	//LevelGenration levelGenration = new LevelGenration(10, 3, 0.4,2 ,6 , 4,3 ,3 );
 	LevelGenration levelGenration = new LevelGenration(10);
 //		worldDim = new Vector2i(5, 5);
@@ -75,21 +76,21 @@ public class LevelHandler {
 
 		
 		// START DEMO: random walk
-		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
-			
-			boolean ok=false;
-			while(!ok)
-			{
-				Vector2i to = new Vector2i(rand.nextInt(worldDim.x),rand.nextInt(worldDim.y));
-				if(isDirectWayPossilbe(to))
-				{
-
-				gameCharacterTargetPosition.set(to.x,to.y);
-				ok=true;
-				}
-			}
-			
-		}
+//		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
+//			
+//			boolean ok=false;
+//			while(!ok)
+//			{
+//				Vector2i to = new Vector2i(rand.nextInt(worldDim.x),rand.nextInt(worldDim.y));
+//				if(isDirectWayPossilbe(to))
+//				{
+//
+//				gameCharacterTargetPosition.set(to.x,to.y);
+//				ok=true;
+//				}
+//			}
+//			
+//		}
 		// END DEMO: random walk
 
 		// update level
@@ -117,19 +118,28 @@ public class LevelHandler {
 		else if (diff.y < 0)
 			step.y = -1;
 
-		gameCharacterPosition.add(step.divide(1/SceneGraph.deltaTime));
+		gameCharacterPosition.add(step.divide(0.1f/SceneGraph.deltaTime));
 
 		// if the step size is larger then to the target
 		if(Math.abs(diff.x+diff.y)<Math.abs(step.x+step.y))
 			gameCharacterPosition.set(gameCharacterTargetPosition);
 	}
 
-	
+	/**
+	 * control if a direct way, horizontal or vertical is possible
+	 * @param to desired point
+	 * @return true if possible
+	 */
 	public boolean isDirectWayPossilbe(Vector2i to){
 		
 		// test if "to" is in the world
-		if(to.x<0||to.x>worldDim.x|| to.y<0||to.y>worldDim.y)
+		if(to.x<0||to.x>worldDim.x|| to.y<0||to.y>worldDim.y){
+			// test if endless walk else return false
+			
 			return false;
+			
+		}
+			
 		
 		// if to is no wall!
 		if(world[to.y*worldDim.x+to.x]==this.wall)
@@ -176,21 +186,26 @@ public class LevelHandler {
 		
 		return false;
 	}
-	public void gameCharacterStepTo(boolean horizontal, int length) {
-//
-//		// is a strait way possible ? no wall in front of
-////		 if(
-////		 ){return}
-//
-//		// in x direction
-//		if (horizontal)
-//			gameCharacterTargetPosition.set(this.gameCharacterPosition.x
-//					+ length, this.gameCharacterPosition.y);
-//		// in y driection
-//		else
-//			gameCharacterTargetPosition.set(this.gameCharacterPosition.x,
-//					this.gameCharacterPosition.y + length);
+	/**
+	 * this method steer the Caracter to the desired position
+	 * @param horizontal, if true go horizontal (x-axis), else vertical (y-axis)
+	 * @param length how long (length of the path) should he go
+	 * @return if the way is possible
+	 */
+	public boolean steerCharacterTo(boolean horizontal, int length) {
+		Vector2i desiredPoint = new Vector2i(Math
+				.round(gameCharacterPosition.x), Math
+				.round(gameCharacterPosition.y));
+		if (horizontal)
+			desiredPoint.add(new Vector2i(length, 0));
+		else
+			desiredPoint.add(new Vector2i(0, length));
 
+		if (isDirectWayPossilbe(desiredPoint)) {
+			gameCharacterTargetPosition.set(desiredPoint.x, desiredPoint.y);
+			return true;
+		}
+		return false;
 	}
 
 }
