@@ -45,8 +45,8 @@ public class LevelHandler {
 		
 		
 		
-	LevelGenration levelGenration = new LevelGenration(10, 3, 0.4,2 ,6 , 4,3 ,3 );
-		
+	//LevelGenration levelGenration = new LevelGenration(10, 3, 0.4,2 ,6 , 4,3 ,3 );
+	LevelGenration levelGenration = new LevelGenration(10);
 //		worldDim = new Vector2i(5, 5);
 	//int[] theworld = new int[worldDim.area()];
 	world = levelGenration.startCreation();// TODO BUG
