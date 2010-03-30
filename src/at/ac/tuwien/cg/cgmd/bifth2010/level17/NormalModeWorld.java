@@ -35,20 +35,11 @@ public class NormalModeWorld implements World {
     private Vector3 mWorldTouchPos = null;
 
 	// camera variables
-	private Vector3 mEye = new Vector3(0f, 30f, 0f);
-	private Vector3 mFocus = new Vector3(0f, 0f, 0f);
+	private Vector3 mLookDirection = new Vector3(0f, -30f, 0f);
 	private Vector3 mUp = new Vector3(1f, 0f, 0f);
-	
-	// player position information
-	private Vector3 mPlayerPos = new Vector3(0f, 0f, 0f);
-	@SuppressWarnings("unused")
-	private Vector3 mPlayerTarget = new Vector3(0f, 0f, 0f);
 	
 	// used to grab the current view and projection matrices
 	private Picker mPicker = new Picker();
-	
-	//just as long as obj files don't work
-	private Cube cube;	
     
     //the Level to render and collide against
 	private Level mLevel;
@@ -85,14 +76,14 @@ public class NormalModeWorld implements World {
     	Vector3 moveDelta = new Vector3();
         if (mNewTouchPos != null)
         {
-        	mPlayerPos = mPicker.GetWorldPosition(mNewTouchPos);
+        	Vector3 currentTouchPos = mPicker.GetWorldPosition(mNewTouchPos);
         	if(mWorldTouchPos != null)
         	{
-        		moveDelta = Vector3.diff(mPlayerPos, mWorldTouchPos);
+        		moveDelta = Vector3.diff(mWorldTouchPos, currentTouchPos);
         		moveDelta.y = 0;
         	}
-        	mWorldTouchPos = mPlayerPos;
-        	Log.d(LOG_TAG, "Final World Coordinates:" + mPlayerPos.toString());
+        	mWorldTouchPos = currentTouchPos;
+        	Log.d(LOG_TAG, "Final World Coordinates:" + currentTouchPos.toString());
         	mNewTouchPos = null;
         }
         
@@ -112,33 +103,32 @@ public class NormalModeWorld implements World {
 		trackGl.glFogx(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
 		trackGl.glEnable(GL10.GL_FOG);
 		trackGl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
-		trackGl.glMatrixMode(GL10.GL_MODELVIEW);
 		trackGl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		trackGl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		trackGl.glEnable(GL10.GL_TEXTURE_2D);
-		trackGl.glEnable(GL10.GL_CULL_FACE);
-        
-		trackGl.glLoadIdentity();					//Reset The Current Modelview Matrix
+		trackGl.glEnable(GL10.GL_CULL_FACE);		
 		
-		//Set ModelView Matrix
-		GLU.gluLookAt(trackGl, mEye.x, mEye.y, mEye.z, mFocus.x, mFocus.y, mFocus.z, mUp.x, mUp.y, mUp.z);
-		
-		// update Picker 
-		mPicker.CameraChanged(gl);
-		mPicker.SetReferencePosition(mPlayerPos);
-		
-		//Drawing
-		mTextures.setTexture(R.drawable.l17_crate);
-		trackGl.glPushMatrix();
-		trackGl.glTranslatef(mPlayerPos);			//Move z units into the screen
-		cube.draw(trackGl, 1);					//Draw the Cube	
-		trackGl.glPopMatrix();
-		
+		SetViewMatrix(trackGl);
 
 		//mObject.draw(trackGl);
 		mLevel.draw(trackGl);
 
         trackGl.glDisable(GL10.GL_TEXTURE_2D);
+	}
+	
+	private void SetViewMatrix(MatrixTrackingGL trackGl)
+	{
+		trackGl.glMatrixMode(GL10.GL_MODELVIEW);
+		trackGl.glLoadIdentity();					//Reset The Current Modelview Matrix
+		
+		//Set ModelView Matrix
+		Vector3 playerPos = mLevel.GetPlayerPosition();
+		Vector3 targetPos = Vector3.add(playerPos, mLookDirection);
+		GLU.gluLookAt(trackGl, playerPos.x, playerPos.y, playerPos.z, targetPos.x, targetPos.y, targetPos.z, mUp.x, mUp.y, mUp.z);
+		
+		// update Picker 
+		mPicker.CameraChanged(trackGl);
+		mPicker.SetReferencePosition(targetPos);
 	}
 	
 	public synchronized void init(GL10 gl)
@@ -149,7 +139,6 @@ public class NormalModeWorld implements World {
         mLevel = new Level();
         
         //mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
-		cube = new Cube();
 		mPause = false;
 	}
 
@@ -166,14 +155,7 @@ public class NormalModeWorld implements World {
 		//Calculate The Aspect Ratio Of The Window
 		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 200.0f);
 
-		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
-		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
-		//Set ModelView Matrix
-		GLU.gluLookAt(gl, mEye.x, mEye.y, mEye.z, mFocus.x, mFocus.y, mFocus.z, mUp.x, mUp.y, mUp.z);
-		
-		// update Picker 
-		mPicker.CameraChanged(gl);
-		mPicker.SetReferencePosition(mPlayerPos);
+		SetViewMatrix((MatrixTrackingGL)gl);
     }
 	
     public synchronized void fingerMove(Vector2 pos)
