@@ -16,7 +16,7 @@ import android.view.View;
  * @author Asperger, Radx
  *
  */
-public class HeistView extends View{
+public class old_HeistView extends View{
 
 	
 	//Hier mal fuer Testzwecke bzw. koennten die Tiles dann auch Verstecke kennzeichnen?
@@ -34,17 +34,17 @@ public class HeistView extends View{
 	
 	
 	
-	public HeistView(Context context) {
+	public old_HeistView(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
 	}
 
-	public HeistView(Context context, AttributeSet attrs){
+	public old_HeistView(Context context, AttributeSet attrs){
 		super(context, attrs);
 		//TODO
 	}
 	
-	public HeistView(Context context, AttributeSet attrs, int defStyle){
+	public old_HeistView(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
 		//TODO
 	}

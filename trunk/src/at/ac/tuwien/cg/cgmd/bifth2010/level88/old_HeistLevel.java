@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Coordinate;
 
 /*
  * Implementierung des Levels
@@ -18,7 +19,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * TODO
  */
 
-public class HeistLevel extends HeistView{
+public class old_HeistLevel extends old_HeistView{
 
 	
 	//Variablendeklarationen
@@ -68,9 +69,9 @@ public class HeistLevel extends HeistView{
 	class RefreshHandler extends Handler{
 		
 		public void handleMessage(Message msg){
-			HeistLevel.this.update();
+			old_HeistLevel.this.update();
 			//TODO wird diese Methode benoetigt bzw in Konflikt mit OpenGL?
-			HeistLevel.this.invalidate();
+			old_HeistLevel.this.invalidate();
 		}
 		
 		public void sleep(long delayMillis){
@@ -84,12 +85,12 @@ public class HeistLevel extends HeistView{
 	 */
 	
 	
-	public HeistLevel(Context context, AttributeSet attrs){
+	public old_HeistLevel(Context context, AttributeSet attrs){
 		super(context, attrs);
 		init();
 	}
 	
-	public HeistLevel(Context context, AttributeSet attrs, int defStyle){
+	public old_HeistLevel(Context context, AttributeSet attrs, int defStyle){
 		super(context, attrs, defStyle);
 		init();
 	}

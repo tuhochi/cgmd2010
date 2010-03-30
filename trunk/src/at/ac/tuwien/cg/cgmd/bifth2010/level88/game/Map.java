@@ -1,7 +1,7 @@
 /**
  * 
  */
-package at.ac.tuwien.cg.cgmd.bifth2010.level88;
+package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
 /**
  * @author Asperger, Radax
