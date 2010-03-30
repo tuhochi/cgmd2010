@@ -1,7 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 import static android.opengl.GLES10.*;
-import static android.opengl.GLES11Ext.*;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
