@@ -71,6 +71,5 @@ public class Sphere
 		{
 			radius.normalize().multiply(Math.max(getRadius(), boundingSphere.getRadius()));
 		}
-		Log.d(LevelActivity.TAG, center + " " + radius.length());
 	}
 }
