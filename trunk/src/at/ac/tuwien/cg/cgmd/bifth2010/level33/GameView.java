@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Camera;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Level;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.LevelHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 
 public class GameView extends GLSurfaceView implements OnGestureListener  {
@@ -26,7 +26,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 		super(context);
 		gestureScanner = new GestureDetector(this);
 		
-		Level level = new Level();// init new Level here!
+		LevelHandler level = new LevelHandler();// init new Level here!
 		sceneGraph = new SceneGraph(level);
 		renderer = new GameRenderer();
 		setRenderer(renderer);
