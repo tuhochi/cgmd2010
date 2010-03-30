@@ -26,17 +26,18 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 import static android.opengl.GLES10.*;
 import static android.opengl.GLU.*;
 
-public class RenderView extends GLSurfaceView implements Renderer {
-
+public class RenderView extends GLSurfaceView implements Renderer
+{
+	private static final float LIGHT_AMBIENT[] = {0.5f,0.5f,0.5f,1.0f};
+	private static final float LIGHT_DIFFUSE[] = {0.9f,0.9f,0.9f,1.0f};
+	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,0.0f,1.0f};
+	private static final String EXTENSIONS[] = {"GL_OES_query_matrix"};
+	
 	private final Context context;
 	private Scene scene;
 	private final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
 	private final OrbitManager orbitManager = OrbitManager.instance;
-	
-	private final float light_ambient[] = {0.5f,0.5f,0.5f,1.0f};
-	private final float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
-	private final float light_position[] = {-3.0f,2.0f,5.0f,1.0f};
 	
 	public RenderView(Context context)
 	{
@@ -54,7 +55,6 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	{
 		this(context);
 	}
-	
 	
 	private void initGLSettings()
 	{
@@ -77,13 +77,29 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		Config.GLES11 = gles11;
 		Log.i(LevelActivity.TAG, "OpenGL ES " + (gles11 ? "1.1" : "1.0") + " found!");
 		
+		// check for needed extensions if OpenGL ES 1.1 is not available
+		if(!gles11)
+		{
+			String extensions = glGetString(GL_EXTENSIONS);
+			boolean supported = true;
+			for(int i=0; i<EXTENSIONS.length && supported; i++)
+				supported &= extensions.contains(EXTENSIONS[i]);
+			if(!supported)
+			{
+//				Log.e(LevelActivity.TAG, "Your phone does not support all required OpenGL extensions needed for playing this level.");
+				/*
+				 * TODO: Show some kind of warning and exit
+				 */
+			}
+		}	
+		
 		initGLSettings();
 		
 		//setup light
 		glEnable(GL_LIGHT0);
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
-		glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient,0);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse,0);
+		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
+		glLightfv(GL_LIGHT0, GL_AMBIENT, LIGHT_AMBIENT,0);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT_DIFFUSE,0);
 
 
 		// client states
@@ -124,7 +140,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		scene.render();
 
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position,0);
+		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
 
 	}
 
