@@ -1,20 +1,13 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
 
-import static android.opengl.GLES10.glEnable;
-import static android.opengl.GLES10.glEnableClientState;
-
 import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11Ext;
 
 import android.content.Context;
-import android.hardware.SensorManager;
-import android.opengl.GLDebugHelper;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
