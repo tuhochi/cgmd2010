@@ -5,14 +5,9 @@ import java.util.ArrayList;
 public class OrbitManager {
 	
 	private final ArrayList<Movement> list;
-	private static final OrbitManager instance = new OrbitManager();
+	public static final OrbitManager instance = new OrbitManager();
 	
-	public static OrbitManager getInstance()
-	{
-		return instance;
-	}
-	
-	public OrbitManager()
+	private OrbitManager()
 	{
 		list =  new ArrayList<Movement>();
 	}

@@ -144,7 +144,7 @@ public class SceneLoader
 		DataInputStream dis = null;
 		Scene scene = new Scene();
 		Context context = LevelActivity.getInstance();
-		MaterialManager materialManager = MaterialManager.getInstance();
+		MaterialManager materialManager = MaterialManager.instance;
 		float[] temp3 = new float[3], temp4 = new float[4], temp16 = new float[16];
 		
 		try

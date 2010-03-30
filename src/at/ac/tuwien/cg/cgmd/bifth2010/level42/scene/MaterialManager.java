@@ -18,7 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 public class MaterialManager
 {
-	private static final MaterialManager instance = new MaterialManager();
+	public static final MaterialManager instance = new MaterialManager();
 	
 	private final HashMap<String, Material> materials;
 	private String boundMaterialName;
@@ -29,11 +29,6 @@ public class MaterialManager
 		materials = new HashMap<String, Material>();
 		boundMaterialName = "";
 		textureEnabled = true;
-	}
-	
-	public static MaterialManager getInstance()
-	{
-		return instance;
 	}
 	
 	public boolean hasMaterial(String name)

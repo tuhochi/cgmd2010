@@ -31,8 +31,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	private final Context context;
 	private Scene scene;
 	private final Camera cam;
-	private final TimeManager timer = TimeManager.getInstance(); 
-	private final OrbitManager orbitManager = OrbitManager.getInstance();
+	private final TimeManager timer = TimeManager.instance; 
+	private final OrbitManager orbitManager = OrbitManager.instance;
 	
 	private final float light_ambient[] = {0.5f,0.5f,0.5f,1.0f};
 	private final float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
