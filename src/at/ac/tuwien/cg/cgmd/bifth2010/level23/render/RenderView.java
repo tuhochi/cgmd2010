@@ -11,7 +11,6 @@ import android.opengl.GLSurfaceView;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import at.ac.tuwien.cg.cgmd.bifth2010.CommonFunctions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
@@ -19,6 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 
@@ -33,7 +33,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	private static RenderView instance;
 	
-	private ArrayList<SceneEntity> sceneEntities;
 	private Context context; 
 	private MainChar mainChar; 
 	private Background background;
@@ -46,17 +45,21 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	private int mainCharMoveDir;
 	private int lastKeyMovement;
+	private TimeUtil timer;
+	private TextureManager textureManager; 
 	
 	public RenderView(Context context)
 	{
 		
 		super(context);
+		timer = TimeUtil.getInstance();
 		this.context = context; 
 		setRenderer(this); 
 		// so that the key events can fire
         setFocusable(true);
-        sceneEntities = new ArrayList<SceneEntity>();
+        new ArrayList<SceneEntity>();
         instance=this;
+        textureManager = TextureManager.getInstance();
 	}
 	
 	public static RenderView getInstance()
@@ -67,7 +70,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		TimeUtil timer = TimeUtil.getInstance();
+		
 		float dt = timer.getDt();
 		
 		timer.update();
@@ -137,9 +140,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 //		sceneEntities.add(mainChar);
 		
 		int resID = context.getResources().getIdentifier("l23_balloon", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
+		//mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
+		mainChar.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		background.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
+		//background.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
+		background.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 	}
 		
 	@Override
