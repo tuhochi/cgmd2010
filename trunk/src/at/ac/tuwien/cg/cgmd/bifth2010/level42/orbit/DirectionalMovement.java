@@ -6,11 +6,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
 public class DirectionalMovement implements Movement {
 
-	private Vector3 startPos,directionVec,currentPos,tempDirectionVec;
+	private final Vector3 startPos,directionVec,currentPos,tempDirectionVec;
 	private float speed;
 	private SatelliteTransformation satTrans;
-	private SceneEntity entity;
-	private Matrix44 transform;
+	private final SceneEntity entity;
+	private final Matrix44 transform;
 	
 	public DirectionalMovement(	SceneEntity entity, Vector3 startPos, 
 								Vector3 directionVec, float speed

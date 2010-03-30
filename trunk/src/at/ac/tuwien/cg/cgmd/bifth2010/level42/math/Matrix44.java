@@ -2,8 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 public class Matrix44
 {
-	public float m[][] = new float[4][4];
-	private float m16[] = new float[16];
+	public final float m[][] = new float[4][4];
+	private final float m16[] = new float[16];
 	private Matrix44 temp;
 
 	public Matrix44()

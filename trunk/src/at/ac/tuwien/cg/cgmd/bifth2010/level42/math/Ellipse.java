@@ -2,7 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 public class Ellipse
 {
-	public Vector3 center,a,b,pos;
+	public final Vector3 center,a,b,pos;
 
 	public float perimeter;
 	//temp vars

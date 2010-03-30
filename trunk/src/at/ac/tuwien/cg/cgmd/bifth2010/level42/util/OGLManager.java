@@ -5,7 +5,7 @@ import android.opengl.GLES11;
 
 public class OGLManager
 {
-	private static OGLManager instance = new OGLManager();
+	private static final OGLManager instance = new OGLManager();
 	
 	private boolean clientStateVertices = false;
 	private boolean clientStateNormals = false;

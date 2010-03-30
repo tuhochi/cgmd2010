@@ -28,15 +28,15 @@ import static android.opengl.GLU.*;
 
 public class RenderView extends GLSurfaceView implements Renderer {
 
-	private Context context;
+	private final Context context;
 	private Scene scene;
-	private Camera cam;
-	private TimeManager timer; 
-	private OrbitManager orbitManager;
+	private final Camera cam;
+	private final TimeManager timer = TimeManager.getInstance(); 
+	private final OrbitManager orbitManager = OrbitManager.getInstance();
 	
-	private float light_ambient[] = {0.5f,0.5f,0.5f,1.0f};
-	private float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
-	private float light_position[] = {-3.0f,2.0f,5.0f,1.0f};
+	private final float light_ambient[] = {0.5f,0.5f,0.5f,1.0f};
+	private final float light_diffuse[] = {0.9f,0.9f,0.9f,1.0f};
+	private final float light_position[] = {-3.0f,2.0f,5.0f,1.0f};
 	
 	public RenderView(Context context)
 	{
@@ -47,8 +47,6 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		this.context = context;
 		
-		timer = TimeManager.getInstance();
-		orbitManager = OrbitManager.getInstance();
 		cam = new Camera(20.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 	}
 	
@@ -121,7 +119,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		timer.update();
 		orbitManager.updateOrbits(timer.getDeltaTsec());
-		cam.updatePosition(new Vector3(0.0f,0.0f,0.0f), 1.0f);
+		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
 		cam.look(gl);
 		
 		scene.render();

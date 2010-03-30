@@ -15,29 +15,19 @@ public class Geometry
 	public static final int VERTEX_LENGTH = 3;
 	public static final int TEXCOORD_LENGTH = 2;
 	
-	MaterialManager materialManager;
-	OGLManager oglManager;
-	Material material;
-	FloatBuffer vertices, normals, texcoords;
-	AxisAlignedBox3 boundingBox;
-	int numVertices;
-	int vboID;
-	int vertexOffset;
-	int normalOffset;
-	int texcoordOffset;
-	
-	public Geometry()
-	{
-		numVertices = 0;
-		vboID = -1;
-		materialManager = MaterialManager.getInstance();
-		oglManager = OGLManager.getInstance();
-		boundingBox = new AxisAlignedBox3();
-	}
+	final MaterialManager materialManager = MaterialManager.getInstance();
+	final OGLManager oglManager = OGLManager.getInstance();
+	final Material material;
+	final FloatBuffer vertices, normals, texcoords;
+	final AxisAlignedBox3 boundingBox;
+	final int numVertices;
+	final int vboID;
+	final int vertexOffset;
+	final int normalOffset;
+	final int texcoordOffset;
 	
 	public Geometry(Material material, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, int numVertices)
 	{
-		this();
 		this.material = material;
 		this.vertices = vertices;
 		this.normals = normals;
@@ -62,6 +52,8 @@ public class Geometry
 				vertexOffset = currentoffset;
 				currentoffset += size;
 			}
+			else
+				vertexOffset = 0;
 			if(normals != null)
 			{
 				int size = numVertices*VERTEX_LENGTH*4;
@@ -69,6 +61,8 @@ public class Geometry
 				normalOffset = currentoffset;
 				currentoffset += size;
 			}
+			else
+				normalOffset = 0;
 			if(texcoords != null)
 			{
 				int size = numVertices*TEXCOORD_LENGTH*4;
@@ -76,6 +70,15 @@ public class Geometry
 				texcoordOffset = currentoffset;
 				currentoffset += size;
 			}
+			else
+				texcoordOffset = 0;
+		}
+		else
+		{
+			vboID = 0;
+			vertexOffset = 0;
+			normalOffset = 0;
+			texcoordOffset = 0;
 		}
 	}
 	

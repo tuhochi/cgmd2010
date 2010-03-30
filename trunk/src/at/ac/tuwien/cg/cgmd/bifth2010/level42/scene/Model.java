@@ -13,8 +13,8 @@ import static android.opengl.GLES10.*;
 public class Model
 {
 	Matrix44 transformation;
-	ArrayList<Geometry> geometries;
-	AxisAlignedBox3 boundingBox;
+	final ArrayList<Geometry> geometries;
+	final AxisAlignedBox3 boundingBox;
 	ArrayList<Pair<Vector3, Model>> distances;
 	
 	public Model()
@@ -46,10 +46,16 @@ public class Model
 		glPopMatrix();
 	}
 	
+	public AxisAlignedBox3 getBoundingBox()
+	{
+		return boundingBox;
+	}
+	
 	public Matrix44 getTransformation()
 	{
 		return transformation;
 	}
+	
 	public void setTransformation(Matrix44 transformation)
 	{
 		this.transformation = transformation;

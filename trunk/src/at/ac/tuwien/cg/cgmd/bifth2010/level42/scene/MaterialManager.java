@@ -20,7 +20,7 @@ public class MaterialManager
 {
 	private static final MaterialManager instance = new MaterialManager();
 	
-	private HashMap<String, Material> materials;
+	private final HashMap<String, Material> materials;
 	private String boundMaterialName;
 	private boolean textureEnabled;
 	

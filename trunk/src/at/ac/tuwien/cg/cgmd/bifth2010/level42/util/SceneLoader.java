@@ -126,7 +126,7 @@ for(numSceneEntities)
 public class SceneLoader
 {
 	private static final int CURRENT_VERSION = 1;
-	private static SceneLoader instance = new SceneLoader();
+	private static final SceneLoader instance = new SceneLoader();
 	
 	private SceneLoader()
 	{

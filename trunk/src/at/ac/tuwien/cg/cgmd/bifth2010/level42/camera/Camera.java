@@ -13,7 +13,7 @@ public class Camera
 {
 
 	
-	private Vector3 viewPosition, eyePosition, upVector,  
+	private final Vector3 viewPosition, eyePosition, upVector,  
 					inverseViewVec;
 	
 	private float 	minAltitude,maxAltitude, azimuth, altitude, 
@@ -21,9 +21,9 @@ public class Camera
 					minDistance,maxDistance;
 
 	private float distance,currentDistance;
-	private float[] lastPosition;
+	private final float[] lastPosition;
 	
-	private Matrix44 qx,qy;
+	private final Matrix44 qx,qy;
 	
 	//temp vectors
 	private Vector3 qyAxis,tempInverseViewVec,viewVecXZProjection;
@@ -107,10 +107,12 @@ public class Camera
 		this.distance = newDistance;
 	}
 	
-	public void updatePosition(Vector3 targetPosition, float dt)
+	public void updatePosition(float posX, float posY, float posZ, float dt)
 	{
 		//set view position
-		viewPosition = targetPosition;
+		viewPosition.x = posX;
+		viewPosition.y = posY;
+		viewPosition.z = posZ;
 		
 		//iterate 
 		float azimuthDiff = azimuth - currentAzimuth;
