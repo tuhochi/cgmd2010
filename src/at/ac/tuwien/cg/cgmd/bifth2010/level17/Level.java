@@ -63,9 +63,9 @@ public class Level {
 			int size = (int)(Math.floor(Math.random() * 5.0));
 			size = (size==5)?4:size;
 			newHouse.setHouseSize(size, new Vector3(mBlockSize, mBlockSize * ((float)size + 1.0f), mBlockSize));
-			int xpos = (int)(Math.floor(Math.random() * 9.0)) - 4;
-			int ypos = (int)(Math.floor(Math.random() * 5.0)) - 2;
-			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 131.0f - (newHouse.getSize().y / 2.0f), ypos * mBlockSize + playerPos.z);
+			int xpos = (int)(Math.floor(Math.random() * 5.0)) - 2;
+			int zpos = (int)(Math.floor(Math.random() * 9.0)) - 4;
+			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 131.0f - (newHouse.getSize().y / 2.0f), zpos * mBlockSize + playerPos.z);
 			newPos.x -= newPos.x % mBlockSize;
 			newPos.z -= newPos.z % mBlockSize;
 			newHouse.setPosition(newPos);
