@@ -5,7 +5,7 @@ import android.opengl.GLES11;
 
 public class OGLManager
 {
-	private static final OGLManager instance = new OGLManager();
+	public static final OGLManager instance = new OGLManager();
 	
 	private boolean clientStateVertices = false;
 	private boolean clientStateNormals = false;
@@ -13,9 +13,9 @@ public class OGLManager
 	
 	private int currentlyBoundVBO = 0;
 	
-	public static OGLManager getInstance()
+	private OGLManager()
 	{
-		return instance;
+		
 	}
 	
 	public void clientState(boolean vertices, boolean normals, boolean texcoords)

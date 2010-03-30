@@ -15,8 +15,8 @@ public class Geometry
 	public static final int VERTEX_LENGTH = 3;
 	public static final int TEXCOORD_LENGTH = 2;
 	
-	final MaterialManager materialManager = MaterialManager.getInstance();
-	final OGLManager oglManager = OGLManager.getInstance();
+	final MaterialManager materialManager = MaterialManager.instance;
+	final OGLManager oglManager = OGLManager.instance;
 	final Material material;
 	final FloatBuffer vertices, normals, texcoords;
 	final AxisAlignedBox3 boundingBox;
