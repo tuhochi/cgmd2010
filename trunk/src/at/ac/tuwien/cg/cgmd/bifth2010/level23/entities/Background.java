@@ -104,7 +104,7 @@ public class Background implements SceneEntity
 		//bottom right
 		textureCoordinates[2] = 1.f;
 		textureCoordinates[3] = 1.f;
-		//top left
+		//top left                   
 		textureCoordinates[4] = 0.f;
 		textureCoordinates[5] = 0.5f;
 		//top right
@@ -133,7 +133,7 @@ public class Background implements SceneEntity
 			switchTexture = !switchTexture;
 		}
 	}
-	
+
 	@Override
 	public void render() 
 	{
