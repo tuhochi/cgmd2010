@@ -123,6 +123,10 @@ public class NormalModeWorld implements World {
 		//Set ModelView Matrix
 		GLU.gluLookAt(trackGl, mEye.x, mEye.y, mEye.z, mFocus.x, mFocus.y, mFocus.z, mUp.x, mUp.y, mUp.z);
 		
+		// update Picker 
+		mPicker.CameraChanged(gl);
+		mPicker.SetReferencePosition(mPlayerPos);
+		
 		//Drawing
 		mTextures.setTexture(R.drawable.l17_crate);
 		trackGl.glPushMatrix();

@@ -146,7 +146,7 @@ public class Matrix4x4
 		{
 			for(int j = 0; j < 4; j++)
 			{
-				array[i*4 + j] = m[i][j];
+				array[j*4 + i] = m[i][j];
 			}
 		}
 
