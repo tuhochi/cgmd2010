@@ -328,4 +328,17 @@ public class Matrix44
 		in.z = z;
 		in.w = w;
 	}
+	
+	public void transformSphere(Sphere inout)
+	{
+		transformPoint(inout.center);
+		transformPoint(inout.radius);
+	}
+	
+	public void transformSphere(Sphere in, Sphere out)
+	{
+		out.center.copy(in.center);
+		out.radius.copy(in.radius);
+		transformSphere(out);
+	}
 }
