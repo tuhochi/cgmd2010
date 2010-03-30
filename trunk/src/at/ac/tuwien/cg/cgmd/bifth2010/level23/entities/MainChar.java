@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 import static android.opengl.GLES10.*;
+import static android.opengl.GLES11Ext.*;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -23,7 +24,7 @@ public class MainChar implements SceneEntity {
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer indexBuffer;
 	private FloatBuffer texCoordBuffer;
-	private int textureID = -1;
+	public int textureID = -1;
 	
 	public static final int MOVE_LEFT = -1;
 	public static final int MOVE_RIGHT = 1;
@@ -231,6 +232,7 @@ public class MainChar implements SceneEntity {
 		
 		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
+
 		
 		glPopMatrix();
 	}
