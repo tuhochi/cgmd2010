@@ -231,7 +231,7 @@ public class LevelGenration {
 		do
 		{
 			wayPointIndex=rg.nextInt(createdWays.length);
-			levelFieldIndex=createdWays[wayPointIndex];
+			levelFieldIndex=createdWays[wayPointIndex];//TODO: BUG falls createdWays ==  [5, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 		}while(levelFieldIndex==-1 || wayPointIndex==0);
 		
 

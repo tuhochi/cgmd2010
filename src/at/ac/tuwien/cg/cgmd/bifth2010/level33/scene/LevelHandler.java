@@ -6,7 +6,7 @@ import android.provider.UserDictionary.Words;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 
-public class Level {
+public class LevelHandler {
 
 	int world[];
 	Vector2i worldDim;
@@ -18,7 +18,7 @@ public class Level {
 	byte wall;
 	Random rand = new Random();
 
-	public Level() {
+	public LevelHandler() {
 		generateLevel();
 		gameCharacterTargetPosition = new Vector2f(gameCharacterPosition);
 	}
@@ -45,12 +45,13 @@ public class Level {
 		
 		
 		
-//		LevelGenration levelGenration = new LevelGenration(5, 0, 0.4,2 ,6 , 4,3 ,3 );
-//		
+	LevelGenration levelGenration = new LevelGenration(5, 0, 0.4,2 ,6 , 4,3 ,3 );
+		
 //		worldDim = new Vector2i(5, 5);
-//		world = levelGenration.startCreation();
+	int[] theworld = new int[worldDim.area()];
+//	 theworld = levelGenration.startCreation();// TODO BUG
 //		
-//		System.out.println(world.length);
+		System.out.println(theworld.length);
 //		
 //		gameCharacterPosition = new Vector2f(1,1);
 		

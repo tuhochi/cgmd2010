@@ -18,7 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 
 public class SceneGraph {
 
-	public static Level level;
+	public static LevelHandler level;
 
 	static Geometry g; // private ArrayList<GeometryGroup> renderables;
 	static Geometry c;
@@ -39,7 +39,7 @@ public class SceneGraph {
 
 	public static boolean zoomOutView = false; // if false use standard zoom for playing, if true zoom out
 
-	public SceneGraph(Level level) {
+	public SceneGraph(LevelHandler level) {
 		this.level = level;
 	}
 
