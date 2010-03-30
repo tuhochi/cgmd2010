@@ -12,9 +12,10 @@ public class LevelHandler {
 	Vector2i worldDim;
 	Vector2f gameCharacterPosition; // actual Position
 	Vector2f gameCharacterTargetPosition; // target Position
+	boolean characterMoves = false; // if Character is moving in this moment
 	float gameCharacterSpeed = 30;
 
-	byte surface;
+	byte way;
 	byte wall;
 	Random rand = new Random();
 
@@ -30,8 +31,11 @@ public class LevelHandler {
 
 		
 		// HARDCODED WORLD
-		worldDim = new Vector2i(10,10);
-		world = new int[worldDim.area()];
+		
+		LevelGenration levelGenration = new LevelGenration(24);
+		
+		worldDim = new Vector2i(levelGenration.rows,levelGenration.columns);
+//		world = new int[worldDim.area()];
 //		int x = 0;
 //		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
 //		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
@@ -47,24 +51,20 @@ public class LevelHandler {
 		
 
 	//LevelGenration levelGenration = new LevelGenration(10, 3, 0.4,2 ,6 , 4,3 ,3 );
-	LevelGenration levelGenration = new LevelGenration(10);
+	
 //		worldDim = new Vector2i(5, 5);
 	//int[] theworld = new int[worldDim.area()];
 	world = levelGenration.startCreation();// TODO BUG
 //		
 //		
-	gameCharacterPosition = new Vector2f(1,1);
+	gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
 		
-		
-		
-		
-		
-		
+
 		
 		
 		
 		// setup surface
-		surface = SceneGraph.GEOMETRY_WAY;
+		way = SceneGraph.GEOMETRY_WAY;
 
 		// setup wall
 		wall = SceneGraph.GEOMETRY_WALL;
@@ -75,7 +75,7 @@ public class LevelHandler {
 	public void updateLogic() {
 
 		
-		// START DEMO: random walk
+//		// START DEMO: random walk
 //		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
 //			
 //			boolean ok=false;
@@ -98,8 +98,12 @@ public class LevelHandler {
 		// now update Character Position
 
 		// if Target Position is the same end
-		if (gameCharacterPosition.equals(gameCharacterTargetPosition))
+		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
+			characterMoves=false;
 			return;
+		}
+		// else it is moving
+		characterMoves=true;
 
 		// now change Position in small steps
 
@@ -121,8 +125,13 @@ public class LevelHandler {
 		gameCharacterPosition.add(step.divide(0.1f/SceneGraph.deltaTime));
 
 		// if the step size is larger then to the target
-		if(Math.abs(diff.x+diff.y)<Math.abs(step.x+step.y))
+		if(Math.abs(diff.x+diff.y)<Math.abs(step.x+step.y)){
 			gameCharacterPosition.set(gameCharacterTargetPosition);
+			characterMoves=false;
+			}
+		
+		
+			
 	}
 
 	/**

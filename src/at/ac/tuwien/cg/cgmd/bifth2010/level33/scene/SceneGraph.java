@@ -36,6 +36,11 @@ public class SceneGraph {
 	public final static byte GEOMETRY_SPRING = 6;
 	
 
+	private boolean N;
+	private boolean O;
+	private boolean S;
+	private boolean W;
+	
 
 	public static boolean zoomOutView = false; // if false use standard zoom for playing, if true zoom out
 
@@ -110,26 +115,123 @@ public class SceneGraph {
 		
 		glMatrixMode(GL_MODELVIEW);
 		
+		
 		// render world
+		
+		// if Caracter is near the end of the world render word twice, quatro
+		int viewRange= 5;
+		
+		
 		for(int y=0;y<level.worldDim.y;y++){
 			for(int x=0;x<level.worldDim.x;x++){
-				
-				
 				//if wall
 				int id=y*level.worldDim.x+x;
 				if(level.world[id]==level.wall)
 				{
+				// move the word
+				glPushMatrix();
+				gl.glTranslatef(-(level.gameCharacterPosition.x-(level.worldDim.x/2)),-((level.worldDim.y/2)-level.gameCharacterPosition.y), 0);
+					// move the wall position
 					glPushMatrix();
-					gl.glTranslatef(x-(level.worldDim.x/2),(level.worldDim.y/2)-y, 0);
-					g.render();					
+					
+						// center world
+						gl.glTranslatef(x-(level.worldDim.x/2),(level.worldDim.y/2)-y, 0);
+						g.render();	
+						
+						if(true)//if(camera.zoom==camera.standardZoom)
+						{
+							
+							boolean N = level.gameCharacterTargetPosition.y<viewRange;
+							boolean O = level.gameCharacterTargetPosition.x>level.worldDim.x-viewRange;
+							boolean S = level.gameCharacterTargetPosition.y>level.worldDim.y-viewRange;
+							boolean W = level.gameCharacterTargetPosition.x<viewRange;
+							// endless copy position
+							
+							if(N)
+							{
+								// N
+								glPushMatrix();
+								gl.glTranslatef(0,level.worldDim.y, 0);
+								g.render();	
+								glPopMatrix();
+							}
+							
+							if(N&&O)
+							{
+							// N-O
+							glPushMatrix();
+							gl.glTranslatef(level.worldDim.x,level.worldDim.y, 0);
+							g.render();	
+							glPopMatrix();
+							}
+							
+							if(O)
+							{
+								// O
+								glPushMatrix();
+								gl.glTranslatef(level.worldDim.x,0, 0);
+								g.render();	
+								glPopMatrix();
+							}
+							
+							if(O&&S)
+							{
+							// O-S
+							glPushMatrix();
+							gl.glTranslatef(level.worldDim.x,-level.worldDim.y, 0);
+							g.render();	
+							glPopMatrix();
+							}
+							
+							if(S)
+							{
+								// S
+								glPushMatrix();
+								gl.glTranslatef(0,-level.worldDim.y, 0);
+								g.render();	
+								glPopMatrix();
+							}
+						
+							if(S&&W)
+							{
+							// S-W
+							glPushMatrix();
+							gl.glTranslatef(-level.worldDim.x,-level.worldDim.y, 0);
+							g.render();	
+							glPopMatrix();
+							}
+							
+							if(W)
+							{
+								// W
+								glPushMatrix();
+								gl.glTranslatef(-level.worldDim.x,0, 0);
+								g.render();	
+								glPopMatrix();
+							}
+							
+							if(N&&W)
+							{
+							// N-W
+							glPushMatrix();
+							gl.glTranslatef(-level.worldDim.x,level.worldDim.y, 0);
+							g.render();	
+							glPopMatrix();
+							}
+							
+						}
+					
+					
+									
 					glPopMatrix();
+				glPopMatrix();
 				}
 			} 
 		}
 		
 		// render GameCaracter
 		glPushMatrix();
-		gl.glTranslatef(level.gameCharacterPosition.x-(level.worldDim.x/2),(level.worldDim.y/2)-level.gameCharacterPosition.y, 0);
+		//gl.glTranslatef(level.gameCharacterPosition.x-(level.worldDim.x/2),(level.worldDim.y/2)-level.gameCharacterPosition.y, 0);
 		c.render();					
 		glPopMatrix();
 		

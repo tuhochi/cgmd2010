@@ -3,6 +3,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 import java.util.ArrayList;
 import java.util.Random;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
+
 public class LevelGenration {
 	
 	Random rg = new Random();
@@ -319,8 +322,10 @@ public class LevelGenration {
 	/**
 	 *Get the start position of the whole labyrinth
 	 */
-	public int getStartPosition(){
-		return createdWays[0];
+	public Vector2i getStartPosition(){
+		
+		
+		return new Vector2i(createdWays[0]%columns,createdWays[0]/columns);
 	}
 	
 	/**
