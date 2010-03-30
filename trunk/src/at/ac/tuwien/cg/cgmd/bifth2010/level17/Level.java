@@ -19,6 +19,7 @@ public class Level {
 	private Vector3 mSpeed = new Vector3(0, 40.0f, 0);
 	private float mBlockSize = 5.0f;
 	private float mNextHouse = 0;
+	private Player mPlayer = new Player(new Vector3(0f, 30f, 0f), 1f, 3, 100);
 	
 	/**
 	 * Level Class for Rendering Houses and other Objects.
@@ -44,6 +45,8 @@ public class Level {
 		house.setPosition(new Vector3(0.0f,-10.0f,-mBlockSize));
 		house.setHouseSize(4);
 		mHouses.add(house);
+		
+		
 		
 	}
 	
@@ -88,7 +91,8 @@ public class Level {
 	public void update(float elapsedSeconds, Vector3 moveDelta)
 	{
 		mPosition = Vector3.add(mPosition, Vector3.mult(mSpeed, elapsedSeconds));	
-		mPosition = Vector3.add(mPosition, moveDelta);
+		//mPosition = Vector3.add(mPosition, moveDelta);
+		mPlayer.SetPosition(Vector3.add(mPlayer.GetPosition(),moveDelta));
 		mNextHouse -= elapsedSeconds;
 		if(mNextHouse < 0)
 		{
@@ -123,5 +127,10 @@ public class Level {
 		}
 		mFadeHouses.removeAll(remove);
 		
+	}
+	
+	public Vector3 GetPlayerPosition()
+	{
+		return mPlayer.GetPosition();
 	}
 }
