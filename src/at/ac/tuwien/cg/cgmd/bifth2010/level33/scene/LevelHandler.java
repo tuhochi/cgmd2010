@@ -30,30 +30,29 @@ public class LevelHandler {
 
 		
 		// HARDCODED WORLD
-		worldDim = new Vector2i(5, 7);
+		worldDim = new Vector2i(10,10);
 		world = new int[worldDim.area()];
-		int x = 0;
-		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
-		gameCharacterPosition = new Vector2f(1, 1);
-		// HARDCODED WORLD END
+//		int x = 0;
+//		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
+//		gameCharacterPosition = new Vector2f(1, 1);
+//		// HARDCODED WORLD END
 		
 		
 		
-	LevelGenration levelGenration = new LevelGenration(5, 0, 0.4,2 ,6 , 4,3 ,3 );
+	LevelGenration levelGenration = new LevelGenration(10, 3, 0.4,2 ,6 , 4,3 ,3 );
 		
 //		worldDim = new Vector2i(5, 5);
-	int[] theworld = new int[worldDim.area()];
-//	 theworld = levelGenration.startCreation();// TODO BUG
+	//int[] theworld = new int[worldDim.area()];
+	world = levelGenration.startCreation();// TODO BUG
 //		
-		System.out.println(theworld.length);
 //		
-//		gameCharacterPosition = new Vector2f(1,1);
+	gameCharacterPosition = new Vector2f(1,1);
 		
 		
 		
