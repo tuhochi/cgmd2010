@@ -16,7 +16,7 @@ public class Background implements SceneEntity
 	private ShortBuffer indexBuffer;
 	private int textureID;
 	private FloatBuffer[] texCoordBuffer;
-	private float scrollSpeed = 0.05f;
+	private float scrollSpeed = 0.01f;
 	private float positionY;
 	private RenderView renderView; 
 	

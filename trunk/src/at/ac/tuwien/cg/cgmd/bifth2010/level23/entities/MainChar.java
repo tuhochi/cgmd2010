@@ -28,7 +28,7 @@ public class MainChar implements SceneEntity {
 	public static final int MOVE_RIGHT = 1;
 	public static final int NO_MOVEMENT = 0;
 	//units per millisecond
-	public static final float MOVE_SPEED = 0.1f;
+	public static final float MOVE_SPEED = 0.05f;
 	
 	private int moveDirection = 0;
 		

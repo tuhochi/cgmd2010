@@ -7,7 +7,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 
 public class OrientationManager {
