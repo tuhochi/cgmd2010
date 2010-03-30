@@ -12,12 +12,16 @@ public class Level {
 		
 		textureTest = new Texture();
 		textureTest.create(R.drawable.l55_testtexture);
+		
+		TilesManager.init();
 	}
 	
 	public void render(GL10 gl) {   
         gl.glBindTexture(GL10.GL_TEXTURE_2D, textureTest.texture);
 
         testQuad.draw(gl);
+        
+        TilesManager.draw(gl);
 	}
 	
 	void update(float dT) {
