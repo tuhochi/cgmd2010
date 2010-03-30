@@ -86,7 +86,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 				supported &= extensions.contains(EXTENSIONS[i]);
 			if(!supported)
 			{
-//				Log.e(LevelActivity.TAG, "Your phone does not support all required OpenGL extensions needed for playing this level.");
+				Log.e(LevelActivity.TAG, "Your phone does not support all required OpenGL extensions needed for playing this level.");
 				/*
 				 * TODO: Show some kind of warning and exit
 				 */
