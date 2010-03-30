@@ -25,7 +25,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 
 /*
-# AndroidModel format (*.amo) layout. The whole thing is usually GZIPed.
+# AndroidModel format (*.aom) layout. The whole thing is usually GZIPed.
 # Entities:
 #	- Material
 #		A Material is a set of ambient, diffuse and specular colors, a ks and an
@@ -69,6 +69,8 @@ for(numGeometries)
 	materialName			String			Material of this Geometry
 	boundingBoxMin			float[3]		Minimum Point of the bounding box
 	boundingBoxMax			float[3]		Maximum Point of the bounding box
+	boundingSphereCenter	float[3]		Center of the bounding sphere
+	boundingSphereRadius	float			Radius of the bounding sphere
 	numVertices				int				Number of Vertices of this Geometry
 	for(numVertices)	
 	{
@@ -126,7 +128,7 @@ for(numSceneEntities)
 
 public class SceneLoader
 {
-	private static final int CURRENT_VERSION = 1;
+	private static final int CURRENT_VERSION = 2;
 	private static final SceneLoader instance = new SceneLoader();
 	
 	private SceneLoader()
@@ -208,6 +210,11 @@ public class SceneLoader
 				Vector3 boundingBoxMax = new Vector3(temp3);
 				AxisAlignedBox3 boundingBox = new AxisAlignedBox3(boundingBoxMin, boundingBoxMax);
 				
+				readFloatArray(temp3, dis);
+				Vector3 boundingSphereCenter = new Vector3(temp3);
+				float boundingSphereRadius = dis.readFloat();
+				Sphere boundingSphere = new Sphere(boundingSphereCenter, boundingSphereRadius);
+				
 				int numVertices = dis.readInt();
 				
 				float[] vertices = new float[numVertices*3];
@@ -223,11 +230,7 @@ public class SceneLoader
 					texcoords = new float[numVertices*2];
 					readFloatArray(texcoords, dis);
 				}
-				
-				/*
-				 * TODO: get bounding sphere!!
-				 */
-				geometries.put(name, new Geometry(m, arrayToBuffer(vertices), arrayToBuffer(normals), arrayToBuffer(texcoords), boundingBox, new Sphere(), numVertices));
+				geometries.put(name, new Geometry(m, arrayToBuffer(vertices), arrayToBuffer(normals), arrayToBuffer(texcoords), boundingBox, boundingSphere, numVertices));
 			}
 			
 			/*
