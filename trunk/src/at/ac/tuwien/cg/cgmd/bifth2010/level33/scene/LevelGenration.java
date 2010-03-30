@@ -12,6 +12,10 @@ public class LevelGenration {
 	int rows=0;
 	int wayOffset=0;
 	double percentOfWay=0.0;
+	
+	//Verhältniss Goodies/Wege
+	double goodiesWayRatio = 0.3;
+	
 	int numberOfMaps=2;
 	int numberOfStone=6;
 	int numberOfBarrel=4;
@@ -32,20 +36,75 @@ public class LevelGenration {
 		this.numberOfBarrel = numberOfBarrel; //4
 		this.numberOfTrashes = numberOfTrashes; //3
 		this.numberOfSpring = numberOfSpring; //3
+		
+		checkLevelSettings();
+	}
+	
+	public LevelGenration(int columnRowSize){
+		
+		this.columns= columnRowSize;
+		this.rows=columnRowSize;
+		int levelSize=rows*columns;
+		
+		setDefaultLevelParameters(levelSize);
+		
+	}
+	
+	/**
+	 * Default Level-Parameter
+	 */
+	private void setDefaultLevelParameters(int levelSize){
+		
+		//relative Werte anhand Lvl-Größe
+		double percentOfWay=0.4;
+		double percentOfMaps=0.04;
+		double percentOfStone=0.10;
+		double percentOfBarrel=0.07;
+		double percentOfTrashes=0.06;
+		double percentOfSprings=0.04;
+		
+		this.percentOfWay = percentOfWay;
+		int numberOfWays =new Double(levelSize*percentOfWay).intValue();
+		this.numberOfMaps = new Double(numberOfWays*percentOfMaps).intValue();
+		this.numberOfStone = new Double(numberOfWays*percentOfStone).intValue();
+		this.numberOfBarrel = new Double(numberOfWays*percentOfBarrel).intValue();
+		this.numberOfTrashes = new Double(numberOfWays*percentOfTrashes).intValue();
+		this.numberOfSpring = new Double(numberOfWays*percentOfSprings).intValue();
+		
+		checkLevelSettings();
+	}
+	
+	/**
+	 * Checks if all Parameters are correct.
+	 */
+	private void checkLevelSettings(){
+		
+		int levelSize=rows*columns;
+		if(percentOfWay >0.50)
+			percentOfWay=0.50;
+		int numberOfWays =new Double(levelSize*percentOfWay).intValue();
+		int allGoodiesTogether= numberOfMaps+numberOfStone+numberOfBarrel+
+								numberOfTrashes+numberOfSpring;
+		
+		if(allGoodiesTogether/numberOfWays>=goodiesWayRatio)
+		{
+			//Wrong Parameter
+			setDefaultLevelParameters(levelSize);
+		}
 	}
 	
 	/**
 	 * Creates a random Level-Matrix
 	 * 
 	 */
-	int[] startCreation() {
+	public int[] startCreation() {
 		
 		int levelSize=rows*columns;
 		levelField = new int[levelSize];
 		
 		if(percentOfWay >0.50)
 			percentOfWay=0.50;
-		int numberOfWays =new Double(levelSize*percentOfWay).intValue();;
+		int numberOfWays =new Double(levelSize*percentOfWay).intValue();
 		createdWays = new int[numberOfWays];
 		
 		//init Lvl
@@ -121,7 +180,7 @@ public class LevelGenration {
 			else if(levelField[allNeighbourIndex[newWayDirection]]!=1)
 			{
 				foundNewWay=true;
-				levelField[allNeighbourIndex[newWayDirection]]=1;
+				levelField[allNeighbourIndex[newWayDirection]]=SceneGraph.GEOMETRY_WAY;
 				createdWays[wayPointCount]=allNeighbourIndex[newWayDirection];
 			}
 						
@@ -231,7 +290,7 @@ public class LevelGenration {
 		do
 		{
 			wayPointIndex=rg.nextInt(createdWays.length);
-			levelFieldIndex=createdWays[wayPointIndex];//TODO: BUG falls createdWays ==  [5, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+			levelFieldIndex=createdWays[wayPointIndex];
 		}while(levelFieldIndex==-1 || wayPointIndex==0);
 		
 
@@ -255,6 +314,13 @@ public class LevelGenration {
 			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_BARREL;
 		}
 		createdWays[wayPointIndex]=-1;
+	}
+	
+	/**
+	 *Get the start position of the whole labyrinth
+	 */
+	public int getStartPosition(){
+		return createdWays[0];
 	}
 	
 	/**
