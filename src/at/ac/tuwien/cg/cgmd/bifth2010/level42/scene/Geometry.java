@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 
 import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
@@ -15,24 +16,26 @@ public class Geometry
 	public static final int VERTEX_LENGTH = 3;
 	public static final int TEXCOORD_LENGTH = 2;
 	
-	final MaterialManager materialManager = MaterialManager.instance;
-	final OGLManager oglManager = OGLManager.instance;
-	final Material material;
-	final FloatBuffer vertices, normals, texcoords;
-	final AxisAlignedBox3 boundingBox;
-	final int numVertices;
-	final int vboID;
-	final int vertexOffset;
-	final int normalOffset;
-	final int texcoordOffset;
+	private final MaterialManager materialManager = MaterialManager.instance;
+	private final OGLManager oglManager = OGLManager.instance;
+	private final Material material;
+	private final FloatBuffer vertices, normals, texcoords;
+	private final AxisAlignedBox3 boundingBox;
+	private final Sphere boundingSphere;
+	private final int numVertices;
+	private final int vboID;
+	private final int vertexOffset;
+	private final int normalOffset;
+	private final int texcoordOffset;
 	
-	public Geometry(Material material, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, int numVertices)
+	public Geometry(Material material, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, Sphere boundingSphere, int numVertices)
 	{
 		this.material = material;
 		this.vertices = vertices;
 		this.normals = normals;
 		this.texcoords = texcoords;
 		this.boundingBox = boundingBox;
+		this.boundingSphere = boundingSphere;
 		this.numVertices = numVertices;
 		
 		if(Config.GLES11)
@@ -115,5 +118,15 @@ public class Geometry
 			glDrawArrays(GL_TRIANGLES, 0, numVertices);
 			break;
 		}
+	}
+	
+	public AxisAlignedBox3 getBoundingBox()
+	{
+		return boundingBox;
+	}
+	
+	public Sphere getBoundingSphere()
+	{
+		return boundingSphere;
 	}
 }

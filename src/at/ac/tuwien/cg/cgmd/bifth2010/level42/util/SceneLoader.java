@@ -15,6 +15,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
@@ -223,7 +224,10 @@ public class SceneLoader
 					readFloatArray(texcoords, dis);
 				}
 				
-				geometries.put(name, new Geometry(m, arrayToBuffer(vertices), arrayToBuffer(normals), arrayToBuffer(texcoords), boundingBox, numVertices));
+				/*
+				 * TODO: get bounding sphere!!
+				 */
+				geometries.put(name, new Geometry(m, arrayToBuffer(vertices), arrayToBuffer(normals), arrayToBuffer(texcoords), boundingBox, new Sphere(), numVertices));
 			}
 			
 			/*

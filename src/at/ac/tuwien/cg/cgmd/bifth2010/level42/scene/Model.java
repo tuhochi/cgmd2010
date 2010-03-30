@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Pair;
 
@@ -12,16 +13,18 @@ import static android.opengl.GLES10.*;
 
 public class Model
 {
-	Matrix44 transformation;
-	final ArrayList<Geometry> geometries;
-	final AxisAlignedBox3 boundingBox;
-	ArrayList<Pair<Vector3, Model>> distances;
+	private Matrix44 transformation;
+	private final ArrayList<Geometry> geometries;
+	private final AxisAlignedBox3 boundingBox;
+	private final Sphere boundingSphere;
+	private ArrayList<Pair<Vector3, Model>> distances;
 	
 	public Model()
 	{
 		transformation = new Matrix44();
 		geometries = new ArrayList<Geometry>();
 		boundingBox = new AxisAlignedBox3();
+		boundingSphere = new Sphere();
 		distances = new ArrayList<Pair<Vector3,Model>>();
 	}
 	
@@ -30,6 +33,7 @@ public class Model
 		geometries = new ArrayList<Geometry>();
 		transformation = new Matrix44(other.transformation);
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
+		boundingSphere = new Sphere(other.boundingSphere);
 		distances = other.distances;
 		int numGeoms = other.geometries.size();
 		for(int i=0; i<numGeoms; i++)
@@ -51,6 +55,11 @@ public class Model
 		return boundingBox;
 	}
 	
+	public Sphere getBoundingSphere()
+	{
+		return boundingSphere;
+	}
+	
 	public Matrix44 getTransformation()
 	{
 		return transformation;
@@ -64,7 +73,8 @@ public class Model
 	public void add(Geometry geometry)
 	{
 		geometries.add(geometry);
-		boundingBox.include(geometry.boundingBox);
+		boundingBox.include(geometry.getBoundingBox());
+		boundingSphere.include(geometry.getBoundingSphere());
 	}
 	
 	public void setDistances(ArrayList<Pair<Vector3, Model>> distances)

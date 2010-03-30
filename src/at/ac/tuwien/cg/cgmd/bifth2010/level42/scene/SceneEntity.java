@@ -8,19 +8,22 @@ import java.util.ArrayList;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 
 public class SceneEntity
 {
-	String name;
-	Matrix44 transformation;
-	final ArrayList<Model> models;
-	final AxisAlignedBox3 boundingBox;
+	private String name;
+	private Matrix44 transformation;
+	private final ArrayList<Model> models;
+	private final AxisAlignedBox3 boundingBox;
+	private final Sphere boundingSphere;
 	
 	public SceneEntity()
 	{
 		transformation = new Matrix44();
 		models = new ArrayList<Model>();
 		boundingBox = new AxisAlignedBox3();
+		boundingSphere = new Sphere();
 	}
 	
 	public void render(int rendermode)
@@ -45,7 +48,8 @@ public class SceneEntity
 	public void add(Model model)
 	{
 		models.add(model);
-		boundingBox.include(model.boundingBox);
+		boundingBox.include(model.getBoundingBox());
+		boundingSphere.include(model.getBoundingSphere());
 	}
 
 	public String getName()
@@ -61,5 +65,10 @@ public class SceneEntity
 	public AxisAlignedBox3 getBoundingBox()
 	{
 		return boundingBox;
+	}
+	
+	public Sphere getBoundingSphere()
+	{
+		return boundingSphere;
 	}
 }
