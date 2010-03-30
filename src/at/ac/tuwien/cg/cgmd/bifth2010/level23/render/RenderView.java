@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11Ext;
 
 import android.content.Context;
 import android.hardware.SensorManager;
@@ -97,7 +98,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		mainChar.update(dt,mainCharMoveDir);
 		background.update(dt);
-				
+		gl.glClearColor(1, 0, 0, 0);
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		background.render();
@@ -115,10 +116,13 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		screenHeight = height;
 		aspectRatio = screenHeight/screenWidth;
 		topBounds = rightBounds*aspectRatio;
+		
+		gl.glViewport(0, 0, width, height);	
+		
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		gl.glOrthof(0.0f, rightBounds, 0.0f, topBounds, -1.0f, 1.0f);
-		gl.glViewport(0, 0, width, height);	
+		gl.glOrthof(0.0f, rightBounds, 0.0f, topBounds, 0.0f, 1.0f);
+		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();		
 	}
@@ -133,18 +137,16 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
 		topBounds = rightBounds*aspectRatio;
 		
-		mainChar = new MainChar(10.0f,10.0f,new Vector2(0,0));
+		mainChar = new MainChar(25.0f,45.0f,new Vector2(0,0));
 		background = new Background();
 		
-		sceneEntities.add(background);
-		sceneEntities.add(mainChar);
+//		sceneEntities.add(background);
+//		sceneEntities.add(mainChar);
 		
-		int resID = context.getResources().getIdentifier("l17_crate", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		int resID = context.getResources().getIdentifier("l23_balloon", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
-		resID = context.getResources().getIdentifier("l23_bg1", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		background.addTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
-		resID = context.getResources().getIdentifier("l23_bg2", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		background.addTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
+		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		background.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 	}
 		
 	@Override
@@ -315,6 +317,12 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glEnable(GL10.GL_BLEND);
+	    gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+	    gl.glShadeModel(GL10.GL_FLAT);
+	    gl.glDisable(GL10.GL_DITHER);
+        gl.glDisable(GL10.GL_LIGHTING);
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 	}
 
 }

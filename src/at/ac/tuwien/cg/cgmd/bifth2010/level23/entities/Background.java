@@ -15,10 +15,9 @@ public class Background implements SceneEntity
 {
 
 	private FloatBuffer vertexBuffer1;
-	private FloatBuffer vertexBuffer2;
 	private ShortBuffer indexBuffer;
-	private ArrayList<Integer> textureIDs;
-	private FloatBuffer texCoordBuffer;
+	private int textureID;
+	private FloatBuffer[] texCoordBuffer;
 	private float scrollSpeed = 0.05f;
 	private float positionY;
 	private RenderView renderView; 
@@ -28,8 +27,8 @@ public class Background implements SceneEntity
 	
 	public Background()
 	{
-		renderView = RenderView.getInstance();
-		textureIDs = new ArrayList<Integer>();		
+		renderView = RenderView.getInstance();	
+		texCoordBuffer = new FloatBuffer[2];
 		generateTiles();
 		createIndexBuffer();
 		createTexCoordBuffer();
@@ -65,33 +64,6 @@ public class Background implements SceneEntity
 		vertexBuffer1 = vertexBBuffer.asFloatBuffer();
 		vertexBuffer1.put(vertices);
 		vertexBuffer1.position(0);
-		
-		vertices = new float[12];
-		
-		//origin = 0 0
-		//bottom left
-		vertices[0] = 0f;
-		vertices[1] = tb;
-		vertices[2] = 0f;
-		//bottom right
-		vertices[3] = rb;
-		vertices[4] = tb;
-		vertices[5] = 0f;
-		//top left
-		vertices[6] = 0f;
-		vertices[7]= tb*2;
-		vertices[8]= 0f;
-		//top right
-		vertices[9] = rb;
-		vertices[10] = tb*2;
-		vertices[11] = 0f;
-				
-		vertexBBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
-		vertexBBuffer.order(ByteOrder.nativeOrder());
-		vertexBuffer2 = vertexBBuffer.asFloatBuffer();
-		vertexBuffer2.put(vertices);
-		vertexBuffer2.position(0);	
-		
 	}
 	
 	private void createIndexBuffer()
@@ -110,10 +82,10 @@ public class Background implements SceneEntity
 		//flipping the y-coordinate here
 		//bottom left
 		textureCoordinates[0] = 0.f;
-		textureCoordinates[1] = 1.f;
+		textureCoordinates[1] = 0.5f;
 		//bottom right
 		textureCoordinates[2] = 1.f;
-		textureCoordinates[3] = 1.f;
+		textureCoordinates[3] = 0.5f;
 		//top left
 		textureCoordinates[4] = 0.f;
 		textureCoordinates[5] = 0.f;
@@ -123,14 +95,34 @@ public class Background implements SceneEntity
 				
 		ByteBuffer tcbb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
 		tcbb.order(ByteOrder.nativeOrder());
-		texCoordBuffer = tcbb.asFloatBuffer();
-		texCoordBuffer.put(textureCoordinates);
-		texCoordBuffer.position(0);
+		texCoordBuffer[0] = tcbb.asFloatBuffer();
+		texCoordBuffer[0].put(textureCoordinates);
+		texCoordBuffer[0].position(0);
+		
+		//flipping the y-coordinate here
+		//bottom left
+		textureCoordinates[0] = 0.f;
+		textureCoordinates[1] = 1.f;
+		//bottom right
+		textureCoordinates[2] = 1.f;
+		textureCoordinates[3] = 1.f;
+		//top left
+		textureCoordinates[4] = 0.f;
+		textureCoordinates[5] = 0.5f;
+		//top right
+		textureCoordinates[6] = 1.f;
+		textureCoordinates[7] = 0.5f;
+				
+		ByteBuffer tcbb2 = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
+		tcbb2.order(ByteOrder.nativeOrder());
+		texCoordBuffer[1] = tcbb2.asFloatBuffer();
+		texCoordBuffer[1].put(textureCoordinates);
+		texCoordBuffer[1].position(0);
 	}
 	
-	public void addTextureID(int texID)
+	public void setTextureID(int texID)
 	{
-		textureIDs.add(texID);
+		textureID = texID;
 	}
 	
 	public void update(float dt)
@@ -151,13 +143,14 @@ public class Background implements SceneEntity
 		
 		glTranslatef(0, positionY, 0);
 		//render first BG quad
-		glBindTexture(GL10.GL_TEXTURE_2D, textureIDs.get(switchTexture?1:0));
-		glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+		glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+		glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer[switchTexture?1:0]);
 		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer1);
 		glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
+		
 		//render second BG quad
-		glBindTexture(GL10.GL_TEXTURE_2D, textureIDs.get(switchTexture?0:1));
-		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer2);
+		glTranslatef(0,renderView.getTopBounds(),0);
+		glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer[switchTexture?0:1]);
 		glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
 		
 		glPopMatrix();
