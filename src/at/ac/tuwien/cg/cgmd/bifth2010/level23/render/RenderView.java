@@ -1,8 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
 
-import java.util.ArrayList;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -15,7 +13,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
@@ -57,7 +54,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		setRenderer(this); 
 		// so that the key events can fire
         setFocusable(true);
-        new ArrayList<SceneEntity>();
+        requestFocus();
         instance=this;
         textureManager = TextureManager.getInstance();
 	}
@@ -70,12 +67,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		
-		float dt = timer.getDt();
-		
 		timer.update();
 		
-		accTime += timer.getDt()/1000;
+		float dt = timer.getDt();
+				
+		accTime += dt/1000;
 		if(accTime > 5)
 		{
 			System.out.println(timer.getFPS());
@@ -94,13 +90,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		mainChar.update(dt,mainCharMoveDir);
 		background.update(dt);
-		gl.glClearColor(1, 0, 0, 0);
+		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		background.render();
 		mainChar.render();
-		
-		//check if needed for all parts of the scene (hud?)
 	}
 
 	@Override
@@ -135,15 +129,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		mainChar = new MainChar(25.0f,45.0f,new Vector2(0,0));
 		background = new Background();
-		
-//		sceneEntities.add(background);
-//		sceneEntities.add(mainChar);
-		
+				
 		int resID = context.getResources().getIdentifier("l23_balloon", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		//mainChar.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 		mainChar.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		//background.setTextureID(CommonFunctions.loadTexture(gl, context.getResources(), resID));
 		background.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 	}
 		
@@ -172,8 +161,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				OrientationManager.registerListener(orientationListener);
 			else
 				OrientationManager.unregisterListener(orientationListener);
-			
-//			Log.i("useSensor", String.valueOf(useSensor));
 			break;
 		}
 		
@@ -192,22 +179,25 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		if (evt.getAction() == MotionEvent.ACTION_DOWN) {
 			released = false;
 			lastMotionEvent = evt; 
-//			handleOnTouchMovement(evt);
-		
 		}
 		else if (evt.getAction() == MotionEvent.ACTION_UP) {
 			released = true;
 		}		
+		
+		//hack to keep framerate stable (event spamming)
+		try {Thread.sleep(1);} catch (InterruptedException e){}
 		
 		return true; 
 	}
 	
 	public void handleOnTouchMovement(final MotionEvent evt) {
 		queueEvent(new Runnable(){
-			public void run() {
-				if (evt.getRawX()*100.0f/screenWidth <  mainChar.getPosition().x) {
+			public void run() 
+			{	float x = evt.getRawX();
+				float charX = mainChar.getPosition().x;
+				if (x*100.0f/screenWidth <  charX) {
 					mainCharMoveDir = MainChar.MOVE_LEFT;
-				} else if (evt.getRawX()*100.0f/screenWidth > (mainChar.getPosition().x + mainChar.getWidth() )) {
+				} else if (x*100.0f/screenWidth > (charX + mainChar.getWidth() )) {
 					mainCharMoveDir = MainChar.MOVE_RIGHT;
 				}
 				else
@@ -321,6 +311,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	    gl.glDisable(GL10.GL_DITHER);
         gl.glDisable(GL10.GL_LIGHTING);
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
+        
+        gl.glClearColor(0, 0, 0, 0);
 	}
 
 }
