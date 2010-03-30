@@ -293,6 +293,14 @@
 			</intent-filter>
 		</activity>
 		
+		<activity
+			android:name=".level88.LevelActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level88.LAUNCH_LEVEL"></action>
+				<category android:name="android.intent.category.DEFAULT"></category>
+			</intent-filter>
+		</activity>
+		
 				<activity
 			android:name=".level99.HelpActivity"
 			android:screenOrientation="portrait">
