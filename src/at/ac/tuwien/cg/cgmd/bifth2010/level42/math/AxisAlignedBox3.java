@@ -2,7 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 public class AxisAlignedBox3
 {
-	public Vector3 min,max;
+	public final Vector3 min,max;
 	
 	public AxisAlignedBox3()
 	{

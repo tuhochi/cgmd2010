@@ -13,8 +13,8 @@ public class SceneEntity
 {
 	String name;
 	Matrix44 transformation;
-	ArrayList<Model> models;
-	AxisAlignedBox3 boundingBox;
+	final ArrayList<Model> models;
+	final AxisAlignedBox3 boundingBox;
 	
 	public SceneEntity()
 	{
@@ -56,5 +56,10 @@ public class SceneEntity
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+	
+	public AxisAlignedBox3 getBoundingBox()
+	{
+		return boundingBox;
 	}
 }

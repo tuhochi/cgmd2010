@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 public class OrbitManager {
 	
-	private  ArrayList<Movement> list;
-	private static OrbitManager instance;
+	private final ArrayList<Movement> list;
+	private static final OrbitManager instance = new OrbitManager();
 	
 	public static OrbitManager getInstance()
 	{
-		if(instance == null)
-			instance = new OrbitManager();
 		return instance;
 	}
 	

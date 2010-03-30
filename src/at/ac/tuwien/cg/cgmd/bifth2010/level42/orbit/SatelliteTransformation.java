@@ -8,7 +8,7 @@ public class SatelliteTransformation {
 	private float 	qx,qy,qz,
 					qxStep,qyStep,qzStep,
 					qxCurr,qyCurr,qzCurr;
-	private Matrix44 transform,basicTransform;
+	private final Matrix44 transform,basicTransform;
 	
 	public SatelliteTransformation(float qx, float qy, float qz, Matrix44 basicTransform) 
 	{
