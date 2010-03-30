@@ -4,11 +4,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
-import android.view.Display;
-import android.view.WindowManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
-
 class Renderer implements MyOpenGLView.Renderer {
 	
 	Level level;

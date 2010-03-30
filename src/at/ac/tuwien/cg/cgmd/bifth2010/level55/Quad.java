@@ -25,6 +25,6 @@ public class Quad extends Mesh {
                 0, 1, 2,    0, 2, 3
         };
         
-        init (vertices, texCoords, indices);
+        super.init (vertices, texCoords, indices);
 	}
 }

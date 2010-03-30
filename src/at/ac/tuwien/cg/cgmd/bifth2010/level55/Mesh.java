@@ -44,14 +44,16 @@ class Mesh
 
     public void draw(GL10 gl)
     {
-    	gl.glEnable(GL10.GL_TEXTURE_2D);
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-    	
-        gl.glFrontFace(GL10.GL_CW);
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexCoordBuffer);
-        gl.glDrawElements(GL10.GL_TRIANGLES, mIndexBuffer.limit(), GL10.GL_UNSIGNED_BYTE, mIndexBuffer);
+    	if (mVertexBuffer!=null && mTexCoordBuffer!=null && mIndexBuffer!=null) {
+	    	gl.glEnable(GL10.GL_TEXTURE_2D);
+	        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+	        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+	    	
+	        gl.glFrontFace(GL10.GL_CW);
+	        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
+	        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexCoordBuffer);
+	        gl.glDrawElements(GL10.GL_TRIANGLES, mIndexBuffer.limit(), GL10.GL_UNSIGNED_BYTE, mIndexBuffer);
+    	}
     }
 
     private FloatBuffer   mVertexBuffer;

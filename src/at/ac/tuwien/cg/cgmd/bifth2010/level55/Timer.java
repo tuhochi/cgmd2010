@@ -25,7 +25,8 @@ public class Timer {
 		debug_count++;
 		debug_accdT+=dT;
 		if (debug_count>=debug_refreshrate) {
-			Log.d("fps",Long.toString(1000/(debug_accdT/debug_count)));
+			//Log.d("fps",Long.toString(1000/(debug_accdT/debug_count)));
+			Log.d("ms",Long.toString((debug_accdT/debug_count)));
 			debug_count=0;
 			debug_accdT=0;
 		}
