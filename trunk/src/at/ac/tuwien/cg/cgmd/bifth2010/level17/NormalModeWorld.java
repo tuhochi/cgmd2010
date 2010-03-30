@@ -20,8 +20,7 @@ public class NormalModeWorld implements World {
 
 	private static final String LOG_TAG = "World";
 	
-    @SuppressWarnings("unused")
-	private Vector2 mTouchPos = new Vector2();
+	private Vector2 mTouchPos = null;
     private Vector2 mNewTouchPos = null;
     private float mElapsedSeconds;
     private long mOldTime;
@@ -31,8 +30,6 @@ public class NormalModeWorld implements World {
     private float mRotAngle = 0;
     @SuppressWarnings("unused")
 	private Handler mHandler;
-    
-    private Vector3 mWorldTouchPos = null;
 
 	// camera variables
 	private Vector3 mLookDirection = new Vector3(0f, -30f, 0f);
@@ -76,14 +73,15 @@ public class NormalModeWorld implements World {
     	Vector3 moveDelta = new Vector3();
         if (mNewTouchPos != null)
         {
-        	Vector3 currentTouchPos = mPicker.GetWorldPosition(mNewTouchPos);
-        	if(mWorldTouchPos != null)
+        	Vector3 currentWorldTouchPos = mPicker.GetWorldPosition(mNewTouchPos);
+        	if(mTouchPos != null)
         	{
-        		moveDelta = Vector3.diff(mWorldTouchPos, currentTouchPos);
+            	Vector3 lastWorldTouchPos = mPicker.GetWorldPosition(mTouchPos);
+        		moveDelta = Vector3.diff(lastWorldTouchPos, currentWorldTouchPos);
         		moveDelta.y = 0;
         	}
-        	mWorldTouchPos = currentTouchPos;
-        	Log.d(LOG_TAG, "Final World Coordinates:" + currentTouchPos.toString());
+        	mTouchPos = mNewTouchPos;
+        	Log.d(LOG_TAG, "Final World Coordinates:" + currentWorldTouchPos.toString());
         	mNewTouchPos = null;
         }
         
@@ -165,12 +163,13 @@ public class NormalModeWorld implements World {
     
     public synchronized void fingerDown(Vector2 pos)
     {
-    	mNewTouchPos = new Vector2(pos);
-    	mWorldTouchPos =  mPicker.GetWorldPosition(mNewTouchPos);
+    	mTouchPos = new Vector2(pos);
+    	mNewTouchPos = mTouchPos;
     }   
     
     public synchronized void fingerUp(Vector2 pos)
     {
-    	mNewTouchPos = new Vector2(pos);
+    	mTouchPos = new Vector2(pos);
+    	mNewTouchPos = mTouchPos;
     }
 }
