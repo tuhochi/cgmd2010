@@ -39,10 +39,12 @@ public class Camera {
 		
         eye.z=zoom;
         
-        if(zoom==standardZoom)
-        	view.set(0, 0, 0);
-        else
-        	view.set(((GameView.lastTouch.x*2)-1)*10,((GameView.lastTouch.y*2)-1)*10,0);
+//        if(zoom==standardZoom)
+//        	view.set(0, 0, 0);
+//        else
+//        	view.set(0,0,0);
+        //	view.set(((GameView.lastTouch.x*2)-1)*10,((GameView.lastTouch.y*2)-1)*10,0);
+        
         
       	gluLookAt(gl,eye.x, eye.y, eye.z, view.x, view.y, view.z , up.x, up.y, up.z  );// momentan nur zum probieren, danach von oben
 

@@ -12,13 +12,13 @@ public class Vector2i {
 	public Vector2i() {
 		set(0, 0);
 	}
-
-	public Vector2i(int x, int y) {
-		set(x, y);
-	}
 	
 	public Vector2i(Vector2i v) {
 		set(v.x, v.y);
+	}
+
+	public Vector2i(int x, int y) {
+		set(x,y);
 	}
 
 	public Vector2i add(Vector2i other)
