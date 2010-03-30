@@ -13,10 +13,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Picker;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJModel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJRenderable;
 
-public class NormalModeWorld implements World {
+public class NormalModeWorld implements World, PlayerStateListener {
 
 	private static final String LOG_TAG = "World";
 	
@@ -28,7 +27,6 @@ public class NormalModeWorld implements World {
     private GLTextures mTextures;
     private LevelActivity mContext;
     private float mRotAngle = 0;
-    @SuppressWarnings("unused")
 	private Handler mHandler;
 
 	// camera variables
@@ -120,7 +118,7 @@ public class NormalModeWorld implements World {
 		trackGl.glLoadIdentity();					//Reset The Current Modelview Matrix
 		
 		//Set ModelView Matrix
-		Vector3 playerPos = mLevel.GetPlayerPosition();
+		Vector3 playerPos = mLevel.getPlayer().getPosition();
 		Vector3 targetPos = Vector3.add(playerPos, mLookDirection);
 		GLU.gluLookAt(trackGl, playerPos.x, playerPos.y, playerPos.z, targetPos.x, targetPos.y, targetPos.z, mUp.x, mUp.y, mUp.z);
 		
@@ -135,6 +133,7 @@ public class NormalModeWorld implements World {
         mTextures.add(R.drawable.l17_crate);
         mTextures.loadTextures();
         mLevel = new Level();
+        mLevel.getPlayer().addPlayerStateListener(this);
         
         //mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
 		mPause = false;
@@ -172,4 +171,32 @@ public class NormalModeWorld implements World {
     	mTouchPos = new Vector2(pos);
     	mNewTouchPos = mTouchPos;
     }
+
+
+	@Override
+	public synchronized void playerHPChanged(float hp) {
+		
+		class HPRunnable implements Runnable{
+        	private float mHp;
+        	public HPRunnable(float hp)
+        	{
+        		mHp = hp;
+        	}
+        	@Override
+            public void run() {
+                mContext.playerHPChanged(mHp);
+            }
+        };
+        
+        Runnable hprunnable = new HPRunnable(hp);
+        mHandler.post(hprunnable);
+	}
+
+
+	@Override
+	public synchronized void setPause(boolean pause) {
+		mPause = pause;
+	}
+	
+	
 }

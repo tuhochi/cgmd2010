@@ -12,4 +12,5 @@ public interface World {
 	public void fingerDown(Vector2 pos);
 	public void fingerMove(Vector2 pos);
 	public void fingerUp(Vector2 pos);
+	public void setPause(boolean pause);
 }

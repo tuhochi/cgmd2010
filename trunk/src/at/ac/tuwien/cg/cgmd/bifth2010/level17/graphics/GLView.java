@@ -75,5 +75,30 @@ public class GLView extends GLSurfaceView {
     {
     	mWorld.fingerUp(pos);
     }
+
+	@Override
+	public void onPause() {
+		if(mWorld != null)
+			mWorld.setPause(true);
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		//if(mWorld != null)
+			//mWorld.setPause(false);
+		super.onResume();
+	}
+	
+	public void onStart() {
+		if(mGame != null && !mGame.isAlive() && mWorld != null)
+			mGame.start();
+	}
+
+
+	public void onStop() {
+		if(mGame != null && mGame.isAlive())
+			mGame.stop();
+	}
     
 }
