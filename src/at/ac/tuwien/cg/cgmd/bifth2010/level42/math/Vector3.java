@@ -47,6 +47,14 @@ public class Vector3
 		return new float[] {x,y,z};
 	}
 	
+	public Vector3 invert()
+	{
+		x = -x;
+		y = -y;
+		z = -z;
+		return this;
+	}
+	
 	public Vector3 add(Vector3 other)
 	{
 		x += other.x;
