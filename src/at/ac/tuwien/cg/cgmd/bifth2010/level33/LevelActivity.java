@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class LevelActivity extends Activity {
@@ -9,6 +11,10 @@ public class LevelActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);  
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);  
 
             
         //Setting up my GameView 
