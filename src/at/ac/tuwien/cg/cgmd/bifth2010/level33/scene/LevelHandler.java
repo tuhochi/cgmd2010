@@ -32,32 +32,24 @@ public class LevelHandler {
 		
 		// HARDCODED WORLD
 		
-		LevelGenration levelGenration = new LevelGenration(24);
+		LevelGenration levelGenration = new LevelGenration(5);
 		
 		worldDim = new Vector2i(levelGenration.rows,levelGenration.columns);
-//		world = new int[worldDim.area()];
-//		int x = 0;
-//		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
-//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-//		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
-//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-//		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;
-//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-//		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;		world[x++] = 0;
-//		gameCharacterPosition = new Vector2f(1, 1);
+		world = new int[worldDim.area()];
+		int x = 0;
+		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;
+		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;
+		
+		gameCharacterPosition = new Vector2f(2, 1);
 //		// HARDCODED WORLD END
-		
-		
-		
 
-	//LevelGenration levelGenration = new LevelGenration(10, 3, 0.4,2 ,6 , 4,3 ,3 );
-	
-//		worldDim = new Vector2i(5, 5);
-	//int[] theworld = new int[worldDim.area()];
-	world = levelGenration.startCreation();// TODO BUG
-//		
-//		
-	gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
+		
+		
+	//world = levelGenration.startCreation();
+	//gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
 		
 
 		
@@ -102,6 +94,8 @@ public class LevelHandler {
 			characterMoves=false;
 			return;
 		}
+		
+		
 		// else it is moving
 		characterMoves=true;
 
@@ -122,38 +116,97 @@ public class LevelHandler {
 		else if (diff.y < 0)
 			step.y = -1;
 
-		gameCharacterPosition.add(step.divide(0.1f/SceneGraph.deltaTime));
+		gameCharacterPosition.add(step.divide(0.2f/SceneGraph.deltaTime));
+		
+		
 
 		// if the step size is larger then to the target
 		if(Math.abs(diff.x+diff.y)<Math.abs(step.x+step.y)){
 			gameCharacterPosition.set(gameCharacterTargetPosition);
 			characterMoves=false;
-			}
+		}
+		
+		// modulo into real world
+		Vector2f real= getRealWorldCoordinate(gameCharacterPosition);
+		
+		if(!real.equals(gameCharacterPosition)){
+			gameCharacterPosition=real;
+			gameCharacterTargetPosition.set(getRealWorldCoordinate(gameCharacterTargetPosition));
+		}
+			
+		
+		
 		
 		
 			
 	}
 
+
+	/**
+	 * 
+	 * @param pos of the desired Entry
+	 * @return the Entry
+	 */
+	public int getWorldEntry(Vector2i pos){
+		Vector2i real= getRealWorldCoordinate(pos);
+		return world[real.y*worldDim.x+real.x];
+	}
+	
+	/**
+	 * look to getWorldEntry(Vector2i pos)
+	 */
+	public int getWorldEntry(int x, int y){
+		return getWorldEntry(new Vector2i(x,y));
+	}
+	
+	private Vector2i getRealWorldCoordinate(Vector2i pos) {
+		Vector2f real= getRealWorldCoordinate(new Vector2f(pos.x, pos.y));
+		return new Vector2i((int)real.x,(int)real.y);
+	}
+	
+	/**
+	 * 
+	 * @param to desired Point
+	 * @return Point in Real World Coordinate
+	 */
+	public Vector2f getRealWorldCoordinate(Vector2f to){
+		// toReal is the to Vector in the Real-World Coordinate System
+		Vector2f toReal = new Vector2f(to);
+		while ((int)toReal.x < 0 || (int)toReal.x > (int)worldDim.x - 1 || (int)toReal.y < 0
+				|| toReal.y > worldDim.y - 1) {
+			if (toReal.x < 0)
+				toReal.x += worldDim.x;
+			if (toReal.y < 0)
+				toReal.y += worldDim.y;
+			if (toReal.x > worldDim.x - 1)
+				toReal.x -= worldDim.x;
+			if (toReal.y > worldDim.y - 1)
+				toReal.y -= worldDim.y;
+		}
+		return toReal;
+		
+	}
+	
+	
 	/**
 	 * control if a direct way, horizontal or vertical is possible
 	 * @param to desired point
 	 * @return true if possible
 	 */
 	public boolean isDirectWayPossilbe(Vector2i to){
-		
-		// test if "to" is in the world
-		if(to.x<0||to.x>worldDim.x|| to.y<0||to.y>worldDim.y){
-			// test if endless walk else return false
-			
+
+		Vector2i toReal= getRealWorldCoordinate(to);
+
+		// if toReal is no wall!
+		if(world[toReal.y*worldDim.x+toReal.x]==this.wall)
 			return false;
-			
-		}
-			
+
 		
-		// if to is no wall!
-		if(world[to.y*worldDim.x+to.x]==this.wall)
-			return false;
-		
+//		// test if "to" is in the mirror world
+//		if(to.x<0||to.x>worldDim.x-1|| to.y<0||to.y>worldDim.y-1){
+//			return false;
+//		}
+			
 		//test if horizontal or vertical way is possible
 		Vector2i diff = new Vector2i(to);
 		diff.subtract(Math.round(gameCharacterPosition.x),Math.round(gameCharacterPosition.y));
@@ -169,7 +222,7 @@ public class LevelHandler {
 				if(diff.x>0)
 					step=1;
 				for(int i= x; i!=to.x;i=i+step)
-					if(world[y*worldDim.x+i]==wall)
+					if(getWorldEntry(x,y)==wall)
 						return false;
 				return true;
 					
@@ -182,7 +235,7 @@ public class LevelHandler {
 				if(diff.y>0)
 					step=1;
 				for(int i= y; i!=to.y;i=i+step)
-					if(world[i*worldDim.x+x]==wall)
+					if(getWorldEntry(x,y)==wall)
 						return false;
 				return true;
 			}
