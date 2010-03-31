@@ -141,11 +141,11 @@ public class SceneGraph {
 						if(true)//if(camera.zoom==camera.standardZoom)
 						{
 							
-							boolean N = level.gameCharacterTargetPosition.y<viewRange;
-							boolean O = level.gameCharacterTargetPosition.x>level.worldDim.x-viewRange;
-							boolean S = level.gameCharacterTargetPosition.y>level.worldDim.y-viewRange;
-							boolean W = level.gameCharacterTargetPosition.x<viewRange;
-							// endless copy position
+							// endless copy clipping
+							N = level.gameCharacterTargetPosition.y<viewRange-1;
+							O = level.gameCharacterTargetPosition.x>level.worldDim.x-viewRange;
+							S = level.gameCharacterTargetPosition.y>level.worldDim.y-viewRange;
+							W = level.gameCharacterTargetPosition.x<viewRange-1;
 							
 							if(N)
 							{
