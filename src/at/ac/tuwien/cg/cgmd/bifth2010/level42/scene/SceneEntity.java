@@ -14,6 +14,7 @@ public class SceneEntity
 {
 	private String name;
 	private Matrix44 transformation;
+	private Matrix44 transformation_temp;
 	private final ArrayList<Model> models;
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
@@ -21,6 +22,7 @@ public class SceneEntity
 	public SceneEntity()
 	{
 		transformation = new Matrix44();
+		transformation_temp = new Matrix44();
 		models = new ArrayList<Model>();
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
@@ -36,13 +38,22 @@ public class SceneEntity
 		glPopMatrix();
 	}
 	
+	public void update()
+	{		
+		int numModels = models.size();
+		for(int i=0; i<numModels; i++)
+			models.get(i).update();
+
+		transformation.copy(transformation_temp);
+	}
+	
 	public Matrix44 getTransformation()
 	{
-		return transformation;
+		return transformation_temp;
 	}
 	public void setTransformation(Matrix44 transformation)
 	{
-		this.transformation = transformation;
+		this.transformation_temp = transformation;
 	}
 	
 	public void add(Model model)

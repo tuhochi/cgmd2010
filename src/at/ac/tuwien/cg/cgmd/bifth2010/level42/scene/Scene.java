@@ -28,6 +28,13 @@ public class Scene
 		}
 	}
 	
+	public void update()
+	{
+		int size = sceneEntities.size();
+		for(int i=0;i<size;i++)
+			sceneEntities.get(i).update();
+	}
+	
 	public void add(SceneEntity sceneEntity)
 	{
 		sceneEntities.add(sceneEntity);

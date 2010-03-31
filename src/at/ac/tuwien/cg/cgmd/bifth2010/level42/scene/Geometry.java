@@ -120,6 +120,10 @@ public class Geometry
 		}
 	}
 	
+	public void update()
+	{
+	}
+	
 	public AxisAlignedBox3 getBoundingBox()
 	{
 		return boundingBox;

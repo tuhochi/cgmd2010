@@ -66,7 +66,13 @@ public class RenderView extends GLSurfaceView implements Renderer
 		glEnable(GL_DEPTH_TEST);
 		glClearDepthf(1.0f);
 		glEnable(GL_TEXTURE_2D);
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); 
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+		
+		//setup light
+		glEnable(GL_LIGHT0);
+		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
+		glLightfv(GL_LIGHT0, GL_AMBIENT, LIGHT_AMBIENT,0);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT_DIFFUSE,0);
 	}
 
 	@Override
@@ -95,15 +101,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		initGLSettings();
 		
-		//setup light
-		glEnable(GL_LIGHT0);
-		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
-		glLightfv(GL_LIGHT0, GL_AMBIENT, LIGHT_AMBIENT,0);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT_DIFFUSE,0);
-
-
-		// client states
-		
 		/*
 		 * Dummy Test Scene
 		 */
@@ -124,45 +121,69 @@ public class RenderView extends GLSurfaceView implements Renderer
 	
 	}
 	
-	@Override
-	public void onDrawFrame(GL10 gl)
+	private void update()
 	{
-		
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
-		
 		timer.update();
 		orbitManager.updateOrbits(timer.getDeltaTsec());
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
-		cam.look(gl);
-		
-		scene.render();
-
+	}
+	
+	private void pre_render(GL10 gl)
+	{
+		glLoadIdentity();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
-
+		
+		cam.look(gl);
+	}
+	
+	private void render(GL10 gl)
+	{
+		scene.render();
+	}
+	
+	@Override
+	public void onDrawFrame(GL10 gl)
+	{
+		update(); // call must be moved to logic thread
+		
+		/*
+		 * Wait for logic thread to finish the current frame
+		 */
+		
+		// copies transformation matrizes
+		scene.update();
+		
+		// sets light and camera
+		pre_render(gl);
+		
+		/*
+		 * Collect input data and schedule logic thread for another frame,
+		 * processing the input data
+		 */
+		
+		render(gl);
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{
-		
-		//thx to l17!!
-		
-		if(height == 0) { 						//Prevent A Divide By Zero By
-			height = 1; 						//Making Height Equal One
-		}
+		// Prevent a Divide By Zero by making height equal one
+		if(height == 0)
+			height = 1;
 
-		glViewport(0, 0, width, height); 	//Reset The Current Viewport
-		glMatrixMode(GL_PROJECTION); 	//Select The Projection Matrix
-		glLoadIdentity(); 					//Reset The Projection Matrix
+		// Reset the current viewport
+		glViewport(0, 0, width, height);
+		
+		// Select and reset the projection matrix
+		glMatrixMode(GL_PROJECTION); 	
+		glLoadIdentity();
 
-		//Calculate The Aspect Ratio Of The Window
+		// Fill the projection Matrix
 		gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
 
-		glMatrixMode(GL_MODELVIEW); 	//Select The Modelview Matrix
-		glLoadIdentity(); 					//Reset The Modelview Matrix
+		// Select the modelview matrix again
+		glMatrixMode(GL_MODELVIEW);
 
 	}
 	
@@ -207,5 +228,4 @@ public class RenderView extends GLSurfaceView implements Renderer
 
 		return false;
 	}
-	
 }
