@@ -34,7 +34,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 		gestureScanner = new GestureDetector(this);
 		
 		LevelHandler level = new LevelHandler();// init new Level here!
-		sceneGraph = new SceneGraph(level);
+		sceneGraph = new SceneGraph(level,context);
 		renderer = new GameRenderer();
 		setRenderer(renderer);
 

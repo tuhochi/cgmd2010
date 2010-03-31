@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL11;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 public class Geometry {
 	public enum Type {
@@ -45,7 +46,7 @@ public class Geometry {
 
 	private static Geometry lastGeometry;
 
-	public static boolean useVBO = true;
+	public static boolean useVBO = Config.GLES11;
 
 	public static int geometryCount = 0;
 

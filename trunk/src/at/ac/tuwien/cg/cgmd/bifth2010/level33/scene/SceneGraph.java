@@ -5,10 +5,17 @@ import static android.opengl.GLES10.glLoadIdentity;
 import static android.opengl.GLES10.glMatrixMode;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
+
+import java.io.InputStream;
+
 import javax.microedition.khronos.opengles.GL10;
+
+import android.content.Context;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GameCharacter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryBarrel;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryMap;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometrySpring;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryStone;
@@ -40,11 +47,13 @@ public class SceneGraph {
 	private boolean O;
 	private boolean S;
 	private boolean W;
+	static Context context;
 	
 	public static boolean zoomOutView = false; // if false use standard zoom for playing, if true zoom out
 
-	public SceneGraph(LevelHandler level) {
+	public SceneGraph(LevelHandler level, Context context) {
 		this.level = level;
+		this.context = context;
 	}
 
 	/**
@@ -66,6 +75,15 @@ public class SceneGraph {
 		geometry[GEOMETRY_TRASH] = new GeometryTrash(gl,geometry[GEOMETRY_WAY]);
 		geometry[GEOMETRY_MAP] = new GeometryMap(gl,geometry[GEOMETRY_WAY]);
 		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl,geometry[GEOMETRY_WAY]);
+		
+		
+//		// object loader
+//		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_steinmauer);
+// 		Geometry steinmauer = GeometryLoader.loadObj(gl, is);
+// 		geometry[GEOMETRY_WALL]= steinmauer;
+// 		System.out.println("ok");
+		
+		
 		
 		
 	}
