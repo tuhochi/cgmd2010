@@ -3,25 +3,24 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.glLoadIdentity;
 import static android.opengl.GLES10.glMatrixMode;
-import static android.opengl.GLES10.glMultMatrixf;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
-
-import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.opengles.GL10;
-
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Cube;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GameCharacter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryBarrel;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryMap;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometrySpring;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryStone;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryTrash;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWall;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWay;
 
 public class SceneGraph {
 
 	public static LevelHandler level;
 
-	static Geometry g; // private ArrayList<GeometryGroup> renderables;
-	static Geometry c;
+	static Geometry[] geometry ;
 	public static Camera camera;
 	
 	static float deltaTime;
@@ -29,19 +28,19 @@ public class SceneGraph {
 	
 	public final static byte GEOMETRY_WALL = 0;
 	public final static byte GEOMETRY_WAY = 1;
+	
 	public final static byte GEOMETRY_STONE = 2;
 	public final static byte GEOMETRY_BARREL = 3;
 	public final static byte GEOMETRY_TRASH = 4;
 	public final static byte GEOMETRY_MAP = 5;
 	public final static byte GEOMETRY_SPRING = 6;
+	public final static byte GEOMETRY_CHARACTER = 7;
 	
-
 	private boolean N;
 	private boolean O;
 	private boolean S;
 	private boolean W;
 	
-
 	public static boolean zoomOutView = false; // if false use standard zoom for playing, if true zoom out
 
 	public SceneGraph(LevelHandler level) {
@@ -51,13 +50,23 @@ public class SceneGraph {
 	/**
 	 * This Method will init the Geometry VBO´s
 	 * 
-	 * @param gl
-	 *            OpenGlHandler
+	 * @param gl  OpenGlHandler
 	 */
 	public static void init(GL10 gl) {
 		SceneGraph.camera = new Camera();
-		g = new Cube(gl);
-		c = new GameCharacter(gl);
+		
+		geometry = new Geometry[8];
+		geometry[GEOMETRY_WALL]= new GeometryWall(gl);
+		geometry[GEOMETRY_CHARACTER]=  new GameCharacter(gl);
+		
+		geometry[GEOMETRY_WAY]=  new GeometryWay(gl);
+		
+		geometry[GEOMETRY_STONE] = new GeometryStone(gl,geometry[GEOMETRY_WAY]);
+		geometry[GEOMETRY_BARREL] = new GeometryBarrel(gl,geometry[GEOMETRY_WAY]);
+		geometry[GEOMETRY_TRASH] = new GeometryTrash(gl,geometry[GEOMETRY_WAY]);
+		geometry[GEOMETRY_MAP] = new GeometryMap(gl,geometry[GEOMETRY_WAY]);
+		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl,geometry[GEOMETRY_WAY]);
+		
 		
 	}
 
@@ -99,8 +108,6 @@ public class SceneGraph {
 
 		// now start
 
-
-
 		// now render the Scene
 		renderScene(gl);
 
@@ -119,15 +126,15 @@ public class SceneGraph {
 		// render world
 		
 		// if Caracter is near the end of the world render word twice, quatro
-		int viewRange= 5;
+		int viewRange= 6;
 		
 		
 		for(int y=0;y<level.worldDim.y;y++){
 			for(int x=0;x<level.worldDim.x;x++){
 				//if wall
 				int id=y*level.worldDim.x+x;
-				if(level.world[id]==level.wall)
-				{
+//				if(level.world[id]<=GEOMETRY_STONE)
+//				{
 				// move the word
 				glPushMatrix();
 				gl.glTranslatef(-(level.gameCharacterPosition.x-(level.worldDim.x/2)),-((level.worldDim.y/2)-level.gameCharacterPosition.y), 0);
@@ -136,7 +143,7 @@ public class SceneGraph {
 					
 						// center world
 						gl.glTranslatef(x-(level.worldDim.x/2),(level.worldDim.y/2)-y, 0);
-						g.render();	
+						geometry[level.world[id]].render();	
 						
 						if(true)//if(camera.zoom==camera.standardZoom)
 						{
@@ -152,7 +159,7 @@ public class SceneGraph {
 								// N
 								glPushMatrix();
 								gl.glTranslatef(0,level.worldDim.y, 0);
-								g.render();	
+								geometry[level.world[id]].render();	
 								glPopMatrix();
 							}
 							
@@ -161,7 +168,7 @@ public class SceneGraph {
 							// N-O
 							glPushMatrix();
 							gl.glTranslatef(level.worldDim.x,level.worldDim.y, 0);
-							g.render();	
+							geometry[level.world[id]].render();	
 							glPopMatrix();
 							}
 							
@@ -170,7 +177,7 @@ public class SceneGraph {
 								// O
 								glPushMatrix();
 								gl.glTranslatef(level.worldDim.x,0, 0);
-								g.render();	
+								geometry[level.world[id]].render();	
 								glPopMatrix();
 							}
 							
@@ -179,7 +186,7 @@ public class SceneGraph {
 							// O-S
 							glPushMatrix();
 							gl.glTranslatef(level.worldDim.x,-level.worldDim.y, 0);
-							g.render();	
+							geometry[level.world[id]].render();	
 							glPopMatrix();
 							}
 							
@@ -188,7 +195,7 @@ public class SceneGraph {
 								// S
 								glPushMatrix();
 								gl.glTranslatef(0,-level.worldDim.y, 0);
-								g.render();	
+								geometry[level.world[id]].render();	
 								glPopMatrix();
 							}
 						
@@ -197,7 +204,7 @@ public class SceneGraph {
 							// S-W
 							glPushMatrix();
 							gl.glTranslatef(-level.worldDim.x,-level.worldDim.y, 0);
-							g.render();	
+							geometry[level.world[id]].render();	
 							glPopMatrix();
 							}
 							
@@ -206,7 +213,7 @@ public class SceneGraph {
 								// W
 								glPushMatrix();
 								gl.glTranslatef(-level.worldDim.x,0, 0);
-								g.render();	
+								geometry[level.world[id]].render();	
 								glPopMatrix();
 							}
 							
@@ -215,24 +222,21 @@ public class SceneGraph {
 							// N-W
 							glPushMatrix();
 							gl.glTranslatef(-level.worldDim.x,level.worldDim.y, 0);
-							g.render();	
+							geometry[level.world[id]].render();	
 							glPopMatrix();
 							}
 							
-						}
-					
-					
-									
+						}		
 					glPopMatrix();
 				glPopMatrix();
-				}
+//				}
 			} 
 		}
 		
 		// render GameCaracter
 		glPushMatrix();
 		//gl.glTranslatef(level.gameCharacterPosition.x-(level.worldDim.x/2),(level.worldDim.y/2)-level.gameCharacterPosition.y, 0);
-		c.render();					
+		geometry[GEOMETRY_CHARACTER].render();			
 		glPopMatrix();
 		
 	}

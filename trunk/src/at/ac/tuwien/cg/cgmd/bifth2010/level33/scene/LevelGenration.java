@@ -59,7 +59,7 @@ public class LevelGenration {
 	private void setDefaultLevelParameters(int levelSize){
 		
 		//relative Werte anhand Lvl-Größe
-		double percentOfWay=0.4;
+		double percentOfWay=0.2;
 		double percentOfMaps=0.04;
 		double percentOfStone=0.10;
 		double percentOfBarrel=0.07;

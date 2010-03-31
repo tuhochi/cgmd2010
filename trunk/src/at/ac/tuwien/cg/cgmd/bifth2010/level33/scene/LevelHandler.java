@@ -18,6 +18,7 @@ public class LevelHandler {
 	byte way;
 	byte wall;
 	Random rand = new Random();
+	public boolean demomode = false;
 
 	public LevelHandler() {
 		generateLevel();
@@ -32,24 +33,24 @@ public class LevelHandler {
 		
 		// HARDCODED WORLD
 		
-		LevelGenration levelGenration = new LevelGenration(5);
-		
+		LevelGenration levelGenration = new LevelGenration(22);
 		worldDim = new Vector2i(levelGenration.rows,levelGenration.columns);
-		world = new int[worldDim.area()];
-		int x = 0;
-		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;
-		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
-		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;
 		
-		gameCharacterPosition = new Vector2f(2, 1);
+//		world = new int[worldDim.area()];
+//		int x = 0;
+//		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+//		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;
+//		world[x++] = 0;		world[x++] = 1;		world[x++] = 1;		world[x++] = 1;		world[x++] = 0;
+//		world[x++] = 0;		world[x++] = 0;		world[x++] = 1;		world[x++] = 0;		world[x++] = 0;
+//		
+//		gameCharacterPosition = new Vector2f(2, 1);
 //		// HARDCODED WORLD END
 
 		
 		
-	//world = levelGenration.startCreation();
-	//gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
+	world = levelGenration.startCreation();
+	gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
 		
 
 		
@@ -67,22 +68,23 @@ public class LevelHandler {
 	public void updateLogic() {
 
 		
-//		// START DEMO: random walk
-//		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
-//			
-//			boolean ok=false;
-//			while(!ok)
-//			{
-//				Vector2i to = new Vector2i(rand.nextInt(worldDim.x),rand.nextInt(worldDim.y));
-//				if(isDirectWayPossilbe(to))
-//				{
-//
-//				gameCharacterTargetPosition.set(to.x,to.y);
-//				ok=true;
-//				}
-//			}
-//			
-//		}
+		// START DEMO: random walk
+		if(demomode)
+		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
+			
+			boolean ok=false;
+			while(!ok)
+			{
+				Vector2i to = new Vector2i(rand.nextInt(worldDim.x),rand.nextInt(worldDim.y));
+				if(isDirectWayPossilbe(to))
+				{
+
+				gameCharacterTargetPosition.set(to.x,to.y);
+				ok=true;
+				}
+			}
+			
+		}
 		// END DEMO: random walk
 
 		// update level
@@ -222,7 +224,7 @@ public class LevelHandler {
 				if(diff.x>0)
 					step=1;
 				for(int i= x; i!=to.x;i=i+step)
-					if(getWorldEntry(x,y)==wall)
+					if(getWorldEntry(i,y)==wall)
 						return false;
 				return true;
 					
@@ -235,7 +237,7 @@ public class LevelHandler {
 				if(diff.y>0)
 					step=1;
 				for(int i= y; i!=to.y;i=i+step)
-					if(getWorldEntry(x,y)==wall)
+					if(getWorldEntry(x,i)==wall)
 						return false;
 				return true;
 			}
@@ -255,6 +257,10 @@ public class LevelHandler {
 	 * @return if the way is possible
 	 */
 	public boolean steerCharacterTo(boolean horizontal, int length) {
+		
+		if(characterMoves)
+			return false;
+		
 		Vector2i desiredPoint = new Vector2i(Math
 				.round(gameCharacterPosition.x), Math
 				.round(gameCharacterPosition.y));

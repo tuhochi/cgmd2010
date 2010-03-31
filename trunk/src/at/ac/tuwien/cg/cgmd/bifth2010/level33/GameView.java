@@ -131,8 +131,15 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 					sceneGraph.level.steerCharacterTo(false, 1);
 				}
 			});
+		
+		else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
+			queueEvent(new Runnable() {
+				public void run() {
+					sceneGraph.level.demomode=!sceneGraph.level.demomode;
+				}
+			});
 
-		return true;
+		return false;
 	}
 	
 	public void startGame() {

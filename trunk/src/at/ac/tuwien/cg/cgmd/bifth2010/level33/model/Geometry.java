@@ -12,10 +12,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 
 public class Geometry {
 	public enum Type {
-		Points, Lines, Triangles, TriangleStrip
+		Points, Lines, Triangles, LineStrip, TriangleStrip, TriangleFan
 	}
 
 	private GL10 gl;
+	private Type type;
 
 	private float vertices[];
 	private int vertexHandle = -1;
@@ -52,9 +53,10 @@ public class Geometry {
 
 	}
 
-	public Geometry(GL10 gl, int numVertices, boolean hasColors,
+	public Geometry(GL10 gl, Type type, int numVertices, boolean hasColors,
 			boolean hasTextureCoordinates, boolean hasNormals) {
 		this.gl = gl;
+		this.type = type;
 		vertices = new float[numVertices * 3];
 		int[] buffer = new int[1];
 
@@ -158,17 +160,22 @@ public class Geometry {
 		init = true;
 	}
 
-	private int getPrimitiveType(Type type) {
+	private int getPrimitiveType( Type type )
+    {
 		if (type == Type.Lines)
 			return GL10.GL_LINES;
 		else if (type == Type.Triangles)
 			return GL10.GL_TRIANGLES;
+		else if (type == Type.LineStrip)
+			return GL10.GL_LINE_STRIP;
 		else if (type == Type.TriangleStrip)
 			return GL10.GL_TRIANGLE_STRIP;
-		else
+		else if (type == Type.Points)
 			return GL10.GL_POINTS;
-
-	}
+		else
+			return GL10.GL_TRIANGLE_FAN;
+            
+    }
 
 	public void render(Type type, int offset, int numVertices) {
 		boolean wasInit = init;
@@ -224,7 +231,7 @@ public class Geometry {
 	}
 
 	public void render() {
-		render(Type.Triangles, 0, numVertices);
+		render(this.type, 0, numVertices);
 	}
 
 	public void render(Type type) {

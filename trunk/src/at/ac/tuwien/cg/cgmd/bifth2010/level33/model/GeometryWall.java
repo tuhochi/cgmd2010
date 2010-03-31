@@ -4,8 +4,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 
-public class Cube extends Geometry {
+public class GeometryWall extends Geometry {
 	float one = 1.0f/2;
 	Vector3f v0 = new Vector3f(-one, -one, -one);
 	Vector3f v1 = new Vector3f(one, -one, -one);
@@ -20,9 +21,9 @@ public class Cube extends Geometry {
 	Color r = new Color(1,0,0);
 	Color g = new Color(0,1,0);
 
-	public Cube(GL10 gl){
+	public GeometryWall(GL10 gl){
 		
-		 super( gl, 36, true, false, false );  
+		 super( gl, Type.Triangles, 36, true, false, false );  
 		 
 		 // simple cube //
 		 //      4--------7
@@ -58,38 +59,6 @@ public class Cube extends Geometry {
 		 this.color(b);this.color(b);this.color(b); this.color(b);this.color(b);this.color(b);
 		 this.vertex( v1 ); this.vertex( v2 ); this.vertex( v6 );	
 		 this.vertex( v1 ); this.vertex( v5 ); this.vertex( v6 );	
-		 
-		 
-
-		 
-		 
-		 
-		 
-		 
-		 
-//       g = new Geometry( gl, 6, true, false, false );           
-//       
-//       g.color( 0, 1, 0, 1 );
-//       g.vertex( 0f, -0.5f, -5 );
-//       g.color( 0, 1, 0, 1 );
-//       g.vertex( 1f, -0.5f, -5 );
-//       g.color( 0, 1, 0, 1 );
-//       g.vertex( 0.5f, 0.5f, -5 );
-//       
-//       g.color( 1, 0, 0, 1 );
-//       g.vertex( -0.5f, -0.5f, -2 );
-//       g.color( 1, 0, 0, 1 );
-//       g.vertex( 0.5f, -0.5f, -2 );
-//       g.color( 1, 0, 0, 1 );
-//       g.vertex( 0, 0.5f, -2);
-		 
 	}
-
-
-	
-
-		
-		
-
-
+		 
 }

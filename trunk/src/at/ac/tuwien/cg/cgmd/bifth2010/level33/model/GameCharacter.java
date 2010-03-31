@@ -7,7 +7,7 @@ public class GameCharacter extends Geometry {
 	float one = 1.0f/2;
 	public GameCharacter(GL10 gl){
 		
-		 super( gl, 36, true, false, false );  
+		 super( gl,Type.Triangles, 36, true, false, false );  
 		 
 		 
 		this.color(0.0f,0.0f,1.0f); // das vordere soll blau werden
