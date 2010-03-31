@@ -153,7 +153,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 			int[] mantissa = new int[16];
 			int[] exponent = new int[16];
 			
-			GLES10Ext.glQueryMatrixxOES(mantissa, 0, exponent, 0);
+			int result = GLES10Ext.glQueryMatrixxOES(mantissa, 0, exponent, 0);
 			for(int i=0; i<16; i++)
 				modelview[i] = ((float)mantissa[i]) * ((float)Math.pow(2, exponent[i]));
 		}
@@ -197,7 +197,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 
 		// Reset the current viewport
 		glViewport(0, 0, width, height);
-		float[] viewport = oglManager.getViewport();
+		int[] viewport = oglManager.getViewport();
 		viewport[0] = 0;
 		viewport[1] = 0;
 		viewport[2] = width;
@@ -239,6 +239,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 
 		if (zFar == Float.MAX_VALUE)
 		{
+			// no depth clamp extension here - workaround see
+			// http://www.gamasutra.com/view/feature/2942/the_mechanics_of_robust_stencil_.php?page=2
 			c = -0.999f;
 			d = -1.999f * zNear;
 		}
