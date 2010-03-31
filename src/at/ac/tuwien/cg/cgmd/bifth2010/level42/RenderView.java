@@ -5,6 +5,8 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import android.content.Context;
+import android.opengl.GLES10Ext;
+import android.opengl.GLES11;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMovement;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
@@ -19,12 +22,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.OrbitManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 // static imports
 import static android.opengl.GLES10.*;
-import static android.opengl.GLU.*;
 
 public class RenderView extends GLSurfaceView implements Renderer
 {
@@ -34,6 +37,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private static final String EXTENSIONS[] = {"GL_OES_query_matrix"};
 	
 	private final Context context;
+	private OGLManager oglManager = OGLManager.instance;
 	private Scene scene;
 	private final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
@@ -83,10 +87,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 		Config.GLES11 = gles11;
 		Log.i(LevelActivity.TAG, "OpenGL ES " + (gles11 ? "1.1" : "1.0") + " found!");
 		
+		String extensions = glGetString(GL_EXTENSIONS);
+		Log.i(LevelActivity.TAG, "Supported Extensions: " + extensions);
+		
 		// check for needed extensions if OpenGL ES 1.1 is not available
 		if(!gles11)
 		{
-			String extensions = glGetString(GL_EXTENSIONS);
 			boolean supported = true;
 			for(int i=0; i<EXTENSIONS.length && supported; i++)
 				supported &= extensions.contains(EXTENSIONS[i]);
@@ -97,7 +103,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 				 * TODO: Show some kind of warning and exit
 				 */
 			}
-		}	
+		}
 		
 		initGLSettings();
 		
@@ -135,6 +141,23 @@ public class RenderView extends GLSurfaceView implements Renderer
 		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
 		
 		cam.look(gl);
+		
+		float[] modelview = new float[16];
+		
+		if(Config.GLES11)
+		{
+			GLES11.glGetFloatv(GLES11.GL_PROJECTION_MATRIX, modelview, 0);
+		}
+		else
+		{
+			int[] mantissa = new int[16];
+			int[] exponent = new int[16];
+			
+			GLES10Ext.glQueryMatrixxOES(mantissa, 0, exponent, 0);
+			for(int i=0; i<16; i++)
+				modelview[i] = ((float)mantissa[i]) * ((float)Math.pow(2, exponent[i]));
+		}
+		oglManager.getModelview().set(modelview);
 	}
 	
 	private void render(GL10 gl)
@@ -174,17 +197,62 @@ public class RenderView extends GLSurfaceView implements Renderer
 
 		// Reset the current viewport
 		glViewport(0, 0, width, height);
+		float[] viewport = oglManager.getViewport();
+		viewport[0] = 0;
+		viewport[1] = 0;
+		viewport[2] = width;
+		viewport[3] = height;
 		
 		// Select and reset the projection matrix
 		glMatrixMode(GL_PROJECTION); 	
 		glLoadIdentity();
 
 		// Fill the projection Matrix
-		gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
+		float fovy = 45.0f;
+		float aspect = (float)width / (float)height;
+		float zNear = 0.1f;
+		float zFar = Float.MAX_VALUE;
+		
+		float top = (float)(Math.tan(fovy*0.0087266463f) * zNear); // top = tan((fovy/2)*(PI/180))*zNear
+		float bottom = -top;
+		float left = aspect * bottom;
+		float right = aspect * top;
+		
+		Matrix44 projection = oglManager.getProjection();
+		
+		glFrustumInfinite(left, right, bottom, top, zNear, zFar, projection);
 
+		glLoadMatrixf(projection.getArray16(), 0);
+		
 		// Select the modelview matrix again
 		glMatrixMode(GL_MODELVIEW);
 
+	}
+	
+	private void glFrustumInfinite(float left, float right, float bottom, float top, float zNear, float zFar, Matrix44 result)
+	{
+		float x, y, a, b, c, d;
+		x = (2.0f * zNear) / (right - left);
+		y = (2.0f * zNear) / (top - bottom);
+		a = (right + left) / (right - left);
+		b = (top + bottom) / (top - bottom);
+
+		if (zFar == Float.MAX_VALUE)
+		{
+			c = -0.999f;
+			d = -1.999f * zNear;
+		}
+		else
+		{
+			c = -(zFar + zNear) / (zFar - zNear);
+			d = -(2.0f * zFar * zNear) / (zFar - zNear);
+		}
+
+		result.set(
+				x, 0, 0, 0,
+				0, y, 0, 0,
+				a, b, c, -1,
+				0, 0, d, 0);
 	}
 	
 	@Override
