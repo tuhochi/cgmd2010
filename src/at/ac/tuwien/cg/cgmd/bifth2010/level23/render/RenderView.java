@@ -13,6 +13,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
@@ -27,6 +28,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	private float rightBounds=100.0f;
 	private float topBounds=100.0f;
+	
+	private float balloonHeight=0;
+	private float BALLOON_SPEED=0.08f;
 	
 	private static RenderView instance;
 	
@@ -71,6 +75,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		float dt = timer.getDt();
 				
+		balloonHeight += dt*BALLOON_SPEED;
 		accTime += dt/1000;
 		if(accTime > 5)
 		{
@@ -95,6 +100,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		background.render();
 		mainChar.render();
+		
+		ObstacleManager.getInstance().renderVisibleObstacles((int)balloonHeight);
+		
 	}
 
 	@Override
@@ -121,6 +129,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{	
 		setupGL(gl);
+		
+		ObstacleManager.getInstance().generateObstacles();
 		
 		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
 		
