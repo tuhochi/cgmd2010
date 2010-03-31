@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class Textures {
 	private HashMap<Integer,Integer> resources2texIds;
@@ -18,18 +19,58 @@ public class Textures {
 	private int[] textureIds;
 	private GL10 gl; 
 	private Context context; 
+	private int lastBound;
 
 	public Textures(GL10 _gl, Context _context) {
 		context = _context;
 		gl = _gl;
 		resources2texIds = new HashMap<Integer,Integer>();
+		lastBound = -1;
+		
+		addTexture(R.drawable.l88_street_turn);
+		addTexture(R.drawable.l88_street_junction);
+		addTexture(R.drawable.l88_street_straight);
+		addTexture(R.drawable.l88_street_tjunction);
+		addTexture(R.drawable.l88_street_none);
+		addTexture(R.drawable.l88_street_end);
+		
+		addTexture(R.drawable.l88_house_jail);
+		addTexture(R.drawable.l88_house_block1);
+		addTexture(R.drawable.l88_house_block2);
+		addTexture(R.drawable.l88_house_block3);
+		addTexture(R.drawable.l88_house_block4);
+		addTexture(R.drawable.l88_house_block5);
+		
+		addTexture(R.drawable.l88_bunny);
+		addTexture(R.drawable.l88_police);
+		addTexture(R.drawable.l88_stash_red);
+		addTexture(R.drawable.l88_stash_green);
+		addTexture(R.drawable.l88_stash_blue);
+		addTexture(R.drawable.l88_stash_yellow);
+		addTexture(R.drawable.l88_stash_orange);
+		addTexture(R.drawable.l88_stash_magenta);
+		addTexture(R.drawable.l88_stash_cyan);
+		addTexture(R.drawable.l88_stash_dark);
+		addTexture(R.drawable.l88_stash_light);
+		
+		addTexture(R.drawable.l88_testtex);
+		addTexture(R.drawable.l88_greenstar);
+		addTexture(R.drawable.l88_redstar);
+		addTexture(R.drawable.l88_yellowstar);
+		
+		
+		
+		loadTextures();
 	}
 	
 	public void bind(int resource) {
-		gl.glBindTexture(
-				GL10.GL_TEXTURE_2D,
-				resources2texIds.get(resource)
-			); 
+		if( lastBound != resource ) {
+			gl.glBindTexture(
+					GL10.GL_TEXTURE_2D,
+					resources2texIds.get(resource)
+				); 
+			lastBound = resource;
+		}
 	}
 	
 	public void loadTextures() {

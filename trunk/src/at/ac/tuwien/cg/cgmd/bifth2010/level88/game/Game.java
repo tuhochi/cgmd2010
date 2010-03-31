@@ -1,28 +1,28 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-import java.util.Random;
+import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
 import android.opengl.GLU;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Textures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
-
-import javax.microedition.khronos.opengles.GL10;
 
 public class Game {
 	private long newTime, oldTime;
 	private float elapsedSeconds;
 	private int screenWidth, screenHeight;
 	private float screenWidthScale, screenHeightScale;
-	private Quad quad;
 	private Context context;
-	private Textures textures;
+	public Textures textures;
 	private Vector2 cameraPos;
-	private float color; // TODO
+	private float worldScale;
+	public Map map;
+	public Bunny bunny;
+	private ArrayList<Police> police;
+	private ArrayList<Stash> stashes;
 	
 	public boolean newTouch;
 	public Vector2 touchPosition;
@@ -30,18 +30,36 @@ public class Game {
 	public Game(Context _context) {
 		context = _context;
 		cameraPos = new Vector2();
+		worldScale = 0.3f;
+		
+		map = new Map(this);
+		bunny = new Bunny(this);
+		bunny.setPosition(0, 0);
+		police = new ArrayList<Police> ();
+		addPolice(4,4);
+		addPolice(4,2);
+		addPolice(4,0);
+		stashes = new ArrayList<Stash> ();
+		addStash(3,4,1);
+		addStash(3,2,2);
+		addStash(3,0,3);
+		
 		
 		newTouch = false;
 		touchPosition = new Vector2();
-		
-		color = 0;
 
 		Date date = new Date();
         newTime = date.getTime();
         oldTime = newTime;
         elapsedSeconds = 0;
-        
-        quad = new Quad(new Vector2(-0.5f, -0.5f), new Vector2(1.0f, 0.0f), new Vector2(0.0f, 1.0f));
+	}
+
+	public void addStash(int x, int y, int size) {
+		stashes.add(new Stash(this, x, y, size));
+	}
+	
+	public void addPolice(int x, int y) {
+		police.add(new Police(this, x, y));
 	}
 
 	public synchronized boolean hasNewInput() {
@@ -66,20 +84,21 @@ public class Game {
 	}
 	
 	public synchronized void init(GL10 gl) {
-    	gl.glClearColor(0, 0, 0, 1.0f);
+    	gl.glClearColor(1, 1, 1, 0);
 
     	gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping
 		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
 		gl.glClearDepthf(1.0f); 					//Depth Buffer Setup
-		gl.glEnable(GL10.GL_DEPTH_TEST); 			//Enables Depth Testing
-		gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
 		textures = new Textures(gl, context);
-		textures.addTexture(R.drawable.l88_greenstar);
-		textures.loadTextures();
 		
 		//Really Nice Perspective Calculations
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
@@ -110,7 +129,34 @@ public class Game {
 		newTime = date.getTime();
         elapsedSeconds = (newTime - oldTime) / 1000.0f;
         
-        if( hasNewInput() ) {
+        // TODO
+        int t = (int)((newTime % 16000) / 1000);
+        if( t < 5 ) {
+        	bunny.setPosition(t, 0);
+        }
+        else if( t < 8 ) {
+        	bunny.setPosition(4, 1+t-5);
+        }
+        else if( t < 13 ) {
+        	bunny.setPosition(4-(t-8), 4);
+        }
+        else if( t < 16 ) {
+        	bunny.setPosition(0, 3-(t-13));
+        }
+        
+        for(int i=0; i<stashes.size(); i++) {
+        	stashes.get(i).update(elapsedSeconds);
+        }
+        bunny.update(elapsedSeconds);
+        for(int i=0; i<police.size(); i++) {
+        	police.get(i).update(elapsedSeconds);
+        }
+        map.update(elapsedSeconds);
+
+        cameraPos.x = bunny.translateX + map.groundXDir.x/2.0f + map.groundYDir.x/2.0f;
+        cameraPos.y = bunny.translateY + map.groundXDir.y/2.0f + map.groundYDir.y/2.0f;
+        
+        /*if( hasNewInput() ) {
         	cameraPos = new Vector2(touchPosition);
         	
         	cameraPos.mult(2);
@@ -118,30 +164,36 @@ public class Game {
         	cameraPos.mult(-1);
 
         	cameraPos.x *= screenWidthScale;
-        	cameraPos.y *= screenHeightScale;
+        	cameraPos.y *= screenHeightScale;*/
         	
-        	float angle = cameraPos.getAngle();
+        	/*float angle = cameraPos.getAngle();
         	angle /= Math.PI;
         	angle *= 180;
         	while( angle > 90 ) angle -= 90;
         	if( angle > 30 && angle < 60 ) {
-        		color = 1;
         	}
         	else {
-        		color = 0;
         	}
-        }
+        }*/
 	}
 
 	public synchronized void draw(GL10 gl) {
-		gl.glClearColor(color, color, color, 1);
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         gl.glLoadIdentity();
+        gl.glScalef(worldScale, worldScale, worldScale);
         gl.glTranslatef(-cameraPos.x, -cameraPos.y, -1f);
         
-        textures.bind(R.drawable.l88_greenstar);
-        quad.draw(gl);
+        map.draw(gl);
 
+        for(int i=0; i<stashes.size(); i++) {
+        	stashes.get(i).draw(gl);
+        }
+        
+        for(int i=0; i<police.size(); i++) {
+        	police.get(i).draw(gl);
+        }
+        
+        bunny.draw(gl);
 	}
 }
