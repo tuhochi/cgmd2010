@@ -107,7 +107,7 @@ public class GeometryLoader {
 		}
 
 		Geometry geometry = new Geometry(gl, Geometry.Type.Triangles, numFaces * 3,
-				false, numUV > 0, numNormals > 0);
+				false, numUV > 0, numNormals > 0,null);
 
 		for (int i = 0; i < numFaces * 3; i++) {
 			if (numNormals > 0) {
