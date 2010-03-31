@@ -1,6 +1,3 @@
-/**
- * 
- */
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -9,19 +6,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
-/**
- * @author Asperger, Radax
- *
- */
-public class Police {
+public class Stash {
 	private Game game;
 	private int currentPosX, currentPosY;
 	public float translateX, translateY;
-	private Quad policeQuad;
+	private Quad stashQuad;
+	public int size;
 
-	public Police(Game _game, int x, int y) {
+	public Stash(Game _game, int x, int y, int _size) {
 		game = _game;
 		setPosition(x, y);
+		size = _size;
 
 		
 		float norm;
@@ -45,7 +40,7 @@ public class Police {
         quadBase.mult(-0.5f);
         quadBase.add(new Vector2(0, -80*norm));        
         
-        policeQuad = new Quad(quadBase, xDir, yDir);
+        stashQuad = new Quad(quadBase, xDir, yDir);
 	}
 	
 	public void update(float elapsedSeconds) {
@@ -53,12 +48,21 @@ public class Police {
 	}
 	
 	public void draw(GL10 gl) {
-		policeQuad.vbos.set(gl);
+		stashQuad.vbos.set(gl);
 
 		gl.glPushMatrix();
 		gl.glTranslatef(translateX, translateY, 0);
 		
-		game.textures.bind(R.drawable.l88_police);
+		if( size == 1 ) {
+			game.textures.bind(R.drawable.l88_stash_yellow);
+		}
+		else if( size == 2 ) {
+			game.textures.bind(R.drawable.l88_stash_orange);
+		}
+		else  {
+			game.textures.bind(R.drawable.l88_stash_red);
+		}
+		
 		gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, 4);
 		
 		gl.glPopMatrix();
