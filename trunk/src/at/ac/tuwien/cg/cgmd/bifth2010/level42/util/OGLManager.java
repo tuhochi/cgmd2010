@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import static android.opengl.GLES10.*;
 import android.opengl.GLES11;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 
 public class OGLManager
 {
@@ -12,6 +13,10 @@ public class OGLManager
 	private boolean clientStateTexcoords = false;
 	
 	private int currentlyBoundVBO = 0;
+	
+	private Matrix44 modelview = new Matrix44();
+	private Matrix44 projection = new Matrix44();
+	private float[] viewport = new float[4];
 	
 	private OGLManager()
 	{
@@ -43,5 +48,20 @@ public class OGLManager
 			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, id);
 			currentlyBoundVBO = id;
 		}
+	}
+
+	public synchronized Matrix44 getModelview()
+	{
+		return modelview;
+	}
+
+	public synchronized Matrix44 getProjection()
+	{
+		return projection;
+	}
+
+	public synchronized float[] getViewport()
+	{
+		return viewport;
 	}
 }
