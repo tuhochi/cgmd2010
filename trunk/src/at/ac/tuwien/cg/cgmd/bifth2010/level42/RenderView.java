@@ -5,8 +5,6 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import android.content.Context;
-import android.opengl.GLES10Ext;
-import android.opengl.GLES11;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
@@ -34,7 +32,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private static final float LIGHT_AMBIENT[] = {0.5f,0.5f,0.5f,1.0f};
 	private static final float LIGHT_DIFFUSE[] = {0.9f,0.9f,0.9f,1.0f};
 	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,0.0f,1.0f};
-	private static final String EXTENSIONS[] = {"GL_OES_query_matrix"};
+	private static final String EXTENSIONS[] = {};
 	
 	private final Context context;
 	private OGLManager oglManager = OGLManager.instance;
@@ -134,33 +132,16 @@ public class RenderView extends GLSurfaceView implements Renderer
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
 	}
 	
-	private void pre_render(GL10 gl)
+	private void pre_render()
 	{
-		glLoadIdentity();
+//		glLoadIdentity(); // not needed, because cam.look() sets the modelview matrix completely new
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
 		
-		cam.look(gl);
-		
-		float[] modelview = new float[16];
-		
-		if(Config.GLES11)
-		{
-			GLES11.glGetFloatv(GLES11.GL_PROJECTION_MATRIX, modelview, 0);
-		}
-		else
-		{
-			int[] mantissa = new int[16];
-			int[] exponent = new int[16];
-			
-			int result = GLES10Ext.glQueryMatrixxOES(mantissa, 0, exponent, 0);
-			for(int i=0; i<16; i++)
-				modelview[i] = ((float)mantissa[i]) * ((float)Math.pow(2, exponent[i]));
-		}
-		oglManager.getModelview().set(modelview);
+		cam.look();
 	}
 	
-	private void render(GL10 gl)
+	private void render()
 	{
 		scene.render();
 	}
@@ -178,14 +159,14 @@ public class RenderView extends GLSurfaceView implements Renderer
 		scene.update();
 		
 		// sets light and camera
-		pre_render(gl);
+		pre_render();
 		
 		/*
 		 * Collect input data and schedule logic thread for another frame,
 		 * processing the input data
 		 */
 		
-		render(gl);
+		render();
 	}
 
 	@Override
@@ -220,41 +201,13 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		Matrix44 projection = oglManager.getProjection();
 		
-		glFrustumInfinite(left, right, bottom, top, zNear, zFar, projection);
+		oglManager.glFrustumInfinite(left, right, bottom, top, zNear, zFar, projection);
 
 		glLoadMatrixf(projection.getArray16(), 0);
 		
 		// Select the modelview matrix again
 		glMatrixMode(GL_MODELVIEW);
 
-	}
-	
-	private void glFrustumInfinite(float left, float right, float bottom, float top, float zNear, float zFar, Matrix44 result)
-	{
-		float x, y, a, b, c, d;
-		x = (2.0f * zNear) / (right - left);
-		y = (2.0f * zNear) / (top - bottom);
-		a = (right + left) / (right - left);
-		b = (top + bottom) / (top - bottom);
-
-		if (zFar == Float.MAX_VALUE)
-		{
-			// no depth clamp extension here - workaround see
-			// http://www.gamasutra.com/view/feature/2942/the_mechanics_of_robust_stencil_.php?page=2
-			c = -0.999f;
-			d = -1.999f * zNear;
-		}
-		else
-		{
-			c = -(zFar + zNear) / (zFar - zNear);
-			d = -(2.0f * zFar * zNear) / (zFar - zNear);
-		}
-
-		result.set(
-				x, 0, 0, 0,
-				0, y, 0, 0,
-				a, b, c, -1,
-				0, 0, d, 0);
 	}
 	
 	@Override

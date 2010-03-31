@@ -5,16 +5,17 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 
 //static imports
-import static android.opengl.GLU.*;
+import static android.opengl.GLES10.*;
 
 public class Camera
 {
-
+	private final OGLManager oglManager = OGLManager.instance;
 	
-	private final Vector3 viewPosition, eyePosition, upVector,  
-					inverseViewVec;
+	private final Vector3 viewPosition, eyePosition, upVector, 
+					inverseViewVector, rightVector;
 	
 	private float 	minAltitude,maxAltitude, azimuth, altitude, 
 					currentAzimuth, currentAltitude, motionFactor,
@@ -50,6 +51,7 @@ public class Camera
 		this.qyAxis = new Vector3();
 		this.viewVecXZProjection = new Vector3();
 		this.tempInverseViewVec = new Vector3();
+		this.rightVector = new Vector3();
 		
 		//init position
 		eyePosition = new Vector3(0.0f,0.0f,distance);
@@ -57,15 +59,24 @@ public class Camera
 		lastPosition[0] = eyePosition.x;
 		lastPosition[1] = eyePosition.y;
 		viewPosition =  new Vector3(0.0f,0.0f,0.0f);
-		inverseViewVec = Vector3.subtract(eyePosition,viewPosition);
-		inverseViewVec.normalize();
-		upVector = new Vector3(0.0f,1.0f,0.0f);
+		inverseViewVector = Vector3.subtract(eyePosition,viewPosition);
+		inverseViewVector.normalize();
+
+		//right = forward x up = up x -forward
+		Vector3.crossProduct(Constants.Y_AXIS, inverseViewVector, rightVector);
+		rightVector.normalize();
+		
+		upVector = Vector3.crossProduct(inverseViewVector, rightVector);
+		upVector.normalize();
 	}
 	
-	public void look(GL10 gl)
+	public void look()
 	{
-		gluLookAt(gl,eyePosition.x, eyePosition.y, eyePosition.z,
-			viewPosition.x, viewPosition.y, viewPosition.z, upVector.x, upVector.y, upVector.z);
+		Matrix44 modelview = oglManager.getModelview();
+		
+		oglManager.gluLookAt(eyePosition, inverseViewVector, rightVector, upVector, modelview);
+		
+		glLoadMatrixf(modelview.getArray16(), 0);
 	}
 	
 	public void setMousePosition(int x,int y)
@@ -119,7 +130,8 @@ public class Camera
 		float altitudeDiff = altitude - currentAltitude;
 		float distanceDiff = distance - currentDistance;
 
-		if(azimuthDiff!=0||altitudeDiff!=0||distanceDiff!=0){
+		if(azimuthDiff!=0||altitudeDiff!=0||distanceDiff!=0)
+		{
 			
 			// calc the iteration step
 			azimuthDiff *= motionFactor * 30.0f;
@@ -130,10 +142,10 @@ public class Camera
 			qx.setIdentity();
 			//rotate around the y axis
 			qx.setRotate(Constants.Y_AXIS,(float)Math.toRadians(azimuthDiff));
-			qx.transformPoint(inverseViewVec);
+			qx.transformPoint(inverseViewVector);
 	
 			// create the axis for the vertical rotation (altitude)
-			viewVecXZProjection.copy(inverseViewVec);
+			viewVecXZProjection.copy(inverseViewVector);
 			viewVecXZProjection.y = 0.0f;
 			viewVecXZProjection.normalize();
 	
@@ -145,8 +157,15 @@ public class Camera
 			qy.setIdentity();
 			qy.setRotate(qyAxis,(float)Math.toRadians(altitudeDiff));
 	
-			qy.transformPoint(inverseViewVec);
-			inverseViewVec.normalize();
+			qy.transformPoint(inverseViewVector);
+			inverseViewVector.normalize();
+			
+			//right = forward x up = up x -forward
+			Vector3.crossProduct(Constants.Y_AXIS, inverseViewVector, rightVector);
+			rightVector.normalize();
+			
+			Vector3.crossProduct(inverseViewVector, rightVector, upVector);
+			upVector.normalize();
 	
 			// update current angle data
 			currentAzimuth += azimuthDiff;
@@ -156,7 +175,7 @@ public class Camera
 			
 			//eyePosition = viewPosition + inverseViewVec * currentDistance
 			eyePosition.copy(viewPosition);
-			tempInverseViewVec.copy(inverseViewVec);
+			tempInverseViewVec.copy(inverseViewVector);
 			eyePosition.add(tempInverseViewVec.multiply(currentDistance));
 		}
 	}
