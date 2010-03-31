@@ -26,6 +26,7 @@ public class L77Renderer implements Renderer {
         mTranslucentBackground = useTranslucentBackground;
         mContext = aContext;
     }
+
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		// TODO Adapt CubeRend to perosnal stuff
