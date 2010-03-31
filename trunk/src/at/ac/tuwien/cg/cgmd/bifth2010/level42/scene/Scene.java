@@ -8,7 +8,7 @@ public class Scene
 	public static final int RENDERMODE_VERTEXARRAY = 0;
 	public static final int RENDERMODE_VBO = 1;
 	
-	private final ArrayList<SceneEntity> sceneEntities;
+	public final ArrayList<SceneEntity> sceneEntities;
 	private final int rendermode;
 		
 	public Scene()
