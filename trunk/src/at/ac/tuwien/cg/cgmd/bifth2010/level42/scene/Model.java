@@ -14,6 +14,7 @@ import static android.opengl.GLES10.*;
 public class Model
 {
 	private Matrix44 transformation;
+	private Matrix44 transformation_temp;
 	private final ArrayList<Geometry> geometries;
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
@@ -50,6 +51,15 @@ public class Model
 		glPopMatrix();
 	}
 	
+	public void update()
+	{
+		int numGeoms = geometries.size();
+		for(int i=0; i<numGeoms; i++)
+			geometries.get(i).update();
+
+		transformation.copy(transformation_temp);
+	}
+	
 	public AxisAlignedBox3 getBoundingBox()
 	{
 		return boundingBox;
@@ -62,12 +72,12 @@ public class Model
 	
 	public Matrix44 getTransformation()
 	{
-		return transformation;
+		return transformation_temp;
 	}
 	
 	public void setTransformation(Matrix44 transformation)
 	{
-		this.transformation = transformation;
+		this.transformation_temp = transformation;
 	}
 	
 	public void add(Geometry geometry)

@@ -2,11 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
 public class LevelActivity extends Activity
 {
@@ -26,12 +24,6 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
-		Vector3 p = new Vector3(99,99,0);
-		Vector3 q = new Vector3(888,888,0);
-		Vector3 a = new Vector3(0,1,0);
-		
-		Log.d(TAG, "" + Vector3.crossProduct(p.subtract(a),q.normalize()).length());
 		
 		// thx @ lvl 11
 		/* Fullscreen window without title */
