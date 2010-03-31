@@ -7,6 +7,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
+import android.graphics.Bitmap;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
@@ -55,11 +56,16 @@ public class Geometry {
 	}
 
 	public Geometry(GL10 gl, Type type, int numVertices, boolean hasColors,
-			boolean hasTextureCoordinates, boolean hasNormals) {
+			boolean hasTextureCoordinates, boolean hasNormals,Bitmap image) {
 		this.gl = gl;
 		this.type = type;
 		vertices = new float[numVertices * 3];
 		int[] buffer = new int[1];
+		
+		if(image!=null){
+			
+			//TODO: generate Textur handler
+		}
 
 		if (!useVBO)
 			vertexBuffer = allocateBuffer(numVertices * 3);

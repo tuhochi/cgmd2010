@@ -19,7 +19,7 @@ public class GeometryWay extends Geometry {
 
 	public GeometryWay(GL10 gl){
 		
- super( gl, Type.Triangles, 6, true, false, false );  
+ super( gl, Type.Triangles, 6, true, false, false,null );  
 		 
 		 // simple Quad //
 		 //    

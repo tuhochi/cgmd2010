@@ -20,7 +20,7 @@ public class GeometryStone extends Geometry {
 	Color w = new Color(0,0,0);
 
 	public GeometryStone(GL10 gl,Geometry way){
-		super( gl, Type.Triangles, 6, true, false, false ); 
+		super( gl, Type.Triangles, 6, true, false, false,null ); 
 		this.way=way;
 		 
 		 // simple Quad //

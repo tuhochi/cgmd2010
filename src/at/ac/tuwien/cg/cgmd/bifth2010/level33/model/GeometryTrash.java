@@ -20,7 +20,7 @@ public class GeometryTrash extends Geometry {
 	Color w = new Color(0,1,0);
 
 	public GeometryTrash(GL10 gl,Geometry way){
-		super( gl, Type.Triangles, 6, true, false, false ); 
+		super( gl, Type.Triangles, 6, true, false, false,null ); 
 		this.way=way;
 		 
 		 // simple Quad //

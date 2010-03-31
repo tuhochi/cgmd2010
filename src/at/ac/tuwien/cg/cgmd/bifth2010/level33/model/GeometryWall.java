@@ -23,7 +23,7 @@ public class GeometryWall extends Geometry {
 
 	public GeometryWall(GL10 gl){
 		
-		 super( gl, Type.Triangles, 36, true, false, false );  
+		 super( gl, Type.Triangles, 36, true, false, false ,null);  
 		 
 		 // simple cube //
 		 //      4--------7

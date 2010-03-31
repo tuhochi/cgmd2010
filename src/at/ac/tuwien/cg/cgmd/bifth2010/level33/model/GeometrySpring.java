@@ -20,7 +20,7 @@ public class GeometrySpring extends Geometry {
 	Color w = new Color(1,1,0.5f);
 
 	public GeometrySpring(GL10 gl,Geometry way){
-		super( gl, Type.Triangles, 6, true, false, false ); 
+		super( gl, Type.Triangles, 6, true, false, false,null ); 
 		this.way=way;
 		 
 		 // simple Quad //
