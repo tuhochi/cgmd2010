@@ -16,7 +16,7 @@ public class OGLManager
 	
 	private Matrix44 modelview = new Matrix44();
 	private Matrix44 projection = new Matrix44();
-	private float[] viewport = new float[4];
+	private int[] viewport = new int[4];
 	
 	private OGLManager()
 	{
@@ -60,7 +60,7 @@ public class OGLManager
 		return projection;
 	}
 
-	public synchronized float[] getViewport()
+	public synchronized int[] getViewport()
 	{
 		return viewport;
 	}
