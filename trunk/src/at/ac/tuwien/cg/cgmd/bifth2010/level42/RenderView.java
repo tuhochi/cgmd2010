@@ -199,7 +199,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 		float fovy = 45.0f;
 		float aspect = (float)width / (float)height;
 		float zNear = 0.1f;
-		float zFar = Float.MAX_VALUE;
+		//float zFar = Float.MAX_VALUE;
+		float zFar = 1000;
 		
 		float top = (float)(Math.tan(fovy*0.0087266463f) * zNear); // top = tan((fovy/2)*(PI/180))*zNear
 		float bottom = -top;
@@ -281,11 +282,14 @@ public class RenderView extends GLSurfaceView implements Renderer
         floatBuffer.put(winZ);
         floatBuffer.position(0);
         
-		glReadPixels( x, (int)winY, 1, 1, GLES11Ext.GL_DEPTH_COMPONENT16_OES, GL_FLOAT, floatBuffer);
-		winZ = floatBuffer.get(0);
-	
-		gluUnProject( winX, winY, winZ, modelview, 0, projection, 0, viewport, 0, pos, 0);
-
+//		glReadPixels( x, (int)winY, 1, 1, GLES11Ext.GL_DEPTH_COMPONENT16_OES, GL_FLOAT, floatBuffer);
+//		winZ = floatBuffer.get(0);
+//		Log.i("z value",""+winZ);
+		gluUnProject( winX, winY, 0, modelview, 0, projection, 0, viewport, 0, pos, 0);
+		Log.i("unproject1",""+pos[0]+ " " +pos[1]+ " " +pos[2]);
+		gluUnProject( winX, winY, 1, modelview, 0, projection, 0, viewport, 0, pos, 0);
+		Log.i("unproject2",""+pos[0]+ " " +pos[1]+ " " +pos[2]);
+		
 		return new Vector3(pos[0], pos[1], pos[2]);
 	}
 
