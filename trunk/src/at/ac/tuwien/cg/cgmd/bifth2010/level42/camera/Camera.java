@@ -14,7 +14,7 @@ public class Camera
 {
 	private final OGLManager oglManager = OGLManager.instance;
 	
-	private final Vector3 viewPosition, eyePosition, upVector, 
+	public final Vector3 viewPosition, eyePosition, upVector, 
 					inverseViewVector, rightVector;
 	
 	private float 	minAltitude,maxAltitude, azimuth, altitude, 

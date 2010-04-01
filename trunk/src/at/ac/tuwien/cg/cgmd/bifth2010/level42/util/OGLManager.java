@@ -1,7 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import static android.opengl.GLES10.*;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 import android.opengl.GLES11;
+import android.opengl.GLU;
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
@@ -19,9 +27,21 @@ public class OGLManager
 	private Matrix44 projection = new Matrix44();
 	private int[] viewport = new int[4];
 
+	//vars for unproject
+	private int[] viewportArray4;
+	private float[] modelviewArray16;
+	private float[] projectionArray16;
+	
+	private float[] window;
+	private float[] unprojectedPos;
+	private Vector3 unprojectedPosVec;
+
+	
 	private OGLManager()
 	{
-
+		window = new float[3];
+		unprojectedPos = new float[4];
+		unprojectedPosVec = new Vector3();
 	}
 
 	public void clientState(boolean vertices, boolean normals, boolean texcoords)
@@ -115,5 +135,28 @@ public class OGLManager
 		view[15] = 1.0f;
 		
 		result.set(view);
+	}
+	
+	public Vector3 unProject(int x, int y)
+	{
+		viewportArray4 = OGLManager.instance.getViewport();
+		modelviewArray16  = OGLManager.instance.getModelview().getArray16();
+		projectionArray16  = OGLManager.instance.getProjection().getArray16();
+		
+		window[0] = (float)x;
+		window[1] = (float)viewport[3] - (float)y;
+		window[2] = 0;
+			
+        GLU.gluUnProject( 	window[0], window[1], window[2], modelviewArray16, 0, 
+        					projectionArray16, 0, viewportArray4, 0, unprojectedPos, 0);
+		
+        unprojectedPosVec.x = unprojectedPos[0];
+        unprojectedPosVec.y = unprojectedPos[1];
+        unprojectedPosVec.z = unprojectedPos[2];
+        
+        //normalize with 4th component
+        unprojectedPosVec.divide(unprojectedPos[3]);
+   
+        return unprojectedPosVec;
 	}
 }
