@@ -18,6 +18,7 @@ public class SceneEntity
 	private final ArrayList<Model> models;
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
+	private final Sphere boundingSphereWorld;
 	
 	public SceneEntity()
 	{
@@ -26,6 +27,7 @@ public class SceneEntity
 		models = new ArrayList<Model>();
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
+		boundingSphereWorld = new Sphere();
 	}
 	
 	public void render(int rendermode)
@@ -45,6 +47,7 @@ public class SceneEntity
 			models.get(i).update();
 
 		transformation.copy(transformation_temp);
+		transformation.transformSphere(boundingSphere, boundingSphereWorld);
 	}
 	
 	public Matrix44 getTransformation()
@@ -60,7 +63,7 @@ public class SceneEntity
 	{
 		models.add(model);
 		boundingBox.include(model.getBoundingBox());
-		boundingSphere.include(model.getBoundingSphere());
+		boundingSphere.include(model.boundingSphere);
 	}
 
 	public String getName()
@@ -78,8 +81,8 @@ public class SceneEntity
 		return boundingBox;
 	}
 	
-	public Sphere getBoundingSphere()
+	public Sphere getBoundingSphereWorld()
 	{
-		return boundingSphere;
+		return boundingSphereWorld;
 	}
 }

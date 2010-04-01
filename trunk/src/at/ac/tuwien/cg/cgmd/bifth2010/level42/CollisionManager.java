@@ -50,7 +50,7 @@ public class CollisionManager {
 		{
 			entity = entityList.get(i);
 			//get entity bounding sphere position
-			q.copy(entity.getBoundingSphere().center);
+			q.copy(entity.getBoundingSphereWorld().center);
 			
 			//calc vector from q -> p
 			pq.copy(p);
@@ -58,7 +58,7 @@ public class CollisionManager {
 			
 			Vector3.crossProduct(pq,a,normalDistance);
 			
-			if(normalDistance.length()<entity.getBoundingSphere().getRadius())
+			if(normalDistance.length()<entity.getBoundingSphereWorld().getRadius())
 			{
 				//only store the one with the nearest z value
 				if(nearestEntity==null)
