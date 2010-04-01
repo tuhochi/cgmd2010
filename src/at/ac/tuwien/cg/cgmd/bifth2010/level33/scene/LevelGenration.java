@@ -66,6 +66,7 @@ public class LevelGenration {
 		double percentOfTrashes=0.06;
 		double percentOfSprings=0.04;
 		
+		this.wayOffset=3;
 		this.percentOfWay = percentOfWay;
 		int numberOfWays =new Double(levelSize*percentOfWay).intValue();
 		this.numberOfMaps = new Double(numberOfWays*percentOfMaps).intValue();

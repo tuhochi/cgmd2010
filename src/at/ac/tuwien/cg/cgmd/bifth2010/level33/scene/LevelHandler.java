@@ -93,7 +93,11 @@ public class LevelHandler {
 
 		// if Target Position is the same end
 		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
-			characterMoves=false;
+			
+			//if(characterMoves)
+				//updateLevelAfterStep();
+			
+			characterMoves=false;	
 			return;
 		}
 		
@@ -135,8 +139,10 @@ public class LevelHandler {
 			gameCharacterPosition=real;
 			gameCharacterTargetPosition.set(getRealWorldCoordinate(gameCharacterTargetPosition));
 		}
-			
 		
+		//update Level
+		if(gameCharacterPosition.x%1==0 && gameCharacterPosition.y%1==0)
+			updateLevelAfterStep();
 		
 		
 		
@@ -274,6 +280,24 @@ public class LevelHandler {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * The world will be updated
+	 */
+	private void updateLevelAfterStep() {
+		
+		int rows = new Float(gameCharacterPosition.y).intValue();
+		int columns = new Float(gameCharacterPosition.x).intValue();
+		int worldIndex = worldDim.y*rows+columns;
+		if(world[worldIndex]!=1)
+		{
+			world[worldIndex]=1;
+			
+			//AlphaBLENDING
+			//TODO
+		}
+		
 	}
 
 }
