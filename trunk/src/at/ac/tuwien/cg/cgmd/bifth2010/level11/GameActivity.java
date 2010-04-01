@@ -10,7 +10,7 @@ public class GameActivity extends Activity {
 	private static final String LOG_TAG = GameActivity.class.getSimpleName();
     private GameView _gameView;
     
-    private Level _level;
+    public Level _level;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

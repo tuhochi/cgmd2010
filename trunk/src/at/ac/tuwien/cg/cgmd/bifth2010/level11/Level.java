@@ -34,8 +34,8 @@ public class Level extends Thread {
 
 	private LinkedList<Treasure> treasureList;
 	private LinkedList<Pedestrian> pedestrianList;
-	private float sizeX;
-	private float sizeY;
+	public float sizeX;
+	public float sizeY;
 	private GL10 gl;
 	private Context context;
 	
@@ -65,7 +65,8 @@ public class Level extends Thread {
 		
 		this.initTextures();
 		
-		this.generatePedestrians(5, 40);
+		this.generatePedestrians(1, 40);
+		this.addTreasure(new Treasure(10.0f, 200.0f, new Vector2(200.0f, 200.0f)));
 		
 		background = new Square();
 		
@@ -89,6 +90,7 @@ public class Level extends Thread {
     	textures.add(R.drawable.l11_pedestrian_shadow);
     	textures.add(R.drawable.l11_pedestrian_head);
     	textures.add(R.drawable.l11_pedestrian_hair_01);
+    	textures.add(R.drawable.l11_treasure);
     	
     	textures.loadTextures();
     	
@@ -119,8 +121,20 @@ public class Level extends Thread {
 	private synchronized void update() {
 		//synchronized(this){
 			timing.update();
-			for (int i=0; i < pedestrianList.size(); i++) {
-				((Pedestrian)pedestrianList.get(i)).update(timing.getCurrTime());
+			Iterator<Pedestrian>iterator1 = pedestrianList.iterator();
+			while(iterator1.hasNext()){
+				Pedestrian pedestrian = iterator1.next();
+				pedestrian.update(timing.getCurrTime());
+				Iterator<Treasure>iterator2 = treasureList.iterator();
+				float minDist = Float.MAX_VALUE;
+				float tempDist = 0;
+				while(iterator2.hasNext()){
+					Treasure treasure = iterator2.next();
+					if((tempDist = pedestrian.getPosition().distance(treasure.getPosition())) < minDist){
+						pedestrian.setTargetTreasure(treasure);
+						minDist = tempDist;
+					}
+				}
 			}
 		//}
 	}
@@ -162,11 +176,17 @@ public class Level extends Thread {
 		//gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		//gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glDisable(GL10.GL_CULL_FACE);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+		Iterator<Treasure>iterator3 = treasureList.iterator();
+		while(iterator3.hasNext())
+			iterator3.next().draw(gl);
+			
 		for (int i=0; i < pedestrianList.size(); i++) {
 			((Pedestrian)pedestrianList.get(i)).draw(gl);
 		}
-
 		gl.glDisable(GL10.GL_BLEND);
 	}
 	

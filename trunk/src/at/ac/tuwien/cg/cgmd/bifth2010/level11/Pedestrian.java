@@ -28,10 +28,11 @@ public class Pedestrian {
 	private float fightingRadius;
 	private float moveSpeed;
 	private float angle;
-
+	private Treasure targetTreasure;
+	private float oldTime;
 	
 	public Pedestrian(GL10 gl, Context context) {
-		this( 30.0f,10.0f,1.0f, 1.0f, gl, context);
+		this( 30.0f,10.0f,0.003f, 1.0f, gl, context);
 	}
 	
 	public Pedestrian(float attractionRadius, float fightingRadius, float moveSpeed, float grabSpeed, GL10 gl, Context context) {
@@ -47,8 +48,9 @@ public class Pedestrian {
 		
 		this.angle = 0.0f;
 		this.moveSpeed = 4.0f;
-		
+		this.targetTreasure = null;
 		this.setColors();
+		this.oldTime = 0;
 	}
 	
 	public void setColors() {
@@ -122,6 +124,15 @@ public class Pedestrian {
 	}
 	
 	public void update(float time) {
+		if(oldTime == 0)
+			oldTime = time;
+		float deltaTime = time - oldTime;
+		oldTime = time;
+		if(targetTreasure != null){//move pedestrian towards target
+			this.position = this.position.add(
+							targetTreasure.getPosition().sub(this.position).
+							normalize().mult(this.moveSpeed*deltaTime));
+		}
 		
 		legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
 		arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
@@ -139,24 +150,14 @@ public class Pedestrian {
 	}
 	
 	public void draw(GL10 gl) {
-		
-		
+
 		//gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
-		
-		
-		
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glDisable(GL10.GL_CULL_FACE);
-		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		
+
 		legs.draw(gl);
 		arms.draw(gl);
 		torso.draw(gl);
 		head.draw(gl);
 		hair.draw(gl);
-		
-		gl.glDisable(GL10.GL_BLEND);
-		
 	}
 	public float getAttractionRadius(){
 		return this.attractionRadius;
@@ -166,5 +167,8 @@ public class Pedestrian {
 	}
 	public float getFightingRadius(){
 		return this.fightingRadius;
+	}
+	public void setTargetTreasure(Treasure target){
+		this.targetTreasure = target;
 	}
 }

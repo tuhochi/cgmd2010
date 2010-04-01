@@ -35,6 +35,15 @@ public class GameView extends GLSurfaceView {
             _x = event.getX();
             _y = event.getY();
         }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            _x = event.getX();
+            _y = event.getY();
+        	((GameActivity)_renderer.context)._level.
+        	addTreasure(new Treasure(event.getDownTime()/10000.0f,200.0f,
+        	new Vector2(_x, ((GameActivity)_renderer.context)._level.sizeY - _y)));
+            
+        	
+        }
         return true;
     }
 }
