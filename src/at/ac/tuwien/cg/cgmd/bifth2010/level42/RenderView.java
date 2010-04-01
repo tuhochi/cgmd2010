@@ -47,6 +47,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
 	private final OrbitManager orbitManager = OrbitManager.instance;
+	private CollisionManager collManager;
 	
 	public RenderView(Context context)
 	{
@@ -116,6 +117,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		 * Dummy Test Scene
 		 */
 		scene = SceneLoader.getInstance().readScene("l42_cube");
+		collManager = new CollisionManager(scene);
 		
 		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(-3,3,0),new Vector3(3,-3,0),
 								new Vector3(0,0,-5),5);
@@ -225,7 +227,13 @@ public class RenderView extends GLSurfaceView implements Renderer
 			public void run() {
 				if(event.getAction() == MotionEvent.ACTION_DOWN){
 					cam.setLastPosition((int)event.getRawX(), (int)event.getRawY());
-					GetOGLPos((int)event.getRawX(), (int)event.getRawY());
+					Vector3 touchedPoint = OGLManager.instance.unProject((int)event.getRawX(), (int)event.getRawY());
+
+//					collManager.intersectRay(touchedPoint, 
+//							Vector3.crossProduct(Vector3.subtract(touchedPoint,cam.eyePosition),cam.upVector));
+					
+			        Log.i(LevelActivity.TAG,"touched - "+touchedPoint.toString());
+			        Log.i(LevelActivity.TAG,"eye - "+cam.eyePosition.toString());
 				}					
 				else
 					cam.setMousePosition((int)event.getRawX(), (int)event.getRawY());
@@ -260,71 +268,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 			});
 
 		return false;
-	}
-	
-	Vector3 GetOGLPos(int x, int y)
-	{
-		int[] viewport = OGLManager.instance.getViewport();
-		float[] modelview = OGLManager.instance.getModelview().getArray16();
-		float[] projection = OGLManager.instance.getProjection().getArray16();
-		
-		float winX, winY, winZ;
-		float[] pos = new float[3];
-
-		winX = (float)x;
-		winY = (float)viewport[3] - (float)y;
-		winZ = 0;
-		
-		//helper
-		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4);
-        byteBuffer.order(ByteOrder.nativeOrder());
-        FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
-        floatBuffer.put(winZ);
-        floatBuffer.position(0);
-        
-//		glReadPixels( x, (int)winY, 1, 1, GLES11Ext.GL_DEPTH_COMPONENT16_OES, GL_FLOAT, floatBuffer);
-//		winZ = floatBuffer.get(0);
-//		Log.i("z value",""+winZ);
-		gluUnProject( winX, winY, 0, modelview, 0, projection, 0, viewport, 0, pos, 0);
-		Log.i("unproject1",""+pos[0]+ " " +pos[1]+ " " +pos[2]);
-		gluUnProject( winX, winY, 1, modelview, 0, projection, 0, viewport, 0, pos, 0);
-		Log.i("unproject2",""+pos[0]+ " " +pos[1]+ " " +pos[2]);
-		
-		return new Vector3(pos[0], pos[1], pos[2]);
-	}
-
-	//http://code.google.com/p/netthreads-for-android/source/browse/trunk/bulletml/src/com/netthreads/android/opengl/GLU.java?spec=svn17&r=17
-	public static int gluUnProject(float winX, float winY, float winZ,
-			float[] model, int modelOffset, float[] project, int projectOffset,
-			int[] view, int viewOffset, float[] obj, int objOffset) {
-		float[] pm = new float[16];
-		Matrix.multiplyMM(pm, 0, project, projectOffset, model, modelOffset);
-
-		float[] invPM = new float[16];
-		if (!Matrix.invertM(invPM, 0, pm, 0)) {
-			return GL10.GL_FALSE;
-		}
-
-		float[] v = new float[4];
-
-		v[0] =
-			2.0f * (winX - view[viewOffset + 0]) / view[viewOffset + 2]
-			                                            - 1.0f;
-		v[1] =
-			2.0f * (winY - view[viewOffset + 1]) / view[viewOffset + 3]
-			                                            - 1.0f;
-		v[2] = 2.0f * winZ - 1.0f;
-		v[3] = 1.0f;
-
-		float[] v2 = new float[4];
-
-		Matrix.multiplyMV(v2, 0, invPM, 0, v, 0);
-
-		obj[objOffset] = v2[0];
-		obj[objOffset + 1] = v2[1];
-		obj[objOffset + 2] = v2[2];
-
-		return GL10.GL_TRUE;
 	}
 
 

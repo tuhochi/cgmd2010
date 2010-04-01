@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 
 public class TimeManager {
 	long t;
@@ -39,7 +40,7 @@ public class TimeManager {
 			frames = 0;
 			fpsT0 = t;
 			fpsChanged = true;
-			Log.i("timer",""+fps);
+			Log.i(LevelActivity.TAG,"FPS - "+fps);
 		}
 		else
 			fpsChanged = false;

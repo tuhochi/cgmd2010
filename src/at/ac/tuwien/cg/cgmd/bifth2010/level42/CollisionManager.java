@@ -18,6 +18,9 @@ public class CollisionManager {
 	private Vector3 q; // punkt der auf abstand getestet werden soll
 	
 	private Vector3 pq;
+	private Vector3 normalDistance;
+	
+	private float minDistance;
 	
 	public CollisionManager(Scene scene)
 	{
@@ -29,6 +32,9 @@ public class CollisionManager {
 		this.q = new Vector3();
 		this.a = new Vector3();
 		this.pq = new Vector3();
+		this.normalDistance = new Vector3();
+		
+		this.minDistance = 0;
 	}
 	
 	public SceneEntity intersectRay(Vector3 origin,Vector3 direction)
@@ -36,6 +42,8 @@ public class CollisionManager {
 		a.copy(direction);
 		a.normalize();
 		p.copy(origin);
+		
+		minDistance = Float.MAX_VALUE;
 
 		//iterate over all scene entities and calc the hesse normal form
 		for(int i=0;i<entityList.size();i++)
@@ -48,15 +56,18 @@ public class CollisionManager {
 			pq.copy(p);
 			pq.subtract(q);
 			
-			if(Vector3.crossProduct(pq,a).length()<entity.getBoundingSphere().getRadius())
+			Vector3.crossProduct(pq,a,normalDistance);
+			
+			if(normalDistance.length()<entity.getBoundingSphere().getRadius())
 			{
 				//only store the one with the nearest z value
 				if(nearestEntity==null)
 					nearestEntity = entity;
 				
-				if(nearestEntity.getBoundingSphere().center.z>entity.getBoundingSphere().center.z)
+				if(pq.length()<minDistance)
 				{
 					nearestEntity = entity;
+					minDistance = pq.length();
 				}
 			}
 		}
