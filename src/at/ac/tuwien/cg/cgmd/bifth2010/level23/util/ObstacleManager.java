@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
 
@@ -43,6 +44,8 @@ public class ObstacleManager
 	
 	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
 	public final static int HORIZONTAL_SPACING = 100;
+	
+	private MainChar mainChar;
 	
 	public class Obstacle
 	{	
@@ -94,6 +97,7 @@ public class ObstacleManager
 		obstacles = new ArrayList<Obstacle>();
 		createVertexBuffer();
 		genArrayWithProbability();
+		mainChar = RenderView.getInstance().getMainChar();
 		instance = this;
 	}
 	
@@ -149,22 +153,6 @@ public class ObstacleManager
 			Obstacle tempObstacle = obstacles.get(i);
 			int posY = (int)tempObstacle.position.y;
 			
-			//do more advanced stuff here
-//			switch(tempObstacle.type)
-//			{
-//				case(OBSTACLE_TYPE1):
-//					posX=0;
-//					break;
-//				case(OBSTACLE_TYPE2):
-//					posX=20;
-//					break;
-//				case(OBSTACLE_TYPE3):
-//					posX=40;
-//					break;
-//				case(OBSTACLE_TYPE4):
-//					posX=80;
-//					break;			
-//			}
 			
 			//test visibility
 			if(posY > currentHeight && posY < topBounds)
@@ -180,12 +168,16 @@ public class ObstacleManager
 				
 				//render
 				glPushMatrix();		
-//				glTranslatef(tempObstacle.width/2,tempObstacle.height/2,0);		
-				glScalef(tempObstacle.width,tempObstacle.height,1);	
-				glTranslatef(tempObstacle.position.x/(float)tempObstacle.width, (posY - currentHeight)/(float)tempObstacle.height, 0);
+	
+					glScalef(tempObstacle.width,tempObstacle.height,1);	
+					glTranslatef(tempObstacle.position.x/(float)tempObstacle.width, (posY - currentHeight)/(float)tempObstacle.height, 0);
 									
-				glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
+					glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
+					
 				glPopMatrix();
+				
+				if(testCollisionWithMainChar(tempObstacle, currentHeight))
+					System.out.println("BAMM");
 				
 				i++;
 			}
@@ -237,6 +229,31 @@ public class ObstacleManager
 		indexBuffer = indexBBuffer.asShortBuffer();
 		indexBuffer.put(indices);
 		indexBuffer.position(0);	
+	}
+	
+	private boolean testCollisionWithMainChar(Obstacle obstacle, float currentHeight)
+	{
+		float leftMainChar, leftObstacle,
+	    	rightMainChar, rightObstacle,
+	    	topMainChar, topObstacle,
+	    	bottomMainChar, bottomObstacle;
+
+		leftMainChar = mainChar.getPosition().x;
+		rightMainChar = leftMainChar + mainChar.getWidth();
+		bottomMainChar = 0.0f;
+		topMainChar = mainChar.getHeight();
+		
+		leftObstacle = obstacle.position.x;
+		rightObstacle = leftObstacle + obstacle.width;
+		bottomObstacle = obstacle.position.y - currentHeight;		
+		topObstacle = bottomObstacle + obstacle.height;
+		
+	    if(bottomMainChar > topObstacle || topMainChar < bottomObstacle 
+	    		|| rightMainChar < leftObstacle || leftMainChar > rightObstacle) 
+	    	return false;
+
+
+		return true;
 	}
 	
 }

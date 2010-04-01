@@ -130,14 +130,14 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	{	
 		setupGL(gl);
 		
-		ObstacleManager.getInstance().generateObstacles();
-		
 		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
-		
 		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
 		topBounds = rightBounds*aspectRatio;
 		
 		mainChar = new MainChar(25.0f,45.0f,new Vector2(0,0));
+		
+		ObstacleManager.getInstance().generateObstacles();
+		
 		background = new Background();
 				
 		int resID = context.getResources().getIdentifier("l23_balloon", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
@@ -230,6 +230,20 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		orientationListener = listener; 
 	}
 	
+	/**
+	 * @return the mainChar
+	 */
+	public MainChar getMainChar() {
+		return mainChar;
+	}
+
+	/**
+	 * @param mainChar the mainChar to set
+	 */
+	public void setMainChar(MainChar mainChar) {
+		this.mainChar = mainChar;
+	}
+
 	public void fetchKeyMoveData()
 	{
 		if(lastKeyMovement!=0)
