@@ -7,7 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class GeometryLoader {
 
-	public static Geometry loadObj(GL10 gl, InputStream is) {
+	public static Geometry loadObj(GL10 gl, InputStream is,InputStream isImage) {
 		String line = "";
 
 		try {
@@ -27,11 +27,11 @@ public class GeometryLoader {
 			throw new RuntimeException(
 					"couldn't load obj from input stream");
 		}
-		return loadObjFromString(gl, line);
+		return loadObjFromString(gl, line, isImage);
 
 	}
 
-	public static Geometry loadObjFromString(GL10 gl, String obj) {
+	public static Geometry loadObjFromString(GL10 gl, String obj, InputStream isImage) {
 		String[] lines = obj.split("\n");
 		float[] vertices = new float[lines.length * 3];
 		float[] normals = new float[lines.length * 3];
@@ -107,7 +107,7 @@ public class GeometryLoader {
 		}
 
 		Geometry geometry = new Geometry(gl, Geometry.Type.Triangles, numFaces * 3,
-				false, numUV > 0, numNormals > 0,null);
+				false, numUV > 0, numNormals > 0,isImage);
 
 		for (int i = 0; i < numFaces * 3; i++) {
 			if (numNormals > 0) {

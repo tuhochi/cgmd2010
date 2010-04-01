@@ -65,7 +65,20 @@ public class SceneGraph {
 		SceneGraph.camera = new Camera();
 		
 		geometry = new Geometry[8];
-		geometry[GEOMETRY_WALL]= new GeometryWall(gl);
+//		geometry[GEOMETRY_WALL]= new GeometryWall(gl);
+		
+		
+		
+		// object loader
+		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_steinmauer);
+		InputStream isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_steinmauer);
+ 		Geometry steinmauer = GeometryLoader.loadObj(gl, is,isImage);
+ 		geometry[GEOMETRY_WALL]= steinmauer;
+ 		//System.out.println("ok");
+		
+		
+		
+		
 		geometry[GEOMETRY_CHARACTER]=  new GameCharacter(gl);
 		
 		geometry[GEOMETRY_WAY]=  new GeometryWay(gl);
@@ -77,11 +90,7 @@ public class SceneGraph {
 		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl,geometry[GEOMETRY_WAY]);
 		
 		
-//		// object loader
-//		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_steinmauer);
-// 		Geometry steinmauer = GeometryLoader.loadObj(gl, is);
-// 		geometry[GEOMETRY_WALL]= steinmauer;
-// 		System.out.println("ok");
+
 		
 		
 		

@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.model;
 
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -8,6 +9,9 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.opengl.GLUtils;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
@@ -50,21 +54,43 @@ public class Geometry {
 	public static boolean useVBO = Config.GLES11;
 
 	public static int geometryCount = 0;
+	
+	private int textureId= -1;
 
 	public Geometry() {
 
 	}
 
 	public Geometry(GL10 gl, Type type, int numVertices, boolean hasColors,
-			boolean hasTextureCoordinates, boolean hasNormals,Bitmap image) {
+			boolean hasTextureCoordinates, boolean hasNormals,InputStream image) {
 		this.gl = gl;
 		this.type = type;
 		vertices = new float[numVertices * 3];
 		int[] buffer = new int[1];
 		
 		if(image!=null){
-			
 			//TODO: generate Textur handler
+			
+			Bitmap bitmap = null;
+			try {
+				bitmap = BitmapFactory.decodeStream(image);
+			} catch (Exception ex) {
+				Log.d("Texture Sample", "Couldn't load bitmap");
+			}
+			int[] textureIds = new int[1];
+			gl.glGenTextures(1, textureIds, 0);
+			textureId = textureIds[0];
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+					GL10.GL_LINEAR);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
+					GL10.GL_LINEAR);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+					GL10.GL_CLAMP_TO_EDGE);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+					GL10.GL_CLAMP_TO_EDGE);
+			bitmap.recycle();
 		}
 
 		if (!useVBO)
@@ -115,7 +141,7 @@ public class Geometry {
 		return buffer.asFloatBuffer();
 	}
 
-	private void update() {
+	private void init() {
 		if (!useVBO) {
 			vertexBuffer.put(vertices);
 			vertexBuffer.position(0);
@@ -187,7 +213,7 @@ public class Geometry {
 	public void render(Type type, int offset, int numVertices) {
 		boolean wasInit = init;
 		if (!init)
-			update();
+			init();
 
 		if (this == lastGeometry && wasInit) {
 			gl.glDrawArrays(getPrimitiveType(type), offset, numVertices);
@@ -197,8 +223,14 @@ public class Geometry {
 			gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisableClientState(GL10.GL_NORMAL_ARRAY);
+			gl.glDisableClientState(GL10.GL_TEXTURE_2D);
 		}
 
+		if(textureId!=-1){
+			gl.glEnable( GL10.GL_TEXTURE_2D );
+            gl.glBindTexture( GL10.GL_TEXTURE_2D, textureId );
+		}
+		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		if (useVBO) {
 			((GL11) gl).glBindBuffer(GL11.GL_ARRAY_BUFFER, vertexHandle);
