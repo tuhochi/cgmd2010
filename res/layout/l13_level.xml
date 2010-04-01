@@ -4,5 +4,5 @@
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:id="@+id/l13_levelLayout">
-<TextView android:text="@+id/l13_fpsTextView" android:id="@+id/l13_fpsTextView" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<TextView android:text="@+id/l13_fpsTextView" android:id="@+id/l13_fpsTextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000"></TextView>
 </FrameLayout>
