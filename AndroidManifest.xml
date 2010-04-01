@@ -63,6 +63,15 @@
 		<activity
 			android:name=".level00.GlTestActivity"/>
 		
+		<activity
+			android:name=".level12.HelpActivity"
+			android:label="@string/l12_title">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level12.LAUNCH_HELP"></action>
+				<category android:name="android.intent.category.DEFAULT"></category>
+			</intent-filter>
+		</activity>
+		
 		
 		<activity
 			android:name=".level13.HelpActivity"
