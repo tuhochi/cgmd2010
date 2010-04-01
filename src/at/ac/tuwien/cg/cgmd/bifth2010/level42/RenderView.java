@@ -1,18 +1,13 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import static android.opengl.GLES10.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import android.content.Context;
-import android.opengl.GLES11Ext;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
-import android.opengl.Matrix;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -30,9 +25,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
-
-// static imports
-import static android.opengl.GLES10.*;
 
 public class RenderView extends GLSurfaceView implements Renderer
 {
@@ -223,20 +215,24 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public boolean onTouchEvent(final MotionEvent event)
 	{
-		queueEvent(new Runnable(){
-			public void run() {
-				if(event.getAction() == MotionEvent.ACTION_DOWN){
-					cam.setLastPosition((int)event.getRawX(), (int)event.getRawY());
-					Vector3 touchedPoint = OGLManager.instance.unProject((int)event.getRawX(), (int)event.getRawY());
+		queueEvent(new Runnable()
+		{
+			public void run()
+			{
+				int rawX = (int)event.getRawX();
+				int rawY = (int)event.getRawY();
+				if(event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					cam.setLastPosition(rawX, rawY);
+					Vector3 unprojectedPoint = oglManager.unProject(rawX, rawY);
 
 //					collManager.intersectRay(touchedPoint, 
 //							Vector3.crossProduct(Vector3.subtract(touchedPoint,cam.eyePosition),cam.upVector));
 					
-			        Log.i(LevelActivity.TAG,"touched - "+touchedPoint.toString());
-			        Log.i(LevelActivity.TAG,"eye - "+cam.eyePosition.toString());
+			        Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + unprojectedPoint.subtract(cam.eyePosition).normalize());
 				}					
 				else
-					cam.setMousePosition((int)event.getRawX(), (int)event.getRawY());
+					cam.setMousePosition(rawX, rawY);
 			}});
 		return true;
 	}
