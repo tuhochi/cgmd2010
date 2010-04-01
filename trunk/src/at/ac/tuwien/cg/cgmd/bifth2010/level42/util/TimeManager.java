@@ -40,7 +40,7 @@ public class TimeManager {
 			frames = 0;
 			fpsT0 = t;
 			fpsChanged = true;
-			Log.i(LevelActivity.TAG,"FPS - "+fps);
+			Log.i(LevelActivity.TAG + "_FPS",fps + "");
 		}
 		else
 			fpsChanged = false;

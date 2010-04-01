@@ -1,15 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import static android.opengl.GLES10.*;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import android.opengl.GLES11;
 import android.opengl.GLU;
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
@@ -139,12 +132,12 @@ public class OGLManager
 	
 	public Vector3 unProject(int x, int y)
 	{
-		viewportArray4 = OGLManager.instance.getViewport();
-		modelviewArray16  = OGLManager.instance.getModelview().getArray16();
-		projectionArray16  = OGLManager.instance.getProjection().getArray16();
+		viewportArray4 = getViewport();
+		modelviewArray16 = getModelview().getArray16();
+		projectionArray16 = getProjection().getArray16();
 		
 		window[0] = (float)x;
-		window[1] = (float)viewport[3] - (float)y;
+		window[1] = (float)(viewport[3] - y);
 		window[2] = 0;
 			
         GLU.gluUnProject( 	window[0], window[1], window[2], modelviewArray16, 0, 
