@@ -17,7 +17,8 @@ public class Model
 	private Matrix44 transformation_temp;
 	private final ArrayList<Geometry> geometries;
 	private final AxisAlignedBox3 boundingBox;
-	private final Sphere boundingSphere;
+	protected final Sphere boundingSphere;
+	private final Sphere boundingSphereWorld;
 	private ArrayList<Pair<Vector3, Model>> distances;
 	
 	public Model()
@@ -26,6 +27,7 @@ public class Model
 		geometries = new ArrayList<Geometry>();
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
+		boundingSphereWorld = new Sphere();
 		distances = new ArrayList<Pair<Vector3,Model>>();
 	}
 	
@@ -35,6 +37,7 @@ public class Model
 		transformation = new Matrix44(other.transformation);
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
 		boundingSphere = new Sphere(other.boundingSphere);
+		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
 		distances = other.distances;
 		int numGeoms = other.geometries.size();
 		for(int i=0; i<numGeoms; i++)
@@ -58,6 +61,7 @@ public class Model
 			geometries.get(i).update();
 
 		transformation.copy(transformation_temp);
+		transformation.transformSphere(boundingSphere, boundingSphereWorld);
 	}
 	
 	public AxisAlignedBox3 getBoundingBox()
@@ -65,9 +69,9 @@ public class Model
 		return boundingBox;
 	}
 	
-	public Sphere getBoundingSphere()
+	public Sphere getBoundingSphereWorld()
 	{
-		return boundingSphere;
+		return boundingSphereWorld;
 	}
 	
 	public Matrix44 getTransformation()
