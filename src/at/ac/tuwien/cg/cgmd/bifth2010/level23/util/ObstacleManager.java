@@ -11,6 +11,7 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
 
@@ -44,14 +45,42 @@ public class ObstacleManager
 	public final static int HORIZONTAL_SPACING = 100;
 	
 	public class Obstacle
-	{		
+	{	
+		public int width;
+		public int height;
+		public Vector2 position;
+		public int type;
+		
 		public Obstacle(int y, int type)
 		{
-			positionY = y;
+			position = new Vector2();
+			position.y = y;
 			this.type = type;
+			switch(type)
+			{
+				case(OBSTACLE_TYPE1):
+					position.x=0;
+					width = 20;
+					height = 10;
+					break;
+				case(OBSTACLE_TYPE2):
+					position.x=20;
+					width = 20;
+					height = 5;
+					break;
+				case(OBSTACLE_TYPE3):
+					position.x=40;
+					width = 20;
+					height = 20;
+					break;
+				case(OBSTACLE_TYPE4):
+					position.x=80;
+					width = 20;
+					height = 5;
+					break;			
+			}
 		}
-		public int positionY;
-		public int type;
+		
 	}
 	
 	private ArrayList<Obstacle> obstacles;
@@ -118,25 +147,24 @@ public class ObstacleManager
 		while(renderNext && i != NR_OF_OBSTACLES)
 		{
 			Obstacle tempObstacle = obstacles.get(i);
-			int posY = tempObstacle.positionY;
-			int posX = 0;
+			int posY = (int)tempObstacle.position.y;
 			
 			//do more advanced stuff here
-			switch(tempObstacle.type)
-			{
-				case(OBSTACLE_TYPE1):
-					posX=0;
-					break;
-				case(OBSTACLE_TYPE2):
-					posX=20;
-					break;
-				case(OBSTACLE_TYPE3):
-					posX=40;
-					break;
-				case(OBSTACLE_TYPE4):
-					posX=80;
-					break;			
-			}
+//			switch(tempObstacle.type)
+//			{
+//				case(OBSTACLE_TYPE1):
+//					posX=0;
+//					break;
+//				case(OBSTACLE_TYPE2):
+//					posX=20;
+//					break;
+//				case(OBSTACLE_TYPE3):
+//					posX=40;
+//					break;
+//				case(OBSTACLE_TYPE4):
+//					posX=80;
+//					break;			
+//			}
 			
 			//test visibility
 			if(posY > currentHeight && posY < topBounds)
@@ -151,11 +179,12 @@ public class ObstacleManager
 				}
 				
 				//render
-				glPushMatrix();
-				
-				glTranslatef(posX, posY - currentHeight, 0);		
-				glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
-				
+				glPushMatrix();		
+//				glTranslatef(tempObstacle.width/2,tempObstacle.height/2,0);		
+				glScalef(tempObstacle.width,tempObstacle.height,1);	
+				glTranslatef(tempObstacle.position.x/(float)tempObstacle.width, (posY - currentHeight)/(float)tempObstacle.height, 0);
+									
+				glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
 				glPopMatrix();
 				
 				i++;
@@ -180,22 +209,22 @@ public class ObstacleManager
 		
 		//just a sample
 		//bottom left
-		vertices[0] = 0f;
-		vertices[1] = 0f;
-		vertices[2] = 0f;
+		vertices[0] = 0.f;
+		vertices[1] = 0.f;
+		vertices[2] = 0.f;
 		//bottom right
-		vertices[3] = 20f;
-		vertices[4] = 0f;
-		vertices[5] = 0f;
+		vertices[3] = 1.f;
+		vertices[4] = 0.f;
+		vertices[5] = 0.f;
 		//top left
-		vertices[6] = 0f;
-		vertices[7]= 10f;
-		vertices[8]= 0f;
+		vertices[6] = 0.f;
+		vertices[7]= 1.f;
+		vertices[8]= 0.f;
 		//top right
-		vertices[9] = 20f;
-		vertices[10] = 10f;
-		vertices[11] = 0f;
-				
+		vertices[9] = 1.f;
+		vertices[10] = 1.f;
+		vertices[1] = 0.f;		
+		
 		ByteBuffer vertexBBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
 		vertexBBuffer.order(ByteOrder.nativeOrder());
 		vertexBuffer = vertexBBuffer.asFloatBuffer();
