@@ -1,56 +1,91 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
-
 import android.os.Bundle;
-import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import android.os.Handler;
+import android.os.Message;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * 
+ * @author arthur (group 13)
+ *
+ */
 public class LevelActivity extends Activity {
-
-
-	private BoozyRenderer boozyRenderer;
+	//custom renderer
+	private MyRenderer myRenderer;
 	
+	private TextView fpsTextView;
+	private String fpsString;
+	
+	
+    /**
+     *  called when the activity is first created
+	 */
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		boozyRenderer = new BoozyRenderer(this);
-	   // boozyRenderer.setRenderer(new BoozyRenderer(this));
-		setContentView(boozyRenderer);
-		
-	
-		
-		SessionState sState = new SessionState();
-		
-		sState.setProgress(13);
-	
-		
-		setResult(RESULT_OK,sState.asIntent());
-	
-		
-		
-	}	
-
-    
-    
-    @Override
-    protected void onResume() {
-    	super.onResume();
-    	boozyRenderer.onResume();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        //make window fullscreen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+	 	Window window = getWindow();
+	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	 	
+	 
+	 	//setup layout with fps-overlay
+	 	setContentView(R.layout.l13_level);
+	 	FrameLayout frameLayout = (FrameLayout)findViewById(R.id.l13_levelLayout);
+	 	fpsTextView = (TextView)findViewById(R.id.l13_fpsTextView);
+	 	frameLayout.removeView(fpsTextView);
+	 	myRenderer = new MyRenderer(this);
+	 	frameLayout.addView(myRenderer);
+	 	frameLayout.addView(fpsTextView);
+	 	
+	 	//timer for fps display
+	 	Timer fpsUpdateTimer = new Timer();
+	 	fpsUpdateTimer.schedule(new TimerTask() {
+	 		
+	 		@Override
+	 		public void run() {
+	 			FPSCounter counter = FPSCounter.getInstance();
+	 			fpsString = "fps: " + counter.getFPS();
+	 			handleUIChanges.sendEmptyMessage(0);
+	 		}
+	 	}, 1000, 3000);
     }
     
-    @Override
-    protected void onPause() {
-    	super.onPause();
-    	boozyRenderer.onPause();
-    }
+   private Handler handleUIChanges = new Handler() {
+	 @Override
+	 public void handleMessage(Message msg) {
+		 super.handleMessage(msg);
+		 fpsTextView.setText(fpsString);
+	 }
+   };
+   
+	/**
+	 * Remember to resume the glSurface
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		myRenderer.onResume();
 
-    @Override
-    protected void onDestroy() {
-    	// TODO Auto-generated method stub
-    	super.onDestroy();
-    	
-    }
+	}
 
+	/**
+	 * Also pause the glSurface
+	 */
+	@Override
+	protected void onPause() {
+		super.onPause();
+		myRenderer.onPause();
+
+	}
 }
