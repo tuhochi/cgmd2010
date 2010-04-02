@@ -5,6 +5,7 @@ public class Matrix44
 	public final float m[][] = new float[4][4];
 	private final float m16[] = new float[16];
 	private Matrix44 temp;
+	private Vector3 tempV = new Vector3();
 
 	public Matrix44()
 	{
@@ -369,14 +370,23 @@ public class Matrix44
 	
 	public void transformSphere(Sphere inout)
 	{
+		// make tempV a point on the hull
+		tempV.copy(1,0,0).multiply(inout.radius).add(inout.center);
+		
+		// transform both points
 		transformPoint(inout.center);
-		transformPoint(inout.radius);
+		transformPoint(tempV);
+		
+		// make tempV a vector from center to hull again
+		tempV.subtract(inout.center);
+
+		inout.radius = tempV.length();
 	}
 	
 	public void transformSphere(Sphere in, Sphere out)
 	{
 		out.center.copy(in.center);
-		out.radius.copy(in.radius);
+		out.radius = in.radius;
 		transformSphere(out);
 	}
 }

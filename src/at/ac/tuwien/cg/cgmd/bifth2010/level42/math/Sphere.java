@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Sphere
 {
 	public final Vector3 center;
-	public final Vector3 radius;
+	public float radius;
 	
 	private final Vector3 temp;
 	
@@ -16,24 +16,19 @@ public class Sphere
 	
 	public Sphere(Sphere other)
 	{
-		this(new Vector3(other.center), new Vector3(other.radius));
-	}
-	
-	public Sphere(Vector3 center, float radius)
-	{
-		this(center, new Vector3(radius,0,0));
+		this(new Vector3(other.center), other.radius);
 	}
 	
 	public Sphere(Vector3 center, Vector3 radius)
 	{
+		this(center, radius.length());
+	}
+	
+	public Sphere(Vector3 center, float radius)
+	{
 		this.center = center;
 		this.radius = radius;
 		temp = new Vector3();
-	}
-
-	public float getRadius()
-	{
-		return radius.length();
 	}
 	
 	public void include(Sphere boundingSphere)
@@ -49,7 +44,7 @@ public class Sphere
 		if(distanceBetweenCenters != 0)	// spheres have different centers
 		{
 			// radius of the resulting sphere
-			float newRadius = (distanceBetweenCenters + boundingSphere.radius.length() + radius.length())/2.0f;
+			float newRadius = (distanceBetweenCenters + boundingSphere.radius + radius)/2.0f;
 			
 			// temp = radius of this sphere in direction of the two centers
 			temp.normalize();
@@ -63,20 +58,18 @@ public class Sphere
 			
 			// center = center of the resulting sphere
 			center.add(temp);
-			radius.copy(temp);
+			radius = newRadius;
 		}
 		else	// both spheres share the same center
 		{
-			radius.x = Math.max(radius.length(), boundingSphere.radius.length());
-			radius.y = 0;
-			radius.z = 0;
+			radius = Math.max(radius, boundingSphere.radius);
 		}
 	}
 	
 	public boolean isPointInside(Vector3 point)
 	{
 		temp.copy(point);
-		return temp.subtract(center).length() <= radius.length();
+		return temp.subtract(center).length() <= radius;
 	}
 	
 	public void setPointSet(ArrayList<Vector3> vertices)
@@ -90,15 +83,13 @@ public class Sphere
 		if(radiusBB < radiusC)
 		{
 			center.copy(centerBB);
-			radius.x = radiusBB;
+			radius = radiusBB;
 		}
 		else
 		{
 			center.copy(centerC);
-			radius.x = radiusC;
+			radius = radiusC;
 		}
-		radius.y = 0;
-		radius.z = 0;
 	}
 	
 	private float calcSphereFromBBox(ArrayList<Vector3> vertices, Vector3 center)
