@@ -12,6 +12,8 @@ public class LevelActivity extends Activity
 	
 	private static LevelActivity instance;
 	
+	public boolean running = true;
+	
 	private RenderView renderView;
 	
 	public LevelActivity()
@@ -33,6 +35,42 @@ public class LevelActivity extends Activity
 		
 	 	setContentView(R.layout.l42_level);
 		renderView = (RenderView)findViewById(R.id.l42_RenderView); // seems to be null?!
+		running = true;
+	}
+	
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		running = true;
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		running = false;
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		running = false;
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		running = true;
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		running = false;
 	}
 
 	public static LevelActivity getInstance()
