@@ -3,8 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 import static android.opengl.GLES10.*;
 
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -30,6 +28,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 public class RenderView extends GLSurfaceView implements Renderer
@@ -39,7 +38,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,0.0f,1.0f};
 	private static final String EXTENSIONS[] = {};
 	
-	private final Context context;
+	private final LevelActivity context;
 	private OGLManager oglManager = OGLManager.instance;
 	private Scene scene;
 	private final Camera cam;
@@ -48,8 +47,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private CollisionManager collManager;
 	
 	// thread stuff
-	private final Runnable logicThread;
-	private final ExecutorService executor;
+	private final Synchronizer synchronizer;
 	private final LinkedList<MotionEvent> motionEvents;
 	private final LinkedList<KeyEvent> keyEvents;
 	
@@ -60,19 +58,20 @@ public class RenderView extends GLSurfaceView implements Renderer
 		requestFocus();
 		setRenderer(this);
 		
-		this.context = context;
+		this.context = (LevelActivity)context;
 		
 		cam = new Camera(20.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 		
-		logicThread = new Runnable()
+		new Thread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				update();
+				while(RenderView.this.context.running)
+					update();
 			}
-		};
-		executor = Executors.newSingleThreadExecutor();
+		}).start();
+		synchronizer = new Synchronizer();
 		motionEvents = new LinkedList<MotionEvent>();
 		keyEvents = new LinkedList<KeyEvent>();
 	}
@@ -147,13 +146,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		motionManager.addMotion(mov1,(Moveable)scene.getSceneEntity(0));
 		motionManager.addMotion(orbit2,(Moveable)scene.getSceneEntity(1));
-		
-		update();
-	
 	}
 	
-	private synchronized void update()
+	private void update()
 	{
+		synchronizer.waitForPreRender();
 		timer.update();
 		
 		/*
@@ -212,6 +209,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		motionManager.updateMotion(timer.getDeltaTsec());
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
+		synchronizer.logicDone();
 	}
 	
 	private void pre_render()
@@ -231,22 +229,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		// the logic thread is synchronized to this, so the render thread will 
-		// wait for the logic thread here
-		synchronized(this)
-		{
-			// copies transformation matrizes
-			scene.update();
-
-			// sets light and camera
-			pre_render();
-		}
-
-		/*
-		 * Collect input data and schedule logic thread for another frame,
-		 * processing the input data
-		 */
-		executor.execute(logicThread);
+		synchronizer.waitForLogic();
+		// copies transformation matrizes
+		scene.update();
+		// sets light and camera
+		pre_render();
+		synchronizer.preRenderDone();
 		
 		render();
 	}
@@ -290,7 +278,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		// Select the modelview matrix again
 		glMatrixMode(GL_MODELVIEW);
-
 	}
 	
 	@Override
