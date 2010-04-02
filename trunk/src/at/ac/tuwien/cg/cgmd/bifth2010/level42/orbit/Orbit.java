@@ -1,13 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Ellipse;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
-public class Orbit implements Movement {
+public class Orbit implements Motion {
 
 	private float 	speed,t,u,step,orbitAngle,
 	
@@ -25,18 +26,15 @@ public class Orbit implements Movement {
 					transformAxis;
 	private Matrix44 transform,objectOrbitTransform,orbitTransform;
 
-	private SceneEntity entity;
 	private SatelliteTransformation satTrans;
 	private Ellipse ellipse;
 	
 	
-	public Orbit(	SceneEntity entity,
-					Vector3 entityPos,Vector3 centerPos,
+	public Orbit(	Vector3 entityPos,Vector3 centerPos,
 					Vector3 directionVec,
 					float speed	
 				)
 	{
-		this.entity = entity;
 		this.speed = speed;
 		
 		this.entityPos = entityPos;
@@ -96,26 +94,41 @@ public class Orbit implements Movement {
 		//check for orbit transformation
 		if(Math.abs(transformDiff)<Math.abs(transformAngle))
 		{
-			Log.i("muh","rotate");
+			
 			transformIteration = transformStep * dt * transformSpeed;
+			
+			if(Math.abs(transformDiff+transformIteration)>Math.abs(transformAngle))
+				transformIteration = transformAngle-transformDiff;
+			
+			transformDiff+=transformIteration;
 			orbitTransform.setRotate(transformAxis, transformIteration);
 			orbitTransform.transformPoint(centerVec);
 			orbitTransform.transformPoint(directionVec);
-			transformDiff+=transformIteration;
+			
+			//Log.i(LevelActivity.TAG,"transformDiff "+transformDiff +" transformAngle" +transformAngle +" transformIteration"+transformIteration );
 		}
 		
 		if(Math.abs(centerDiff)<Math.abs(centerDiffFactor))
 		{
-			Log.i("muh","a");
+			
 			centerDiffIteration = centerDiffStep * dt * transformSpeed;
+			
+			if(Math.abs(centerDiff+centerDiffIteration)>Math.abs(centerDiffFactor))
+				centerDiffIteration = centerDiffFactor-centerDiff;
+
 			centerDiff += centerDiffIteration;
 			centerVec.multiply( 1 + centerDiffIteration);
+			
+			//Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
 		}
 		
 		if(Math.abs(directionDiff)<Math.abs(directionDiffFactor))
 		{
-			Log.i("muh","b");
 			directionDiffIteration = directionDiffStep * dt * transformSpeed;
+			
+			if(Math.abs(directionDiff+directionDiffIteration)>Math.abs(directionDiffFactor))
+				directionDiffIteration = directionDiffFactor-directionDiff;
+			
 			directionDiff += directionDiffIteration;
 			directionVec.multiply( 1 + directionDiffIteration);
 		}
@@ -124,7 +137,7 @@ public class Orbit implements Movement {
 		evaluatePos();
 		
 		//update transformation in the entity
-		entity.setTransformation(transform);
+		//entity.setTransformation(transform);
 	}
 	
 	private void evaluatePos()
@@ -136,7 +149,7 @@ public class Orbit implements Movement {
 		transform.setIdentity();
 		
 		//change orientation relative to the orbit
-		transform.mult(objectOrbitTransform);
+		//transform.mult(objectOrbitTransform);
 		
 		//object transf.
 		if(satTrans!=null)
@@ -174,11 +187,11 @@ public class Orbit implements Movement {
 		transformDiff = 0;
 		
 		centerDiffFactor = (newCenterVec.length()/centerVec.length()) - 1;
-		centerDiffStep = centerDiffFactor/100;
+		centerDiffStep = centerDiffFactor/10;
 		centerDiff = 0;
 		
 		directionDiffFactor = (newDirectionVec.length()/directionVec.length()) - 1;
-		directionDiffStep = directionDiffFactor/100;
+		directionDiffStep = directionDiffFactor/10;
 		directionDiff = 0;
 		
 	}

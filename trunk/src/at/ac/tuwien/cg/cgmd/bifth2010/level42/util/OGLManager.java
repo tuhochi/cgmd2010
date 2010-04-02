@@ -138,7 +138,7 @@ public class OGLManager
 		
 		window[0] = (float)x;
 		window[1] = (float)(viewport[3] - y);
-		window[2] = 0;
+		window[2] = 1;
 			
         GLU.gluUnProject( 	window[0], window[1], window[2], modelviewArray16, 0, 
         					projectionArray16, 0, viewportArray4, 0, unprojectedPos, 0);

@@ -6,11 +6,14 @@ import static android.opengl.GLES10.glPushMatrix;
 
 import java.util.ArrayList;
 
+import android.text.method.MovementMethod;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 
-public class SceneEntity
+public class SceneEntity implements Moveable
 {
 	private String name;
 	private Matrix44 transformation;
@@ -19,6 +22,7 @@ public class SceneEntity
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
 	private final Sphere boundingSphereWorld;
+	private Motion motion;
 	
 	public SceneEntity()
 	{
@@ -84,5 +88,13 @@ public class SceneEntity
 	public Sphere getBoundingSphereWorld()
 	{
 		return boundingSphereWorld;
+	}
+
+	public Motion getMotion() {
+		return motion;
+	}
+
+	public void setMotion(Motion motion) {
+		this.motion = motion;
 	}
 }

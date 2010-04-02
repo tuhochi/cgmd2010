@@ -6,12 +6,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Pair;
 
 //static imports
 import static android.opengl.GLES10.*;
 
-public class Model
+public class Model implements Moveable
 {
 	private Matrix44 transformation;
 	private Matrix44 transformation_temp;
@@ -20,6 +22,7 @@ public class Model
 	protected final Sphere boundingSphere;
 	private final Sphere boundingSphereWorld;
 	private ArrayList<Pair<Vector3, Model>> distances;
+	private Motion motion;
 	
 	public Model()
 	{
@@ -94,5 +97,15 @@ public class Model
 	public void setDistances(ArrayList<Pair<Vector3, Model>> distances)
 	{
 		this.distances = distances;
+	}
+
+	@Override
+	public Motion getMotion() {
+		return motion;
+	}
+
+	@Override
+	public void setMotion(Motion motion) {
+		this.motion = motion;
 	}
 }

@@ -4,7 +4,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
-public class DirectionalMovement implements Movement {
+public class DirectionalMotion implements Motion {
 
 	private final Vector3 startPos,directionVec,currentPos,tempDirectionVec;
 	private float speed;
@@ -12,7 +12,7 @@ public class DirectionalMovement implements Movement {
 	private final SceneEntity entity;
 	private final Matrix44 transform;
 	
-	public DirectionalMovement(	SceneEntity entity, Vector3 startPos, 
+	public DirectionalMotion(	SceneEntity entity, Vector3 startPos, 
 								Vector3 directionVec, float speed
 								)
 	{

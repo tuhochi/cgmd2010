@@ -20,11 +20,13 @@ import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMovement;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.OrbitManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
@@ -42,7 +44,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private Scene scene;
 	private final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
-	private final OrbitManager orbitManager = OrbitManager.instance;
+	private final MotionManager motionManager = MotionManager.instance;
 	private CollisionManager collManager;
 	
 	// thread stuff
@@ -133,18 +135,18 @@ public class RenderView extends GLSurfaceView implements Renderer
 		scene = SceneLoader.getInstance().readScene("l42_cube");
 		collManager = new CollisionManager(scene);
 		
-		Orbit orbit2 = new Orbit(scene.getSceneEntity(1),new Vector3(-3,3,0),new Vector3(3,-3,0),
+		Orbit orbit2 = new Orbit(new Vector3(-3,3,0),new Vector3(3,-3,0),
 								new Vector3(0,0,-5),5);
 	
 		SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0, null);
 		orbit2.setSatTrans(sat1);
 		
-		DirectionalMovement mov1 = new DirectionalMovement(	scene.getSceneEntity(0),
+		DirectionalMotion mov1 = new DirectionalMotion(	scene.getSceneEntity(0),
 															new Vector3(-3,3,10),
 															new Vector3(0,0,-1),0.1f);
 		
-		orbitManager.addOrbit(mov1);
-		orbitManager.addOrbit(orbit2);
+		motionManager.addMotion(mov1,(Moveable)scene.getSceneEntity(0));
+		motionManager.addMotion(orbit2,(Moveable)scene.getSceneEntity(1));
 		
 		update();
 	
@@ -168,11 +170,17 @@ public class RenderView extends GLSurfaceView implements Renderer
 				{
 					cam.setLastPosition(rawX, rawY);
 					Vector3 unprojectedPoint = oglManager.unProject(rawX, rawY);
-
-//					collManager.intersectRay(touchedPoint, 
-//							Vector3.crossProduct(Vector3.subtract(touchedPoint,cam.eyePosition),cam.upVector));
-					
-			        Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + unprojectedPoint.subtract(cam.eyePosition).normalize());
+					Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
+				
+					SceneEntity entity = collManager.intersectRay(cam.eyePosition, rayDirection);
+					if(entity!=null){
+						motionManager.addMotion(new Orbit(	entity.getBoundingSphereWorld().center,
+															new Vector3(),
+															new Vector3(0,0,-1),5),
+												(Moveable)entity);
+					}
+	
+			        Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
 				}					
 				else
 					cam.setMousePosition(rawX, rawY);
@@ -192,7 +200,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 					cam.setDistance(cam.getDistance() - 10.0f);
 					break;
 				case KeyEvent.KEYCODE_DPAD_LEFT:
-					Orbit temp = (Orbit)orbitManager.getOrbit(1);
+					Orbit temp = (Orbit)motionManager.getMotion(1);
 					temp.decA();
 					break;
 				case KeyEvent.KEYCODE_DPAD_DOWN:
@@ -202,7 +210,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 			}
 		}
 		
-		orbitManager.updateOrbits(timer.getDeltaTsec());
+		motionManager.updateMotion(timer.getDeltaTsec());
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
 	}
 	
