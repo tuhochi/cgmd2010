@@ -11,6 +11,7 @@ import java.io.InputStream;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GameCharacter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
@@ -32,6 +33,7 @@ public class SceneGraph {
 	
 	static float deltaTime;
 	static long lastFrameStart;
+	static int framesSinceLastSecound=0;
 	
 	public final static byte GEOMETRY_WALL = 0;
 	public final static byte GEOMETRY_WAY = 1;
@@ -77,17 +79,14 @@ public class SceneGraph {
  		//System.out.println("ok");
 		
 		
-		
-		
 		geometry[GEOMETRY_CHARACTER]=  new GameCharacter(gl);
 		
 		geometry[GEOMETRY_WAY]=  new GeometryWay(gl);
-		
-		geometry[GEOMETRY_STONE] = new GeometryStone(gl,geometry[GEOMETRY_WAY]);
-		geometry[GEOMETRY_BARREL] = new GeometryBarrel(gl,geometry[GEOMETRY_WAY]);
-		geometry[GEOMETRY_TRASH] = new GeometryTrash(gl,geometry[GEOMETRY_WAY]);
-		geometry[GEOMETRY_MAP] = new GeometryMap(gl,geometry[GEOMETRY_WAY]);
-		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl,geometry[GEOMETRY_WAY]);
+		geometry[GEOMETRY_STONE] = new GeometryStone(gl);
+		geometry[GEOMETRY_BARREL] = new GeometryBarrel(gl);
+		geometry[GEOMETRY_TRASH] = new GeometryTrash(gl);
+		geometry[GEOMETRY_MAP] = new GeometryMap(gl);
+		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl);
 		
 		
 
@@ -105,9 +104,15 @@ public class SceneGraph {
 	public void render(GL10 gl) {
 		
 		// start time mesherment
+		framesSinceLastSecound++;
 		long currentFrameStart = System.nanoTime();
-		deltaTime = (currentFrameStart-lastFrameStart) / 1000000000.0f;
+		deltaTime += (currentFrameStart-lastFrameStart) / 1000000000.0f;
 		lastFrameStart = currentFrameStart;		
+		if (deltaTime >= 1) {
+			Log.d("fps", String.valueOf(framesSinceLastSecound));
+			framesSinceLastSecound = 0;
+			deltaTime = 0f;
+		}
 
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -160,7 +165,7 @@ public class SceneGraph {
 			for(int x=0;x<level.worldDim.x;x++){
 				//if wall
 				int id=y*level.worldDim.x+x;
-//				if(level.world[id]<=GEOMETRY_STONE)
+//				if(level.world[id]>=GEOMETRY_STONE)
 //				{
 				// move the word
 				glPushMatrix();
@@ -256,8 +261,8 @@ public class SceneGraph {
 						}		
 					glPopMatrix();
 				glPopMatrix();
-//				}
-			} 
+				}
+//			} 
 		}
 		
 		// render GameCaracter

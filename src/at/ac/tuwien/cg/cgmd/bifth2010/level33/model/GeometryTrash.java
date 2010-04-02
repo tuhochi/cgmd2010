@@ -8,7 +8,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 
 public class GeometryTrash extends Geometry {
 
-	Geometry way;
 	
 	float one = 1.0f/4;
 	Vector3f v0 = new Vector3f(-one, -one, 0);
@@ -19,9 +18,8 @@ public class GeometryTrash extends Geometry {
 
 	Color w = new Color(0,1,0);
 
-	public GeometryTrash(GL10 gl,Geometry way){
+	public GeometryTrash(GL10 gl){
 		super( gl, Type.Triangles, 6, true, false, false,null ); 
-		this.way=way;
 		 
 		 // simple Quad //
 		 //    
@@ -35,9 +33,5 @@ public class GeometryTrash extends Geometry {
 		 this.vertex( v3 ); this.vertex( v2 ); this.vertex( v1 );	
 		
 	}
-	
-	public void render() {
-		way.render();
-		super.render();
-	}
+
 }
