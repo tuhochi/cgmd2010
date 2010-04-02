@@ -15,16 +15,17 @@ public class Vector3
 		copy(x,y,z);
 	}
 	
-	private void copy(float x, float y, float z)
+	public Vector3 copy(float x, float y, float z)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		return this;
 	}
 	
-	public void copy(Vector3 other)
+	public Vector3 copy(Vector3 other)
 	{
-		copy(other.x, other.y, other.z);
+		return copy(other.x, other.y, other.z);
 	}
 	
 	public Vector3(Vector3 other)
