@@ -8,8 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 
 public class GeometryBarrel extends Geometry {
 	
-	Geometry way;
-	
+
 	float one = 1.0f/4;
 	Vector3f v0 = new Vector3f(-one, -one, 0);
 	Vector3f v1 = new Vector3f(one, -one, 0);
@@ -19,9 +18,8 @@ public class GeometryBarrel extends Geometry {
 
 	Color w = new Color(0.4f,0.4f,0.4f);
 
-	public GeometryBarrel(GL10 gl,Geometry way){
+	public GeometryBarrel(GL10 gl){
 		super( gl, Type.Triangles, 6, true, false, false ,null); 
-		this.way=way;
 		 
 		 // simple Quad //
 		 //    
@@ -35,10 +33,6 @@ public class GeometryBarrel extends Geometry {
 		 this.vertex( v3 ); this.vertex( v2 ); this.vertex( v1 );	
 		
 	}
-	
-	public void render() {
-		way.render();
-		super.render();
-	}
+
 
 }

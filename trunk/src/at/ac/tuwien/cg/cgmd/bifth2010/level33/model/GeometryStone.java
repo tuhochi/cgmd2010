@@ -7,8 +7,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 
 public class GeometryStone extends Geometry {
-	
-	Geometry way;
+
 	
 	float one = 1.0f/4;
 	Vector3f v0 = new Vector3f(-one, -one, 0);
@@ -19,9 +18,8 @@ public class GeometryStone extends Geometry {
 
 	Color w = new Color(0,0,0);
 
-	public GeometryStone(GL10 gl,Geometry way){
+	public GeometryStone(GL10 gl){
 		super( gl, Type.Triangles, 6, true, false, false,null ); 
-		this.way=way;
 		 
 		 // simple Quad //
 		 //    
@@ -35,10 +33,4 @@ public class GeometryStone extends Geometry {
 		 this.vertex( v3 ); this.vertex( v2 ); this.vertex( v1 );	
 		
 	}
-	
-	public void render() {
-		way.render();
-		super.render();
-	}
-
 }

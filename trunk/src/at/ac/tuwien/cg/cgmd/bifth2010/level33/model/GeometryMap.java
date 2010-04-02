@@ -7,7 +7,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 
 public class GeometryMap extends Geometry {
-	Geometry way;
+	
 	
 	float one = 1.0f/4;
 	Vector3f v0 = new Vector3f(-one, -one, 0);
@@ -18,9 +18,9 @@ public class GeometryMap extends Geometry {
 
 	Color w = new Color(0,0.6f,0);
 
-	public GeometryMap(GL10 gl,Geometry way){
+	public GeometryMap(GL10 gl){
 		super( gl, Type.Triangles, 6, true, false, false ,null); 
-		this.way=way;
+
 		 
 		 // simple Quad //
 		 //    
@@ -35,9 +35,6 @@ public class GeometryMap extends Geometry {
 		
 	}
 	
-	public void render() {
-		way.render();
-		super.render();
-	}
+
 	
 }
