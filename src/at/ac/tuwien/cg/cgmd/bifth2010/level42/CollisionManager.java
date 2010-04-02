@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
@@ -9,7 +10,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 public class CollisionManager {
 
 	private Scene scene;
-	private ArrayList<SceneEntity> intersectedEntities;
 	private ArrayList<SceneEntity> entityList;
 	private SceneEntity entity,nearestEntity;
 	
@@ -26,7 +26,6 @@ public class CollisionManager {
 	{
 		this.scene = scene;
 		this.entityList = scene.sceneEntities;
-		this.intersectedEntities = new ArrayList<SceneEntity>();
 		
 		this.p = new Vector3();
 		this.q = new Vector3();
@@ -43,7 +42,9 @@ public class CollisionManager {
 		a.normalize();
 		p.copy(origin);
 		
+		//reset values
 		minDistance = Float.MAX_VALUE;
+		nearestEntity = null;
 
 		//iterate over all scene entities and calc the hesse normal form
 		for(int i=0;i<entityList.size();i++)
@@ -57,10 +58,11 @@ public class CollisionManager {
 			pq.subtract(q);
 			
 			Vector3.crossProduct(pq,a,normalDistance);
-			
 			if(normalDistance.length()<entity.getBoundingSphereWorld().radius)
 			{
-				//only store the one with the nearest z value
+				Log.d(LevelActivity.TAG,"found hit with " + entity.getName() + " distance="+normalDistance.length()+" sphereradius="+entity.getBoundingSphereWorld().radius);
+				
+				//only store the one with the min distance
 				if(nearestEntity==null)
 					nearestEntity = entity;
 				
@@ -71,7 +73,10 @@ public class CollisionManager {
 				}
 			}
 		}
-		
+		if(nearestEntity!=null)
+			Log.d(LevelActivity.TAG,"ray intersected with "+nearestEntity.getName());
+		else
+			Log.d(LevelActivity.TAG,"no ray intersection found");
 		return nearestEntity;
 		
 	}
