@@ -2,6 +2,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import static android.opengl.GLES10.*;
 
+import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
@@ -41,6 +45,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private final OrbitManager orbitManager = OrbitManager.instance;
 	private CollisionManager collManager;
 	
+	// thread stuff
+	private final Runnable logicThread;
+	private final ExecutorService executor;
+	private final LinkedList<MotionEvent> motionEvents;
+	private final LinkedList<KeyEvent> keyEvents;
+	
 	public RenderView(Context context)
 	{
 		super(context);
@@ -51,6 +61,18 @@ public class RenderView extends GLSurfaceView implements Renderer
 		this.context = context;
 		
 		cam = new Camera(20.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
+		
+		logicThread = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				update();
+			}
+		};
+		executor = Executors.newSingleThreadExecutor();
+		motionEvents = new LinkedList<MotionEvent>();
+		keyEvents = new LinkedList<KeyEvent>();
 	}
 	
 	public RenderView(Context context, AttributeSet attr)
@@ -123,12 +145,63 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		orbitManager.addOrbit(mov1);
 		orbitManager.addOrbit(orbit2);
+		
+		update();
 	
 	}
 	
-	private void update()
+	private synchronized void update()
 	{
 		timer.update();
+		
+		/*
+		 * process all events
+		 */
+		synchronized(motionEvents)
+		{
+			MotionEvent event;
+			while((event = motionEvents.poll()) != null)
+			{
+				int rawX = (int)event.getRawX();
+				int rawY = (int)event.getRawY();
+				if(event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					cam.setLastPosition(rawX, rawY);
+					Vector3 unprojectedPoint = oglManager.unProject(rawX, rawY);
+
+//					collManager.intersectRay(touchedPoint, 
+//							Vector3.crossProduct(Vector3.subtract(touchedPoint,cam.eyePosition),cam.upVector));
+					
+			        Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + unprojectedPoint.subtract(cam.eyePosition).normalize());
+				}					
+				else
+					cam.setMousePosition(rawX, rawY);
+			}
+		}
+		
+		synchronized(keyEvents)
+		{
+			KeyEvent event;
+			while((event = keyEvents.poll()) != null)
+			{
+				int keyCode = event.getKeyCode();
+				
+				switch(keyCode)
+				{
+				case KeyEvent.KEYCODE_DPAD_UP:
+					cam.setDistance(cam.getDistance() - 10.0f);
+					break;
+				case KeyEvent.KEYCODE_DPAD_LEFT:
+					Orbit temp = (Orbit)orbitManager.getOrbit(1);
+					temp.decA();
+					break;
+				case KeyEvent.KEYCODE_DPAD_DOWN:
+					cam.setDistance(cam.getDistance() + 10.0f);
+					break;
+				}
+			}
+		}
+		
 		orbitManager.updateOrbits(timer.getDeltaTsec());
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
 	}
@@ -150,22 +223,22 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
-		update(); // call must be moved to logic thread
-		
-		/*
-		 * Wait for logic thread to finish the current frame
-		 */
-		
-		// copies transformation matrizes
-		scene.update();
-		
-		// sets light and camera
-		pre_render();
-		
+		// the logic thread is synchronized to this, so the render thread will 
+		// wait for the logic thread here
+		synchronized(this)
+		{
+			// copies transformation matrizes
+			scene.update();
+
+			// sets light and camera
+			pre_render();
+		}
+
 		/*
 		 * Collect input data and schedule logic thread for another frame,
 		 * processing the input data
 		 */
+		executor.execute(logicThread);
 		
 		render();
 	}
@@ -215,54 +288,20 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public boolean onTouchEvent(final MotionEvent event)
 	{
-		queueEvent(new Runnable()
+		synchronized(motionEvents)
 		{
-			public void run()
-			{
-				int rawX = (int)event.getRawX();
-				int rawY = (int)event.getRawY();
-				if(event.getAction() == MotionEvent.ACTION_DOWN)
-				{
-					cam.setLastPosition(rawX, rawY);
-					Vector3 unprojectedPoint = oglManager.unProject(rawX, rawY);
-
-//					collManager.intersectRay(touchedPoint, 
-//							Vector3.crossProduct(Vector3.subtract(touchedPoint,cam.eyePosition),cam.upVector));
-					
-			        Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + unprojectedPoint.subtract(cam.eyePosition).normalize());
-				}					
-				else
-					cam.setMousePosition(rawX, rawY);
-			}});
+			motionEvents.addLast(event);
+		}
 		return true;
 	}
 	
 	@Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-	
-		if (keyCode == KeyEvent.KEYCODE_DPAD_UP)
-			queueEvent(new Runnable() {
-				public void run() {
-					cam.setDistance(cam.getDistance() - 10.0f);
-				}
-			});
-		
-		if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT)
-			queueEvent(new Runnable() {
-				public void run() {
-					Orbit temp = (Orbit)orbitManager.getOrbit(1);
-					temp.decA();
-				}
-			});
-
-		if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN)
-			queueEvent(new Runnable() {
-				public void run() {
-					cam.setDistance(cam.getDistance() + 10.0f);
-				}
-			});
-
+		synchronized(keyEvents)
+		{
+			keyEvents.addLast(event);
+		}
 		return false;
 	}
 
