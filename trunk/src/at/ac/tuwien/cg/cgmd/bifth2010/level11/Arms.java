@@ -53,23 +53,25 @@ public class Arms {
 		//Log.i(LOG_TAG, "draw()");
 		
 
-		gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
+gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
 		
 		
 		Textures.tex.setTexture(arm_texture_id);
 		
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y+10, 0.0f);
+		gl.glTranslatef(position.x, position.y, 0.0f);
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(0.0f, 10.0f, 0.0f);
 		gl.glTranslatef(-arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		left_arm.draw(gl);
 		
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y-10, 0.0f);
+		gl.glTranslatef(position.x, position.y, 0.0f);
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(0.0f, -10.0f, 0.0f);
 		gl.glTranslatef(arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		right_arm.draw(gl);
@@ -79,16 +81,18 @@ public class Arms {
 		Textures.tex.setTexture(hand_texture_id);
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y+10, 0.0f);
+		gl.glTranslatef(position.x, position.y, 0.0f);
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(0.0f, 10.0f, 0.0f);
 		gl.glTranslatef(-arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		left_hand.draw(gl);
 		
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y-10, 0.0f);
+		gl.glTranslatef(position.x, position.y, 0.0f);
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(0.0f, -10.0f, 0.0f);
 		gl.glTranslatef(arm_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		right_hand.draw(gl);

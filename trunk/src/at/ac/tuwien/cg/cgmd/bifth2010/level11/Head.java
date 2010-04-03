@@ -45,6 +45,7 @@ public class Head {
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(position.x, position.y, 0.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		
 		head.draw(gl);
