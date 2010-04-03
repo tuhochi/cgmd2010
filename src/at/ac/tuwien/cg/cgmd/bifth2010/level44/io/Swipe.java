@@ -1,6 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.io;
 
 public class Swipe implements InputGesture {
+	public static final float MIN_LENGTH = 70.f;
+	public static final float MAX_LENGTH = 270.f;
+	
 	private float startX = 0;
 	private float startY = 0;
 	private float endX = 0;
@@ -16,7 +19,7 @@ public class Swipe implements InputGesture {
 		this.endY = y2;
 		
 		this.displayHalf = displayHalf;
-		this.length = Math.round(Math.sqrt((endX - startX) + (endX - startX) + (endY - startY) * (endY - startY)));
+		this.length = Math.min(MAX_LENGTH, Math.round(Math.sqrt((endX - startX) + (endX - startX) + (endY - startY) * (endY - startY))));
 	}
 	
 	public float getLength() {
