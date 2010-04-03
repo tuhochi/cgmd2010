@@ -1,11 +1,7 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level44;
+package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 import java.util.Random;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Container;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Item;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.TextureParts;
 
 public class CoinBucket extends Container {
 	public CoinBucket(Texture texture) {
