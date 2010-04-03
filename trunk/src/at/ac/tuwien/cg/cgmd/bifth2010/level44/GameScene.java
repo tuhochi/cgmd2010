@@ -11,12 +11,14 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Item;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Rabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
-	private Item rootItem;
+	private PhysicalObject rabbit;
 	private GameThread gameThread;
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
 	
@@ -25,7 +27,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
 		System.err.println("GameScene created");
-		rootItem = null;
+		rabbit = null;
 		gameThread = null;
 	}
 
@@ -37,8 +39,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
-		if (rootItem != null) {
-			rootItem.draw(gl);
+		if (rabbit != null) {
+			rabbit.draw(gl);
 		}
 	}
 
@@ -69,8 +71,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 		
-		rootItem = new Rabbit(mainTexture);
-		rootItem.setPosition(getWidth()/2, getHeight()/2);
+		rabbit = new PhysicalRabbit(new Rabbit(mainTexture));
+		rabbit.setPosition(getWidth()/2, getHeight()/2);
 		
 		//((RabbitHead)rootItem).setWingAngle(50);
 		
@@ -79,8 +81,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	
 	private void restartGameThread() {
 		stopGameThread();
-		if (rootItem != null) {
-			gameThread = new GameThread(this, (Rabbit)rootItem);
+		
+		if (rabbit != null) {
+			gameThread = new GameThread(this,rabbit);
 			gameThread.start();
 		}
 	}

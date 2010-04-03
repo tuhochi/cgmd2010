@@ -1,0 +1,96 @@
+package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
+
+public class Rabbit extends Container {
+	private static final float FLAP_DELTA = 3.5f;
+
+	private Item leftWing;
+	private Item rightWing;
+	private Item coinBucket;
+
+	private boolean leftFlapUp = false;
+	private boolean rightFlapUp = false;
+	
+	private float currentLeftAngleMin = -45.f;
+	private float currentRightAngleMax = 45.f;
+
+	public Rabbit(Texture texture) {
+		super(TextureParts.makeRabbitHead(texture));
+		setCenter(84, 64);
+
+		leftWing = new Item(TextureParts.makeWing(texture));
+		leftWing.setCenter(128, 64);
+		leftWing.setPosition(0, -10);
+		leftWing.setRotation(45.f);
+
+		rightWing = new Item(TextureParts.makeWing(texture).setMirror(
+				Mirror.HORIZONTAL));
+		rightWing.setCenter(0, 64);
+		rightWing.setPosition(0, -10);
+		rightWing.setRotation(-45.f);
+
+		coinBucket = new CoinBucket(texture);
+		coinBucket.setPosition(0, 50);
+
+		addChild(leftWing);
+		addChild(rightWing);
+		addChild(coinBucket);
+	}
+
+	public void setWingAngle(float angle) {
+		leftWing.setRotation(-angle);
+		rightWing.setRotation(angle);
+	}
+
+	public boolean flapLeftWing(float strength) {
+		System.out.println("flap left");
+		float newAngle = leftWing.getRotation();
+
+		if (leftFlapUp) {
+			newAngle += FLAP_DELTA;
+		} else {
+			newAngle -= FLAP_DELTA;
+		}
+
+		leftWing.setRotation(newAngle);
+
+		if (newAngle < currentLeftAngleMin) {
+			leftFlapUp = !leftFlapUp;
+		} else if (newAngle > 45.f) {
+			leftFlapUp = !leftFlapUp;
+			return true;
+		}
+		
+		return false;
+	}
+
+	public boolean flapRightWing(float strength) {
+		System.out.println("flap right, strength: " + strength);
+		float newAngle = rightWing.getRotation();
+
+		if (rightFlapUp) {
+			newAngle -= FLAP_DELTA;
+		} else {
+			newAngle += FLAP_DELTA;
+		}
+
+		rightWing.setRotation(newAngle);
+
+		if (newAngle > currentRightAngleMax) {
+			rightFlapUp = !rightFlapUp;
+		} else if (newAngle < -45.f) {
+			rightFlapUp = !rightFlapUp;
+			return true;
+		}
+		
+		return false;
+	}
+
+	@Override
+	public void setRotation(float angle) {
+		super.setRotation(angle);
+
+		/* Simulate gravity for the coin bucket */
+		coinBucket.setRotation(-angle / 2);
+	}
+
+}

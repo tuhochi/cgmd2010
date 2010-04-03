@@ -1,7 +1,5 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level44;
+package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TexturePart;
 
 public class TextureParts {
 	
