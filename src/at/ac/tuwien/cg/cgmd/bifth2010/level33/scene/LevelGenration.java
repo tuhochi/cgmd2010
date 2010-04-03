@@ -13,6 +13,11 @@ public class LevelGenration {
 	int[] createdWays;
 	int columns=0;
 	int rows=0;
+	
+	//WallInfomation
+	int numberOfWallTextures=4;
+	ArrayList<int[]> wallField = new ArrayList<int[]>(4);
+	
 	int wayOffset=0;
 	double percentOfWay=0.0;
 	
@@ -149,6 +154,9 @@ public class LevelGenration {
 		{
 			creatGoodiesWayPoints("Barrel");
 		}
+		
+		//calculates wall-information
+		wallGeneration();
 		
 		return levelField;
 	
@@ -321,6 +329,248 @@ public class LevelGenration {
 	}
 	
 	/**
+	 * The wall-ArrayList will be calculated, which defines how many corners a 
+	 * wall-element has and it`s rotation
+	 */
+	public void wallGeneration(){
+		
+		//Init Walls
+		int[] allNeighbourIndex;
+		for(int i=0; i<levelField.length; i++)
+		{
+			int[] wallProperties = new int[4];
+			
+			if(levelField[i]==0)
+			{
+				//Wall
+				wallProperties[0]=0;
+				
+				allNeighbourIndex = checkAllNeighbours(i);
+				int[] specialCornerAndRotation=wallModelCalculation(i,allNeighbourIndex);
+				wallProperties[1]=specialCornerAndRotation[0];
+				wallProperties[2]=specialCornerAndRotation[1];
+				
+				wallProperties[3]=rg.nextInt(numberOfWallTextures);
+				
+				wallField.add(i, wallProperties);
+			}
+			else
+			{
+				//something else
+				wallProperties[0]=-1;
+				wallProperties[1]=-1;
+				wallProperties[2]=-1;
+				wallProperties[3]=-1;
+				wallField.add(i, wallProperties);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Calculates the number of special-corners of a particular wall-element
+	 */
+	public int[] wallModelCalculation(int seedPoint, int[] allNeighbourIndex){
+		
+		/*
+		 * wallProperties: [wall/noWall wallModel wallModelRatation wallModelTexture]
+		 * wallModels:
+		 * 				0	-	no special corner
+		 * 				1	-	1 special corner
+		 * 				2	- 	2 special corner
+		 * 			   (5) 	-	2 special corner (diagonal special corner)
+		 * 				3	-	3 special corner
+		 * 				4	-	4 special corner
+		 */
+		
+		int specialCorner =0;
+		
+		//Load all Neighbour-Values
+		int[] tempLevelField = new int[8];
+		for(int i=0; i<tempLevelField.length; i++)
+		{
+			tempLevelField[i]=levelField[allNeighbourIndex[i]];
+		}
+		
+		//no special corner
+		if(tempLevelField[1]==0 && tempLevelField[3]==0 && tempLevelField[5]==0 &&
+		   tempLevelField[7]==0)
+			specialCorner=0;
+		else
+		{
+			int next=0;
+			//some special corners
+			for(int i=1; i<tempLevelField.length; i=i+2)
+			{
+				if(tempLevelField[i]!=0 )
+				{
+					if(i==7)
+						next=0;
+					else
+						next=i+1;
+					
+					if(tempLevelField[i-1]!=0 && tempLevelField[next]!=0)
+					{
+						//Found special Corner
+						specialCorner++;
+						tempLevelField[i]=-1;
+					}
+				}
+			}
+			
+			//Sonderfall bei 2 special corner abfragen
+			if(specialCorner==2 && 
+			((tempLevelField[1]==-1 && tempLevelField[5]==-1) || (tempLevelField[3]==-1 && tempLevelField[7]==-1)))
+			{
+				specialCorner=5;
+			}
+		}
+		
+		
+		int rotation = wallModelRotation(tempLevelField,specialCorner);
+		int[]specialCornerAndRotation = new int[2];
+		specialCornerAndRotation[0]=specialCorner;
+		specialCornerAndRotation[1]=rotation;
+		return specialCornerAndRotation;
+	}
+	
+	/**
+	 * Calculates the rotation of a particular wall-model
+	 */
+	public int wallModelRotation(int[] tempLevelField, int specialCorner){
+		
+		/*
+		 * 	180	x	270
+		 * 	x	SP	x
+		 * 	90	x	0
+		 */
+		
+		int rotation=0;
+		
+		//no corners
+		if(specialCorner==0)
+			return rotation;
+		
+		//1 corner
+		else if(specialCorner==1)
+		{
+			if(tempLevelField[1]==-1)
+				return 270;
+			else if(tempLevelField[3]==-1)
+				return 0;
+			else if(tempLevelField[5]==-1)
+				return 90;
+			else if(tempLevelField[7]==-1)
+				return 180;
+		}
+		
+		//2 corners
+		else if(specialCorner==2)
+		{
+			if(tempLevelField[1]==-1 && tempLevelField[3]==-1)
+				return 270;
+			else if(tempLevelField[3]==-1 && tempLevelField[5]==-1)
+				return 0;
+			else if(tempLevelField[5]==-1 && tempLevelField[7]==-1)
+				return 90;
+			else if(tempLevelField[7]==-1 && tempLevelField[1]==-1)
+				return 180;
+		}
+		
+		//2 diagonal corners
+		else if(specialCorner==5)
+		{
+			if(tempLevelField[3]==-1 && tempLevelField[7]==-1)
+				return 0;
+			else
+				return 90;
+		}
+		
+		//3 corners
+		else if(specialCorner==3)
+		{
+			if(tempLevelField[1]==-1 && tempLevelField[3]==-1 && tempLevelField[5]==-1)
+				return 270;
+			else if(tempLevelField[3]==-1 && tempLevelField[5]==-1 && tempLevelField[7]==-1)
+				return 0;
+			else if(tempLevelField[5]==-1 && tempLevelField[7]==-1 && tempLevelField[1]==-1)
+				return 90;
+			else if(tempLevelField[7]==-1 && tempLevelField[1]==-1 && tempLevelField[3]==-1)
+				return 180;
+		}
+		
+		//4 corners
+		else if(specialCorner==4)
+		{
+			return 0;
+		}
+		
+		return rotation;
+	}
+	
+	/**
+	 * Calculates all neighbours-index of a point
+	 */
+	public  int[] checkAllNeighbours(int seedPoint){
+		
+		/*
+		 * 	7	0	1
+		 * 	6	SP	2
+		 * 	5	4	3
+		 */
+		
+		int[] allNeighbours = new int[8];
+		int[] mainNeighbours = checkWayPossibility(seedPoint);
+		
+		allNeighbours[0]=mainNeighbours[1];
+		allNeighbours[2]=mainNeighbours[2];
+		allNeighbours[4]=mainNeighbours[3];
+		allNeighbours[6]=mainNeighbours[4];
+		
+		//1
+		if(mainNeighbours[2]-columns<0)
+		{
+			allNeighbours[1]=mainNeighbours[2]+(rows-1)*columns;
+		}
+		else
+		{
+			allNeighbours[1]=mainNeighbours[2]-columns;
+		}
+		
+		//3
+		if(mainNeighbours[2]+columns>columns*rows-1)
+		{
+			allNeighbours[3]=mainNeighbours[2]-(rows-1)*columns;
+		}
+		else
+		{
+			allNeighbours[3]=mainNeighbours[2]+columns;
+		}
+		
+		//5
+		if(mainNeighbours[4]+columns>columns*rows-1)
+		{
+			allNeighbours[5]=mainNeighbours[4]-(rows-1)*columns;
+		}
+		else
+		{
+			allNeighbours[5]=mainNeighbours[4]+columns;
+		}
+		
+		//7
+		if(mainNeighbours[4]-columns<0)
+		{
+			allNeighbours[7]=mainNeighbours[4]+(rows-1)*columns;
+		}
+		else
+		{
+			allNeighbours[7]=mainNeighbours[4]-columns;
+		}				
+		
+		return allNeighbours;
+	}
+	
+	/**
 	 *Get the start position of the whole labyrinth
 	 */
 	public Vector2i getStartPosition(){
@@ -330,9 +580,38 @@ public class LevelGenration {
 	}
 	
 	/**
+	 * Get the wall-information about the whole level
+	 */
+	public ArrayList<int[]> getWallField(){
+		
+		/*
+		 * wallProperties: [wall/noWall wallModel wallModelRatation wallModelTexture]
+		 * 
+		 * wall/noWall: 
+		 * 				0	-	wall
+		 * 			   -1	-	noWall (all other parameters are -1 too)
+		 * 
+		 * wallModels:
+		 * 				0	-	no special corner
+		 * 				1	-	1 special corner
+		 * 				2	- 	2 special corner
+		 * 			   (5) 	-	2 special corner (diagonal special corner)
+		 * 				3	-	3 special corner
+		 * 				4	-	4 special corner
+		 * 
+		 * rotation:
+		 * 				0,90,180,270 degree
+		 * 
+		 * texture:
+		 * 				0,1,2,3,4 (amount of textures can be changed, see constructor)
+		 */
+		return wallField;
+	}
+	
+	/**
 	 * Print the created labyrinth
 	 */
-	private void testCreation(){
+	private void testCreation(boolean all){
 		
 		System.out.println("Labyrinth: Startpunkt bei "+createdWays[0]+"\n");
 		System.out.println("------------------------");
@@ -344,7 +623,22 @@ public class LevelGenration {
 				//System.out.print(" "+(10*i+j));
 			}
 			System.out.print("\n");
-		}	
+		}
+		
+		if(!all)
+			return;
+		System.out.println("------------------------");
+		int[] test = new int[4];
+		for(int i=0;i<rows;i++)
+		{
+			for(int j=0;j<columns;j++)
+			{
+				test = wallField.get(10*i+j);
+				System.out.print(" "+test[0]);
+				//System.out.print(" "+(10*i+j));
+			}
+			System.out.print("\n");
+		}
 	}
 
 }
