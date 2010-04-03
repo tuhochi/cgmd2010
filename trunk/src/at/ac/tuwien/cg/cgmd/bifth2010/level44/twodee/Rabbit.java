@@ -1,7 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
+
 public class Rabbit extends Container {
 	private static final float FLAP_DELTA = 3.5f;
+	private static final float ANGLE_MAX = 45.f;
+	private static final float INPUT_DELTA = Swipe.MAX_LENGTH - Swipe.MIN_LENGTH;
+	private static final float ANGLE_QUOTIENT = ANGLE_MAX / INPUT_DELTA;
 
 	private Item leftWing;
 	private Item rightWing;
@@ -22,8 +27,7 @@ public class Rabbit extends Container {
 		leftWing.setPosition(0, -10);
 		leftWing.setRotation(45.f);
 
-		rightWing = new Item(TextureParts.makeWing(texture).setMirror(
-				Mirror.HORIZONTAL));
+		rightWing = new Item(TextureParts.makeWing(texture).setMirror(Mirror.HORIZONTAL));
 		rightWing.setCenter(0, 64);
 		rightWing.setPosition(0, -10);
 		rightWing.setRotation(-45.f);
@@ -40,9 +44,28 @@ public class Rabbit extends Container {
 		leftWing.setRotation(-angle);
 		rightWing.setRotation(angle);
 	}
+	
+	public void setCurrentAngleMax(Swipe swipe) {
+		if (swipe.isLeftHalf()) {
+			this.setCurrentLeftAngleMax(swipe.getLength());
+		} else {
+			this.setCurrentRightAngleMax(swipe.getLength());
+		}
+	}
+	
+	private void setCurrentLeftAngleMax(float swipeLength) {
+		float max = (swipeLength - Swipe.MIN_LENGTH) * ANGLE_QUOTIENT;
+		
+		this.currentLeftAngleMin = -max;
+	}
+	
+	private void setCurrentRightAngleMax(float swipeLength) {
+		float max = (swipeLength - Swipe.MIN_LENGTH) * ANGLE_QUOTIENT;
+		
+		this.currentRightAngleMax = max;
+	}
 
-	public boolean flapLeftWing(float strength) {
-		System.out.println("flap left");
+	public boolean flapLeftWing(float swipeLength) {
 		float newAngle = leftWing.getRotation();
 
 		if (leftFlapUp) {
@@ -63,8 +86,7 @@ public class Rabbit extends Container {
 		return false;
 	}
 
-	public boolean flapRightWing(float strength) {
-		System.out.println("flap right, strength: " + strength);
+	public boolean flapRightWing(float swipeLength) {
 		float newAngle = rightWing.getRotation();
 
 		if (rightFlapUp) {

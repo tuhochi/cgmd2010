@@ -27,21 +27,37 @@ public class PhysicalRabbit implements PhysicalObject {
 	}
 
 	@Override
+	/**
+	 * Process the next input gesture
+	 * 
+	 * @gesture The Gesture that the user inputs, normally a Swipe (Flick)
+	 */
 	public void processGesture(InputGesture gesture) {
 		InputGesture currentGestureToPerform = null;
 
 		if (gesture != null) {
+			// append to inputQueue
 			inputQueue.add(gesture);
 		}
 
+		// get newest input to process
 		currentGestureToPerform = inputQueue.peek();
 
+		// is there a input to process, is it a swipe?
 		if (currentGestureToPerform != null && currentGestureToPerform instanceof Swipe) {
 			Swipe swipe = (Swipe) currentGestureToPerform;
+			
+			// set the maximum angle for the wings depending on length of swipe
+			// longer swipe means longer angle-flip
+			rabbit.setCurrentAngleMax(swipe);
 
+			// check in which half of the screen the input was detected
 			if (swipe.isLeftHalf()) {
+				// perform one step of the flap and check if the flap is finished
+				// finshed = at top position again (-45/45 ¡)
 				boolean finished = rabbit.flapLeftWing(swipe.getLength());
 
+				// current flap finished -> remove from input queue
 				if (finished) {
 					inputQueue.remove();
 				}

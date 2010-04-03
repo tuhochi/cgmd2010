@@ -5,7 +5,6 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
 
 public class InputListener extends SimpleOnGestureListener {
-	private static final int SWIPE_MIN_DISTANCE = 100;
 	private static final int SWIPE_MAX_OFF_PATH = 70;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 100;
 	
@@ -29,7 +28,7 @@ public class InputListener extends SimpleOnGestureListener {
             return false;
 		
 		// check if swipe is long enough to ge a gesture
-		if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+		if (e2.getY() - e1.getY() > Swipe.MIN_LENGTH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
 			// left half of screen
 			if (e1.getX() < width/2) {
 				System.out.println("Swipe Gesture on Left Half");
