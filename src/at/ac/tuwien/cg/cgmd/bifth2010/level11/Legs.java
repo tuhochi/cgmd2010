@@ -42,15 +42,17 @@ public class Legs {
 		Textures.tex.setTexture(leg_texture_id);
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y+5.0f, 0.0f);
+		gl.glTranslatef(position.x, position.y, 0.0f);
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(0.0f, 5.0f, 0.0f);
 		gl.glTranslatef(leg_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		left_leg.draw(gl);
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y-5.0f, 0.0f);
+		gl.glTranslatef(position.x, position.y, 0.0f);
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glTranslatef(0.0f, -5.0f, 0.0f);
 		gl.glTranslatef(-leg_position, 0.0f, 0.0f);
 		gl.glScalef(50.0f, 50.0f, 1.0f);
 		right_leg.draw(gl);

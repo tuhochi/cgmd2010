@@ -22,7 +22,7 @@ public class Level extends Thread {
 
     private static final String LOG_TAG = Level.class.getSimpleName();
 	private boolean isRunning;
-	private boolean isPaused;
+	private boolean isPaused; 
 	
 	private Textures textures;
 	
