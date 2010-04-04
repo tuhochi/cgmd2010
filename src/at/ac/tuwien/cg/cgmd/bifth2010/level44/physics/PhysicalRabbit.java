@@ -94,6 +94,8 @@ public class PhysicalRabbit implements PhysicalObject {
 			} else if (currentGestureToPerform instanceof DoubleTap) {
 				DoubleTap tap = (DoubleTap)currentGestureToPerform;
 				
+				rabbit.setFlying(true);
+				
 				boolean finishedLeft = rabbit.flapLeftWing(Swipe.MAX_LENGTH);
 				boolean finishedRight = rabbit.flapRightWing(Swipe.MAX_LENGTH);
 				
