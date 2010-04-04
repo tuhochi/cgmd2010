@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 import static android.opengl.GLES10.*;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -7,9 +8,14 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.hardware.Camera.Size;
+import android.opengl.GLES10;
+import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 
 public class MainChar implements SceneEntity {
@@ -22,6 +28,8 @@ public class MainChar implements SceneEntity {
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer indexBuffer;
 	private FloatBuffer texCoordBuffer;
+	private int vboId; 
+	private boolean vbo = false;
 	public int textureID = -1;
 	
 	public static final int MOVE_LEFT = -1;
@@ -42,6 +50,8 @@ public class MainChar implements SceneEntity {
 		createVertexBuffer();
 		createIndexBuffer();
 		createTexCoordBuffer();
+		if (vbo)
+			setupVBO();
 	}
 	
 	public MainChar(float width, float height, Vector2 position)
@@ -53,8 +63,25 @@ public class MainChar implements SceneEntity {
 		createVertexBuffer();
 		createIndexBuffer();
 		createTexCoordBuffer();
+		if(vbo)
+			setupVBO();
 	}
+	
+	private void setupVBO() {
 		
+		int[] ids = new int[1];
+		GLES11.glGenBuffers(1, ids, 0);
+		vboId = ids[0];
+		
+		GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
+		int size = (vertexBuffer.capacity()+texCoordBuffer.capacity())* 4; //4*3 Vertices, 4*2 Texcoords, 4 Byte je Float
+		GLES11.glBufferData(GLES11.GL_ARRAY_BUFFER, size, null, GLES11.GL_STATIC_DRAW);
+		
+		GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, 0, vertexBuffer.capacity()*4, vertexBuffer);
+		GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, vertexBuffer.capacity()*4, texCoordBuffer.capacity()*4, texCoordBuffer);
+		//GLES11.glBufferSubData(GLES11.GL_ELEMENT_ARRAY_BUFFER, (vertexBuffer.capacity() + texCoordBuffer.capacity())*4, indexBuffer.capacity()*2, indexBuffer);
+	
+}
 	/**
 	 * @return the moveDirection
 	 */
@@ -147,6 +174,7 @@ public class MainChar implements SceneEntity {
 		texCoordBuffer = tcbb.asFloatBuffer();
 		texCoordBuffer.put(textureCoordinates);
 		texCoordBuffer.position(0);
+		
 	}
 	
 	public void setTextureID(int texID)
@@ -223,15 +251,32 @@ public class MainChar implements SceneEntity {
 		
 		glTranslatef(position.x, 0, 0);
 		
-		if(textureID != -1)
-		{	glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
-		}		
+		if (!vbo) {
+			if(textureID != -1)
+			{	
+				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+			}		
 		
-		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-		glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
+			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+			glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
+		
+		} else {
+		
+			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
+			
+			if (textureID != -1) {
+				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+				GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
+			}
+			
+			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
 
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+		}
 		
 		glPopMatrix();
 	}
+	
+	
 }

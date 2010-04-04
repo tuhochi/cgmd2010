@@ -56,6 +56,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onPause() {
 		super.onPause(); 
+		renderer.persistSceneEntities();
 		// should be fast because could be called often 
 		// end animation and other cpu consuming tasks
 		// followed by onResume() or onStop()
@@ -64,6 +65,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onResume() {
 		super.onResume(); 
+		renderer.restoreSceneEntities();
 		// followed by onPause()
 	}
 	@Override
