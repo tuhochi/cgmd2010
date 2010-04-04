@@ -19,6 +19,8 @@ public class Rabbit extends Container {
 
 	private float currentLeftAngleMin = -ANGLE_MAX;
 	private float currentRightAngleMax = ANGLE_MAX;
+	
+	private boolean flying = false;
 
 	public Rabbit(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
@@ -89,6 +91,7 @@ public class Rabbit extends Container {
 			leftFlapUp = !leftFlapUp;
 		} else if (newAngle > ANGLE_MAX) {
 			leftFlapUp = !leftFlapUp;
+			setFlying(false);
 			return true;
 		}
 
@@ -110,6 +113,7 @@ public class Rabbit extends Container {
 			rightFlapUp = !rightFlapUp;
 		} else if (newAngle < -ANGLE_MAX) {
 			rightFlapUp = !rightFlapUp;
+			setFlying(false);
 			return true;
 		}
 
@@ -140,5 +144,13 @@ public class Rabbit extends Container {
 	
 	public float getHeight() {
 		return 70.f;
+	}
+
+	public void setFlying(boolean flying) {
+		this.flying = flying;
+	}
+
+	public boolean isFlying() {
+		return flying;
 	}
 }
