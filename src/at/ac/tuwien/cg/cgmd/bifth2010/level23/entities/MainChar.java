@@ -29,7 +29,7 @@ public class MainChar implements SceneEntity {
 	private ShortBuffer indexBuffer;
 	private FloatBuffer texCoordBuffer;
 	private int vboId; 
-	private boolean vbo = false;
+	private boolean vbo = true;
 	public int textureID = -1;
 	
 	public static final int MOVE_LEFT = -1;
@@ -50,7 +50,7 @@ public class MainChar implements SceneEntity {
 		createVertexBuffer();
 		createIndexBuffer();
 		createTexCoordBuffer();
-		if (vbo)
+//		if (vbo)
 			setupVBO();
 	}
 	
@@ -63,7 +63,7 @@ public class MainChar implements SceneEntity {
 		createVertexBuffer();
 		createIndexBuffer();
 		createTexCoordBuffer();
-		if(vbo)
+//		if(vbo)
 			setupVBO();
 	}
 	
@@ -79,10 +79,12 @@ public class MainChar implements SceneEntity {
 		
 		GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, 0, vertexBuffer.capacity()*4, vertexBuffer);
 		GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, vertexBuffer.capacity()*4, texCoordBuffer.capacity()*4, texCoordBuffer);
+		GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
+		
 		//GLES11.glBufferSubData(GLES11.GL_ELEMENT_ARRAY_BUFFER, (vertexBuffer.capacity() + texCoordBuffer.capacity())*4, indexBuffer.capacity()*2, indexBuffer);
 	
 }
-	/**
+	/** 
 	 * @return the moveDirection
 	 */
 	public int getMoveDirection() {
@@ -273,6 +275,7 @@ public class MainChar implements SceneEntity {
 			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
 
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
 		}
 		
 		glPopMatrix();
