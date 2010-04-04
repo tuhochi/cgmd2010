@@ -44,7 +44,6 @@ public class Geometry
 			GLES11.glGenBuffers(1, buffers, 0);
 			vboID = buffers[0];
 			oglManager.bindVBO(vboID);
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboID);
 			int datasize = ((vertices != null ? numVertices*VERTEX_LENGTH : 0) + (normals != null ? numVertices*VERTEX_LENGTH : 0) + (texcoords != null ? numVertices*TEXCOORD_LENGTH : 0))*4;
 			GLES11.glBufferData(GLES11.GL_ARRAY_BUFFER, datasize, null, GLES11.GL_STATIC_DRAW);
 			int currentoffset = 0;
