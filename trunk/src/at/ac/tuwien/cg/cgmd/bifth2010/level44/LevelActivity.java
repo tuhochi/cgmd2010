@@ -36,7 +36,6 @@ public class LevelActivity extends Activity {
 		gestureDetector = new GestureDetector(new InputListener(scene, display.getWidth(), display.getHeight()));
         gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-            	System.err.println("onTouch");
                 if (gestureDetector.onTouchEvent(event)) {
                     return true;
                 }

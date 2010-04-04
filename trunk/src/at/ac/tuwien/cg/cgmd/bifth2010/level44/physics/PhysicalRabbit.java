@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.DoubleTap;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Rabbit;
@@ -12,9 +13,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Rabbit;
 public class PhysicalRabbit implements PhysicalObject {
 	private Rabbit rabbit = null;
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
+	private int screenWidth;
+	private int screenHeight;
 
-	public PhysicalRabbit(Rabbit rabbit) {
+	public PhysicalRabbit(Rabbit rabbit, int screenWidth, int screenHeight) {
 		this.rabbit = rabbit;
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
 	}
 
 	public Rabbit getRabbit() {
@@ -22,8 +27,16 @@ public class PhysicalRabbit implements PhysicalObject {
 	}
 
 	@Override
-	public void move() {
-		// TODO Auto-generated method stub
+	public void move(long time) {
+		// v(t) - gt 
+		// s = v * t
+		
+		float v = PhysicalObject.GRAVITY * time;
+		float s = v * time;
+		
+		if ((rabbit.getY() + rabbit.getHeight()) <= screenHeight) {
+			rabbit.setPosition(rabbit.getX(), rabbit.getY() + s/5000.f);
+		}
 	}
 
 	@Override
@@ -44,27 +57,40 @@ public class PhysicalRabbit implements PhysicalObject {
 		currentGestureToPerform = inputQueue.peek();
 
 		// is there a input to process, is it a swipe?
-		if (currentGestureToPerform != null && currentGestureToPerform instanceof Swipe) {
-			Swipe swipe = (Swipe) currentGestureToPerform;
-			
-			// set the maximum angle for the wings depending on length of swipe
-			// longer swipe means longer angle-flip
-			rabbit.setCurrentAngleMax(swipe);
+		if (currentGestureToPerform != null) {
+			if (currentGestureToPerform instanceof Swipe) {
+				Swipe swipe = (Swipe) currentGestureToPerform;
 
-			// check in which half of the screen the input was detected
-			if (swipe.isLeftHalf()) {
-				// perform one step of the flap and check if the flap is finished
-				// finshed = at top position again (-45/45 ¡)
-				boolean finished = rabbit.flapLeftWing(swipe.getLength());
+				// set the maximum angle for the wings depending on length of swipe
+				// longer swipe means longer angle-flip
+				rabbit.setCurrentAngleMax(swipe);
+				rabbit.rotate(swipe);
 
-				// current flap finished -> remove from input queue
-				if (finished) {
-					inputQueue.remove();
+				// check in which half of the screen the input was detected
+				if (swipe.isLeftHalf()) {
+					// perform one step of the flap and check if the flap is finished
+					// finshed = at top position again (-45/45 ¡)
+					boolean finished = rabbit.flapLeftWing(swipe.getLength());
+
+					// current flap finished -> remove from input queue
+					if (finished) {
+						inputQueue.remove();
+					}
+				} else {
+					boolean finished = rabbit.flapRightWing(swipe.getLength());
+
+					if (finished) {
+						inputQueue.remove();
+					}
 				}
-			} else {
-				boolean finished = rabbit.flapRightWing(swipe.getLength());
-
-				if (finished) {
+			} else if (currentGestureToPerform instanceof DoubleTap) {
+				DoubleTap tap = (DoubleTap)currentGestureToPerform;
+				
+				boolean finishedLeft = rabbit.flapLeftWing(Swipe.MAX_LENGTH);
+				boolean finishedRight = rabbit.flapRightWing(Swipe.MAX_LENGTH);
+				
+				if (finishedLeft || finishedRight) {
+					rabbit.resetWings();
 					inputQueue.remove();
 				}
 			}

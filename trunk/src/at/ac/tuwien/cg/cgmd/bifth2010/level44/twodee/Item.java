@@ -65,6 +65,14 @@ public class Item {
 		return angle;
 	}
 	
+	public float getX() {
+		return x;
+	}
+	
+	public float getY() {
+		return y;
+	}
+	
 	protected void onBeforeDraw(GL10 gl) {
 		/* Override this in subclasses to draw children, etc... */
 	}

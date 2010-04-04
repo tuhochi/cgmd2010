@@ -71,7 +71,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 		
-		rabbit = new PhysicalRabbit(new Rabbit(mainTexture));
+		rabbit = new PhysicalRabbit(new Rabbit(mainTexture), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
 		
 		//((RabbitHead)rootItem).setWingAngle(50);
