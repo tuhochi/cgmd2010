@@ -4,9 +4,9 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 
 public interface PhysicalObject {
-	public static final double GRAVITY = 9.81;
+	public static final float GRAVITY = 9.81f;
 	
-	public void move();
+	public void move(long time);
 	public void processGesture(InputGesture gesture);
 	
 	public void draw(GL10 gl);

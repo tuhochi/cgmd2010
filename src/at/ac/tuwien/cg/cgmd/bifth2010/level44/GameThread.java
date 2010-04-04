@@ -13,17 +13,20 @@ public class GameThread extends Thread {
 	private boolean quit;
 	private InputGesture gesture = null;
 	private int frameRate = FRAME_RATE;
+	private long startTime;
 
 	public GameThread(GameScene scene, PhysicalObject rabbit) {
 		this.scene = scene;
 		this.rabbit = (PhysicalRabbit) rabbit;
 		this.quit = false;
 
-		// TODO Remove
-		this.rabbit.getRabbit().setScale(0.5f);
+		// TODO Remove and make textures smaller
+		this.rabbit.getRabbit().setScale(0.4f);
 	}
 
 	public void run() {
+		startTime = System.currentTimeMillis();
+		
 		while (!quit) {
 			scene.queueEvent(new Runnable() {
 				public void run() {
@@ -35,13 +38,14 @@ public class GameThread extends Thread {
 					}*/
 
 					rabbit.processGesture(scene.getNextInputGesture());
+					rabbit.move((startTime - System.currentTimeMillis()) / 100);
 
-					// rabbit.setPosition((float)(scene.getWidth()/2 +
-					// scene.getWidth()/5*Math.sin((double)(System.currentTimeMillis()/10000.))),
-					// (float)(scene.getHeight()/3));
-					// rabbit.setScale((float)(.5+.5*Math.abs(Math.sin((double)(System.currentTimeMillis()/5000.)))));
-					// rabbit.setWingAngle((float)(Math.sin((double)(System.currentTimeMillis()/100.))*45));
-					// rabbit.setRotation((float)(10-Math.sin((double)(System.currentTimeMillis()/1000.))*20));
+					 /*rabbit.setPosition((float)(scene.getWidth()/2 +
+					 scene.getWidth()/5*Math.sin((double)(System.currentTimeMillis()/10000.))),
+					 (float)(scene.getHeight()/3));
+					 rabbit.getRabbit().setScale((float)(.5+.5*Math.abs(Math.sin((double)(System.currentTimeMillis()/5000.)))));
+					 rabbit.getRabbit().setWingAngle((float)(Math.sin((double)(System.currentTimeMillis()/100.))*45));
+					 rabbit.getRabbit().setRotation((float)(10-Math.sin((double)(System.currentTimeMillis()/1000.))*20));*/
 
 					//frameRate--;
 				}
