@@ -11,7 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Rabbit;
 
 public class PhysicalRabbit implements PhysicalObject {
-	private static final float MAX_FLAP_ACCELERATION = 18.f;
+	private static final float MAX_FLAP_ACCELERATION = 22.f;
 	
 	private Rabbit rabbit = null;
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
@@ -37,7 +37,7 @@ public class PhysicalRabbit implements PhysicalObject {
 	 */
 	public void move(long time) {
 		InputGesture currentGesture = inputQueue.peek();
-		float factor = 2000.f;
+		float factor = 5000.f;
 		float flapAcceleration = MAX_FLAP_ACCELERATION;
 		
 		if (currentGesture != null) {
@@ -45,20 +45,24 @@ public class PhysicalRabbit implements PhysicalObject {
 			float p = currentGesture.getLength() / Swipe.MAX_LENGTH;
 			
 			flapAcceleration *= p;
-			System.out.println("Rotation: " + rabbit.getRotation());
 		}
 		
 		// s = 1/2 * g * t^2
+		float angle = (float)((90.f - rabbit.getRotation()) * Math.PI/180.);
 		float sGravity = (1/2.f * PhysicalObject.GRAVITY * time * time) / factor;
 		float sMovement = (1/2.f * flapAcceleration * time * time) / factor;
+		float sMovementY = sMovement * (float)Math.sin(Math.abs(angle));
+		float sMovementX = sMovement * (float)Math.cos(angle);
 		float newY = rabbit.getY() + sGravity;
+		float newX = rabbit.getX();
 		
 		if (rabbit.isFlying()) {
-			newY -= sMovement;
+			newY -= sMovementY;
+			newX += sMovementX;
 		}
 		
 		// set new position, if the position is on the screen
-		rabbit.setPosition(rabbit.getX(), Math.min(newY, screenHeight - rabbit.getHeight()));
+		rabbit.setPosition(newX, Math.min(newY, screenHeight - rabbit.getHeight()));
 	}
 
 	@Override
