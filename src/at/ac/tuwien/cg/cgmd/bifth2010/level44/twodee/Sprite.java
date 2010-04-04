@@ -4,7 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import java.nio.FloatBuffer;
 
-public class Item {
+public class Sprite {
 	private float x;
 	private float y;
 	private float width;
@@ -15,15 +15,15 @@ public class Item {
 	private TexturePart texturePart;
 	private FloatBuffer vtxCoords;
 	
-	public Item(TexturePart texturePart) {
+	public Sprite(TexturePart texturePart) {
 		this(texturePart, texturePart.getWidth(), texturePart.getHeight(), 0, 0);
 	}
 	
-	public Item(TexturePart texturePart, float width, float height) {
+	public Sprite(TexturePart texturePart, float width, float height) {
 		this(texturePart, width, height, 0, 0);
 	}
 	
-	public Item(TexturePart texturePart, float width, float height, float x, float y) {
+	public Sprite(TexturePart texturePart, float width, float height, float x, float y) {
 		this.texturePart = texturePart;
 		this.width = width;
 		this.height = height;

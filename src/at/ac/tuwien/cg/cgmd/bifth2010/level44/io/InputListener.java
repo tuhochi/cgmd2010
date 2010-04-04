@@ -4,11 +4,20 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
 
+/**
+ * InputListener to detect various Gestures (Fling/Swipe, Tap)
+ * 
+ * @author Matthias
+ *
+ */
+
 public class InputListener extends SimpleOnGestureListener {
+	/** maximum horizontal distance to be travelled during swipe to be detected as a Swipe Gesture */
 	private static final int SWIPE_MAX_OFF_PATH = 70;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 100;
-	
+	/** width of the Screen */
 	private int width;
+	/** height of the Screen */
 	private int height;
 	private GameScene scene;
 
@@ -21,23 +30,21 @@ public class InputListener extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		InputGesture.DisplayHalf displayHalf;
+		InputGesture.ScreenHalf displayHalf;
 		
 		// check that swipe is straight
 		if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH)
             return false;
 		
-		// check if swipe is long enough to ge a gesture
+		// check if swipe is long enough to be a gesture
 		if (e2.getY() - e1.getY() > Swipe.MIN_LENGTH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
 			// left half of screen
 			if (e1.getX() < width/2) {
-				System.out.println("Swipe Gesture on Left Half");
-				displayHalf = InputGesture.DisplayHalf.LEFT;
+				displayHalf = InputGesture.ScreenHalf.LEFT;
 			} 
 			// right half of screen
 			else {
-				System.out.println("Swipe Gesture on Right Half");
-				displayHalf = InputGesture.DisplayHalf.RIGHT;
+				displayHalf = InputGesture.ScreenHalf.RIGHT;
 			}
 			
 			// add Gesture to InputQueue

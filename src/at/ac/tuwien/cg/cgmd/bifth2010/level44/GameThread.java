@@ -13,6 +13,7 @@ public class GameThread extends Thread {
 	private boolean quit;
 	private InputGesture gesture = null;
 	private int frameRate = FRAME_RATE;
+	/** start time of each wing-flap, used for calculating physical movement */
 	private long startTime;
 
 	public GameThread(GameScene scene, PhysicalObject rabbit) {
@@ -21,7 +22,7 @@ public class GameThread extends Thread {
 		this.quit = false;
 
 		// TODO Remove and make textures smaller
-		this.rabbit.getRabbit().setScale(0.4f);
+		this.rabbit.getSprite().setScale(0.4f);
 	}
 
 	public void run() {
@@ -42,12 +43,15 @@ public class GameThread extends Thread {
 					boolean resetTime = rabbit.processGesture(scene.getNextInputGesture()); 
 					
 					if (resetTime) {
+						// new moving period begins
 						startTime = System.currentTimeMillis() - 2000;
 					}
 					
+					// perform movement of rabbit
 					rabbit.move((startTime - System.currentTimeMillis()) / 100);
 					
-					if (rabbit.getRabbit().isUnder(scene.getHeight() - 10)) {
+					// reset start time if rabbit sits at the bottom of the screen
+					if (rabbit.getSprite().isUnder(scene.getHeight() - 10)) {
 						startTime = System.currentTimeMillis() - 2000;
 					}
 
