@@ -1,6 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
 
+import java.util.HashMap;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,9 +15,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Serializer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
@@ -48,6 +52,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private int lastKeyMovement;
 	private TimeUtil timer;
 	private TextureManager textureManager; 
+	private Serializer serializer; 
 	
 	public RenderView(Context context)
 	{
@@ -61,11 +66,23 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         requestFocus();
         instance=this;
         textureManager = TextureManager.getInstance();
+        serializer = Serializer.getInstance();
+        serializer.setContext(context); 
 	}
 	
 	public static RenderView getInstance()
 	{
 		return instance;
+	}
+	
+	public void persistSceneEntities() {
+		Serializer.getInstance().serializeObjects(mainChar, background);
+	}
+	
+	public void restoreSceneEntities() {
+		HashMap<Integer, SceneEntity> map = Serializer.getInstance().getSerializedObjects();
+		mainChar = (MainChar)map.get(Serializer.SERIALIZED_MAINCHAR);
+		background = (Background)map.get(Serializer.SERIALIZED_BACKGROUND);
 	}
 	
 	@Override
