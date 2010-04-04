@@ -13,13 +13,16 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Rabbit;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
+	/** the flying rabbit */
 	private PhysicalObject rabbit;
+	/** thread for game logic */
 	private GameThread gameThread;
+	/** queue of all inputGestures to process */
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
 	
 	public GameScene(Context context) {
@@ -71,10 +74,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 		
-		rabbit = new PhysicalRabbit(new Rabbit(mainTexture), this.getWidth(), this.getHeight());
+		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
-		
-		//((RabbitHead)rootItem).setWingAngle(50);
 		
 		restartGameThread();
 	}
