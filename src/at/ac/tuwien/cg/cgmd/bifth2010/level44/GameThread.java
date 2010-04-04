@@ -37,11 +37,19 @@ public class GameThread extends Thread {
 							frameRate = FRAME_RATE;
 					}*/
 
-					if (rabbit.processGesture(scene.getNextInputGesture())) {
+					// process input gesture and
+					// check if one flap has finished -> reset time for next flap of wings
+					boolean resetTime = rabbit.processGesture(scene.getNextInputGesture()); 
+					
+					if (resetTime) {
 						startTime = System.currentTimeMillis() - 2000;
 					}
 					
 					rabbit.move((startTime - System.currentTimeMillis()) / 100);
+					
+					if (rabbit.getRabbit().isUnder(scene.getHeight() - 10)) {
+						startTime = System.currentTimeMillis() - 2000;
+					}
 
 					 /*rabbit.setPosition((float)(scene.getWidth()/2 +
 					 scene.getWidth()/5*Math.sin((double)(System.currentTimeMillis()/10000.))),

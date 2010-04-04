@@ -153,4 +153,8 @@ public class Rabbit extends Container {
 	public boolean isFlying() {
 		return flying;
 	}
+	
+	public boolean isUnder(float y) {
+		return this.getY() + this.getHeight() > y;
+	}
 }
