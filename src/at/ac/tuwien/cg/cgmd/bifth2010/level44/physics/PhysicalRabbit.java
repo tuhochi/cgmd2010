@@ -30,12 +30,18 @@ public class PhysicalRabbit implements PhysicalObject {
 	public void move(long time) {
 		// v(t) - gt 
 		// s = v * t
+		float factor = 2000.f;
+		float sGravity = (1/2.f * PhysicalObject.GRAVITY * time * time) / factor;
+		float sMovement = (1/2.f * 15.f * time * time) / factor; //5000.f;
+		float newY = rabbit.getY() + sGravity;
 		
-		float v = PhysicalObject.GRAVITY * time;
-		float s = v * time;
+		if (rabbit.isFlying()) {
+			newY -= sMovement;
+		}
+		
 		
 		if ((rabbit.getY() + rabbit.getHeight()) <= screenHeight) {
-			rabbit.setPosition(rabbit.getX(), rabbit.getY() + s/5000.f);
+			rabbit.setPosition(rabbit.getX(), newY);
 		}
 	}
 
@@ -45,8 +51,9 @@ public class PhysicalRabbit implements PhysicalObject {
 	 * 
 	 * @gesture The Gesture that the user inputs, normally a Swipe (Flick)
 	 */
-	public void processGesture(InputGesture gesture) {
+	public boolean processGesture(InputGesture gesture) {
 		InputGesture currentGestureToPerform = null;
+		boolean finished = false;
 
 		if (gesture != null) {
 			// append to inputQueue
@@ -65,19 +72,20 @@ public class PhysicalRabbit implements PhysicalObject {
 				// longer swipe means longer angle-flip
 				rabbit.setCurrentAngleMax(swipe);
 				rabbit.rotate(swipe);
+				rabbit.setFlying(true);
 
 				// check in which half of the screen the input was detected
 				if (swipe.isLeftHalf()) {
 					// perform one step of the flap and check if the flap is finished
 					// finshed = at top position again (-45/45 ¡)
-					boolean finished = rabbit.flapLeftWing(swipe.getLength());
+					 finished = rabbit.flapLeftWing(swipe.getLength());
 
 					// current flap finished -> remove from input queue
 					if (finished) {
 						inputQueue.remove();
 					}
 				} else {
-					boolean finished = rabbit.flapRightWing(swipe.getLength());
+					finished = rabbit.flapRightWing(swipe.getLength());
 
 					if (finished) {
 						inputQueue.remove();
@@ -89,12 +97,16 @@ public class PhysicalRabbit implements PhysicalObject {
 				boolean finishedLeft = rabbit.flapLeftWing(Swipe.MAX_LENGTH);
 				boolean finishedRight = rabbit.flapRightWing(Swipe.MAX_LENGTH);
 				
-				if (finishedLeft || finishedRight) {
+				finished = finishedLeft || finishedRight;
+				
+				if (finished) {
 					rabbit.resetWings();
 					inputQueue.remove();
 				}
 			}
 		}
+		
+		return finished;
 	}
 
 	@Override

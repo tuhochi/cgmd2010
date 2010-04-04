@@ -37,7 +37,10 @@ public class GameThread extends Thread {
 							frameRate = FRAME_RATE;
 					}*/
 
-					rabbit.processGesture(scene.getNextInputGesture());
+					if (rabbit.processGesture(scene.getNextInputGesture())) {
+						startTime = System.currentTimeMillis() - 2000;
+					}
+					
 					rabbit.move((startTime - System.currentTimeMillis()) / 100);
 
 					 /*rabbit.setPosition((float)(scene.getWidth()/2 +
