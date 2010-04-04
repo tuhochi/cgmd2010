@@ -7,5 +7,7 @@ public interface InputGesture {
 	public float getEndX();
 	public float getEndY();
 	
+	public float getLength();
+	
 	public enum DisplayHalf { LEFT, RIGHT }
 }

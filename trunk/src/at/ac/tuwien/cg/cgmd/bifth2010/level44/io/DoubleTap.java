@@ -29,4 +29,9 @@ public class DoubleTap implements InputGesture {
 		return y;
 	}
 
+	@Override
+	public float getLength() {
+		return Swipe.MAX_LENGTH;
+	}
+
 }
