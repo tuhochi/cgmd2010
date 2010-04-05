@@ -80,6 +80,10 @@ public class Texture {
 		return false;
 	}
 	
+	void bind(GL10 gl) {
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
+	}
+	
 	int texture;
 	static Context context;
 	static GL10 gl;

@@ -1,12 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
 public class Quad extends Mesh {
+	
+	static float screenResolutionX;
+	static float screenResolutionY;
 
 	void init() {
-		init (0,0,480,320);
+		init (0,0,screenResolutionX,screenResolutionY);
 	}
 	
-	void init(int x, int y, int width, int height) {
+	void init(float x, float y, float width, float height) {
 		float vertices[] = {
                 x, y, 1,
                 x+width, y, 1,
@@ -21,7 +24,7 @@ public class Quad extends Mesh {
                 0.0f,  1.0f
         };
 
-        byte indices[] = {
+        short indices[] = {
                 0, 1, 2,    0, 2, 3
         };
         

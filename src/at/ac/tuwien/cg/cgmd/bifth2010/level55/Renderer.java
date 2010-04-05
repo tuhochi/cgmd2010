@@ -7,8 +7,12 @@ import javax.microedition.khronos.opengles.GL10;
 class Renderer implements MyOpenGLView.Renderer {
 	
 	Level level;
+	Player player;
+	Interface ui;
+	Texture interfaceTexture;
 	
-    public Renderer() {  
+    public Renderer(Player _player) {
+    	player=_player;
     }
 
     @Override
@@ -21,27 +25,13 @@ class Renderer implements MyOpenGLView.Renderer {
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	level.update(Timer.dT);
+    	player.update(Timer.dT);
+    	level.draw(gl);
+    	player.draw(gl);
     	
-    	level.render(gl);
     	
-    	
-    //	StateManager.current_state.update(Timer.dT);
-    //	StateManager.current_state.render(gl);
-   
-    //	StateManager.render(gl);
+    	ui.draw(gl); 	
     }
-
-  /*  public int[] getConfigSpec() {
-        int[] configSpec = {
-                EGL10.EGL_RED_SIZE,      8,
-                EGL10.EGL_GREEN_SIZE,    8,
-                EGL10.EGL_BLUE_SIZE,     8,
-                EGL10.EGL_ALPHA_SIZE,    8,
-                //EGL10.EGL_DEPTH_SIZE,   16,
-                EGL10.EGL_NONE
-        };
-        return configSpec;
-    }*/
 
     @Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -53,13 +43,21 @@ class Renderer implements MyOpenGLView.Renderer {
           * be set when the viewport is resized.
           */
 
-     //    float ratio = (float) width / height;
          gl.glMatrixMode(GL10.GL_PROJECTION);
          gl.glLoadIdentity();
          
-         //gl.glOrthof(0.0f, 480.0f, 320.0f, 0.0f, 0.0f, 5.0f);
-         gl.glOrthof(0.0f, width, height, 0.0f, 0.0f, 5.0f);
-         //gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
+         float ratio=(float)height/(float)width;
+         float numTilesHorizontal=20.0f;
+         gl.glOrthof(0.0f, numTilesHorizontal, numTilesHorizontal*ratio, 0.0f, 0.0f, 5.0f);
+         
+         Quad.screenResolutionX=numTilesHorizontal;
+         Quad.screenResolutionY=numTilesHorizontal*ratio;
+         
+         ui.screenWidth=numTilesHorizontal;
+         ui.screenHeight=numTilesHorizontal*ratio;
+         
+         gl.glMatrixMode(GL10.GL_MODELVIEW);
+         gl.glLoadIdentity();
     }
 
     @Override
@@ -83,26 +81,18 @@ class Renderer implements MyOpenGLView.Renderer {
          gl.glShadeModel(GL10.GL_SMOOTH);
          gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
          gl.glEnable(GL10.GL_BLEND);
-         //gl.glEnable(GL10.GL_DEPTH_TEST);
          
          Texture.setGL(gl);
          
          level=new Level();
-         
          level.init(gl);
+         
+         //player=new Player();
+         player.init(level);
+         
+         ui=new Interface();
+         ui.init();
+         
     }
-    
-	/*public boolean onTouch(View arg0, MotionEvent arg1) {
-		//Level.onTouch(event);
-    	
-    	synchronized(this) {
-	    	try {
-				this.wait(16);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-    	}
-    	return true;
-	}*/
 
 }
