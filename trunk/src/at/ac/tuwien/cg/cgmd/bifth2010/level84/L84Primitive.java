@@ -99,7 +99,7 @@ public class L84Primitive {
 	 */
 	public void loadGLTexture(GL10 gl, Context context) {
 		//Get the texture from the Android resource directory
-		InputStream is = context.getResources().openRawResource(R.drawable.l84_helpjewels);
+		InputStream is = context.getResources().openRawResource(R.drawable.l00_coin);
 		Bitmap bitmap = null;
 		try {
 			//BitmapFactory is an Android graphics utility for images
