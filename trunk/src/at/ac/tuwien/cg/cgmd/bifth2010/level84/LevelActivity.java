@@ -14,13 +14,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class LevelActivity extends Activity implements OnClickListener {
 
-
+	GLSurfaceView openglview;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.l84_level);
-		GLSurfaceView openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
-		openglview.setRenderer(new L84RenderManager());
+		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
+		openglview.setRenderer(new L84RenderManager(this));
 		
 		Button b1 = (Button) findViewById(R.id.l84_GemButton01);
 		b1.setOnClickListener(this);
@@ -36,13 +37,13 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		//TODO: surfaceview on pause
+		openglview.onPause();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//TODO: surfaceview on resume
+		openglview.onResume();
 	}
 
 	@Override
