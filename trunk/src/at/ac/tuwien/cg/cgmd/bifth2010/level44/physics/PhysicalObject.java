@@ -33,18 +33,14 @@ public interface PhysicalObject {
 	/**
 	 * Perform the movement of the physical object
 	 * take into account gravity and possible input gestures on it
-	 * 
-	 * @param time the time since the last input gesture happened
 	 */
-	public void move(long time);
+	public void move();
 	/**
 	 * process a input gesture on a physical object
 	 * 
 	 * @param gesture the input gesture (Swipe/Double Tap) to be processed
-	 * @return true, if the processing has finished and therefore the time should be resetted
-	 * 		   false otherwise
 	 */
-	public boolean processGesture(InputGesture gesture);
+	public void processGesture(InputGesture gesture);
 	/**
 	 * Draw itself with OpenGL
 	 * 
