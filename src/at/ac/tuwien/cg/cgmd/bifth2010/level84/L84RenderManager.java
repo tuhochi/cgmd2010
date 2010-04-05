@@ -8,8 +8,10 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.R;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 
 
 
@@ -17,6 +19,7 @@ public class L84RenderManager implements Renderer {
 
 	Square sq = new Square();
 	float rotation = 4.0f;
+	L84TextureManager texMan;
 	
 	/**
 	 * main draw method
@@ -65,7 +68,9 @@ public class L84RenderManager implements Renderer {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 			
 		//TODO: load textures
-		
+		texMan = new L84TextureManager(gl, null);
+		texMan.add(at.ac.tuwien.cg.cgmd.bifth2010.R.drawable.l00_coin);
+		//texMan.loadTextures();
 	}
 
 	private class Square {
