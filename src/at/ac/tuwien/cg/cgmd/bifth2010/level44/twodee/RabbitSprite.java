@@ -31,8 +31,6 @@ public class RabbitSprite extends SpriteContainer {
 	private float currentLeftAngleMin = -ANGLE_MAX;
 	/** current maximum angle of right wing (depends on the length of a swipe gesture, longer swipe -> longer flap on wing) */
 	private float currentRightAngleMax = ANGLE_MAX;
-	/** is the rabbit currently flying (flapping wings) ? */
-	private boolean flying = false;
 
 	public RabbitSprite(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
@@ -60,7 +58,7 @@ public class RabbitSprite extends SpriteContainer {
 	 * resets wings to initial (non-flying) state: both wings on top
 	 */
 	public void resetWings() {
-		setWingAngle(-45.1f);
+		setWingAngle(-ANGLE_MAX);
 		currentLeftAngleMin = -ANGLE_MAX;
 		currentRightAngleMax = ANGLE_MAX;
 		leftFlapUp = rightFlapUp = false;
@@ -125,8 +123,6 @@ public class RabbitSprite extends SpriteContainer {
 		} else if (newAngle > ANGLE_MAX) {
 			leftFlapUp = !leftFlapUp;
 			// flap is finished -> not flying anymore
-			setFlying(false);
-			
 			return true;
 		}
 
@@ -149,7 +145,6 @@ public class RabbitSprite extends SpriteContainer {
 			rightFlapUp = !rightFlapUp;
 		} else if (newAngle < -ANGLE_MAX) {
 			rightFlapUp = !rightFlapUp;
-			setFlying(false);
 			return true;
 		}
 
@@ -183,12 +178,8 @@ public class RabbitSprite extends SpriteContainer {
 			}
 	}
 
-	public void setFlying(boolean flying) {
-		this.flying = flying;
-	}
-
 	public boolean isFlying() {
-		return flying;
+		return leftWing.getRotation() < ANGLE_MAX || rightWing.getRotation() > -ANGLE_MAX; 
 	}
 	
 	public float getWidth() {

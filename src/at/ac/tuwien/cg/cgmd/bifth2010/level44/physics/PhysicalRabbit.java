@@ -20,8 +20,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 public class PhysicalRabbit implements PhysicalObject {
 	/** the acceleration of a full wing-flap (vgl. PhysicalObject.GRAVITY) */
 	private static final float MAX_FLAP_ACCELERATION = 22.f;
+	
 	/** the sprite showing the rabbit */
 	private RabbitSprite sprite = null;
+	/** the velocity of the rabbit */
+	private float velocity = 0.f;
 	/** queue of gestures to perform */
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
 	/** width of the screen */
@@ -114,8 +117,6 @@ public class PhysicalRabbit implements PhysicalObject {
 				sprite.setCurrentAngleMax(swipe);
 				// rotate the rabbit depending on which wing is flapped
 				sprite.rotate(swipe);
-				// if current gesture is a swipe, the rabbit is flying
-				sprite.setFlying(true);
 
 				// check in which half of the screen the input was detected
 				if (swipe.isLeftHalf()) {
@@ -136,9 +137,6 @@ public class PhysicalRabbit implements PhysicalObject {
 				}
 			} else if (currentGestureToPerform instanceof DoubleTap) {
 				DoubleTap tap = (DoubleTap)currentGestureToPerform;
-				
-				// current gesture is a doubleTap, so the rabbit is flying
-				sprite.setFlying(true);
 				
 				boolean finishedLeft = sprite.flapLeftWing(Swipe.MAX_LENGTH);
 				boolean finishedRight = sprite.flapRightWing(Swipe.MAX_LENGTH);
@@ -166,5 +164,13 @@ public class PhysicalRabbit implements PhysicalObject {
 	public void setPosition(float x, float y) {
 		if (sprite != null)
 			sprite.setPosition(x, y);
+	}
+	
+	public float getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(float velocity) {
+		this.velocity = velocity;
 	}
 }
