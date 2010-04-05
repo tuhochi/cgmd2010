@@ -1,39 +1,94 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level36;
 
-import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
-import android.opengl.GLSurfaceView;
-import android.opengl.GLSurfaceView.Renderer;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.view.MotionEvent;
+import android.view.View;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class GameView extends GLSurfaceView implements Renderer {
-
-	private FloatBuffer vBuffer;
-	private FloatBuffer cBuffer;
-
-	public GameView(Context context) {
-		super(context);
-		Log.v("View", "Konstruktor");
-		setRenderer(this);
-		setRenderMode(RENDERMODE_CONTINUOUSLY);
+public class GameView extends View {
+	private Bitmap mBitmap;
+	private Bitmap background;
+	private Canvas mCanvas;
+	private Path mPath;
+	private Paint mBitmapPaint;
+	private float mX, mY;
+	private static final float TOUCH_TOLERANCE = 4;
+	
+	public GameView(Context c) {
+		super(c);
+		mBitmap = Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
+		background = BitmapFactory.decodeResource(getResources(), R.drawable.l36_los_h);
+		mCanvas = new Canvas(background.copy(Bitmap.Config.ARGB_8888, true));
+		mCanvas = new Canvas(mBitmap);
+		mPath = new Path();
+		mBitmapPaint = new Paint(Paint.DITHER_FLAG);
 	}
 
 	@Override
-	public void onDrawFrame(GL10 gl) {
-		gl.glClear(gl.GL_COLOR_BUFFER_BIT);
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
 	}
 
 	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		Log.v("View", "onSurfaceChanged");
+	protected void onDraw(Canvas canvas) {
+		canvas.drawColor(Color.WHITE);
+		// das bereits gezeichnete
+		canvas.drawBitmap(background, 0,0, mBitmapPaint);
+		canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+		// was jetzt gezeichnet wird
+		canvas.drawPath(mPath, LevelActivity.paint);
+	}
+
+	private void touch_start(float x, float y) {
+		mPath.reset();
+		mPath.moveTo(x, y);
+		mX = x;
+		mY = y;
+	}
+
+	private void touch_move(float x, float y) {
+		float dx = Math.abs(x - mX);
+		float dy = Math.abs(y - mY);
+		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+			mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+			mX = x;
+			mY = y;
+		}
+	}
+
+	private void touch_up() {
+		mPath.lineTo(mX, mY);
+		// commit the path to our offscreen
+		mCanvas.drawPath(mPath, LevelActivity.paint);
+		// kill this so we don't double draw
+		mPath.reset();
 	}
 
 	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		Log.v("View", "onSurfaceCreated");
+	public boolean onTouchEvent(MotionEvent event) {
+		float x = event.getX();
+		float y = event.getY();
+
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			touch_start(x, y);
+			invalidate();
+			break;
+		case MotionEvent.ACTION_MOVE:
+			touch_move(x, y);
+			invalidate();
+			break;
+		case MotionEvent.ACTION_UP:
+			touch_up();
+			invalidate();
+			break;
+		}
+		return true;
 	}
 }
