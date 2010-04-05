@@ -17,6 +17,20 @@ public interface PhysicalObject {
 	public static final float GRAVITY = 9.81f;
 	
 	/**
+	 * Sets the velocity of the physical object
+	 * 
+	 * @param v the new velocity
+	 */
+	public void setVelocity(float v);
+	
+	/**
+	 * returns the velocity of the object
+	 * 
+	 * @return the velocity
+	 */
+	public float getVelocity();
+	
+	/**
 	 * Perform the movement of the physical object
 	 * take into account gravity and possible input gestures on it
 	 * 
