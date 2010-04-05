@@ -65,6 +65,28 @@ public class RabbitSprite extends SpriteContainer {
 	}
 	
 	/**
+	 * @return true, if both wings are on top, otherwise false
+	 */
+	public boolean bothWingsOnTop() {
+		return leftWing.getRotation() >= ANGLE_MAX && rightWing.getRotation() <= -ANGLE_MAX && !leftFlapUp && !rightFlapUp;
+	}
+	
+	/**
+	 * @return true, if the rabbit is flying (one or both wing(s) not in topright position, otherwise false
+	 */
+	public boolean isFlying() {
+		return leftWing.getRotation() < ANGLE_MAX || rightWing.getRotation() > -ANGLE_MAX; 
+	}
+	
+	public boolean wingsMovingDown() {
+		return isFlying() && (!leftFlapUp || !rightFlapUp);
+	}
+	
+	public boolean wingsMovingUp() {
+		return isFlying() && (leftFlapUp || rightFlapUp);
+	}
+	
+	/**
 	 * sets the angle of both wings simultaniously
 	 * 
 	 * @param angle the new angle
@@ -176,10 +198,6 @@ public class RabbitSprite extends SpriteContainer {
 			if (Math.abs(this.getRotation() + angleDelta) < MAX_ROTATION) {
 				setRotation(this.getRotation() + angleDelta);
 			}
-	}
-
-	public boolean isFlying() {
-		return leftWing.getRotation() < ANGLE_MAX || rightWing.getRotation() > -ANGLE_MAX; 
 	}
 	
 	public float getWidth() {
