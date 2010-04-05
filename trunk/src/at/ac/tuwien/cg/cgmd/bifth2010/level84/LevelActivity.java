@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -23,13 +24,13 @@ public class LevelActivity extends Activity implements OnClickListener {
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		openglview.setRenderer(new L84RenderManager(this));
 		
-		Button b1 = (Button) findViewById(R.id.l84_GemButton01);
+		ImageButton b1 = (ImageButton) findViewById(R.id.l84_GemButton01);
 		b1.setOnClickListener(this);
-		Button b2 = (Button) findViewById(R.id.l84_GemButton02);
+		ImageButton b2 = (ImageButton) findViewById(R.id.l84_GemButton02);
 		b2.setOnClickListener(this);
-		Button b3 = (Button) findViewById(R.id.l84_GemButton03);
+		ImageButton b3 = (ImageButton) findViewById(R.id.l84_GemButton03);
 		b3.setOnClickListener(this);
-		Button b4 = (Button) findViewById(R.id.l84_GemButton04);
+		ImageButton b4 = (ImageButton) findViewById(R.id.l84_GemButton04);
 		b4.setOnClickListener(this);
 		
 	}
