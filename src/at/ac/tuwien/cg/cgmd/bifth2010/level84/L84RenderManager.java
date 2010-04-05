@@ -27,7 +27,6 @@ public class L84RenderManager implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 arg0) {
 		arg0.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		arg0.glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 		arg0.glLoadIdentity();
 		arg0.glTranslatef(0, 0, -4);
 		arg0.glPushMatrix();
