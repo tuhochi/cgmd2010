@@ -97,4 +97,12 @@ public class SceneEntity implements Moveable
 	public void setMotion(Motion motion) {
 		this.motion = motion;
 	}
+
+	@Override
+	public Matrix44 getBasicOrientation() {
+		transformation_temp.addTranslate(	-boundingSphereWorld.center.x,
+											-boundingSphereWorld.center.y,
+											-boundingSphereWorld.center.z);
+		return transformation_temp;
+	}
 }

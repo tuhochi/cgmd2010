@@ -20,11 +20,14 @@ public class MotionManager {
 	
 	public void addMotion(Motion motion,Moveable entity)
 	{
-		entity.setMotion(motion);
-		SceneEntity se = (SceneEntity)entity;
-		Sphere sphere = se.getBoundingSphereWorld();
-		motion.setSatTrans(new SatelliteTransformation(0,0,0,entity.getTransformation().addTranslate(-sphere.center.x,-sphere.center.y,-sphere.center.z)));
-		list.add(entity);
+		int index = list.indexOf(entity);
+		if(index==-1){
+			entity.setMotion(motion);
+			motion.setSatTrans(new SatelliteTransformation(0,0,0));
+			list.add(entity);
+		}else{
+			//transform motion
+		}
 	}
 	
 	public Moveable getMotion(int index)

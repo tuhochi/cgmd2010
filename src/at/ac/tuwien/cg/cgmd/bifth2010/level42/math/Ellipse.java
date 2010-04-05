@@ -25,7 +25,7 @@ public class Ellipse
 		calcPerimeter();
 	}
 
-	private void calcPerimeter()
+	public void calcPerimeter()
 	{
 		lambda = (a.length()-b.length())/(a.length()+b.length());
 		perimeter = (float)Math.PI * (a.length()+b.length()) * (1 + ((3*(float)Math.pow(lambda, 2))/(10 + ((float)Math.sqrt(4 - 3*((float)Math.pow(lambda, 2)))))));

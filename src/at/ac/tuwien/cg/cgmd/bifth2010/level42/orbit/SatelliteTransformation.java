@@ -8,17 +8,16 @@ public class SatelliteTransformation {
 	private float 	qx,qy,qz,
 					qxStep,qyStep,qzStep,
 					qxCurr,qyCurr,qzCurr;
-	private final Matrix44 transform,basicTransform;
+	private final Matrix44 transform;
 	
-	public SatelliteTransformation(float qx, float qy, float qz, Matrix44 basicTransform) 
+	public SatelliteTransformation(float qx, float qy, float qz) 
 	{
 		this.qx = (float)Math.toRadians(qx);
 		this.qy = (float)Math.toRadians(qy);
 		this.qz = (float)Math.toRadians(qz);
 
 		this.transform = new Matrix44();
-		this.basicTransform = basicTransform;
-					
+
 		this.qxStep = qx*Constants.TWOPI/100;
 		this.qyStep = qy*Constants.TWOPI/100;
 		this.qzStep = qz*Constants.TWOPI/100;
@@ -46,8 +45,6 @@ public class SatelliteTransformation {
 		transform.addRotateY(qyCurr);
 		transform.addRotateZ(qzCurr);
 		
-		if(basicTransform!=null)
-			transform.mult(basicTransform);
 	}
 
 	public Matrix44 getTransform() {

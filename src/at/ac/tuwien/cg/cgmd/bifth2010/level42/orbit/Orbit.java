@@ -18,31 +18,41 @@ public class Orbit implements Motion {
 					centerDiffFactor=0,centerDiffStep=0,centerDiff=0,centerDiffIteration=0,
 					directionDiffFactor=0,directionDiffStep=0,directionDiff=0,directionDiffIteration=0;
 
-	private Vector3 position,entityPos,centerPos,centerVec,toCenterVec,
-					normalVec,directionVec,orbitAxis,
+	public final Vector3 position,
+						 entityPos,centerPos,normalVec,
+						 newEntityPos,newCenterPos;
 					
 					//orbit transformation
-					newEntityPos,newCenterPos,newCenterVec,newToCenterVec,newDirectionVec,newNormalVec,
-					transformAxis;
-	private Matrix44 transform,objectOrbitTransform,orbitTransform;
-
+	private final Vector3 	centerVec,toCenterVec,directionVec,orbitAxis,
+							newCenterVec,newToCenterVec,newDirectionVec,newNormalVec,
+							transformAxis;
+	
+	private Matrix44 objectOrbitTransform;
+	private final Matrix44 transform,basicOrientation,orbitTransform;
 	private SatelliteTransformation satTrans;
-	private Ellipse ellipse;
+	private final Ellipse ellipse;
 	
 	
 	public Orbit(	Vector3 entityPos,Vector3 centerPos,
 					Vector3 directionVec,
-					float speed	
+					float speed, 
+					Matrix44 basicOrientation
 				)
 	{
 		this.speed = speed;
 		
-		this.entityPos = entityPos;
-		this.centerPos = centerPos;
-		this.centerVec = Vector3.subtract(entityPos,centerPos);
-		this.toCenterVec =  Vector3.subtract(centerPos,entityPos);
-		this.normalVec = Vector3.crossProduct(toCenterVec, directionVec).normalize();
-		this.directionVec = directionVec;
+		this.entityPos = new Vector3(entityPos);
+		this.centerPos = new Vector3(centerPos);
+		this.directionVec = new Vector3(directionVec);
+		this.centerVec = Vector3.subtract(this.entityPos,this.centerPos);
+		this.toCenterVec =  Vector3.subtract(this.centerPos,this.entityPos);
+		this.normalVec = Vector3.crossProduct(this.toCenterVec, this.directionVec).normalize();
+		
+		
+		if(basicOrientation!=null)
+			this.basicOrientation = new Matrix44(basicOrientation);
+		else
+			this.basicOrientation = new Matrix44();
 		
 		this.newEntityPos = new Vector3(entityPos);
 		this.newCenterPos = new Vector3(centerPos);
@@ -51,16 +61,17 @@ public class Orbit implements Motion {
 		this.newNormalVec = new Vector3(normalVec);
 		this.newToCenterVec = new Vector3(toCenterVec);
 
-		//init
-		transform = new Matrix44();
-		position = new Vector3();
-		transformAxis = new Vector3();
-		orbitTransform = new Matrix44();
-		t = 0;
-		u = 0;
+		//init other temp vars 
+		this.transform = new Matrix44();
+		this.position = new Vector3();
+		this.orbitAxis = new Vector3();
+		this.transformAxis = new Vector3();
+		this.orbitTransform = new Matrix44();
+		this.t = 0;
+		this.u = 0;
 		
 		//generate ellipse from vec
-		ellipse = new Ellipse(centerPos,centerVec,directionVec);
+		this.ellipse = new Ellipse(this.centerPos,this.centerVec,this.directionVec);
 		
 		//calc init parameter and stepsize
 		preCalc();
@@ -71,11 +82,12 @@ public class Orbit implements Motion {
 	{
 		//calc start parameter
 		this.u = (float)(t*Constants.TWOPI);
-		//todo: relative to size?!
+		//stepsize relative so perimeter
 		this.step = Constants.TWOPI/ellipse.perimeter;
 		
-		//change the orientation between orbit and object
-		orbitAxis = Vector3.crossProduct(normalVec,Constants.Y_AXIS).normalize();
+		//change the orientation between orbit and object - TODO: wird ansich nicht benötigt
+		Vector3.crossProduct(normalVec,Constants.Y_AXIS,orbitAxis);
+		orbitAxis.normalize();
 		orbitAngle = Vector3.getAngle(normalVec, Constants.Y_AXIS);
 		objectOrbitTransform = Matrix44.getRotate(orbitAxis, -orbitAngle);
 	}
@@ -94,23 +106,45 @@ public class Orbit implements Motion {
 		//check for orbit transformation
 		if(Math.abs(transformDiff)<Math.abs(transformAngle))
 		{
+//			transformIteration = transformStep * dt * transformSpeed;
+//			
+//			if(Math.abs(transformDiff+transformIteration)>Math.abs(transformAngle))
+//				transformIteration = transformAngle-transformDiff;
+//			
+//			transformDiff+=transformIteration;
+			orbitTransform.setRotate(transformAxis, transformAngle);
 			
-			transformIteration = transformStep * dt * transformSpeed;
-			
-			if(Math.abs(transformDiff+transformIteration)>Math.abs(transformAngle))
-				transformIteration = transformAngle-transformDiff;
-			
-			transformDiff+=transformIteration;
-			orbitTransform.setRotate(transformAxis, transformIteration);
 			orbitTransform.transformPoint(centerVec);
 			orbitTransform.transformPoint(directionVec);
+			orbitTransform.transformPoint(normalVec);
+			orbitTransform.transformPoint(entityPos);
+			
+			float centerangle = Vector3.getAngle(	new Vector3(centerVec).normalize(),
+													new Vector3(newCenterVec).normalize());
+			
+			orbitTransform.setRotate(newNormalVec, centerangle);
+			
+			orbitTransform.transformPoint(centerVec);
+
+			float directionrangle = Vector3.getAngle(	new Vector3(directionVec).normalize(),
+					new Vector3(newDirectionVec).normalize());
+
+			orbitTransform.setRotate(newNormalVec,-directionrangle);
+			orbitTransform.transformPoint(directionVec);
+
 			
 			//Log.i(LevelActivity.TAG,"transformDiff "+transformDiff +" transformAngle" +transformAngle +" transformIteration"+transformIteration );
+			Log.i(LevelActivity.TAG,"centervec = "+ new Vector3(centerVec).normalize() 
+												  + " newcentervec="+new Vector3(newCenterVec).normalize());
+			Log.i(LevelActivity.TAG,"entitypos = "  + entityPos
+					  								+ " newpos="+newCenterVec);
+		
+			//testonly
+			transformDiff = transformAngle;
 		}
 		
 		if(Math.abs(centerDiff)<Math.abs(centerDiffFactor))
 		{
-			
 			centerDiffIteration = centerDiffStep * dt * transformSpeed;
 			
 			if(Math.abs(centerDiff+centerDiffIteration)>Math.abs(centerDiffFactor))
@@ -132,21 +166,21 @@ public class Orbit implements Motion {
 			directionDiff += directionDiffIteration;
 			directionVec.multiply( 1 + directionDiffIteration);
 		}
-		
+
 		//calc position on ellipse - build transformation matrix
 		evaluatePos();
-		
-		//update transformation in the entity
-		//entity.setTransformation(transform);
 	}
 	
 	private void evaluatePos()
 	{
 		//evaluate ellipse
-		position = ellipse.getPoint(u);
+		position.copy(ellipse.getPoint(u));
 				
 		//reset transformation
 		transform.setIdentity();
+		
+		//set basic orientation
+		transform.mult(basicOrientation);
 		
 		//change orientation relative to the orbit
 		//transform.mult(objectOrbitTransform);
@@ -176,29 +210,31 @@ public class Orbit implements Motion {
 		
 		this.newDirectionVec.copy(newDirectionVec);
 		
-		Vector3.crossProduct(newToCenterVec, newDirectionVec,newNormalVec);
-		newNormalVec.normalize();
+		Vector3.crossProduct(this.newToCenterVec, this.newDirectionVec, this.newNormalVec);
+		this.newNormalVec.normalize();
 		
-
 		//calc main rotation axis
-		transformAxis = Vector3.crossProduct(normalVec,newNormalVec).normalize();
+		Vector3.crossProduct(this.normalVec,this.newNormalVec,this.transformAxis);
+		transformAxis.normalize();
+		
 		transformAngle = (transformAxis.length()!=0)?Vector3.getAngle(normalVec,newNormalVec):0;
 		transformStep = transformAngle/Constants.TWOPI;
 		transformDiff = 0;
 		
-		centerDiffFactor = (newCenterVec.length()/centerVec.length()) - 1;
+		Log.i(LevelActivity.TAG,"angle "+transformAngle);
+		
+		centerDiffFactor = (this.newCenterVec.length()/centerVec.length()) - 1;
 		centerDiffStep = centerDiffFactor/10;
 		centerDiff = 0;
 		
-		directionDiffFactor = (newDirectionVec.length()/directionVec.length()) - 1;
+		directionDiffFactor = (this.newDirectionVec.length()/directionVec.length()) - 1;
 		directionDiffStep = directionDiffFactor/10;
 		directionDiff = 0;
 		
+		u = 0;
+	
 	}
-	public void decA(){
-		transformOrbit(	Vector3.subtract(entityPos,new Vector3(1,-2,-5)),
-						centerPos, directionVec,5);
-	}
+	
 	public void setSatTrans(SatelliteTransformation satTrans) {
 		this.satTrans = satTrans;
 	}
@@ -207,9 +243,27 @@ public class Orbit implements Motion {
 		return transform;
 	}
 
-	public void setTransform(Matrix44 transform) {
-		this.transform = transform;
-	}
+	
+	public void morphOrbit(Vector3 pushVec)
+	{
+		//approx current direction vec
+		Vector3 directionApprox = Vector3.subtract(ellipse.getPoint(u+step),position).normalize();
+		
+		directionApprox.multiply(this.directionVec.length());
+		directionApprox.add(pushVec);
+		
+		this.entityPos.copy(this.position);
+		this.directionVec.copy(directionApprox);
+		this.centerVec.copy(this.entityPos);
+		this.centerVec.subtract(this.centerPos);
+		
+		this.toCenterVec.copy(this.centerPos);
+		this.toCenterVec.subtract(this.entityPos);
+		
+		this.ellipse.calcPerimeter();
+		this.step = Constants.TWOPI/ellipse.perimeter;
+		this.u = 0;
 
+	}
 	
 }
