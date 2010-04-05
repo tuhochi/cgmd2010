@@ -4,14 +4,21 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-class Renderer implements MyOpenGLView.Renderer {
+import android.content.Context;
+
+class MyRenderer implements MyOpenGLView.Renderer {
 	
 	Level level;
 	Player player;
 	Interface ui;
 	Texture interfaceTexture;
+	static Context context;
 	
-    public Renderer(Player _player) {
+	static public void setContext(Context _context) {
+		context=_context;
+	}
+	
+    public MyRenderer(Player _player) {
     	player=_player;
     }
 
@@ -85,7 +92,7 @@ class Renderer implements MyOpenGLView.Renderer {
          Texture.setGL(gl);
          
          level=new Level();
-         level.init(gl);
+         level.init(gl, context);
          
          //player=new Player();
          player.init(level);
