@@ -13,7 +13,6 @@ public class L84RenderManager implements Renderer {
 
 	L84Primitive square;
 	float rotation = 4.0f;
-	L84TextureManager texMan;
 	private Context context;
 	
 	public L84RenderManager(Context context)
