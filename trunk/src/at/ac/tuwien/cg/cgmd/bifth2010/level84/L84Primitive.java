@@ -28,21 +28,30 @@ public class L84Primitive {
 
 	// Our vertices.
 	private float vertices[] = {
-		      -1.0f,  1.0f, 0.0f,  // 0, Top Left
-		      -1.0f, -1.0f, 0.0f,  // 1, Bottom Left
-		       1.0f, -1.0f, 0.0f,  // 2, Bottom Right
-		       1.0f,  1.0f, 0.0f,  // 3, Top Right
+//		      -1.0f,  1.0f, 0.0f,  // 0, Top Left
+//		      -1.0f, -1.0f, 0.0f,  // 1, Bottom Left
+//		       1.0f, -1.0f, 0.0f,  // 2, Bottom Right
+//		       1.0f,  1.0f, 0.0f,  // 3, Top Right
+		       -1.0f, -1.0f, 1.0f, //v0
+	    		1.0f, -1.0f, 1.0f,  //v1
+	    		-1.0f, 1.0f, 1.0f,  //v2
+	    		1.0f, 1.0f, 1.0f,   //v3
 		};
 
 	private float texture[] = {
-		      0.0f,  1.0f, 0.0f,  
-		      0.0f, 0.0f, 0.0f,  
-		       1.0f, 0.0f, 0.0f,  
-		       1.0f,  1.0f, 0.0f,  
+//		      0.0f,  1.0f,  
+//		      0.0f, 0.0f,  
+//		       1.0f, 0.0f,  
+//		       1.0f,  1.0f
+		       0.0f, 0.0f,
+	    		0.0f, 1.0f,
+	    		1.0f, 0.0f,
+	    		1.0f, 1.0f, 
 	};
 	
 	// The order we like to connect them.
-	private byte indices[] = { 0, 1, 2, 0, 2, 3 };
+	//private byte indices[] = { 0, 1, 2, 0, 2, 3 };
+	private byte indices[] = {0,1,3, 0,3,2};
 
 	
 	public L84Primitive()
