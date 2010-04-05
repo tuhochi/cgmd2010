@@ -77,9 +77,10 @@ public class PhysicalRabbit implements PhysicalObject {
 			// v = a * delta t
 			this.setVelocity(flapAcceleration * deltaTime);
 		} // if wings moving up, inhibit speed (needed? - FIXME) --myellow
-		else if (sprite.wingsMovingUp())
-			this.setVelocity(this.getVelocity() - 0.05f);
-	
+		else if (sprite.wingsMovingUp()) {
+			this.setVelocity(this.getVelocity() - 0.05f);	
+		}
+		
 		// s = 1/2 * g * t^2
 		float sGravity = (1/2.f * PhysicalObject.GRAVITY * time * time);
 		// s = v0 * t
@@ -95,10 +96,11 @@ public class PhysicalRabbit implements PhysicalObject {
 		// add movements to position
 		newY -= sMovementY;
 		newX += sMovementX;
-		//}
 		
 		// set new position, if the position is on the screen
-		sprite.setPosition(Math.min(screenWidth - sprite.getWidth(),Math.max(0,newX)), Math.min(newY, screenHeight - sprite.getHeight()));
+		newX = Math.min(screenWidth, Math.max(0,newX));
+		newY = Math.min(screenHeight - sprite.getHeight(), newY);
+		setPosition(newX,newY);
 	}
 
 	@Override
@@ -145,12 +147,14 @@ public class PhysicalRabbit implements PhysicalObject {
 
 					// current flap finished -> remove from input queue
 					if (finished) {
+						sprite.resetWings();
 						inputQueue.remove();
 					}
 				} else {
 					finished = sprite.flapRightWing(swipe.getStrength());
 
 					if (finished) {
+						sprite.resetWings();
 						inputQueue.remove();
 					}
 				}
