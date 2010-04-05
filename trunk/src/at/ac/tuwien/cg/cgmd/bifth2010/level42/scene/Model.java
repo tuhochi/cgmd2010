@@ -8,6 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Pair;
 
 //static imports
@@ -107,5 +108,13 @@ public class Model implements Moveable
 	@Override
 	public void setMotion(Motion motion) {
 		this.motion = motion;
+	}
+
+	@Override
+	public Matrix44 getBasicOrientation() {
+		transformation_temp.addTranslate(	-boundingSphereWorld.center.x,
+											-boundingSphereWorld.center.y,
+											-boundingSphereWorld.center.z);
+		return transformation_temp;
 	}
 }

@@ -19,6 +19,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
@@ -51,6 +52,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private final LinkedList<MotionEvent> motionEvents;
 	private final LinkedList<KeyEvent> keyEvents;
 	
+	
+	// some temp vars
+	private final Vector3 selectionDirection;
+	
 	public RenderView(Context context)
 	{
 		super(context);
@@ -74,6 +79,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		synchronizer = new Synchronizer();
 		motionEvents = new LinkedList<MotionEvent>();
 		keyEvents = new LinkedList<KeyEvent>();
+		
+		//init temp vars
+		selectionDirection = new Vector3();
 	}
 	
 	public RenderView(Context context, AttributeSet attr)
@@ -135,9 +143,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		collManager = new CollisionManager(scene);
 		
 		Orbit orbit2 = new Orbit(new Vector3(-3,3,0),new Vector3(3,-3,0),
-								new Vector3(0,0,-5),5);
+								new Vector3(0,0,-5),5,null);
 	
-		SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0, null);
+		SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0);
 		orbit2.setSatTrans(sat1);
 		
 		DirectionalMotion mov1 = new DirectionalMotion(	scene.getSceneEntity(0),
@@ -170,11 +178,33 @@ public class RenderView extends GLSurfaceView implements Renderer
 					Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
 				
 					SceneEntity entity = collManager.intersectRay(cam.eyePosition, rayDirection);
-					if(entity!=null){
-						motionManager.addMotion(new Orbit(	entity.getBoundingSphereWorld().center,
-															new Vector3(),
-															new Vector3(0,0,-1),5),
-												(Moveable)entity);
+					
+					//entity selected
+					if(entity!=null)
+					{
+						selectionDirection.copy(rayDirection);
+						//force strength
+						selectionDirection.normalize().multiply(5);
+						
+						if(entity.getMotion()==null){
+						
+							motionManager.addMotion(new Orbit(	entity.getBoundingSphereWorld().center,
+																new Vector3(),
+																selectionDirection,5,
+																entity.getBasicOrientation()),
+													(Moveable)entity);
+						}else{
+							Orbit orbit = (Orbit)entity.getMotion();
+						
+							orbit.morphOrbit(selectionDirection);
+							
+//							orbit.transformOrbit(new Vector3(orbit.entityPos).subtract(new Vector3(1,1,2)), 
+//												 new Vector3(),
+//												 new Vector3(0,0,-1),
+//												 10);
+							
+							 Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
+						}
 					}
 	
 			        Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
@@ -195,10 +225,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 				{
 				case KeyEvent.KEYCODE_DPAD_UP:
 					cam.setDistance(cam.getDistance() - 10.0f);
-					break;
-				case KeyEvent.KEYCODE_DPAD_LEFT:
-					Orbit temp = (Orbit)motionManager.getMotion(1);
-					temp.decA();
 					break;
 				case KeyEvent.KEYCODE_DPAD_DOWN:
 					cam.setDistance(cam.getDistance() + 10.0f);
