@@ -79,15 +79,17 @@ public class RabbitSprite extends SpriteContainer {
 	}
 	
 	public boolean wingsMovingDown() {
-		return isFlying() && (!leftFlapUp || !rightFlapUp);
+		return (leftWing.getRotation() < ANGLE_MAX && !leftFlapUp) || 
+		       (rightWing.getRotation() > -ANGLE_MAX && !rightFlapUp);
 	}
 	
 	public boolean wingsMovingUp() {
-		return isFlying() && (leftFlapUp || rightFlapUp);
+		return (leftWing.getRotation() < ANGLE_MAX && leftFlapUp) || 
+	          (rightWing.getRotation() > -ANGLE_MAX && rightFlapUp);
 	}
 	
 	/**
-	 * sets the angle of both wings simultaniously
+	 * sets the angle of both wings simultaneously
 	 * 
 	 * @param angle the new angle
 	 */
@@ -201,11 +203,11 @@ public class RabbitSprite extends SpriteContainer {
 	}
 	
 	public float getWidth() {
-		return 60.f;
+		return 50.f;
 	}
 	
 	public float getHeight() {
-		return 70.f;
+		return 60.f;
 	}
 	
 	public boolean isUnder(float y) {

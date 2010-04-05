@@ -43,14 +43,14 @@ public class GameThread extends Thread {
 					
 					
 					// reset start time if rabbit sits at the bottom of the screen
-					if (rabbit.getSprite().isUnder(scene.getHeight() - 10)) {
-						System.out.println("Rabbit is on the Bottom");
+					if (rabbit.getSprite().isUnder(scene.getHeight() - 5)) {
 						rabbit.resetStartTime(0);
 						rabbit.setVelocity(0.f);
 					}
 					
 
-					 /*rabbit.setPosition((float)(scene.getWidth()/2 +
+					 /* old moving, maybe useful as intro
+					  * rabbit.setPosition((float)(scene.getWidth()/2 +
 					 scene.getWidth()/5*Math.sin((double)(System.currentTimeMillis()/10000.))),
 					 (float)(scene.getHeight()/3));
 					 rabbit.getRabbit().setScale((float)(.5+.5*Math.abs(Math.sin((double)(System.currentTimeMillis()/5000.)))));
