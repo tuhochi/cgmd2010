@@ -2,11 +2,17 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class LevelActivity extends Activity {
+	
+	Player player=new Player();
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -14,12 +20,9 @@ public class LevelActivity extends Activity {
 		 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); 
 	     requestWindowFeature(Window.FEATURE_NO_TITLE);
 	     
-	     
-		
 		mGLSurfaceView = new MyOpenGLView(this);
-        mGLSurfaceView.setRenderer(new Renderer());        
+        mGLSurfaceView.setRenderer(new Renderer(player));   
         setContentView(mGLSurfaceView);
-        
         
        SessionState s = new SessionState();
 		//we set the progress the user has made (must be between 0-100)
@@ -43,6 +46,51 @@ public class LevelActivity extends Activity {
         // to take appropriate action when the activity looses focus
         super.onPause();
         mGLSurfaceView.onPause();
+    }
+   
+    public boolean onTouchEvent(MotionEvent me) {
+		Log.d("onTouch", me.toString());
+    	
+    	synchronized(this) {
+	    	try {
+				this.wait(16);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}
+    	return true;
+	}
+    
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	if (keyCode==event.KEYCODE_A) {
+    		player.moveLeft(true);
+    		return true;
+    	}
+    	if (keyCode==event.KEYCODE_D) {
+    		player.moveRight(true);
+    		return true;
+    	}
+    	if (keyCode==event.KEYCODE_W) {
+    		player.jump(true);
+    		return true;
+    	}
+		return super.onKeyDown(keyCode, event);
+    }
+    
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    	if (keyCode==event.KEYCODE_A) {
+    		player.moveLeft(false);
+    		return true;
+    	}
+    	if (keyCode==event.KEYCODE_D) {
+    		player.moveRight(false);
+    		return true;
+    	}
+    	if (keyCode==event.KEYCODE_W) {
+    		player.jump(false);
+    		return true;
+    	}
+    	return super.onKeyUp(keyCode, event);
     }
 	
 	private MyOpenGLView mGLSurfaceView;

@@ -3,6 +3,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 
 public class MyOpenGLView extends GLSurfaceView {
