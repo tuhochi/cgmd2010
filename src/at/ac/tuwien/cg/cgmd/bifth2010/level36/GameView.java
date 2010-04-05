@@ -19,15 +19,17 @@ public class GameView extends View {
 	private Paint mBitmapPaint;
 	private float mX, mY;
 	private static final float TOUCH_TOLERANCE = 4;
+	private GewinnFeld feld;
 	
 	public GameView(Context c) {
 		super(c);
 		mBitmap = Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
 		background = BitmapFactory.decodeResource(getResources(), R.drawable.l36_los_h);
-		mCanvas = new Canvas(background.copy(Bitmap.Config.ARGB_8888, true));
 		mCanvas = new Canvas(mBitmap);
+		mCanvas.drawBitmap(background, 0,0, mBitmapPaint);
 		mPath = new Path();
 		mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+		feld = new GewinnFeld();
 	}
 
 	@Override
@@ -38,8 +40,10 @@ public class GameView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.WHITE);
+	
+//		canvas.drawText("gewonnen", 100, 100, mBitmapPaint);
+		feld.drawFeld(canvas);
 		// das bereits gezeichnete
-		canvas.drawBitmap(background, 0,0, mBitmapPaint);
 		canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 		// was jetzt gezeichnet wird
 		canvas.drawPath(mPath, LevelActivity.paint);
