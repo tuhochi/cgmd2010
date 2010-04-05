@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
@@ -21,7 +20,7 @@ public class LevelActivity extends Activity {
 	     requestWindowFeature(Window.FEATURE_NO_TITLE);
 	     
 		mGLSurfaceView = new MyOpenGLView(this);
-        mGLSurfaceView.setRenderer(new Renderer(player));   
+        mGLSurfaceView.setRenderer(new MyRenderer(player));   
         setContentView(mGLSurfaceView);
         
        SessionState s = new SessionState();
@@ -62,15 +61,15 @@ public class LevelActivity extends Activity {
 	}
     
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	if (keyCode==event.KEYCODE_A) {
+    	if (keyCode==KeyEvent.KEYCODE_A) {
     		player.moveLeft(true);
     		return true;
     	}
-    	if (keyCode==event.KEYCODE_D) {
+    	if (keyCode==KeyEvent.KEYCODE_D) {
     		player.moveRight(true);
     		return true;
     	}
-    	if (keyCode==event.KEYCODE_W) {
+    	if (keyCode==KeyEvent.KEYCODE_W) {
     		player.jump(true);
     		return true;
     	}
@@ -78,15 +77,15 @@ public class LevelActivity extends Activity {
     }
     
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-    	if (keyCode==event.KEYCODE_A) {
+    	if (keyCode==KeyEvent.KEYCODE_A) {
     		player.moveLeft(false);
     		return true;
     	}
-    	if (keyCode==event.KEYCODE_D) {
+    	if (keyCode==KeyEvent.KEYCODE_D) {
     		player.moveRight(false);
     		return true;
     	}
-    	if (keyCode==event.KEYCODE_W) {
+    	if (keyCode==KeyEvent.KEYCODE_W) {
     		player.jump(false);
     		return true;
     	}

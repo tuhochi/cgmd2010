@@ -1,8 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.util.Log;
 
 public class TileLayer {	
@@ -15,33 +21,62 @@ public class TileLayer {
 	float posY;
 	
 	float scrollFactor=1.0f;
+	
+	Texture texture;
 
-	public void init(float _scrollFactor) { // tile_height, tile_width,
+	public void init(float _scrollFactor, int levelResource, int textureResource, Context context) {
 		scrollFactor=_scrollFactor;
 		
-		loadLevel();
+		loadLevel(levelResource, context);
 		
 		createVBOs();
+		
+		texture=new Texture();
+		texture.create(textureResource);
 	}
 	
 	public int getTypeAt(int x, int y) {
 		return tiles_vector[x][y];
 	}
 	
-	private void loadLevel() {
-		numTilesX=10;
-		numTilesY=54;
-		
-		tiles_vector=new int[numTilesX+1][numTilesY+1];
-		
+	private void loadLevel(int levelResource, Context context) {
 		Log.d("TileLayer", "loadLevel");
 		
-		
-		// open file... fill tiles_hashmap
-		tiles_vector[2][2]=23;
-		tiles_vector[0][2]=23;	
-		tiles_vector[7][4]=23;
-		// *******************************
+		BufferedReader levelStream=new BufferedReader(new InputStreamReader(context.getResources().openRawResource(levelResource)));
+		String line;
+		try {
+			line = levelStream.readLine();
+			if (line!=null) {
+				StringTokenizer st = new StringTokenizer(line);
+				if (st.hasMoreTokens()) {
+					numTilesX=Integer.parseInt(st.nextToken());
+				}
+				if (st.hasMoreTokens()) {
+					numTilesY=Integer.parseInt(st.nextToken());
+				}
+			}
+			tiles_vector=new int[numTilesX+1][numTilesY+1];
+			
+			line = levelStream.readLine();
+			
+			int row=0;
+			int col=0;
+			
+			while(line!=null) {
+				StringTokenizer st = new StringTokenizer(line);
+				col=0;
+				while (st.hasMoreTokens()) {
+					tiles_vector[col][row]=Integer.parseInt(st.nextToken());
+					col++;
+				}
+				
+				line=levelStream.readLine();
+				row++;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Log.e("loadLevel", "fileError");
+		}
 	}
 	
 	private void createVBOs() {
@@ -66,6 +101,7 @@ public class TileLayer {
 	
 	public void draw(GL10 gl)
     {
+		texture.bind(gl);
 		gl.glLoadIdentity();
 		gl.glTranslatef(posX*scrollFactor, posY*scrollFactor, 0.0f);
 		// bind tilesatlas
