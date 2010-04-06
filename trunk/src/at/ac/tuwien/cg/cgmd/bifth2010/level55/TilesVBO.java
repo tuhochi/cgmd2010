@@ -2,9 +2,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
 import java.util.Vector;
 
+import javax.microedition.khronos.opengles.GL10;
+
 public class TilesVBO extends Mesh {
 	
-	public TilesVBO(int x, int y, int width, int height, int[][] tiles_vector) {
+	public TilesVBO(GL10 gl, int x, int y, int width, int height, int[][] tiles_vector) {
 		/*
 		+-+-+-+-+
 		+-+-+-+-+
@@ -66,7 +68,7 @@ public class TilesVBO extends Mesh {
 		}
 		
 		if (count>0) {
-			super.init(vertices, texCoords, indices);
+			super.init(gl, vertices, texCoords, indices);
 		}
 	}
 

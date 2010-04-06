@@ -12,12 +12,12 @@ public class Interface {
 	float screenWidth;
 	float screenHeight;
 	
-	public void init() {
+	public void init(GL10 gl) {
 		inputFieldTex=new Texture();
 		inputFieldTex.create(R.drawable.l55_inputfield);
 		
 		jumpQuad=new Quad();
-		jumpQuad.init(0.0f,0.0f,1.0f,1.0f);
+		jumpQuad.init(gl, 0.0f,0.0f,1.0f,1.0f);
 	}
 	
 	public void draw(GL10 gl) {

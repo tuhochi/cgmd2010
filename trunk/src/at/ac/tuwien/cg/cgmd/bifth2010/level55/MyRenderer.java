@@ -5,6 +5,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.util.Log;
 
 class MyRenderer implements MyOpenGLView.Renderer {
 	
@@ -69,12 +70,17 @@ class MyRenderer implements MyOpenGLView.Renderer {
 
     @Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+    	Log.d("Renderer","onSurfaceCreate");
+    	
+    	gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
+    	
         /*
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
          * especially on software renderer.
          */
         gl.glDisable(GL10.GL_DITHER);
+        gl.glDisable(GL10.GL_LIGHTING);
 
         /*
          * Some one-time OpenGL initialization can be made here
@@ -89,17 +95,17 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
          gl.glEnable(GL10.GL_BLEND);
          
+         Texture.cleanUp();
          Texture.setGL(gl);
          
          level=new Level();
          level.init(gl, context);
          
          //player=new Player();
-         player.init(level);
+         player.init(gl, level);
          
          ui=new Interface();
-         ui.init();
-         
+         ui.init(gl);
     }
 
 }

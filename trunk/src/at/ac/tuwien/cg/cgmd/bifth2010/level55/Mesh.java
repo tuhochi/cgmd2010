@@ -7,18 +7,24 @@ import java.nio.ShortBuffer;
 import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
+
+import android.util.Log;
 
 /**
  * A vertex shaded cube.
  */
 class Mesh
 {
+	
+	boolean useHardwareBuffers=false;
+	
     public Mesh()
     {
     }
     
-    public void init(Vector<Float> vertices, Vector<Float> texCoords, Vector<Short> indices)
-    {
+    public void init(GL10 gl, Vector<Float> vertices, Vector<Float> texCoords, Vector<Short> indices)
+    {	
     	float[] primVertices=new float[vertices.size()];
     	float[] primTexCoords=new float[texCoords.size()];
     	short[] primIndices=new short[indices.size()];
@@ -35,10 +41,10 @@ class Mesh
     		primIndices[i]=indices.elementAt(i).shortValue();
     	}
     	
-    	init(primVertices, primTexCoords, primIndices);    
+    	init(gl, primVertices, primTexCoords, primIndices);    
     }
     
-    public void init(float[] vertices, float[] texCoords, short[] indices)
+    public void init(GL10 gl, float[] vertices, float[] texCoords, short[] indices)
     {
         // Buffers to be passed to gl*Pointer() functions
         // must be direct, i.e., they must be placed on the
@@ -47,6 +53,17 @@ class Mesh
         //
         // Buffers with multi-byte datatypes (e.g., short, int, float)
         // must have their byte order set to native order
+    	
+    	if (gl instanceof GL11) {
+    		GL11 gl11=(GL11)gl;
+    		if (MyOpenGLView.isExtensionSupported(gl11,"GL_ANDROID_vertex_buffer_object") ||
+    				MyOpenGLView.isExtensionSupported(gl11,"GL_OES_vertex_buffer_object")) {
+    			useHardwareBuffers=true;
+    			Log.d("useHardwareBuffers", "true");
+    		}
+    	} else {
+    		Log.d("useHardwareBuffers", "false");
+    	}
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);
         vbb.order(ByteOrder.nativeOrder());

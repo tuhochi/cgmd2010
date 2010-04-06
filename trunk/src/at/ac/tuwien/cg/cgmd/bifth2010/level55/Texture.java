@@ -23,6 +23,20 @@ public class Texture {
 	public Texture () {
 	}
 	
+	static void cleanUp() {
+		Log.d("Texture", "cleanUp");
+		loadedTex.clear();
+	}
+	
+	public void finalize() {
+		Log.d("Texture", "finalize");
+		IntBuffer textures=IntBuffer.allocate(1);
+		textures.put(texture);
+		gl.glDeleteTextures(1, textures);
+		
+		loadedTex.remove(texture);
+	}
+	
 	static public void setContext(Context _context) {
 		context=_context;
 	}

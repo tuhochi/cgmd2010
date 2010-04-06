@@ -46,6 +46,12 @@ public class LevelActivity extends Activity {
         super.onPause();
         mGLSurfaceView.onPause();
     }
+    
+    @Override
+    protected void onStop() {
+    	super.onStop();
+    	Log.d("Activity", "onStop");
+    }
    
     public boolean onTouchEvent(MotionEvent me) {
 		Log.d("onTouch", me.toString());
