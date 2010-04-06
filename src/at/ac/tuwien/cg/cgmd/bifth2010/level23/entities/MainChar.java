@@ -178,24 +178,23 @@ public class MainChar implements SceneEntity {
 		
 		glTranslatef(position.x, 0, 0);
 		
-		if (!vbo) {
-			if(textureID != -1)
-			{	
-				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
-			}		
+		if (!vbo) 
+		{
+			
+			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
 		
 			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 		
-		} else {
+		} 
+		else 
+		{
 	
 			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
 			
-			if (textureID != -1) {
-				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-				GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-			}
+			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
 			
 			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
 
