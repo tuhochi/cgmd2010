@@ -19,13 +19,13 @@ public class Level {
 		textureTest.create(R.drawable.l55_testtexture);
 		
 		frontLayer=new TileLayer();
-		frontLayer.init(gl, 1.0f, R.raw.l55_level, R.drawable.l55_testtexture, context);
+		frontLayer.init(gl, 1.0f, 1.0f, R.raw.l55_level, R.drawable.l55_front_layer_tex, 2, 4, context);
 		
 		secondLayer=new TileLayer();
-		secondLayer.init(gl, 0.5f, R.raw.l55_level, R.drawable.l55_testtexture, context);
+		secondLayer.init(gl, 0.5f, 3.0f, R.raw.l55_level, R.drawable.l55_testtexture, 2, 4, context);
 		
 		thirdLayer=new TileLayer();
-		thirdLayer.init(gl, 0.25f, R.raw.l55_level, R.drawable.l55_testtexture, context);
+		thirdLayer.init(gl, 0.25f, 3.0f, R.raw.l55_level, R.drawable.l55_testtexture, 2, 4, context);
 	}
 	
 	public void draw(GL10 gl) {   

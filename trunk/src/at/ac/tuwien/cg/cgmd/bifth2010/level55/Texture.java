@@ -13,6 +13,10 @@ import android.util.Log;
 
 public class Texture {
 	int texture;
+	float texelWidth;
+	float texelHeight;
+	
+	
 	static Context context;
 	static GL10 gl;
 	
@@ -55,6 +59,9 @@ public class Texture {
 				int tile_height=image.getHeight();
 				int tile_width=image.getWidth();
 				int tile_size=tile_height*tile_width;
+				
+				texelWidth=1.0f/(float)tile_width;
+				texelHeight=1.0f/(float)tile_height;
 				
 				int[] pixels = new int[tile_width];
 				
