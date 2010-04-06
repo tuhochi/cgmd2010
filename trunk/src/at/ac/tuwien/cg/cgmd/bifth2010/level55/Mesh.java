@@ -19,6 +19,14 @@ class Mesh
 	
 	boolean useHardwareBuffers=false;
 	
+	private int mVertBufferIndex;
+    private int mIndexBufferIndex;
+    private int mTextureCoordBufferIndex;
+    
+    private FloatBuffer   mVertexBuffer;
+    private FloatBuffer	mTexCoordBuffer;
+    private ShortBuffer  mIndexBuffer;
+	
     public Mesh()
     {
     }
@@ -53,17 +61,6 @@ class Mesh
         //
         // Buffers with multi-byte datatypes (e.g., short, int, float)
         // must have their byte order set to native order
-    	
-    	if (gl instanceof GL11) {
-    		GL11 gl11=(GL11)gl;
-    		if (MyOpenGLView.isExtensionSupported(gl11,"GL_ANDROID_vertex_buffer_object") ||
-    				MyOpenGLView.isExtensionSupported(gl11,"GL_OES_vertex_buffer_object")) {
-    			useHardwareBuffers=true;
-    			Log.d("useHardwareBuffers", "true");
-    		}
-    	} else {
-    		Log.d("useHardwareBuffers", "false");
-    	}
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);
         vbb.order(ByteOrder.nativeOrder());
@@ -82,23 +79,81 @@ class Mesh
         mIndexBuffer = ibb.asShortBuffer();
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
+        
+        
+        if (gl instanceof GL11) {
+    		GL11 gl11=(GL11)gl;
+    		if (MyOpenGLView.isExtensionSupported(gl11,"GL_ANDROID_vertex_buffer_object") ||
+    				MyOpenGLView.isExtensionSupported(gl11,"GL_OES_vertex_buffer_object")) {
+    			
+                int[] buffer = new int[1];
+                
+                // Allocate and fill the vertex buffer.
+                gl11.glGenBuffers(1, buffer, 0);
+                mVertBufferIndex = buffer[0];
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertBufferIndex);
+                final int vertexSize = vertices.length*4; 
+                gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertexSize, 
+                        mVertexBuffer, GL11.GL_STATIC_DRAW);
+                
+                
+                // Allocate and fill the texture coordinate buffer.
+                gl11.glGenBuffers(1, buffer, 0);
+                mTextureCoordBufferIndex = buffer[0];
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 
+                        mTextureCoordBufferIndex);
+                final int texCoordSize = texCoords.length*4;
+                gl11.glBufferData(GL11.GL_ARRAY_BUFFER, texCoordSize, 
+                        mTexCoordBuffer, GL11.GL_STATIC_DRAW);
+
+                
+                // Unbind the array buffer.
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+                
+                // Allocate and fill the index buffer.
+                gl11.glGenBuffers(1, buffer, 0);
+                mIndexBufferIndex = buffer[0];
+                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 
+                        mIndexBufferIndex);
+                // A char is 2 bytes.
+                final int indexSize = indices.length*2;
+                gl11.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indexSize, mIndexBuffer, 
+                        GL11.GL_STATIC_DRAW);
+                
+                // Unbind the element array buffer.
+                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+    			
+    			
+    			useHardwareBuffers=true;
+    			Log.d("useHardwareBuffers", "true");
+    		}
+    	} else {
+    		Log.d("useHardwareBuffers", "false");
+    	}
     }
 
     public void draw(GL10 gl)
     {
     	if (mVertexBuffer!=null || mTexCoordBuffer!=null || mIndexBuffer!=null) {
-	    	gl.glEnable(GL10.GL_TEXTURE_2D);
-	        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-	    	
-	        gl.glFrontFace(GL10.GL_CW);
-	        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
-	        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexCoordBuffer);
-	        gl.glDrawElements(GL10.GL_TRIANGLES, mIndexBuffer.limit(), GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+    		if (useHardwareBuffers) {	// vbo
+    			GL11 gl11 = (GL11)gl;
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertBufferIndex);
+                gl11.glVertexPointer(3, GL10.GL_FLOAT, 0, 0);
+                
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mTextureCoordBufferIndex);
+    	        gl11.glTexCoordPointer(2, GL10.GL_FLOAT, 0, 0);
+                
+                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, mIndexBufferIndex);
+                gl11.glDrawElements(GL11.GL_TRIANGLES, mIndexBuffer.capacity(),
+                        GL11.GL_UNSIGNED_SHORT, 0);
+                
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+    		} else {	// fall-back: vertex arrays
+		        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
+		        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexCoordBuffer);
+		        gl.glDrawElements(GL10.GL_TRIANGLES, mIndexBuffer.capacity(), GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+    		}
     	}
     }
-
-    private FloatBuffer   mVertexBuffer;
-    private FloatBuffer	mTexCoordBuffer;
-    private ShortBuffer  mIndexBuffer;
 }

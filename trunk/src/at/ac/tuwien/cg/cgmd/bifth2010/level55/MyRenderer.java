@@ -81,6 +81,7 @@ class MyRenderer implements MyOpenGLView.Renderer {
          */
         gl.glDisable(GL10.GL_DITHER);
         gl.glDisable(GL10.GL_LIGHTING);
+        gl.glEnable(GL10.GL_TEXTURE_2D);
 
         /*
          * Some one-time OpenGL initialization can be made here
@@ -94,6 +95,11 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glShadeModel(GL10.GL_SMOOTH);
          gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
          gl.glEnable(GL10.GL_BLEND);
+         
+         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+    	
+         gl.glFrontFace(GL10.GL_CW);
          
          Texture.cleanUp();
          Texture.setGL(gl);
