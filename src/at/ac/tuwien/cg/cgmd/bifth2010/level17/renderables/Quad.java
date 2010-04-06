@@ -19,10 +19,10 @@ public class Quad implements Renderable {
     	float onef = 1.0f;
 
     	Vector3 vertices[] = {
-    			new Vector3( -width / 2.0f, -height / 2.0f, 0),
-    			new Vector3(width / 2.0f, -height / 2.0f, 0),
-    			new Vector3(width / 2.0f,  height / 2.0f, 0),
-    			new Vector3(-width / 2.0f,  height / 2.0f, 0)
+    			new Vector3( -width / 2.0f, 0, -height / 2.0f),
+    			new Vector3(width / 2.0f, 0, -height / 2.0f),
+    			new Vector3(width / 2.0f, 0, height / 2.0f),
+    			new Vector3(-width / 2.0f, 0, height / 2.0f)
     	};
     	Vector2 texCoords[] = {
 
@@ -34,7 +34,7 @@ public class Quad implements Renderable {
 
 
     	Short indices[] = {
-    			3, 0, 1,    3, 1, 2
+    			3, 1, 0,    3, 2, 1
     	};
 
     	mVertexBuffer = new VertexBuffer(VertexBufferType.Position);
@@ -49,9 +49,13 @@ public class Quad implements Renderable {
 
     public void draw(GL10 gl)
     {
-    	gl.glFrontFace(GL10.GL_CCW);
+    	
+
+    	
     	mVertexBuffer.set(gl);
     	mTexCoordBuffer.set(gl);
     	gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, mIndexBuffer.getBuffer());
+
+
     }
 }

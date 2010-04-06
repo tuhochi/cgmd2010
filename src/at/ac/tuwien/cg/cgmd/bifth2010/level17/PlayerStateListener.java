@@ -6,5 +6,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level17;
  */
 public interface PlayerStateListener {
 	public void playerHPChanged(float damage);
+	public void playerMoneyChanged(int money);
 
 }

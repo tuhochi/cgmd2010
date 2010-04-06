@@ -8,8 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
 
-public class HouseModel implements Renderable
-{
+public class HouseModel implements Renderable {
 
 	private VertexBuffer mVertexBuffer;
 	private VertexBuffer mTexCoordBuffer;
@@ -122,19 +121,8 @@ public class HouseModel implements Renderable
      */
     public void draw(GL10 gl)
     {		
-
-    	
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-    	
-    	gl.glFrontFace(GL10.GL_CCW);
     	mVertexBuffer.set(gl);
     	mTexCoordBuffer.set(gl);
     	gl.glDrawElements(GL10.GL_TRIANGLES, 36, GL10.GL_UNSIGNED_SHORT, mIndexBuffer.getBuffer());
-
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisable(GL10.GL_TEXTURE_2D);
     }
 }

@@ -6,9 +6,9 @@ public class Player {
 
 	private Vector3 mPosition;
 	private float mRadius = 1.5f;
-	private int mLives = 0;
+	private int mLives = 3;
 	@SuppressWarnings("unused")
-	private int mMoney;
+	private int mMoney = 0;
 	
 	private PlayerStateListener mListener;
 
@@ -20,9 +20,14 @@ public class Player {
 		mMoney = money;
 	}
 	
-	public void hit() {
-		mLives++;
+	public void hitHouse() {
+		mLives--;
 		mListener.playerHPChanged(mLives);
+	}
+	
+	public void hitBird() {
+		mMoney += 10;
+		mListener.playerMoneyChanged(mMoney);
 	}
 	
     public void addPlayerStateListener(PlayerStateListener listener) {

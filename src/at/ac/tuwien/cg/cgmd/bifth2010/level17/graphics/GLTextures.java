@@ -19,6 +19,7 @@ public class GLTextures {
 	private GL10 gl; 
 	private Context context; 
 	private int[] textures; 
+	private int mActiveTex = 0;
 	
 	public GLTextures(GL10 gl,Context context) 
 	{ 
@@ -55,7 +56,6 @@ public class GLTextures {
 	            try {
 	                is.close();
 	            } catch(IOException e) {
-	                // Ignore.
 	            }
 	        }
 
@@ -68,8 +68,12 @@ public class GLTextures {
 	{ 
 		try 
 		{ 
-			int textureid = (Integer) this.textureMap.get(new Integer(id));//.intValue(); 
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, this.textures[textureid]); 
+			if(id != mActiveTex)
+			{
+				int textureid = (Integer) this.textureMap.get(new Integer(id));//.intValue(); 
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, this.textures[textureid]); 
+				mActiveTex = id;
+			}
 		} 
 		catch(Exception e) 
 		{ 

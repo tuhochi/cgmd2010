@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 
@@ -29,6 +31,8 @@ public class LevelActivity extends Activity {
 	private final Handler mHandler = new Handler();
 	private NormalModeWorld mWorld;
 	private TextView mHealthText;
+	private TextView mSpacer;
+	private TextView mPointsText;
 	private Vibrator mVibrator;
 	
 	
@@ -41,26 +45,41 @@ public class LevelActivity extends Activity {
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         mWindowSize = new Vector2((float)d.getWidth(), (float)d.getHeight());
-        
-        
-        
+
         mNormalModeView = new GLView(this, mWindowSize, mWorld);
         setContentView(mNormalModeView);
         
         LinearLayout llayout = new LinearLayout(this);
-        llayout.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        llayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+        llayout.setOrientation(LinearLayout.HORIZONTAL);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
         addContentView(llayout, params);
         
         mHealthText = new TextView(this);
-        mHealthText.setText("");
-        mHealthText.setGravity(Gravity.CENTER_HORIZONTAL);
+        mHealthText.setText("3");
         mHealthText.setTextSize(25);
-        mHealthText.setTextColor(Color.BLACK);
+        mHealthText.setGravity(Gravity.CENTER);
+        mHealthText.setTextColor(Color.BLACK);  
+        mHealthText.setBackgroundResource(R.drawable.l17_text_bg);
+        
+        mSpacer = new TextView(this);
+        
+        mPointsText = new TextView(this);
+        mPointsText.setText("0");
+        mPointsText.setTextSize(25);
+        mPointsText.setGravity(Gravity.CENTER);
+        mPointsText.setTextColor(Color.BLACK);
+        mPointsText.setBackgroundResource(R.drawable.l17_text_bg);
         
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        llparams.setMargins(0, 10, 0, 10);
+        llparams.weight = 0;
+        llparams.setMargins(10, 10, 10, 10);
         llayout.addView(mHealthText, llparams);
+        LinearLayout.LayoutParams llparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        llparams2.weight = 1;
+        llparams2.setMargins(10, 10, 10, 10);
+        llayout.addView(mSpacer, llparams2);
+        llayout.addView(mPointsText, llparams);
         
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  
     }
@@ -114,11 +133,18 @@ public class LevelActivity extends Activity {
     
     public void playerHPChanged(float hp)
     {
-    	mHealthText.setText(Float.toString(hp));
-    	
+    	if(hp > 0)
+    		mHealthText.setText(Integer.toString((int)hp));
+    	else
+    		mHealthText.setText(getString(getResources().getIdentifier("l17_gameover_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")));
     	  
     	// 1. Vibrate for 1000 milliseconds  
     	long milliseconds = 100;  
     	mVibrator.vibrate(milliseconds);  
+    }    
+    
+    public void playerMoneyChanged(int money)
+    {
+    	mPointsText.setText(Integer.toString(money)); 
     }
 }
