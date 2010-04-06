@@ -8,7 +8,7 @@ import android.opengl.GLU;
 import android.os.Handler;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLTextures;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Picker;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
@@ -24,7 +24,6 @@ public class NormalModeWorld implements World, PlayerStateListener {
     private float mElapsedSeconds;
     private long mOldTime;
     private long mTime;
-    private GLTextures mTextures;
     private LevelActivity mContext;
     private float mRotAngle = 0;
 	private Handler mHandler;
@@ -79,7 +78,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
         		moveDelta.y = 0;
         	}
         	mTouchPos = mNewTouchPos;
-        	Log.d(LOG_TAG, "Final World Coordinates:" + currentWorldTouchPos.toString());
+        	//Log.d(LOG_TAG, "Final World Coordinates:" + currentWorldTouchPos.toString());
         	mNewTouchPos = null;
         }
         
@@ -106,7 +105,6 @@ public class NormalModeWorld implements World, PlayerStateListener {
 		
 		SetViewMatrix(trackGl);
 
-		//mObject.draw(trackGl);
 		mLevel.draw(trackGl);
 
         trackGl.glDisable(GL10.GL_TEXTURE_2D);
@@ -129,13 +127,13 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	
 	public synchronized void init(GL10 gl)
 	{
-        mTextures = new GLTextures(gl, mContext);
-        mTextures.add(R.drawable.l17_crate);
-        mTextures.loadTextures();
-        mLevel = new Level();
+		MatrixTrackingGL trackGl = (MatrixTrackingGL)gl;
+        GLManager.getInstance().init(trackGl, mContext);
+        mLevel = new Level(this);
         mLevel.getPlayer().addPlayerStateListener(this);
         
         //mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
+        GLManager.getInstance().getTextures().loadTextures();
 		mPause = false;
 	}
 
@@ -191,12 +189,34 @@ public class NormalModeWorld implements World, PlayerStateListener {
         Runnable hprunnable = new HPRunnable(hp);
         mHandler.post(hprunnable);
 	}
+	
+	@Override
+	public void playerMoneyChanged(int money) {
+		
+		class MoneyRunnable implements Runnable{
+        	private int mMoney;
+        	public MoneyRunnable(int money)
+        	{
+        		mMoney = money;
+        	}
+        	@Override
+            public void run() {
+                mContext.playerMoneyChanged(mMoney);
+            }
+        };
+        
+        Runnable moneyrunnable = new MoneyRunnable(money);
+        mHandler.post(moneyrunnable);
+		
+	}
 
 
 	@Override
 	public synchronized void setPause(boolean pause) {
 		mPause = pause;
 	}
+
+
 	
 	
 }

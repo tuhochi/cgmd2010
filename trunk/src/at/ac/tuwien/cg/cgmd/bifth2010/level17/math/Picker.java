@@ -46,10 +46,10 @@ public class Picker
 
 		mViewProjection = Matrix4x4.mult(projection, view);
 		mInvViewProjection = mViewProjection.InvertedCopy();
-    	Log.d(LOG_TAG, "View: " + view.toString());
-    	Log.d(LOG_TAG, "Projection: " + projection.toString());
-    	Log.d(LOG_TAG, "View Projection: " + mViewProjection.toString());
-    	Log.d(LOG_TAG, "Inverse View Projection: " + mInvViewProjection.toString());
+    	//Log.d(LOG_TAG, "View: " + view.toString());
+    	//Log.d(LOG_TAG, "Projection: " + projection.toString());
+    	//Log.d(LOG_TAG, "View Projection: " + mViewProjection.toString());
+    	//Log.d(LOG_TAG, "Inverse View Projection: " + mInvViewProjection.toString());
 	}
 
 	/**
@@ -65,10 +65,10 @@ public class Picker
 		Vector4 pos4dim = new Vector4(referencePosition);
 		Vector4 screenSpacePos = mViewProjection.transformPoint(pos4dim);
 		screenSpacePos.homogenize();
-    	Log.d(LOG_TAG, "Calculated Screen Space Position: " + screenSpacePos.toString());
+    	//Log.d(LOG_TAG, "Calculated Screen Space Position: " + screenSpacePos.toString());
 		
 		mLastDepth = screenSpacePos.z; // for some reason, the y axis contains the depth, not the z axis as one would expect...
-    	Log.d(LOG_TAG, "Calculated Depth: " + mLastDepth);
+    	//Log.d(LOG_TAG, "Calculated Depth: " + mLastDepth);
 	}
 	
 	/**
@@ -80,18 +80,18 @@ public class Picker
 	 */
 	public Vector3 GetWorldPosition(Vector2 pickerCoordinates)
 	{
-    	Log.d(LOG_TAG, "Device Coordinates: " + pickerCoordinates.toString());
+    	//Log.d(LOG_TAG, "Device Coordinates: " + pickerCoordinates.toString());
 		// calculate picking position in screen space
 		Vector3 screenSpace = new Vector3();
 		screenSpace.y = -Device2ScreenSpace(pickerCoordinates.y);
 		screenSpace.x = Device2ScreenSpace(pickerCoordinates.x);
-    	Log.d(LOG_TAG, "Screen Coordinates: " + screenSpace.toString());
+    	//Log.d(LOG_TAG, "Screen Coordinates: " + screenSpace.toString());
 		// set the same depth as in screenSpacePos.y
 		screenSpace.z = mLastDepth;
 		// unproject the picking position to world coordinates
 		Vector4 screenSpace4dim = new Vector4(screenSpace);
 		Vector4 worldSpace = mInvViewProjection.transformPoint(screenSpace4dim);
-    	Log.d(LOG_TAG, "Transformed World Coordinates: " + worldSpace.toString());
+    	//Log.d(LOG_TAG, "Transformed World Coordinates: " + worldSpace.toString());
 		// return these coordinates homogenized
 		return new Vector3(worldSpace);
 	}

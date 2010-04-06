@@ -89,6 +89,11 @@ public class Vector3
 		}
 	}
 	
+	public float length ()
+	{
+		return (float) Math.sqrt (x*x + y*y + z*z);
+	}
+	
 	public void invert()
 	{
 		x = -x;
