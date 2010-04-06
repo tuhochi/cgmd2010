@@ -32,21 +32,21 @@ public class L84Primitive {
 //		      -1.0f, -1.0f, 0.0f,  // 1, Bottom Left
 //		       1.0f, -1.0f, 0.0f,  // 2, Bottom Right
 //		       1.0f,  1.0f, 0.0f,  // 3, Top Right
-		       -1.0f, -1.0f, 1.0f, //v0
-	    		1.0f, -1.0f, 1.0f,  //v1
-	    		-1.0f, 1.0f, 1.0f,  //v2
-	    		1.0f, 1.0f, 1.0f,   //v3
+			-1.0f, -1.0f, 1.0f, //v0
+	    	1.0f, -1.0f, 1.0f,  //v1
+	    	-1.0f, 1.0f, 1.0f,  //v2
+	    	1.0f, 1.0f, 1.0f,   //v3
 		};
 
 	private float texture[] = {
 //		      0.0f,  1.0f,  
 //		      0.0f, 0.0f,  
 //		       1.0f, 0.0f,  
-//		       1.0f,  1.0f
-		       0.0f, 0.0f,
-	    		0.0f, 1.0f,
-	    		1.0f, 0.0f,
-	    		1.0f, 1.0f, 
+//		       1.0f,  1.0f, 
+			0.0f, 0.0f,
+	    	0.0f, 1.0f,
+	    	1.0f, 0.0f,
+	    	1.0f, 1.0f, 
 	};
 	
 	// The order we like to connect them.
