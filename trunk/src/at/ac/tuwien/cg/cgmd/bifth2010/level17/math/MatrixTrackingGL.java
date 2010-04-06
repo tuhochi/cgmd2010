@@ -1079,7 +1079,7 @@ public class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
         for(int i = 0; i < 16; i++) {
             if (mCheckA[i] != mCheckB[i]) {
                 //Log.d("GLMatWrap", "i:" + i + " a:" + mCheckA[i]
-                + " a:" + mCheckB[i]);
+                //+ " a:" + mCheckB[i]);
                 fail = true;
             }
         }
