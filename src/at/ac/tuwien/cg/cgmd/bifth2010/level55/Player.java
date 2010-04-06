@@ -13,8 +13,8 @@ public class Player {
 	public boolean doMoveRight = false;
 	public boolean doMoveLeft = false;
 	
-	public void init(Level _level) {
-		hase.init(-0.5f, -0.5f, 1, 1);
+	public void init(GL10 gl, Level _level) {
+		hase.init(gl, -0.5f, -0.5f, 1, 1);
 		level=_level;
 	}
 	

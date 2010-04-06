@@ -1,15 +1,17 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
+import javax.microedition.khronos.opengles.GL10;
+
 public class Quad extends Mesh {
 	
 	static float screenResolutionX;
 	static float screenResolutionY;
 
-	void init() {
-		init (0,0,screenResolutionX,screenResolutionY);
+	void init(GL10 gl) {
+		init (gl, 0,0,screenResolutionX,screenResolutionY);
 	}
 	
-	void init(float x, float y, float width, float height) {
+	void init(GL10 gl, float x, float y, float width, float height) {
 		float vertices[] = {
                 x, y, 1,
                 x+width, y, 1,
@@ -28,6 +30,6 @@ public class Quad extends Mesh {
                 0, 1, 2,    0, 2, 3
         };
         
-        super.init (vertices, texCoords, indices);
+        super.init (gl, vertices, texCoords, indices);
 	}
 }
