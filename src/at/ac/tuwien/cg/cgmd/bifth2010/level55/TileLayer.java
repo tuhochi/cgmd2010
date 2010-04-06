@@ -24,15 +24,15 @@ public class TileLayer {
 	
 	Texture texture;
 
-	public void init(GL10 gl, float _scrollFactor, int levelResource, int textureResource, Context context) {
+	public void init(GL10 gl, float _scrollFactor, float sizeFactor, int levelResource, int textureResource, int texRows, int texCols, Context context) {
 		scrollFactor=_scrollFactor;
-		
-		loadLevel(levelResource, context);
-		
-		createVBOs(gl);
 		
 		texture=new Texture();
 		texture.create(textureResource);
+		
+		loadLevel(levelResource, context);
+		
+		createVBOs(gl, sizeFactor, texRows, texCols);
 	}
 	
 	public int getTypeAt(int x, int y) {
@@ -79,7 +79,7 @@ public class TileLayer {
 		}
 	}
 	
-	private void createVBOs(GL10 gl) {
+	private void createVBOs(GL10 gl, float sizeFactor, int texRows, int texCols) {
 		maxVBOPosX=(int) Math.ceil((double)numTilesX/VBO_WIDTH);
 		maxVBOPosY=(int) Math.ceil((double)numTilesY/VBO_HEIGHT);
 		
@@ -90,7 +90,7 @@ public class TileLayer {
 
 		for (int i=0; i<maxVBOPosX; i++) {
 			for (int j=0; j<maxVBOPosY; j++) {
-				vbo_vector[i][j]=new TilesVBO(gl, i*VBO_WIDTH, j*VBO_HEIGHT, VBO_WIDTH, VBO_HEIGHT, tiles_vector);
+				vbo_vector[i][j]=new TilesVBO(gl, sizeFactor, i*VBO_WIDTH, j*VBO_HEIGHT, VBO_WIDTH, VBO_HEIGHT, tiles_vector, texture, texRows, texCols);
 			}
 		}
 	}

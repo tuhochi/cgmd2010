@@ -6,7 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class TilesVBO extends Mesh {
 	
-	public TilesVBO(GL10 gl, int x, int y, int width, int height, int[][] tiles_vector) {
+	public TilesVBO(GL10 gl, float sizeFactor, int x, int y, int width, int height, int[][] tiles_vector, Texture texture, int texRows, int texCols) {
 		/*
 		+-+-+-+-+
 		+-+-+-+-+
@@ -22,6 +22,12 @@ public class TilesVBO extends Mesh {
 		int maxX=tiles_vector.length;
 		int maxY=tiles_vector[0].length;
 		
+		float tileWidth=1.0f/(float)texCols;
+		float tileHeight=1.0f/(float)texRows;
+		
+		float halfTexelWidth=texture.texelWidth/2.0f;
+		float halfTexelHeight=texture.texelHeight/2.0f;
+		
 		int count=0;
 		for (int i=x; i<Math.min(maxX,(x+width)); i++) {
 			for (int j=y; j<Math.min(maxY, (y+height)); j++) {
@@ -29,30 +35,39 @@ public class TilesVBO extends Mesh {
 				int type=tiles_vector[i][j];
 	
 				if (type!=0) {
+					int rowInTileSet=(type-1)/texCols;
+					int colInTileSet=(type-1)-rowInTileSet*texCols;
+					
+					float texX1=tileWidth*colInTileSet+halfTexelWidth;
+					float texX2=tileWidth+tileWidth*colInTileSet-halfTexelWidth;
+					
+					float texY1=tileHeight*rowInTileSet+halfTexelHeight;
+					float texY2=tileHeight+tileHeight*rowInTileSet-halfTexelHeight;
+					
 					count++;
-					vertices.add(new Float(i));
-					vertices.add(new Float(j));
+					vertices.add(new Float(i*sizeFactor));
+					vertices.add(new Float(j*sizeFactor));
 					vertices.add(new Float(1.0));
-					texCoords.add(new Float(0.0));
-					texCoords.add(new Float(0.0));
+					texCoords.add(new Float(texX1));
+					texCoords.add(new Float(texY1));
 					
-					vertices.add(new Float(i+1.0));
-					vertices.add(new Float(j));
+					vertices.add(new Float((i+1.0)*sizeFactor));
+					vertices.add(new Float(j)*sizeFactor);
 					vertices.add(new Float(1.0));
-					texCoords.add(new Float(1.0));
-					texCoords.add(new Float(0.0));
+					texCoords.add(new Float(texX2));
+					texCoords.add(new Float(texY1));
 					
-					vertices.add(new Float(i+1.0));
-					vertices.add(new Float(j+1.0));
+					vertices.add(new Float((i+1.0)*sizeFactor));
+					vertices.add(new Float((j+1.0)*sizeFactor));
 					vertices.add(new Float(1.0));
-					texCoords.add(new Float(1.0));
-					texCoords.add(new Float(1.0));
+					texCoords.add(new Float(texX2));
+					texCoords.add(new Float(texY2));
 					
-					vertices.add(new Float(i));
-					vertices.add(new Float(j+1.0));
+					vertices.add(new Float(i*sizeFactor));
+					vertices.add(new Float((j+1.0)*sizeFactor));
 					vertices.add(new Float(1.0));
-					texCoords.add(new Float(0.0));
-					texCoords.add(new Float(1.0));
+					texCoords.add(new Float(texX1));
+					texCoords.add(new Float(texY2));
 					
 					int numVertices=vertices.size()/3;
 					
