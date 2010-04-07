@@ -25,6 +25,7 @@ Here you can find some useful links for the project. If you find some links, ple
 
   * *Nehe Android Ports: [http://insanitydesign.com/wp/projects/nehe-android-ports/ 1] [http://code.google.com/p/nehe-android/ 2]*
   * *[http://www.khronos.org/opengles/ OpenGL ES Specification]*
+  * *[http://stackoverflow.com/questions/2093594/opengl-extensions-available-on-different-android-devices OpenGL ES extensions of some Android devices]*
 
 == Books / Literature (Android & OpenGL ES) ==
 
