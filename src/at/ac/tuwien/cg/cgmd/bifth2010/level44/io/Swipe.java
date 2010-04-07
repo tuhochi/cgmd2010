@@ -36,7 +36,7 @@ public class Swipe implements InputGesture {
 		
 		this.screenHalf = screenHalf;
 		// compute length of swipe, pythagoras
-		this.length = Math.min(MAX_LENGTH, Math.round(Math.sqrt((endX - startX) + (endX - startX) + (endY - startY) * (endY - startY))));
+		this.length = Math.min(MAX_LENGTH, Math.round(Math.sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))));
 	}
 	
 	public float getStrength() {
