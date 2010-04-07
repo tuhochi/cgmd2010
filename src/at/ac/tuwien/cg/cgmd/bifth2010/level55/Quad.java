@@ -4,11 +4,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Quad extends Mesh {
 	
-	static float screenResolutionX;
-	static float screenResolutionY;
+	static float screenWidth;
+	static float screenHeight;
 
 	void init(GL10 gl) {
-		init (gl, 0,0,screenResolutionX,screenResolutionY);
+		init (gl, 0,0,screenWidth,screenHeight);
 	}
 	
 	void init(GL10 gl, float x, float y, float width, float height) {

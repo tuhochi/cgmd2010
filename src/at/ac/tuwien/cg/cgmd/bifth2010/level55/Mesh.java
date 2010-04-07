@@ -9,7 +9,6 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import android.util.Log;
 
 /**
  * A vertex shaded cube.
@@ -125,10 +124,9 @@ class Mesh
     			
     			
     			useHardwareBuffers=true;
-    			Log.d("useHardwareBuffers", "true");
     		}
     	} else {
-    		Log.d("useHardwareBuffers", "false");
+    		useHardwareBuffers=false;
     	}
     }
 

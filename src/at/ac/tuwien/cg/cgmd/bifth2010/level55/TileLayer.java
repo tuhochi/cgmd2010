@@ -21,18 +21,23 @@ public class TileLayer {
 	float posY;
 	
 	float scrollFactor=1.0f;
+	float sizeFactor=1.0f;
 	
 	Texture texture;
+	
+	static float screenWidth;
+	static float screenHeight;
 
-	public void init(GL10 gl, float _scrollFactor, float sizeFactor, int levelResource, int textureResource, int texRows, int texCols, Context context) {
+	public void init(GL10 gl, float _scrollFactor, float _sizeFactor, int levelResource, int textureResource, int texRows, int texCols, Context context) {
 		scrollFactor=_scrollFactor;
+		sizeFactor=_sizeFactor;
 		
 		texture=new Texture();
 		texture.create(textureResource);
 		
 		loadLevel(levelResource, context);
 		
-		createVBOs(gl, sizeFactor, texRows, texCols);
+		createVBOs(gl, texRows, texCols);
 	}
 	
 	public int getTypeAt(int x, int y) {
@@ -79,7 +84,7 @@ public class TileLayer {
 		}
 	}
 	
-	private void createVBOs(GL10 gl, float sizeFactor, int texRows, int texCols) {
+	private void createVBOs(GL10 gl, int texRows, int texCols) {
 		maxVBOPosX=(int) Math.ceil((double)numTilesX/VBO_WIDTH);
 		maxVBOPosY=(int) Math.ceil((double)numTilesY/VBO_HEIGHT);
 		
@@ -102,12 +107,22 @@ public class TileLayer {
 	public void draw(GL10 gl)
     {
 		texture.bind(gl);
+		
+		float tempPosX=posX*scrollFactor;
+		float tempPosY=posY*scrollFactor;
+		
+		int minVisibleVBO_x=Math.max((int) (-tempPosX/(VBO_WIDTH*sizeFactor)), 0);
+		int maxVisibleVBO_x=Math.min((int) ((screenWidth-tempPosX-1)/(VBO_WIDTH*sizeFactor)),maxVBOPosX-1);
+		
+		int minVisibleVBO_y=Math.max((int) (-tempPosY/(VBO_HEIGHT*sizeFactor)), 0);
+		int maxVisibleVBO_y=Math.min((int) ((screenHeight-tempPosY-1)/(VBO_HEIGHT*sizeFactor)), maxVBOPosY-1);
+		
 		gl.glLoadIdentity();
-		gl.glTranslatef(posX*scrollFactor, posY*scrollFactor, 0.0f);
+		gl.glTranslatef(tempPosX, tempPosY, 0.0f);
 		// bind tilesatlas
 		// apply view frustum culling (adjust loops)
-		for (int i=0; i<maxVBOPosX; i++) {
-			for (int j=0; j<maxVBOPosY; j++) {
+		for (int i=minVisibleVBO_x; i<=maxVisibleVBO_x; i++) {
+			for (int j=minVisibleVBO_y; j<=maxVisibleVBO_y; j++) {
 				vbo_vector[i][j].draw(gl);
 			}
 		}
