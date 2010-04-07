@@ -31,6 +31,12 @@ Here you can find some useful links for the project. If you find some links, ple
 
   * *[http://dpunkt.de/buecher/3436.html Arno Becker / Marcus Pant: Android - Grundlagen und Programmierung (German) - Free Download!]*
 
+== Nexus One ==
+  
+  * *[http://www.google.com/support/android/ Help pages (Google)]*
+    * *[http://static.googleusercontent.com/external_content/untrusted_dlcp/www.google.com/de//googlephone/nexusone-userguide.pdf User guide]*
+  * *[http://www.htc.com/www/product/nexusone/specification.html Specification]*
+
 == SVN ==
 
   * *[http://svnbook.red-bean.com/index.de.html SVN book]*
