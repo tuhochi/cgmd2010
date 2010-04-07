@@ -29,9 +29,16 @@ public class Bird {
 		MatrixTrackingGL gl = GLManager.getInstance().getGLContext();
 		gl.glPushMatrix();
 		gl.glTranslatef(mPosition);
-		gl.glRotatef(mRotation, 0, 1.0f, 0);
+		gl.glRotatef(-mRotation - 90.0f, 0, 1.0f, 0);
 		mModel.draw(gl);
 		gl.glPopMatrix();
+	}
+	
+	public void update(float elapsedSeconds) {
+		float x = (float)Math.cos(mRotation * Math.PI / 180.0f);
+		float z = (float)Math.sin(mRotation * Math.PI / 180.0f);
+
+		mPosition = Vector3.add(mPosition, Vector3.mult(new Vector3(x,0,z), elapsedSeconds * 5.0f));
 	}
 	
 	public boolean intersect(Vector3 pos, float radius) {

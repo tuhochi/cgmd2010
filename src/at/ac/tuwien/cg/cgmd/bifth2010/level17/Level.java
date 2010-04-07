@@ -65,8 +65,7 @@ public class Level {
 		//for (Bird bird : mBirds) {
 			//bird.draw();
 		//}
-		for(int i = mBirds.size() - 1; i >= 0; i-- )
-		{
+		for(int i = mBirds.size() - 1; i >= 0; i-- ){
 			mBirds.get(i).draw();
 		}
 		
@@ -100,8 +99,8 @@ public class Level {
 			int size = (int)(Math.floor(Math.random() * 5.0));
 			size = (size==5)?4:size;
 			newHouse.setHouseSize(size, new Vector3(mBlockSize, mBlockSize * ((float)size + 1.0f), mBlockSize));
-			int xpos = (int)(Math.floor(Math.random() * 10.0)) - 4;
-			int zpos = (int)(Math.floor(Math.random() * 18.0)) - 8;
+			int xpos = (int)(Math.floor(Math.random() * 5.0)) - 2;
+			int zpos = (int)(Math.floor(Math.random() * 9.0)) - 4;
 			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 131.0f - (newHouse.getSize().y / 2.0f), zpos * mBlockSize + playerPos.z);
 			newPos.x -= newPos.x % mBlockSize;
 			newPos.z -= newPos.z % mBlockSize;
@@ -118,11 +117,15 @@ public class Level {
 			Vector3 newPos = new Vector3(birdxpos + playerPos.x, playerPos.y - 131.0f, birdzpos + playerPos.z);
 			newbird.setPosition(newPos);
 			newbird.setModel(mBird);
-			float rotation = (float)(Math.random() * Math.PI) * 2.0f;
+			float rotation = (float)(Math.random() * 360);
 			newbird.setRotation(rotation);
 			mBirds.add(newbird);
 			
-			mNextBird = (float)Math.random() * 0.5f;
+			mNextBird = (float)Math.random() * 1.0f;
+		}
+		
+		for(Bird bird: mBirds){
+			bird.update(elapsedSeconds);
 		}
 		
 		List<House> remove = new ArrayList<House>();
