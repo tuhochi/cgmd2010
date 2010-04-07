@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -11,8 +12,6 @@ public class LevelActivity extends Activity
 	public static final String TAG = "Signanzorbit";
 	
 	private static LevelActivity instance;
-	
-	public boolean running = true;
 	
 	private RenderView renderView;
 	
@@ -26,8 +25,8 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		Log.v(TAG,"onCreate(" + savedInstanceState + ")");
 		
-		// thx @ lvl 11
 		/* Fullscreen window without title */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
@@ -35,42 +34,60 @@ public class LevelActivity extends Activity
 		
 	 	setContentView(R.layout.l42_level);
 		renderView = (RenderView)findViewById(R.id.l42_RenderView); // seems to be null?!
-		running = true;
+
+		renderView.synchronizer.setActive(true);
 	}
 	
 	@Override
 	protected void onStart()
 	{
 		super.onStart();
-		running = true;
-	}
-	
-	@Override
-	protected void onStop()
-	{
-		super.onStop();
-		running = false;
-	}
-	
-	@Override
-	protected void onPause()
-	{
-		super.onPause();
-		running = false;
+		Log.v(TAG,"onStart()");
+		renderView.synchronizer.setActive(true);
 	}
 	
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
-		running = true;
+		Log.v(TAG,"onResume()");
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		Log.v(TAG,"onPause()");
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		Log.v(TAG,"onStop()");
+		renderView.synchronizer.setActive(false);
 	}
 	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		running = false;
+		Log.v(TAG,"onDestroy()");
+		renderView.synchronizer.setActive(false);
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		Log.v(TAG,"onRestoreInstanceState(" + savedInstanceState + ")");
 	}
 
 	public static LevelActivity getInstance()

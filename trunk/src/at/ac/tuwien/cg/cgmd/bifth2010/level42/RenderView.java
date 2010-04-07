@@ -19,7 +19,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
@@ -48,17 +47,16 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private CollisionManager collManager;
 	
 	// thread stuff
-	private final Synchronizer synchronizer;
+	public final Synchronizer synchronizer;
 	private final LinkedList<MotionEvent> motionEvents;
 	private final LinkedList<KeyEvent> keyEvents;
-	
 	
 	// some temp vars
 	private final Vector3 selectionDirection;
 	
-	public RenderView(Context context)
+	public RenderView(Context context, AttributeSet attr)
 	{
-		super(context);
+		super(context, attr);
 		setFocusable(true);
 		requestFocus();
 		setRenderer(this);
@@ -67,26 +65,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		cam = new Camera(20.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 		
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				while(RenderView.this.context.running)
-					update();
-			}
-		}).start();
 		synchronizer = new Synchronizer();
 		motionEvents = new LinkedList<MotionEvent>();
 		keyEvents = new LinkedList<KeyEvent>();
 		
 		//init temp vars
 		selectionDirection = new Vector3();
-	}
-	
-	public RenderView(Context context, AttributeSet attr)
-	{
-		this(context);
 	}
 	
 	private void initGLSettings()
@@ -111,13 +95,14 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
+		Log.v(LevelActivity.TAG,"onSurfaceCreated(" + gl + ", " + config + ")");
 		// check for GLES11
 		boolean gles11 = (gl instanceof GL11);
 		Config.GLES11 = gles11;
 		Log.i(LevelActivity.TAG, "OpenGL ES " + (gles11 ? "1.1" : "1.0") + " found!");
 		
 		String extensions = glGetString(GL_EXTENSIONS);
-		Log.i(LevelActivity.TAG, "Supported Extensions: " + extensions);
+//		Log.i(LevelActivity.TAG, "Supported Extensions: " + extensions);
 		
 		// check for needed extensions if OpenGL ES 1.1 is not available
 		if(!gles11)
@@ -154,6 +139,16 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		motionManager.addMotion(mov1,(Moveable)scene.getSceneEntity(0));
 		motionManager.addMotion(orbit2,(Moveable)scene.getSceneEntity(1));
+		
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				while(RenderView.this.synchronizer.running)
+					update();
+			}
+		}, "Logic Thread").start();
 	}
 	
 	private void update()
@@ -268,6 +263,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{
+		Log.v(LevelActivity.TAG,"onSurfaceChanged(" + gl + ", " + width + ", " + height + ")");
 		// Prevent a Divide By Zero by making height equal one
 		if(height == 0)
 			height = 1;
