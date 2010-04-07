@@ -34,9 +34,9 @@ public class TilesVBO extends Mesh {
 				
 				int type=tiles_vector[i][j];
 	
-				if (type!=0) {
-					int rowInTileSet=(type-1)/texCols;
-					int colInTileSet=(type-1)-rowInTileSet*texCols;
+				if (type!=-1) {
+					int rowInTileSet=type/texCols;
+					int colInTileSet=type-rowInTileSet*texCols;
 					
 					float texX1=tileWidth*colInTileSet+halfTexelWidth;
 					float texX2=tileWidth+tileWidth*colInTileSet-halfTexelWidth;

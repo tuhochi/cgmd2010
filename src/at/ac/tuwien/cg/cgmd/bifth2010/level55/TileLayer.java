@@ -12,9 +12,6 @@ import android.content.Context;
 import android.util.Log;
 
 public class TileLayer {	
-	int TILE_HEIGHT=32;
-	int TILE_WIDTH=32;
-			
 	float duration = 0;
 	
 	float posX;
