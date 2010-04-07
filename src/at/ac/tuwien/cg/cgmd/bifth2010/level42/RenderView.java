@@ -23,6 +23,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
@@ -40,6 +41,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	
 	private final LevelActivity context;
 	private OGLManager oglManager = OGLManager.instance;
+	private MaterialManager materialManager = MaterialManager.instance;
 	private Scene scene;
 	private final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
@@ -96,6 +98,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		Log.v(LevelActivity.TAG,"onSurfaceCreated(" + gl + ", " + config + ")");
+		
+		// reset managers
+		oglManager.reset();
+		materialManager.reset();
+		
 		// check for GLES11
 		boolean gles11 = (gl instanceof GL11);
 		Config.GLES11 = gles11;

@@ -31,6 +31,13 @@ public class MaterialManager
 		textureEnabled = true;
 	}
 	
+	public void reset()
+	{
+		materials.clear();
+		boundMaterialName = "";
+		textureEnabled = true;
+	}
+	
 	public boolean hasMaterial(String name)
 	{
 		return materials.containsKey(name);

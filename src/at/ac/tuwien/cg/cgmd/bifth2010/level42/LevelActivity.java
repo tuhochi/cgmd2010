@@ -44,6 +44,13 @@ public class LevelActivity extends Activity
 	}
 	
 	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		Log.v(TAG,"onRestart()");
+	}
+	
+	@Override
 	protected void onResume()
 	{
 		super.onResume();
