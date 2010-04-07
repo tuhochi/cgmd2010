@@ -27,13 +27,12 @@ public class LevelActivity extends Activity
 		super.onCreate(savedInstanceState);
 		Log.v(TAG,"onCreate(" + savedInstanceState + ")");
 		
-		/* Fullscreen window without title */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 	 	setContentView(R.layout.l42_level);
-		renderView = (RenderView)findViewById(R.id.l42_RenderView); // seems to be null?!
+		renderView = (RenderView)findViewById(R.id.l42_RenderView);
 	}
 	
 	@Override
@@ -87,6 +86,7 @@ public class LevelActivity extends Activity
 	{
 		super.onSaveInstanceState(outState);
 		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
+		outState.putCharSequence("testkey", "testvalue");
 	}
 	
 	@Override
