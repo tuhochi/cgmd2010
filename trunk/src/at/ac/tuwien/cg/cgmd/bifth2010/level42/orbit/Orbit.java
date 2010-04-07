@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
+import android.net.http.SslCertificate.DName;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
@@ -16,7 +17,11 @@ public class Orbit implements Motion {
 					transformSpeed,
 					transformAngle=0,transformStep=0,transformDiff=0,transformIteration=0,
 					centerDiffFactor=0,centerDiffStep=0,centerDiff=0,centerDiffIteration=0,
-					directionDiffFactor=0,directionDiffStep=0,directionDiff=0,directionDiffIteration=0;
+					directionDiffFactor=0,directionDiffStep=0,directionDiff=0,directionDiffIteration=0,
+					
+					//morph
+					newSpeed,oldPerimeter,oldStepSize,
+					speedMorphStep,speedMorphIteration,dynamicMorphSpeed;
 
 	public final Vector3 position,
 						 entityPos,centerPos,normalVec,
@@ -25,7 +30,8 @@ public class Orbit implements Motion {
 					//orbit transformation
 	private final Vector3 	centerVec,toCenterVec,directionVec,orbitAxis,
 							newCenterVec,newToCenterVec,newDirectionVec,newNormalVec,
-							transformAxis;
+							transformAxis,
+							currtDirApproximation,tempDirectionVec;
 	
 	private Matrix44 objectOrbitTransform;
 	private final Matrix44 transform,basicOrientation,orbitTransform;
@@ -40,6 +46,7 @@ public class Orbit implements Motion {
 				)
 	{
 		this.speed = speed;
+		this.newSpeed = speed;
 		
 		this.entityPos = new Vector3(entityPos);
 		this.centerPos = new Vector3(centerPos);
@@ -65,6 +72,8 @@ public class Orbit implements Motion {
 		this.transform = new Matrix44();
 		this.position = new Vector3();
 		this.orbitAxis = new Vector3();
+		this.currtDirApproximation = new Vector3();
+		this.tempDirectionVec = new Vector3();
 		this.transformAxis = new Vector3();
 		this.orbitTransform = new Matrix44();
 		this.t = 0;
@@ -102,6 +111,28 @@ public class Orbit implements Motion {
 		//update sat transformation
 		if(satTrans!=null)
 			satTrans.update(dt,speed);
+		
+		//increase the new directionvec
+		if(speed!=newSpeed)
+		{
+			speedMorphIteration = speedMorphStep * dt * dynamicMorphSpeed;
+			
+			if(speedMorphStep>=0)
+			{
+				if(speed + speedMorphIteration > newSpeed)
+				{
+					speedMorphIteration = newSpeed - speed;
+				}
+			}else{
+				if(speed + speedMorphIteration < newSpeed)
+				{
+					speedMorphIteration = newSpeed - speed;
+				}
+			}
+				
+			speed+=speedMorphIteration;
+			Log.d(LevelActivity.TAG,"Morph speed curr="+speed+" iteration="+speedMorphIteration+" newspeed="+newSpeed + " dynSpeed="+dynamicMorphSpeed);
+		}
 		
 		//check for orbit transformation
 		if(Math.abs(transformDiff)<Math.abs(transformAngle))
@@ -247,13 +278,27 @@ public class Orbit implements Motion {
 	public void morphOrbit(Vector3 pushVec)
 	{
 		//approx current direction vec
-		Vector3 directionApprox = Vector3.subtract(ellipse.getPoint(u+step),position).normalize();
+		currtDirApproximation.copy(ellipse.getPoint(u+step));
+		currtDirApproximation.subtract(position);
+		currtDirApproximation.normalize();
 		
-		directionApprox.multiply(this.directionVec.length());
-		directionApprox.add(pushVec);
+		//new speed evaluation
+		tempDirectionVec.copy(currtDirApproximation);
+		tempDirectionVec.multiply(speed);
+		tempDirectionVec.add(pushVec);
+		newSpeed = tempDirectionVec.length();
 		
+		//new direction
+		currtDirApproximation.multiply(this.directionVec.length());
+		currtDirApproximation.add(pushVec);
+
+		//store old perimeter
+		oldPerimeter = ellipse.perimeter;
+		oldStepSize = step;
+		
+		//update ellipse
 		this.entityPos.copy(this.position);
-		this.directionVec.copy(directionApprox);
+		this.directionVec.copy(currtDirApproximation);
 		this.centerVec.copy(this.entityPos);
 		this.centerVec.subtract(this.centerPos);
 		
@@ -261,8 +306,19 @@ public class Orbit implements Motion {
 		this.toCenterVec.subtract(this.entityPos);
 		
 		this.ellipse.calcPerimeter();
-		this.step = Constants.TWOPI/ellipse.perimeter;
+		
+		//stepsize should be the same relative to the new perimeter
+		this.step = (oldStepSize*oldPerimeter)/ellipse.perimeter;
 		this.u = 0;
+		
+		//speedmorphing parameters
+		this.speedMorphStep = (this.newSpeed-this.speed)/100;
+		
+		if(newSpeed>speed)
+			this.dynamicMorphSpeed = (newSpeed/speed)*200;
+		else
+			this.dynamicMorphSpeed = (speed/newSpeed)*200;
+		
 
 	}
 	
