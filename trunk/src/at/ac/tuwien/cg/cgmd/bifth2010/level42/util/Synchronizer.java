@@ -64,6 +64,9 @@ public class Synchronizer
 
 	public void setActive(boolean running)
 	{
+		if(this.running == running)
+			return;
+		
 		this.running = running;
 		
 		if(!running)
