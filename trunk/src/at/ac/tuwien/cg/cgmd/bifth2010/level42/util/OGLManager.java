@@ -10,15 +10,15 @@ public class OGLManager
 {
 	public static final OGLManager instance = new OGLManager();
 
-	private boolean clientStateVertices = false;
-	private boolean clientStateNormals = false;
-	private boolean clientStateTexcoords = false;
+	private boolean clientStateVertices;
+	private boolean clientStateNormals;
+	private boolean clientStateTexcoords;
 
-	private int currentlyBoundVBO = 0;
+	private int currentlyBoundVBO;
 
-	private Matrix44 modelview = new Matrix44();
-	private Matrix44 projection = new Matrix44();
-	private int[] viewport = new int[4];
+	private Matrix44 modelview;
+	private Matrix44 projection;
+	private int[] viewport;
 
 	//vars for unproject
 	private int[] viewportArray4;
@@ -32,11 +32,29 @@ public class OGLManager
 	
 	private OGLManager()
 	{
+		clientStateVertices = false;
+		clientStateNormals = false;
+		clientStateTexcoords = false;
+		
+		currentlyBoundVBO = 0;
+
+		modelview = new Matrix44();
+		projection = new Matrix44();
+		viewport = new int[4];
+		
 		window = new float[3];
 		unprojectedPos = new float[4];
 		unprojectedPosVec = new Vector3();
 	}
 
+	public void reset()
+	{
+		clientStateVertices = false;
+		clientStateNormals = false;
+		clientStateTexcoords = false;
+		currentlyBoundVBO = 0;
+	}
+	
 	public void clientState(boolean vertices, boolean normals, boolean texcoords)
 	{
 		if(vertices && !clientStateVertices)
