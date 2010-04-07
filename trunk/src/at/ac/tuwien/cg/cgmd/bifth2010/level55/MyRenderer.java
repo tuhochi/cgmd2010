@@ -55,7 +55,7 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glLoadIdentity();
          
          float ratio=(float)height/(float)width;
-         float numTilesHorizontal=20.0f;
+         float numTilesHorizontal=15.0f;
          gl.glOrthof(0.0f, numTilesHorizontal, numTilesHorizontal*ratio, 0.0f, 0.0f, 5.0f);
          
          Quad.screenWidth=numTilesHorizontal;

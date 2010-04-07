@@ -26,11 +26,11 @@ public class Player {
 	public void update(float dT) {
 		if (doMoveLeft) {
 			Log.d("player", "left");
-			level.setPosition(1.0f, 0.0f);
+			level.setPosition(0.0f, 0.0f);
 		}
 		if (doMoveRight) {
 			Log.d("player", "right");
-			level.setPosition(0.0f, 0.0f);
+			level.setPosition(-1.0f, 0.0f);
 		}
 		if (doJump) {
 			Log.d("player", "jump");
