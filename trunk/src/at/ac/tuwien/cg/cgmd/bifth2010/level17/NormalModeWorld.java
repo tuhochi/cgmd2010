@@ -38,6 +38,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
     //the Level to render and collide against
 	private Level mLevel;
 	
+	// test
 	@SuppressWarnings("unused")
 	private OBJRenderable mObject;
 	
