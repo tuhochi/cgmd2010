@@ -22,7 +22,7 @@ public class Level {
 		frontLayer.init(gl, 1.0f, 1.0f, R.raw.l55_level, R.drawable.l55_front_layer_tex, 2, 4, context);
 		
 		secondLayer=new TileLayer();
-		secondLayer.init(gl, 0.5f, 3.0f, R.raw.l55_level, R.drawable.l55_testtexture, 2, 4, context);
+		secondLayer.init(gl, 0.5f, 2.0f, R.raw.l55_level, R.drawable.l55_testtexture, 2, 4, context);
 		
 		thirdLayer=new TileLayer();
 		thirdLayer.init(gl, 0.25f, 3.0f, R.raw.l55_level, R.drawable.l55_testtexture, 2, 4, context);
