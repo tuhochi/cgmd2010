@@ -15,3 +15,11 @@ Although we will buy Android hardware that is capable of doing OpenGL ES 2.0, it
 == Where can we find a modelloader for our level? ==
 
 Group 17 provide an *[http://www.informatik-forum.at/showthread.php?79216-OBJ-Loader obj-modelloader]*. But you can use any other free modelloader that is compatible with the license of our game.
+
+== How do I test my level? ==
+
+Run the application and press "Menu" in the Emulator Controls. At the bottom of the display, a field is appearing where you can enable/disable Debug Mode. If enabled, the Debug screen appears. There you can start a level or help Activy directly. 
+
+== How do I disable Debug Mode again? ==
+
+While in the Debug screen, press "Start Menu Activity" to load the Main Game screen. Pressing "Menu" in the Emulator Controls lets you disable Debug Mode again. 
