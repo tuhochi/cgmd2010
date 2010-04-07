@@ -12,9 +12,12 @@ public class Synchronizer
 	// to let the logic frame run once before starting to render
 	private int lastLogicFrame = -1;
 	private int lastPreRenderFrame = 0;
+	public boolean running = true;
 
 	public void waitForLogic()
 	{
+		if(!running)
+			return;
 		lock.lock();
 		try
 		{
@@ -29,6 +32,8 @@ public class Synchronizer
 
 	public void waitForPreRender()
 	{
+		if(!running)
+			return;
 		lock.lock();
 		try
 		{
@@ -57,11 +62,16 @@ public class Synchronizer
 		lock.unlock();
 	}
 
-	public void releaseAll()
+	public void setActive(boolean running)
 	{
-		lock.lock();
-		prerender.signal();
-		logic.signal();
-		lock.unlock();
+		this.running = running;
+		
+		if(!running)
+		{
+			lock.lock();
+			prerender.signal();
+			logic.signal();
+			lock.unlock();
+		}
 	}
 }
