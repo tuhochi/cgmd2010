@@ -34,8 +34,6 @@ public class LevelActivity extends Activity
 		
 	 	setContentView(R.layout.l42_level);
 		renderView = (RenderView)findViewById(R.id.l42_RenderView); // seems to be null?!
-
-		renderView.synchronizer.setActive(true);
 	}
 	
 	@Override
@@ -43,7 +41,6 @@ public class LevelActivity extends Activity
 	{
 		super.onStart();
 		Log.v(TAG,"onStart()");
-		renderView.synchronizer.setActive(true);
 	}
 	
 	@Override
@@ -51,6 +48,8 @@ public class LevelActivity extends Activity
 	{
 		super.onResume();
 		Log.v(TAG,"onResume()");
+		renderView.synchronizer.setActive(true);
+		renderView.onResume();
 	}
 	
 	@Override
@@ -58,6 +57,8 @@ public class LevelActivity extends Activity
 	{
 		super.onPause();
 		Log.v(TAG,"onPause()");
+		renderView.synchronizer.setActive(false);
+		renderView.onPause();
 	}
 	
 	@Override
@@ -65,7 +66,6 @@ public class LevelActivity extends Activity
 	{
 		super.onStop();
 		Log.v(TAG,"onStop()");
-		renderView.synchronizer.setActive(false);
 	}
 	
 	@Override
@@ -73,7 +73,6 @@ public class LevelActivity extends Activity
 	{
 		super.onDestroy();
 		Log.v(TAG,"onDestroy()");
-		renderView.synchronizer.setActive(false);
 	}
 	
 	@Override

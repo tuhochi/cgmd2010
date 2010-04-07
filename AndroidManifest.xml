@@ -67,8 +67,8 @@
 			android:name=".level12.HelpActivity"
 			android:label="@string/l12_title">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level12.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level12.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
@@ -77,8 +77,8 @@
 			android:name=".level13.HelpActivity"
 			android:label="@string/l13_GameName">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level13.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level13.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 
@@ -95,8 +95,8 @@
 			android:name=".level17.HelpActivity"
 			android:label="@string/l17_nameofthegame_full">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level17.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level17.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 
@@ -114,8 +114,8 @@
 		<activity
 			android:name=".level22.HelpActivity">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level22.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level22.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
@@ -123,8 +123,8 @@
 			android:name=".level23.HelpActivity"
 			android:label="@string/l23_nameofthegame_full">
 			<intent-filter>
-				<action  android:name="at.ac.tuwien.cg.cgmd.bifth2010.level23.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level23.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
@@ -133,8 +133,8 @@
 			android:label="@string/l23_nameofthegame_full"
 			android:screenOrientation="portrait">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level23.LAUNCH_LEVEL"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level23.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
@@ -142,16 +142,16 @@
 			android:name=".level30.HelpActivity"
 			android:label="@string/l30_nameofthegame_full">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level30.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level30.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
 		<activity
 			android:name=".level84.HelpActivity">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level84.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level84.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
@@ -169,8 +169,8 @@
 		<activity
 			android:name=".level36.HelpActivity">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level36.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level36.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
@@ -205,8 +205,8 @@
 		<activity
    			android:name=".level11.HelpActivity">
    			<intent-filter>
-    			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level11.LAUNCH_HELP"></action>
-    			<category android:name="android.intent.category.DEFAULT"></category>
+    			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level11.LAUNCH_HELP"/>
+    			<category android:name="android.intent.category.DEFAULT"/>
    			</intent-filter>
   		</activity>
   		
@@ -214,61 +214,60 @@
    			android:name=".level11.GameActivity"
    			android:screenOrientation="landscape">
    			<intent-filter>
-    			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level11.LAUNCH_LEVEL"></action>
-    			<category android:name="android.intent.category.DEFAULT"></category>
+    			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level11.LAUNCH_LEVEL"/>
+    			<category android:name="android.intent.category.DEFAULT"/>
    			</intent-filter>
   		</activity>
 		
 		<activity
    			android:name=".level70.HelpActivity">
    			<intent-filter>
-    			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level70.LAUNCH_HELP"></action>
-    			<category android:name="android.intent.category.DEFAULT"></category>
+    			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level70.LAUNCH_HELP"/>
+    			<category android:name="android.intent.category.DEFAULT"/>
    			</intent-filter>
   		</activity>
-  		
   		
   		<activity 
   			android:name=".level33.HelpActivity"
   			android:label="@string/l33_GameName">
-		<intent-filter>
-			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level33.LAUNCH_HELP"></action>
-			<category android:name="android.intent.category.DEFAULT"></category>
-		</intent-filter>
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level33.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
 		</activity>
 		
 		<activity 
   			android:name=".level33.LevelActivity"
   			android:label="@string/l33_GameName">
-		<intent-filter>
-			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level33.LAUNCH_LEVEL"></action>
-			<category android:name="android.intent.category.DEFAULT"></category>
-		</intent-filter>
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level33.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
 		</activity>
 		
 		<activity 
   			android:name=".level44.HelpActivity"
   			android:label="@string/l44_GameName">
-		<intent-filter>
-			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level44.LAUNCH_HELP"></action>
-			<category android:name="android.intent.category.DEFAULT"></category>
-		</intent-filter>
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level44.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
 		</activity>
 
 		<activity
 			android:name=".level44.LevelActivity"
 			android:label="@string/l44_GameName">
-		<intent-filter>
-			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level44.LAUNCH_LEVEL"></action>
-			<category android:name="android.intent.category.DEFAULT"></category>
-		</intent-filter>
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level44.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
 		</activity>
 
   		<activity
 			android:name=".level55.HelpActivity">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level55.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level55.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
@@ -283,69 +282,77 @@
 		
 		<activity android:label="@string/l83_title" android:name=".level83.HelpActivity">
 		  <intent-filter>
-		        <action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level83.LAUNCH_HELP"></action>
-		        <category android:name="android.intent.category.DEFAULT"></category>
+		        <action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level83.LAUNCH_HELP"/>
+		        <category android:name="android.intent.category.DEFAULT"/>
 		      </intent-filter>
 		</activity>
 		
 		<activity android:label="@string/l83_title" android:name=".level83.LevelActivity">
 		  <intent-filter>
-		        <action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level83.LAUNCH_LEVEL"></action>
-		        <category android:name="android.intent.category.DEFAULT"></category>
+		        <action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level83.LAUNCH_LEVEL"/>
+		        <category android:name="android.intent.category.DEFAULT"/>
 		      </intent-filter>
 		</activity>
 		
 		<activity
 			android:name=".level88.HelpActivity">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level88.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level88.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
 		<activity
 			android:name=".level88.LevelActivity">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level88.LAUNCH_LEVEL"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level88.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
-				<activity
+		<activity
 			android:name=".level99.HelpActivity"
 			android:screenOrientation="portrait">
 			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level99.LAUNCH_HELP"></action>
-				<category android:name="android.intent.category.DEFAULT"></category>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level99.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 		
-	<activity android:name=".level66.HelpActivity" android:screenOrientation="landscape" android:label="@string/l66_nameofthegame_full">
-		<intent-filter>
-			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level66.LAUNCH_HELP"></action>
-			<category android:name="android.intent.category.DEFAULT"></category>
-		</intent-filter>
-	</activity>
+		<activity
+			android:name=".level66.HelpActivity"
+			android:screenOrientation="landscape"
+			android:label="@string/l66_nameofthegame_full">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level66.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
 
-	<activity android:name=".level77.LevelActivity"><intent-filter><action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_LEVEL"></action>
-<category android:name="android.intent.category.DEFAULT"></category>
-</intent-filter>
-</activity>
-<activity android:name=".level77.HelpActivity"><intent-filter><action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_HELP"></action>
-<category android:name="android.intent.category.DEFAULT"></category>
-</intent-filter>
-</activity>
+		<activity
+			android:name=".level77.LevelActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
+		
+		<activity
+			android:name=".level77.HelpActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
 
-	<activity
-		android:name=".level20.HelpActivity">
-		<intent-filter>
-			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level20.LAUNCH_HELP"></action>
-			<category android:name="android.intent.category.DEFAULT"></category>
-		</intent-filter>
-	</activity>
-	
-
-</application>
+		<activity
+			android:name=".level20.HelpActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level20.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
+	</application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<supports-screens
