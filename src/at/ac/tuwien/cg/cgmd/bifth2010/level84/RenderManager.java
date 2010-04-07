@@ -3,44 +3,50 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import java.util.*;
+
 import android.content.Context;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 
+public class RenderManager implements Renderer {
 
-
-public class L84RenderManager implements Renderer {
-
-	L84Primitive square;
-	float rotation = 4.0f;
 	private Context context;
+	private List<Model> models;
 	
-	public L84RenderManager(Context context)
+	//Model square;
+	//float rotation = 4.0f;
+	
+	
+	public RenderManager(Context context, List<Model> models)
 	{
 		this.context = context;
-		square = new L84Primitive(); 
+		this.models = models;
+		
+		//square = new Model(); 
 	}
 	
 	/**
 	 * main draw method
 	 */
 	@Override
-	public void onDrawFrame(GL10 arg0) {
-		arg0.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		arg0.glLoadIdentity();
-		arg0.glTranslatef(0, 0, -4);
-		arg0.glPushMatrix();
-		if (rotation > 360.0f) rotation = 0;
-		arg0.glRotatef(rotation, 0.0f, 1.0f, 0.0f);
-		rotation += 10.0f;
-		square.draw(arg0);
-		arg0.glPopMatrix();
+	public void onDrawFrame(GL10 gl) {
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		gl.glLoadIdentity();
+		gl.glTranslatef(0, 0, -4);
+		gl.glPushMatrix();
 		
+		/*if (rotation > 360.0f) 
+			rotation = 0;
+		
+		gl.glRotatef(rotation, 0.0f, 1.0f, 0.0f);
+		rotation += 10.0f;
+		square.draw(gl);*/
+		gl.glPopMatrix();
 	}
 
 	/**
-	 * called when size/orientation changes
-	 *    
+	 * called when size/orientation changes   
 	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -59,7 +65,7 @@ public class L84RenderManager implements Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		//TODO: load textures
-		square.loadGLTexture(gl, this.context);
+		//square.loadGLTexture(gl, this.context);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
@@ -69,7 +75,4 @@ public class L84RenderManager implements Renderer {
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	}
-
-	
-	
 }

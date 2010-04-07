@@ -6,23 +6,27 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+import java.util.*;
+
 public class LevelActivity extends Activity implements OnClickListener {
 
-	GLSurfaceView openglview;
+	private List<Model> models;
+	private GLSurfaceView openglview;
+	private RenderManager renderManager;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.l84_level);
+		
+		models = new LinkedList<Model>();
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
-		openglview.setRenderer(new L84RenderManager(this));
+		renderManager = new RenderManager(this, models);
+	
+		openglview.setRenderer(renderManager);
 		
 		ImageButton b1 = (ImageButton) findViewById(R.id.l84_GemButton01);
 		b1.setOnClickListener(this);
@@ -33,6 +37,11 @@ public class LevelActivity extends Activity implements OnClickListener {
 		ImageButton b4 = (ImageButton) findViewById(R.id.l84_GemButton04);
 		b4.setOnClickListener(this);
 		
+		loadModels();
+	}
+
+	private void loadModels() {
+		models.add(new Model());
 	}
 
 	@Override
@@ -50,18 +59,27 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		int selectedButton = 0;
-		if (v.getId() == R.id.l84_GemButton01){selectedButton = 1;}
-		if (v.getId() == R.id.l84_GemButton02){selectedButton = 2;}
-		if (v.getId() == R.id.l84_GemButton03){selectedButton = 3;}
-		if (v.getId() == R.id.l84_GemButton04){selectedButton = 4;}
+		
+		switch(v.getId()) {
+		case R.id.l84_GemButton01: selectedButton = 1; break;
+		case R.id.l84_GemButton02: selectedButton = 2; break;
+		case R.id.l84_GemButton03: selectedButton = 3; break;
+		case R.id.l84_GemButton04: selectedButton = 4; break;
+		}
 			
 		Context context = getApplicationContext();
-		CharSequence text = "Button " + selectedButton +" pressed!";
+		CharSequence text = "You pressed Button #" + selectedButton;
 		int duration = Toast.LENGTH_SHORT;
 
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
-		
 	}
-	
+
+	public void setModels(List<Model> models) {
+		this.models = models;
+	}
+
+	public List<Model> getModels() {
+		return models;
+	}
 }
