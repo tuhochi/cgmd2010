@@ -58,7 +58,7 @@ public class Level extends Thread {
 	
 	
 	public void init(GL10 gl, Context context) {
-		//Log.i(LOG_TAG, "init()");
+		Log.i(LOG_TAG, "init()");
 		 
 		this.gl = gl;
 		this.context = context;
@@ -121,15 +121,13 @@ public class Level extends Thread {
 	private synchronized void update() {
 		//synchronized(this){
 			timing.update();
-			Iterator<Pedestrian>iterator1 = pedestrianList.iterator();
-			while(iterator1.hasNext()){
-				Pedestrian pedestrian = iterator1.next();
+			for (int i=0; i < pedestrianList.size(); i++) {
+				Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
 				pedestrian.update(timing.getCurrTime());
-				Iterator<Treasure>iterator2 = treasureList.iterator();
 				float minDist = Float.MAX_VALUE;
 				float tempDist = 0;
-				while(iterator2.hasNext()){
-					Treasure treasure = iterator2.next();
+				for (int j=0; j < treasureList.size(); j++){
+					Treasure treasure = ((Treasure)treasureList.get(j));
 					if((tempDist = pedestrian.getPosition().distance(treasure.getPosition())) < minDist){
 						pedestrian.setTargetTreasure(treasure);
 						minDist = tempDist;
@@ -180,10 +178,9 @@ public class Level extends Thread {
 		gl.glDisable(GL10.GL_CULL_FACE);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-		Iterator<Treasure>iterator3 = treasureList.iterator();
-		while(iterator3.hasNext())
-			iterator3.next().draw(gl);
-			
+		for (int i=0; i < treasureList.size(); i++){
+			((Treasure)treasureList.get(i)).draw(gl);
+		}	
 		for (int i=0; i < pedestrianList.size(); i++) {
 			((Pedestrian)pedestrianList.get(i)).draw(gl);
 		}

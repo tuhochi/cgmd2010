@@ -30,6 +30,7 @@ public class Pedestrian {
 	private float angle;
 	private Treasure targetTreasure;
 	private float oldTime;
+	private Vector2 temp;
 	
 	public Pedestrian(GL10 gl, Context context) {
 		this( 30.0f,10.0f,0.003f, 1.0f, gl, context);
@@ -51,6 +52,7 @@ public class Pedestrian {
 		this.targetTreasure = null;
 		this.setColors();
 		this.oldTime = 0;
+		this.temp = new Vector2();
 	}
 	
 	public void setColors() {
@@ -129,9 +131,13 @@ public class Pedestrian {
 		float deltaTime = time - oldTime;
 		oldTime = time;
 		if(targetTreasure != null){//move pedestrian towards target
-			this.position = this.position.add(
+			/*this.position = this.position.add(
 							targetTreasure.getPosition().sub(this.position).
-							normalize().mult(this.moveSpeed*deltaTime));
+							normalize().mult(this.moveSpeed*deltaTime));*/
+			this.temp.set(this.position.x, this.position.y);
+			this.position.add(this.temp.subThisFrom(
+					targetTreasure.getPosition()).normalize()
+					.mult(this.moveSpeed*deltaTime));
 		}
 		
 		legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
