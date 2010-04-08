@@ -14,5 +14,16 @@ public class Vector3f {
 		this.z = z;
 
 	}
+	
+	public String toString(){
+		
+		return String.valueOf(x+" "+y+" "+z);
+	}
+
+	public void translate(Vector3f translation) {
+		this.x+=translation.x;
+		this.y+=translation.y;
+		this.z+=translation.z;
+	}
 
 }

@@ -75,7 +75,7 @@ public class GeometryLoader {
 			if (line.startsWith("vt")) {
 				String[] tokens = line.split(" ");
 				uv[uvIndex] = Float.parseFloat(tokens[1]);
-				uv[uvIndex + 1] = Float.parseFloat(tokens[2]);
+				uv[uvIndex + 1] = 1-Float.parseFloat(tokens[2]);
 				uvIndex += 2;
 				numUV++;
 				continue;

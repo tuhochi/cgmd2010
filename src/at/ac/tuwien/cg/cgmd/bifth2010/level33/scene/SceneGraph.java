@@ -13,6 +13,9 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GameCharacter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryBarrel;
@@ -23,6 +26,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryStone;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryTrash;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWall;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWay;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 
 public class SceneGraph {
 
@@ -37,21 +41,25 @@ public class SceneGraph {
 	
 	public final static byte GEOMETRY_WALL = 0;
 	public final static byte GEOMETRY_WAY = 1;
+	public final static byte GEOMETRY_WORLD = 2;
 	
-	public final static byte GEOMETRY_STONE = 2;
-	public final static byte GEOMETRY_BARREL = 3;
-	public final static byte GEOMETRY_TRASH = 4;
-	public final static byte GEOMETRY_MAP = 5;
-	public final static byte GEOMETRY_SPRING = 6;
-	public final static byte GEOMETRY_CHARACTER = 7;
+	public final static byte GEOMETRY_STONE = 11;
+	public final static byte GEOMETRY_BARREL = 12;
+	public final static byte GEOMETRY_TRASH = 13;
+	public final static byte GEOMETRY_MAP = 14;
+	public final static byte GEOMETRY_SPRING = 15;
+	public final static byte GEOMETRY_CHARACTER = 16;
 	
 	private boolean N;
 	private boolean O;
 	private boolean S;
 	private boolean W;
 	static Context context;
+	private Vector2i frustumDim = new Vector2i(3, 5);
+	private Vector2i frustumMin = new Vector2i(0, 0);
+	private Vector2i frustumMax = new Vector2i(0, 0);
 	
-	public static boolean zoomOutView = false; // if false use standard zoom for playing, if true zoom out
+	private Vector2f lastPos = new Vector2f(0, 0);
 
 	public SceneGraph(LevelHandler level, Context context) {
 		this.level = level;
@@ -66,34 +74,45 @@ public class SceneGraph {
 	public static void init(GL10 gl) {
 		SceneGraph.camera = new Camera();
 		
-		geometry = new Geometry[8];
-//		geometry[GEOMETRY_WALL]= new GeometryWall(gl);
-		
-		
-		
-		// object loader
+		geometry = new Geometry[17];
+
+		// load Objects
 		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_steinmauer);
 		InputStream isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_steinmauer);
- 		Geometry steinmauer = GeometryLoader.loadObj(gl, is,isImage);
- 		geometry[GEOMETRY_WALL]= steinmauer;
- 		//System.out.println("ok");
+		geometry[GEOMETRY_WALL]= GeometryLoader.loadObj(gl, is,isImage);
+		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_way);
+		geometry[GEOMETRY_WAY]= GeometryLoader.loadObj(gl, is,isImage);
 		
 		
-		geometry[GEOMETRY_CHARACTER]=  new GameCharacter(gl);
+		//
+	
+
+//			
+//		
+//		
+// 		//System.out.println("ok");
+//		
+//		
 		
-		geometry[GEOMETRY_WAY]=  new GeometryWay(gl);
+		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_character);
+		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_character);
+		
+		geometry[GEOMETRY_CHARACTER]=  GeometryLoader.loadObj(gl, is,isImage);
+		
+		//geometry[GEOMETRY_WAY]=  new GeometryWay(gl);
 		geometry[GEOMETRY_STONE] = new GeometryStone(gl);
 		geometry[GEOMETRY_BARREL] = new GeometryBarrel(gl);
 		geometry[GEOMETRY_TRASH] = new GeometryTrash(gl);
 		geometry[GEOMETRY_MAP] = new GeometryMap(gl);
 		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl);
 		
-		
-
-		
-		
-		
-		
+		// init geometry
+		for (int i=0;i<geometry.length;i++){
+			
+			if(geometry[i]!=null)
+				geometry[i].render();
+		}
+//		
 	}
 
 	/**
@@ -102,6 +121,7 @@ public class SceneGraph {
 	 * @param gl
 	 */
 	public void render(GL10 gl) {
+	//	Log.d("Frame", "--");
 		
 		// start time mesherment
 		framesSinceLastSecound++;
@@ -119,7 +139,7 @@ public class SceneGraph {
 		// Set the background color to black ( rgba ).
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 		// Enable Smooth Shading, default not really needed.
-		gl.glShadeModel(GL10.GL_SMOOTH);
+//		gl.glShadeModel(GL10.GL_SMOOTH);
 		// Depth buffer setup.
 		gl.glClearDepthf(1.0f);
 		// Enables depth testing.
@@ -127,14 +147,12 @@ public class SceneGraph {
 		// The type of depth testing to do.
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 		// Really nice perspective calculations.
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+//		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 
 		// updateLogic
 		level.updateLogic();
 
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		
+
 		// upadate Camera
 		camera.lookAt(gl);
 
@@ -149,120 +167,70 @@ public class SceneGraph {
 
 
 	private void renderScene(GL10 gl) {
-		//this.level
-		
-		
+				
 		glMatrixMode(GL_MODELVIEW);
+		
 		
 		
 		// render world
 		
-		// if Caracter is near the end of the world render word twice, quatro
-		int viewRange= 6;
+		if(!lastPos.equals(level.gameCharacterPosition)){
+			lastPos.set(level.gameCharacterPosition);
+			Log.d("pos",lastPos.x+" "+lastPos.y);
+		}
 		
 		
+		
+		// easy culling
+		//if(Camera.zoom==Camera.standardZoom){
+		if(true){
+			frustumMin.set(Math.round(level.gameCharacterPosition.x-frustumDim.x),Math.round(level.gameCharacterPosition.y-frustumDim.y));
+			frustumMax.set(frustumMin.x+frustumDim.x*2+1, frustumMin.y+frustumDim.y*2+1);
+
+			// whole world
+//			for(int y=0;y<level.worldDim.y;y++){
+//			for(int x=0;x<level.worldDim.x;x++){
+			
+			// frustum
+			for(int y=frustumMin.y;y<frustumMax.y;y++){
+				for(int x=frustumMin.x;x<frustumMax.x;x++){
+					
+					int type = level.getWorldEntry(x, y);
+					
+				glPushMatrix();
+
+				gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
+			
+				geometry[type].render();	
+				// render way if no wall
+				if(type!=GEOMETRY_WALL)
+					geometry[GEOMETRY_WAY].render();
+				
+				glPopMatrix();
+				}
+			}
+			
+			
+			
+		}
+		
+		// render the whol world
+		else
 		for(int y=0;y<level.worldDim.y;y++){
 			for(int x=0;x<level.worldDim.x;x++){
 				//if wall
-				int id=y*level.worldDim.x+x;
-//				if(level.world[id]>=GEOMETRY_STONE)
-//				{
-				// move the word
+				int type = level.getWorldEntry(x, y);
+				
 				glPushMatrix();
-				gl.glTranslatef(-(level.gameCharacterPosition.x-(level.worldDim.x/2)),-((level.worldDim.y/2)-level.gameCharacterPosition.y), 0);
-					// move the wall position
-					glPushMatrix();
+				gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
 					
-						// center world
-						gl.glTranslatef(x-(level.worldDim.x/2),(level.worldDim.y/2)-y, 0);
-						geometry[level.world[id]].render();	
+						geometry[type].render();	
+						// render way if no wall
+						if(type!=GEOMETRY_WALL)
+							geometry[GEOMETRY_WAY].render();	
 						
-						if(true)//if(camera.zoom==camera.standardZoom)
-						{
-							
-							// endless copy clipping
-							N = level.gameCharacterTargetPosition.y<viewRange-1;
-							O = level.gameCharacterTargetPosition.x>level.worldDim.x-viewRange;
-							S = level.gameCharacterTargetPosition.y>level.worldDim.y-viewRange;
-							W = level.gameCharacterTargetPosition.x<viewRange-1;
-							
-							if(N)
-							{
-								// N
-								glPushMatrix();
-								gl.glTranslatef(0,level.worldDim.y, 0);
-								geometry[level.world[id]].render();	
-								glPopMatrix();
-							}
-							
-							if(N&&O)
-							{
-							// N-O
-							glPushMatrix();
-							gl.glTranslatef(level.worldDim.x,level.worldDim.y, 0);
-							geometry[level.world[id]].render();	
-							glPopMatrix();
-							}
-							
-							if(O)
-							{
-								// O
-								glPushMatrix();
-								gl.glTranslatef(level.worldDim.x,0, 0);
-								geometry[level.world[id]].render();	
-								glPopMatrix();
-							}
-							
-							if(O&&S)
-							{
-							// O-S
-							glPushMatrix();
-							gl.glTranslatef(level.worldDim.x,-level.worldDim.y, 0);
-							geometry[level.world[id]].render();	
-							glPopMatrix();
-							}
-							
-							if(S)
-							{
-								// S
-								glPushMatrix();
-								gl.glTranslatef(0,-level.worldDim.y, 0);
-								geometry[level.world[id]].render();	
-								glPopMatrix();
-							}
-						
-							if(S&&W)
-							{
-							// S-W
-							glPushMatrix();
-							gl.glTranslatef(-level.worldDim.x,-level.worldDim.y, 0);
-							geometry[level.world[id]].render();	
-							glPopMatrix();
-							}
-							
-							if(W)
-							{
-								// W
-								glPushMatrix();
-								gl.glTranslatef(-level.worldDim.x,0, 0);
-								geometry[level.world[id]].render();	
-								glPopMatrix();
-							}
-							
-							if(N&&W)
-							{
-							// N-W
-							glPushMatrix();
-							gl.glTranslatef(-level.worldDim.x,level.worldDim.y, 0);
-							geometry[level.world[id]].render();	
-							glPopMatrix();
-							}
-							
-						}		
-					glPopMatrix();
 				glPopMatrix();
 				}
-//			} 
 		}
 		
 		// render GameCaracter
@@ -272,5 +240,6 @@ public class SceneGraph {
 		glPopMatrix();
 		
 	}
+
 
 }

@@ -69,14 +69,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-
-		SceneGraph.zoomOutView=!SceneGraph.zoomOutView;
-		
-		if(SceneGraph.zoomOutView)
-			SceneGraph.camera.zoom=Camera.outZoom;
-		else
-			SceneGraph.camera.zoom=Camera.standardZoom;
-		
+		SceneGraph.camera.switchZoom();
 		System.out.println("onLongPress");
 	}
 
