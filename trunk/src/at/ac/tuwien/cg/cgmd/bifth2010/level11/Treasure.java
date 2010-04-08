@@ -4,7 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class Treasure {
+public class Treasure implements Target{
 	private float value;
 	private float attractionRadius;
 	private Vector2 position;
@@ -12,7 +12,7 @@ public class Treasure {
 	private Square sprite;
 	public Treasure(float value, float attractionRadius, Vector2 position){
 		this.value = value;
-		System.out.println(value);
+		//System.out.println(value);
 		this.attractionRadius = attractionRadius;
 		this.position = position;
 		this.sprite = new Square();
@@ -27,10 +27,12 @@ public class Treasure {
 	 */
 	public boolean grabValue(float value){
 		this.value -= value;
-		if(this.value > 0)
+		if(this.value > 1)
 			return true;
-		else
+		else{
+			this.value = 0;
 			return false;
+		}
 	}
 
 	public void setPosition(Vector2 pos) {
@@ -46,7 +48,10 @@ public class Treasure {
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glScalef(20.0f+this.value, 20.0f+this.value, 1.0f);
+		gl.glScalef(10.0f+this.value, 10.0f+this.value, 1.0f);
 		sprite.draw(gl);
+	}
+	public float getValue(){
+		return this.value;
 	}
 }
