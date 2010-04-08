@@ -3,7 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -27,12 +26,15 @@ public class LevelActivity extends Activity
 		super();
 		instance = this;
 	}
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		Log.v(TAG,"onCreate(" + savedInstanceState + ")");
+		
+		if(savedInstanceState == null)
+			deleteFile(TRANSFORMATION_FILE);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
@@ -92,6 +94,7 @@ public class LevelActivity extends Activity
 		try
 		{
 			DataOutputStream dos = new DataOutputStream(openFileOutput(TRANSFORMATION_FILE, MODE_PRIVATE));
+			renderView.cam.persist(dos);
 			s.persist(dos);
 			dos.close();
 		}
@@ -113,7 +116,6 @@ public class LevelActivity extends Activity
 	{
 		super.onDestroy();
 		Log.v(TAG,"onDestroy()");
-		deleteFile(TRANSFORMATION_FILE);
 	}
 	
 	@Override

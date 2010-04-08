@@ -45,7 +45,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private MaterialManager materialManager = MaterialManager.instance;
 	public Scene scene;
 	public DataInputStream sceneStateFile;
-	private final Camera cam;
+	public final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
 	private final MotionManager motionManager = MotionManager.instance;
 	private CollisionManager collManager;
@@ -142,6 +142,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		{
 			try
 			{
+				cam.restore(sceneStateFile);
 				scene.restore(sceneStateFile);
 				sceneStateFile.close();
 			}

@@ -1,10 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
 public class MotionManager {
 	

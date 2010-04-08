@@ -5,7 +5,6 @@ import static android.opengl.GLES10.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 
 import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;

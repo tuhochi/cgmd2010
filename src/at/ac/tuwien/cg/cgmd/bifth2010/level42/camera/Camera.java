@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.camera;
 
-import javax.microedition.khronos.opengles.GL10;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
@@ -79,14 +80,14 @@ public class Camera
 		glLoadMatrixf(modelview.getArray16(), 0);
 	}
 	
-	public void setMousePosition(int x,int y)
+	public void setMousePosition(float x, float y)
 	{
 		//calc difference to last position
-		float diffx = lastPosition[0]-(float)x;
-		float diffy = lastPosition[1]-(float)y;
+		float diffx = lastPosition[0]-x;
+		float diffy = lastPosition[1]-y;
 		//store last position
-		lastPosition[0] = (float)x;
-		lastPosition[1] = (float)y;
+		lastPosition[0] = x;
+		lastPosition[1] = y;
 		//set new desired angle 
 		azimuth += motionFactor * 30 * diffx;
 		altitude += motionFactor * 30 * diffy;
@@ -98,7 +99,8 @@ public class Camera
 		
 	}
 	
-	public float getDistance() {
+	public float getDistance()
+	{
 		return distance;
 	}
 
@@ -179,10 +181,20 @@ public class Camera
 			eyePosition.add(tempInverseViewVec.multiply(currentDistance));
 		}
 	}
-
 	
-	public void setLastPosition(int x, int y) {
+	public void setLastPosition(int x, int y)
+	{
 		this.lastPosition[0] = x;
 		this.lastPosition[1] = y;
+	}
+	
+	public void persist(DataOutputStream dos)
+	{
+		
+	}
+	
+	public void restore(DataInputStream dis)
+	{
+		
 	}
 }
