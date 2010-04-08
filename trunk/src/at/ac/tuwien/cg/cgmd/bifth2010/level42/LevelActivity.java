@@ -95,13 +95,9 @@ public class LevelActivity extends Activity
 			s.persist(dos);
 			dos.close();
 		}
-		catch (FileNotFoundException e)
+		catch (Throwable t)
 		{
-			Log.e(TAG, "Failed to persist Scene state: ",e);
-		}
-		catch (IOException e)
-		{
-			Log.e(TAG, "Failed to persist Scene state: ",e);
+			Log.e(TAG, "Failed to persist Scene state: ",t);
 		}
 	}
 	
