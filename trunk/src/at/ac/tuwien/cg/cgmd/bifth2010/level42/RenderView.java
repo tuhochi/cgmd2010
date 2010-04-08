@@ -68,7 +68,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		this.context = (LevelActivity)context;
 		
-		cam = new Camera(20.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
+		cam = new Camera(40.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 		
 		synchronizer = new Synchronizer();
 		motionEvents = new LinkedList<MotionEvent>();
@@ -135,7 +135,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		/*
 		 * Dummy Test Scene
 		 */
-		scene = SceneLoader.getInstance().readScene("l42_cube");
+		scene = SceneLoader.getInstance().readScene("l42_cubeworld");
 		
 		// restore scene state
 		if(sceneStateFile != null)
@@ -145,15 +145,17 @@ public class RenderView extends GLSurfaceView implements Renderer
 				scene.restore(sceneStateFile);
 				sceneStateFile.close();
 			}
-			catch (IOException e)
+			catch (Throwable t)
 			{
-				Log.e(LevelActivity.TAG, "Failed to restore scene state", e);
+				Log.e(LevelActivity.TAG, "Failed to restore scene state", t);
 			}
 			sceneStateFile = null;
 		}
 		else
 		{
-
+			/*
+			 * Default Motion initialization goes here!
+			 */
 			Orbit orbit2 = new Orbit(new Vector3(-3,3,0),new Vector3(3,-3,0),
 					new Vector3(0,0,-5),5,null);
 
