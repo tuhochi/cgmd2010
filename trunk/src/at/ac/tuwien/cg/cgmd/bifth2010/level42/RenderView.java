@@ -3,7 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 import static android.opengl.GLES10.*;
 
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -106,6 +105,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		oglManager.reset();
 		materialManager.reset();
 		synchronizer.reset();
+		timer.reset();
 		
 		// check for GLES11
 		boolean gles11 = (gl instanceof GL11);

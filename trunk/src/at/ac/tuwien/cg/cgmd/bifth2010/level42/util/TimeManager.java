@@ -16,6 +16,11 @@ public class TimeManager {
 	
 	private TimeManager()
 	{
+		reset();
+	}
+	
+	public void reset()
+	{
 		t0 = System.currentTimeMillis();
 		t = t0;
 		dt = 0;
