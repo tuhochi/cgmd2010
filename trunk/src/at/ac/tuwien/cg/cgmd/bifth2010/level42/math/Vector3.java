@@ -1,5 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 
 public class Vector3
 {
@@ -13,6 +17,20 @@ public class Vector3
 	public Vector3(float x, float y, float z)
 	{
 		copy(x,y,z);
+	}
+	
+	public void persist(DataOutputStream dos) throws IOException
+	{
+		dos.writeFloat(x);
+		dos.writeFloat(y);
+		dos.writeFloat(z);
+	}
+	
+	public void restore(DataInputStream dis) throws IOException
+	{
+		x = dis.readFloat();
+		y = dis.readFloat();
+		z = dis.readFloat();
 	}
 	
 	public Vector3 copy(float x, float y, float z)
