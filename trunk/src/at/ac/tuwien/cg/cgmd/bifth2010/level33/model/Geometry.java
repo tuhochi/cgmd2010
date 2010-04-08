@@ -56,83 +56,34 @@ public class Geometry {
 	public static int geometryCount = 0;
 	
 	private int textureId= -1;
-
+	Bitmap bitmap = null;
 	public Geometry() {
 
 	}
 
 	public Geometry(GL10 gl, Type type, int numVertices, boolean hasColors,
 			boolean hasTextureCoordinates, boolean hasNormals,InputStream image) {
+		
 		this.gl = gl;
 		this.type = type;
+		
 		vertices = new float[numVertices * 3];
-		int[] buffer = new int[1];
+		if(hasColors)
+			colors = new float[numVertices * 4];
+		if(hasTextureCoordinates)
+			texCoords = new float[numVertices * 2];
+		if(hasNormals)
+			normals = new float[numVertices * 3];
 		
 		if(image!=null){
-			//TODO: generate Textur handler
-			
-			Bitmap bitmap = null;
 			try {
 				bitmap = BitmapFactory.decodeStream(image);
 			} catch (Exception ex) {
 				Log.d("Texture Sample", "Couldn't load bitmap");
 			}
-			int[] textureIds = new int[1];
-			gl.glGenTextures(1, textureIds, 0);
-			textureId = textureIds[0];
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-					GL10.GL_LINEAR);
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-					GL10.GL_LINEAR);
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-					GL10.GL_CLAMP_TO_EDGE);
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-					GL10.GL_CLAMP_TO_EDGE);
-			bitmap.recycle();
 		}
 
-		if (!useVBO)
-			vertexBuffer = allocateBuffer(numVertices * 3);
-		else {
-			((GL11) gl).glGenBuffers(1, buffer, 0);
-			vertexHandle = buffer[0];
-			vertexBuffer = FloatBuffer.wrap(vertices);
-		}
 
-		if (hasColors) {
-			colors = new float[numVertices * 4];
-			if (!useVBO)
-				colorBuffer = allocateBuffer(numVertices * 4);
-			else {
-				((GL11) gl).glGenBuffers(1, buffer, 0);
-				colorHandle = buffer[0];
-				colorBuffer = FloatBuffer.wrap(colors);
-			}
-		}
-
-		if (hasTextureCoordinates) {
-			texCoords = new float[numVertices * 2];
-			if (!useVBO)
-				texCoordBuffer = allocateBuffer(numVertices * 2);
-			else {
-				((GL11) gl).glGenBuffers(1, buffer, 0);
-				texHandle = buffer[0];
-				texCoordBuffer = FloatBuffer.wrap(texCoords);
-			}
-		}
-
-		if (hasNormals) {
-			normals = new float[numVertices * 3];
-			if (!useVBO)
-				normalBuffer = allocateBuffer(numVertices * 3);
-			else {
-				((GL11) gl).glGenBuffers(1, buffer, 0);
-				normalHandle = buffer[0];
-				normalBuffer = FloatBuffer.wrap(normals);
-			}
-		}
 	}
 
 	private FloatBuffer allocateBuffer(int size) {
@@ -142,7 +93,81 @@ public class Geometry {
 	}
 
 	private void init() {
+	
+		int[] buffer = new int[1];
+		
+		if (!useVBO)
+			vertexBuffer = allocateBuffer(numVertices * 3);
+		else {
+			((GL11) gl).glGenBuffers(1, buffer, 0);
+			vertexHandle = buffer[0];
+			vertexBuffer = FloatBuffer.wrap(vertices);
+		}
+
+		if (colors!=null) {
+			
+			if (!useVBO)
+				colorBuffer = allocateBuffer(numVertices * 4);
+			else {
+				((GL11) gl).glGenBuffers(1, buffer, 0);
+				colorHandle = buffer[0];
+				colorBuffer = FloatBuffer.wrap(colors);
+			}
+		}
+
+		if (texCoords!=null) {
+			
+			if (!useVBO)
+				texCoordBuffer = allocateBuffer(numVertices * 2);
+			else {
+				((GL11) gl).glGenBuffers(1, buffer, 0);
+				texHandle = buffer[0];
+				texCoordBuffer = FloatBuffer.wrap(texCoords);
+			}
+		}
+
+		if (this.normals!=null) {
+			
+			if (!useVBO)
+				normalBuffer = allocateBuffer(numVertices * 3);
+			else {
+				((GL11) gl).glGenBuffers(1, buffer, 0);
+				normalHandle = buffer[0];
+				normalBuffer = FloatBuffer.wrap(normals);
+			}
+		}
+		// init Texture
+		if(bitmap!=null){
+		int[] textureIds = new int[1];
+		gl.glGenTextures(1, textureIds, 0);
+		textureId = textureIds[0];
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+				GL10.GL_LINEAR);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
+				GL10.GL_LINEAR);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+				GL10.GL_CLAMP_TO_EDGE);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+				GL10.GL_CLAMP_TO_EDGE);
+		bitmap.recycle();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		Log.d("init","Geometry");
 		if (!useVBO) {
+			Log.d("init","Geometry2");
 			vertexBuffer.put(vertices);
 			vertexBuffer.position(0);
 
@@ -288,6 +313,7 @@ public class Geometry {
 		vertices[offset + 1] = y;
 		vertices[offset + 2] = z;
 		indexVertex++;
+		numVertices=indexVertex;
 	}
 
 	public void color(Color c) {
@@ -359,4 +385,89 @@ public class Geometry {
 		texCoordBuffer = null;
 		geometryCount--;
 	}
+	
+	/**
+	 * this method add another Geometry to this one, (only same type and with same textureId)
+	 * @param other 
+	 * @param rotation
+	 * @param scale
+	 * @param translation
+	 */
+	public void addGeometryAt(Geometry other, Vector3f rotation, Vector3f scale,Vector3f translation) {
+		
+		if(other==this)
+			return;
+		
+		// VERTICES
+		if(other.vertices!=null){
+			float[] oldVertices = this.vertices.clone();
+
+			// init new vertices array
+			this.vertices = new float[other.vertices.length+this.vertices.length];
+			this.indexVertex=0;
+			// add old vertices
+			for (int index = 0; index < oldVertices.length/3; index++)
+				this.vertex(oldVertices[3*index],oldVertices[3*index+1],oldVertices[3*index+2]);
+			// add new vertices
+			for (int index = 0; index < other.vertices.length/3; index++) {
+				Vector3f vertex = new Vector3f(other.vertices[3*index],
+						other.vertices[3*index + 1],
+						other.vertices[3*index + 2]);
+				//		vertex.rotate(rotation); // TODO
+				//		vertex.scale(scale);
+				vertex.translate(translation);
+				this.vertex(vertex);
+			}
+			
+			Log.d("d", "d");
+		}
+		
+		// COLORS
+		if(other.colors!=null){
+			float[] oldColors = this.colors.clone();
+			
+			// init new color array
+			this.colors = new float[other.colors.length+this.colors.length];
+			this.indexColor=0;
+			// add old color
+			for (int index = 0; index < oldColors.length/4; index++)
+				this.color(oldColors[4*index],oldColors[4*index+1],oldColors[4*index+2],oldColors[4*index+3]);
+			// add new color
+			for (int index = 0; index < other.colors.length/4; index++)
+				this.color(other.colors[4*index],other.colors[4*index+1],other.colors[4*index+2],other.colors[4*index+3]);
+		}
+		
+		// NORMALS
+		if(other.normals!=null){
+			float[] oldNormals = this.normals.clone();
+
+			// init new normal array
+			this.normals = new float[other.normals.length+this.normals.length];
+			this.indexNormal=0; 
+			// add old normal
+			for (int index = 0; index < oldNormals.length/3; index++)
+				this.normal(oldNormals[3*index],oldNormals[3*index+1],oldNormals[3*index+2]);
+			// add new normal
+			for (int index = 0; index < other.vertices.length/3; index++)
+				this.normal(other.normals[3*index],other.normals[3*index+1],other.normals[3*index+2]);
+		}
+		
+		// TEXCOORDS
+		if(other.texCoords!=null){
+			float[] oldTexCoords = this.texCoords.clone();
+			// init new textcoords array
+			this.texCoords = new float[other.texCoords.length+this.texCoords.length];
+			this.indexTexCoords=0;
+			// add old textcoords
+			for (int index = 0; index < oldTexCoords.length/2; index++)
+				this.texCoord(oldTexCoords[2*index],oldTexCoords[2*index+1]);
+			// add new textcoords
+			for (int index = 0; index < other.texCoords.length/2; index++)
+				this.texCoord(other.texCoords[2*index],other.texCoords[2*index+1]);
+		}	
+		
+		System.out.println("end?");
+		
+	}
+
 }

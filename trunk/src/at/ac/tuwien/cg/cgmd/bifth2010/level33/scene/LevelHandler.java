@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 import java.util.Random;
 
 import android.provider.UserDictionary.Words;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 
@@ -99,8 +100,7 @@ public class LevelHandler {
 			
 			characterMoves=false;	
 			return;
-		}
-		
+		}		
 		
 		// else it is moving
 		characterMoves=true;
@@ -122,7 +122,7 @@ public class LevelHandler {
 		else if (diff.y < 0)
 			step.y = -1;
 
-		gameCharacterPosition.add(step.divide(0.2f/SceneGraph.deltaTime));
+		gameCharacterPosition.add(step.divide(2f/SceneGraph.deltaTime));
 		
 		
 
