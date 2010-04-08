@@ -114,7 +114,7 @@ public class Textures {
 		//Log.i(LOG_TAG, "setTexture()");
 		
 		try {
-			int textureid = this.textureMap.get(new Integer(id)).intValue();
+			int textureid = this.textureMap.get((Integer)id).intValue();
 	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, this.textures[textureid]);
 		
 		}

@@ -23,19 +23,32 @@ public class Vector2 {
 	}
 	public Vector2 normalize(){
 		float length = this.length();
-		return new Vector2(this.x/length, this.y/length);
+		this.x /= length;
+		this.y /= length;
+		return this;
 	}
 	public float length(){
 		return (float)Math.sqrt(Math.pow(this.x, 2)+ Math.pow(this.y,2));
 	}
 	public Vector2 sub(Vector2 other){
-		return new Vector2(this.x-other.x, this.y-other.y);
+		this.x -= other.x;
+		this.y -= other.y;
+		return this;
+	}
+	public Vector2 subThisFrom(Vector2 other){
+		this.x = (other.x - this.x);
+		this.y = (other.y - this.y);
+		return this;
 	}
 	public Vector2 add(Vector2 other){
-		return new Vector2(this.x+other.x, this.y+other.y);
+		this.x += other.x;
+		this.y += other.y;
+		return this;
 	}
 	public Vector2 mult(float skalar){
-		return new Vector2(this.x*skalar, this.y*skalar);
+		this.x *= skalar;
+		this.y *= skalar;
+		return this;
 	}
 	public Vector2 clone(){
 		Vector2 vec = new Vector2();
