@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
@@ -15,8 +16,8 @@ public abstract class Motion
 	public abstract void update(float dt);
 	public abstract Matrix44 getTransform();
 	public abstract void setSatTrans(SatelliteTransformation satTrans);
-	public abstract void persist(DataOutputStream dos);
-	protected abstract void restore(DataInputStream dis);
+	public abstract void persist(DataOutputStream dos) throws IOException;
+	protected abstract void restore(DataInputStream dis) throws IOException;
 	
 	public static Motion restore(DataInputStream dis, String className)
 	{
@@ -28,7 +29,7 @@ public abstract class Motion
 			/*
 			 * TODO: uncomment the following line!
 			 */
-//			return m;
+			return m;
 		}
 		catch (Throwable t)
 		{

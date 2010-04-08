@@ -1,7 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
@@ -13,36 +15,44 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 public class Orbit extends Motion
 {
 
-	private float 	speed,t,u,step,orbitAngle,
-	
-					//orbit transformation
-					transformSpeed,
-					transformAngle=0,transformStep=0,transformDiff=0,transformIteration=0,
-					centerDiffFactor=0,centerDiffStep=0,centerDiff=0,centerDiffIteration=0,
-					directionDiffFactor=0,directionDiffStep=0,directionDiff=0,directionDiffIteration=0,
+	private float 	speed,u,step,
+
+					//scale morphing
+					scalingMorphSpeed,
+					centerDiffFactor,centerDiffStep,centerDiff,centerDiffIteration,
+					directionDiffFactor,directionDiffStep,directionDiff,directionDiffIteration,
 					
-					//morph
+					//speed morphing
 					newSpeed,oldPerimeter,oldStepSize,
 					speedMorphStep,speedMorphIteration,dynamicMorphSpeed;
 
-	public Vector3 position,
-						 entityPos,centerPos,normalVec,
-						 newEntityPos,newCenterPos;
+	public final Vector3 position,
+						 entityPos,centerPos;
 					
-					//orbit transformation
-	private Vector3 	centerVec,toCenterVec,directionVec,orbitAxis,
-							newCenterVec,newToCenterVec,newDirectionVec,newNormalVec,
-							transformAxis,
+							//orbit morphing
+	private final Vector3 	centerVec,directionVec,
 							currtDirApproximation,tempDirectionVec;
-	
-	private Matrix44 objectOrbitTransform;
-	private Matrix44 transform,basicOrientation,orbitTransform;
+
+	private final Matrix44 transform,basicOrientation;
 	private SatelliteTransformation satTrans;
 	private Ellipse ellipse;
 	
 	protected Orbit()
-	{
+	{	
+		//init
+		position = new Vector3();
+		entityPos = new Vector3();
+		centerPos = new Vector3();
 		
+		centerVec = new Vector3();
+		directionVec = new Vector3();
+		currtDirApproximation = new Vector3();
+		tempDirectionVec = new Vector3();
+		
+		transform = new Matrix44();
+		basicOrientation = new Matrix44();
+
+		u = 0;
 	}
 	
 	public Orbit(	Vector3 entityPos,Vector3 centerPos,
@@ -51,60 +61,28 @@ public class Orbit extends Motion
 					Matrix44 basicOrientation
 				)
 	{
+		
+		//init fields
+		this();
+		
 		this.speed = speed;
 		this.newSpeed = speed;
 		
-		this.entityPos = new Vector3(entityPos);
-		this.centerPos = new Vector3(centerPos);
-		this.directionVec = new Vector3(directionVec);
-		this.centerVec = Vector3.subtract(this.entityPos,this.centerPos);
-		this.toCenterVec =  Vector3.subtract(this.centerPos,this.entityPos);
-		this.normalVec = Vector3.crossProduct(this.toCenterVec, this.directionVec).normalize();
+		this.entityPos.copy(entityPos);
+		this.centerPos.copy(centerPos);
+		this.directionVec.copy(directionVec);
 		
-		
-		if(basicOrientation!=null)
-			this.basicOrientation = new Matrix44(basicOrientation);
-		else
-			this.basicOrientation = new Matrix44();
-		
-		this.newEntityPos = new Vector3(entityPos);
-		this.newCenterPos = new Vector3(centerPos);
-		this.newCenterVec = new Vector3(centerVec);
-		this.newDirectionVec = new Vector3(directionVec);
-		this.newNormalVec = new Vector3(normalVec);
-		this.newToCenterVec = new Vector3(toCenterVec);
+		this.centerVec.copy(this.entityPos);
+		this.centerVec.subtract(this.centerPos);
 
-		//init other temp vars 
-		this.transform = new Matrix44();
-		this.position = new Vector3();
-		this.orbitAxis = new Vector3();
-		this.currtDirApproximation = new Vector3();
-		this.tempDirectionVec = new Vector3();
-		this.transformAxis = new Vector3();
-		this.orbitTransform = new Matrix44();
-		this.t = 0;
-		this.u = 0;
+		if(basicOrientation!=null)
+			this.basicOrientation.copy(basicOrientation);
 		
 		//generate ellipse from vec
 		this.ellipse = new Ellipse(this.centerPos,this.centerVec,this.directionVec);
 		
-		//calc init parameter and stepsize
-		preCalc();
-		
-	}
-		
-	private void preCalc()
-	{
-		//calc start parameter
-		this.u = (float)(t*Constants.TWOPI);
 		//stepsize relative so perimeter
 		this.step = Constants.TWOPI/ellipse.perimeter;
-		
-		//change the orientation between orbit and object - TODO: wird ansich nicht benötigt
-		Vector3.crossProduct(normalVec,Constants.Y_AXIS,orbitAxis);
-		orbitAxis.normalize();
-		orbitAngle = Vector3.getAngle(normalVec, Constants.Y_AXIS);
-		objectOrbitTransform = Matrix44.getRotate(orbitAxis, -orbitAngle);
 	}
 		
 	public void update(float dt)
@@ -118,7 +96,18 @@ public class Orbit extends Motion
 		if(satTrans!=null)
 			satTrans.update(dt,speed);
 		
-		//increase the new directionvec
+		//update the morphing for the direction vec length
+		updateSpeedMorphing(dt);
+		
+		//update the morphing for the axis scaling
+		updateAxisScaling(dt);
+			
+		//calc position on ellipse - build transformation matrix
+		evaluatePos();
+	}
+	
+	private void updateSpeedMorphing(float dt)
+	{
 		if(speed!=newSpeed)
 		{
 			speedMorphIteration = speedMorphStep * dt * dynamicMorphSpeed;
@@ -139,73 +128,61 @@ public class Orbit extends Motion
 			speed+=speedMorphIteration;
 			Log.d(LevelActivity.TAG,"Morph speed curr="+speed+" iteration="+speedMorphIteration+" newspeed="+newSpeed + " dynSpeed="+dynamicMorphSpeed);
 		}
-		
-		//check for orbit transformation
-		if(Math.abs(transformDiff)<Math.abs(transformAngle))
-		{
-//			transformIteration = transformStep * dt * transformSpeed;
-//			
-//			if(Math.abs(transformDiff+transformIteration)>Math.abs(transformAngle))
-//				transformIteration = transformAngle-transformDiff;
-//			
-//			transformDiff+=transformIteration;
-			orbitTransform.setRotate(transformAxis, transformAngle);
+	}
+	
+	private void updateAxisScaling(float dt)
+	{
+		if(Math.signum(centerDiffStep)<0){
+			if(centerDiffFactor<centerDiff){
+				
+				centerDiffIteration = centerDiffStep * dt * scalingMorphSpeed;
+				
+				if(centerDiff+centerDiffIteration<centerDiffFactor)
+					centerDiffIteration = centerDiffFactor-centerDiff;
+				
+				centerDiff += centerDiffIteration;
+				centerVec.multiply( 1 + centerDiffIteration);
+				
+				Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
+			}
+		}else{
+			if(centerDiffFactor>centerDiff){
+				centerDiffIteration = centerDiffStep * dt * scalingMorphSpeed;
 			
-			orbitTransform.transformPoint(centerVec);
-			orbitTransform.transformPoint(directionVec);
-			orbitTransform.transformPoint(normalVec);
-			orbitTransform.transformPoint(entityPos);
-			
-			float centerangle = Vector3.getAngle(	new Vector3(centerVec).normalize(),
-													new Vector3(newCenterVec).normalize());
-			
-			orbitTransform.setRotate(newNormalVec, centerangle);
-			
-			orbitTransform.transformPoint(centerVec);
-
-			float directionrangle = Vector3.getAngle(	new Vector3(directionVec).normalize(),
-					new Vector3(newDirectionVec).normalize());
-
-			orbitTransform.setRotate(newNormalVec,-directionrangle);
-			orbitTransform.transformPoint(directionVec);
-
-			
-			//Log.i(LevelActivity.TAG,"transformDiff "+transformDiff +" transformAngle" +transformAngle +" transformIteration"+transformIteration );
-			Log.i(LevelActivity.TAG,"centervec = "+ new Vector3(centerVec).normalize() 
-												  + " newcentervec="+new Vector3(newCenterVec).normalize());
-			Log.i(LevelActivity.TAG,"entitypos = "  + entityPos
-					  								+ " newpos="+newCenterVec);
-		
-			//testonly
-			transformDiff = transformAngle;
-		}
-		
-		if(Math.abs(centerDiff)<Math.abs(centerDiffFactor))
-		{
-			centerDiffIteration = centerDiffStep * dt * transformSpeed;
-			
-			if(Math.abs(centerDiff+centerDiffIteration)>Math.abs(centerDiffFactor))
-				centerDiffIteration = centerDiffFactor-centerDiff;
-
-			centerDiff += centerDiffIteration;
-			centerVec.multiply( 1 + centerDiffIteration);
-			
-			//Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
-		}
-		
-		if(Math.abs(directionDiff)<Math.abs(directionDiffFactor))
-		{
-			directionDiffIteration = directionDiffStep * dt * transformSpeed;
-			
-			if(Math.abs(directionDiff+directionDiffIteration)>Math.abs(directionDiffFactor))
-				directionDiffIteration = directionDiffFactor-directionDiff;
-			
-			directionDiff += directionDiffIteration;
-			directionVec.multiply( 1 + directionDiffIteration);
+				if(centerDiff+centerDiffIteration>centerDiffFactor)
+					centerDiffIteration = centerDiffFactor-centerDiff;
+	
+				centerDiff += centerDiffIteration;
+				centerVec.multiply( 1 + centerDiffIteration);
+	
+				Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
+			}
 		}
 
-		//calc position on ellipse - build transformation matrix
-		evaluatePos();
+		if(Math.signum(directionDiffStep)<0){
+			if(directionDiffFactor<directionDiff){
+				directionDiffIteration = directionDiffStep * dt * scalingMorphSpeed;
+				if(directionDiff+directionDiffIteration<directionDiffFactor)
+					directionDiffIteration = directionDiffFactor-directionDiff;
+				
+				directionDiff += directionDiffIteration;
+				directionVec.multiply( 1 + directionDiffIteration);
+				
+				Log.i(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
+			}
+		}else{
+			if(directionDiffFactor>directionDiff){
+				directionDiffIteration = directionDiffStep * dt * scalingMorphSpeed;
+				if(directionDiff+directionDiffIteration>directionDiffFactor)
+					directionDiffIteration = directionDiffFactor-directionDiff;
+				
+				directionDiff += directionDiffIteration;
+				directionVec.multiply( 1 + directionDiffIteration);
+				
+				Log.i(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
+			}
+		}
+
 	}
 	
 	private void evaluatePos()
@@ -230,47 +207,7 @@ public class Orbit extends Motion
 		transform.addTranslate(position.x,position.y,position.z);
 	}
 
-	public void transformOrbit(	Vector3 newEntityPos,Vector3 newCenterPos,
-								Vector3 newDirectionVec, float transformSpeed)
-	{
-		this.transformSpeed = transformSpeed;
-		
-		//store new constellation
-		this.newEntityPos.copy(newEntityPos);
-		this.newCenterPos.copy(newCenterPos);
-		
-		this.newCenterVec.copy(newEntityPos);
-		this.newCenterVec.subtract(newCenterPos);
-		
-		this.newToCenterVec.copy(newCenterPos);
-		this.newToCenterVec.subtract(newEntityPos);
-		
-		this.newDirectionVec.copy(newDirectionVec);
-		
-		Vector3.crossProduct(this.newToCenterVec, this.newDirectionVec, this.newNormalVec);
-		this.newNormalVec.normalize();
-		
-		//calc main rotation axis
-		Vector3.crossProduct(this.normalVec,this.newNormalVec,this.transformAxis);
-		transformAxis.normalize();
-		
-		transformAngle = (transformAxis.length()!=0)?Vector3.getAngle(normalVec,newNormalVec):0;
-		transformStep = transformAngle/Constants.TWOPI;
-		transformDiff = 0;
-		
-		Log.i(LevelActivity.TAG,"angle "+transformAngle);
-		
-		centerDiffFactor = (this.newCenterVec.length()/centerVec.length()) - 1;
-		centerDiffStep = centerDiffFactor/10;
-		centerDiff = 0;
-		
-		directionDiffFactor = (this.newDirectionVec.length()/directionVec.length()) - 1;
-		directionDiffStep = directionDiffFactor/10;
-		directionDiff = 0;
-		
-		u = 0;
 	
-	}
 	
 	public void setSatTrans(SatelliteTransformation satTrans) {
 		this.satTrans = satTrans;
@@ -280,6 +217,20 @@ public class Orbit extends Motion
 		return transform;
 	}
 
+	public void morphAxisScale(float aAxisFactor,float bAxisFactor,float morphSpeed)
+	{
+		scalingMorphSpeed = morphSpeed;
+		
+		centerDiffFactor = aAxisFactor;
+		centerDiffStep = (centerDiffFactor-1)/100;
+		centerDiff = 1;
+		
+		directionDiffFactor = bAxisFactor;
+		directionDiffStep = (directionDiffFactor-1)/100;
+		directionDiff = 1;
+	}
+	
+	
 	
 	public void morphOrbit(Vector3 pushVec)
 	{
@@ -308,9 +259,6 @@ public class Orbit extends Motion
 		this.centerVec.copy(this.entityPos);
 		this.centerVec.subtract(this.centerPos);
 		
-		this.toCenterVec.copy(this.centerPos);
-		this.toCenterVec.subtract(this.entityPos);
-		
 		this.ellipse.calcPerimeter();
 		
 		//stepsize should be the same relative to the new perimeter
@@ -321,22 +269,72 @@ public class Orbit extends Motion
 		this.speedMorphStep = (this.newSpeed-this.speed)/100;
 		
 		if(newSpeed>speed)
-			this.dynamicMorphSpeed = (newSpeed/speed)*200;
+			this.dynamicMorphSpeed = (newSpeed/speed)*150;
 		else
-			this.dynamicMorphSpeed = (speed/newSpeed)*200;
+			this.dynamicMorphSpeed = (speed/newSpeed)*150;
 		
 
 	}
-
+	
 	@Override
-	public void persist(DataOutputStream dos)
+	public void persist(DataOutputStream dos) throws IOException
 	{
+		dos.writeFloat(speed);
+		dos.writeFloat(u);
+		dos.writeFloat(step);
+
+		//scale morphing
+		dos.writeFloat(scalingMorphSpeed);
+		dos.writeFloat(centerDiffFactor);
+		dos.writeFloat(centerDiffStep);
+		dos.writeFloat(centerDiff);
+		dos.writeFloat(directionDiffFactor);
+		dos.writeFloat(directionDiffStep);
+		dos.writeFloat(directionDiff);
 		
+		//speed morphing
+		dos.writeFloat(newSpeed); 
+		dos.writeFloat(oldPerimeter);
+		dos.writeFloat(oldStepSize);
+		dos.writeFloat(speedMorphStep);
+		dos.writeFloat(speedMorphIteration); 
+		dos.writeFloat(dynamicMorphSpeed);
+	
+		centerPos.persist(dos);
+		centerVec.persist(dos);
+		directionVec.persist(dos);
+		basicOrientation.persist(dos);
 	}
 
 	@Override
-	protected void restore(DataInputStream dis)
+	protected void restore(DataInputStream dis) throws IOException
 	{
+		speed = dis.readFloat();
+		u = dis.readFloat();
+		step = dis.readFloat();
+
+		//scale morphing
+		scalingMorphSpeed = dis.readFloat();
+		centerDiffFactor = dis.readFloat();
+		centerDiffStep = dis.readFloat();
+		centerDiff = dis.readFloat();
+		directionDiffFactor = dis.readFloat();
+		directionDiffStep = dis.readFloat();
+		directionDiff = dis.readFloat();
+	
+		//speed morphing
+		newSpeed  = dis.readFloat(); 
+		oldPerimeter = dis.readFloat();
+		oldStepSize = dis.readFloat();
+		speedMorphStep = dis.readFloat();
+		speedMorphIteration = dis.readFloat(); 
+		dynamicMorphSpeed = dis.readFloat();
 		
+		centerPos.restore(dis);
+		centerVec.restore(dis);
+		directionVec.restore(dis);
+		basicOrientation.restore(dis);
+		
+		ellipse = new Ellipse(centerPos,centerVec,directionVec);
 	}
 }

@@ -2,37 +2,35 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
 public class DirectionalMotion extends Motion
 {
 
-	private Vector3 startPos,directionVec,currentPos,tempDirectionVec;
+	private final Vector3 directionVec,currentPos,tempDirectionVec;
 	private float speed;
 	private SatelliteTransformation satTrans;
-	private SceneEntity entity;
-	private Matrix44 transform;
+	private final Matrix44 transform;
+	
+	public DirectionalMotion(Vector3 startPos,Vector3 directionVec,float speed)
+	{
+		//init
+		this();
+		this.directionVec.copy(directionVec.normalize());
+		this.currentPos.copy(startPos);
+		this.speed = speed;
+	}
 	
 	protected DirectionalMotion()
 	{
-		
-	}
-	
-	public DirectionalMotion(	SceneEntity entity, Vector3 startPos, 
-								Vector3 directionVec, float speed
-								)
-	{
-		this.entity = entity;
-		this.startPos = startPos;
-		this.directionVec = directionVec.normalize();
-		this.speed = speed;
-		
-		currentPos = new Vector3(startPos);
-		tempDirectionVec = new Vector3();
-		transform = new Matrix44();
+		//init
+		this.transform = new Matrix44();
+		this.directionVec = new Vector3();
+		this.currentPos = new Vector3();
+		this.tempDirectionVec = new Vector3();
 	}
 	
 	public void update(float dt)
@@ -50,8 +48,6 @@ public class DirectionalMotion extends Motion
 		}
 		
 		transform.addTranslate(currentPos.x, currentPos.y, currentPos.z);
-		
-		entity.setTransformation(transform);
 	}
 
 	public Matrix44 getTransform() {
@@ -63,14 +59,29 @@ public class DirectionalMotion extends Motion
 	}
 
 	@Override
-	public void persist(DataOutputStream dos)
+	public void persist(DataOutputStream dos) throws IOException
 	{
+		this.directionVec.persist(dos);
+		this.currentPos.persist(dos);
+		dos.writeFloat(this.speed);
 		
+		if(satTrans != null){
+			dos.writeBoolean(true);
+			this.satTrans.persist(dos);
+		}else
+			dos.writeBoolean(false);
 	}
 
 	@Override
-	protected void restore(DataInputStream dis)
+	protected void restore(DataInputStream dis) throws IOException
 	{
+		this.directionVec.restore(dis);
+		this.currentPos.restore(dis);
+		this.speed = dis.readFloat();
 		
+		if(dis.readBoolean()){
+			this.satTrans = new SatelliteTransformation();
+			this.satTrans.restore(dis);
+		}
 	}
 }
