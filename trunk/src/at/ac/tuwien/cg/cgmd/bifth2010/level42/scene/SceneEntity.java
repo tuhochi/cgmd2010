@@ -4,13 +4,16 @@ import static android.opengl.GLES10.glMultMatrixf;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import android.text.method.MovementMethod;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 
 public class SceneEntity implements Moveable
@@ -32,6 +35,40 @@ public class SceneEntity implements Moveable
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
+	}
+	
+	public void persist(DataOutputStream dos) throws IOException
+	{
+		ArrayList<Model> models = this.models;
+		int size = models.size();
+		for(int i=0; i<size; i++)
+			models.get(i).persist(dos);
+		transformation.persist(dos);
+		
+		if(motion != null)
+		{
+			dos.writeBoolean(true);
+			String className = motion.getClass().getName();
+			dos.writeUTF(className);
+			motion.persist(dos);
+		}
+		else
+			dos.writeBoolean(false);
+	}
+	
+	public void restore(DataInputStream dis) throws IOException
+	{
+		ArrayList<Model> models = this.models;
+		int size = models.size();
+		for(int i=0; i<size; i++)
+			models.get(i).restore(dis);
+		transformation_temp.restore(dis);
+		if(dis.readBoolean())
+		{
+			motion = Motion.restore(dis, dis.readUTF());
+			if(motion != null)
+				MotionManager.instance.addMotion(motion, this);
+		}
 	}
 	
 	public void render(int rendermode)

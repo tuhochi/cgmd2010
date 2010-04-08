@@ -2,7 +2,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import static android.opengl.GLES10.*;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
@@ -82,6 +85,16 @@ public class Geometry
 			normalOffset = 0;
 			texcoordOffset = 0;
 		}
+	}
+	
+	public void persist(DataOutputStream dos)
+	{
+		material.persist(dos);
+	}
+	
+	public void restore(DataInputStream dis)
+	{
+		material.restore(dis);
 	}
 	
 	public void render(int rendermode)

@@ -1,15 +1,22 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 
 public class LevelActivity extends Activity
 {
 	public static final String TAG = "Signanzorbit";
+	public static final String TRANSFORMATION_FILE = "l42_SceneState.bin";
 	
 	private static LevelActivity instance;
 	
@@ -54,6 +61,17 @@ public class LevelActivity extends Activity
 	{
 		super.onResume();
 		Log.v(TAG,"onResume()");
+		
+		try
+		{
+			DataInputStream dis = new DataInputStream(openFileInput(TRANSFORMATION_FILE));
+			renderView.sceneStateFile = dis;
+		}
+		catch (FileNotFoundException e)
+		{
+			renderView.sceneStateFile = null;
+		}
+		
 		renderView.synchronizer.setActive(true);
 		renderView.onResume();
 	}
@@ -65,6 +83,26 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onPause()");
 		renderView.synchronizer.setActive(false);
 		renderView.onPause();
+		
+		Scene s = renderView.scene;
+		
+		if(s==null)
+			return;
+		
+		try
+		{
+			DataOutputStream dos = new DataOutputStream(openFileOutput(TRANSFORMATION_FILE, MODE_PRIVATE));
+			s.persist(dos);
+			dos.close();
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.e(TAG, "Failed to persist Scene state: ",e);
+		}
+		catch (IOException e)
+		{
+			Log.e(TAG, "Failed to persist Scene state: ",e);
+		}
 	}
 	
 	@Override
@@ -79,6 +117,7 @@ public class LevelActivity extends Activity
 	{
 		super.onDestroy();
 		Log.v(TAG,"onDestroy()");
+		deleteFile(TRANSFORMATION_FILE);
 	}
 	
 	@Override

@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 import static android.opengl.GLES10.*;
 import static android.opengl.GLUtils.*;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -152,6 +154,14 @@ public class MaterialManager
 			}
 			else
 				texId = -1;
+		}
+		
+		public void persist(DataOutputStream dos)
+		{
+		}
+		
+		public void restore(DataInputStream dis)
+		{
 		}
 		
 		private Bitmap loadTexture(String filename)

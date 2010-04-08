@@ -1,5 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
@@ -7,8 +10,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Pair;
 
 //static imports
@@ -33,6 +36,40 @@ public class Model implements Moveable
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
 		distances = new ArrayList<Pair<Vector3,Model>>();
+	}
+	
+	public void persist(DataOutputStream dos) throws IOException
+	{
+		ArrayList<Geometry> geometries = this.geometries;
+		int size = geometries.size();
+		for(int i=0; i<size; i++)
+			geometries.get(i).persist(dos);
+		transformation.persist(dos);
+		
+		if(motion != null)
+		{
+			dos.writeBoolean(true);
+			String className = motion.getClass().getName();
+			dos.writeUTF(className);
+			motion.persist(dos);
+		}
+		else
+			dos.writeBoolean(false);
+	}
+	
+	public void restore(DataInputStream dis) throws IOException
+	{
+		ArrayList<Geometry> geometries = this.geometries;
+		int size = geometries.size();
+		for(int i=0; i<size; i++)
+			geometries.get(i).restore(dis);
+		transformation_temp.restore(dis);
+		if(dis.readBoolean())
+		{
+			motion = Motion.restore(dis, dis.readUTF());
+			if(motion != null)
+				MotionManager.instance.addMotion(motion, this);
+		}
 	}
 	
 	public Model(Model other)

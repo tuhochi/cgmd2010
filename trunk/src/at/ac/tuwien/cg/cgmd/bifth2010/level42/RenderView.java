@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import static android.opengl.GLES10.*;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -42,7 +44,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private final LevelActivity context;
 	private OGLManager oglManager = OGLManager.instance;
 	private MaterialManager materialManager = MaterialManager.instance;
-	private Scene scene;
+	public Scene scene;
+	public DataInputStream sceneStateFile;
 	private final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
 	private final MotionManager motionManager = MotionManager.instance;
@@ -102,6 +105,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		// reset managers
 		oglManager.reset();
 		materialManager.reset();
+		synchronizer.reset();
 		
 		// check for GLES11
 		boolean gles11 = (gl instanceof GL11);
@@ -132,20 +136,40 @@ public class RenderView extends GLSurfaceView implements Renderer
 		 * Dummy Test Scene
 		 */
 		scene = SceneLoader.getInstance().readScene("l42_cube");
+		
+		// restore scene state
+		if(sceneStateFile != null)
+		{
+			try
+			{
+				scene.restore(sceneStateFile);
+				sceneStateFile.close();
+			}
+			catch (IOException e)
+			{
+				Log.e(LevelActivity.TAG, "Failed to restore scene state", e);
+			}
+			sceneStateFile = null;
+		}
+		else
+		{
+
+			Orbit orbit2 = new Orbit(new Vector3(-3,3,0),new Vector3(3,-3,0),
+					new Vector3(0,0,-5),5,null);
+
+			SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0);
+			orbit2.setSatTrans(sat1);
+
+			DirectionalMotion mov1 = new DirectionalMotion(	scene.getSceneEntity(0),
+					new Vector3(-3,3,10),
+					new Vector3(0,0,-1),0.1f);
+
+			motionManager.addMotion(mov1,(Moveable)scene.getSceneEntity(0));
+			motionManager.addMotion(orbit2,(Moveable)scene.getSceneEntity(1));
+
+		}
+		
 		collManager = new CollisionManager(scene);
-		
-		Orbit orbit2 = new Orbit(new Vector3(-3,3,0),new Vector3(3,-3,0),
-								new Vector3(0,0,-5),5,null);
-	
-		SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0);
-		orbit2.setSatTrans(sat1);
-		
-		DirectionalMotion mov1 = new DirectionalMotion(	scene.getSceneEntity(0),
-															new Vector3(-3,3,10),
-															new Vector3(0,0,-1),0.1f);
-		
-		motionManager.addMotion(mov1,(Moveable)scene.getSceneEntity(0));
-		motionManager.addMotion(orbit2,(Moveable)scene.getSceneEntity(1));
 		
 		new Thread(new Runnable()
 		{
