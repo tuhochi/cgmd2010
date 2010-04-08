@@ -1,15 +1,17 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
-import android.net.http.SslCertificate.DName;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Ellipse;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
-public class Orbit implements Motion {
+public class Orbit extends Motion
+{
 
 	private float 	speed,t,u,step,orbitAngle,
 	
@@ -23,21 +25,25 @@ public class Orbit implements Motion {
 					newSpeed,oldPerimeter,oldStepSize,
 					speedMorphStep,speedMorphIteration,dynamicMorphSpeed;
 
-	public final Vector3 position,
+	public Vector3 position,
 						 entityPos,centerPos,normalVec,
 						 newEntityPos,newCenterPos;
 					
 					//orbit transformation
-	private final Vector3 	centerVec,toCenterVec,directionVec,orbitAxis,
+	private Vector3 	centerVec,toCenterVec,directionVec,orbitAxis,
 							newCenterVec,newToCenterVec,newDirectionVec,newNormalVec,
 							transformAxis,
 							currtDirApproximation,tempDirectionVec;
 	
 	private Matrix44 objectOrbitTransform;
-	private final Matrix44 transform,basicOrientation,orbitTransform;
+	private Matrix44 transform,basicOrientation,orbitTransform;
 	private SatelliteTransformation satTrans;
-	private final Ellipse ellipse;
+	private Ellipse ellipse;
 	
+	protected Orbit()
+	{
+		
+	}
 	
 	public Orbit(	Vector3 entityPos,Vector3 centerPos,
 					Vector3 directionVec,
@@ -321,5 +327,16 @@ public class Orbit implements Motion {
 		
 
 	}
-	
+
+	@Override
+	public void persist(DataOutputStream dos)
+	{
+		
+	}
+
+	@Override
+	protected void restore(DataInputStream dis)
+	{
+		
+	}
 }

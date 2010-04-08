@@ -1,5 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Matrix44
 {
 	public final float m[][] = new float[4][4];
@@ -29,6 +33,20 @@ public class Matrix44
 			float m03, float m13, float m23, float m33)
 	{
 		set(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
+	}
+	
+	public void persist(DataOutputStream dos) throws IOException
+	{
+		for(int c=0; c<4; c++)
+			for(int r=0; r<4; r++)
+				dos.writeFloat(m[r][c]);
+	}
+	
+	public void restore(DataInputStream dis) throws IOException
+	{
+		for(int c=0; c<4; c++)
+			for(int r=0; r<4; r++)
+				m[r][c] = dis.readFloat();
 	}
 	
 	public float[] getArray16()

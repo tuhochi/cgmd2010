@@ -1,16 +1,25 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
-public class DirectionalMotion implements Motion {
+public class DirectionalMotion extends Motion
+{
 
-	private final Vector3 startPos,directionVec,currentPos,tempDirectionVec;
+	private Vector3 startPos,directionVec,currentPos,tempDirectionVec;
 	private float speed;
 	private SatelliteTransformation satTrans;
-	private final SceneEntity entity;
-	private final Matrix44 transform;
+	private SceneEntity entity;
+	private Matrix44 transform;
+	
+	protected DirectionalMotion()
+	{
+		
+	}
 	
 	public DirectionalMotion(	SceneEntity entity, Vector3 startPos, 
 								Vector3 directionVec, float speed
@@ -52,5 +61,16 @@ public class DirectionalMotion implements Motion {
 	public void setSatTrans(SatelliteTransformation satTrans) {
 		this.satTrans = satTrans;
 	}
-	
+
+	@Override
+	public void persist(DataOutputStream dos)
+	{
+		
+	}
+
+	@Override
+	protected void restore(DataInputStream dis)
+	{
+		
+	}
 }

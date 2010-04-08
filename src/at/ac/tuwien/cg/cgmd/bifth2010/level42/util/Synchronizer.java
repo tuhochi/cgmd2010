@@ -14,6 +14,16 @@ public class Synchronizer
 	private int lastPreRenderFrame = 0;
 	public boolean running = true;
 
+	public void reset()
+	{
+		lock.lock();
+		prerender.signal();
+		logic.signal();
+		lastLogicFrame = -1;
+		lastPreRenderFrame = 0;
+		lock.unlock();
+	}
+	
 	public void waitForLogic()
 	{
 		if(!running)
@@ -76,5 +86,10 @@ public class Synchronizer
 			logic.signal();
 			lock.unlock();
 		}
+	}
+	
+	public void blockLogic(boolean block)
+	{
+		
 	}
 }
