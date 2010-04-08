@@ -2,7 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 public class Ellipse
 {
-	public final Vector3 center,a,b,pos;
+	public Vector3 center,a,b,pos;
 
 	public float perimeter;
 	//temp vars
@@ -11,17 +11,17 @@ public class Ellipse
 
 	public Ellipse(Vector3 center, Vector3 a, Vector3 b)
 	{
-		this.center = center;
-		this.a = a;
-		this.b = b;
-
+		//init
 		this.pos = new Vector3();
-		
 		this.aCost = new Vector3();
 		this.bSint = new Vector3();
 		this.sumAB = new Vector3();
 		this.lambda = 0;
 		
+		this.center = center;
+		this.a = a;
+		this.b = b;
+	
 		calcPerimeter();
 	}
 

@@ -162,9 +162,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 			SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0);
 			orbit2.setSatTrans(sat1);
 
-			DirectionalMotion mov1 = new DirectionalMotion(	scene.getSceneEntity(0),
-					new Vector3(-3,3,10),
-					new Vector3(0,0,-1),0.1f);
+			DirectionalMotion mov1 = new DirectionalMotion(	new Vector3(-3,3,10),
+															new Vector3(0,0,-1),
+															0.1f);
 
 			motionManager.addMotion(mov1,(Moveable)scene.getSceneEntity(0));
 			motionManager.addMotion(orbit2,(Moveable)scene.getSceneEntity(1));
@@ -257,6 +257,14 @@ public class RenderView extends GLSurfaceView implements Renderer
 				case KeyEvent.KEYCODE_DPAD_DOWN:
 					cam.setDistance(cam.getDistance() + 10.0f);
 					break;
+				case KeyEvent.KEYCODE_DPAD_LEFT:
+					Orbit test = (Orbit) motionManager.getMotion(1).getMotion();
+					test.morphAxisScale(0.4f, 0.5f,100);
+					break;	
+				case KeyEvent.KEYCODE_DPAD_RIGHT:
+					Orbit test1 = (Orbit) motionManager.getMotion(1).getMotion();
+					test1.morphAxisScale(1.6f,1.5f,100);
+				break;
 				}
 			}
 		}
