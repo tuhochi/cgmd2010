@@ -7,7 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.util.Log;
 
-public class Pedestrian {
+public class Pedestrian implements Target{
 
     private static final String LOG_TAG = Pedestrian.class.getSimpleName();
     
@@ -28,12 +28,12 @@ public class Pedestrian {
 	private float fightingRadius;
 	private float moveSpeed;
 	private float angle;
-	private Treasure targetTreasure;
+	private Target target;
 	private float oldTime;
 	private Vector2 temp;
 	
 	public Pedestrian(GL10 gl, Context context) {
-		this( 30.0f,10.0f,0.003f, 1.0f, gl, context);
+		this( 30.0f,10.0f,0.01f, 2.0f, gl, context);
 	}
 	
 	public Pedestrian(float attractionRadius, float fightingRadius, float moveSpeed, float grabSpeed, GL10 gl, Context context) {
@@ -49,7 +49,7 @@ public class Pedestrian {
 		
 		this.angle = 0.0f;
 		this.moveSpeed = 4.0f;
-		this.targetTreasure = null;
+		this.target = null;
 		this.setColors();
 		this.oldTime = 0;
 		this.temp = new Vector2();
@@ -130,18 +130,32 @@ public class Pedestrian {
 			oldTime = time;
 		float deltaTime = time - oldTime;
 		oldTime = time;
-		if(targetTreasure != null){//move pedestrian towards target
-			/*this.position = this.position.add(
-							targetTreasure.getPosition().sub(this.position).
-							normalize().mult(this.moveSpeed*deltaTime));*/
-			this.temp.set(this.position.x, this.position.y);
-			this.position.add(this.temp.subThisFrom(
-					targetTreasure.getPosition()).normalize()
-					.mult(this.moveSpeed*deltaTime));
+		if(target != null){//target exists
+			if(target instanceof Pedestrian){
+				legs.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
+				arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
+			}else{
+				if(((Treasure)target).getValue() <= 0){
+					target = null;
+					return;
+				}
+				this.temp.set(this.position.x, this.position.y);
+				this.temp.subThisFrom(target.getPosition());
+				if(this.temp.length()>10.0f){//move to target
+					this.position.add(temp.normalize()
+						.mult(this.moveSpeed*deltaTime*2.0f));
+					legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+					arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+				}else{//near enough to target, so grab treasure
+					legs.update(position, angle, 0.0f);
+					arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
+					((Treasure)target).grabValue(this.grabSpeed*deltaTime);
+				}
+			}
+		}else{//no target
+			legs.update(position, angle, 0.0f);
+			arms.update(position, angle, 0.0f);
 		}
-		
-		legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
-		arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
 		torso.update(position, angle);
 		head.update(position, angle);
 		hair.update(position, angle);
@@ -174,8 +188,8 @@ public class Pedestrian {
 	public float getFightingRadius(){
 		return this.fightingRadius;
 	}
-	public void setTargetTreasure(Treasure target){
-		this.targetTreasure = target;
+	public void setTargetTreasure(Target target){
+		this.target = target;
 		this.angle = (float)Math.atan2(target.getPosition().y - this.position.y, target.getPosition().x - this.position.x) * (180.0f/(float)Math.PI);
 		//this.angle = (float)Math.atan( (treasurePosition.y - this.position.y) / (treasurePosition.x - this.position.x) )
 	

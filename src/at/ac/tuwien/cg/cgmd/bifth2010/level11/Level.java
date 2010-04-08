@@ -58,15 +58,15 @@ public class Level extends Thread {
 	
 	
 	public void init(GL10 gl, Context context) {
-		Log.i(LOG_TAG, "init()");
+		//Log.i(LOG_TAG, "init()");
 		 
 		this.gl = gl;
 		this.context = context;
 		
 		this.initTextures();
 		
-		this.generatePedestrians(1, 40);
-		this.addTreasure(new Treasure(10.0f, 200.0f, new Vector2(200.0f, 200.0f)));
+		this.generatePedestrians(5, 40);
+		//this.addTreasure(new Treasure(10.0f, 200.0f, new Vector2(200.0f, 200.0f)));
 		
 		background = new Square();
 		
@@ -121,16 +121,38 @@ public class Level extends Thread {
 	private synchronized void update() {
 		//synchronized(this){
 			timing.update();
-			for (int i=0; i < pedestrianList.size(); i++) {
+			for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
 				Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
 				pedestrian.update(timing.getCurrTime());
-				float minDist = Float.MAX_VALUE;
+				float bestRating = Float.MAX_VALUE;
 				float tempDist = 0;
-				for (int j=0; j < treasureList.size(); j++){
+				float rating = 0;
+				for (int j=0; j < treasureList.size(); j++){//search the cuurent target
 					Treasure treasure = ((Treasure)treasureList.get(j));
-					if((tempDist = pedestrian.getPosition().distance(treasure.getPosition())) < minDist){
-						pedestrian.setTargetTreasure(treasure);
-						minDist = tempDist;
+					if(treasure.getValue() == 0.0f){
+						treasure = null;
+						treasureList.remove(j);
+						j--;
+						continue;
+					}
+					if((rating =
+						(tempDist = pedestrian.getPosition().distance(treasure.getPosition()))
+						/ treasure.getValue()) //TODO: determine, how to rate a target
+							< bestRating){
+						if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttracktionRadius()){
+							pedestrian.setTargetTreasure(treasure);
+							bestRating = rating;
+						}
+					}
+				}
+				for (int j=0; j < pedestrianList.size(); j++) {//check if another one is too close
+					Pedestrian otherPedestrian = ((Pedestrian)pedestrianList.get(j));
+					if(otherPedestrian != pedestrian){
+						//System.out.println(otherPedestrian.getPosition().distance(pedestrian.getPosition()));
+						if(otherPedestrian.getPosition().distance(pedestrian.getPosition()) < 20.0f){
+							//System.out.println("Too close");
+							pedestrian.setTargetTreasure(otherPedestrian);
+						}
 					}
 				}
 			}
