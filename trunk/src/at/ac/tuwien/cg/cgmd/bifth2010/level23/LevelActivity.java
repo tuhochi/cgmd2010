@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
@@ -16,6 +18,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 	private static Context CONTEXT; 
 	private static LevelActivity instance;
 	
+	private static final int SENSOR_MENU_ITEM = 1;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,13 +29,12 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-	 	;
 		renderer = new RenderView(this);
 		renderer.setOrientationListener(this);
         setContentView(renderer);
         CONTEXT = this; 
         OrientationManager.registerListener(this);
-        
+
         instance = this;
 	}
 	
@@ -113,5 +116,24 @@ public class LevelActivity extends Activity implements OrientationListener {
 	
 	public static Context getContext() {
 		return CONTEXT;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		menu.add(0, SENSOR_MENU_ITEM, 0, "Sensor On/Off");
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) 
+	    {
+	    case SENSOR_MENU_ITEM:
+	        renderer.switchSensor();
+	        return true;
+
+	    }
+	    return false;
 	}
 }

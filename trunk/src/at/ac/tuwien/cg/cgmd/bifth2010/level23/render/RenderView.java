@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 import android.content.Context;
 import android.opengl.GLES10;
@@ -21,6 +22,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Serializer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
@@ -35,13 +37,12 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private float topBounds=100.0f;
 	
 	private float balloonHeight=0;
-	private float BALLOON_SPEED=0.08f;
-	
 	private static RenderView instance;
 	
 	private Context context; 
 	private MainChar mainChar; 
 	private Background background;
+	private Hud hud;
 	private boolean released = true; 
 	private MotionEvent lastMotionEvent = null; 
 	private float accTime;
@@ -93,7 +94,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		float dt = timer.getDt();
 				
-		balloonHeight += dt*BALLOON_SPEED;
+		balloonHeight += dt*Settings.BALLOON_SPEED;
 		accTime += dt/1000;
 		if(accTime > 5)
 		{
@@ -118,6 +119,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		background.render();
 		mainChar.render();
+		hud.render();
 		
 		ObstacleManager.getInstance().renderVisibleObstacles((int)balloonHeight);
 		
@@ -157,6 +159,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		ObstacleManager.getInstance().generateObstacles();
 		
 		background = new Background();
+		
+		hud = new Hud();
 				
 		int resID = context.getResources().getIdentifier("l23_balloon", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		mainChar.setTextureID(textureManager.getTextureId(context.getResources(), resID));
@@ -184,17 +188,22 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			mainChar.moveUpDown(stepWidth);
 			break;*/
 		case KeyEvent.KEYCODE_S: 
-			useSensor = !useSensor; 
-			if (useSensor)
-				OrientationManager.registerListener(orientationListener);
-			else
-				OrientationManager.unregisterListener(orientationListener);
+			switchSensor();
 			break;
 		}
 		
 		return true; 
 	}
 
+	public void switchSensor()
+	{
+		useSensor = !useSensor; 
+		if (useSensor)
+			OrientationManager.registerListener(orientationListener);
+		else
+			OrientationManager.unregisterListener(orientationListener);
+	}
+	
 	@Override
 	public boolean onKeyUp(int key, KeyEvent evt) {
 		
@@ -221,11 +230,17 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void handleOnTouchMovement(final MotionEvent evt) {
 		queueEvent(new Runnable(){
 			public void run() 
-			{	float x = evt.getRawX();
+			{	
+				float x = evt.getRawX()*100.0f/screenWidth;
+				float y = topBounds-evt.getRawY()*100.0f/screenHeight;
+				
+				if(hud.testPressed(x,y))
+					return;
+				
 				float charX = mainChar.getPosition().x;
-				if (x*100.0f/screenWidth <  charX) {
+				if (x <  charX) {
 					mainCharMoveDir = MainChar.MOVE_LEFT;
-				} else if (x*100.0f/screenWidth > (charX + mainChar.getWidth() )) {
+				} else if (x > (charX + mainChar.getWidth() )) {
 					mainCharMoveDir = MainChar.MOVE_RIGHT;
 				}
 				else
@@ -238,8 +253,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	public void handleRollMovement(int moveDir) 
 	{
-	
-		
 		if(useSensor)
 			mainCharMoveDir = moveDir;
 	}
@@ -340,7 +353,21 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void setTopBounds(float topBounds) {
 		this.topBounds = topBounds;
 	}
-	
+		
+	/**
+	 * @return the useSensor
+	 */
+	public boolean isUseSensor() {
+		return useSensor;
+	}
+
+	/**
+	 * @param useSensor the useSensor to set
+	 */
+	public void setUseSensor(boolean useSensor) {
+		this.useSensor = useSensor;
+	}
+
 	private void setupGL(GL10 gl)
 	{
 		gl.glDepthFunc(GL10.GL_LEQUAL);
@@ -355,6 +382,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
         
         gl.glClearColor(0, 0, 0, 0);
+        
+        Settings.GLES11Supported = (gl instanceof GL11);
 	}
-
 }

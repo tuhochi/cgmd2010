@@ -1,5 +1,16 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
-import static android.opengl.GLES10.*;
+import static android.opengl.GLES10.GL_FLOAT;
+import static android.opengl.GLES10.GL_MODELVIEW;
+import static android.opengl.GLES10.GL_TEXTURE;
+import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES10.glBindTexture;
+import static android.opengl.GLES10.glDrawArrays;
+import static android.opengl.GLES10.glMatrixMode;
+import static android.opengl.GLES10.glPopMatrix;
+import static android.opengl.GLES10.glPushMatrix;
+import static android.opengl.GLES10.glTexCoordPointer;
+import static android.opengl.GLES10.glTranslatef;
+import static android.opengl.GLES10.glVertexPointer;
 
 import java.nio.FloatBuffer;
 
@@ -7,9 +18,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES10;
 import android.opengl.GLES11;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 
 public class Background implements SceneEntity 
 {
@@ -23,7 +34,6 @@ public class Background implements SceneEntity
 	private float positionY;
 	private RenderView renderView; 
 	private GeometryManager geometryManager; 
-	private boolean vbo=true;
 	private int vboId;
 	
 	public Background()
@@ -40,7 +50,10 @@ public class Background implements SceneEntity
 		texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords)[0];
 		vertexBuffer = geometryManager.createVertexBufferQuad(renderView.getRightBounds(), renderView.getTopBounds());
 		//texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords);
-		vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+		if(Settings.GLES11Supported) 
+		{
+			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+		}
 		
 	}
 	
@@ -69,7 +82,7 @@ public class Background implements SceneEntity
 			//translate texture
 			glTranslatef(0, positionY, 0);
 			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			if (!vbo) 
+			if (!Settings.GLES11Supported) 
 			{
 				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
 				glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);

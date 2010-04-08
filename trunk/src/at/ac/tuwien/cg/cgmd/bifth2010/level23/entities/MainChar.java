@@ -18,6 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 
 
 public class MainChar implements SceneEntity {
@@ -33,15 +34,11 @@ public class MainChar implements SceneEntity {
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer texCoordBuffer;
 	private int vboId; 
-	private boolean vbo = true;
 	public int textureID = -1;
 	
 	public static final int MOVE_LEFT = -1;
 	public static final int MOVE_RIGHT = 1;
 	public static final int NO_MOVEMENT = 0;
-	//units per millisecond
-	public static final float MOVE_SPEED = 0.05f;
-	
 	private int moveDirection = 0;
 		
 	public MainChar()
@@ -68,7 +65,10 @@ public class MainChar implements SceneEntity {
 		geometryManager = GeometryManager.getInstance(); 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
 		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
-		vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+		if(Settings.GLES11Supported) 
+		{
+			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+		}
 		
 	}
 	
@@ -157,7 +157,7 @@ public class MainChar implements SceneEntity {
 				|| moveDir<1 && position.x == 0)
 			return;
 		
-		float step = dt * MOVE_SPEED * moveDir;
+		float step = dt * Settings.MOVE_SPEED * moveDir;
 		
 		if(!isInboundsAfterStep(moveDir,step))
 		{
@@ -178,7 +178,7 @@ public class MainChar implements SceneEntity {
 		
 		glTranslatef(position.x, 0, 0);
 		
-		if (!vbo) 
+		if(!Settings.GLES11Supported) 
 		{
 			
 			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
