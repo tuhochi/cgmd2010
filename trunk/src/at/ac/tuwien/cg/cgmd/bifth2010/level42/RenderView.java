@@ -157,19 +157,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 			/*
 			 * Default Motion initialization goes here!
 			 */
-			Orbit orbit2 = new Orbit(new Vector3(-3,3,0),new Vector3(3,-3,0),
-					new Vector3(0,0,-5),5,null);
-
-			SatelliteTransformation sat1 = new SatelliteTransformation(0, 2, 0);
-			orbit2.setSatTrans(sat1);
-
-			DirectionalMotion mov1 = new DirectionalMotion(	new Vector3(-3,3,10),
-															new Vector3(0,0,-1),
-															0.1f);
-
-			motionManager.addMotion(mov1,(Moveable)scene.getSceneEntity(0));
-			motionManager.addMotion(orbit2,(Moveable)scene.getSceneEntity(1));
-
+			motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,2,10);
 		}
 		
 		collManager = new CollisionManager(scene);

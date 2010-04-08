@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.camera;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
@@ -188,13 +189,49 @@ public class Camera
 		this.lastPosition[1] = y;
 	}
 	
-	public void persist(DataOutputStream dos)
+	public void persist(DataOutputStream dos) throws IOException
 	{
+		dos.writeFloat(azimuth);
+		dos.writeFloat(altitude);
+		dos.writeFloat(distance);
 		
+		dos.writeFloat(currentAzimuth);
+		dos.writeFloat(currentAltitude);
+		dos.writeFloat(currentDistance);
+		
+		dos.writeFloat(minAltitude);
+		dos.writeFloat(maxAltitude);
+		dos.writeFloat(minDistance);
+		dos.writeFloat(maxDistance);
+		
+		dos.writeFloat(motionFactor);
+		
+		inverseViewVector.persist(dos);
+		rightVector.persist(dos);
+		upVector.persist(dos);
+		viewPosition.persist(dos);
 	}
 	
-	public void restore(DataInputStream dis)
+	public void restore(DataInputStream dis) throws IOException
 	{
+		azimuth = dis.readFloat();
+		altitude = dis.readFloat();
+		distance = dis.readFloat();
 		
+		currentAzimuth = dis.readFloat();
+		currentAltitude = dis.readFloat();
+		currentDistance = dis.readFloat();
+		
+		minAltitude = dis.readFloat();
+		maxAltitude = dis.readFloat();
+		minDistance = dis.readFloat();
+		maxDistance = dis.readFloat();
+		
+		motionFactor = dis.readFloat();
+		
+		inverseViewVector.restore(dis);
+		rightVector.restore(dis);
+		upVector.restore(dis);
+		viewPosition.restore(dis);
 	}
 }

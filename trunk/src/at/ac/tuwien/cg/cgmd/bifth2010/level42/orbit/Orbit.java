@@ -31,7 +31,8 @@ public class Orbit extends Motion
 					
 							//orbit morphing
 	private final Vector3 	centerVec,directionVec,
-							currtDirApproximation,tempDirectionVec;
+							currtDirApproximation,tempDirectionVec,
+							refDirectionVec,refCenterVec;
 
 	private final Matrix44 transform,basicOrientation;
 	private SatelliteTransformation satTrans;
@@ -48,6 +49,8 @@ public class Orbit extends Motion
 		directionVec = new Vector3();
 		currtDirApproximation = new Vector3();
 		tempDirectionVec = new Vector3();
+		refDirectionVec = new Vector3();
+		refCenterVec = new Vector3();
 		
 		transform = new Matrix44();
 		basicOrientation = new Matrix44();
@@ -134,13 +137,13 @@ public class Orbit extends Motion
 	{
 		if(Math.signum(centerDiffStep)<0){
 			if(centerDiffFactor<centerDiff){
-				
 				centerDiffIteration = centerDiffStep * dt * scalingMorphSpeed;
-				
 				if(centerDiff+centerDiffIteration<centerDiffFactor)
 					centerDiffIteration = centerDiffFactor-centerDiff;
 				
 				centerDiff += centerDiffIteration;
+				
+				centerVec.copy(refCenterVec);
 				centerVec.multiply( 1 + centerDiffIteration);
 				
 				Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
@@ -153,6 +156,8 @@ public class Orbit extends Motion
 					centerDiffIteration = centerDiffFactor-centerDiff;
 	
 				centerDiff += centerDiffIteration;
+				
+				centerVec.copy(refCenterVec);
 				centerVec.multiply( 1 + centerDiffIteration);
 	
 				Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
@@ -166,6 +171,8 @@ public class Orbit extends Motion
 					directionDiffIteration = directionDiffFactor-directionDiff;
 				
 				directionDiff += directionDiffIteration;
+				
+				directionVec.copy(refDirectionVec);
 				directionVec.multiply( 1 + directionDiffIteration);
 				
 				Log.i(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
@@ -177,6 +184,8 @@ public class Orbit extends Motion
 					directionDiffIteration = directionDiffFactor-directionDiff;
 				
 				directionDiff += directionDiffIteration;
+				
+				directionVec.copy(refDirectionVec);
 				directionVec.multiply( 1 + directionDiffIteration);
 				
 				Log.i(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
@@ -195,10 +204,7 @@ public class Orbit extends Motion
 		
 		//set basic orientation
 		transform.mult(basicOrientation);
-		
-		//change orientation relative to the orbit
-		//transform.mult(objectOrbitTransform);
-		
+				
 		//object transf.
 		if(satTrans!=null)
 			transform.mult(satTrans.getTransform());
@@ -220,6 +226,8 @@ public class Orbit extends Motion
 	public void morphAxisScale(float aAxisFactor,float bAxisFactor,float morphSpeed)
 	{
 		scalingMorphSpeed = morphSpeed;
+		refCenterVec.copy(centerVec);
+		refDirectionVec.copy(directionVec);
 		
 		centerDiffFactor = aAxisFactor;
 		centerDiffStep = (centerDiffFactor-1)/100;
@@ -291,6 +299,8 @@ public class Orbit extends Motion
 		dos.writeFloat(directionDiffFactor);
 		dos.writeFloat(directionDiffStep);
 		dos.writeFloat(directionDiff);
+		refCenterVec.persist(dos);
+		refDirectionVec.persist(dos);
 		
 		//speed morphing
 		dos.writeFloat(newSpeed); 
@@ -321,6 +331,8 @@ public class Orbit extends Motion
 		directionDiffFactor = dis.readFloat();
 		directionDiffStep = dis.readFloat();
 		directionDiff = dis.readFloat();
+		refCenterVec.restore(dis);
+		refDirectionVec.restore(dis);		
 	
 		//speed morphing
 		newSpeed  = dis.readFloat(); 
