@@ -1,5 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class TimeUtil {
 	
 	private static TimeUtil instance;
@@ -12,9 +15,14 @@ public class TimeUtil {
 	private int fpsRefreshInterval = 3;
 	
 	private float fps;
+	
+	private Timer timer;
 		
 	private TimeUtil()
-	{}
+	{
+		timer = new Timer();
+		instance = this;
+	}
 	
 	public static TimeUtil getInstance()
 	{
@@ -22,6 +30,11 @@ public class TimeUtil {
 			instance = new TimeUtil();
 		
 		return instance;
+	}
+	
+	public void scheduleTimer(TimerTask task, long delay)
+	{
+		timer.schedule(task, delay);
 	}
 	
 	/**
