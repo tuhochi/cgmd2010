@@ -97,7 +97,7 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glDisable(GL10.GL_CULL_FACE);
          gl.glShadeModel(GL10.GL_SMOOTH);
          gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-         //gl.glEnable(GL10.GL_BLEND);
+         gl.glEnable(GL10.GL_BLEND);
          
          gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
          gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);

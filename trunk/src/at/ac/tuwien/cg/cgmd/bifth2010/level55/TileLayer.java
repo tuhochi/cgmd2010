@@ -24,6 +24,21 @@ public class TileLayer {
 	
 	static float screenWidth;
 	static float screenHeight;
+	
+	static final int activeCoin_typeId=11;
+	static final int inactiveCoin_typeId=10;
+	
+	private final static int VBO_WIDTH=5;
+	private final static int VBO_HEIGHT=5;
+	
+	private int numTilesX=0;
+	private int numTilesY=0;
+	
+	private int maxVBOPosX=0;
+	private int maxVBOPosY=0;
+	
+	public int[][] tiles_vector;
+	private TilesVBO[][] vbo_vector;
 
 	public void init(GL10 gl, float _scrollFactor, float _sizeFactor, int levelResource, int textureResource, int texRows, int texCols, Context context) {
 		scrollFactor=_scrollFactor;
@@ -35,6 +50,24 @@ public class TileLayer {
 		loadLevel(levelResource, context);
 		
 		createVBOs(gl, texRows, texCols);
+	}
+	
+	public int changeCoinState(int x, int y) {
+		int result=0;
+		if (tiles_vector[x][y]==activeCoin_typeId || tiles_vector[x][y]==inactiveCoin_typeId) {
+			Coin[] coins=vbo_vector[x/VBO_WIDTH][y/VBO_HEIGHT].coins;
+			
+			for (int i=0; i<coins.length; i++) {
+				if (coins[i].x==x && coins[i].y==y) {
+					result=coins[i].changeActiveState();
+					break;
+				}
+			}
+		}
+		
+		Log.d("changeCoinState", Integer.toString(result));
+		
+		return result;
 	}
 	
 	public int getTypeAt(int x, int y) {
@@ -123,17 +156,5 @@ public class TileLayer {
 				vbo_vector[i][j].draw(gl);
 			}
 		}
-    }
-	
-	private final static int VBO_WIDTH=5;
-	private final static int VBO_HEIGHT=5;
-	
-	private int numTilesX=0;
-	private int numTilesY=0;
-	
-	private int maxVBOPosX=0;
-	private int maxVBOPosY=0;
-	
-	public int[][] tiles_vector;
-	private TilesVBO[][] vbo_vector;	
+    }	
 }
