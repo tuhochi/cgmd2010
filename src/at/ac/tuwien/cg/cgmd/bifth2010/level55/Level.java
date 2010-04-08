@@ -36,6 +36,10 @@ public class Level {
         frontLayer.draw(gl);
 	}
 	
+	public int changeCoinState(int x, int y) {
+		return frontLayer.changeCoinState(x, y);
+	}
+	
 	public void setPosition(float x, float y) {
 		frontLayer.posX=x;
 		frontLayer.posY=y;

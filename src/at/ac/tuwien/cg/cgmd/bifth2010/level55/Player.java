@@ -34,6 +34,7 @@ public class Player {
 		}
 		if (doJump) {
 			Log.d("player", "jump");
+			level.changeCoinState(2, 4);
 			doJump=false;
 		}
 	}

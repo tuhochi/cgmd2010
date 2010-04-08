@@ -9,6 +9,8 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
+import android.util.Log;
+
 
 /**
  * A vertex shaded cube.
@@ -51,6 +53,65 @@ class Mesh
     	init(gl, primVertices, primTexCoords, primIndices);    
     }
     
+    public void init(GL10 gl, FloatBuffer _mVertexBuffer, FloatBuffer _mTexCoordBuffer, ShortBuffer  _mIndexBuffer) {
+    	mVertexBuffer=_mVertexBuffer;
+    	mTexCoordBuffer=_mTexCoordBuffer;
+    	mIndexBuffer=_mIndexBuffer;
+    	
+    	mVertexBuffer.position(0);
+    	mTexCoordBuffer.position(0);
+    	mIndexBuffer.position(0);
+    	
+    	if (gl instanceof GL11) {
+    		GL11 gl11=(GL11)gl;
+    		if (MyOpenGLView.isExtensionSupported(gl11,"GL_ANDROID_vertex_buffer_object") ||
+    				MyOpenGLView.isExtensionSupported(gl11,"GL_OES_vertex_buffer_object")) {
+    			
+                int[] buffer = new int[1];
+                
+                // Allocate and fill the vertex buffer.
+                gl11.glGenBuffers(1, buffer, 0);
+                mVertBufferIndex = buffer[0];
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertBufferIndex);
+                final int vertexSize = mVertexBuffer.capacity()*4; 
+                gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertexSize, 
+                        mVertexBuffer, GL11.GL_STATIC_DRAW);
+                
+                
+                // Allocate and fill the texture coordinate buffer.
+                gl11.glGenBuffers(1, buffer, 0);
+                mTextureCoordBufferIndex = buffer[0];
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 
+                        mTextureCoordBufferIndex);
+                final int texCoordSize = mTexCoordBuffer.capacity()*4;
+                gl11.glBufferData(GL11.GL_ARRAY_BUFFER, texCoordSize, 
+                        mTexCoordBuffer, GL11.GL_STATIC_DRAW);
+
+                
+                // Unbind the array buffer.
+                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+                
+                // Allocate and fill the index buffer.
+                gl11.glGenBuffers(1, buffer, 0);
+                mIndexBufferIndex = buffer[0];
+                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 
+                        mIndexBufferIndex);
+                // A char is 2 bytes.
+                final int indexSize = mIndexBuffer.capacity()*2;
+                gl11.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indexSize, mIndexBuffer, 
+                        GL11.GL_STATIC_DRAW);
+                
+                // Unbind the element array buffer.
+                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+    			
+    			
+    			useHardwareBuffers=true;
+    		}
+    	} else {
+    		useHardwareBuffers=false;
+    	}
+    }
+    
     public void init(GL10 gl, float[] vertices, float[] texCoords, short[] indices)
     {
         // Buffers to be passed to gl*Pointer() functions
@@ -60,7 +121,8 @@ class Mesh
         //
         // Buffers with multi-byte datatypes (e.g., short, int, float)
         // must have their byte order set to native order
-
+    	
+    
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);
         vbb.order(ByteOrder.nativeOrder());
         mVertexBuffer = vbb.asFloatBuffer();
@@ -79,55 +141,7 @@ class Mesh
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
         
-        
-        if (gl instanceof GL11) {
-    		GL11 gl11=(GL11)gl;
-    		if (MyOpenGLView.isExtensionSupported(gl11,"GL_ANDROID_vertex_buffer_object") ||
-    				MyOpenGLView.isExtensionSupported(gl11,"GL_OES_vertex_buffer_object")) {
-    			
-                int[] buffer = new int[1];
-                
-                // Allocate and fill the vertex buffer.
-                gl11.glGenBuffers(1, buffer, 0);
-                mVertBufferIndex = buffer[0];
-                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertBufferIndex);
-                final int vertexSize = vertices.length*4; 
-                gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertexSize, 
-                        mVertexBuffer, GL11.GL_STATIC_DRAW);
-                
-                
-                // Allocate and fill the texture coordinate buffer.
-                gl11.glGenBuffers(1, buffer, 0);
-                mTextureCoordBufferIndex = buffer[0];
-                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 
-                        mTextureCoordBufferIndex);
-                final int texCoordSize = texCoords.length*4;
-                gl11.glBufferData(GL11.GL_ARRAY_BUFFER, texCoordSize, 
-                        mTexCoordBuffer, GL11.GL_STATIC_DRAW);
-
-                
-                // Unbind the array buffer.
-                gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-                
-                // Allocate and fill the index buffer.
-                gl11.glGenBuffers(1, buffer, 0);
-                mIndexBufferIndex = buffer[0];
-                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 
-                        mIndexBufferIndex);
-                // A char is 2 bytes.
-                final int indexSize = indices.length*2;
-                gl11.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indexSize, mIndexBuffer, 
-                        GL11.GL_STATIC_DRAW);
-                
-                // Unbind the element array buffer.
-                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-    			
-    			
-    			useHardwareBuffers=true;
-    		}
-    	} else {
-    		useHardwareBuffers=false;
-    	}
+        init(gl, mVertexBuffer, mTexCoordBuffer, mIndexBuffer);
     }
 
     public void draw(GL10 gl)
