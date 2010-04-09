@@ -83,4 +83,15 @@ public final class CommonFunctions {
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 		return tex[0];
 	}
+
+	public static int getIndexOfLevel(String level) {
+		for(int i=0; i<Constants.LEVELIDS.length; i++) {
+			if(Constants.LEVELIDS[i].equals(level))
+			{
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 }

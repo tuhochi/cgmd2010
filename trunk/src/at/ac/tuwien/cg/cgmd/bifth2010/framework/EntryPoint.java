@@ -9,11 +9,14 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import at.ac.tuwien.cg.cgmd.bifth2010.CommonFunctions;
 import at.ac.tuwien.cg.cgmd.bifth2010.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -44,13 +47,18 @@ public class EntryPoint extends Activity {
 
 	/** Called when the activity is first created.
 	 * Shows a splash screen 
-	 * Starts the framework service
 	 * Starts the Menu
 	 * */
 
 	private TextView mTextView = null;
-	EditText mEditTextHelpId = null;
-	EditText mEditTextLevelId = null;
+	//EditText mEditTextHelpId = null;
+	//EditText mEditTextLevelId = null;
+	
+	private ArrayAdapter<String> mLevelAdapter;
+	
+	Spinner mSpinnerLevel = null;
+	Spinner mSpinnerHelp = null;
+	
 	EditText mEditTextLevelId01 = null;
 	EditText mEditTextLevelId02 = null;
 	EditText mEditTextLevelId03 = null;
@@ -69,8 +77,25 @@ public class EntryPoint extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l00_debug);
-		mEditTextHelpId = (EditText) findViewById(R.id.l00_EditViewDebugHelpActivity);
-		mEditTextLevelId = (EditText) findViewById(R.id.l00_EditViewDebugLevelActivity);
+		
+		mLevelAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);        
+		mLevelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		for(int i=0; i<Constants.LEVELIDS.length; i++)
+		{
+			mLevelAdapter.add(Constants.LEVELIDS[i]);
+		}
+			
+		
+		mSpinnerLevel = (Spinner)findViewById(R.id.l00_SpinnerDebug); 
+		mSpinnerHelp = (Spinner)findViewById(R.id.l00_SpinnerHelp);
+		
+		mSpinnerLevel.setAdapter(mLevelAdapter);
+		mSpinnerHelp.setAdapter(mLevelAdapter);
+		
+		
+		
+		//mEditTextHelpId = (EditText) findViewById(R.id.l00_EditViewDebugHelpActivity);
+		//mEditTextLevelId = (EditText) findViewById(R.id.l00_EditViewDebugLevelActivity);
 		mEditTextLevelId01 = (EditText) findViewById(R.id.l00_EditViewDebugLevelActivity01);
 		mEditTextLevelId02 = (EditText) findViewById(R.id.l00_EditViewDebugLevelActivity02);
 		mEditTextLevelId03 = (EditText) findViewById(R.id.l00_EditViewDebugLevelActivity03);
@@ -87,7 +112,14 @@ public class EntryPoint extends Activity {
 			@Override
 			public void onClick(View v) {
 				int iHelp = -1; 
-				String sHelp = mEditTextHelpId.getText().toString();
+				//String sHelp = mEditTextHelpId.getText().toString();
+				long lId = mSpinnerHelp.getSelectedItemId();
+				String sHelp = "";
+				if(mLevelAdapter.getCount() > (int)lId) 
+				{
+					sHelp = mLevelAdapter.getItem((int)lId);
+				}
+				 
 				try{
 					iHelp = Integer.parseInt(sHelp);
 					if(iHelp<0){
@@ -122,7 +154,13 @@ public class EntryPoint extends Activity {
 			@Override
 			public void onClick(View v) {
 				int iLevel = -1; 
-				String sLevel = mEditTextLevelId.getText().toString();
+				//String sLevel = mEditTextLevelId.getText().toString();
+				long lId = mSpinnerLevel.getSelectedItemId();
+				String sLevel = "";
+				if(mLevelAdapter.getCount() > (int)lId) 
+				{
+					sLevel = mLevelAdapter.getItem((int)lId);
+				}
 				try{
 					iLevel = Integer.parseInt(sLevel);
 					if(iLevel<0){
@@ -226,20 +264,46 @@ public class EntryPoint extends Activity {
 		int iLevel5 = -1;
 		int iLevel6 = -1;
 
-		String sHelp = mEditTextHelpId.getText().toString();
+	
+
+		long lLevelIndex = mSpinnerLevel.getSelectedItemId();
+		long lHelpIndex = mSpinnerHelp.getSelectedItemId();
+		
+		String sLevel = "00" ;			
+		if(lLevelIndex<mLevelAdapter.getCount()){
+			sLevel = mLevelAdapter.getItem((int)lLevelIndex);
+		}
+		
+		try{
+			iLevel = Integer.parseInt(sLevel);
+		} catch (NumberFormatException e){
+
+		}
+		
+		String sHelp = "00" ;			
+		if(lHelpIndex<mLevelAdapter.getCount()){
+			sHelp = mLevelAdapter.getItem((int)lHelpIndex);
+		}
+		
 		try{
 			iHelp = Integer.parseInt(sHelp);
 		} catch (NumberFormatException e){
 
 		}
 
+		/*String sHelp = mEditTextHelpId.getText().toString();
+		try{
+			iHelp = Integer.parseInt(sHelp);
+		} catch (NumberFormatException e){
 
-		String sLevel = mEditTextLevelId.getText().toString();
+		}*/
+
+		/*String sLevel = mEditTextLevelId.getText().toString();
 		try{
 			iLevel = Integer.parseInt(sLevel);
 		} catch (NumberFormatException e){
 
-		}
+		}*/
 		String sLevel1 = mEditTextLevelId01.getText().toString();
 		try{
 			iLevel1 = Integer.parseInt(sLevel1);
@@ -330,10 +394,24 @@ public class EntryPoint extends Activity {
 		int iLevel06 = settings.getInt(PREFERENCE_LEVEL_06, -1);
 
 		if(iHelp>=0) {
-			mEditTextHelpId.setText(String.valueOf(iHelp));
+			String sHelp = String.valueOf(iHelp);
+			int iIndex = (int) CommonFunctions.getIndexOfLevel(sHelp);
+			if((iIndex>0) && (iIndex<mLevelAdapter.getCount())) {
+				mSpinnerHelp.setSelection(iIndex);
+			} else {
+				mSpinnerHelp.setSelection(0);
+			}
+			//mEditTextHelpId.setText();
 		}
 		if(iLevel>=0) {
-			mEditTextLevelId.setText(String.valueOf(iLevel));
+			String sLevel = String.valueOf(iLevel);
+			int iIndex = (int) CommonFunctions.getIndexOfLevel(sLevel);
+			if((iIndex>0) && (iIndex<mLevelAdapter.getCount())) {
+				mSpinnerLevel.setSelection(iIndex);
+			} else {
+				mSpinnerLevel.setSelection(0);
+			}
+			//mEditTextLevelId.setText(String.valueOf(iLevel));
 		}
 		if(iLevel01>=0) {
 			mEditTextLevelId01.setText(String.valueOf(iLevel01));
