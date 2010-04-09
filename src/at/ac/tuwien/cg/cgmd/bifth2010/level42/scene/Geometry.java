@@ -25,10 +25,15 @@ public class Geometry
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
 	private final int numVertices;
-	private final int vboID;
+	private final int nrOfVertexBytes;
+	private final int nrOfNormalBytes;
+	private final int nrOfTexcoordBytes;
+	
+	private int vboID;
 	private final int vertexOffset;
 	private final int normalOffset;
 	private final int texcoordOffset;
+	private boolean initialized;
 	
 	public Geometry(Material material, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, Sphere boundingSphere, int numVertices)
 	{
@@ -39,51 +44,73 @@ public class Geometry
 		this.boundingBox = boundingBox;
 		this.boundingSphere = boundingSphere;
 		this.numVertices = numVertices;
+		initialized = false;
 		
-		if(Config.GLES11)
+		nrOfVertexBytes = numVertices*VERTEX_LENGTH*4;
+		nrOfNormalBytes = numVertices*VERTEX_LENGTH*4;
+		nrOfTexcoordBytes = numVertices*TEXCOORD_LENGTH*4;
+		
+		// calculate vbo offsets
+		int currentoffset = 0;
+		if(vertices != null)
 		{
-			int[] buffers = new int[1];
-			GLES11.glGenBuffers(1, buffers, 0);
-			vboID = buffers[0];
-			oglManager.bindVBO(vboID);
-			int datasize = ((vertices != null ? numVertices*VERTEX_LENGTH : 0) + (normals != null ? numVertices*VERTEX_LENGTH : 0) + (texcoords != null ? numVertices*TEXCOORD_LENGTH : 0))*4;
-			GLES11.glBufferData(GLES11.GL_ARRAY_BUFFER, datasize, null, GLES11.GL_STATIC_DRAW);
-			int currentoffset = 0;
-			if(vertices != null)
-			{
-				int size = numVertices*VERTEX_LENGTH*4;
-				GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, currentoffset, size, vertices);
-				vertexOffset = currentoffset;
-				currentoffset += size;
-			}
-			else
-				vertexOffset = 0;
-			if(normals != null)
-			{
-				int size = numVertices*VERTEX_LENGTH*4;
-				GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, currentoffset, size, normals);
-				normalOffset = currentoffset;
-				currentoffset += size;
-			}
-			else
-				normalOffset = 0;
-			if(texcoords != null)
-			{
-				int size = numVertices*TEXCOORD_LENGTH*4;
-				GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, currentoffset, size, texcoords);
-				texcoordOffset = currentoffset;
-				currentoffset += size;
-			}
-			else
-				texcoordOffset = 0;
+			vertexOffset = currentoffset;
+			currentoffset += nrOfVertexBytes;
 		}
 		else
-		{
-			vboID = 0;
 			vertexOffset = 0;
-			normalOffset = 0;
-			texcoordOffset = 0;
+		
+		if(normals != null)
+		{
+			normalOffset = currentoffset;
+			currentoffset += nrOfNormalBytes;
 		}
+		else
+			normalOffset = 0;
+		
+		if(texcoords != null)
+		{
+			texcoordOffset = currentoffset;
+			currentoffset += nrOfTexcoordBytes;
+		}
+		else
+			texcoordOffset = 0;
+	}
+	
+	void init()
+	{
+		if(!initialized)
+		{
+			if(Config.GLES11)
+			{
+				int[] buffers = new int[1];
+				GLES11.glGenBuffers(1, buffers, 0);
+				vboID = buffers[0];
+				oglManager.bindVBO(vboID);
+				int datasize = ((vertices != null ? numVertices*VERTEX_LENGTH : 0) + (normals != null ? numVertices*VERTEX_LENGTH : 0) + (texcoords != null ? numVertices*TEXCOORD_LENGTH : 0))*4;
+				GLES11.glBufferData(GLES11.GL_ARRAY_BUFFER, datasize, null, GLES11.GL_STATIC_DRAW);
+				
+				if(vertices != null)
+					GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, vertexOffset, nrOfVertexBytes, vertices);
+				
+				if(normals != null)
+					GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, normalOffset, nrOfNormalBytes, normals);
+				
+				if(texcoords != null)
+					GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, texcoordOffset, nrOfTexcoordBytes, texcoords);
+			}
+			
+			material.init();
+			
+			initialized = true;
+		}
+	}
+	
+	void deInit()
+	{
+		initialized = false;
+		
+		material.deInit();
 	}
 	
 	public void persist(DataOutputStream dos)

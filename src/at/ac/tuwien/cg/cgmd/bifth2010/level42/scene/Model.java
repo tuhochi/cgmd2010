@@ -27,6 +27,7 @@ public class Model implements Moveable
 	private final Sphere boundingSphereWorld;
 	private ArrayList<Pair<Vector3, Model>> distances;
 	private Motion motion;
+	private boolean initialized;
 	
 	public Model()
 	{
@@ -36,6 +37,30 @@ public class Model implements Moveable
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
 		distances = new ArrayList<Pair<Vector3,Model>>();
+		initialized = false;
+	}
+	
+	void init()
+	{
+		if(!initialized)
+		{
+			ArrayList<Geometry> geometries = this.geometries;
+			int size = geometries.size();
+			for(int i=0; i<size; i++)
+				geometries.get(i).init();
+			
+			initialized = true;
+		}
+	}
+	
+	void deInit()
+	{
+		initialized = false;
+		
+		ArrayList<Geometry> geometries = this.geometries;
+		int size = geometries.size();
+		for(int i=0; i<size; i++)
+			geometries.get(i).deInit();
 	}
 	
 	public void persist(DataOutputStream dos) throws IOException
