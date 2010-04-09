@@ -7,4 +7,5 @@ public interface Moveable {
 	public void setMotion(Motion motion); 
 	public Matrix44 getBasicOrientation();
 	public void setTransformation(Matrix44 transform);
+	public Matrix44 getTransformation();
 }

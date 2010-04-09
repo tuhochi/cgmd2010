@@ -13,7 +13,7 @@ public class DirectionalMotion extends Motion
 	private final Vector3 directionVec,currentPos,tempDirectionVec;
 	private float speed;
 	private SatelliteTransformation satTrans;
-	private final Matrix44 transform;
+	private Matrix44 transform;
 	
 	public DirectionalMotion(Vector3 startPos,Vector3 directionVec,float speed)
 	{
@@ -81,7 +81,8 @@ public class DirectionalMotion extends Motion
 		this.speed = dis.readFloat();
 		
 		if(dis.readBoolean()){
-			this.satTrans = SatelliteTransformation.restore(dis,dis.readUTF());
+			String className = dis.readUTF();
+			this.satTrans = SatelliteTransformation.restore(dis,className);
 		}
 	}
 	
@@ -94,5 +95,10 @@ public class DirectionalMotion extends Motion
 	@Override
 	public Vector3 getCurrDirectionVec() {
 		return directionVec;
+	}
+
+	@Override
+	public void setTransform(Matrix44 transform) {
+		this.transform = transform;
 	}
 }

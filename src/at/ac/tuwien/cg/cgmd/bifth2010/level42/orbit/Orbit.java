@@ -34,7 +34,8 @@ public class Orbit extends Motion
 							currtDirApproximation,tempDirectionVec,
 							refDirectionVec,refCenterVec;
 
-	private final Matrix44 transform,basicOrientation;
+	private Matrix44 transform;
+	private final Matrix44  basicOrientation;
 	private SatelliteTransformation satTrans;
 	private Ellipse ellipse;
 	
@@ -354,11 +355,14 @@ public class Orbit extends Motion
 		directionVec.restore(dis);
 		basicOrientation.restore(dis);
 		
+		if(dis.readBoolean()){
+			String className = dis.readUTF();
+			satTrans = SatelliteTransformation.restore(dis,className);
+		}
+		
 		ellipse = new Ellipse(centerPos,centerVec,directionVec);
 		
-		if(dis.readBoolean()){
-			satTrans = SatelliteTransformation.restore(dis,dis.readUTF());
-		}
+		
 	}
 
 	@Override
@@ -372,5 +376,10 @@ public class Orbit extends Motion
 		currtDirApproximation.copy(ellipse.getPoint(u+step));
 		currtDirApproximation.subtract(position);
 		return currtDirApproximation;
+	}
+
+	@Override
+	public void setTransform(Matrix44 transform) {
+		this.transform = transform;		
 	}
 }

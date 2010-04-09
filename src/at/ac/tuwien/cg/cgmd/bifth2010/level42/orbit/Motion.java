@@ -17,6 +17,7 @@ public abstract class Motion implements Persistable
 	 */
 	public abstract void update(float dt);
 	public abstract Matrix44 getTransform();
+	public abstract void setTransform(Matrix44 transform);
 	public abstract void setSatTrans(SatelliteTransformation satTrans);
 	public abstract SatelliteTransformation getSatTrans();
 	public abstract Vector3 getCurrDirectionVec();

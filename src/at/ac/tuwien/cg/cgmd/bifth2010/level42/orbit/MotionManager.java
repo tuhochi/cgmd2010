@@ -26,11 +26,9 @@ public class MotionManager {
 		int index = list.indexOf(entity);
 		if(index==-1){
 			entity.setMotion(motion);	
-			entity.setTransformation(motion.getTransform());
 			motion.setSatTrans(new VecAxisTransformation(Constants.Y_AXIS,1,null));
+			motion.setTransform(entity.getTransformation());
 			list.add(entity);
-		}else{
-			//transform motion
 		}
 	}
 	
@@ -52,6 +50,11 @@ public class MotionManager {
 			tempEntity = list.get(i);
 			tempEntity.getMotion().update(dt);
 		}
+	}
+	
+	public void reset()
+	{
+		list.clear();
 	}
 	
 	public void changeSatelliteTransformation(Moveable entity,Vector3 directionVec,Vector3 pushVec)
@@ -85,7 +88,7 @@ public class MotionManager {
 		
 		for(int i=0;i<scene.sceneEntities.size();i++){
 			entity = scene.sceneEntities.get(i);
-			if(entity.getName().indexOf("Satellite_")>=0){
+			if(entity.getName().startsWith("Satellite_")){
 				
 				//generate random setup
 				
