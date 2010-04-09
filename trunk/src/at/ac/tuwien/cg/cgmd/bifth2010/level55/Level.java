@@ -40,6 +40,11 @@ public class Level {
 		return frontLayer.changeCoinState(x, y);
 	}
 	
+	public int getTypeAt(int x, int y) {
+		return frontLayer.tiles_vector[x][y];
+	}
+	
+	
 	public void setPosition(float x, float y) {
 		frontLayer.posX=x;
 		frontLayer.posY=y;
