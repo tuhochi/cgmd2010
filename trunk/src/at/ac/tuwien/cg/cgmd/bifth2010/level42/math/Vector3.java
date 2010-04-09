@@ -4,8 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public class Vector3
+
+public class Vector3 implements Persistable
 {
 	public float x,y,z;
 	

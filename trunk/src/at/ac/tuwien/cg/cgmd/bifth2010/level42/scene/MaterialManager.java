@@ -17,6 +17,7 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 public class MaterialManager
 {
@@ -107,7 +108,7 @@ public class MaterialManager
 		}
 	}
 	
-	public class Material
+	public class Material implements Persistable
 	{
 		private final String name;
 		private final Color4 ambient;

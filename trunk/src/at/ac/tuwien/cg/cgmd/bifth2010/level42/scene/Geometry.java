@@ -12,8 +12,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public class Geometry
+public class Geometry implements Persistable
 {
 	public static final int VERTEX_LENGTH = 3;
 	public static final int TEXCOORD_LENGTH = 2;

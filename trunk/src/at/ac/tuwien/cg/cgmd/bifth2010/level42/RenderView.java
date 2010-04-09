@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import static android.opengl.GLES10.*;
 
-import java.io.DataInputStream;
 import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -19,11 +18,9 @@ import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
@@ -38,13 +35,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private static final float LIGHT_AMBIENT[] = {0.5f,0.5f,0.5f,1.0f};
 	private static final float LIGHT_DIFFUSE[] = {0.9f,0.9f,0.9f,1.0f};
 	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,0.0f,1.0f};
-	private static final String EXTENSIONS[] = {};
 	
 	private final LevelActivity context;
 	private OGLManager oglManager = OGLManager.instance;
 	private MaterialManager materialManager = MaterialManager.instance;
 	public Scene scene;
-	public DataInputStream sceneStateFile;
 	public final Camera cam;
 	private final TimeManager timer = TimeManager.instance; 
 	private final MotionManager motionManager = MotionManager.instance;
@@ -75,6 +70,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		//init temp vars
 		selectionDirection = new Vector3();
+		
+		scene = SceneLoader.getInstance().readScene("l42_cubeworld");
+		motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,2,10);
+		collManager = new CollisionManager(scene);
 	}
 	
 	private void initGLSettings()
@@ -101,66 +100,18 @@ public class RenderView extends GLSurfaceView implements Renderer
 	{
 		Log.v(LevelActivity.TAG,"onSurfaceCreated(" + gl + ", " + config + ")");
 		
-		// reset managers
+		// reset everything
 		oglManager.reset();
 		materialManager.reset();
-		synchronizer.reset();
 		timer.reset();
+		scene.deInit();
 		
 		// check for GLES11
 		boolean gles11 = (gl instanceof GL11);
 		Config.GLES11 = gles11;
 		Log.i(LevelActivity.TAG, "OpenGL ES " + (gles11 ? "1.1" : "1.0") + " found!");
 		
-		String extensions = glGetString(GL_EXTENSIONS);
-//		Log.i(LevelActivity.TAG, "Supported Extensions: " + extensions);
-		
-		// check for needed extensions if OpenGL ES 1.1 is not available
-		if(!gles11)
-		{
-			boolean supported = true;
-			for(int i=0; i<EXTENSIONS.length && supported; i++)
-				supported &= extensions.contains(EXTENSIONS[i]);
-			if(!supported)
-			{
-				Log.e(LevelActivity.TAG, "Your phone does not support all required OpenGL extensions needed for playing this level.");
-				/*
-				 * TODO: Show some kind of warning and exit
-				 */
-			}
-		}
-		
 		initGLSettings();
-		
-		/*
-		 * Dummy Test Scene
-		 */
-		scene = SceneLoader.getInstance().readScene("l42_cubeworld");
-		
-		// restore scene state
-		if(sceneStateFile != null)
-		{
-			try
-			{
-				cam.restore(sceneStateFile);
-				scene.restore(sceneStateFile);
-				sceneStateFile.close();
-			}
-			catch (Throwable t)
-			{
-				Log.e(LevelActivity.TAG, "Failed to restore scene state", t);
-			}
-			sceneStateFile = null;
-		}
-		else
-		{
-			/*
-			 * Default Motion initialization goes here!
-			 */
-			motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,2,10);
-		}
-		
-		collManager = new CollisionManager(scene);
 		
 		new Thread(new Runnable()
 		{

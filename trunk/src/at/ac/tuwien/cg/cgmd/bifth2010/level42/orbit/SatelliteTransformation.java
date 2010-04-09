@@ -6,8 +6,10 @@ import java.io.IOException;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public class SatelliteTransformation {
+public class SatelliteTransformation implements Persistable
+{
 
 	private float 	qx,qy,qz,
 					qxStep,qyStep,qzStep,
