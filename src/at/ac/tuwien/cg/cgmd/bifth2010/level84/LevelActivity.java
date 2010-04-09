@@ -41,7 +41,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	}
 
 	private void loadModels() {
-		models.add(new Model());
+		models.add(new ModelQuad(R.drawable.l00_coin));
 	}
 
 	@Override
