@@ -5,7 +5,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;

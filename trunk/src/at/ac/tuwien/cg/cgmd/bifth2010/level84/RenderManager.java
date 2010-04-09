@@ -19,72 +19,58 @@ public class RenderManager implements Renderer {
 
 	private Activity context;
 	private List<Model> models;
-	private Date time = new Date();
-	private double lastTime = 0.0;
+	private long lastTime = 0;
 	float rotation = 4.0f;
 	
 	private TextView tfFps;
 	private int fps = 0;
 	
-	public RenderManager(Activity context, List<Model> models)
-	{
+	/** Handler for FPS timer */
+	private Handler updateFps = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			tfFps.setText(fps + " FPS");
+			fps = 0;
+		}
+	};
+	
+	public RenderManager(Activity context, List<Model> models) {
 		this.context = context;
 		this.models = models;
-		this.tfFps = (TextView)context.findViewById(R.id.l84_TfFps);
-		
+		this.tfFps = (TextView) context.findViewById(R.id.l84_TfFps);
+
 		Timer fpsUpdateTimer = new Timer();
-	 	fpsUpdateTimer.schedule(new TimerTask() {
-	 		
-	 		@Override
-	 		public void run() {
-	 			//FPSCounter counter = FPSCounter.getInstance();
-	 			//fpsString = "fps: " + counter.getFPS();
-	 		handleUIChanges.sendEmptyMessage(0);
-	 		}
-	 	}, 1000, 3000);
+		fpsUpdateTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				updateFps.sendEmptyMessage(0);
+			}
+		}, 1000, 1000);
 	}
 	
-	 private Handler handleUIChanges = new Handler() {
-		 @Override
-		 public void handleMessage(Message msg) {
-			 super.handleMessage(msg);
-			 tfFps.setText(fps + " FPS");
-		 }
-	   };
-	
 	/**
-	 * main draw method
+	 * Main draw method. Updates and renders all available models.
 	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
-		double deltaTime = time.getTime() - lastTime;
+		Date time = new Date();
+		long currentTime = time.getTime();
+		double deltaTime = (double)(currentTime - lastTime) / 1000.0;
 		lastTime = time.getTime();
 		
-		fps = (int)(1.0/deltaTime);
-		//TODO: Fette FPS Anzeige.
-		//tfFps.setText((1.0 / deltaTime) + " FPS");
+		fps++;
 		
 		gl.glLoadIdentity();
-		gl.glTranslatef(0, 0, -4);
-		gl.glPushMatrix();
 		
-		if (rotation > 360.0f)
-			rotation = 0;
-		
-		gl.glRotatef(rotation, 0.0f, 1.0f, 0.0f);
-		rotation += 10.0f;
-
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext()) {
 			Model m = i.next();
-			m.update(deltaTime);
+			m.update(gl, deltaTime);
 			m.draw(gl);
 		}
-		gl.glPopMatrix();
-		
-		
 	}
 
 	/**

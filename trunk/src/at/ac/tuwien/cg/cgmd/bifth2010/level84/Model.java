@@ -11,8 +11,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
-import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.*;
 
 /**
  * Baseclass for all OpenGL models.
@@ -33,6 +33,9 @@ public class Model {
 	protected int[] textures = new int[1];
 	/** Texture resource */
 	protected int textureResource = -1;
+	
+	/** Transformation matrix */
+	protected Matrix4x4 mTrans = new Matrix4x4();
 
 	/**
 	 * Creates a new model.
@@ -53,10 +56,8 @@ public class Model {
 	 * Updates the model's transformation(s).
 	 * @param deltaTime
 	 */
-	public void update(double deltaTime) {
-//		TextView tf = (TextView) findViewByI(R.id.l84_TfFps);
-//		tf.setText(text);
-//		System.out.println("timepassed: " + deltaTime);
+	public void update(GL10 gl, double deltaTime) {
+		gl.glPushMatrix();
 	}
 	
 	/**
@@ -87,6 +88,8 @@ public class Model {
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		}
+		
+		gl.glPopMatrix();
 	}
 	
 	/**
