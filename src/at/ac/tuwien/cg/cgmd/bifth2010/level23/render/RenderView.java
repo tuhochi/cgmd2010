@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL11;
 import android.content.Context;
 import android.opengl.GLES10;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -127,6 +128,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		Log.v("RenderView.java", "onSurfaceChanged");
 		//setup the Viewport with an Orthogonal View 1 unit = 1 pixel
 		//0 0 is bottom left
 		
@@ -148,6 +150,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{	
+		Log.v("RenderView.java", "onSurfaceCreated");
 		setupGL(gl);
 		
 		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();

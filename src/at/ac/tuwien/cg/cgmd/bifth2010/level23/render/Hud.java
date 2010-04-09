@@ -13,6 +13,7 @@ public class Hud
 	private Button moneyButton;
 	
 	private TimerTask burnTask;
+	private TimeUtil timeUtil; 
 	
 	private class BurnTimer extends TimerTask
 	{
@@ -22,6 +23,7 @@ public class Hud
 		{
 			Settings.BALLOON_SPEED -= Settings.BURN_BOOST;
 			moneyButton.setActive(true);
+			timeUtil.cancelTimer();
 		}
 		
 	}
@@ -33,6 +35,7 @@ public class Hud
 		goldButton = new Button(10, 10, new Vector2(0,topBounds-10));
 		moneyButton = new Button(10, 10, new Vector2(rightBounds-10,topBounds-10));
 		burnTask = new BurnTimer();
+		timeUtil = TimeUtil.getInstance();
 	}
 	
 	public boolean testPressed(float x, float y)
@@ -47,7 +50,7 @@ public class Hud
 		{
 			moneyButton.setActive(false);
 			Settings.BALLOON_SPEED += Settings.BURN_BOOST;
-			TimeUtil.getInstance().scheduleTimer(burnTask, Settings.BURN_BOOST_TIME);
+			timeUtil.scheduleTimer(new BurnTimer(), Settings.BURN_BOOST_TIME);
 			return true;
 		}
 		
