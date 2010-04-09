@@ -133,6 +133,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 * Persist scene entities to disk.
 	 */
 	public void persistSceneEntities() {
+		textureManager.reset();
 		Serializer.getInstance().serializeObjects(mainChar, background);
 	}
 	

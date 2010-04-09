@@ -35,6 +35,11 @@ public class TextureManager {
 		instance = this; 
 	}
 	
+	public void reset()
+	{
+		textureMap.clear();
+	}
+	
 	public void loadTexture(Resources res, int resId) {
 		// thx to lvl17
 		

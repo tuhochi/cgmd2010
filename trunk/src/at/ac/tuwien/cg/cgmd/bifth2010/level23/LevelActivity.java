@@ -184,7 +184,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		menu.add(0, SENSOR_MENU_ITEM, 0, "Sensor On/Off");
+		menu.add(0, SENSOR_MENU_ITEM, 0, "Turn on Sensor");
 	    return true;
 	}
 	
@@ -197,7 +197,12 @@ public class LevelActivity extends Activity implements OrientationListener {
 	    switch (item.getItemId()) 
 	    {
 	    case SENSOR_MENU_ITEM:
+	    	if(renderer.isUseSensor())
+	    		item.setTitle("Turn on Sensor");
+	    	else
+	    		item.setTitle("Turn off Sensor");
 	        renderer.switchSensor();
+	        
 	        return true;
 
 	    }
