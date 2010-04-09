@@ -82,23 +82,27 @@ public class Camera implements Persistable
 		glLoadMatrixf(modelview.getArray16(), 0);
 	}
 	
-	public void setMousePosition(float x, float y)
+	public void setMouseDiff(float xDiff, float yDiff)
 	{
-		//calc difference to last position
-		float diffx = lastPosition[0]-x;
-		float diffy = lastPosition[1]-y;
-		//store last position
-		lastPosition[0] = x;
-		lastPosition[1] = y;
 		//set new desired angle 
-		azimuth += motionFactor * 30 * diffx;
-		altitude += motionFactor * 30 * diffy;
+		azimuth += motionFactor * 15 * xDiff;
+		altitude += motionFactor * 15 * yDiff;
 		
 		if(altitude>=maxAltitude)
 			altitude = maxAltitude;
 		if(altitude<=minAltitude)
 			altitude = minAltitude;
-		
+	}
+	
+	public void setMousePosition(float x, float y)
+	{
+		//calc difference to last position
+		float xDiff = lastPosition[0]-x;
+		float yDiff = lastPosition[1]-y;
+		//store last position
+		lastPosition[0] = x;
+		lastPosition[1] = y;
+		setMouseDiff(xDiff, yDiff);
 	}
 	
 	public float getDistance()
