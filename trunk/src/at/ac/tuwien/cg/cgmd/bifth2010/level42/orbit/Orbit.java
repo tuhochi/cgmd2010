@@ -314,6 +314,13 @@ public class Orbit extends Motion
 		centerVec.persist(dos);
 		directionVec.persist(dos);
 		basicOrientation.persist(dos);
+		
+		if(satTrans != null){
+			dos.writeBoolean(true);
+			dos.writeUTF(satTrans.getClass().getName());
+			this.satTrans.persist(dos);
+		}else
+			dos.writeBoolean(false);
 	}
 
 	@Override
@@ -348,5 +355,22 @@ public class Orbit extends Motion
 		basicOrientation.restore(dis);
 		
 		ellipse = new Ellipse(centerPos,centerVec,directionVec);
+		
+		if(dis.readBoolean()){
+			satTrans = SatelliteTransformation.restore(dis,dis.readUTF());
+		}
+	}
+
+	@Override
+	public SatelliteTransformation getSatTrans() {
+		return satTrans;
+	}
+
+	@Override
+	public Vector3 getCurrDirectionVec() {
+		//approx current direction vec
+		currtDirApproximation.copy(ellipse.getPoint(u+step));
+		currtDirApproximation.subtract(position);
+		return currtDirApproximation;
 	}
 }

@@ -4,92 +4,42 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public class SatelliteTransformation implements Persistable
-{
-
-	private float 	qx,qy,qz,
-					qxStep,qyStep,qzStep,
-					qxCurr,qyCurr,qzCurr;
-	private final Matrix44 transform;
-
-	public SatelliteTransformation() 
-	{
-		this.transform = new Matrix44();
-	}
+public abstract class SatelliteTransformation implements Persistable{
 	
-	public SatelliteTransformation(float qx, float qy, float qz) 
-	{
-		this();
-		
-		this.qx = (float)Math.toRadians(qx);
-		this.qy = (float)Math.toRadians(qy);
-		this.qz = (float)Math.toRadians(qz);
+	public abstract void update(float dt,float speed);
 
-		this.qxStep = qx*Constants.TWOPI/100;
-		this.qyStep = qy*Constants.TWOPI/100;
-		this.qzStep = qz*Constants.TWOPI/100;
-		
-		this.qxCurr = 0;
-		this.qyCurr = 0;
-		this.qzCurr = 0;
-	}
+	public abstract Matrix44 getTransform();
 	
-	public void update(float dt,float speed)
-	{
-		qxCurr += dt*qxStep*speed;
-		qyCurr += dt*qyStep*speed;
-		qzCurr += dt*qzStep*speed;
-		
-		if(qxCurr>=Constants.TWOPI)
-			qxCurr-=Constants.TWOPI;
-		if(qyCurr>=Constants.TWOPI)
-			qyCurr-=Constants.TWOPI;
-		if(qzCurr>=Constants.TWOPI)
-			qzCurr-=Constants.TWOPI;
-		
-		transform.setIdentity();
-		transform.addRotateX(qxCurr);
-		transform.addRotateY(qyCurr);
-		transform.addRotateZ(qzCurr);
-		
-	}
+	public abstract void persist(DataOutputStream dos) throws IOException;
+	
+	public abstract void restore(DataInputStream dis) throws IOException;
+	
+	public abstract Matrix44 getBasicOrientaion();
+	
+	public abstract void setBasicOrientaion(Matrix44 orientation);
 
-	public Matrix44 getTransform() {
-		return transform;
-	}	
-	
-	
-	public void persist(DataOutputStream dos) throws IOException
+	public static SatelliteTransformation restore(DataInputStream dis, String className)
 	{
-		dos.writeFloat(qx);
-		dos.writeFloat(qy);
-		dos.writeFloat(qz);
-		
-		dos.writeFloat(qxStep);
-		dos.writeFloat(qyStep);
-		dos.writeFloat(qzStep);
-
-		dos.writeFloat(qxCurr);
-		dos.writeFloat(qyCurr);
-		dos.writeFloat(qzCurr);
-	}
-	
-	public void restore(DataInputStream dis) throws IOException
-	{
-		this.qx = dis.readFloat();
-		this.qy = dis.readFloat();
-		this.qz = dis.readFloat();
-		
-		this.qxStep = dis.readFloat();
-		this.qyStep = dis.readFloat();
-		this.qzStep = dis.readFloat();
-
-		this.qxCurr = dis.readFloat();
-		this.qyCurr = dis.readFloat();
-		this.qzCurr = dis.readFloat();
+		try
+		{
+			Class<?> c = Class.forName(className);
+			SatelliteTransformation m = (SatelliteTransformation)c.newInstance();
+			m.restore(dis);
+			/*
+			 * TODO: uncomment the following line!
+			 */
+			return m;
+		}
+		catch (Throwable t)
+		{
+			Log.e(LevelActivity.TAG, "Could not restore Motion (no default constructor?)", t);
+		}
+		return null;
 	}
 }

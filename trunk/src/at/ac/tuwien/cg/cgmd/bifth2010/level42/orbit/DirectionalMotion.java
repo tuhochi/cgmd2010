@@ -67,6 +67,7 @@ public class DirectionalMotion extends Motion
 		
 		if(satTrans != null){
 			dos.writeBoolean(true);
+			dos.writeUTF(satTrans.getClass().getName());
 			this.satTrans.persist(dos);
 		}else
 			dos.writeBoolean(false);
@@ -80,8 +81,18 @@ public class DirectionalMotion extends Motion
 		this.speed = dis.readFloat();
 		
 		if(dis.readBoolean()){
-			this.satTrans = new SatelliteTransformation();
-			this.satTrans.restore(dis);
+			this.satTrans = SatelliteTransformation.restore(dis,dis.readUTF());
 		}
+	}
+	
+
+	@Override
+	public SatelliteTransformation getSatTrans() {
+		return satTrans;
+	}
+
+	@Override
+	public Vector3 getCurrDirectionVec() {
+		return directionVec;
 	}
 }

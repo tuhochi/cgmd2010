@@ -25,8 +25,9 @@ public class MotionManager {
 	{
 		int index = list.indexOf(entity);
 		if(index==-1){
-			entity.setMotion(motion);
-			motion.setSatTrans(new SatelliteTransformation(0,0,0));
+			entity.setMotion(motion);	
+			entity.setTransformation(motion.getTransform());
+			motion.setSatTrans(new VecAxisTransformation(Constants.Y_AXIS,1,null));
 			list.add(entity);
 		}else{
 			//transform motion
@@ -50,7 +51,22 @@ public class MotionManager {
 		{
 			tempEntity = list.get(i);
 			tempEntity.getMotion().update(dt);
-			tempEntity.setTransformation(tempEntity.getMotion().getTransform());
+		}
+	}
+	
+	public void changeSatelliteTransformation(Moveable entity,Vector3 directionVec,Vector3 pushVec)
+	{
+		Vector3 axis = Vector3.crossProduct(directionVec, pushVec);
+		axis.normalize();
+		SatelliteTransformation satTrafo = entity.getMotion().getSatTrans();
+		VecAxisTransformation vecSatTrafo;
+		
+		if(satTrafo!=null && satTrafo instanceof VecAxisTransformation){
+			vecSatTrafo = (VecAxisTransformation)satTrafo;
+			Matrix44 temp = new Matrix44(vecSatTrafo.getTransform());
+			vecSatTrafo.setBasicOrientaion(temp);
+			vecSatTrafo.axis.copy(axis);
+			vecSatTrafo.qv = 5;
 		}
 	}
 	
@@ -61,13 +77,11 @@ public class MotionManager {
 										int minDistance,int maxDistance	)
 	{
 		Matrix44 rotation = new Matrix44();
-		Matrix44 orientation = new Matrix44();
 		SceneEntity entity = null;
 		Random rand = new Random();
 		Vector3 a = new Vector3();
 		Vector3 b = new Vector3();
 		Vector3 center = new Vector3(0,0,0);
-		Vector3 translate = new Vector3();
 		
 		for(int i=0;i<scene.sceneEntities.size();i++){
 			entity = scene.sceneEntities.get(i);
@@ -83,14 +97,10 @@ public class MotionManager {
 				rotation.addRotateZ((float)rand.nextDouble()*maxQz + minQz);
 				rotation.transformPoint(a);
 				rotation.transformPoint(b);
-				
-				orientation.copy(entity.getTransformation());
-				translate.copy(entity.getBoundingSphereWorld().center);
-				orientation.addTranslate(-translate.x,-translate.y, -translate.z);
-				//TODO: basicorientation
+
 				addMotion(	new Orbit(	a,center,b,
 										(float)rand.nextDouble()*maxSpeed + minSpeed,
-										null),
+										entity.getBasicOrientation()),
 							entity);
 			}
 		}
