@@ -16,44 +16,92 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
 
-//just testing stuff, very primitive version
+/**
+ * The Class ObstacleManager manages all obstacles in different size and position.
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class ObstacleManager 
 {
+	
+	/** The instance of ObstacleManager to pass around. */
 	private static ObstacleManager instance;
+	
+	/** The array filled with random numbers. */
 	private int[] randomArray; 
+	
+	/** The random generator. */
 	private Random randomGenerator;
 	
 	//current position for generating obstacle, 80 = start position
+	/** The current position to start generationg obstacles. */
 	private int currentPosition = 80;
 	
 	//lowest index of a visible obstacle in obstacles list
+	/** The least rendered obstacle. */
 	private int leastRenderedObstacle;
 	
+	/** The number of obstacles to be rendered. */
 	public final int NR_OF_OBSTACLES = 50;
 	
+	/** The constant for obstacle type 1  */
 	public final int OBSTACLE_TYPE1 = 1;
+	
+	/** The constant for obstacle type 2 */
 	public final int OBSTACLE_TYPE2 = 2;
+	
+	/** The constant for obstacle type 3 */
 	public final int OBSTACLE_TYPE3 = 3;
+	
+	/** the constant for obstacle type 4. */
 	public final int OBSTACLE_TYPE4 = 4;
 	
-	//in numbers per 100, must sum up to 100
+	//in numbers per 100, must sum up to 10
+	/** The probability for obstacle type 1. */
 	public final static int TYPE1_PROB = 25;
+	
+	/** The probability for obstacle type 2. */
 	public final static int TYPE2_PROB = 25;
+	
+	/** The probability for obstacle type 3. */
 	public final static int TYPE3_PROB = 25;
+	
+	/** The probability for obstacle type 4. */
 	public final static int TYPE4_PROB = 25;
 	
 	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
+	/** The Constant HORIZONTAL_SPACING to define the horizontal spacing between obstacles. */
 	public final static int HORIZONTAL_SPACING = 100;
 	
+	/** The main char. */
 	private MainChar mainChar;
 	
+	/**
+	 * The Class Obstacle represents one single obstacle
+	 * @author Markus Ernst
+	 * @author Florian Felberbauer
+	 */
 	public class Obstacle
 	{	
+		
+		/** The width. */
 		public int width;
+		
+		/** The height. */
 		public int height;
+		
+		/** The position. */
 		public Vector2 position;
+		
+		/** The type. */
 		public int type;
 		
+		/**
+		 * Instantiates a new obstacle.
+		 *
+		 * @param y the y position of the obtacle
+		 * @param type the type (1-4) 
+		 */
 		public Obstacle(int y, int type)
 		{
 			position = new Vector2();
@@ -86,10 +134,18 @@ public class ObstacleManager
 		
 	}
 	
+	/** The arraylist of obstacles. */
 	private ArrayList<Obstacle> obstacles;
+	
+	/** The index buffer. */
 	private ShortBuffer indexBuffer;
+	
+	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
 	
+	/**
+	 * Instantiates a new obstacle manager.
+	 */
 	public ObstacleManager()
 	{
 		randomGenerator = new Random(System.currentTimeMillis());
@@ -101,6 +157,11 @@ public class ObstacleManager
 		instance = this;
 	}
 	
+	/**
+	 * Gets the singleton of ObstacleManager.
+	 *
+	 * @return singleton of ObstacleManager
+	 */
 	public static ObstacleManager getInstance()
 	{
 		if(instance==null)
@@ -108,6 +169,9 @@ public class ObstacleManager
 		return instance;		
 	}
 	
+	/**
+	 * Generates array with probabilities.
+	 */
 	private void genArrayWithProbability()
 	{
 		//distribute values according to probabilities
@@ -121,11 +185,19 @@ public class ObstacleManager
 			randomArray[i] = OBSTACLE_TYPE4;
 	}
 	
+	/**
+	 * Selects random type.
+	 *
+	 * @return one random int from randomArray
+	 */
 	private int selectRandomType()
 	{
 		return randomArray[randomGenerator.nextInt(99)];
 	}
 	
+	/**
+	 * Generates obstacles.
+	 */
 	public void generateObstacles()
 	{
 		for(int i=0; i < NR_OF_OBSTACLES;i++)
@@ -135,6 +207,11 @@ public class ObstacleManager
 		}
 	}
 	
+	/**
+	 * Render visible obstacles.
+	 *
+	 * @param currentHeight the current height
+	 */
 	public void renderVisibleObstacles(int currentHeight)
 	{
 		//calculate current topBounds value for relative position
@@ -195,6 +272,9 @@ public class ObstacleManager
 		glEnable(GL_TEXTURE_2D);
 	}
 	
+	/**
+	 * Creates the vertex buffer.
+	 */
 	private void createVertexBuffer()
 	{
 		float[] vertices = new float[12];
@@ -231,6 +311,13 @@ public class ObstacleManager
 		indexBuffer.position(0);	
 	}
 	
+	/**
+	 * Test collision with main char.
+	 *
+	 * @param obstacle the obstacle
+	 * @param currentHeight the current height
+	 * @return true, if a collision happened
+	 */
 	private boolean testCollisionWithMainChar(Obstacle obstacle, float currentHeight)
 	{
 		float leftMainChar, leftObstacle,

@@ -9,22 +9,46 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 
+/**
+ * The Class OrientationManager handles the registration/unregistration of the orientation listener and supports a getter if the sensor is listening.
+ *
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class OrientationManager {
 
+	/** The orientation sensor. */
 	private static Sensor orientationSensor; 
+	
+	/** The sensor manager. */
 	private static SensorManager sensorManager;
+	
+	/** The orientation listener. */
 	private static OrientationListener orientationListener; 
+	
+	/** The booleans if the sensor is listening and if the sensor is supported by the mobile . */
 	private static boolean isListening, isSupported; 
+	
+	/** The constant for LEFT. */
 	private static int LEFT = 0; 
+	
+	/** The constant for RIGHT. */
 	private static int RIGHT = 1; 
+	
+	/** The current side. */
 	private static int currentSide = -1; 
 	
 	// create SensorEventListener, which listens to the events from the orientation sensor
 	
+	/** The orientation sensor event listener. */
 	private static SensorEventListener orientationSensorEventListener = new SensorEventListener() {
 	
 		private float roll; 
 		
+		/**
+		 * Called when the sensor has changed
+		 * @param evt the SensorEvent delivered
+		 */
 		// 0: azimuth, 1: pitch, 2: roll
 		public void onSensorChanged(SensorEvent evt) {
 			
@@ -57,6 +81,11 @@ public class OrientationManager {
 				orientationListener.isInDeadZone();
 		}
 
+		/**
+		 * Called when the accuracy changed
+		 * @param sensor the Sensor affected by the change
+		 * @param accuracy the accuracy 
+		 */
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
 			// TODO Auto-generated method stub
@@ -66,6 +95,11 @@ public class OrientationManager {
 
 
 	// start listener
+	/**
+	 * Register listener.
+	 *
+	 * @param listener the listener registered
+	 */
 	public static void registerListener(OrientationListener listener) {
 	
 		sensorManager = (SensorManager)LevelActivity.getContext().getSystemService(Context.SENSOR_SERVICE);
@@ -86,6 +120,11 @@ public class OrientationManager {
 	}
 	
 	//end listener
+	/**
+	 * Unregister listener.
+	 *
+	 * @param listener the listener to unregister
+	 */
 	public static void unregisterListener(OrientationListener listener) {
 		isListening = false; 
 		try {
@@ -97,10 +136,20 @@ public class OrientationManager {
 		}
 	}
 	
+	/**
+	 * Checks if the sensor is listening.
+	 *
+	 * @return true, if it is listening
+	 */
 	public static boolean isListening() {
 		return isListening; 
 	}
 	
+	/**
+	 * Checks if the sensor is supported by the phone.
+	 *
+	 * @return true, if it is supported
+	 */
 	public static boolean isSupported() {
 		return isSupported; 
 	}
