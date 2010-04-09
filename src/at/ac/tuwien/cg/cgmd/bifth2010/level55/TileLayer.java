@@ -71,7 +71,11 @@ public class TileLayer {
 	}
 	
 	public int getTypeAt(int x, int y) {
-		return tiles_vector[x][y];
+		if (x<=numTilesX && x>=0 && y<=numTilesY && y>=0) {
+			return tiles_vector[x][y];
+		} else {
+			return -1;
+		}
 	}
 	
 	private void loadLevel(int levelResource, Context context) {
