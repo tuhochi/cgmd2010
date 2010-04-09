@@ -7,6 +7,7 @@ import java.io.IOException;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 public abstract class Motion implements Persistable
@@ -17,6 +18,8 @@ public abstract class Motion implements Persistable
 	public abstract void update(float dt);
 	public abstract Matrix44 getTransform();
 	public abstract void setSatTrans(SatelliteTransformation satTrans);
+	public abstract SatelliteTransformation getSatTrans();
+	public abstract Vector3 getCurrDirectionVec();
 	public abstract void persist(DataOutputStream dos) throws IOException;
 	public abstract void restore(DataInputStream dis) throws IOException;
 	

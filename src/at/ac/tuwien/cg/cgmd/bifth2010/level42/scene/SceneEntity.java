@@ -22,6 +22,7 @@ public class SceneEntity implements Moveable,Persistable
 	private String name;
 	private Matrix44 transformation;
 	private Matrix44 transformation_temp;
+	private final Matrix44 basicOrientation;
 	private final ArrayList<Model> models;
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
@@ -33,6 +34,7 @@ public class SceneEntity implements Moveable,Persistable
 	{
 		transformation = new Matrix44();
 		transformation_temp = new Matrix44();
+		basicOrientation = new Matrix44();
 		models = new ArrayList<Model>();
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
@@ -163,9 +165,10 @@ public class SceneEntity implements Moveable,Persistable
 
 	@Override
 	public Matrix44 getBasicOrientation() {
-		transformation_temp.addTranslate(	-boundingSphereWorld.center.x,
-											-boundingSphereWorld.center.y,
-											-boundingSphereWorld.center.z);
-		return transformation_temp;
+		basicOrientation.copy(transformation);
+		basicOrientation.addTranslate(	-boundingSphereWorld.center.x,
+										-boundingSphereWorld.center.y,
+										-boundingSphereWorld.center.z);
+		return basicOrientation;
 	}
 }

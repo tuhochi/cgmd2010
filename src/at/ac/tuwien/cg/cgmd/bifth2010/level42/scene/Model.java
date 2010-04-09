@@ -22,6 +22,7 @@ public class Model implements Moveable,Persistable
 {
 	private Matrix44 transformation;
 	private Matrix44 transformation_temp;
+	private final Matrix44 basicOrientation;
 	private final ArrayList<Geometry> geometries;
 	private final AxisAlignedBox3 boundingBox;
 	protected final Sphere boundingSphere;
@@ -33,6 +34,7 @@ public class Model implements Moveable,Persistable
 	public Model()
 	{
 		transformation = new Matrix44();
+		basicOrientation = new Matrix44();
 		geometries = new ArrayList<Geometry>();
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
@@ -101,6 +103,7 @@ public class Model implements Moveable,Persistable
 	public Model(Model other)
 	{
 		geometries = new ArrayList<Geometry>();
+		basicOrientation = new Matrix44();
 		transformation = new Matrix44(other.transformation);
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
 		boundingSphere = new Sphere(other.boundingSphere);
@@ -175,9 +178,10 @@ public class Model implements Moveable,Persistable
 
 	@Override
 	public Matrix44 getBasicOrientation() {
-		transformation_temp.addTranslate(	-boundingSphereWorld.center.x,
-											-boundingSphereWorld.center.y,
-											-boundingSphereWorld.center.z);
-		return transformation_temp;
+		basicOrientation.copy(transformation_temp);
+		basicOrientation.addTranslate(	-boundingSphereWorld.center.x,
+										-boundingSphereWorld.center.y,
+										-boundingSphereWorld.center.z);
+		return basicOrientation;
 	}
 }
