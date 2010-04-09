@@ -1,8 +1,11 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+/**
+ * 
+ * @author sebastian (group 13)
+ *
+ */
 
-
-	
 	//Garbage collector efficient 2D Vector class
 
 	public class Vector2
@@ -43,7 +46,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 			this.y+=v1.y;
 		}
 		
-		public void diff (Vector2 other)
+		public void sub (Vector2 other)
 		{
 			this.x -= other.x;
 			this.y -= other.y;
@@ -98,6 +101,22 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 			return evilTwin;
 			
 		}
+		
+		public int signX(){
+			if (this.x >= 0)
+				return 1;
+			else
+				return -1;
+		}
+		
+		public int signY(){
+			if (this.y >= 0)
+				return 1;
+			else
+				return -1;
+		}
+		
+		
 		
 		/**
 		 * Debug output.

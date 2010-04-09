@@ -11,10 +11,39 @@ import android.view.MotionEvent;
 
 /**
  * 
- * @author arthur (group 13)
+ * @author arthur/ sebastian (group 13)
  *
  */
 public class MyRenderer extends GLSurfaceView implements Renderer {
+	
+	
+	//the current map in form of an array
+	
+	public static int map[][] = {
+		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+		{ 1, 1, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1, 1, 1, 1, 2, 1 },
+		{ 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 1 },
+		{ 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1 },
+		{ 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1 },
+		{ 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 3, 2, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 0, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1 },
+		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+};
+	
+	
 	//dimensions of screen
 	public static int screenWidth;
 	public static int screenHeight;
@@ -74,6 +103,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		//draw all game objects
 		for(GameObject gameObject : gameObjects) {
+			gameObject.update();
 			gameObject.draw(gl);
 		}
 	}
@@ -98,10 +128,13 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		//create all game objects
 		gameObjects.add(new BackgroundObject());
-		for(int i = 0; i < BeerObject.map.length; i++) {
-			for(int j = 0; j < BeerObject.map[i].length; j++) {
-				if(BeerObject.map[i][j] == 2) {
-					gameObjects.add(new BeerObject(j, Math.abs(i - BeerObject.map.length + 1)));
+		for(int i = 0; i < MyRenderer.map.length; i++) {
+			for(int j = 0; j < MyRenderer.map[i].length; j++) {
+				if(MyRenderer.map[i][j] == 2) {
+					gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
+				}
+				else if (MyRenderer.map[i][j] == 3){
+					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
 				}
 			}
 		}

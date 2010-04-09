@@ -1,47 +1,78 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+
+import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
 
 /**
  * 
- * @author arthur (group 13)
+ * @author sebastian (group 13)
  *
  */
-public class BeerObject extends GameObject {
+public class CopObject extends GameObject {
 
-	
-	//if object is visible
-	private boolean visible;
 
 	/**
-	 * constructor calls super() with object's dimensions
-	 * @param x x-position (*GameObject.BLOCKSIZE)
-	 * @param y y-position (*GameObject.BLOCKSIZE)
+	 * constructor calls super with object's dimensions
 	 */
-	public BeerObject(int x, int y) {
+
+	public float speed = 5.0f;
+
+	public Vector2[] directionVectorArray = new Vector2[4];
+	Random random;
+	
+	
+	public CopObject(int x, int y) {
+		//set dimension (must be equal to GameObject.BLOCKSIZE)
 		super(GameObject.BLOCKSIZE, GameObject.BLOCKSIZE);
+		moveVec = new Vector2(0,0);
+		
+		directionVectorArray[0] = new Vector2(0,1);
+		directionVectorArray[1] = new Vector2(0,-1);
+		directionVectorArray[2] = new Vector2(1,0);
+		directionVectorArray[3] = new Vector2(-1,0);
+		
+		for (int i = 0; i < 4;i++)
+			directionVectorArray[i].mult(speed);
+		
+		random = new Random();
+		
+		setRandomDirection();
 		
 		//set position
 		this.position.x = x * GameObject.BLOCKSIZE;
 		this.position.y = y * GameObject.BLOCKSIZE;
-		
-		//beer is visible until player drinks it
-		this.visible = true;
 	}
+	
+	
+	private void setRandomDirection(){
+		
+		int randomDir = random.nextInt(4);
+		this.moveVec = directionVectorArray[randomDir];
 
+	}
+	
+	
+	//Sets the initial position of the cop object
+	public void setPos(int x, int y){
+		this.position.x = x;
+		this.position.y = y;
+	}
+	
+	
+	@Override
+	public void update(){
+		this.position.add(moveVec);
+		}
+	
 	/**
-	 * @see GameObject#draw(GL10)
+	 * @see GameObject#draw(GL10) 
 	 */
 	@Override
 	public void draw(GL10 gl) {
-		//check for player-collision
-		if(CollisionHandler.checkBeerCollision((int)this.position.x, (int)this.position.y)) {
-			this.visible = false;
-		}
-		
-		//don't draw invisible beer
-		if(!visible) {
-			return;
+		if (CollisionHandler.checkBackgroundCollision(MyRenderer.map, (GameObject)this)){
+			setRandomDirection();
 		}
 		
 		//update position with offset
@@ -66,6 +97,7 @@ public class BeerObject extends GameObject {
 		//draw
 		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
+		
 		//translate back
 		gl.glTranslatef(-this.position.x, -this.position.y, 0.0f);
 		
