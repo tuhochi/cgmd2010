@@ -8,7 +8,7 @@ import android.content.Context;
 
 /**
  * 
- * @author arthur (group 13)
+ * @author arthur/sebastian (group 13)
  *
  */
 public class TextureSingletons {
@@ -30,7 +30,7 @@ public class TextureSingletons {
 		textures.put(PlayerObject.class.getSimpleName(), new PlayerTexture(gl, context));
 		textures.put(BackgroundObject.class.getSimpleName(), new BackgroundTexture(gl, context));
 		textures.put(BeerObject.class.getSimpleName(), new BeerTexture(gl, context));
-		
+		textures.put(CopObject.class.getSimpleName(), new CopTexture(gl, context));
 	}
 	
 	/**

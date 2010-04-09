@@ -177,7 +177,7 @@ public abstract class GameObject {
 	
 
 	
-	public void loadGLTexture(GL10 gl, Context context,int textureId){
+	public void loadGLTexture(GL10 gl, Context context,int textureId) {
 		InputStream is = context.getResources().openRawResource(textureId);
 		
 		Bitmap bmp = null;
@@ -192,6 +192,7 @@ public abstract class GameObject {
 				
 				
 			}catch(IOException e){
+				System.out.println("Failed loading texture");
 				//Bad ... some error should be generated here
 			}
 			

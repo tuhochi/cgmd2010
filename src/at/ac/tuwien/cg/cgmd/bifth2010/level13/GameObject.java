@@ -9,7 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * 
- * @author arthur (group 13)
+ * @author arthur/sebastian (group 13)
  *
  */
 public abstract class GameObject {
@@ -27,6 +27,7 @@ public abstract class GameObject {
 	protected float[] vertices;
 	protected ShortBuffer indexBuffer;
 	
+	public Vector2 moveVec;
 	//texture of object (=singleton)
 	protected Texture texture;
 	
@@ -89,5 +90,15 @@ public abstract class GameObject {
 	 */
 	public static void updateOffset(Vector2 movement) {
 		offset.add(movement);
-	}	
+	}
+	
+	/**
+	 * Execute whatever the sub class should do here
+	 */
+	
+	public void update(){
+	
+	}
+	
+	
 }
