@@ -21,26 +21,59 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 
 
+/**
+ * The Class MainChar handles the protagonist of the level.
+ * It handles the movement, the rising and the collision detection with the walls 
+ */
 public class MainChar implements SceneEntity {
 
 	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -8661277209785862751L;
+	
+	/** The width. */
 	private float width;
+	
+	/** The height. */
 	private float height;
+	
+	/** The position. */
 	private Vector2 position;
+	
+	/** The translation. */
 	private Vector3 translation;
+	
+	/** The geometry manager. */
 	private GeometryManager geometryManager; 
 	
+	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
+	
+	/** The texture coordinate buffer. */
 	private FloatBuffer texCoordBuffer;
+	
+	/** The unique vertex buffer id. */
 	private int vboId; 
+	
+	/** The texture id. */
 	public int textureID = -1;
 	
+	/** The Constant MOVE_LEFT. */
 	public static final int MOVE_LEFT = -1;
+	
+	/** The Constant MOVE_RIGHT. */
 	public static final int MOVE_RIGHT = 1;
+	
+	/** The Constant NO_MOVEMENT. */
 	public static final int NO_MOVEMENT = 0;
+	
+	/** The move direction. */
 	private int moveDirection = 0;
 		
+	/**
+	 * Default constructor
+	 * Instantiates a new main char.
+	 */
 	public MainChar()
 	{
 		//create Default MainChar
@@ -51,6 +84,13 @@ public class MainChar implements SceneEntity {
 		preprocess();
 	}
 	
+	/**
+	 * Instantiates a new main char.
+	 *
+	 * @param width the width of the main character
+	 * @param height the height of the main character
+	 * @param position the position of the main character
+	 */
 	public MainChar(float width, float height, Vector2 position)
 	{
 		this.height = height;
@@ -60,6 +100,10 @@ public class MainChar implements SceneEntity {
 		preprocess(); 
 	}
 	
+	/**
+	 * Preprocesses, before the main character starts working 
+	 * creates the vertex and texture coordinate buffer and the vbo id 
+	 */
 	private void preprocess() {
 		
 		geometryManager = GeometryManager.getInstance(); 
@@ -73,7 +117,9 @@ public class MainChar implements SceneEntity {
 	}
 	
 
-	/** 
+	/**
+	 * Gets the move direction.
+	 *
 	 * @return the moveDirection
 	 */
 	public int getMoveDirection() {
@@ -81,29 +127,56 @@ public class MainChar implements SceneEntity {
 	}
 
 	/**
+	 * Sets the move direction.
+	 *
 	 * @param moveDirection the moveDirection to set
 	 */
 	public void setMoveDirection(int moveDirection) {
 		this.moveDirection = moveDirection;
 	}
 
+	/**
+	 * Gets the position.
+	 *
+	 * @return the position
+	 */
 	public Vector2 getPosition() {
 		return this.position; 
 	}
 	
+	/**
+	 * Gets the translation.
+	 *
+	 * @return the translation
+	 */
 	public Vector3 getTranslation() {
 		return this.translation; 
 	}
 	
+	/**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
 	public float getWidth() {
 		return this.width; 
 	}
 	
+	/**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
 	public float getHeight() {
 		return this.height; 
 	}
 	
 	
+	/**
+	 * Sets the texture id.
+	 *
+	 * @param texID the new texture id
+	 */
 	public void setTextureID(int texID)
 	{
 		this.textureID = texID;
@@ -115,16 +188,29 @@ public class MainChar implements SceneEntity {
 //		position.x += translate; 
 //	}
 //	
-	public void moveUpDown(float translate)
+/**
+ * Handles the movement up and down
+ *
+ * @param translate the vertical translation
+ */
+public void moveUpDown(float translate)
 	{
 		translation.y += translate;
 	}
 	
+	/**
+	 * Moves back and forward.
+	 *
+	 * @param translate the translation in z-direction
+	 */
 	public void moveBackFront(float translate)
 	{
 		translation.z += translate;
 	}	
 	
+	/**
+	 * Resets the translation.
+	 */
 	public void resetTranslation()
 	{
 		translation.x = 0f;
@@ -132,6 +218,13 @@ public class MainChar implements SceneEntity {
 		translation.z = 0f;
 	}
 	
+	/**
+	 * Checks if main character is inbounds after step.
+	 *
+	 * @param moveDir the move dir (static final int) 
+	 * @param stepWidth the step width
+	 * @return true, if is inbounds after step
+	 */
 	public boolean isInboundsAfterStep(int moveDir, float stepWidth) {
 		if (moveDir > 0)
 		{
@@ -149,6 +242,12 @@ public class MainChar implements SceneEntity {
 		return false; 
 	}	
 	
+	/**
+	 * Updates the horizontal position of the main character
+	 *
+	 * @param dt time unit 
+	 * @param moveDir the movement direction (static final int) 
+	 */
 	public void update(float dt, int moveDir)
 	{
 		RenderView renderer = RenderView.getInstance();
@@ -171,6 +270,12 @@ public class MainChar implements SceneEntity {
 		position.x += translation.x;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity#render()
+	 */
+	/**
+	 * Renders the main character
+	 */
 	@Override
 	public void render() 
 	{

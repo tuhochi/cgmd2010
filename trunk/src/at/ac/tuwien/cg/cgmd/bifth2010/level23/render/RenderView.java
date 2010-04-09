@@ -28,35 +28,81 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 
+/**
+ * The Class RenderView implements the renderer to render all needed objects.
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer {
 	
+	/** The screen width. */
 	private float screenWidth;
+	
+	/** The screen height. */
 	private float screenHeight;
+	
+	/** The aspect ratio. */
 	private float aspectRatio;
 	
+	/** The right bounds. */
 	private float rightBounds=100.0f;
+	
+	/** The top bounds. */
 	private float topBounds=100.0f;
 	
+	/** The balloon height. */
 	private float balloonHeight=0;
+	
+	/** The instance of the RenderView to pass it around. */
 	private static RenderView instance;
 	
+	/** The Android context . */
 	private Context context; 
+	
+	/** The main character. */
 	private MainChar mainChar; 
+	
+	/** The background. */
 	private Background background;
+	
+	/** The hud. */
 	private Hud hud;
+	
+	/** The boolean that checks if the screen is pressed or released . */
 	private boolean released = true; 
+	
+	/** The last motion event. */
 	private MotionEvent lastMotionEvent = null; 
+	
+	/** The accumulation time. */
 	private float accTime;
+	
+	/** The orientation listener. */
 	private OrientationListener orientationListener; 
 	
+	/** The boolean indicating if orientation sensor is used or not. */
 	private boolean useSensor = false;
 	
+	/** The main characters movement direction. */
 	private int mainCharMoveDir;
+	
+	/** The last key movement. */
 	private int lastKeyMovement;
+	
+	/** The timer. */
 	private TimeUtil timer;
+	
+	/** The texture manager. */
 	private TextureManager textureManager; 
+	
+	/** The serializer. */
 	private Serializer serializer; 
 	
+	/**
+	 * Instantiates a new render view.
+	 *
+	 * @param context the Android context
+	 */
 	public RenderView(Context context)
 	{
 		
@@ -73,21 +119,38 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         serializer.setContext(context); 
 	}
 	
+	/**
+	 * Gets the single instance of RenderView. Implements the singleton pattern
+	 *
+	 * @return singleton of RenderView
+	 */
 	public static RenderView getInstance()
 	{
 		return instance;
 	}
 	
+	/**
+	 * Persist scene entities to disk.
+	 */
 	public void persistSceneEntities() {
 		Serializer.getInstance().serializeObjects(mainChar, background);
 	}
 	
+	/**
+	 * Restore scene entities from disk.
+	 */
 	public void restoreSceneEntities() {
 		HashMap<Integer, SceneEntity> map = Serializer.getInstance().getSerializedObjects();
 		mainChar = (MainChar)map.get(Serializer.SERIALIZED_MAINCHAR);
 		background = (Background)map.get(Serializer.SERIALIZED_BACKGROUND);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView.Renderer#onDrawFrame(javax.microedition.khronos.opengles.GL10)
+	 */
+	/**
+	 * method which loops while the level is running, to do all work needed
+	 */
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
@@ -126,6 +189,13 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceChanged(javax.microedition.khronos.opengles.GL10, int, int)
+	 */
+	/**
+	 * called when the surface has changed (landscape to portrait, hw keyboard on etc)
+	 * Here, the screen parameters are set, viewport and projection are set
+	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		Log.v("RenderView.java", "onSurfaceChanged");
@@ -147,6 +217,13 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		gl.glLoadIdentity();		
 	}
 
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceCreated(javax.microedition.khronos.opengles.GL10, javax.microedition.khronos.egl.EGLConfig)
+	 */
+	/**
+	 * called when the surface has been created, on startup 
+	 * Here, display is set, mainchar, obstacles, background and hut are created and the textures are loaded 
+	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{	
@@ -171,6 +248,15 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		background.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 	}
 		
+	/* (non-Javadoc)
+	 * @see android.view.View#onKeyDown(int, android.view.KeyEvent)
+	 */
+	/**
+	 * handles the event when a key is pressed
+	 * @param key the key which is pressed
+	 * @param evt the delivered KeyEvent
+	 */
+	
 	@Override
 	public boolean onKeyDown(int key, KeyEvent evt) {
 		
@@ -198,6 +284,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		return true; 
 	}
 
+	/**
+	 * enables/disables the usage of the orientation sensor. Also registers or unregisters the listener for this sensor 
+	 */
 	public void switchSensor()
 	{
 		useSensor = !useSensor; 
@@ -207,6 +296,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			OrientationManager.unregisterListener(orientationListener);
 	}
 	
+	/**
+	 * Handles the event when a key is released
+	 * @param key the key affected
+	 * @param evt the delivered KeyEvent 
+	 */
 	@Override
 	public boolean onKeyUp(int key, KeyEvent evt) {
 		
@@ -214,6 +308,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		return true; 
 	}
 	
+	
+	/**
+	 * Handles the motion event, when they screen is touched 
+	 */
 	@Override
 	public boolean onTouchEvent(final MotionEvent evt) {
 		if (evt.getAction() == MotionEvent.ACTION_DOWN) {
@@ -230,6 +328,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		return true; 
 	}
 	
+	/**
+	 * Handle the movement when screen is touched.
+	 *
+	 * @param evt the event delivered by touching the screen 
+	 */
 	public void handleOnTouchMovement(final MotionEvent evt) {
 		queueEvent(new Runnable(){
 			public void run() 
@@ -254,30 +357,47 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		});
 	}
 	
+	/**
+	 * Handle the roll movement using orientation sensor.
+	 *
+	 * @param moveDir the direction the mobile has been rolled
+	 */
 	public void handleRollMovement(int moveDir) 
 	{
 		if(useSensor)
 			mainCharMoveDir = moveDir;
 	}
 	
+	/**
+	 * Sets the orientation listener.
+	 *
+	 * @param listener the OrientationListener to set
+	 */
 	public void setOrientationListener(OrientationListener listener) {
 		orientationListener = listener; 
 	}
 	
 	/**
-	 * @return the mainChar
+	 * Gets the main char.
+	 *
+	 * @return the main char
 	 */
 	public MainChar getMainChar() {
 		return mainChar;
 	}
 
 	/**
+	 * Sets the main char.
+	 *
 	 * @param mainChar the mainChar to set
 	 */
 	public void setMainChar(MainChar mainChar) {
 		this.mainChar = mainChar;
 	}
 
+	/**
+	 * Fetches key move data.
+	 */
 	public void fetchKeyMoveData()
 	{
 		if(lastKeyMovement!=0)
@@ -288,89 +408,118 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	}
 	
 	/**
-	 * @return the screenWidth
+	 * Gets the screen width.
+	 *
+	 * @return the screen width
 	 */
 	public float getScreenWidth() {
 		return screenWidth;
 	}
 
 	/**
-	 * @param screenWidth the screenWidth to set
+	 * Sets the screen width.
+	 *
+	 * @param screenWidth the screen width to set
 	 */
 	public void setScreenWidth(float screenWidth) {
 		this.screenWidth = screenWidth;
 	}
 
 	/**
-	 * @return the screenHeight
+	 * Gets the screen height.
+	 *
+	 * @return the screen height
 	 */
 	public float getScreenHeight() {
 		return screenHeight;
 	}
 
 	/**
-	 * @param screenHeight the screenHeight to set
+	 * Sets the screen height.
+	 *
+	 * @param screenHeight the screen height to set
 	 */
 	public void setScreenHeight(float screenHeight) {
 		this.screenHeight = screenHeight;
 	}
 
 	/**
-	 * @return the aspectRatio
+	 * Gets the aspect ratio.
+	 *
+	 * @return the aspect ratio
 	 */
 	public float getAspectRatio() {
 		return aspectRatio;
 	}
 
 	/**
-	 * @param aspectRatio the aspectRatio to set
+	 * Sets the aspect ratio.
+	 *
+	 * @param aspectRatio the aspect ratio to set
 	 */
 	public void setAspectRatio(float aspectRatio) {
 		this.aspectRatio = aspectRatio;
 	}
 
 	/**
-	 * @return the rightBounds
+	 * Gets the right bounds.
+	 *
+	 * @return the right bounds
 	 */
 	public float getRightBounds() {
 		return rightBounds;
 	}
 
 	/**
-	 * @param rightBounds the rightBounds to set
+	 * Sets the right bounds.
+	 *
+	 * @param rightBounds the right bounds to set
 	 */
 	public void setRightBounds(float rightBounds) {
 		this.rightBounds = rightBounds;
 	}
 
 	/**
-	 * @return the topBounds
+	 * Gets the top bounds.
+	 *
+	 * @return the top bounds
 	 */
 	public float getTopBounds() {
 		return topBounds;
 	}
 
 	/**
-	 * @param topBounds the topBounds to set
+	 * Sets the top bounds.
+	 *
+	 * @param topBounds the top bounds to set
 	 */
 	public void setTopBounds(float topBounds) {
 		this.topBounds = topBounds;
 	}
 		
 	/**
-	 * @return the useSensor
+	 * Checks if orientation sensor is used.
+	 *
+	 * @return true if the orientation sensor is in use, false otherwise
 	 */
 	public boolean isUseSensor() {
 		return useSensor;
 	}
 
 	/**
-	 * @param useSensor the useSensor to set
+	 * Sets if the sensor shall be used.
+	 *
+	 * @param useSensor true if the orientation sensor shall be used, false otherwise
 	 */
 	public void setUseSensor(boolean useSensor) {
 		this.useSensor = useSensor;
 	}
 
+	/**
+	 * Sets up the GL stuff.
+	 *
+	 * @param gl Reference to GL10 object
+	 */
 	private void setupGL(GL10 gl)
 	{
 		gl.glDepthFunc(GL10.GL_LEQUAL);
