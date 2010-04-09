@@ -13,7 +13,9 @@ public class RenderManager implements Renderer {
 
 	private Context context;
 	private List<Model> models;
-	private float rotation = 4.0f;
+	private Date time = new Date();
+	private double lastTime = 0.0;
+	float rotation = 4.0f;
 	
 	public RenderManager(Context context, List<Model> models)
 	{
@@ -27,6 +29,10 @@ public class RenderManager implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		
+		double deltaTime = time.getTime() - lastTime;
+		lastTime = time.getTime();
+		
 		gl.glLoadIdentity();
 		gl.glTranslatef(0, 0, -4);
 		gl.glPushMatrix();
@@ -38,10 +44,14 @@ public class RenderManager implements Renderer {
 		rotation += 10.0f;
 
 		ListIterator<Model> i = models.listIterator();
-		while(i.hasNext())
-			i.next().draw(gl);
-		
+		while(i.hasNext()) {
+			Model m = i.next();
+			m.update(deltaTime);
+			m.draw(gl);
+		}
 		gl.glPopMatrix();
+		
+		
 	}
 
 	/**
@@ -63,7 +73,8 @@ public class RenderManager implements Renderer {
 	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		//TODO: load textures
+
+		//Load textures of all available models.
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext())
 			i.next().loadGLTexture(gl, this.context);
