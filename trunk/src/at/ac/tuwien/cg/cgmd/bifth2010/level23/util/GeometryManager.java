@@ -6,15 +6,31 @@ import java.nio.FloatBuffer;
 
 import android.opengl.GLES11;
 
+/**
+ * The Class GeometryManager manages all geometry 
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class GeometryManager {
 
+	/** The geometry manager. */
 	private static GeometryManager geometryManager; 
 	
 	
+	/**
+	 * Instantiates a new geometry manager.
+	 */
 	public GeometryManager() {
 		geometryManager = this; 
 	}
 	
+	/**
+	 * Creates the vertex buffer as a quad.
+	 *
+	 * @param width the width
+	 * @param height the height
+	 * @return the float buffer
+	 */
 	public FloatBuffer createVertexBufferQuad(float width, float height)
 	{
 		FloatBuffer buffer;
@@ -50,6 +66,11 @@ public class GeometryManager {
 	}
 	
 	
+	/**
+	 * Creates the texture coordinate buffer mapped to a quad.
+	 *
+	 * @return the float buffer
+	 */
 	public FloatBuffer createTexCoordBufferQuad()
 	{
 		FloatBuffer texCoordBuffer; 
@@ -79,6 +100,12 @@ public class GeometryManager {
 		
 	}
 	
+	/**
+	 * Creates an array of texture coordinate buffers as quads.
+	 *
+	 * @param coordinates the coordinates for each quad
+	 * @return the float buffer[]
+	 */
 	public FloatBuffer[] createTexCoordBufferQuad(float[] coordinates)
 	{
 
@@ -110,6 +137,13 @@ public class GeometryManager {
 		return texCoordBuffer; 
 	}
 	
+		/**
+		 * Creates the vertex buffer object for the given buffer.
+		 *
+		 * @param vertexBuffer the vertex buffer
+		 * @param texCoordBuffer the texture coordinate buffer
+		 * @return the unique vbo id 
+		 */
 		public int createVBO(FloatBuffer vertexBuffer, FloatBuffer texCoordBuffer) {
 			
 			int vboId; 
@@ -132,6 +166,11 @@ public class GeometryManager {
 			return vboId; 
 		}
 	
+	/**
+	 * Gets the singleton of GeometryManager.
+	 *
+	 * @return singleton of GeometryManager
+	 */
 	public static GeometryManager getInstance() {
 		if (geometryManager == null) 
 			geometryManager = new GeometryManager(); 
