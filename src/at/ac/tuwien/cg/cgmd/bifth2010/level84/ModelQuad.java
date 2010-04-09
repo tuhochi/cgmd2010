@@ -3,6 +3,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
+
 public class ModelQuad extends Model {
 	
 	/** Quad vertices */
@@ -53,5 +58,16 @@ public class ModelQuad extends Model {
 	public ModelQuad(int textureResource) {
 		this();
 		this.textureResource = textureResource;
+	}
+	
+	/**
+	 * Update the model's transformations.
+	 */
+	public void update(GL10 gl, double deltaTime) {
+		mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0, 0, -4);
+		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 }
