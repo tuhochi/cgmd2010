@@ -13,17 +13,12 @@ public class RenderManager implements Renderer {
 
 	private Context context;
 	private List<Model> models;
-	
-	//Model square;
-	//float rotation = 4.0f;
-	
+	private float rotation = 4.0f;
 	
 	public RenderManager(Context context, List<Model> models)
 	{
 		this.context = context;
 		this.models = models;
-		
-		//square = new Model(); 
 	}
 	
 	/**
@@ -36,12 +31,16 @@ public class RenderManager implements Renderer {
 		gl.glTranslatef(0, 0, -4);
 		gl.glPushMatrix();
 		
-		/*if (rotation > 360.0f) 
+		if (rotation > 360.0f)
 			rotation = 0;
 		
 		gl.glRotatef(rotation, 0.0f, 1.0f, 0.0f);
 		rotation += 10.0f;
-		square.draw(gl);*/
+
+		ListIterator<Model> i = models.listIterator();
+		while(i.hasNext())
+			i.next().draw(gl);
+		
 		gl.glPopMatrix();
 	}
 
@@ -65,7 +64,9 @@ public class RenderManager implements Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		//TODO: load textures
-		//square.loadGLTexture(gl, this.context);
+		ListIterator<Model> i = models.listIterator();
+		while(i.hasNext())
+			i.next().loadGLTexture(gl, this.context);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
