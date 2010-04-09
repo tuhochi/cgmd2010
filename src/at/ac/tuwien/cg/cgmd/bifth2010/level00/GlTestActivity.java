@@ -20,7 +20,6 @@ public class GlTestActivity extends Activity {
         MyRenderer renderer = new MyRenderer(); 
         sf.setRenderer(renderer);
         
-        
         FrameLayout fl = new FrameLayout(this);
         fl.addView(sf);
         setContentView(fl);
