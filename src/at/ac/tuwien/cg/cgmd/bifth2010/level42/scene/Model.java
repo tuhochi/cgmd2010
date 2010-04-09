@@ -98,6 +98,8 @@ public class Model implements Moveable,Persistable
 			if(motion != null)
 				MotionManager.instance.addMotion(motion, this);
 		}
+		else
+			motion = null;
 	}
 	
 	public Model(Model other)

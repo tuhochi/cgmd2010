@@ -97,6 +97,8 @@ public class SceneEntity implements Moveable,Persistable
 			if(motion != null)
 				MotionManager.instance.addMotion(motion, this);
 		}
+		else
+			motion = null;
 	}
 	
 	public void render(int rendermode)
