@@ -35,5 +35,7 @@
   	android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 </ImageButton>
+<TextView android:layout_above="@+id/l84_openglview" android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_TfFps"></TextView>
 </TableLayout>
+
 </RelativeLayout>
