@@ -47,31 +47,7 @@ public class BeerObject extends GameObject {
 		//update position with offset
 		this.position.sub(GameObject.offset);
 		
-		//enable client state
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		
-		//bind texture
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, this.texture.textures[0]);
-		
-		//define texture coordinates
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, this.texture.textureBuffer);
-		
-		//point to vertex buffer
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-		
-		//translate to correct position
-		gl.glTranslatef(this.position.x, this.position.y, 0.0f);
-		
-		//draw
-		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
-
-		//translate back
-		gl.glTranslatef(-this.position.x, -this.position.y, 0.0f);
-		
-		//disable client state
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		super.draw(gl);
 		
 		//reset position
 		this.position.add(GameObject.offset);		
