@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * 
@@ -37,10 +40,13 @@ public class LevelLoader {
 	BufferedReader bf = null;
 	String zeile = null;
 	ArrayList<String[]> values = new ArrayList<String[]>();
+	Random r = null;
 	
 	//Constructor
 	public LevelLoader(String _file){
 		file = _file;
+		r = new Random();
+		
 		
 		//TODO
 		ok = exist();
@@ -103,5 +109,83 @@ public class LevelLoader {
 	public String[] getLine(int l){
 		return values.get(l);
 	}
+	
+	//Werte zurueckliefern fuer die Objekte im Level TODO
+	public int getCellInfo(String info){
+		
+		if(info.equalsIgnoreCase("X")){
+			//Haeuser
+			int h = (r.nextInt()%5);
+			
+			switch(h){
+			case 0:
+				return R.drawable.l88_house_block1;
+			case 1:
+				return R.drawable.l88_house_block2;
+			case 2:
+				return R.drawable.l88_house_block3;
+			case 3:
+				return R.drawable.l88_house_block4;
+			case 4:
+				return R.drawable.l88_house_block5;
+			}
+			
+			
+		}
+		if(info.equalsIgnoreCase(" ")){
+			//Straﬂe TODO noch genauer unterteilen
+			
+		}
+		if(info.equalsIgnoreCase("B")){
+			//Startpos bunny
+			return R.drawable.l88_bunny;
+		}
+		if(info.equalsIgnoreCase("P")){
+			//Startpos police
+			return R.drawable.l88_police;
+		}
+		if(info.equalsIgnoreCase("1")){
+			//Versteck Groesse 1
+			return R.drawable.l88_stash_yellow;
+		}
+		if(info.equalsIgnoreCase("2")){
+			//Versteck Groesse 2
+			return R.drawable.l88_stash_orange;
+		}
+		if(info.equalsIgnoreCase("3")){
+			//Versteck Groesse 3
+			return R.drawable.l88_stash_red;
+		}
+		if(info.equalsIgnoreCase("G")){
+			//Garagenversteck
+		}
+		if(info.equalsIgnoreCase("S")){
+			//Strassensperre
+		}
+		if(info.equalsIgnoreCase("W")){
+			//Waschanlage
+		}
+		if(info.equalsIgnoreCase("F")){
+			//Fussgaengerzone
+		}
+		if(info.equalsIgnoreCase("T")){
+			//Schwere Strassensperre
+		}
+		if(info.equalsIgnoreCase("N")){
+			//Wassergraben
+		}
+		if(info.equalsIgnoreCase("Z")){
+			//Zugbruecke
+		}
+		
+		
+		
+		return 0;
+	}
+	
+	
+	
+	
+	
 	
 }
