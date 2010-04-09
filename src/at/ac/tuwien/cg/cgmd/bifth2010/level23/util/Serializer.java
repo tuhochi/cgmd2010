@@ -10,18 +10,47 @@ import java.util.HashMap;
 import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
 
+/**
+ * The Class Serializer does serializing and deserializing of objects to persist them before the application is destroyed.
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class Serializer {
 
+	/** The file output stream. */
 	private FileOutputStream fileOutputStream; 
+	
+	/** The file input stream. */
 	private FileInputStream fileInputStream; 
+	
+	/** The object input stream. */
 	private ObjectInputStream objectInputStream; 
+	
+	/** The object output stream. */
 	private ObjectOutputStream objectOutputStream; 
+	
+	/** The filename to store the file with. */
 	private String filename; 
+	
+	/** The serializer object to pass around. */
 	public static Serializer serializer; 
+	
+	/** The hashmap, storing the serialized objects. */
 	private HashMap<Integer, SceneEntity> objects; 
+	
+	/** The constant for identifying the serialized mainchar. */
 	public static int SERIALIZED_MAINCHAR = 0; 
+	
+	/** The constant for identifying the serialized background. */
 	public static int SERIALIZED_BACKGROUND = 1; 
+	
+	/** The Android context. */
 	private Context context;
+	
+	/**
+	 * Instantiates a new serializer.
+	 *
+	 */
 	
 	public Serializer() {
 		serializer = this;
@@ -29,6 +58,11 @@ public class Serializer {
 		objects = new HashMap<Integer, SceneEntity>(); 
 	}
 	
+	/**
+	 * Gets the single instance of Serializer.
+	 *
+	 * @return single instance of Serializer
+	 */
 	public static Serializer getInstance() {
 		if (serializer == null)
 			serializer = new Serializer(); 
@@ -37,6 +71,11 @@ public class Serializer {
 	}
 	
 	
+	/**
+	 * Gets the serialized objects.
+	 *
+	 * @return the serialized objects
+	 */
 	public HashMap<Integer, SceneEntity> getSerializedObjects() {
 		objects.clear();
 		try {
@@ -59,6 +98,12 @@ public class Serializer {
 		return objects;
 	}
 	
+	/**
+	 * Serializes objects.
+	 *
+	 * @param mainChar the main char
+	 * @param background the background
+	 */
 	public void serializeObjects(SceneEntity mainChar, SceneEntity background) {
 		
 		objects.put(SERIALIZED_MAINCHAR, mainChar);
@@ -76,6 +121,11 @@ public class Serializer {
 		}
 	}
 
+	/**
+	 * Sets the context.
+	 *
+	 * @param context the new context
+	 */
 	public void setContext(Context context) {
 		this.context = context; 
 		

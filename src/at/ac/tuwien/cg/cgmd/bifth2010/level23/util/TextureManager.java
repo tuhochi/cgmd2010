@@ -24,22 +24,44 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 
 
+/**
+ * The Class TextureManager manages the textures to centralize texture loading.
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class TextureManager {
 
+	/** The texture id. */
 	private int texId; 
+	
+	/** The texture map. */
 	private HashMap<Integer, Integer> textureMap;
+	
+	/** The instance of TextureManager to pass around. */
 	private static TextureManager instance; 
 	
+	/**
+	 * Instantiates a new texture manager.
+	 */
 	public TextureManager() {
 		textureMap = new HashMap<Integer, Integer>();
 		instance = this; 
 	}
 	
+	/**
+	 * Resets the textureMap, so that textures are reloaded.
+	 */
 	public void reset()
 	{
 		textureMap.clear();
 	}
 	
+	/**
+	 * Loads a texture.
+	 *
+	 * @param res the resource
+	 * @param resId the resource id
+	 */
 	public void loadTexture(Resources res, int resId) {
 		// thx to lvl17
 		
@@ -93,6 +115,13 @@ public class TextureManager {
 	
 }
 	
+	/**
+	 * Gets the texture id.
+	 *
+	 * @param res the resource
+	 * @param resId the resource id
+	 * @return the texture id
+	 */
 	public int getTextureId(Resources res, int resId) {
 		if (!textureMap.containsKey(resId))
 			loadTexture(res, resId);
@@ -102,6 +131,11 @@ public class TextureManager {
 	}
 
 
+	/**
+	 * Gets the singleton of TextureManager.
+	 *
+	 * @return singleton of TextureManager
+	 */
 	public static TextureManager getInstance() {
 		if (instance == null)
 			instance = new TextureManager();
