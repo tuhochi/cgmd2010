@@ -26,6 +26,7 @@ public class SceneEntity implements Moveable
 	private final Sphere boundingSphere;
 	private final Sphere boundingSphereWorld;
 	private Motion motion;
+	private boolean initialized;
 	
 	public SceneEntity()
 	{
@@ -35,6 +36,30 @@ public class SceneEntity implements Moveable
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
+		initialized = false;
+	}
+	
+	void init()
+	{
+		if(!initialized)
+		{
+			ArrayList<Model> models = this.models;
+			int size = models.size();
+			for(int i=0; i<size; i++)
+				models.get(i).init();
+			
+			initialized = true;
+		}
+	}
+	
+	void deInit()
+	{
+		initialized = false;
+		
+		ArrayList<Model> models = this.models;
+		int size = models.size();
+		for(int i=0; i<size; i++)
+			models.get(i).deInit();
 	}
 	
 	public void persist(DataOutputStream dos) throws IOException

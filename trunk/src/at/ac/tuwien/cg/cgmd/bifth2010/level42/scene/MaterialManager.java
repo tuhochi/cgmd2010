@@ -109,12 +109,14 @@ public class MaterialManager
 	
 	public class Material
 	{
-		public final String name;
-		public final Color4 ambient;
-		public final Color4 diffuse;
-		public final Color4 specular;
-		public final float ks;
-		public final int texId;
+		private final String name;
+		private final Color4 ambient;
+		private final Color4 diffuse;
+		private final Color4 specular;
+		private final float ks;
+		private final Bitmap tex;
+		private int texId;
+		private boolean initialized;
 		
 		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, String textureFilename)
 		{
@@ -125,8 +127,15 @@ public class MaterialManager
 			this.ks = ks;
 			
 			if(!textureFilename.equals(""))
+				tex = loadTexture(textureFilename);
+			else
+				tex = null;
+		}
+		
+		void init()
+		{
+			if(!initialized)
 			{
-				Bitmap tex = loadTexture(textureFilename);
 				if(tex != null)
 				{
 					int[] textures = new int[1];
@@ -144,16 +153,18 @@ public class MaterialManager
 					else
 					{
 						buildMipmap(tex);
-					}		
-
-					//Clean up
-					tex.recycle();
+					}
 				}
 				else
 					texId = -1;
+				
+				initialized = true;
 			}
-			else
-				texId = -1;
+		}
+		
+		void deInit()
+		{
+			initialized = false;
 		}
 		
 		public void persist(DataOutputStream dos)
