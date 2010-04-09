@@ -13,12 +13,13 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
@@ -36,21 +37,26 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private static final float LIGHT_DIFFUSE[] = {0.9f,0.9f,0.9f,1.0f};
 	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,0.0f,1.0f};
 	
-	private final LevelActivity context;
-	private OGLManager oglManager = OGLManager.instance;
-	private MaterialManager materialManager = MaterialManager.instance;
-	public Scene scene;
+	final LevelActivity context;
+	public final Scene scene;
 	public final Camera cam;
+	
+	// Managers
 	private final TimeManager timer = TimeManager.instance; 
 	private final MotionManager motionManager = MotionManager.instance;
+	private final OGLManager oglManager = OGLManager.instance;
+	private final MaterialManager materialManager = MaterialManager.instance;
 	private CollisionManager collManager;
 	
 	// thread stuff
 	public final Synchronizer synchronizer;
+	
+	// event stuff
 	private final LinkedList<MotionEvent> motionEvents;
 	private final LinkedList<KeyEvent> keyEvents;
+	private final GestureDetector gestureDetector;
 	
-	// some temp vars
+	// temp vars
 	private final Vector3 selectionDirection;
 	
 	public RenderView(Context context, AttributeSet attr)
@@ -67,6 +73,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 		synchronizer = new Synchronizer();
 		motionEvents = new LinkedList<MotionEvent>();
 		keyEvents = new LinkedList<KeyEvent>();
+		
+		gestureDetector = new GestureDetector(context,new GestureListener());
 		
 		//init temp vars
 		selectionDirection = new Vector3();
@@ -136,52 +144,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		{
 			MotionEvent event;
 			while((event = motionEvents.poll()) != null)
-			{
-				int rawX = (int)event.getRawX();
-				int rawY = (int)event.getRawY();
-				if(event.getAction() == MotionEvent.ACTION_DOWN)
-				{
-					cam.setLastPosition(rawX, rawY);
-					Vector3 unprojectedPoint = oglManager.unProject(rawX, rawY);
-					Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
-				
-					SceneEntity entity = collManager.intersectRay(cam.eyePosition, rayDirection);
-					
-					//entity selected
-					if(entity!=null)
-					{
-						selectionDirection.copy(rayDirection);
-						//force strength
-						selectionDirection.normalize().multiply(5);
-						
-						if(entity.getMotion()==null){
-						
-							motionManager.addMotion(new Orbit(	entity.getBoundingSphereWorld().center,
-																new Vector3(),
-																selectionDirection,5,
-																entity.getBasicOrientation()),
-													(Moveable)entity);
-						}else{
-							Orbit orbit = (Orbit)entity.getMotion();
-						
-							orbit.morphOrbit(selectionDirection);
-							motionManager.changeSatelliteTransformation(entity, orbit.getCurrDirectionVec(), selectionDirection);
-							
-							
-//							orbit.transformOrbit(new Vector3(orbit.entityPos).subtract(new Vector3(1,1,2)), 
-//												 new Vector3(),
-//												 new Vector3(0,0,-1),
-//												 10);
-							
-							 Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
-						}
-					}
-	
-			        Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
-				}					
-				else
-					cam.setMousePosition(rawX, rawY);
-			}
+				gestureDetector.onTouchEvent(event);
 		}
 		
 		synchronized(keyEvents)
@@ -216,6 +179,67 @@ public class RenderView extends GLSurfaceView implements Renderer
 		synchronizer.logicDone();
 	}
 	
+	private class GestureListener extends SimpleOnGestureListener
+	{
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+		{
+			Log.v(LevelActivity.TAG, "onFling(" + e1 + ", " + e2 + ", " + velocityX + ", " + velocityY + ")");
+
+			float xDiff = e1.getRawX() - e2.getRawX();
+			float yDiff = e1.getRawY() - e2.getRawY();
+			cam.setMouseDiff(xDiff, yDiff);
+			
+			return true;
+		}
+		
+		@Override
+		public boolean onSingleTapUp(MotionEvent e)
+		{
+			Log.v(LevelActivity.TAG, "onSingleTapUp(" + e + ")");
+
+			Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
+			Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
+
+			SceneEntity entity = collManager.intersectRay(cam.eyePosition, rayDirection);
+
+			//entity selected
+			if(entity!=null)
+			{
+				selectionDirection.copy(rayDirection);
+				//force strength
+				selectionDirection.normalize().multiply(5);
+
+				if(entity.getMotion()==null)
+				{
+					motionManager.addMotion(
+							new Orbit(entity.getBoundingSphereWorld().center,
+									new Vector3(),
+									selectionDirection,
+									5,
+									entity.getBasicOrientation()),
+							entity);
+				}
+				else
+				{
+					Orbit orbit = (Orbit)entity.getMotion();
+					orbit.morphOrbit(selectionDirection);
+					motionManager.changeSatelliteTransformation(entity, orbit.getCurrDirectionVec(), selectionDirection);
+					//						orbit.transformOrbit(new Vector3(orbit.entityPos).subtract(new Vector3(1,1,2)), 
+					//											 new Vector3(),
+					//											 new Vector3(0,0,-1),
+					//											 10);
+
+					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
+				}
+			}
+
+			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
+
+			return true;
+		}
+	}
+
 	private void pre_render()
 	{
 //		glLoadIdentity(); // not needed, because cam.look() sets the modelview matrix completely new
@@ -304,6 +328,4 @@ public class RenderView extends GLSurfaceView implements Renderer
 		}
 		return false;
 	}
-
-
 }
