@@ -14,6 +14,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import android.util.Log;
 
 public class GameRenderer implements GLSurfaceView.Renderer {
 
@@ -39,12 +40,14 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 		glLoadIdentity();
 		gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
 		GameView.resolution = new Vector2f(width, height);
+		Log.d("onSurfaceChanged","jo");
 
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		SceneGraph.init(gl); // now init the Geometry VBO´s
+		Log.d("onSurfaceCreated","jo");
 	}
 
 }
