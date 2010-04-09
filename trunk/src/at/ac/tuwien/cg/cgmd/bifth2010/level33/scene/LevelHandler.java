@@ -122,7 +122,7 @@ public class LevelHandler {
 		else if (diff.y < 0)
 			step.y = -1;
 
-		gameCharacterPosition.add(step.divide(2f/SceneGraph.deltaTime));
+		gameCharacterPosition.add(step.divide(0.2f/SceneGraph.deltaTime));
 		
 		
 
