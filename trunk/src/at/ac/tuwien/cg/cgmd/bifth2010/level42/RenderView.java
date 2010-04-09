@@ -181,29 +181,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 	
 	private class GestureListener extends SimpleOnGestureListener
 	{
+		
 		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
-			Log.v(LevelActivity.TAG, "onFling(" + e1 + ", " + e2 + ", " + velocityX + ", " + velocityY + ")");
-
-			if(e2 == null)
-				return true;
-			
-			float xDiff;
-			float yDiff;
-			if(e1 == null)
-			{
-				xDiff = 0 - e2.getRawX();
-				yDiff = 0 - e2.getRawY();
-			}
-			else
-			{
-				xDiff = e1.getRawX() - e2.getRawX();
-				yDiff = e1.getRawY() - e2.getRawY();
-			}
-			
-			cam.setMouseDiff(xDiff, yDiff);
-			
+			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
+			cam.setMouseDiff(distanceX, distanceY);
 			return true;
 		}
 		
