@@ -11,18 +11,50 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 
+/**
+ * Button is used to define buttons shown in the level. 
+ * It is used to define position, width, height, active state and others.
+ * 
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
+
 public class Button
 {
+	
+	/** The position of the button. */
 	private Vector2 position;
+	
+	/** The width of the button. */
 	private float width;
+	
+	/** The height of the button. */
 	private float height;
+	
+	/** The active of the button. */
 	private boolean active=true;
+	
+	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
+	
+	/** The texture coordinates buffer. */
 	private FloatBuffer texCoordBuffer;
+	
+	/** The unique vertex buffer id. */
 	private int vboId;
+	
+	/** The geometry manager. */
 	private GeometryManager geometryManager;
 //	private int textureID=0; 
 	
+	/**
+	 * Constructor to set width, height, position, as well as instantiating the <code>GeometryManager</code><p>
+	 * Additionally, <code>FrontBuffer</code> vertexBuffer and texCoordBuffer are created. Then, the VBOs are generated
+	 * @param width describes the width of the button 
+	 * @param height describes the height of the button 
+	 * @param position describes the 2d position (x,y) of the button, where (0,0) is left bottom  
+	 * 
+	 */
 	public Button(float width, float height, Vector2 position)
 	{
 		this.width = width;
@@ -37,6 +69,13 @@ public class Button
 		}
 	}
 	
+	/**
+	 * Checks if the button is pressed or not.
+	 *
+	 * @param x x-coordinate of the position
+	 * @param y y-coordinate of the position
+	 * @return true if the button is pressed, false else
+	 */
 	public boolean isPressed(float x, float y)
 	{
 		if(x < position.x)
@@ -51,6 +90,11 @@ public class Button
 		return true;				
 	}
 	
+	/**
+	 * Renders the button <p>
+	 * If GLES11 is supported, the button is rendered using VBOs <p>
+	 * Else, Vertex Arrays are used.
+	 */
 	public void render()
 	{
 		glDisable(GL_TEXTURE_2D);
@@ -95,6 +139,8 @@ public class Button
 	}
 
 	/**
+	 * Gets the button's position.
+	 *
 	 * @return the position
 	 */
 	public Vector2 getPosition() {
@@ -102,6 +148,8 @@ public class Button
 	}
 
 	/**
+	 * Sets the button's position.
+	 *
 	 * @param position the position to set
 	 */
 	public void setPosition(Vector2 position) {
@@ -109,6 +157,8 @@ public class Button
 	}
 
 	/**
+	 * Gets the width of the button.
+	 *
 	 * @return the width
 	 */
 	public float getWidth() {
@@ -116,6 +166,8 @@ public class Button
 	}
 
 	/**
+	 * Sets the width of the button.
+	 *
 	 * @param width the width to set
 	 */
 	public void setWidth(float width) {
@@ -123,6 +175,8 @@ public class Button
 	}
 
 	/**
+	 * Gets the height of the button.
+	 *
 	 * @return the height
 	 */
 	public float getHeight() {
@@ -130,6 +184,8 @@ public class Button
 	}
 
 	/**
+	 * sets the height of the button.
+	 *
 	 * @param height the height to set
 	 */
 	public void setHeight(float height) {
@@ -137,13 +193,17 @@ public class Button
 	}
 
 	/**
-	 * @return the active
+	 * Returns the active state of the button.
+	 *
+	 * @return true if the button is allowed to be pressed, false otherwise
 	 */
 	public boolean isActive() {
 		return active;
 	}
 
 	/**
+	 * sets the active state of the button (allowed to be pressed?).
+	 *
 	 * @param active the active to set
 	 */
 	public void setActive(boolean active) {

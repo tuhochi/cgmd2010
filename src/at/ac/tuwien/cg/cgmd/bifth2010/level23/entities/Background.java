@@ -22,6 +22,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 
+/**
+ * This class does the background
+ * It is using a full screen quad and maps the texture on it
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ *
+ */
 public class Background implements SceneEntity 
 {
 
@@ -36,6 +43,9 @@ public class Background implements SceneEntity
 	private GeometryManager geometryManager; 
 	private int vboId;
 	
+	/**
+	 * Default constructor, which calls @see #preprocess() 
+	 */
 	public Background()
 	{
 		renderView = RenderView.getInstance();	
@@ -44,6 +54,10 @@ public class Background implements SceneEntity
 		
 	}
 	
+	/**
+	 * Creates the <code>FrontBuffer</code> used for rendering
+	 * It uses VBO if GLES11 is supported and vertex arrays otherwise
+	 */
 	private void preprocess() {
 		
 		geometryManager = GeometryManager.getInstance(); 
@@ -57,11 +71,19 @@ public class Background implements SceneEntity
 		
 	}
 	
+	/**
+	 * Sets the unique texture id 
+	 * @param texID texture id 
+	 */
 	public void setTextureID(int texID)
 	{
 		textureID = texID;
 	}
 	
+	/**
+	 * Updates the vertical position, depending on time 
+	 * @param dt time elapsed
+	 */
 	public void update(float dt)
 	{
 		positionY -= dt*scrollSpeed/RenderView.getInstance().getTopBounds();
@@ -72,6 +94,12 @@ public class Background implements SceneEntity
 //		}
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity#render()
+	 */
+	/**
+	 * Renders the background
+	 */
 	@Override
 	public void render() 
 	{
