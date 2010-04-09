@@ -8,11 +8,65 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.View.OnTouchListener;
 
 
 public final class CommonFunctions {
 	
 	private static final String CLASS_TAG = CommonFunctions.class.getName();
+	
+	
+	
+	/*************************** CODE SAMPLES *****************************
+	* 
+	*
+ 	////////////////////////////// SAMPLE 1 ////////////////////////////////
+	// A GestureDetector for GlSurfaceView that doesn't affect the frame rate
+	//  
+
+	private OnTouchListener touchListener = new OnTouchListener()
+	{
+	    public boolean onTouch(View v, MotionEvent e)
+	    {
+	    	//pass on the touch event to the GestureDetector
+	    	boolean b = cGestureDetector.onTouchEvent(e);
+	    	try {
+	    		//this hack prevents the frame rate from dropping dramatically during interaction.
+	    		//described at: 
+	    		//http://groups.google.com/group/android-developers/browse_frm/thread/39eea4d7f6e6dfca
+	    		Thread.sleep(35);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+	    	return b;
+	    }
+	};
+	
+	private OnGestureListener gestureListener = new OnGestureListener() {
+		//TODO implement OnGestureListener here
+	};
+	
+	GestureDetector cGestureDetector = null;
+	//init the activity
+	void initialization(){
+		myGlSurfaceView.setOnTouchListener(touchListener);
+        cGestureDetector = new GestureDetector(gestureListener);
+    }
+    
+    //
+  	///////////////////////////// SAMPLE 1 ////////////////////////////////
+  	
+	*  
+	*  
+	*  
+	*  
+	*************************** CODE SAMPLES *****************************/
+	
+	
 	
 	public static final int loadTexture(GL10 gl, Resources cResources, int iResource) {
 		if(gl==null){
