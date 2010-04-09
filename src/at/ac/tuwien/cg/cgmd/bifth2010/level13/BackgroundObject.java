@@ -23,7 +23,11 @@ public class BackgroundObject extends GameObject {
 	 */
 	@Override
 	public void draw(GL10 gl) {
-
+		
+		//Reset modelview matrix
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		
 		//test for collision with solid tiles
 		if(CollisionHandler.checkBackgroundCollision(MyRenderer.map)) {
 			//reset offset
@@ -51,8 +55,7 @@ public class BackgroundObject extends GameObject {
 		//draw
 		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 		
-		//translate back
-		gl.glTranslatef(GameObject.offset.x, GameObject.offset.y, 0f);
+		
 		
 		//disable client state
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
