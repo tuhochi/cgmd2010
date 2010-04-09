@@ -7,8 +7,9 @@ import java.io.IOException;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public abstract class Motion
+public abstract class Motion implements Persistable
 {
 	/*
 	 * Subclasses of Motion *need* a default constructor!
@@ -17,7 +18,7 @@ public abstract class Motion
 	public abstract Matrix44 getTransform();
 	public abstract void setSatTrans(SatelliteTransformation satTrans);
 	public abstract void persist(DataOutputStream dos) throws IOException;
-	protected abstract void restore(DataInputStream dis) throws IOException;
+	public abstract void restore(DataInputStream dis) throws IOException;
 	
 	public static Motion restore(DataInputStream dis, String className)
 	{

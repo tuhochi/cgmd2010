@@ -317,7 +317,7 @@ public class Orbit extends Motion
 	}
 
 	@Override
-	protected void restore(DataInputStream dis) throws IOException
+	public void restore(DataInputStream dis) throws IOException
 	{
 		speed = dis.readFloat();
 		u = dis.readFloat();

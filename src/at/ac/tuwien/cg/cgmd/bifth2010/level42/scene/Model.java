@@ -13,11 +13,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Pair;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 //static imports
 import static android.opengl.GLES10.*;
 
-public class Model implements Moveable
+public class Model implements Moveable,Persistable
 {
 	private Matrix44 transformation;
 	private Matrix44 transformation_temp;

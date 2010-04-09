@@ -1,8 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,12 +11,13 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 
 public class LevelActivity extends Activity
 {
 	public static final String TAG = "Signanzorbit";
-	public static final String TRANSFORMATION_FILE = "l42_SceneState.bin";
+	public static final String SCENE_STATE_KEY = "l42_state";
 	
 	private static LevelActivity instance;
 	
@@ -32,9 +34,6 @@ public class LevelActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		Log.v(TAG,"onCreate(" + savedInstanceState + ")");
-		
-		if(savedInstanceState == null)
-			deleteFile(TRANSFORMATION_FILE);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
@@ -64,16 +63,6 @@ public class LevelActivity extends Activity
 		super.onResume();
 		Log.v(TAG,"onResume()");
 		
-		try
-		{
-			DataInputStream dis = new DataInputStream(openFileInput(TRANSFORMATION_FILE));
-			renderView.sceneStateFile = dis;
-		}
-		catch (FileNotFoundException e)
-		{
-			renderView.sceneStateFile = null;
-		}
-		
 		renderView.synchronizer.setActive(true);
 		renderView.onResume();
 	}
@@ -85,23 +74,6 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onPause()");
 		renderView.synchronizer.setActive(false);
 		renderView.onPause();
-		
-		Scene s = renderView.scene;
-		
-		if(s==null)
-			return;
-		
-		try
-		{
-			DataOutputStream dos = new DataOutputStream(openFileOutput(TRANSFORMATION_FILE, MODE_PRIVATE));
-			renderView.cam.persist(dos);
-			s.persist(dos);
-			dos.close();
-		}
-		catch (Throwable t)
-		{
-			Log.e(TAG, "Failed to persist Scene state: ",t);
-		}
 	}
 	
 	@Override
@@ -123,7 +95,25 @@ public class LevelActivity extends Activity
 	{
 		super.onSaveInstanceState(outState);
 		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
-		outState.putCharSequence("testkey", "testvalue");
+		
+		Scene scene = renderView.scene;
+		Camera cam = renderView.cam;
+
+		try
+		{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
+			DataOutputStream dos = new DataOutputStream(baos);
+			cam.persist(dos);
+			scene.persist(dos);
+			dos.close();
+			baos.close();
+			byte[] state = baos.toByteArray();
+			outState.putByteArray(SCENE_STATE_KEY, state);
+		}
+		catch (Throwable t)
+		{
+			Log.e(TAG, "Failed to persist Scene state: ",t);
+		}
 	}
 	
 	@Override
@@ -131,6 +121,29 @@ public class LevelActivity extends Activity
 	{
 		super.onRestoreInstanceState(savedInstanceState);
 		Log.v(TAG,"onRestoreInstanceState(" + savedInstanceState + ")");
+		
+		byte[] state = savedInstanceState.getByteArray(SCENE_STATE_KEY);
+		if(state != null)
+		{
+			try
+			{
+				ByteArrayInputStream bais = new ByteArrayInputStream(state);
+				DataInputStream dis = new DataInputStream(bais);
+				
+				Scene scene = renderView.scene;
+				Camera cam = renderView.cam;
+				
+				cam.restore(dis);
+				scene.restore(dis);
+				
+				dis.close();
+				bais.close();
+			}
+			catch (Throwable t)
+			{
+				Log.e(TAG, "Failed to restore Scene state: ",t);
+			}
+		}
 	}
 
 	public static LevelActivity getInstance()

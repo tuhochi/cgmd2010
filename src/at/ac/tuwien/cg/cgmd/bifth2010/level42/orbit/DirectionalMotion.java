@@ -73,7 +73,7 @@ public class DirectionalMotion extends Motion
 	}
 
 	@Override
-	protected void restore(DataInputStream dis) throws IOException
+	public void restore(DataInputStream dis) throws IOException
 	{
 		this.directionVec.restore(dis);
 		this.currentPos.restore(dis);

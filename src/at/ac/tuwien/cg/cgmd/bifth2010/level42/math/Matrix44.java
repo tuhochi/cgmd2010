@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Matrix44
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
+
+public class Matrix44 implements Persistable
 {
 	public final float m[][] = new float[4][4];
 	private final float m16[] = new float[16];

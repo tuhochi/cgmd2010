@@ -5,8 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public class Scene
+public class Scene implements Persistable
 {
 	public static final int RENDERMODE_VERTEXARRAY = 0;
 	public static final int RENDERMODE_VBO = 1;

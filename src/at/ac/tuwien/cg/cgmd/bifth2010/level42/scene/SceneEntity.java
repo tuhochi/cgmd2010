@@ -15,8 +15,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public class SceneEntity implements Moveable
+public class SceneEntity implements Moveable,Persistable
 {
 	private String name;
 	private Matrix44 transformation;
