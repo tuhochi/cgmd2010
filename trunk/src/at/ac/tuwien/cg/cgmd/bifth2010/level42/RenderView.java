@@ -33,9 +33,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 public class RenderView extends GLSurfaceView implements Renderer
 {
-	private static final float LIGHT_AMBIENT[] = {0.5f,0.5f,0.5f,1.0f};
-	private static final float LIGHT_DIFFUSE[] = {0.9f,0.9f,0.9f,1.0f};
-	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,0.0f,1.0f};
+	private static final float LIGHT_AMBIENT[] = {0.6f,0.6f,0.6f,1.0f};
+	private static final float LIGHT_DIFFUSE[] = {1.0f,1.0f,1.0f,1.0f};
+	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,100.0f,1.0f};
 	
 	final LevelActivity context;
 	public final Scene scene;
@@ -181,13 +181,26 @@ public class RenderView extends GLSurfaceView implements Renderer
 	
 	private class GestureListener extends SimpleOnGestureListener
 	{
+		private long pressStart = 0;
+		@Override
+		public boolean onDown(MotionEvent e)
+		{
+			pressStart = timer.getTimeOfLastFrame();
+			return super.onDown(e);
+		}
 		
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
-			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
+//			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
 			cam.setMouseDiff(distanceX, distanceY);
 			return true;
+		}
+		
+		@Override
+		public void onLongPress(MotionEvent e)
+		{
+			Log.v(LevelActivity.TAG, "onLongPress(" + e + ")");
 		}
 		
 		@Override
@@ -205,8 +218,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 			{
 				selectionDirection.copy(cam.viewPosition);
 				selectionDirection.subtract(cam.eyePosition);
+
 				//force strength
-				selectionDirection.normalize().multiply(5);
+				int difference = (int)(timer.getTimeOfLastFrame()-pressStart)/10;
+				Log.d(LevelActivity.TAG,"" + difference);
+				selectionDirection.normalize().multiply(difference);
 
 				if(entity.getMotion()==null)
 				{
