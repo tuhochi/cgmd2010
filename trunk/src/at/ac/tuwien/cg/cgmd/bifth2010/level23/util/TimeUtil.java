@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.util.Log;
+
 public class TimeUtil {
 	
 	private static TimeUtil instance;
@@ -32,8 +34,13 @@ public class TimeUtil {
 		return instance;
 	}
 	
+	public void cancelTimer() {
+		timer.cancel();
+	}
+	
 	public void scheduleTimer(TimerTask task, long delay)
 	{
+		timer = new Timer(); 
 		timer.schedule(task, delay);
 	}
 	
