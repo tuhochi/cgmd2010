@@ -5,6 +5,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 		openglview.setRenderer(renderManager);
 		
 		ImageButton b1 = (ImageButton) findViewById(R.id.l84_GemButton01);
-		b1.setOnClickListener(this);
+		b1.setOnClickListener(this);    
 		ImageButton b2 = (ImageButton) findViewById(R.id.l84_GemButton02);
 		b2.setOnClickListener(this);
 		ImageButton b3 = (ImageButton) findViewById(R.id.l84_GemButton03);

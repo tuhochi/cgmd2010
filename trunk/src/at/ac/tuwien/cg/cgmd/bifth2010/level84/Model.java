@@ -11,7 +11,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
-import android.util.Log;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * Baseclass for all OpenGL models.
@@ -53,7 +54,9 @@ public class Model {
 	 * @param deltaTime
 	 */
 	public void update(double deltaTime) {
-		System.out.println("timepassed: " + deltaTime);
+//		TextView tf = (TextView) findViewByI(R.id.l84_TfFps);
+//		tf.setText(text);
+//		System.out.println("timepassed: " + deltaTime);
 	}
 	
 	/**

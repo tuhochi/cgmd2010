@@ -5,23 +5,52 @@ import javax.microedition.khronos.opengles.GL10;
 
 import java.util.*;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Handler;
+import android.os.Message;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
 
 public class RenderManager implements Renderer {
 
-	private Context context;
+	private Activity context;
 	private List<Model> models;
 	private Date time = new Date();
 	private double lastTime = 0.0;
 	float rotation = 4.0f;
 	
-	public RenderManager(Context context, List<Model> models)
+	private TextView tfFps;
+	private int fps = 0;
+	
+	public RenderManager(Activity context, List<Model> models)
 	{
 		this.context = context;
 		this.models = models;
+		this.tfFps = (TextView)context.findViewById(R.id.l84_TfFps);
+		
+		Timer fpsUpdateTimer = new Timer();
+	 	fpsUpdateTimer.schedule(new TimerTask() {
+	 		
+	 		@Override
+	 		public void run() {
+	 			//FPSCounter counter = FPSCounter.getInstance();
+	 			//fpsString = "fps: " + counter.getFPS();
+	 		handleUIChanges.sendEmptyMessage(0);
+	 		}
+	 	}, 1000, 3000);
 	}
+	
+	 private Handler handleUIChanges = new Handler() {
+		 @Override
+		 public void handleMessage(Message msg) {
+			 super.handleMessage(msg);
+			 tfFps.setText(fps + " FPS");
+		 }
+	   };
 	
 	/**
 	 * main draw method
@@ -32,6 +61,10 @@ public class RenderManager implements Renderer {
 		
 		double deltaTime = time.getTime() - lastTime;
 		lastTime = time.getTime();
+		
+		fps = (int)(1.0/deltaTime);
+		//TODO: Fette FPS Anzeige.
+		//tfFps.setText((1.0 / deltaTime) + " FPS");
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(0, 0, -4);
@@ -77,7 +110,7 @@ public class RenderManager implements Renderer {
 		//Load textures of all available models.
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext())
-			i.next().loadGLTexture(gl, this.context);
+			i.next().loadGLTexture(gl, (Context)this.context);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
