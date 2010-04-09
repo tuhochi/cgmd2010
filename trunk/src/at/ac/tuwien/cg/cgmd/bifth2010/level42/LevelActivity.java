@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 
 public class LevelActivity extends Activity
@@ -132,6 +133,7 @@ public class LevelActivity extends Activity
 				
 				Scene scene = renderView.scene;
 				Camera cam = renderView.cam;
+				MotionManager.instance.reset();
 				
 				cam.restore(dis);
 				scene.restore(dis);
