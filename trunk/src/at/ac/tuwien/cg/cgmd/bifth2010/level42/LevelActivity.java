@@ -133,8 +133,8 @@ public class LevelActivity extends Activity
 				
 				Scene scene = renderView.scene;
 				Camera cam = renderView.cam;
-				MotionManager.instance.reset();
 				
+				MotionManager.instance.reset();
 				cam.restore(dis);
 				scene.restore(dis);
 				

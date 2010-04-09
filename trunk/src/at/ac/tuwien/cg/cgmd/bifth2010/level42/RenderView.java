@@ -203,7 +203,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 			//entity selected
 			if(entity!=null)
 			{
-				selectionDirection.copy(rayDirection);
+				selectionDirection.copy(cam.viewPosition);
+				selectionDirection.subtract(cam.eyePosition);
 				//force strength
 				selectionDirection.normalize().multiply(5);
 
