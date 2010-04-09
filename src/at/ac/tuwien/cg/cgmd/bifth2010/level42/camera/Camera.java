@@ -8,11 +8,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 //static imports
 import static android.opengl.GLES10.*;
 
-public class Camera
+public class Camera implements Persistable
 {
 	private final OGLManager oglManager = OGLManager.instance;
 	
@@ -206,6 +207,7 @@ public class Camera
 		
 		dos.writeFloat(motionFactor);
 		
+		eyePosition.persist(dos);
 		inverseViewVector.persist(dos);
 		rightVector.persist(dos);
 		upVector.persist(dos);
@@ -229,6 +231,7 @@ public class Camera
 		
 		motionFactor = dis.readFloat();
 		
+		eyePosition.restore(dis);
 		inverseViewVector.restore(dis);
 		rightVector.restore(dis);
 		upVector.restore(dis);
