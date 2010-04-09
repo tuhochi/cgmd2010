@@ -36,6 +36,7 @@ public class SceneGraph {
 	public static Camera camera;
 	
 	static float deltaTime;
+	static float deltaTimeCount;
 	static long lastFrameStart;
 	static int framesSinceLastSecound=0;
 	
@@ -50,14 +51,11 @@ public class SceneGraph {
 	public final static byte GEOMETRY_SPRING = 15;
 	public final static byte GEOMETRY_CHARACTER = 16;
 	
-	private boolean N;
-	private boolean O;
-	private boolean S;
-	private boolean W;
 	static Context context;
 	private Vector2i frustumDim = new Vector2i(3, 5);
 	private Vector2i frustumMin = new Vector2i(0, 0);
 	private Vector2i frustumMax = new Vector2i(0, 0);
+	private static boolean init = false;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 
@@ -72,8 +70,15 @@ public class SceneGraph {
 	 * @param gl  OpenGlHandler
 	 */
 	public static void init(GL10 gl) {
-		SceneGraph.camera = new Camera();
 		
+		
+		
+//		if(SceneGraph.init)
+//			return;
+//		SceneGraph.init=true;
+			
+		
+		SceneGraph.camera = new Camera();
 		geometry = new Geometry[17];
 
 		// load Objects
@@ -102,7 +107,20 @@ public class SceneGraph {
 		//geometry[GEOMETRY_WAY]=  new GeometryWay(gl);
 		geometry[GEOMETRY_STONE] = new GeometryStone(gl);
 		geometry[GEOMETRY_BARREL] = new GeometryBarrel(gl);
-		geometry[GEOMETRY_TRASH] = new GeometryTrash(gl);
+		//geometry[GEOMETRY_TRASH] = new GeometryTrash(gl);
+		
+		
+		
+		
+		
+		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_schatz);
+		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_schatz);
+		geometry[GEOMETRY_TRASH]= GeometryLoader.loadObj(gl, is,isImage);
+		
+		
+		
+		
+		
 		geometry[GEOMETRY_MAP] = new GeometryMap(gl);
 		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl);
 		
@@ -126,12 +144,13 @@ public class SceneGraph {
 		// start time mesherment
 		framesSinceLastSecound++;
 		long currentFrameStart = System.nanoTime();
-		deltaTime += (currentFrameStart-lastFrameStart) / 1000000000.0f;
+		deltaTime = (currentFrameStart-lastFrameStart) / 1000000000.0f;
+		deltaTimeCount+=deltaTime;
 		lastFrameStart = currentFrameStart;		
-		if (deltaTime >= 1) {
+		if (deltaTimeCount >= 1) {
 			Log.d("fps", String.valueOf(framesSinceLastSecound));
 			framesSinceLastSecound = 0;
-			deltaTime = 0f;
+			deltaTimeCount = 0f;
 		}
 
 		// Clears the screen and depth buffer.
