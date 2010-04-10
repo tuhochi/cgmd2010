@@ -14,7 +14,7 @@
 <color name="l30_HelpActivityTextColor">#000000</color>
 <string name="l30_nameofthegame_full">Stockmarket Loser</string>
 <string name="l30_HelpActivity_Title">Stockmarket Loser</string>
-<string name="l30_HelpActivity_Text1">What's the quickest way to lose money? Right, invest it in the stock market! Your goal is to lose a lot of money by buying and selling company shares.</string>
+<string name="l30_HelpActivity_Text1">What\'s the quickest way to lose money? Right, invest it in the stock market! Your goal is to lose a lot of money by buying and selling company shares.</string>
 <string name="l30_HelpActivity_Text2">Multiple graphs of stock prices fly towards you in glorious 3D. In contrast to reality you can see a little bit in the future how the market price develops. Buy and sell shares by hitting the buttons. Try to buy when the market price is high, and sell when the price is low.</string>
 
 </resources>
