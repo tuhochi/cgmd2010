@@ -1,10 +1,19 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
-import static android.opengl.GLES10.*;
+import static android.opengl.GLES10.GL_TEXTURE_2D;
+import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES10.GL_UNSIGNED_SHORT;
+import static android.opengl.GLES10.glDisable;
+import static android.opengl.GLES10.glDrawElements;
+import static android.opengl.GLES10.glEnable;
+import static android.opengl.GLES10.glPopMatrix;
+import static android.opengl.GLES10.glPushMatrix;
+import static android.opengl.GLES10.glScalef;
+import static android.opengl.GLES10.glTranslatef;
+import static android.opengl.GLES10.glVertexPointer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -16,9 +25,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.os.Bundle;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Obstacle;
 
 
 /**
@@ -26,7 +35,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
  * @author Markus Ernst
  * @author Florian Felberbauer
  */
-public class ObstacleManager implements Serializable
+public class ObstacleManager
 {
 	
 	/**
@@ -55,16 +64,16 @@ public class ObstacleManager implements Serializable
 	public final int NR_OF_OBSTACLES = 50;
 	
 	/** The constant for obstacle type 1  */
-	public final int OBSTACLE_TYPE1 = 1;
+	public static final int OBSTACLE_TYPE1 = 1;
 	
 	/** The constant for obstacle type 2 */
-	public final int OBSTACLE_TYPE2 = 2;
+	public static final int OBSTACLE_TYPE2 = 2;
 	
 	/** The constant for obstacle type 3 */
-	public final int OBSTACLE_TYPE3 = 3;
+	public static final int OBSTACLE_TYPE3 = 3;
 	
 	/** the constant for obstacle type 4. */
-	public final int OBSTACLE_TYPE4 = 4;
+	public static final int OBSTACLE_TYPE4 = 4;
 	
 	//in numbers per 100, must sum up to 10
 	/** The probability for obstacle type 1. */
@@ -91,63 +100,7 @@ public class ObstacleManager implements Serializable
 	 * @author Markus Ernst
 	 * @author Florian Felberbauer
 	 */
-	public class Obstacle implements Serializable
-	{	
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 8841834994514009996L;
 
-		/** The width. */
-		public int width;
-		
-		/** The height. */
-		public int height;
-		
-		/** The position. */
-		public Vector2 position;
-		
-		/** The type. */
-		public int type;
-		
-		/**
-		 * Instantiates a new obstacle.
-		 *
-		 * @param y the y position of the obstacle
-		 * @param type the type (1-4) 
-		 */
-		public Obstacle(int y, int type)
-		{
-			position = new Vector2();
-			position.y = y;
-			this.type = type;
-			switch(type)
-			{
-				case(OBSTACLE_TYPE1):
-					position.x=0;
-					width = 20;
-					height = 10;
-					break;
-				case(OBSTACLE_TYPE2):
-					position.x=20;
-					width = 20;
-					height = 5;
-					break;
-				case(OBSTACLE_TYPE3):
-					position.x=40;
-					width = 20;
-					height = 20;
-					break;
-				case(OBSTACLE_TYPE4):
-					position.x=80;
-					width = 20;
-					height = 5;
-					break;			
-			}
-		}
-		
-	}
 	
 	/** The arraylist of obstacles. */
 	private ArrayList<Obstacle> obstacles;
@@ -212,9 +165,9 @@ public class ObstacleManager implements Serializable
 	 */
 	public void writeToBundle(Bundle bundle) {
 		try {
-		//bundle.putSerializable("obstacles", obstacles);
+			bundle.putSerializable("obstacles", obstacles);
 		} catch (Throwable t) {
-			Log.e("ObstacleManager.java", "blubb "+t.getMessage());
+			Log.e("ObstacleManager.java", t.getMessage());
 		}
 	}
 	
