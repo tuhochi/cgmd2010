@@ -4,6 +4,7 @@ import java.util.Random;
 
 import android.provider.UserDictionary.Words;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 
@@ -292,12 +293,37 @@ public class LevelHandler {
 		int worldIndex = worldDim.y*rows+columns;
 		if(world[worldIndex]!=1)
 		{
+			if(LevelActivity.IS_MUSIC_ON)
+			{
+				if(world[worldIndex]==SceneGraph.GEOMETRY_STONE)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_BARREL)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_TRASH)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_SPRING)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_MAP)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
+				}
+			}
 			world[worldIndex]=1;
+			
+			
 			
 			//AlphaBLENDING
 			//TODO
 		}
-		
+		LevelActivity.soundHandler.releaseActivityAudioPlayer();
 	}
 
 }
