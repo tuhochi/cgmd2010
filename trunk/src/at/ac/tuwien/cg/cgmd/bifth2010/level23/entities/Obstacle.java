@@ -1,6 +1,9 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 
 import java.io.Serializable;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 public class Obstacle implements Serializable {
 	/**

@@ -8,9 +8,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
@@ -35,10 +33,6 @@ public class MainChar implements SceneEntity {
 	/** The position. */
 	private Vector2 position;
 	
-	/** The translation. */
-	private Vector3 translation;
-	
-
 	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
 	
@@ -78,7 +72,6 @@ public class MainChar implements SceneEntity {
 		else
 			this.position = new Vector2(200,0);
 		
-		this.translation = new Vector3(0,0,0);
 		preprocess();
 		
 	}
@@ -97,9 +90,8 @@ public class MainChar implements SceneEntity {
 		if (Settings.MAINCHARPOS != null)
 			this.position = Settings.MAINCHARPOS; 
 		else
-			this.position = new Vector2(200,0);
+			this.position = position;
 		
-		this.translation = new Vector3(0,0,0);
 		preprocess(); 
 	}
 	
@@ -184,14 +176,6 @@ public class MainChar implements SceneEntity {
 	public void setPosition(Vector2 position) {
 		this.position = position; 
 	}
-	/**
-	 * Gets the translation.
-	 *
-	 * @return the translation
-	 */
-	public Vector3 getTranslation() {
-		return this.translation; 
-	}
 	
 	/**
 	 * Gets the width.
@@ -221,43 +205,7 @@ public class MainChar implements SceneEntity {
 	{
 		this.textureID = texID;
 	}
-	
-//	public void moveLeftRight(float translate)
-//	{
-//		translation.x += translate;
-//		position.x += translate; 
-//	}
-//	
-/**
- * Handles the movement up and down
- *
- * @param translate the vertical translation
- */
-public void moveUpDown(float translate)
-	{
-		translation.y += translate;
-	}
-	
-	/**
-	 * Moves back and forward.
-	 *
-	 * @param translate the translation in z-direction
-	 */
-	public void moveBackFront(float translate)
-	{
-		translation.z += translate;
-	}	
-	
-	/**
-	 * Resets the translation.
-	 */
-	public void resetTranslation()
-	{
-		translation.x = 0f;
-		translation.y = 0f;
-		translation.z = 0f;
-	}
-	
+
 	/**
 	 * Checks if main character is inbounds after step.
 	 *
@@ -291,8 +239,9 @@ public void moveUpDown(float translate)
 	public void update(float dt, int moveDir)
 	{
 		RenderView renderer = RenderView.getInstance();
+		float rightBounds = renderer.getRightBounds();
 		
-		if(moveDir == 0 || moveDir >0 && position.x == renderer.getRightBounds() - width 
+		if(moveDir == 0 || moveDir >0 && position.x == rightBounds - width 
 				|| moveDir<1 && position.x == 0)
 			return;
 		
@@ -300,14 +249,13 @@ public void moveUpDown(float translate)
 		
 		if(!isInboundsAfterStep(moveDir,step))
 		{
-			if(moveDir > 0 && position.x != renderer.getRightBounds() - width)
-				step = renderer.getRightBounds() - width - position.x;
+			if(moveDir > 0 && position.x != rightBounds - width)
+				step = rightBounds - width - position.x;
 			if(moveDir < 0 && position.x != 0.0f)
 				step = -position.x;
 		}
 		
-		translation.x = step;
-		position.x += translation.x;
+		position.x += step;
 	}
 	
 	/* (non-Javadoc)

@@ -26,8 +26,8 @@ import javax.microedition.khronos.opengles.GL10;
 import android.os.Bundle;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Obstacle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Obstacle;
 
 
 /**
