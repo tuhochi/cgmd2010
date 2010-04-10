@@ -26,12 +26,12 @@ public class Obstacle implements Serializable {
 	 * @param y the y position of the obstacle
 	 * @param type the type (1-4) 
 	 */
-	public Obstacle(int y, int type2)
+	public Obstacle(int y, int type)
 	{
 		position = new Vector2();
 		position.y = y;
-		int type = -1; 
-		this.type = type2;
+		this.type = type; 
+		
 		switch(type)
 		{
 			case(ObstacleManager.OBSTACLE_TYPE1):
