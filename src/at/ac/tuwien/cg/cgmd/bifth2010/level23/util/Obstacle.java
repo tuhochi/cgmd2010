@@ -1,0 +1,60 @@
+package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
+
+import java.io.Serializable;
+
+public class Obstacle implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8841834994514009996L;
+
+	/** The width. */
+	public int width;
+	
+	/** The height. */
+	public int height;
+	
+	/** The position. */
+	public Vector2 position;
+	
+	/** The type. */
+	public int type;
+	
+	/**
+	 * Instantiates a new obstacle.
+	 *
+	 * @param y the y position of the obstacle
+	 * @param type the type (1-4) 
+	 */
+	public Obstacle(int y, int type2)
+	{
+		position = new Vector2();
+		position.y = y;
+		int type = -1; 
+		this.type = type2;
+		switch(type)
+		{
+			case(ObstacleManager.OBSTACLE_TYPE1):
+				position.x=0;
+				width = 20;
+				height = 10;
+				break;
+			case(ObstacleManager.OBSTACLE_TYPE2):
+				position.x=20;
+				width = 20;
+				height = 5;
+				break;
+			case(ObstacleManager.OBSTACLE_TYPE3):
+				position.x=40;
+				width = 20;
+				height = 20;
+				break;
+			case(ObstacleManager.OBSTACLE_TYPE4):
+				position.x=80;
+				width = 20;
+				height = 5;
+				break;			
+		}
+	}
+	
+}
