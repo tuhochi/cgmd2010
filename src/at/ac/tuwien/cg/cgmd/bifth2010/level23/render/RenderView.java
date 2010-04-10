@@ -321,8 +321,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
 		topBounds = rightBounds*aspectRatio;
 		
-		mainChar = new MainChar(25.0f,45.0f,new Vector2(0,0));
-		
+		mainChar = new MainChar(Settings.MAINCHAR_WIDTH,Settings.MAINCHAR_HEIGHT,Settings.MAINCHAR_STARTPOS);
+
 		ObstacleManager.getInstance().generateObstacles();
 		
 		background = new Background();
