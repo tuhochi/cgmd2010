@@ -288,6 +288,21 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		gl.glLoadIdentity();		
 	}
 
+	/**
+	 * Gets the position of the main char
+	 * @return the position of the main char 
+	 */
+	public Vector2 getMainCharPos() {
+		return mainChar.getPosition();
+	}
+	
+	/**
+	 * Sets the position of the main char
+	 * @param pos the position to set 
+	 */
+	public void setMainCharPos(Vector2 pos) {
+		mainChar.setPosition(pos);
+	}
 	/* (non-Javadoc)
 	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceCreated(javax.microedition.khronos.opengles.GL10, javax.microedition.khronos.egl.EGLConfig)
 	 */

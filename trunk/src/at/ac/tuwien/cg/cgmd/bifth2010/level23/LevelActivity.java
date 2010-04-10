@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -17,6 +18,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings; 
 
 /**
  * The Class LevelActivity handles the Android Lifecycle for the level and takes care of the interaction with the use
@@ -38,6 +41,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	/** The Constant SENSOR_MENU_ITEM if a user wants to use the orientation sensor. */
 	private static final int SENSOR_MENU_ITEM = 1;
 	
+	private Vector2 mainCharPos; 
 	/**
 	 * called when the activity is created. Here, the window is created and the the UI is placed by RenderView renderer
 	 * @param savedInstanceState the Bundle received from Android 
@@ -45,6 +49,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.v("dasdf", "onCreate in LevelActivity.java");
 		// thx @ lvl 11
 		/* Fullscreen window without title */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -56,7 +61,7 @@ public class LevelActivity extends Activity implements OrientationListener {
         setContentView(renderer);
         CONTEXT = this; 
         OrientationManager.registerListener(this);
-
+ 
         instance = this;
 	}
 	
@@ -100,6 +105,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void onPause() {
 		super.onPause(); 
 		//renderer.persistSceneEntities();
+		Settings.MAINCHARPOS = renderer.getMainCharPos(); 
 	}
 	
 	/**

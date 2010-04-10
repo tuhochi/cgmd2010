@@ -27,4 +27,5 @@ public class Settings
 	/** The Constant GOLD_BOOST. */
 	public static final float GOLD_BOOST = 0.01f;
 
+	public static Vector2 MAINCHARPOS;
 }

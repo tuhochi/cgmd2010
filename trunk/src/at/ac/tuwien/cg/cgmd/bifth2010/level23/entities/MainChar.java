@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
@@ -71,9 +72,15 @@ public class MainChar implements SceneEntity {
 		//create Default MainChar
 		this.height = 200f;
 		this.width = 100f;
-		this.position = new Vector2(200,0);
+		
+		if (Settings.MAINCHARPOS != null)
+			this.position = Settings.MAINCHARPOS; 
+		else
+			this.position = new Vector2(200,0);
+		
 		this.translation = new Vector3(0,0,0);
 		preprocess();
+		
 	}
 	
 	/**
@@ -87,7 +94,11 @@ public class MainChar implements SceneEntity {
 	{
 		this.height = height;
 		this.width = width;
-		this.position = position;
+		if (Settings.MAINCHARPOS != null)
+			this.position = Settings.MAINCHARPOS; 
+		else
+			this.position = new Vector2(200,0);
+		
 		this.translation = new Vector3(0,0,0);
 		preprocess(); 
 	}
@@ -112,6 +123,7 @@ public class MainChar implements SceneEntity {
 	 * @param dis Stream to read from
 	 */
 	public void readFromStream(DataInputStream dis) {
+		
 		try {
 			position.x = dis.readFloat(); 
 			position.y = dis.readFloat(); 
@@ -165,6 +177,13 @@ public class MainChar implements SceneEntity {
 		return this.position; 
 	}
 	
+	/**
+	 * Sets the position
+	 * @param position the position to set
+	 */
+	public void setPosition(Vector2 position) {
+		this.position = position; 
+	}
 	/**
 	 * Gets the translation.
 	 *
