@@ -146,10 +146,10 @@ public class TileLayer {
 		float tempPosY=posY*scrollFactor;
 		
 		int minVisibleVBO_x=Math.max((int) (-tempPosX/(VBO_WIDTH*sizeFactor)), 0);
-		int maxVisibleVBO_x=Math.min((int) ((screenWidth-tempPosX-1)/(VBO_WIDTH*sizeFactor)),maxVBOPosX-1);
+		int maxVisibleVBO_x=Math.min((int) ((screenWidth-tempPosX)/(VBO_WIDTH*sizeFactor)),maxVBOPosX-1);
 		
 		int minVisibleVBO_y=Math.max((int) (-tempPosY/(VBO_HEIGHT*sizeFactor)), 0);
-		int maxVisibleVBO_y=Math.min((int) ((screenHeight-tempPosY-1)/(VBO_HEIGHT*sizeFactor)), maxVBOPosY-1);
+		int maxVisibleVBO_y=Math.min((int) ((screenHeight-tempPosY)/(VBO_HEIGHT*sizeFactor)), maxVBOPosY-1);
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(tempPosX, tempPosY, 0.0f);
