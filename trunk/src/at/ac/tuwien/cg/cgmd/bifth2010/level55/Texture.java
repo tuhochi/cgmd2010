@@ -56,6 +56,12 @@ public class Texture {
 			
 			if (image!=null) {
 				
+				int tile_height=image.getHeight();
+				int tile_width=image.getWidth();
+				
+				texelWidth=1.0f/(float)tile_width;
+				texelHeight=1.0f/(float)tile_height;
+				
 				IntBuffer textures=IntBuffer.allocate(1);
 				
 				gl.glGenTextures(1, textures);

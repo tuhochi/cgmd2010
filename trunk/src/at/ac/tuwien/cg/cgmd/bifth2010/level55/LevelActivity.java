@@ -55,6 +55,8 @@ public class LevelActivity extends Activity {
    
     public boolean onTouchEvent(MotionEvent me) {
 		Log.d("onTouch", me.toString());
+		
+		Log.d("onTouch x",Float.toString(me.getX()));
     	
     	synchronized(this) {
 	    	try {
