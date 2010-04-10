@@ -1,20 +1,51 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import android.util.Log;
+import android.view.KeyEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
 
 public class UpdateTask implements Runnable {
 
-	static final int FRAMES_PER_SECOND = 10;
-	static final int FRAME_DT   = 1000 / FRAMES_PER_SECOND;
-	boolean isRunning;
+	// ----------------------------------------------------------------------------------
+	// -- Static ----
+	
+	private static final int FRAMES_PER_SECOND = 10;
+	private static final int FRAME_DT   = 1000 / FRAMES_PER_SECOND;
 	
 	
-	Geometry geom;
+	// ----------------------------------------------------------------------------------
+	// -- Members ----
 	
-	public UpdateTask(Geometry geom) {
-		this.geom = geom;
+	private LinkedList<KeyEvent> inputs; //< all input events
+	private boolean isRunning;   //< true if the game is running
+	private GameScene scene;     //< Game scene
+	private boolean isLeft;      //< Left key is pressed
+	private boolean isRight;     //< Right key is pressed
+	
+	
+	// ----------------------------------------------------------------------------------
+	// -- Ctor / Dtor ----
+	
+	/**
+	 * Ctor.
+	 * @param The game scene.
+	 */
+	public UpdateTask(GameScene scene) {
+		this.scene = scene;
+		inputs = new LinkedList<KeyEvent>();
 	}
 	
+	
+	// ----------------------------------------------------------------------------------
+	// -- Public methods ----
+	
+	/**
+	 * Main update loop.
+	 */
 	@Override
 	public void run() {
 		isRunning = true;
@@ -25,9 +56,14 @@ public class UpdateTask implements Runnable {
 		long  begTime = System.nanoTime();
 		while (isRunning) {
 			
-			synchronized(geom) {
+			synchronized(inputs) {
+				doInput();
+				inputs.notify();
+			}
+			
+			synchronized(scene) {
 				update(dt);
-				geom.notify();
+				scene.notify();
 			}
 			
 			endTime = System.nanoTime();
@@ -47,13 +83,55 @@ public class UpdateTask implements Runnable {
 		}
 	}
 	
+	
+	/**
+	 * Return list with all input events.
+	 * @return List with input events.
+	 */
+	public LinkedList<KeyEvent> getInputs() {
+		return inputs;
+	}
+	
+	
+	// ----------------------------------------------------------------------------------
+	// -- Private methods ----
 
+	/**
+	 * Process input.
+	 */
+	private void doInput() {
+		while (!inputs.isEmpty()) {
+			KeyEvent key = inputs.remove();
+			int keycode       = key.getKeyCode();
+			boolean isPressed = key.getAction() == KeyEvent.ACTION_DOWN;
+			if (keycode == KeyEvent.KEYCODE_A) {
+				isLeft = isPressed;
+			}
+			else if (keycode == KeyEvent.KEYCODE_D) {
+				isRight = isPressed;
+			}
+		}
+	}
+	
+	
+	/**
+	 * Update.
+	 * @param dt Delta time
+	 */
 	private void update(float dt) {
 		
-		Log.i("UpdateTask", Float.toString(dt));
-		geom.pos[1] += 0.1;
-		if (geom.pos[1] > 1.0) {
-			geom.pos[1] = -1.0f;
+		ArrayList<Geometry> geoms = scene.getGeometry();
+		for (Geometry it : geoms) {
+			if (isLeft) {
+				it.pos[0] -= 0.1;
+			}
+			if (isRight) {
+				it.pos[0] += 0.1;
+			}
+			it.pos[1] += 0.1;
+			if (it.pos[1] > 1.0) {
+				it.pos[1] = -1.0f;
+			}
 		}
 	}
 }

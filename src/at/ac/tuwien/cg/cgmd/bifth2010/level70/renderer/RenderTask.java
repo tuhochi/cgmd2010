@@ -1,21 +1,43 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer;
 
+import java.util.ArrayList;
+
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
 
+/**
+ * @author herrjohann
+ */
 public class RenderTask implements Renderer {
 
-	Geometry geomQuad;
+	// ----------------------------------------------------------------------------------
+	// -- Members ----
 	
-	public RenderTask(Geometry geom) {
-		this.geomQuad = geom;
-	}
+	GameScene scene; //< Game scene
+	
+	
+	// ----------------------------------------------------------------------------------
+	// -- Ctor / Dtor ----
 	
 	/**
-	 * Initialization.
+	 * Ctor.
+	 * @param The game scene.
+	 */
+	public RenderTask(GameScene scene) {
+		this.scene = scene;
+	}
+	
+	
+	// ----------------------------------------------------------------------------------
+	// -- Public methods ----
+	
+	/**
+	 * OpenGL initialization.
 	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -53,14 +75,17 @@ public class RenderTask implements Renderer {
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glColor4f(0.8f, 0.5f, 0.0f, 1.0f);
-		synchronized(geomQuad) {
+		synchronized(scene) {
 			try {
-				geomQuad.wait();
+				scene.wait();
 			}
 			catch(InterruptedException e) {
 				
 			}
-			geomQuad.draw(gl);
+			ArrayList<Geometry> geoms = scene.getGeometry();
+			for (Geometry it : geoms) {
+				it.draw(gl);
+			}
 		}
 		
 		Log.i("Renderer", "onDrawFrame");
