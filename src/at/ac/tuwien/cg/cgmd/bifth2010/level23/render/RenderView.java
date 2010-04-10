@@ -1,7 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
 
-import java.util.HashMap;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -10,15 +11,14 @@ import javax.microedition.khronos.opengles.GL11;
 import android.content.Context;
 import android.opengl.GLES10;
 import android.opengl.GLSurfaceView;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
@@ -26,6 +26,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Serializer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 
 /**
@@ -98,6 +99,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** The serializer. */
 	private Serializer serializer; 
 	
+	
 	/**
 	 * Instantiates a new render view.
 	 *
@@ -130,20 +132,86 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	}
 	
 	/**
-	 * Persist scene entities to disk.
+	 * Writes to DataOutputStream 
+	 * @param dos the stream to write to 
 	 */
-	public void persistSceneEntities() {
-		textureManager.reset();
-		Serializer.getInstance().serializeObjects(mainChar, background);
+	public void writeToStream(DataOutputStream dos) {
+		try {
+			// local
+			dos.writeBoolean(released);
+			dos.writeInt(mainCharMoveDir);
+			dos.writeFloat(balloonHeight);
+			
+			// remote
+			dos.writeFloat(timer.getAccFrameTimes());
+			dos.writeBoolean(hud.isMoneyButtonActive());
+			
+			// propagate
+			mainChar.writeToStream(dos); 
+			background.writeToStream(dos); 
+			ObstacleManager.getInstance().writeToStream(dos); 
+			
+		} catch (Exception e) {
+			System.out.println("Error writing to stream in RenderView: "+e.getMessage());
+		}
 	}
 	
 	/**
+	 * Writes to bundle
+	 * @param bundle the Bundle to write to
+	 */
+	public void writeToBundle(Bundle bundle) {
+		
+	}
+	
+	public void readFromStream(DataInputStream dis) {
+		try {
+			released = dis.readBoolean(); 
+			mainCharMoveDir = dis.readInt(); 
+			balloonHeight = dis.readFloat(); 
+			timer.setAccFrameTime(dis.readFloat()); 
+			hud.setMoneyButtonActive(dis.readBoolean());
+			mainChar.readFromStream(dis); 
+			background.readFromStream(dis); 
+			ObstacleManager.getInstance().readFromStream(dis); 
+		} catch (Exception e) {
+			System.out.println("Error reading from stream in RenderView.java: "+e.getMessage()); 
+		}
+	}
+	/**
+	 * Persist scene entities to disk.
+	 */
+	public void persistSceneEntities(Bundle toSave) {
+		
+		
+		try {
+		//Serializer.getInstance().serializeObjects(mainChar, background);
+		//toSave.putSerializable("mainChar", mainChar);
+		/*toSave.putSerializable("background", background);
+		//toSave.putSerializable("OBSTACLE_MANAGER", ObstacleManager.getInstance());
+		toSave.putFloat("accFrameTime", timer.getAccFrameTimes());
+		toSave.putFloat("balloonHeight", balloonHeight);
+		toSave.putBoolean("moneyButtonActive", hud.isMoneyButtonActive());
+		*/
+		} catch (Throwable t) {
+			Log.e("Throwable in RenderView: ", t.getMessage());
+		}
+	}
+
+	/**
 	 * Restore scene entities from disk.
 	 */
-	public void restoreSceneEntities() {
-		HashMap<Integer, SceneEntity> map = Serializer.getInstance().getSerializedObjects();
+	public void restoreSceneEntities(Bundle toRestore) {
+		/*HashMap<Integer, SceneEntity> map = Serializer.getInstance().getSerializedObjects();
 		mainChar = (MainChar)map.get(Serializer.SERIALIZED_MAINCHAR);
-		background = (Background)map.get(Serializer.SERIALIZED_BACKGROUND);
+		background = (Background)map.get(Serializer.SERIALIZED_BACKGROUND);*/
+		//mainChar = (MainChar)toRestore.getSerializable("mainChar");
+		/*background = (Background)toRestore.getSerializable("background");
+		//ObstacleManager.setInstance((ObstacleManager)toRestore.getSerializable("OBSTACLE_MANAGER"));
+		timer.setAccFrameTime(toRestore.getFloat("accFrameTime"));
+		balloonHeight = toRestore.getFloat("balloonHeight");
+		hud.setMoneyButtonActive(toRestore.getBoolean("moneyButtonActive"));*/
+		
 	}
 	
 	/* (non-Javadoc)
@@ -188,6 +256,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		ObstacleManager.getInstance().renderVisibleObstacles((int)balloonHeight);
 		
+		Log.v("Balloon Height: ", String.valueOf(balloonHeight));
+		
 	}
 
 	/* (non-Javadoc)
@@ -229,6 +299,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{	
 		Log.v("RenderView.java", "onSurfaceCreated");
+		textureManager.reset();
 		setupGL(gl);
 		
 		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
@@ -383,8 +454,26 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 *
 	 * @return the main char
 	 */
-	public MainChar getMainChar() {
+	public MainChar getMainCharInstance() {
 		return mainChar;
+	}
+
+	/**
+	 * Sets the main char.
+	 *
+	 * @param background the background to set
+	 */
+	public void setBackgroundInstance(Background background) {
+		this.background = background;
+	}
+
+	/**
+	 * Gets the background.
+	 *
+	 * @return the background
+	 */
+	public Background getBackgroundInstance() {
+		return background;
 	}
 
 	/**
@@ -392,10 +481,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 *
 	 * @param mainChar the mainChar to set
 	 */
-	public void setMainChar(MainChar mainChar) {
+	public void setMainCharInstance(MainChar mainChar) {
 		this.mainChar = mainChar;
 	}
-
 	/**
 	 * Fetches key move data.
 	 */
@@ -538,4 +626,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         
         Settings.GLES11Supported = (gl instanceof GL11);
 	}
+	
+	
 }

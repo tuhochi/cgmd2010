@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 
 import static android.opengl.GLES10.*;
 
+import java.io.Serializable;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;

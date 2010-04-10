@@ -60,6 +60,21 @@ public class Hud
 	}
 	
 	/**
+	 * Checks if the money button is active
+	 * @return true if active, else otherwise
+	 */
+	public boolean isMoneyButtonActive() {
+		return moneyButton.isActive();
+	}
+	
+	/**
+	 * Sets the active state of the money button 
+	 * @param b true if button should be active, false otherwise
+	 */
+	public void setMoneyButtonActive(boolean b) {
+		moneyButton.setActive(b); 
+	}
+	/**
 	 * Tests if pressed
 	 *
 	 * @param x the x coordinate

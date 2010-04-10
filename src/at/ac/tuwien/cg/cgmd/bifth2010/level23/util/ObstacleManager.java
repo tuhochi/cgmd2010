@@ -2,6 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
 import static android.opengl.GLES10.*;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -11,7 +14,9 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import android.os.Bundle;
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
@@ -21,9 +26,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
  * @author Markus Ernst
  * @author Florian Felberbauer
  */
-public class ObstacleManager 
+public class ObstacleManager implements Serializable
 {
 	
+	/**
+	 * the unique serialVersionUID 
+	 */
+	private static final long serialVersionUID = -4564339113161027088L;
+
 	/** The instance of ObstacleManager to pass around. */
 	private static ObstacleManager instance;
 	
@@ -34,7 +44,7 @@ public class ObstacleManager
 	private Random randomGenerator;
 	
 	//current position for generating obstacle, 80 = start position
-	/** The current position to start generationg obstacles. */
+	/** The current position to start generating obstacles. */
 	private int currentPosition = 80;
 	
 	//lowest index of a visible obstacle in obstacles list
@@ -81,9 +91,14 @@ public class ObstacleManager
 	 * @author Markus Ernst
 	 * @author Florian Felberbauer
 	 */
-	public class Obstacle
+	public class Obstacle implements Serializable
 	{	
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8841834994514009996L;
+
 		/** The width. */
 		public int width;
 		
@@ -99,7 +114,7 @@ public class ObstacleManager
 		/**
 		 * Instantiates a new obstacle.
 		 *
-		 * @param y the y position of the obtacle
+		 * @param y the y position of the obstacle
 		 * @param type the type (1-4) 
 		 */
 		public Obstacle(int y, int type)
@@ -153,7 +168,7 @@ public class ObstacleManager
 		obstacles = new ArrayList<Obstacle>();
 		createVertexBuffer();
 		genArrayWithProbability();
-		mainChar = RenderView.getInstance().getMainChar();
+		mainChar = RenderView.getInstance().getMainCharInstance();
 		instance = this;
 	}
 	
@@ -167,6 +182,59 @@ public class ObstacleManager
 		if(instance==null)
 			instance = new ObstacleManager();
 		return instance;		
+	}
+	
+	/**
+	 * Sets the instance
+	 * @param manager Instance to set to singleton
+	 */
+	public static void setInstance(ObstacleManager manager) {
+		instance = manager;
+	}
+	
+	/**
+	 * Writes to stream
+	 * @param dos Stream to write to 
+	 */
+	public void writeToStream(DataOutputStream dos) {
+		try {
+			dos.writeInt(currentPosition);
+			dos.writeInt(leastRenderedObstacle);
+			
+		} catch(Exception e) {
+			System.out.println("Error writing to stream in ObstacleManager.java: "+e.getMessage());
+		}
+		
+	}
+	/**
+	 * Writes to bundle
+	 * @param bundle bundle to write to 
+	 */
+	public void writeToBundle(Bundle bundle) {
+		try {
+		//bundle.putSerializable("obstacles", obstacles);
+		} catch (Throwable t) {
+			Log.e("ObstacleManager.java", "blubb "+t.getMessage());
+		}
+	}
+	
+	/**
+	 * Reads from stream
+	 * @param dis Stream to read from 
+	 */
+	public void readFromStream(DataInputStream dis) {
+		try {
+			currentPosition = dis.readInt(); 
+			leastRenderedObstacle = dis.readInt(); 
+			
+		} catch(Exception e) {
+			System.out.println("Error reading from stream in ObstacleManager.java: "+e.getMessage());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void readFromBundle(Bundle bundle) {
+		obstacles = (ArrayList<Obstacle>)bundle.getSerializable("obstacles");
 	}
 	
 	/**

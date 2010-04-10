@@ -12,6 +12,8 @@ import static android.opengl.GLES10.glTexCoordPointer;
 import static android.opengl.GLES10.glTranslatef;
 import static android.opengl.GLES10.glVertexPointer;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -39,8 +41,7 @@ public class Background implements SceneEntity
 	private final float[] texCoords = {0.f, 0.5f, 1.f, 0.5f, 0.f, 0.f, 1.f, 0.f}; 
 	private float scrollSpeed = 0.01f;
 	private float positionY;
-	private RenderView renderView; 
-	private GeometryManager geometryManager; 
+
 	private int vboId;
 	
 	/**
@@ -48,10 +49,39 @@ public class Background implements SceneEntity
 	 */
 	public Background()
 	{
-		renderView = RenderView.getInstance();	
 		//texCoordBuffer = new FloatBuffer[2];
 		preprocess();
 		
+	}
+	
+	/**
+	 * Writes to stream
+	 * @param dos Stream to write to
+	 */
+	public void writeToStream(DataOutputStream dos) {
+		try {
+			dos.writeFloat(positionY);
+			dos.writeFloat(scrollSpeed);
+			
+		} catch (Exception e) {
+			System.out.println("Error writing to stream in Background.java: "+e.getMessage());
+		}
+		
+	}
+	
+	/**
+	 * Reads from stream
+	 * @param dis Stream to read from 
+	 */
+	
+	public void readFromStream(DataInputStream dis) {
+		try {
+			positionY = dis.readFloat(); 
+			scrollSpeed = dis.readFloat(); 
+			
+		} catch (Exception e) {
+			System.out.println("Error reading from stream in Background.java: "+e.getMessage());
+		}
 	}
 	
 	/**
@@ -60,9 +90,11 @@ public class Background implements SceneEntity
 	 */
 	private void preprocess() {
 		
-		geometryManager = GeometryManager.getInstance(); 
-		texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords)[0];
-		vertexBuffer = geometryManager.createVertexBufferQuad(renderView.getRightBounds(), renderView.getTopBounds());
+		RenderView renderView = RenderView.getInstance(); 
+		GeometryManager geometryManager = GeometryManager.getInstance();
+		
+		texCoordBuffer = GeometryManager.getInstance().createTexCoordBufferQuad(texCoords)[0];
+		vertexBuffer = GeometryManager.getInstance().createVertexBufferQuad(renderView.getRightBounds(), renderView.getTopBounds());
 		//texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords);
 		if(Settings.GLES11Supported) 
 		{
