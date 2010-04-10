@@ -1,5 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 
@@ -93,7 +99,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onPause() {
 		super.onPause(); 
-		renderer.persistSceneEntities();
+		//renderer.persistSceneEntities();
 	}
 	
 	/**
@@ -103,7 +109,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onResume() {
 		super.onResume(); 
-		renderer.restoreSceneEntities();
+		//renderer.restoreSceneEntities();
 	}
 	
 	/**
@@ -137,13 +143,51 @@ public class LevelActivity extends Activity implements OrientationListener {
 	
 	/**
 	 * Called before the activity is moved to the background but will not be called in every case. So save persistent data in onPause()
+	 * @param toSave Bundle to store the data to 
 	 */
 	@Override
 	public void onSaveInstanceState(Bundle toSave) {
-		// e.g. toSave.putInt("value", 1);
 		
+		try {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(38); 
+		DataOutputStream dos = new DataOutputStream(bos); 
+		renderer.writeToStream(dos);
+		dos.close(); 
+		bos.close(); 
+		byte[] byteArray = bos.toByteArray(); 
+		
+		ObstacleManager.getInstance().writeToBundle(toSave);
+		toSave.putByteArray("l42_persist", byteArray);
+
+		} catch (Exception e) {
+			System.out.println("Error writing to stream in LevelActivity.java: "+e.getMessage()); 
+		}
+		//renderer.persistSceneEntities(toSave); 
 	}
 
+	/**
+	 * Called to restore the saved instance state
+	 * @param toRestore the bundle where the data was stored to 
+	 */
+	@Override
+	public void onRestoreInstanceState(Bundle toRestore) {
+		//renderer.restoreSceneEntities(toRestore);
+		//Log.v("onRestoreInstanceState", "called!!!");
+		
+		try {
+		byte[] byteArray = toRestore.getByteArray("l42_persist"); 
+		ByteArrayInputStream bis = new ByteArrayInputStream(byteArray); 
+		DataInputStream dis = new DataInputStream(bis); 
+		renderer.readFromStream(dis); 
+		dis.close(); 
+		bis.close(); 
+		
+		ObstacleManager.getInstance().readFromBundle(toRestore); 
+		} catch (Exception e) {
+			System.out.println("Error restoring from bundle in LevelAcitvity.java: "+e.getMessage()); 
+		}
+	}
+	
 	/**
 	 * Implements onRollLeft from OrientationListener
 	 * Is called when orientation sensor checks that the mobile is rolled to the left 

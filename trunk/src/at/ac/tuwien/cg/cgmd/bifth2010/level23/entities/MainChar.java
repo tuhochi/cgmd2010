@@ -1,13 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 import static android.opengl.GLES10.*;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
@@ -35,9 +37,7 @@ public class MainChar implements SceneEntity {
 	/** The translation. */
 	private Vector3 translation;
 	
-	/** The geometry manager. */
-	private GeometryManager geometryManager; 
-	
+
 	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
 	
@@ -93,12 +93,41 @@ public class MainChar implements SceneEntity {
 	}
 	
 	/**
+	 * Writing to stream 
+	 * @param dos Stream to write to
+	 */
+	public void writeToStream(DataOutputStream dos) {
+		try {
+			dos.writeFloat(position.x); 
+			dos.writeFloat(position.y);
+			
+		} catch (Exception e) {
+			System.out.println("Error writing to stream in MainChar.java: "+e.getMessage());
+		}
+		
+	}
+	
+	/**
+	 * Reading from stream
+	 * @param dis Stream to read from
+	 */
+	public void readFromStream(DataInputStream dis) {
+		try {
+			position.x = dis.readFloat(); 
+			position.y = dis.readFloat(); 
+			
+		} catch (Exception e) {
+			System.out.println("Error reading from stream in MainChar.java: "+e.getMessage());
+		}
+		
+	}
+	/**
 	 * Preprocesses, before the main character starts working 
 	 * creates the vertex and texture coordinate buffer and the vbo id 
 	 */
 	private void preprocess() {
 		
-		geometryManager = GeometryManager.getInstance(); 
+		GeometryManager geometryManager = GeometryManager.getInstance(); 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
 		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
 		if(Settings.GLES11Supported) 
