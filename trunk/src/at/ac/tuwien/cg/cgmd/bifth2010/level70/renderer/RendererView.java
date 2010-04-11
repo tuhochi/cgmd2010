@@ -29,11 +29,13 @@ public class RendererView extends GLSurfaceView {
 	 * Ctor.
 	 * @param context
 	 */
-	public RendererView(Context context) {
+	public RendererView(Context context, int windowWidth, int windowHeight) 
+	{
 		super(context);
         setFocusable(true);
         
         scene = new GameScene();
+        scene.create(windowWidth,windowHeight);
         
         renderTask = new RenderTask(scene);
         setRenderer(renderTask);
