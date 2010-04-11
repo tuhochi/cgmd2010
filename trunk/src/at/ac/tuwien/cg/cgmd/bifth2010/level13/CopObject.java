@@ -75,7 +75,7 @@ public class CopObject extends GameObject {
 			setRandomDirection();
 		
 		if (CollisionHandler.checkPlayerObjectCollision((int)this.position.x,(int) this.position.y))
-			this.isActive = false;
+			GameControl.encounterCop(this);
 		
 		
 		//update position with offset

@@ -29,7 +29,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
 		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1 },
 		{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 1, 1 },
 		{ 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1 },
 		{ 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1 },
 		{ 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
@@ -39,7 +39,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
 		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1 },
+		{ 1, 1, 0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 1 },
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 	
@@ -127,7 +127,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		//init all textures
 		TextureSingletons.initTextures(gl, context);
-		
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		//create all game objects
 		gameObjects.add(new BackgroundObject());
 		for(int i = 0; i < MyRenderer.map.length; i++) {
@@ -137,6 +137,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 				}
 				else if (MyRenderer.map[i][j] == 3){
 					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
+				}
+				else if (MyRenderer.map[i][j] == 4){
+					gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
 				}
 			}
 		}
