@@ -37,21 +37,18 @@ public class ModelObj extends Model implements Serializable
 	
 	public ModelObj(InputStream is, Context context)
 	{
-		Log.i("Obj", "loading object");
 		load(is,context);
-		Log.i("Obj", "init buffers");
 		initBuffers();
-		Log.i("Obj", "finished object");
 	}
 	
 	public ModelObj(InputStream is, int modelTex, Context context)
 	{
-		this.textureResource = modelTex;
-		Log.i("Obj", "loading object");
+		textureResource = modelTex;
+	//	Log.i("Obj", "starting loading object");
 		load(is,context);
-		Log.i("Obj", "init buffers");
+	//	Log.i("Obj", "init buffers");
 		initBuffers();
-		Log.i("Obj", "finished object");
+		//Log.i("Obj", "finished loading object");
 	}
 
 	public void initBuffers()
