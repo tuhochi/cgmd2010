@@ -35,7 +35,7 @@ public final class Constants {
 		return R.drawable.l00_levelicon_start;
 	}
 	
-	public static String[] LEVELIDS = {"11", "12", "13", "17", "20", "23", "30", "33", "36", "42", "44", "50", "55", "66", "70", "77", "83", "84", "88", "99"};
+	public static String[] LEVELIDS = {"11", "12", "13", "17", "20", "23", "30", "33", "36", "42", "44", "50", "55", "60", "66", "70", "77", "83", "84", "88", "99"};
 
 	
 }
