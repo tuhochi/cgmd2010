@@ -88,4 +88,12 @@ public class LevelActivity extends Activity {
 		myRenderer.onPause();
 
 	}
+	
+	 @Override
+	    protected void onDestroy() {
+	    	// TODO Auto-generated method stub
+	    	super.onDestroy();
+	    	
+	    }
+	
 }

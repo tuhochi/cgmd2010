@@ -31,6 +31,9 @@ public abstract class GameObject {
 	//texture of object (=singleton)
 	protected Texture texture;
 	
+	
+	protected boolean isActive = true;
+	
 	/**
 	 * constructor sets up object (used by subtypes)
 	 * @param objectWidth

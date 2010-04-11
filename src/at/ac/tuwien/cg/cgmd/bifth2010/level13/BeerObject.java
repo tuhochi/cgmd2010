@@ -4,14 +4,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * 
- * @author arthur (group 13)
+ * @author arthur/sebastian (group 13)
  *
  */
 public class BeerObject extends GameObject {
 
-	
-	//if object is visible
-	private boolean visible;
 
 	/**
 	 * constructor calls super() with object's dimensions
@@ -25,8 +22,6 @@ public class BeerObject extends GameObject {
 		this.position.x = x * GameObject.BLOCKSIZE;
 		this.position.y = y * GameObject.BLOCKSIZE;
 		
-		//beer is visible until player drinks it
-		this.visible = true;
 	}
 
 	/**
@@ -35,14 +30,9 @@ public class BeerObject extends GameObject {
 	@Override
 	public void draw(GL10 gl) {
 		//check for player-collision
-		if(CollisionHandler.checkBeerCollision((int)this.position.x, (int)this.position.y)) {
-			this.visible = false;
-		}
-		
-		//don't draw invisible beer
-		if(!visible) {
-			return;
-		}
+		if(CollisionHandler.checkPlayerObjectCollision((int)this.position.x, (int)this.position.y)) 
+			this.isActive = false;
+
 		
 		//update position with offset
 		this.position.sub(GameObject.offset);
