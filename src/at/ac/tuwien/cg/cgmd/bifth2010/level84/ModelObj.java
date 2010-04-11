@@ -125,9 +125,9 @@ public class ModelObj extends Model implements Serializable
             		{
             			String[] indicesStr = values[i].split("/");
                 		indexList[indexPos] = Byte.parseByte(indicesStr[0]); //vertex
-                		indexList[indexPos + 1] = Byte.parseByte(indicesStr[1]); //normal
-                		indexList[indexPos + 2] = Byte.parseByte(indicesStr[2]); //texture
-                		indexPos += 3;
+                		//indexList[indexPos + 1] = Byte.parseByte(indicesStr[1]); //normal
+                		//indexList[indexPos + 2] = Byte.parseByte(indicesStr[2]); //texture
+                		indexPos ++;
             		}
             	}
             	
