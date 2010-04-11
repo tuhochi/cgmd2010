@@ -34,9 +34,9 @@ public class ModelObj extends Model implements Serializable
 	public ModelObj()
 	{}	
 	
-	public ModelObj(String fileName, Context context)
+	public ModelObj(InputStream is, Context context)
 	{
-		load(fileName,context);
+		load(is,context);
 		//initBuffers();
 		
 	}
@@ -49,21 +49,7 @@ public class ModelObj extends Model implements Serializable
 	}
 	
 	
-	public static ModelObj read(String fileName, Context context)
-	{
-		ModelObj model = null;
-    	try {
-    		InputStream fis = context.getAssets().open(fileName);
-			ObjectInputStream stream = new ObjectInputStream(fis);
-			model = (ModelObj)stream.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return model;
-	}
-	
-	public void load(String fileName, Context context )
+	public void load(InputStream is, Context context )
 	{
 		float[] vertexList = new float[255];
 		float[] texcoordList = new float[255];
@@ -75,8 +61,6 @@ public class ModelObj extends Model implements Serializable
 		int indexPos = 0;
 
         try {
-            InputStream is = context.getAssets().open(fileName);
-            is.available();
             InputStreamReader isr = new InputStreamReader(is);            
             BufferedReader textReader = new BufferedReader(isr);
             
