@@ -71,9 +71,12 @@ public class CopObject extends GameObject {
 	 */
 	@Override
 	public void draw(GL10 gl) {
-		if (CollisionHandler.checkBackgroundCollision(MyRenderer.map, (GameObject)this)){
+		if (CollisionHandler.checkBackgroundCollision(MyRenderer.map, (GameObject)this))
 			setRandomDirection();
-		}
+		
+		if (CollisionHandler.checkPlayerObjectCollision((int)this.position.x,(int) this.position.y))
+			this.isActive = false;
+		
 		
 		//update position with offset
 		this.position.sub(GameObject.offset);

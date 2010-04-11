@@ -84,15 +84,13 @@ public class CollisionHandler {
 	
 	
 	
-	
-	
 	/**
-	 * checks if a collision between the player and a beer occurs
+	 * checks if a collision between the player and an object occurs
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	public static boolean checkBeerCollision(int x, int y) {
+	public static boolean checkPlayerObjectCollision(int x, int y) {
 		//calculate player's min/max x/y - coordinates
 		int playerXMin = (int)(PlayerObject.center.x + GameObject.offset.x);
 		int playerYMin = (int)(PlayerObject.center.y + GameObject.offset.y);

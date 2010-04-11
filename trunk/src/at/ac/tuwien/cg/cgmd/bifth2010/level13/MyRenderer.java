@@ -103,8 +103,10 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		//draw all game objects
 		for(GameObject gameObject : gameObjects) {
+			if (gameObject.isActive){
 			gameObject.update();
 			gameObject.draw(gl);
+			}
 		}
 	}
 
