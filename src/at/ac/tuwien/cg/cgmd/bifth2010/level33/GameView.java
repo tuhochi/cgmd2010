@@ -46,8 +46,10 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 	public boolean onTouchEvent(final MotionEvent e) {
 		
 		System.out.println("onTouchEvent");
-		
 		lastTouch.set(e.getX() / getWidth(), e.getY()/ getHeight());
+		
+		if(SceneGraph.camera.zoom==SceneGraph.camera.standardZoom)
+			SceneGraph.level.steerTouchEvent(lastTouch);
 		
 		return gestureScanner.onTouchEvent(e);
 	}
