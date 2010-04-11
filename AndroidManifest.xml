@@ -289,6 +289,14 @@
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
+		
+		<activity
+			android:name=".level50.HelpActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level50.LAUNCH_HELP"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
 
   		<activity
 			android:name=".level55.HelpActivity">
