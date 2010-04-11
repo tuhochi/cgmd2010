@@ -41,7 +41,7 @@ public class Level {
 	}
 	
 	public int getTypeAt(int x, int y) {
-		return frontLayer.tiles_vector[x][y];
+		return frontLayer.getTypeAt(x, y);//.tiles_vector[x][y];
 	}
 	
 	
