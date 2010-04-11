@@ -1,17 +1,23 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
+import java.io.InputStream;
+import java.io.Writer;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.microedition.khronos.opengles.GL;
+
 import android.app.Activity;
 import android.content.Context;
+import android.opengl.GLDebugHelper;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLSurfaceView.GLWrapper;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
-import java.io.InputStream;
-import java.util.*;
 
 public class LevelActivity extends Activity implements OnClickListener {
 
@@ -45,8 +51,9 @@ public class LevelActivity extends Activity implements OnClickListener {
 		models.add(new ModelQuad(R.drawable.l00_coin));
 		
 		//TODO: loading obj-files
-		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l33_schatz);
-		//models.add(new ModelObj(modelFile1.toString(), getApplicationContext()));
+		//Context context = getApplicationContext();
+		//InputStream modelFile1 = context.getResources().openRawResource(R.raw.l33_steinmauer);
+		//models.add(new ModelObj(modelFile1, context));
 	}
 
 	@Override
