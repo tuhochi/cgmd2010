@@ -11,9 +11,12 @@ class MyRenderer implements MyOpenGLView.Renderer {
 	
 	Level level;
 	Player player;
+	Camera camera;
 	Interface ui;
 	Texture interfaceTexture;
 	static Context context;
+	static float numTilesHorizontal=15.0f;
+	static float numTilesVertical;
 	
 	static public void setContext(Context _context) {
 		context=_context;
@@ -32,12 +35,24 @@ class MyRenderer implements MyOpenGLView.Renderer {
     	//gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
-    	level.update(Timer.dT);
-    	player.update(Timer.dT);
+    	
+    	//Ich hab jetzt dT auf Sekunden umgerechnet, weils sonst verwirrend ist...
+    	//Player updated früher weil sonst das Level um ein Frame nachhinkt.
+    	float dt = Timer.dT*0.001f;
+    	player.update(dt);
+    	camera.update(dt);
+    	level.update(dt);
+    	
+    	//Performs view transformation
+    	camera.draw(gl);
+    	
+    	//Renders level + background layers
     	level.draw(gl);
+    	
+    	//Renders the player
     	player.draw(gl);
     	
-    	
+    	//Renders the user interface
     	ui.draw(gl); 	
     }
 
@@ -55,8 +70,10 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glLoadIdentity();
          
          float ratio=(float)height/(float)width;
-         float numTilesHorizontal=15.0f;
+         
          gl.glOrthof(0.0f, numTilesHorizontal, numTilesHorizontal*ratio, 0.0f, 0.0f, 5.0f);
+         
+         numTilesVertical = numTilesHorizontal*ratio;
          
          Quad.screenWidth=numTilesHorizontal;
          Quad.screenHeight=numTilesHorizontal*ratio;
@@ -107,11 +124,15 @@ class MyRenderer implements MyOpenGLView.Renderer {
          Texture.cleanUp();
          Texture.setGL(gl);
          
+         
+         
          level=new Level();
          level.init(gl, context);
          
+         camera = new Camera(level);
+         
          //player=new Player();
-         player.init(gl, level);
+         player.init(gl, level, camera);
          
          ui=new Interface();
          ui.init(gl);

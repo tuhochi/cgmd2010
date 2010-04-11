@@ -71,7 +71,8 @@ public class TileLayer {
 	}
 	
 	public int getTypeAt(int x, int y) {
-		if (x<=numTilesX && x>=0 && y<=numTilesY && y>=0) {
+		//Log.d("TileLayer", "x,y = "+x+", "+y);
+		if (x<numTilesX && x>=0 && y<numTilesY && y>=0) {
 			return tiles_vector[x][y];
 		} else {
 			return -1;
@@ -151,8 +152,9 @@ public class TileLayer {
 		int minVisibleVBO_y=Math.max((int) (-tempPosY/(VBO_HEIGHT*sizeFactor)), 0);
 		int maxVisibleVBO_y=Math.min((int) ((screenHeight-tempPosY)/(VBO_HEIGHT*sizeFactor)), maxVBOPosY-1);
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(tempPosX, tempPosY, 0.0f);
+		/*gl.glLoadIdentity();
+		gl.glTranslatef(tempPosX, tempPosY, 0.0f);*/
+		
 		// bind tilesatlas
 		// apply view frustum culling (adjust loops)
 		for (int i=minVisibleVBO_x; i<=maxVisibleVBO_x; i++) {
