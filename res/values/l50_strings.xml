@@ -2,16 +2,16 @@
 <resources>
 
 
-<string name="l50_GameName">Mal andersrum</string>
+<string name="l50_GameName">Jump'n'Back</string>
 
 
-<string name="l50_HelpActivity1">Sei aufmerksam und schau dir das Introvideo genau an. Du wirst merken, dass das Geld nur so auf der Straße liegt.</string>
-
-
-
+<string name="l50_HelpActivity1">Pay close attention to the preview, it won't be the last time you have to deal with the level.</string>
 
 
 
-<string name="l50_HelpActivity2">Nachdem du nun deine Umgebung sorgfältig beobachtet hast, dürfte es kein Problem sein die Münzen an ihren ursprünglichen Platz zu schaffen. Aber sei achtsam - nicht alles funktioniert von VORNherein.</string>
-<string name="l50_HelpActivity3">Wenn du an deine Grenzen stößt, versuche durch Umwege ans Ziel zu kommen. Manchmal ist rückwärts halt nicht einfach nur vorwärts rückwärts.</string>
+
+
+
+<string name="l50_HelpActivity2">Mr. Bunny, a successful Executive Jump'n'Runner, made a fortune by collecting left about gold coins. After he decided to change his views on filthy lucre he tries anything within his power to reverse his moral errors.</string>
+<string name="l50_HelpActivity3">Try to put all coins back to its places but remember that it is not going to be a walk in the park. If you get stuck don't fall into despair, there are always ways and means to get ahead... or back.</string>
 </resources>
