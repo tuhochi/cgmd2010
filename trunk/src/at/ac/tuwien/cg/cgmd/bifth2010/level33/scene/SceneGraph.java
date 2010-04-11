@@ -141,7 +141,7 @@ public class SceneGraph {
 	public void render(GL10 gl) {
 	//	Log.d("Frame", "--");
 		
-		// start time mesherment
+		// start time measurement
 		framesSinceLastSecound++;
 		long currentFrameStart = System.nanoTime();
 		deltaTime = (currentFrameStart-lastFrameStart) / 1000000000.0f;
@@ -201,8 +201,8 @@ public class SceneGraph {
 		
 		
 		// easy culling
-		//if(Camera.zoom==Camera.standardZoom){
-		if(true){
+		if(Camera.zoom==Camera.standardZoom){
+		//if(true){
 			frustumMin.set(Math.round(level.gameCharacterPosition.x-frustumDim.x),Math.round(level.gameCharacterPosition.y-frustumDim.y));
 			frustumMax.set(frustumMin.x+frustumDim.x*2+1, frustumMin.y+frustumDim.y*2+1);
 

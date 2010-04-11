@@ -144,10 +144,6 @@ public class LevelHandler {
 		//update Level
 		if(gameCharacterPosition.x%1==0 && gameCharacterPosition.y%1==0)
 			updateLevelAfterStep();
-		
-		
-		
-			
 	}
 
 
@@ -324,6 +320,67 @@ public class LevelHandler {
 			//TODO
 		}
 		LevelActivity.soundHandler.releaseActivityAudioPlayer();
+	}
+
+	public void steerTouchEvent(Vector2f lastTouch) {
+		
+		// calculate Position 
+		int x = (int) Math.round(lastTouch.x*5+0.5	)-3;
+		int y = (int) Math.round(lastTouch.y*7-0.3	)-3;
+		
+		Vector2i to = new Vector2i(Math.round(x+gameCharacterPosition.x), Math.round(y+gameCharacterPosition.y));
+		
+		Log.d("to=", to.x+" "+to.y);
+		
+		//if(false)
+		if(isDirectWayPossilbe(to))
+		{
+			Vector2i pos = new Vector2i(Math.round(gameCharacterPosition.x),Math.round(gameCharacterPosition.y));
+			
+			
+			// if not horizontal
+			if(pos.x==to.x)
+				steerCharacterTo(false, to.y-pos.y);
+			else
+				steerCharacterTo(true, to.x-pos.x);
+			
+		}
+		
+		/// else split Screen in to 4 areas and go in this direction 
+		///  \ /
+		///   X
+		///  / \
+		else
+		{
+			float cx=((lastTouch.x-0.5f)*2);
+			float cy=((lastTouch.y-0.5f)*2);
+			
+			// horizontal
+			if(Math.abs(cx)>Math.abs(cy))
+			{
+				if(cx>0)
+					steerCharacterTo(true, 1);
+				else
+					steerCharacterTo(true, -1);
+				
+			}
+			// vertical
+			else
+			{
+				if(cy>0)
+					steerCharacterTo(false, 1);
+				else
+					steerCharacterTo(false, -1);
+			}
+System.out.println("steer3");
+			
+			
+		}
+
+		
+			
+		
+		
 	}
 
 }
