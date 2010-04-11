@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+import java.io.InputStream;
 import java.util.*;
 
 public class LevelActivity extends Activity implements OnClickListener {
@@ -42,6 +43,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 
 	private void loadModels() {
 		models.add(new ModelQuad(R.drawable.l00_coin));
+		
+		//TODO: loading obj-files
+		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l33_schatz);
+		//models.add(new ModelObj(modelFile1.toString(), getApplicationContext()));
 	}
 
 	@Override
