@@ -24,13 +24,19 @@ public class GameScene {
 	/**
 	 * Ctor. Create game scene.
 	 */
-	public GameScene() {
-		createGeometry();
+	public GameScene() 
+	{
+		
 	}
 	
 	
 	// ----------------------------------------------------------------------------------
 	// -- Public methods ----
+	
+	public void create(int windowWidth, int windowHeight)
+	{
+		createGeometry();
+	}
 	
 	/**
 	 * Return geometry
