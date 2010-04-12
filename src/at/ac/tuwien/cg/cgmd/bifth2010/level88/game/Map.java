@@ -17,7 +17,10 @@ public class Map {
 		public MapCell() {
 			x = y = -1;
 			groundRotation = 0;
+			groundTexture = R.drawable.l88_street_none;
 			houseTexture = -1;
+			isStreetForPolice=false;
+			isStreetForBunny=false;
 		}
 
 		public int x, y;
@@ -25,6 +28,9 @@ public class Map {
 		public int groundTexture;
 		public int houseTexture;
 		public int groundRotation; // Tex-Coords
+
+		public boolean isStreetForPolice;
+		public boolean isStreetForBunny;
 	}
 
 	private Game game;
@@ -52,7 +58,7 @@ public class Map {
         houseQuadBase.x = -groundXDir.x;
         houseQuad = new Quad(houseQuadBase, houseXDir, houseYDir);
 
-		cells = new MapCell[6][5];
+		cells = new MapCell[7][7];
 		for(int x=0; x<cells.length; x++) {
 			for(int y=0; y<cells[0].length; y++) {
 				cells[x][y] = new MapCell();
@@ -60,13 +66,18 @@ public class Map {
 				cells[x][y].y = y;
 				cells[x][y].translateX = groundXDir.x*x + groundYDir.x*y;
 				cells[x][y].translateY = groundXDir.y*x + groundYDir.y*y;
-				cells[x][y].groundTexture = R.drawable.l88_street_none;
+			}
+		}
+
+		for(int x=1; x<cells.length-1; x++) {
+			for(int y=1; y<cells[0].length-1; y++) {
+				cells[x][y].isStreetForBunny = true;
+				cells[x][y].groundTexture = R.drawable.l88_street_junction;
 			}
 		}
 		
-		
 		// TODO: ersetzen durch File-Loader 
-		cells[2][2].groundTexture = R.drawable.l88_street_junction;
+		/*cells[2][2].groundTexture = R.drawable.l88_street_junction;
 		
 		cells[0][2].groundTexture = R.drawable.l88_street_tjunction;
 		cells[0][2].groundRotation = 0;
@@ -119,7 +130,7 @@ public class Map {
 		cells[1][1].houseTexture = R.drawable.l88_house_block5;
 		cells[3][1].houseTexture = R.drawable.l88_house_block2;
 		cells[3][3].houseTexture = R.drawable.l88_house_block3;
-		cells[1][3].houseTexture = R.drawable.l88_house_block4;
+		cells[1][3].houseTexture = R.drawable.l88_house_block4;*/
 		
 		
 	}

@@ -13,8 +13,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 public class Game {
 	private long newTime, oldTime;
 	private float elapsedSeconds;
-	private int screenWidth, screenHeight;
-	private float screenWidthScale, screenHeightScale;
+	public int screenWidth, screenHeight;
+	public float screenWidthScale, screenHeightScale;
 	private Context context;
 	public Textures textures;
 	private Vector2 cameraPos;
@@ -32,19 +32,13 @@ public class Game {
 		cameraPos = new Vector2();
 		worldScale = 0.3f;
 		
-		map = new Map(this);
 		bunny = new Bunny(this);
-		bunny.setPosition(0, 0);
+		map = new Map(this);
+		bunny.setPosition(3, 3); // TODO: Entfernen sobald Fileloader da ist
+
 		police = new ArrayList<Police> ();
-		addPolice(4,4);
-		addPolice(4,2);
-		addPolice(4,0);
 		stashes = new ArrayList<Stash> ();
-		addStash(3,4,1);
-		addStash(3,2,2);
-		addStash(3,0,3);
-		
-		
+				
 		newTouch = false;
 		touchPosition = new Vector2();
 
@@ -128,22 +122,7 @@ public class Game {
         oldTime = newTime;
 		newTime = date.getTime();
         elapsedSeconds = (newTime - oldTime) / 1000.0f;
-        
-        // TODO
-        int t = (int)((newTime % 16000) / 1000);
-        if( t < 5 ) {
-        	bunny.setPosition(t, 0);
-        }
-        else if( t < 8 ) {
-        	bunny.setPosition(4, 1+t-5);
-        }
-        else if( t < 13 ) {
-        	bunny.setPosition(4-(t-8), 4);
-        }
-        else if( t < 16 ) {
-        	bunny.setPosition(0, 3-(t-13));
-        }
-        
+
         for(int i=0; i<stashes.size(); i++) {
         	stashes.get(i).update(elapsedSeconds);
         }
@@ -155,26 +134,6 @@ public class Game {
 
         cameraPos.x = bunny.translateX + map.groundXDir.x/2.0f + map.groundYDir.x/2.0f;
         cameraPos.y = bunny.translateY + map.groundXDir.y/2.0f + map.groundYDir.y/2.0f;
-        
-        /*if( hasNewInput() ) {
-        	cameraPos = new Vector2(touchPosition);
-        	
-        	cameraPos.mult(2);
-        	cameraPos.add(new Vector2(-1,-1));
-        	cameraPos.mult(-1);
-
-        	cameraPos.x *= screenWidthScale;
-        	cameraPos.y *= screenHeightScale;*/
-        	
-        	/*float angle = cameraPos.getAngle();
-        	angle /= Math.PI;
-        	angle *= 180;
-        	while( angle > 90 ) angle -= 90;
-        	if( angle > 30 && angle < 60 ) {
-        	}
-        	else {
-        	}
-        }*/
 	}
 
 	public synchronized void draw(GL10 gl) {
