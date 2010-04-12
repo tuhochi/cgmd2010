@@ -53,7 +53,12 @@ public class RenderTask implements Renderer {
 		gl.glCullFace(GL10.GL_BACK);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
-		tex = new GlTexture(R.drawable.l70_spritetest);
+		/*
+		 * EDIT BY PONTOMEDON, UNCOMMENT THE FOLLOWING LINE!
+		 * 
+		 * missing resource 'l70_spritetest' caused compile error!
+		 */
+//		tex = new GlTexture(R.drawable.l70_spritetest);
 	}
 	
 	
