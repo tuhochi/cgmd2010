@@ -1,9 +1,13 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
+import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import java.util.*;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +17,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
 
 public class RenderManager implements Renderer {
 

@@ -1,17 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import java.io.InputStream;
-import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.microedition.khronos.opengles.GL;
-
 import android.app.Activity;
 import android.content.Context;
-import android.opengl.GLDebugHelper;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLSurfaceView.GLWrapper;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
