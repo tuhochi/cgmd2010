@@ -220,11 +220,13 @@ public class MaterialManager
 			int level = 0;
 			int height = bitmap.getHeight();
 			int width = bitmap.getWidth();
+			
+			Bitmap bitmap2 = bitmap.copy(bitmap.getConfig(), false);
 
 			while(height >= 1 || width >= 1)
 			{
 				//First of all, generate the texture from our bitmap and set it to the according level
-				texImage2D(GL_TEXTURE_2D, level, bitmap, 0);
+				texImage2D(GL_TEXTURE_2D, level, bitmap2, 0);
 				
 				if(height == 1 || width == 1)
 					break;
@@ -235,12 +237,10 @@ public class MaterialManager
 				//Downscale
 				height /= 2;
 				width /= 2;
-				Bitmap bitmap2 = Bitmap.createScaledBitmap(bitmap, width, height, true);
-				
-				//Clean up
-				bitmap.recycle();
-				bitmap = bitmap2;
+				bitmap2.recycle();
+				bitmap2 = Bitmap.createScaledBitmap(bitmap, width, height, true);
 			}
+			bitmap2.recycle();
 		}
 	}
 }
