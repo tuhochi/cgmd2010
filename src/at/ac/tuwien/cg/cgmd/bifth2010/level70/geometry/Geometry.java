@@ -9,26 +9,36 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Geometry {
 
-	private float[] vertices;
+	private float[] positions;
+	private float[] texcoords;
 	private short[] indices;
-	public  float[] pos = { 0.0f, -1.0f, 0.0f };
+	public  float[] pos = { 0.0f, 0.0f, 0.0f };
 	
-	private FloatBuffer vertexBuf;
+	private FloatBuffer posBuf;
+	private FloatBuffer texBuf;
 	private ShortBuffer indexBuf;
 
-	public Geometry(float[] vertices, short[] indices) {
+	public Geometry(float[] positions, float[] texcoords, short[] indices) {
 		
 		// Set vertices and indices
-		this.vertices = vertices;
-		this.indices  = indices;
+		this.positions  = positions;
+		this.texcoords = texcoords;
+		this.indices   = indices;
 		
-		// Create vertex buffer
-		ByteBuffer vbuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		vbuf.order(ByteOrder.nativeOrder());
-		vertexBuf = vbuf.asFloatBuffer();
-		vertexBuf.put(vertices);
-		vertexBuf.position(0);
+		// Create positions buffer 
+		ByteBuffer pbuf = ByteBuffer.allocateDirect(positions.length * 4);
+		pbuf.order(ByteOrder.nativeOrder());
+		posBuf = pbuf.asFloatBuffer();
+		posBuf.put(positions);
+		posBuf.position(0);
 		
+		// Create texcoord buffer 
+		ByteBuffer tbuf = ByteBuffer.allocateDirect(texcoords.length * 4);
+		tbuf.order(ByteOrder.nativeOrder());
+		texBuf = tbuf.asFloatBuffer();
+		texBuf.put(texcoords);
+		texBuf.position(0);
+				
 		// Create index buffer
 		ByteBuffer ibuf = ByteBuffer.allocateDirect(indices.length * 2);
 		ibuf.order(ByteOrder.nativeOrder());
@@ -42,7 +52,10 @@ public class Geometry {
 		
 		gl.glTranslatef(pos[0], pos[1], pos[2]);
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuf);
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, posBuf);
+		
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texBuf);
 
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_SHORT, indexBuf);
 

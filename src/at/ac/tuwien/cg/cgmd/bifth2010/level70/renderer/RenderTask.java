@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.GlTexture;
 
 /**
  * @author herrjohann
@@ -19,10 +23,11 @@ public class RenderTask implements Renderer {
 	// -- Members ----
 	
 	GameScene scene; //< Game scene
+	GlTexture tex;
 	
 	
 	// ----------------------------------------------------------------------------------
-	// -- Ctor / Dtor ----
+	// -- Ctor ----
 	
 	/**
 	 * Ctor.
@@ -46,6 +51,9 @@ public class RenderTask implements Renderer {
 		gl.glFrontFace(GL10.GL_CCW);
 		gl.glEnable(GL10.GL_CULL_FACE);
 		gl.glCullFace(GL10.GL_BACK);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		
+		tex = new GlTexture(R.drawable.l70_spritetest);
 	}
 	
 	
@@ -73,6 +81,10 @@ public class RenderTask implements Renderer {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glTranslatef(0.01f, 0, 0);
+		//gl.glLoadIdentity();
+		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glColor4f(0.8f, 0.5f, 0.0f, 1.0f);
 		synchronized(scene) {
@@ -82,6 +94,8 @@ public class RenderTask implements Renderer {
 			catch(InterruptedException e) {
 				
 			}
+			gl.glActiveTexture(0);
+			tex.bind();
 			ArrayList<Geometry> geoms = scene.getGeometry();
 			for (Geometry it : geoms) {
 				it.draw(gl);

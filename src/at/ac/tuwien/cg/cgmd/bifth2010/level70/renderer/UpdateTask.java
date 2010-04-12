@@ -28,7 +28,7 @@ public class UpdateTask implements Runnable {
 	
 	
 	// ----------------------------------------------------------------------------------
-	// -- Ctor / Dtor ----
+	// -- Ctor ----
 	
 	/**
 	 * Ctor.
@@ -128,7 +128,7 @@ public class UpdateTask implements Runnable {
 			if (isRight) {
 				it.pos[0] += 0.1;
 			}
-			it.pos[1] += 0.1;
+			//it.pos[1] += 0.1;
 			if (it.pos[1] > 1.0) {
 				it.pos[1] = -1.0f;
 			}
