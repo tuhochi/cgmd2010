@@ -2,6 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 
 import java.util.Random;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.provider.UserDictionary.Words;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
@@ -16,6 +19,8 @@ public class LevelHandler {
 	Vector2f gameCharacterTargetPosition; // target Position
 	boolean characterMoves = false; // if Character is moving in this moment
 	float gameCharacterSpeed = 30;
+	
+
 
 	byte way;
 	byte wall;
@@ -35,7 +40,7 @@ public class LevelHandler {
 		
 		// HARDCODED WORLD
 		
-		LevelGenration levelGenration = new LevelGenration(22);
+		LevelGenration levelGenration = new LevelGenration(44);
 		worldDim = new Vector2i(levelGenration.rows,levelGenration.columns);
 		
 //		world = new int[worldDim.area()];
@@ -63,6 +68,9 @@ public class LevelHandler {
 
 		// setup wall
 		wall = SceneGraph.GEOMETRY_WALL;
+		
+		
+		 
 			
 		
 	}
@@ -302,6 +310,7 @@ public class LevelHandler {
 				else if(world[worldIndex]==SceneGraph.GEOMETRY_TRASH)
 				{
 					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
+					LevelActivity.vibrator.vibrate(120L);  
 				}
 				else if(world[worldIndex]==SceneGraph.GEOMETRY_SPRING)
 				{
