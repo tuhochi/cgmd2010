@@ -101,4 +101,15 @@ public class DirectionalMotion extends Motion
 	public void setTransform(Matrix44 transform) {
 		this.transform = transform;
 	}
+	
+	@Override
+	public float getSpeed() {
+		return this.speed;
+	}
+
+	@Override
+	public void morph(Vector3 pushVec) {
+		// TODO Auto-generated method stub
+		
+	}
 }
