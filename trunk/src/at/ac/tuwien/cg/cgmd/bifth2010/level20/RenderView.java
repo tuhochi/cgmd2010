@@ -10,12 +10,15 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
  * @author Reinbert
@@ -66,14 +69,18 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	private final float TOUCH_SCALE = 0.2f;		//Proved to be good for normal rotation ( NEW )
 	
 	/** The Activity Context */
-	private Context context;
+	private Activity activity;
+	private SessionState sessionState;
 	
 
 	/**
 	 * @param context
 	 */
-	public RenderView(Context context) {
-		super(context);
+	/**
+	 * @param activity
+	 */
+	public RenderView(Activity activity) {
+		super(activity);
 
 		//Set this as Renderer
 		this.setRenderer(this);
@@ -81,8 +88,11 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		this.requestFocus();
 		this.setFocusableInTouchMode(true);
 		
-		//
-		this.context = context;		
+		// Store Activity (= Context)
+		this.activity = activity;
+		// The SessionState is a convenience class to set a result
+		sessionState = new SessionState();
+		setProgress(0);
 		
 		//
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(lightAmbient.length * 4);
@@ -105,7 +115,12 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		//
 		cube = new Cube();
+		
+		
+		
+		
 	}
+	
 	
 
 	/* (non-Javadoc)
@@ -131,9 +146,12 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		//Really Nice Perspective Calculations
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST); 
-				
+		
+		ResourceManager.init(gl, activity);
 		//Load the texture for the cube once during Surface creation
-		cube.loadGLTexture(gl, this.context);
+		cube.textures[0] = ResourceManager.loadTexture(R.drawable.l20_icon);
+		cube.textures[1] = ResourceManager.loadTexture(R.drawable.l00_rabit_256);
+		cube.textures[2] = ResourceManager.loadTexture(R.drawable.l00_icon);
 	}
 
 	
@@ -215,6 +233,10 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		} else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
 			xspeed += 0.1f;
 			
+		} else if(keyCode == KeyEvent.KEYCODE_5) {
+			setProgress(5);
+			activity.finish();
+			
 		} else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
 			filter += 1;
 			if(filter > 2) {
@@ -225,7 +247,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		//We handled the event
 		return true;
 	}
-		
+
+	
 	/**
 	 * Override the touch screen listener.
 	 * 
@@ -277,5 +300,17 @@ public class RenderView extends GLSurfaceView implements Renderer {
         
         //We handled the event
 		return true;
+	}
+	
+	/**
+	 * @param p
+	 */
+	public void setProgress(int p) {
+		
+		// We set the progress the user has made (must be between 0-100)
+		sessionState.setProgress(p);
+		// We call the activity's setResult method 
+		activity.setResult(Activity.RESULT_OK, sessionState.asIntent());
+		
 	}
 }

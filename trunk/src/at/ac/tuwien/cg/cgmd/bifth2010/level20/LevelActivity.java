@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
  * @author Reinbert
@@ -32,6 +33,8 @@ public class LevelActivity extends Activity {
 		//Create an Instance with this Activity
 		
 	}
+	
+	
 
 	@Override
 	protected void onPause() {
@@ -43,6 +46,26 @@ public class LevelActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		renderView.onResume();
+	}
+	
+	
+ 
+	@Override
+	protected void onRestart() {
+		
+		super.onRestart();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		
+		
+		super.onDestroy();
 	}
 	
 	
