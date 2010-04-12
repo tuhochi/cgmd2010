@@ -24,7 +24,7 @@
 		<Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="70sp" android:id="@+id/l00_SpinnerDebug"></Spinner><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Start" android:minWidth="30pt" android:id="@+id/l00_ButtonStartLevel"></Button><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Result: none" android:id="@+id/l00_TextViewLevelResult"></TextView>
 	
 
-</LinearLayout><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_CheckBoxAlwaysStartLevel" android:text="Always automagically start the above specified level"></CheckBox>
+</LinearLayout><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_CheckBoxAlwaysStartLevel" android:text="Always automatically start the above specified level"></CheckBox>
 
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="Debug Levels For Map Activity"></TextView>
