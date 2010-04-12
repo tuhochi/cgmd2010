@@ -36,7 +36,7 @@ public class Cube {
 	private FloatBuffer normalBuffer;
 
 	/** Our texture pointer */
-	private int[] textures = new int[3];
+	public int[] textures = new int[3];
 
 	/** The initial vertex definition */	
 	private float vertices[] = {
@@ -231,7 +231,7 @@ public class Cube {
 	 * @param gl - The GL Context
 	 * @param context - The Activity context
 	 */
-	public void loadGLTexture(GL10 gl, Context context) {
+/*	public void loadGLTexture(GL10 gl, Context context) {
 		//Get the texture from the Android resource directory
 		InputStream is = context.getResources().openRawResource(R.drawable.l20_icon);
 		Bitmap bitmap = null;
@@ -267,14 +267,8 @@ public class Cube {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[2]);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR_MIPMAP_NEAREST);
-		/*
-		 * This is a change to the original tutorial, as buildMipMap does not exist anymore
-		 * in the Android SDK.
-		 * 
-		 * We check if the GL context is version 1.1 and generate MipMaps by flag.
-		 * Otherwise we call our own buildMipMap implementation
-		 */
-		if(gl instanceof GL11) {
+		
+/*		if(gl instanceof GL11) {
 			gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 			
@@ -286,7 +280,7 @@ public class Cube {
 		//Clean up
 		bitmap.recycle();
 	}
-	
+	*/
 	/**
 	 * Our own MipMap generation implementation.
 	 * Scale the original bitmap down, always by factor two,
