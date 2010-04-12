@@ -16,7 +16,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer.RendererView;
 
 public class LevelActivity extends Activity {
 
-	RendererView rendererView; //< Renderer view
+	private static LevelActivity instance;
+	private RendererView rendererView; //< Renderer view
 		
 	public void onCreate(Bundle savedInstanceState) 
 	{
@@ -35,5 +36,16 @@ public class LevelActivity extends Activity {
    		
    		//set
    		setContentView(rendererView);
+   		
+   		instance = this;
+	}
+	
+	
+	/**
+	 * Return instance.
+	 * @return LevelActivity instance
+	 */
+	public static LevelActivity getInstance() {
+		return instance;
 	}
 }
