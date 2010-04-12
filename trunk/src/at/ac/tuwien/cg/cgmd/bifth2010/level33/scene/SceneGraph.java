@@ -13,6 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
@@ -52,7 +53,8 @@ public class SceneGraph {
 	public final static byte GEOMETRY_CHARACTER = 16;
 	
 	static Context context;
-	private Vector2i frustumDim = new Vector2i(3, 5);
+	public  static Vector2f touchDim = new Vector2f(0, 0);
+	public  static Vector2i frustumDim = new Vector2i(3, 5);
 	private Vector2i frustumMin = new Vector2i(0, 0);
 	private Vector2i frustumMax = new Vector2i(0, 0);
 	private static boolean init = false;
@@ -131,6 +133,9 @@ public class SceneGraph {
 				geometry[i].render();
 		}
 //		
+		
+
+	
 	}
 
 	/**
@@ -235,21 +240,32 @@ public class SceneGraph {
 		
 		// render the whol world
 		else
-		for(int y=0;y<level.worldDim.y;y++){
-			for(int x=0;x<level.worldDim.x;x++){
-				//if wall
-				int type = level.getWorldEntry(x, y);
-				
-				glPushMatrix();
-				gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
+		{
+		//	glPushMatrix();
+		//	gl.glTranslatef(level.worldDim.x/2,0,level.worldDim.y/2);
+			
+			
+			for(int y=0;y<level.worldDim.y;y++){
+				for(int x=0;x<level.worldDim.x;x++){
+					//if wall
+					int type = level.getWorldEntry(x, y);
 					
-						geometry[type].render();	
-						// render way if no wall
-						if(type!=GEOMETRY_WALL)
-							geometry[GEOMETRY_WAY].render();	
+					glPushMatrix();
+					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
 						
-				glPopMatrix();
-				}
+							geometry[type].render();	
+							// render way if no wall
+							if(type!=GEOMETRY_WALL)
+								geometry[GEOMETRY_WAY].render();	
+							
+					glPopMatrix();
+					}
+			}
+			
+			geometry[GEOMETRY_CHARACTER].render();
+			
+			//glPopMatrix();
+			return;
 		}
 		
 		// render GameCaracter

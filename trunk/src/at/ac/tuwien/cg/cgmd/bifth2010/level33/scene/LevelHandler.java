@@ -325,12 +325,15 @@ public class LevelHandler {
 	public void steerTouchEvent(Vector2f lastTouch) {
 		
 		// calculate Position 
-		int x = (int) Math.round(lastTouch.x*5+0.5	)-3;
-		int y = (int) Math.round(lastTouch.y*7-0.3	)-3;
+		int x = (int) Math.round(lastTouch.x*SceneGraph.touchDim.x -SceneGraph.touchDim.x/2);
+		int y = (int) Math.round(lastTouch.y*SceneGraph.touchDim.y -SceneGraph.touchDim.y/2);
 		
 		Vector2i to = new Vector2i(Math.round(x+gameCharacterPosition.x), Math.round(y+gameCharacterPosition.y));
 		
 		Log.d("to=", to.x+" "+to.y);
+		
+//		if(1==1)
+//		return;
 		
 		//if(false)
 		if(isDirectWayPossilbe(to))
@@ -372,7 +375,7 @@ public class LevelHandler {
 				else
 					steerCharacterTo(false, -1);
 			}
-System.out.println("steer3");
+
 			
 			
 		}
