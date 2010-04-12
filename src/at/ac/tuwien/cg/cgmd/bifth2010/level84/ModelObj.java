@@ -14,8 +14,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import android.content.Context;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
@@ -43,11 +46,12 @@ public class ModelObj extends Model implements Serializable
 	
 	public ModelObj(InputStream is, int modelTex, Context context)
 	{
-		textureResource = modelTex;
+		
 	//	Log.i("Obj", "starting loading object");
 		load(is,context);
 	//	Log.i("Obj", "init buffers");
 		initBuffers();
+		this.textureResource = modelTex;
 		//Log.i("Obj", "finished loading object");
 	}
 
@@ -93,7 +97,8 @@ public class ModelObj extends Model implements Serializable
             while (line != null)
             {
             	if(line.startsWith("v "))
-            	{
+            	{ 	// vertex
+    				// e.g. v 1.000000 -1.000000 -1.000000
             		String[] values = line.split(" ");
             		vertexList[vertexPos] = Float.parseFloat(values[1]);
             		vertexList[vertexPos + 1] = Float.parseFloat(values[2]);
@@ -101,14 +106,16 @@ public class ModelObj extends Model implements Serializable
             		vertexPos += 3;
             	}
             	else if(line.startsWith("vt "))
-            	{
+            	{	// texture coordinate
+    				// e.g. vt 0.499997 0.250000
             		String[] values = line.split(" ");
             		texcoordList[texcoordPos] = Float.parseFloat(values[1]);
             		texcoordList[texcoordPos + 1] = Float.parseFloat(values[2]);
             		texcoordPos += 2;
             	}
             	else if(line.startsWith("vn "))
-            	{
+            	{	// normal
+    				// e.g. vn 0.000000 0.000000 -1.000000
             		String[] values = line.split(" ");
             		normalsList[normalsPos] = Float.parseFloat(values[1]);
             		normalsList[normalsPos + 1]  = Float.parseFloat(values[2]);
@@ -116,15 +123,16 @@ public class ModelObj extends Model implements Serializable
             		normalsPos += 3;
             	}
             	else if(line.startsWith("f"))
-            	{
+            	{	// face (triangle)
+        			// e.g. f 5/1/1 1/2/1 4/3/1
             		String[] values = line.split(" ");
             		for(int i = 1; i < 4; i++)
             		{
             			String[] indicesStr = values[i].split("/");
-                		indexList[indexPos] = Byte.parseByte(indicesStr[0]); //vertex
-                		//indexList[indexPos + 1] = Byte.parseByte(indicesStr[1]); //normal
-                		//indexList[indexPos + 2] = Byte.parseByte(indicesStr[2]); //texture
-                		indexPos ++;
+                		indexList[indexPos] = Byte.parseByte(indicesStr[0]); 
+                		indexList[indexPos + 1] = Byte.parseByte(indicesStr[1]);
+                		indexList[indexPos + 2] = Byte.parseByte(indicesStr[2]);
+                		indexPos += 3;
             		}
             	}
             	
@@ -137,5 +145,16 @@ public class ModelObj extends Model implements Serializable
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+	}
+	
+	/**
+	 * Update the model's transformations.
+	 */
+	public void update(GL10 gl, double deltaTime) {
+		mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0, 0, -4);
+		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 }
