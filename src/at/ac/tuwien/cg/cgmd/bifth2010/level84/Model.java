@@ -11,8 +11,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.*;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 /**
  * Baseclass for all OpenGL models.

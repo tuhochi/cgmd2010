@@ -1,26 +1,18 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
 
 public class ModelObj extends Model implements Serializable
@@ -31,9 +23,12 @@ public class ModelObj extends Model implements Serializable
 	private static final long serialVersionUID = -762515591771882029L;
 	private int mNumVertices;
 	
-    private float[] vertexList = new float[255];
-	private float[] texcoordList = new float[255];
-	private byte[] indexList = new byte[255];
+    private float[] vertexList;
+	private float[] texcoordList;
+	private byte[] indexList;
+	private byte[] indexListVertices;
+	private byte[] indexListTexCoords;
+	private byte[] indexListNormals;
 	
 	public ModelObj()
 	{}	
@@ -41,7 +36,7 @@ public class ModelObj extends Model implements Serializable
 	public ModelObj(InputStream is, Context context)
 	{
 		load(is,context);
-		initBuffers();
+		//initBuffers();
 	}
 	
 	public ModelObj(InputStream is, int modelTex, Context context)
@@ -50,7 +45,7 @@ public class ModelObj extends Model implements Serializable
 	//	Log.i("Obj", "starting loading object");
 		load(is,context);
 	//	Log.i("Obj", "init buffers");
-		initBuffers();
+		//initBuffers();
 		this.textureResource = modelTex;
 		//Log.i("Obj", "finished loading object");
 	}
@@ -83,6 +78,9 @@ public class ModelObj extends Model implements Serializable
 		float[] texcoordList = new float[400];
 		float[] normalsList = new float[400];
 		byte[] indexList = new byte[400];
+		byte[] indexListVertices = new byte[400];
+		byte[] indexListTexCoords = new byte[400];
+		byte[] indexListNormals = new byte[400];
 		int vertexPos = 0;
 		int texcoordPos = 0;
 		int normalsPos = 0;
@@ -125,13 +123,14 @@ public class ModelObj extends Model implements Serializable
             	else if(line.startsWith("f"))
             	{	// face (triangle)
         			// e.g. f 5/1/1 1/2/1 4/3/1
+            		// f v/vt/vn
             		String[] values = line.split(" ");
             		for(int i = 1; i < 4; i++)
             		{
             			String[] indicesStr = values[i].split("/");
-                		indexList[indexPos] = Byte.parseByte(indicesStr[0]); 
-                		//indexList[indexPos + 1] = Byte.parseByte(indicesStr[1]);
-                		//indexList[indexPos + 2] = Byte.parseByte(indicesStr[2]);
+                		indexListVertices[indexPos] = Byte.parseByte(indicesStr[0]); //vertex 
+                		indexListTexCoords[indexPos] = Byte.parseByte(indicesStr[1]); //texture coordinate
+                		indexListNormals[indexPos] = Byte.parseByte(indicesStr[2]); //normal
                 		indexPos ++;
             		}
             	}
@@ -155,6 +154,6 @@ public class ModelObj extends Model implements Serializable
 
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, -4);
-		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
+		//gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 }
