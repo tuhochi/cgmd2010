@@ -13,10 +13,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -26,10 +24,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener;
 
 public class RenderView extends GLSurfaceView implements Renderer
 {
@@ -54,7 +54,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	// event stuff
 	private final LinkedList<MotionEvent> motionEvents;
 	private final LinkedList<KeyEvent> keyEvents;
-	private final GestureDetector gestureDetector;
+	private final CustomGestureDetector gestureDetector;
 	
 	// temp vars
 	private final Vector3 selectionDirection;
@@ -74,7 +74,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		motionEvents = new LinkedList<MotionEvent>();
 		keyEvents = new LinkedList<KeyEvent>();
 		
-		gestureDetector = new GestureDetector(context,new GestureListener());
+		gestureDetector = new CustomGestureDetector(new GestureListener());
 		
 		//init temp vars
 		selectionDirection = new Vector3();
@@ -179,34 +179,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 		synchronizer.logicDone();
 	}
 	
-	private class GestureListener extends SimpleOnGestureListener
+	private class GestureListener implements CustomOnGestureListener
 	{
-		private long pressStart = 0;
 		@Override
-		public boolean onDown(MotionEvent e)
+		public boolean onTouchUp(MotionEvent e, long duration)
 		{
-			pressStart = timer.getTimeOfLastFrame();
-			return super.onDown(e);
-		}
-		
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
-		{
-//			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
-			cam.setMouseDiff(distanceX, distanceY);
-			return true;
-		}
-		
-		@Override
-		public void onLongPress(MotionEvent e)
-		{
-			Log.v(LevelActivity.TAG, "onLongPress(" + e + ")");
-		}
-		
-		@Override
-		public boolean onSingleTapUp(MotionEvent e)
-		{
-			Log.v(LevelActivity.TAG, "onSingleTapUp(" + e + ")");
+			Log.v(LevelActivity.TAG, "onLongerPress(" + e + ", " + duration + ")");
 
 			Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
 			Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
@@ -220,7 +198,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 				selectionDirection.subtract(cam.eyePosition);
 
 				//force strength
-				int difference = (int)(timer.getTimeOfLastFrame()-pressStart)/10;
+				int difference = ((int)duration)/10;
 				Log.d(LevelActivity.TAG,"" + difference);
 				selectionDirection.normalize().multiply(difference);
 
@@ -252,6 +230,15 @@ public class RenderView extends GLSurfaceView implements Renderer
 
 			return true;
 		}
+
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+		{
+			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
+			cam.setMouseDiff(distanceX, distanceY);
+			return true;
+		}
+		
 	}
 
 	private void pre_render()
