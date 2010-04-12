@@ -88,6 +88,9 @@ public class Vector2 {
 		else
 			angle = (float)Math.atan(y / x);
 		
+		angle /= Math.PI;
+		angle *= 180;
+		
 		return angle;
 	}
 }
