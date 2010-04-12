@@ -29,7 +29,7 @@ public class Camera {
     public void init(GL10 gl, int width, int height){
     	
 		 float aspectRatio = (float)width / height;
-	        GLU.gluPerspective( gl, 45, aspectRatio, 0.1f, 100 );
+	        GLU.gluPerspective( gl, 45, aspectRatio, 0.001f, 100 );
     	
     }
     
