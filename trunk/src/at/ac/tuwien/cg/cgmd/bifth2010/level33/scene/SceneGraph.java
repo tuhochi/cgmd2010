@@ -11,6 +11,7 @@ import java.io.InputStream;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
@@ -60,10 +61,14 @@ public class SceneGraph {
 	private static boolean init = false;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
-
+	
+	
+	 
 	public SceneGraph(LevelHandler level, Context context) {
 		this.level = level;
 		this.context = context;
+		 
+
 	}
 
 	/**

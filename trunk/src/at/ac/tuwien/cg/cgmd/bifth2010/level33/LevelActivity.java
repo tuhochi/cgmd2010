@@ -1,10 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -27,6 +29,7 @@ public class LevelActivity extends Activity {
 	
 	private MediaPlayer mAudioPlayer = null;
 	public static SoundHandler soundHandler = null;
+	public static Vibrator vibrator;
 	
 	
 	@Override
@@ -57,6 +60,7 @@ public class LevelActivity extends Activity {
         //Starting 
         setContentView(gameView);   
         //gameView.startGame(); 
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 	}
 	
 	
