@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
@@ -13,12 +15,17 @@ public class CollisionManager {
 	private ArrayList<SceneEntity> entityList;
 	private SceneEntity entity,nearestEntity;
 	
-	private Vector3 p; // punkt auf der gerade
-	private Vector3 a; // richtungsvektor der gerade
-	private Vector3 q; // punkt der auf abstand getestet werden soll
+	private final Vector3 p; // punkt auf der gerade
+	private final Vector3 a; // richtungsvektor der gerade
+	private final Vector3 q; // punkt der auf abstand getestet werden soll
 	
-	private Vector3 pq;
-	private Vector3 normalDistance;
+	private final Vector3 pq;
+	private final Vector3 normalDistance;
+	
+	private final Vector3 centerDistance,objACurrDir,objBCurrDir;
+	private Motion objAMotion,objBMotion;
+	
+	private Moveable objA,objB;
 	
 	private float minDistance;
 	
@@ -32,6 +39,10 @@ public class CollisionManager {
 		this.a = new Vector3();
 		this.pq = new Vector3();
 		this.normalDistance = new Vector3();
+		
+		this.centerDistance = new Vector3();
+		this.objACurrDir = new Vector3();
+		this.objBCurrDir = new Vector3();
 		
 		this.minDistance = 0;
 	}
@@ -79,5 +90,48 @@ public class CollisionManager {
 			Log.d(LevelActivity.TAG,"no ray intersection found");
 		return nearestEntity;
 		
+	}
+	
+	public void doCollisionDetection()
+	{
+		//for each entity
+		for(int i=0; i<entityList.size(); i++) 
+		{
+			objA = entityList.get(i);	
+			for(int j = i+1; j<entityList.size(); j++)
+			{
+				//detect collision
+				objB = entityList.get(j);
+				
+				//calc distance between center points
+				centerDistance.copy(objB.getBoundingSphereWorld().center);
+				centerDistance.subtract(objA.getBoundingSphereWorld().center);
+				
+				if(centerDistance.length()+0.2 < 
+						objB.getBoundingSphereWorld().radius + objA.getBoundingSphereWorld().radius)
+				{
+					objAMotion = objA.getMotion();
+					objBMotion = objB.getMotion();
+					
+					//TODO: generate motion
+					if(objAMotion == null || objBMotion == null)
+						continue;
+					
+					objACurrDir.copy(objA.getMotion().getCurrDirectionVec()).normalize();
+					objBCurrDir.copy(objB.getMotion().getCurrDirectionVec()).normalize();
+										
+					//weight with current speed
+					objACurrDir.multiply(objA.getMotion().getSpeed());
+					objBCurrDir.multiply(objB.getMotion().getSpeed());
+					
+					objACurrDir.add(objBCurrDir);
+					
+					objA.getMotion().morph(objACurrDir);
+					objACurrDir.multiply(-1);
+					objB.getMotion().morph(objACurrDir);
+				}
+				
+			}
+		}
 	}
 }

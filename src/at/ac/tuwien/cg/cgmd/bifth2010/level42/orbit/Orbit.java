@@ -116,20 +116,24 @@ public class Orbit extends Motion
 		{
 			speedMorphIteration = speedMorphStep * dt * dynamicMorphSpeed;
 			
-			if(speedMorphStep>=0)
+			if(speedMorphStep<0)
 			{
-				if(speed + speedMorphIteration > newSpeed)
-				{
-					speedMorphIteration = newSpeed - speed;
+				if(speed + speedMorphIteration < newSpeed){
+					//speedMorphIteration = newSpeed - speed;
+					speed=newSpeed;
+				}else{
+					speed+=speedMorphIteration;
 				}
 			}else{
-				if(speed + speedMorphIteration < newSpeed)
-				{
-					speedMorphIteration = newSpeed - speed;
+				if(speed + speedMorphIteration > newSpeed){
+					//speedMorphIteration = newSpeed - speed;
+					speed=newSpeed;
+				}else{
+					speed+=speedMorphIteration;
 				}
 			}
 				
-			speed+=speedMorphIteration;
+		
 			Log.d(LevelActivity.TAG,"Morph speed curr="+speed+" iteration="+speedMorphIteration+" newspeed="+newSpeed + " dynSpeed="+dynamicMorphSpeed);
 		}
 	}
@@ -241,7 +245,7 @@ public class Orbit extends Motion
 	
 	
 	
-	public void morphOrbit(Vector3 pushVec)
+	public void morph(Vector3 pushVec)
 	{
 		//approx current direction vec
 		currtDirApproximation.copy(ellipse.getPoint(u+step));
@@ -268,21 +272,33 @@ public class Orbit extends Motion
 		this.centerVec.copy(this.entityPos);
 		this.centerVec.subtract(this.centerPos);
 		
+		//cap
+		if(this.centerVec.length()>25)
+			this.centerVec.normalize().multiply(25);
+		if(this.directionVec.length()>23)
+			this.directionVec.normalize().multiply(23);
+		if(this.newSpeed > 10)
+			this.newSpeed = 10;
+		
 		this.ellipse.calcPerimeter();
 		
 		//stepsize should be the same relative to the new perimeter
 		this.step = (oldStepSize*oldPerimeter)/ellipse.perimeter;
 		this.u = 0;
-		
+
+		if(newSpeed<speed){
+			this.dynamicMorphSpeed = (newSpeed/speed)*200;
+			this.speed -= (pushVec.length()*0.25f);
+		}else{
+			this.dynamicMorphSpeed = (speed/newSpeed)*200;
+			this.speed += (pushVec.length()*0.25f);
+		}
 		//speedmorphing parameters
 		this.speedMorphStep = (this.newSpeed-this.speed)/100;
 		
-		if(newSpeed>speed)
-			this.dynamicMorphSpeed = (newSpeed/speed)*150;
-		else
-			this.dynamicMorphSpeed = (speed/newSpeed)*150;
+		Log.d(LevelActivity.TAG,"speedMorphStep="+speedMorphStep+ " dynamicMorphSpeed="+dynamicMorphSpeed+" speed="+speed+" newSpeed="+newSpeed);
 		
-
+		
 	}
 	
 	@Override
@@ -381,5 +397,10 @@ public class Orbit extends Motion
 	@Override
 	public void setTransform(Matrix44 transform) {
 		this.transform = transform;		
+	}
+
+	@Override
+	public float getSpeed() {
+		return this.speed;
 	}
 }

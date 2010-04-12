@@ -23,6 +23,8 @@ public abstract class Motion implements Persistable
 	public abstract Vector3 getCurrDirectionVec();
 	public abstract void persist(DataOutputStream dos) throws IOException;
 	public abstract void restore(DataInputStream dis) throws IOException;
+	public abstract float getSpeed();
+	public abstract void morph(Vector3 pushVec);
 	
 	public static Motion restore(DataInputStream dis, String className)
 	{

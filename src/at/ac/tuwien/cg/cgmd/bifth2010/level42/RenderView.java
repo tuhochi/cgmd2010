@@ -175,8 +175,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		}
 		
 		motionManager.updateMotion(timer.getDeltaTsec());
+		collManager.doCollisionDetection();
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
-		synchronizer.logicDone();
+		synchronizer.logicDone(); 
 	}
 	
 	private class GestureListener implements CustomOnGestureListener
@@ -215,7 +216,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 				else
 				{
 					Orbit orbit = (Orbit)entity.getMotion();
-					orbit.morphOrbit(selectionDirection);
+					orbit.morph(selectionDirection);
 					motionManager.changeSatelliteTransformation(entity, orbit.getCurrDirectionVec(), selectionDirection);
 					//						orbit.transformOrbit(new Vector3(orbit.entityPos).subtract(new Vector3(1,1,2)), 
 					//											 new Vector3(),
@@ -225,7 +226,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
 				}
 			}
-
+			
 			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
 
 			return true;
