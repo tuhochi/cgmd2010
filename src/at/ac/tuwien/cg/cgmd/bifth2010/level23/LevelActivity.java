@@ -113,6 +113,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onPause() {
 		super.onPause(); 
+		renderer.onPause();
 		//renderer.persistSceneEntities();
 		Settings.MAINCHARPOS = renderer.getMainCharPos(); 
 	}
@@ -124,6 +125,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onResume() {
 		super.onResume(); 
+		renderer.onResume();
 		//renderer.restoreSceneEntities();
 	}
 	
@@ -188,7 +190,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void onRestoreInstanceState(Bundle toRestore) {
 		//renderer.restoreSceneEntities(toRestore);
 		//Log.v("onRestoreInstanceState", "called!!!");
-		
+
 		try {
 		byte[] byteArray = toRestore.getByteArray("l42_persist"); 
 		ByteArrayInputStream bis = new ByteArrayInputStream(byteArray); 

@@ -121,7 +121,8 @@ public class ObstacleManager
 		obstacles = new ArrayList<Obstacle>();
 		createVertexBuffer();
 		genArrayWithProbability();
-		mainChar = RenderView.getInstance().getMainCharInstance();
+		currentPosition = 80;
+		leastRenderedObstacle = 0;
 		instance = this;
 	}
 	
@@ -235,9 +236,12 @@ public class ObstacleManager
 	 */
 	public void renderVisibleObstacles(int currentHeight)
 	{
+		if(mainChar == null)
+			mainChar = RenderView.getInstance().getMainCharInstance();
+		
 		//calculate current topBounds value for relative position
 		int topBounds = currentHeight+(int)RenderView.getInstance().getTopBounds();
-		
+		Log.v("topBounds Height: ", String.valueOf(topBounds));
 		boolean renderNext = true;
 		boolean leastRenderedFound = false;
 		int i = leastRenderedObstacle;
