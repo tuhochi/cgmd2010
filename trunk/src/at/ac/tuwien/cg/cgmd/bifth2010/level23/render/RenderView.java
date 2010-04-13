@@ -25,6 +25,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Serializer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
@@ -45,6 +46,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         }
     };
 	private FpsHandle fpsHandle;
+	
+	private SoundManager soundManager;
 	
 	/** The screen width. */
 	private float screenWidth;
@@ -129,6 +132,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         serializer = Serializer.getInstance();
         serializer.setContext(context); 
         fpsHandle = new FpsHandle();
+        soundManager = new SoundManager(context);
 	}
 	
 	/**
@@ -343,6 +347,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		mainChar.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		background.setTextureID(textureManager.getTextureId(context.getResources(), resID));
+	
+//		soundManager.startMusic();
 	}
 		
 	/* (non-Javadoc)
