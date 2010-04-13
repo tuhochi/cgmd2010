@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -19,6 +20,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	private List<Model> models;
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
+	private Accelerometer accelerometer;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,8 +28,9 @@ public class LevelActivity extends Activity implements OnClickListener {
 		
 		models = new LinkedList<Model>();
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
-		renderManager = new RenderManager(this, models);
-	
+		accelerometer = new Accelerometer(this);
+		renderManager = new RenderManager(this, models, accelerometer);
+		
 		openglview.setRenderer(renderManager);
 		
 		ImageButton b1 = (ImageButton) findViewById(R.id.l84_GemButton01);

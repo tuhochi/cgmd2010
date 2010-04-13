@@ -9,21 +9,21 @@ import java.util.TimerTask;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class RenderManager implements Renderer {
 
-	private Activity context;
+	private LevelActivity activity;
 	private List<Model> models;
 	private long lastTime = 0;
-	float rotation = 4.0f;
+	private Accelerometer accelerometer;
 	
 	private TextView tfFps;
 	private int fps = 0;
@@ -38,10 +38,11 @@ public class RenderManager implements Renderer {
 		}
 	};
 	
-	public RenderManager(Activity context, List<Model> models) {
-		this.context = context;
+	public RenderManager(LevelActivity activity, List<Model> models, Accelerometer accelerometer) {
+		this.activity = activity;
 		this.models = models;
-		this.tfFps = (TextView) context.findViewById(R.id.l84_TfFps);
+		this.accelerometer = accelerometer;
+		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
@@ -67,6 +68,8 @@ public class RenderManager implements Renderer {
 		fps++;
 		
 		gl.glLoadIdentity();
+		gl.glPushMatrix();
+		gl.glLoadMatrixf(accelerometer.getMDeviceOrientation(), 0);
 		
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext()) {
@@ -74,6 +77,8 @@ public class RenderManager implements Renderer {
 			m.update(gl, deltaTime);
 			m.draw(gl);
 		}
+		
+		gl.glPopMatrix();
 	}
 
 	/**
@@ -99,7 +104,7 @@ public class RenderManager implements Renderer {
 		//Load textures of all available models.
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext())
-			i.next().loadGLTexture(gl, (Context)this.context);
+			i.next().loadGLTexture(gl, (Context)this.activity);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
