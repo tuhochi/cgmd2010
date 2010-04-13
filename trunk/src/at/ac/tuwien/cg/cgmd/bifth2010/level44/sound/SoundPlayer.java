@@ -74,9 +74,7 @@ public class SoundPlayer {
 			} else { 
 				rightVolume = volume * (1.0f - (position - 0.5f) * 2.0f); 
 			}
-			
-			System.err.println("left: " + leftVolume + " right: " + rightVolume);
-			
+		
 			soundPool.play(sounds.get(sound), leftVolume, rightVolume, 1, 0, 1f);
 		}
 	}
