@@ -26,9 +26,9 @@ public class Swipe implements InputGesture {
 	/** length of swipe */
 	private float length = 0;
 	/** screenhalf of the swipe */
-	private InputGesture.ScreenHalf screenHalf;
+	private InputGesture.Position screenHalf;
 	
-	public Swipe(float x1, float y1, float x2, float y2, InputGesture.ScreenHalf screenHalf) {
+	public Swipe(float x1, float y1, float x2, float y2, InputGesture.Position screenHalf) {
 		this.startX = x1;
 		this.startY = y1;
 		this.endX = x2;
@@ -43,16 +43,20 @@ public class Swipe implements InputGesture {
 		return length;
 	}
 	
-	public InputGesture.ScreenHalf getScreenHalf() {
+	public InputGesture.Position getScreenHalf() {
 		return screenHalf;
 	}
 	
-	public boolean isLeftHalf() {
-		return screenHalf.equals(InputGesture.ScreenHalf.LEFT);
+	public boolean isLeft() {
+		return screenHalf.equals(InputGesture.Position.LEFT);
 	}
 	
-	public boolean isRightHalf() {
-		return !isLeftHalf();
+	public boolean isMiddle() {
+		return screenHalf.equals(InputGesture.Position.MIDDLE);
+	}
+	
+	public boolean isRight() {
+		return screenHalf.equals(InputGesture.Position.RIGHT);
 	}
 
 	@Override

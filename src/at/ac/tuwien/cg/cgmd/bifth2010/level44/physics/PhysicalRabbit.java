@@ -116,7 +116,8 @@ public class PhysicalRabbit implements PhysicalObject {
 
 		if (gesture != null) {
 			// append to inputQueue
-			inputQueue.add(gesture);
+			if (inputQueue.size() < 2)
+				inputQueue.add(gesture);
 		}
 
 		// get newest input to process
@@ -137,10 +138,11 @@ public class PhysicalRabbit implements PhysicalObject {
 				// longer swipe means longer angle-flip
 				sprite.setCurrentAngleMax(swipe);
 				// rotate the rabbit depending on which wing is flapped
-				sprite.rotate(swipe);
+				if (swipe.isLeft() || swipe.isRight()) 
+					sprite.rotate(swipe);
 
 				// check in which half of the screen the input was detected
-				if (swipe.isLeftHalf()) {
+				if (swipe.isLeft()) {
 					// perform one step of the flap and check if the flap is finished
 					// finshed = at top position again (-45/45 ¡)
 					 finished = sprite.flapLeftWing(swipe.getStrength());
@@ -150,10 +152,21 @@ public class PhysicalRabbit implements PhysicalObject {
 						sprite.resetWings();
 						inputQueue.remove();
 					}
-				} else {
+				} else if (swipe.isRight()) {
 					finished = sprite.flapRightWing(swipe.getStrength());
 
 					if (finished) {
+						sprite.resetWings();
+						inputQueue.remove();
+					}
+				} else {
+					boolean finishedLeft = sprite.flapLeftWing(Swipe.MAX_LENGTH);
+					boolean finishedRight = sprite.flapRightWing(Swipe.MAX_LENGTH);
+					
+					finished = finishedLeft || finishedRight;
+					
+					if (finished) {
+						// set wings back to top position
 						sprite.resetWings();
 						inputQueue.remove();
 					}
