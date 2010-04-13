@@ -1,7 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
 
 /**
  * The Class TimeUtil takes care of all tasks belonging to time.
@@ -9,7 +8,7 @@ import java.util.TimerTask;
  * @author Florian Felberbauer
  */
 public class TimeUtil {
-	
+		
 	/** The instance of TimeUtil to pass around. */
 	private static TimeUtil instance;
 	
@@ -32,14 +31,14 @@ public class TimeUtil {
 	private float fps;
 	
 	/** The timer. */
-	private Timer timer;
+	private ArrayList<TimingTask> scheduledTimers;
 		
 	/**
 	 * Instantiates a new time util.
 	 */
 	private TimeUtil()
 	{
-		timer = new Timer();
+		scheduledTimers = new ArrayList<TimingTask>();
 		instance = this;
 	}
 	
@@ -57,22 +56,14 @@ public class TimeUtil {
 	}
 	
 	/**
-	 * Cancels the timer.
-	 */
-	public void cancelTimer() {
-		timer.cancel();
-	}
-	
-	/**
 	 * Schedules timer.
 	 *
 	 * @param task the TimerTask to schedule
 	 * @param delay the delay
 	 */
-	public void scheduleTimer(TimerTask task, long delay)
+	public void scheduleTimer(TimingTask task)
 	{
-		timer = new Timer(); 
-		timer.schedule(task, delay);
+		scheduledTimers.add(task);
 	}
 	
 	/**
@@ -155,6 +146,8 @@ public class TimeUtil {
 	{
 		long currentTime = System.currentTimeMillis();
 		
+		
+		
 		if(accFrameTime >= fpsRefreshInterval*1000)
 		{
 			fps = (nrRenderedFrames/accFrameTime)*1000;
@@ -171,6 +164,18 @@ public class TimeUtil {
 			accFrameTime += dt;
 			nrRenderedFrames++;
 			lastFrameTime = currentTime;
+		}
+		
+		for(int i=0;i<scheduledTimers.size();i++)
+		{
+			TimingTask tempTask = scheduledTimers.get(i);
+			if(tempTask.isDead)
+			{
+				scheduledTimers.remove(i);
+				tempTask.isDead = false;
+			}
+			else
+				scheduledTimers.get(i).update(dt);
 		}
 	}
 }

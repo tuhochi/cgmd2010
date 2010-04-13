@@ -1,11 +1,11 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
-import java.util.TimerTask;
-
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimingTask;
 
 /**
  * The Class Hud provides the HUD for activating boni and movement arrows
@@ -25,15 +25,16 @@ public class Hud
 	/** The class handling time utilities */
 	private TimeUtil timeUtil; 
 	
+	private BurnTimer burnTimer = new BurnTimer();
+	
 	/**
 	 * Th Class BurnTimer handles all tasks needed for the money bonus 
 	 */
-	private class BurnTimer extends TimerTask
+	private class BurnTimer extends TimingTask
 	{
-
-		/* (non-Javadoc)
-		 * @see java.util.TimerTask#run()
-		 */
+		public float time=Settings.BURN_BOOST_TIME;
+		public float remainingTime=Settings.BURN_BOOST_TIME;
+		
 		/**
 		 * sets the balloon speed to the old value after the boost time ran up
 		 */
@@ -42,7 +43,17 @@ public class Hud
 		{
 			Settings.BALLOON_SPEED -= Settings.BURN_BOOST;
 			moneyButton.setActive(true);
-			timeUtil.cancelTimer();
+			isDead=true;
+			remainingTime = time;
+			SoundManager.instance.stopBoostSound();
+		}
+
+		@Override
+		public void update(float dt) 
+		{
+			remainingTime -= dt;
+			if(remainingTime <= 0)
+				run();
 		}
 		
 	}
@@ -93,7 +104,8 @@ public class Hud
 		{
 			moneyButton.setActive(false);
 			Settings.BALLOON_SPEED += Settings.BURN_BOOST;
-			timeUtil.scheduleTimer(new BurnTimer(), Settings.BURN_BOOST_TIME);
+			timeUtil.scheduleTimer(burnTimer);
+			SoundManager.instance.startBoostSound();
 			return true;
 		}
 		
