@@ -2,8 +2,8 @@
 <resources>
 <string name="l42_nameofthegame_full">Signanzorbit</string>
 <string name="l42_HelpActivity_Title">Signanzorbit</string>
-<string name="l42_HelpActivity_Text1">Die hohe Masse des Schatzes führte durch den Signanzeffekt zu einer Transformation des Raumes in ein schwereloses Gebilde in dem all deine Besitztümer eine kompakte zentrale Masse darstellen. Diese Masse ist so groß, dass sich bereits verschiedene kleinere Objekte in Umlaufbahnen um den Schatz befinden.</string>
-<string name="l42_HelpActivity_Text2">Diesen zentralen &quot;Goldplaneten&quot; gilt es nun so weit wie möglich zu zerstören um den Schatz zu verkleinern. Um dieses Ziel zu erreichen müssen die Objekte (im weiteren Satelliten genannt) aus ihren Umlaufbahnen hinaus auf den Schatz geschleudert werden. Der Spieler besitzt die Fähigkeit gerichtete Kraftimpulse im Raum auszulösen um die Satellitenbahnen zu beeinflussen.</string>
-<string name="l42_HelpActivity_Text3">Ein Impuls kann durch Berühren des Bildschirms erzeugt werden, dabei lädt sich die Kraft des Impulses über die Zeit auf. Ein Satellit muss mit der richtigen Kraft an der richtigen Stelle getroffen werden um beim Absturz maximalen Schaden anzurichten.</string>
-<string name="l42_HelpActivity_Text4">Die Kameraperspektive kann kugelförmig rund um den Schatz beliebig verändert werden, die Steuerung der Kamera erfolgt über sog. &quot;Sweeps&quot;, also schnelle, gerichtete Bewegungen über den Bildschirm.</string>
+<string name="l42_HelpActivity_Text1">The huge mass of your treasure and the Signanzeffect led to a transformation of space into a zero-gravity structure where all your possessions form a central compact shape. This central shape has already drawn various smaller objects into orbits.</string>
+<string name="l42_HelpActivity_Text2">This central 'Goldplanet' must be damaged as much as possible to decrease the treasures value. The only way to damage the Goldplanet is to push the objects (let's call them satellites) out of their orbits and let them crash into the planet. The player can use directional force pushes to alter the orbits.</string>
+<string name="l42_HelpActivity_Text3">A force push is triggered by touching the screen, a longer touch results in a stronger push. A satellite must be hit with the right force at the right place to do maximum damage when it crashes.</string>
+<string name="l42_HelpActivity_Text4">The perspective camera can be moved freely on a sphere around the treasure by moving your finger on the screen.</string>
 </resources>
