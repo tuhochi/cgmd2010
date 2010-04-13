@@ -189,11 +189,17 @@ public class RenderView extends GLSurfaceView implements Renderer
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
 		
 		/*
-		 * Update UI
+		 * Update FPS
 		 */
 		if(timer.haveFPSchanged())
 			mainThreadHandler.post(fpsUpdateRunnable);
-		// TODO: update score!
+		
+		/*
+		 * Update Score
+		 */
+		boolean scoreChanged = false;
+		if(scoreChanged)
+			mainThreadHandler.post(scoreUpdateRunnable);
 		
 		synchronizer.logicDone(); 
 	}
