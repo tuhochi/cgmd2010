@@ -58,29 +58,30 @@ public class ModelObj extends Model implements Serializable
 	public void initBuffers()
 	{
 		numIndices = finalIndexList.length;
-		Log.i("buffers", "numindices " + numIndices);
-		Log.i("buffers", "Vertex " + finalVertexList.length);
+	
+		//Log.i("buffers", "numindices " + numIndices);
+		//Log.i("buffers", "Vertex " + finalVertexList.length);
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(finalVertexList.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(finalVertexList);
 		vertexBuffer.position(0);
 
-		Log.i("buffers", "TC " + finalTexcoordsList.length);
+//		Log.i("buffers", "TC " + finalTexcoordsList.length);
 		byteBuf = ByteBuffer.allocateDirect(finalTexcoordsList.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		textureBuffer = byteBuf.asFloatBuffer();
 		textureBuffer.put(finalTexcoordsList);
 		textureBuffer.position(0);
 
-		Log.i("buffers", "Normals " + finalNormalsList.length);
+		//Log.i("buffers", "Normals " + finalNormalsList.length);
 //		byteBuf = ByteBuffer.allocateDirect(finalNormalsList.length * 4);
 //		byteBuf.order(ByteOrder.nativeOrder());
 //		normalBuffer = byteBuf.asFloatBuffer();
 //		normalBuffer.put(finalNormalsList);
 //		normalBuffer.position(0);
 		
-		Log.i("buffers", "Index " + finalIndexList.length);
+		//Log.i("buffers", "Index " + finalIndexList.length);
 		indexBuffer = ByteBuffer.allocateDirect(finalIndexList.length);
 		indexBuffer.put(finalIndexList);
 		indexBuffer.position(0);
@@ -177,14 +178,18 @@ public class ModelObj extends Model implements Serializable
 		int Npos = 0;
 		int Indexpos = 0;
 		
+		finalVertexList = new float[vertexList.size() * 3];
+		finalTexcoordsList = new float[texcoordsList.size() * 2];
+		finalNormalsList = new float[normalsList.size() * 3];
+		
 		for (int i=0; i < vertexList.size();i++)
 		{
 			float[] tempVertex = new float[3];
 			tempVertex = vertexList.get(i);
-			finalVertexList = new float[vertexList.size() * 3];
 			finalVertexList[Vpos] = tempVertex[0]; 
         	finalVertexList[Vpos + 1] = tempVertex[1];
-        	finalVertexList[Vpos + 2] = tempVertex[2];        	
+        	finalVertexList[Vpos + 2] = tempVertex[2];
+    //    	Log.i("finalList", "finalVertexList: " + finalVertexList[Vpos] + "/" + finalVertexList[Vpos+1] + "/" + finalVertexList[Vpos+2]);
         	Vpos += 3;
 		}
 		
@@ -192,19 +197,19 @@ public class ModelObj extends Model implements Serializable
 		{
 			float[] tempTC = new float[2];
 			tempTC = texcoordsList.get(i);
-        	finalTexcoordsList = new float[texcoordsList.size() * 2];
         	finalTexcoordsList[TCpos] = tempTC[0];
         	finalTexcoordsList[TCpos + 1] = tempTC[1];
+//        	Log.i("finalList", "finalTexList: " + finalTexcoordsList[TCpos] + "/" + finalTexcoordsList[TCpos+1]);
         	TCpos += 2;
 		}
 		for (int i=0; i < normalsList.size(); i++)
 		{
 			float[] tempNormal = new float[3];
 			tempNormal = normalsList.get(i);
-        	finalNormalsList = new float[normalsList.size() * 3];
         	finalNormalsList[Npos] = tempNormal[0];
         	finalNormalsList[Npos + 1] = tempNormal[1];
         	finalNormalsList[Npos + 2] = tempNormal[2];
+        //	Log.i("finalList", "finalNormalsList: " + finalNormalsList[Npos] + "/" + finalNormalsList[Npos+1] + "/" + finalNormalsList[Npos+2]);
         	Npos += 3;
 		}
 
@@ -240,8 +245,10 @@ public class ModelObj extends Model implements Serializable
 //        	Log.i("listsize", "finallistTC " + finalTexcoordsList.length);
 //        	Log.i("listsize", "finallistNormal " + finalNormalsList.length);
 //        	Log.i("listsize", "finallistFace " + finalIndexList.length);
-//        	//Log.i("indexlist", String.valueOf(tempface[0]));
-        	finalIndexList[Indexpos] = tempface[0];
+
+        	int facenumber = tempface[0] - 1;
+        	finalIndexList[Indexpos] = (byte) facenumber;
+        	//Log.i("indexlist", String.valueOf(finalIndexList[Indexpos]));
         	Indexpos++;
 //
 //        	finalVertexList[Vpos] = tempVertex[0]; 
@@ -296,11 +303,11 @@ public class ModelObj extends Model implements Serializable
 	/**
 	 * Update the model's transformations.
 	 */
-//	public void update(GL10 gl, double deltaTime) {
-//		mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
-//
-//		gl.glPushMatrix();
-//		gl.glTranslatef(0, 0, -4);
-//		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
-//	}
+	public void update(GL10 gl, double deltaTime) {
+		mTrans = Matrix4x4.mult(Matrix4x4.RotateY((float)(1f * deltaTime)), mTrans);
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0, 0, -4);
+		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
+	}
 }
