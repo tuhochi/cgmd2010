@@ -21,4 +21,11 @@ public class TextureParts {
 		return new TexturePart(texture, 224, 224, 255, 255);
 	}
 
+	public static TexturePart makeCrosshairsRed(Texture texture) {
+		return new TexturePart(texture,48,0,96,48);
+	}
+	
+	public static TexturePart makeCrosshairsGreen(Texture texture) {
+		return new TexturePart(texture,0,0,48,48);
+	}
 }
