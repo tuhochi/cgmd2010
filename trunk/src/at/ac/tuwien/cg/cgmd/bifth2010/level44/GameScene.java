@@ -13,6 +13,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 
@@ -24,9 +25,14 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private GameThread gameThread;
 	/** queue of all inputGestures to process */
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
+	/** soundPlayer */
+	private SoundPlayer player = null;
 	
 	public GameScene(Context context) {
 		super(context);
+		
+		player = new SoundPlayer(context);
+		
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
 		System.err.println("GameScene created");
@@ -113,10 +119,15 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	}
 	
 	public void addInputGesture(InputGesture gesture) {
-		inputQueue.add(gesture);
+		if (inputQueue.size() < 1)
+			inputQueue.add(gesture);
 	}
 	
 	public InputGesture getNextInputGesture() {
 		return inputQueue.poll();
+	}
+	
+	public SoundPlayer getSoundPlayer() {
+		return player;
 	}
 }

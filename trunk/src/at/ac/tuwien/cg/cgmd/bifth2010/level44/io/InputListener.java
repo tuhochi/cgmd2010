@@ -30,7 +30,7 @@ public class InputListener extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		InputGesture.ScreenHalf displayHalf;
+		InputGesture.Position position;
 		
 		// check that swipe is straight
 		if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH)
@@ -39,16 +39,20 @@ public class InputListener extends SimpleOnGestureListener {
 		// check if swipe is long enough to be a gesture
 		if (e2.getY() - e1.getY() > Swipe.MIN_LENGTH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
 			// left half of screen
-			if (e1.getX() < width/2) {
-				displayHalf = InputGesture.ScreenHalf.LEFT;
+			if (e1.getX() <= width/3) {
+				position = InputGesture.Position.LEFT;
 			} 
 			// right half of screen
+			else if (e1.getX() >= width*2/3) {
+				position = InputGesture.Position.RIGHT;
+			}
+			// Middle of the screen
 			else {
-				displayHalf = InputGesture.ScreenHalf.RIGHT;
+				position = InputGesture.Position.MIDDLE;
 			}
 			
 			// add Gesture to InputQueue
-			scene.addInputGesture(new Swipe(e1.getX(), e1.getY(), e2.getX(), e2.getY(), displayHalf));
+			scene.addInputGesture(new Swipe(e1.getX(), e1.getY(), e2.getX(), e2.getY(), position));
 		}
 		
 		return true;

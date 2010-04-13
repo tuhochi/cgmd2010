@@ -4,6 +4,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 
 public class GameThread extends Thread {
 	private static final int FRAME_RATE = 200;
@@ -37,9 +38,12 @@ public class GameThread extends Thread {
 					}*/
 
 					// process input gesture 
-					rabbit.processGesture(scene.getNextInputGesture()); 
+					gesture = scene.getNextInputGesture();
+					rabbit.processGesture(gesture); 
 					// perform movement of rabbit
 					rabbit.move();
+					// play sound effect if wings are moving
+					playFlapSound(gesture);
 					
 					
 					// reset start time if rabbit sits at the bottom of the screen
@@ -69,5 +73,23 @@ public class GameThread extends Thread {
 
 	public void doQuit() {
 		this.quit = true;
+	}
+	
+	public void playFlapSound(InputGesture gesture) {
+		float soundPosition = 0.5f;
+		
+		if (gesture != null) {
+			if (gesture instanceof Swipe) {
+				Swipe swipe = (Swipe)gesture;
+				
+				if (swipe.isLeft()) {
+					soundPosition = 0.f;
+				} else if (swipe.isRight()) {
+					soundPosition = 1.0f;
+				}
+			}
+			
+			scene.getSoundPlayer().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
+		}
 	}
 }

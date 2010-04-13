@@ -104,9 +104,12 @@ public class RabbitSprite extends SpriteContainer {
 	 * @param swipe if the swipe is in the left half, the max angle of the left wing is set, otherwise the one of the right wing
 	 */
 	public void setCurrentAngleMax(Swipe swipe) {
-		if (swipe.isLeftHalf()) {
+		if (swipe.isLeft()) {
 			this.setCurrentLeftAngleMax(swipe.getStrength());
+		} else if (swipe.isRight()) {
+			this.setCurrentRightAngleMax(swipe.getStrength());
 		} else {
+			this.setCurrentLeftAngleMax(swipe.getStrength());
 			this.setCurrentRightAngleMax(swipe.getStrength());
 		}
 	}
@@ -193,7 +196,7 @@ public class RabbitSprite extends SpriteContainer {
 
 			angleDelta *= MAX_ROTATION / Swipe.MAX_MIN_DELTA;
 
-			if (swipe.isRightHalf()) {
+			if (swipe.isRight()) {
 				angleDelta *= -1.f;
 			} 
 
