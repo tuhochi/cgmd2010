@@ -10,9 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class SoundPlayer {
 	/** The Sound Effects we support */
-	public enum SoundEffect {
-		LOAD, SHOT, FLAP, DROP
-	};
+	public enum SoundEffect { LOAD, SHOT, FLAP, DROP };
 
 	/** SoundPool for playing sounds */
 	private SoundPool soundPool;
@@ -22,8 +20,24 @@ public class SoundPlayer {
 	private float volume = 1.0f;
 	/** does the user want to play sound effects? */
 	private boolean musicOn = true;
+	/** Singleton-Object */
+	private static SoundPlayer instance = null;
 
-	public SoundPlayer(Context context) {
+	/**
+	 * Get the Singleton-Object
+	 * 
+	 * @param context needed for creation
+	 * @return the SoundPlayer
+	 */
+	public static SoundPlayer getInstance(Context context) {
+		if (instance == null) {
+			instance = new SoundPlayer(context);
+		}
+		
+		return instance;
+	}
+	
+	private SoundPlayer(Context context) {
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
 		sounds = new HashMap<SoundEffect, Integer>();
 

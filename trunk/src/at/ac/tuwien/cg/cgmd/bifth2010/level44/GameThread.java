@@ -49,7 +49,7 @@ public class GameThread extends Thread {
 					// perform movement of rabbit
 					rabbit.move();
 					// play sound effect if wings are moving
-					playFlapSound(gesture);
+					playSoundEffects(gesture);
 					// move crosshairs
 					crosshairs.ai();
 					
@@ -58,6 +58,7 @@ public class GameThread extends Thread {
 					if (rabbit.getSprite().isUnder(scene.getHeight() - 5)) {
 						rabbit.resetStartTime(0);
 						rabbit.setVelocity(0.f);
+						scene.clearInputQueue();
 					}
 					
 					landscape.step();					
@@ -84,7 +85,7 @@ public class GameThread extends Thread {
 		this.quit = true;
 	}
 	
-	public void playFlapSound(InputGesture gesture) {
+	public void playSoundEffects(InputGesture gesture) {
 		float soundPosition = 0.5f;
 		
 		if (gesture != null) {
@@ -99,6 +100,10 @@ public class GameThread extends Thread {
 			}
 			
 			scene.getSoundPlayer().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
+		}
+		
+		if (crosshairs.isNearRabbit()) {
+			scene.getSoundPlayer().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
 		}
 	}
 }

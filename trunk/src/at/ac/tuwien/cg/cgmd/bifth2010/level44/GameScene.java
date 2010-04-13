@@ -39,7 +39,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	public GameScene(Context context) {
 		super(context);
 		
-		player = new SoundPlayer(context);
+		player = SoundPlayer.getInstance(context);
 		
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
