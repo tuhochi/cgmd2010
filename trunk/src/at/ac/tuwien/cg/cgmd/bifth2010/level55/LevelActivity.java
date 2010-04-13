@@ -11,16 +11,22 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class LevelActivity extends Activity {
 	
-	Player player=new Player();
+	//Player player=new Player();
+	
+	MyRenderer myRenderer;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d("Activity", "onCreate");
 		
 		 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); 
 	     requestWindowFeature(Window.FEATURE_NO_TITLE);
 	     
 		mGLSurfaceView = new MyOpenGLView(this);
-        mGLSurfaceView.setRenderer(new MyRenderer(player));   
+        //mGLSurfaceView.setRenderer(new MyRenderer(player));
+		myRenderer=new MyRenderer();
+		mGLSurfaceView.setRenderer(myRenderer);
         setContentView(mGLSurfaceView);
         
        SessionState s = new SessionState();
@@ -35,6 +41,9 @@ public class LevelActivity extends Activity {
     protected void onResume() {
         // Ideally a game should implement onResume() and onPause()
         // to take appropriate action when the activity looses focus
+		
+		Log.d("Activity", "onResume");
+		
         super.onResume();
         mGLSurfaceView.onResume();
     }
@@ -49,8 +58,8 @@ public class LevelActivity extends Activity {
     
     @Override
     protected void onStop() {
-    	super.onStop();
     	Log.d("Activity", "onStop");
+    	super.onStop();
     }
    
     public boolean onTouchEvent(MotionEvent me) {
@@ -69,32 +78,34 @@ public class LevelActivity extends Activity {
 	}
     
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	if (keyCode==KeyEvent.KEYCODE_A) {
-    		player.moveLeft(true);
-    		return true;
-    	}
-    	if (keyCode==KeyEvent.KEYCODE_D) {
-    		player.moveRight(true);
-    		return true;
-    	}
-    	if (keyCode==KeyEvent.KEYCODE_W) {
-    		player.jump(true);
-    		return true;
+    	if (myRenderer.player!=null) {
+	    	if (keyCode==KeyEvent.KEYCODE_A) {
+	    		myRenderer.player.moveLeft(true);
+	    		return true;
+	    	}
+	    	if (keyCode==KeyEvent.KEYCODE_D) {
+	    		myRenderer.player.moveRight(true);
+	    		return true;
+	    	}
+	    	if (keyCode==KeyEvent.KEYCODE_W) {
+	    		myRenderer.player.jump(true);
+	    		return true;
+	    	}
     	}
 		return super.onKeyDown(keyCode, event);
     }
     
     public boolean onKeyUp(int keyCode, KeyEvent event) {
     	if (keyCode==KeyEvent.KEYCODE_A) {
-    		player.moveLeft(false);
+    		myRenderer.player.moveLeft(false);
     		return true;
     	}
     	if (keyCode==KeyEvent.KEYCODE_D) {
-    		player.moveRight(false);
+    		myRenderer.player.moveRight(false);
     		return true;
     	}
     	if (keyCode==KeyEvent.KEYCODE_W) {
-    		player.jump(false);
+    		myRenderer.player.jump(false);
     		return true;
     	}
     	return super.onKeyUp(keyCode, event);
