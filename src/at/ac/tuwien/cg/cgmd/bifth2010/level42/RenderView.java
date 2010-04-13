@@ -11,6 +11,7 @@ import javax.microedition.khronos.opengles.GL11;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -51,6 +52,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 	// thread stuff
 	public final Synchronizer synchronizer;
 	
+	// main thread stuff
+	private final Handler mainThreadHandler;
+	private final Runnable fpsUpdateRunnable;
+	private final Runnable scoreUpdateRunnable;
+	
 	// event stuff
 	private final LinkedList<MotionEvent> motionEvents;
 	private final LinkedList<KeyEvent> keyEvents;
@@ -82,6 +88,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 		scene = SceneLoader.getInstance().readScene("l42_cubeworld");
 		motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,2,10);
 		collManager = new CollisionManager(scene);
+		
+		mainThreadHandler = this.context.handler;
+		fpsUpdateRunnable = this.context.fpsUpdateRunnable;
+		scoreUpdateRunnable = this.context.scoreUpdateRunnable;
 	}
 	
 	private void initGLSettings()
@@ -181,7 +191,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		/*
 		 * Update UI
 		 */
-		context.handler.post(context.uiUpdateRunnable);
+		if(timer.haveFPSchanged())
+			mainThreadHandler.post(fpsUpdateRunnable);
+		// TODO: update score!
 		
 		synchronizer.logicDone(); 
 	}
