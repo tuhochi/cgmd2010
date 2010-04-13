@@ -220,4 +220,8 @@ public class RabbitSprite extends SpriteContainer {
 	public boolean looseCoin() {
 		return coinBucket.looseCoin();
 	}
+	
+	public int getCoinCount() {
+		return coinBucket.getCoinCount();
+	}
 }
