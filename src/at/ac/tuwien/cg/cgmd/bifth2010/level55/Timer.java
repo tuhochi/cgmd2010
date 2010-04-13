@@ -14,7 +14,7 @@ public class Timer {
 		long currentTime = System.currentTimeMillis();
 		
 		if (lastTime!=0) {
-			dT=(currentTime-lastTime);
+			dT=Math.min(1000,(currentTime-lastTime));
 			debug();
 		}
 		

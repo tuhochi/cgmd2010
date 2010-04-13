@@ -44,16 +44,16 @@ public class LevelActivity extends Activity {
 		
 		Log.d("Activity", "onResume");
 		
-        super.onResume();
         mGLSurfaceView.onResume();
+        super.onResume();
     }
 
     @Override
     protected void onPause() {
         // Ideally a game should implement onResume() and onPause()
         // to take appropriate action when the activity looses focus
-        super.onPause();
         mGLSurfaceView.onPause();
+        super.onPause();
     }
     
     @Override
