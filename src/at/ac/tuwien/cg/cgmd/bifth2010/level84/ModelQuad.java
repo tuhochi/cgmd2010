@@ -34,7 +34,7 @@ public class ModelQuad extends Model {
 	public ModelQuad() {
 		numIndices = indices.length;
 		
-		Log.i("modelquad", String.valueOf(vertices.length));
+		//Log.i("modelquad", String.valueOf(vertices.length));
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexBuffer = byteBuf.asFloatBuffer();
@@ -61,11 +61,12 @@ public class ModelQuad extends Model {
 		this.textureResource = textureResource;
 	}
 	
+	
 	/**
 	 * Update the model's transformations.
 	 */
 	public void update(GL10 gl, double deltaTime) {
-		mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
+		//mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
 
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, -4);
