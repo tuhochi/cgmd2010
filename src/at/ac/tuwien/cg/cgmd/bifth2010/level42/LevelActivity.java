@@ -46,6 +46,7 @@ public class LevelActivity extends Activity
 			public void run()
 			{
 				fps.setText(timeManager.getFPS() + " fps");
+//				Log.d(TAG,timeManager.getFPS() + " fps");
 			}
 		};
 		scoreUpdateRunnable = new Runnable()
