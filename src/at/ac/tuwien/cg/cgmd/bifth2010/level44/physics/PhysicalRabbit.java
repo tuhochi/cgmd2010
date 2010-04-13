@@ -20,8 +20,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 public class PhysicalRabbit implements PhysicalObject {
 	/** the acceleration of a full wing-flap (vgl. PhysicalObject.GRAVITY) */
 	private static final float MAX_FLAP_ACCELERATION = 22.f;
+	/** factor for slowing down movement */
 	private static final float VELOCITY_FACTOR = 6000.f;
-	private static final int   FULL_COIN_COUNT = 10;
+	/** number of coins at the beginning */
+	public static final int FULL_COIN_COUNT = 10;
 	
 	/** the sprite showing the rabbit */
 	private RabbitSprite sprite = null;
@@ -102,7 +104,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		
 		// set new position, if the position is on the screen
 		newX = Math.min(screenWidth, Math.max(0,newX));
-		newY = Math.min(screenHeight - sprite.getHeight(), Math.max(0,newY));
+		newY = Math.min(screenHeight - sprite.getHeight(), Math.max(-40,newY));
 		setPosition(newX,newY);
 	}
 
@@ -235,5 +237,10 @@ public class PhysicalRabbit implements PhysicalObject {
 	
 	public void looseCoin() {
 		coinCount--;
+		sprite.looseCoin();
+	}
+	
+	public boolean hasLanded() {
+		return sprite.isUnder(screenHeight - 5);
 	}
 }

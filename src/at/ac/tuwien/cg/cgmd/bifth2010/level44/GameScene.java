@@ -99,7 +99,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
 		
 		crosshairs = new Crosshairs(mainTexture, this.getWidth(), this.getHeight());
-		crosshairs.setPosition(getWidth()/2, getHeight()/2 + 20);
+		crosshairs.setPosition(30, getHeight()/2);
 		crosshairs.setRabbit(rabbit);
 		
 		landscape = new Landscape(mainTexture, getWidth(), getHeight());

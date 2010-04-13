@@ -5,8 +5,8 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 public class SpriteContainer extends Sprite {
-	private Vector<Sprite> children;
-	private Vector<Sprite> childrenFront;
+	protected Vector<Sprite> children;
+	protected Vector<Sprite> childrenFront;
 	
 	public SpriteContainer(TexturePart texturePart) {
 		this(texturePart, texturePart.getWidth(), texturePart.getHeight());

@@ -21,7 +21,7 @@ public class RabbitSprite extends SpriteContainer {
 
 	private Sprite leftWing;
 	private Sprite rightWing;
-	private Sprite coinBucket;
+	private CoinBucketSprite coinBucket;
 
 	/** left wing currently flapping up? */
 	private boolean leftFlapUp = false;
@@ -215,5 +215,9 @@ public class RabbitSprite extends SpriteContainer {
 	
 	public boolean isUnder(float y) {
 		return this.getY() + this.getHeight() > y;
+	}
+	
+	public boolean looseCoin() {
+		return coinBucket.looseCoin();
 	}
 }

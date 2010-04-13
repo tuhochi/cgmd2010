@@ -48,14 +48,14 @@ public class GameThread extends Thread {
 					rabbit.processGesture(gesture); 
 					// perform movement of rabbit
 					rabbit.move();
-					// play sound effect if wings are moving
-					playSoundEffects(gesture);
 					// move crosshairs
 					crosshairs.ai();
+					// play sound effects
+					playSoundEffects(gesture);
 					
 					
 					// reset start time if rabbit sits at the bottom of the screen
-					if (rabbit.getSprite().isUnder(scene.getHeight() - 5)) {
+					if (rabbit.hasLanded()) {
 						rabbit.resetStartTime(0);
 						rabbit.setVelocity(0.f);
 						scene.clearInputQueue();
@@ -102,8 +102,12 @@ public class GameThread extends Thread {
 			scene.getSoundPlayer().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
 		}
 		
-		if (crosshairs.isNearRabbit()) {
-			scene.getSoundPlayer().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
+		if (crosshairs.changeLoadingState()) {
+			scene.queueEvent(new Runnable() {
+				public void run() {
+					scene.getSoundPlayer().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
+				}
+			});
 		}
 	}
 }
