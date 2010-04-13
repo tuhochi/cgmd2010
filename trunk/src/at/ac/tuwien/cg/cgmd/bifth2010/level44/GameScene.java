@@ -11,6 +11,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
@@ -21,6 +22,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 public class GameScene extends GLSurfaceView implements Renderer {
 	/** the flying rabbit */
 	private PhysicalObject rabbit;
+	/** the crosshairs that shoot on the rabbit */
+	private Crosshairs crosshairs;
 	/** thread for game logic */
 	private GameThread gameThread;
 	/** queue of all inputGestures to process */
@@ -50,6 +53,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		if (rabbit != null) {
 			rabbit.draw(gl);
+		}
+		
+		if (crosshairs != null) {
+			crosshairs.draw(gl);
 		}
 	}
 
@@ -82,6 +89,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
+		
+		crosshairs = new Crosshairs(new Texture(gl, getContext(), R.drawable.l44_crosshairs));
+		crosshairs.setPosition(getWidth()/2, getHeight()/2 + 20);
+		crosshairs.setRabbit(rabbit);
 		
 		restartGameThread();
 	}
@@ -119,8 +130,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	}
 	
 	public void addInputGesture(InputGesture gesture) {
-		if (inputQueue.size() < 1)
-			inputQueue.add(gesture);
+		//if (inputQueue.size() < 1)
+		inputQueue.clear();
+		inputQueue.add(gesture);
 	}
 	
 	public InputGesture getNextInputGesture() {

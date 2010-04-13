@@ -52,16 +52,16 @@ public class SoundPlayer {
 	 *            distributed between left and right speaker
 	 */
 	public void play(SoundEffect sound, float position) {
-		System.err.println("volume: " + volume);
-
 		if (musicOn) {
 			float leftVolume = volume, rightVolume = volume;
 
 			if (position < 0.5f) { 
-				rightVolume = volume * position * 2.0f; 
+				leftVolume = volume * position * 2.0f; 
 			} else { 
-				leftVolume = volume * (1.0f - (position - 0.5f) * 2.0f); 
+				rightVolume = volume * (1.0f - (position - 0.5f) * 2.0f); 
 			}
+			
+			System.err.println("left: " + leftVolume + " right: " + rightVolume);
 			
 			soundPool.play(sounds.get(sound), leftVolume, rightVolume, 1, 0, 1f);
 		}

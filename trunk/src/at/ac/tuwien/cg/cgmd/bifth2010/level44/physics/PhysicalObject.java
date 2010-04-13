@@ -54,4 +54,8 @@ public interface PhysicalObject {
 	 * @param y the new y position
 	 */
 	public void setPosition(float x, float y);
+	
+	public float getX();
+	
+	public float getY();
 }
