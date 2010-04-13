@@ -1,8 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
-
 public class TimeManager {
 	long t;
 	long t0;
@@ -19,7 +16,7 @@ public class TimeManager {
 		reset();
 	}
 	
-	public void reset()
+	public synchronized void reset()
 	{
 		t0 = System.currentTimeMillis();
 		t = t0;
@@ -30,7 +27,7 @@ public class TimeManager {
 		fpsChanged = false;
 	}
 	
-	public void update()
+	public synchronized void update()
 	{
 		t = System.currentTimeMillis();
 		
@@ -45,7 +42,6 @@ public class TimeManager {
 			frames = 0;
 			fpsT0 = t;
 			fpsChanged = true;
-			Log.i(LevelActivity.TAG + "_FPS",fps + "");
 		}
 		else
 			fpsChanged = false;
@@ -58,24 +54,27 @@ public class TimeManager {
 	}
 	
 	
-	public long getDeltaTmillis()
+	public synchronized long getDeltaTmillis()
 	{
 		return dt;
 	}
-	public float getDeltaTsec()
+	
+	public synchronized float getDeltaTsec()
 	{
 		return ((float)dt)/1000.0f;
 	}
-	public float getFPS()
+	
+	public synchronized float getFPS()
 	{
 		return fps;
 	}
-	public boolean haveFPSchanged()
+	
+	public synchronized boolean haveFPSchanged()
 	{
 		return fpsChanged;
 	}
 
-	public long getTimeOfLastFrame()
+	public synchronized long getTimeOfLastFrame()
 	{
 		return t;
 	}

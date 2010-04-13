@@ -7,13 +7,16 @@ import java.io.DataOutputStream;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 public class LevelActivity extends Activity
 {
@@ -23,11 +26,27 @@ public class LevelActivity extends Activity
 	private static LevelActivity instance;
 	
 	private RenderView renderView;
+	private TextView fps;
+	private TextView score;
+	
+	public final Handler handler;
+	public final Runnable uiUpdateRunnable;
+	
+	private final TimeManager timerManager = TimeManager.instance;
 	
 	public LevelActivity()
 	{
 		super();
 		instance = this;
+		handler = new Handler();
+		uiUpdateRunnable = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				updateUI();
+			}
+		};
 	}
 	
 	@Override
@@ -42,6 +61,8 @@ public class LevelActivity extends Activity
 		
 	 	setContentView(R.layout.l42_level);
 		renderView = (RenderView)findViewById(R.id.l42_RenderView);
+		fps = (TextView)findViewById(R.id.l42_fpsTextField);
+		score = (TextView)findViewById(R.id.l42_scoreTextField);
 	}
 	
 	@Override
@@ -146,6 +167,15 @@ public class LevelActivity extends Activity
 				Log.e(TAG, "Failed to restore Scene state: ",t);
 			}
 		}
+	}
+	
+	private void updateUI()
+	{
+		fps.setText(timerManager.getFPS() + " fps");
+		/*
+		 * TODO: set correct score!
+		 */
+		score.setText("100.00%");
 	}
 
 	public static LevelActivity getInstance()

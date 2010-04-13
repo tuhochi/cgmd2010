@@ -37,7 +37,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private static final float LIGHT_DIFFUSE[] = {1.0f,1.0f,1.0f,1.0f};
 	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,100.0f,1.0f};
 	
-	final LevelActivity context;
+	private final LevelActivity context;
 	public final Scene scene;
 	public final Camera cam;
 	
@@ -177,6 +177,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 		motionManager.updateMotion(timer.getDeltaTsec());
 		collManager.doCollisionDetection();
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
+		
+		/*
+		 * Update UI
+		 */
+		context.handler.post(context.uiUpdateRunnable);
+		
 		synchronizer.logicDone(); 
 	}
 	
