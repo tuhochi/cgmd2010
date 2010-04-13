@@ -5,12 +5,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
-import javax.microedition.khronos.egl.EGLConfig;
-
 import android.opengl.GLSurfaceView.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.Cylinder;
-import at.ac.tuwien.cg.cgmd.bifth2010.framework.Rectangle;
+
 
 //one of the bloody things needed for getResources()
 import android.content.Context;
