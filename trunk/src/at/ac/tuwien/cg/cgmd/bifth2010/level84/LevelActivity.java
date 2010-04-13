@@ -50,7 +50,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 		
 		//TODO: loading obj-files
 		Context context = getApplicationContext();
-		InputStream modelFile1 = context.getResources().openRawResource(R.raw.l84_quad);
+		InputStream modelFile1 = context.getResources().openRawResource(R.raw.l84_gem);
 		models.add(new ModelObj(modelFile1,R.drawable.l00_coin, context));
 	}
 
@@ -59,7 +59,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 		super.onPause();
 		openglview.onPause();
 	}
-
+	
 	@Override
 	protected void onResume() {
 		super.onResume();

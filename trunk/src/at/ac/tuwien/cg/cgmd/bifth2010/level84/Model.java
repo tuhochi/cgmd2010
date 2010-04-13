@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 /**
@@ -64,6 +65,7 @@ public class Model {
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
+		//Log.i("Draw","drawing model");
 		if (vertexBuffer != null && indexBuffer != null && numIndices > 0) {
 			
 			//Bind our only previously generated texture in this case

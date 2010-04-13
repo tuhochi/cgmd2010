@@ -25,22 +25,22 @@ public class ModelObj extends Model implements Serializable
 	 */
 	private static final long serialVersionUID = -762515591771882029L;
 	
-	float[] tempVertices = new float[3];
-	float[] tempTexcoords = new float[2];
-	float[] tempNormals = new float[3];
-	int[] tempIndexListfaces = new int[3];
+	protected float[] tempVertices = new float[3];
+	protected float[] tempTexcoords = new float[2];
+	protected float[] tempNormals = new float[3];
+	protected int[] tempIndexListfaces = new int[3];
 	
-	List<float[]> vertexList = new ArrayList<float[]>();
-	List<float[]> texcoordsList = new ArrayList<float[]>();
-	List<float[]> normalsList = new ArrayList<float[]>();
-	List<int[]> faceList = new ArrayList<int[]>();
+	protected List<float[]> vertexList = new ArrayList<float[]>();
+	protected List<float[]> texcoordsList = new ArrayList<float[]>();
+	protected List<float[]> normalsList = new ArrayList<float[]>();
+	protected List<int[]> faceList = new ArrayList<int[]>();
 	
-	float[] finalVertexList = new float[vertexList.size()*3];
-	float[] finalTexcoordsList = new float[texcoordsList.size()*2];
-	float[] finalNormalsList = new float[normalsList.size()*3];
-	byte[] finalIndexList = new byte[faceList.size()*3];
+	protected float[] finalVertexList = new float[vertexList.size()*3];
+	protected float[] finalTexcoordsList = new float[texcoordsList.size()*2];
+	protected float[] finalNormalsList = new float[normalsList.size()*3];
+	protected byte[] finalIndexList = new byte[faceList.size()*3];
 	
-	FloatBuffer normalBuffer;
+	protected FloatBuffer normalBuffer;
 	
 	public ModelObj()
 	{}	
@@ -174,8 +174,7 @@ public class ModelObj extends Model implements Serializable
         //build our arrays
         
         
-		String f1 = String.valueOf(faceList.size());
-		//Log.i("Facelist size", "facelistsize:  " + f1 );
+		//Log.i("Facelist size", "facelistsize:  " + String.valueOf(faceList.size()));
 		int Vpos = 0;
 		int TCpos = 0;
 		int Npos = 0;
@@ -203,7 +202,7 @@ public class ModelObj extends Model implements Serializable
         	finalIndexList = new byte[faceList.size()*3];
         	finalIndexList[Indexpos] = (byte) tempface[0];
         	Indexpos++;
-        	//Log.i("indexlist", String.valueOf(tempface[0]));
+        	Log.i("indexlist", String.valueOf(finalIndexList[Indexpos]));
 //        	Log.i("Listsize V", String.valueOf(vertexList.size()));
 //        	Log.i("Listsize TC", String.valueOf(texcoordsList.size()));
 //        	Log.i("Listsize N", String.valueOf(normalsList.size()));

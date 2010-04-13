@@ -34,6 +34,7 @@ public class ModelQuad extends Model {
 	public ModelQuad() {
 		numIndices = indices.length;
 		
+		Log.i("modelquad", String.valueOf(vertices.length));
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexBuffer = byteBuf.asFloatBuffer();
