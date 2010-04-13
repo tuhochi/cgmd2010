@@ -49,9 +49,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 		models.add(new ModelQuad(R.drawable.l00_coin));
 		
 		//TODO: loading obj-files
-		Context context = getApplicationContext();
-		InputStream modelFile1 = context.getResources().openRawResource(R.raw.l84_gem);
-		models.add(new ModelObj(modelFile1,R.drawable.l00_coin, context));
+		InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l84_quad);
+		models.add(new ModelObj(modelFile1,R.drawable.l00_coin));
 	}
 
 	@Override

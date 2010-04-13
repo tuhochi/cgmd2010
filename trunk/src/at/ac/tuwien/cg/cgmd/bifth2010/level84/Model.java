@@ -66,8 +66,9 @@ public class Model {
 	 */
 	public void draw(GL10 gl) {
 		//Log.i("Draw","drawing model");
+		
 		if (vertexBuffer != null && indexBuffer != null && numIndices > 0) {
-			
+		
 			//Bind our only previously generated texture in this case
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
 			
