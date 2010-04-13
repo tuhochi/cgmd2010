@@ -53,9 +53,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 	public final Synchronizer synchronizer;
 	
 	// main thread stuff
-	private final Handler mainThreadHandler;
+	private final Handler guiThreadHandler;
 	private final Runnable fpsUpdateRunnable;
 	private final Runnable scoreUpdateRunnable;
+	private final Runnable remainingGameTimeRunnable;
 	
 	// event stuff
 	private final LinkedList<MotionEvent> motionEvents;
@@ -89,9 +90,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 		motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,2,10);
 		collManager = new CollisionManager(scene);
 		
-		mainThreadHandler = this.context.handler;
+		guiThreadHandler = this.context.handler;
 		fpsUpdateRunnable = this.context.fpsUpdateRunnable;
 		scoreUpdateRunnable = this.context.scoreUpdateRunnable;
+		remainingGameTimeRunnable = this.context.remainingGameTimeRunnable;
 	}
 	
 	private void initGLSettings()
@@ -121,7 +123,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		// reset everything
 		oglManager.reset();
 		materialManager.reset();
-		timer.reset();
+		timer.reset(false);
 		scene.deInit();
 		
 		// check for GLES11
@@ -192,14 +194,20 @@ public class RenderView extends GLSurfaceView implements Renderer
 		 * Update FPS
 		 */
 		if(timer.haveFPSchanged())
-			mainThreadHandler.post(fpsUpdateRunnable);
+			guiThreadHandler.post(fpsUpdateRunnable);
+		
+		/*
+		 * Update Time
+		 */
+		if(timer.hasRemainingGameTimeChanged())
+			guiThreadHandler.post(remainingGameTimeRunnable);
 		
 		/*
 		 * Update Score
 		 */
 		boolean scoreChanged = false;
 		if(scoreChanged)
-			mainThreadHandler.post(scoreUpdateRunnable);
+			guiThreadHandler.post(scoreUpdateRunnable);
 		
 		synchronizer.logicDone(); 
 	}

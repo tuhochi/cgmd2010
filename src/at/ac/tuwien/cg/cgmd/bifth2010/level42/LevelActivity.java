@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
@@ -26,12 +27,14 @@ public class LevelActivity extends Activity
 	private static LevelActivity instance;
 	
 	private RenderView renderView;
-	private TextView fps;
 	private TextView score;
+	private TextView time;
+	private TextView fps;
 	
 	public final Handler handler;
 	public final Runnable fpsUpdateRunnable;
 	public final Runnable scoreUpdateRunnable;
+	public final Runnable remainingGameTimeRunnable;
 	
 	private final TimeManager timeManager = TimeManager.instance;
 	
@@ -46,17 +49,47 @@ public class LevelActivity extends Activity
 			public void run()
 			{
 				fps.setText(timeManager.getFPS() + " fps");
-//				Log.d(TAG,timeManager.getFPS() + " fps");
 			}
 		};
+		
 		scoreUpdateRunnable = new Runnable()
 		{
 			@Override
 			public void run()
 			{
 				/*
-				 * TODO: set correct score!
+				 * TODO: set score!
 				 */
+			}
+		};
+		
+		remainingGameTimeRunnable = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				int remainingSeconds = (int)(timeManager.getRemainingGameTime()/1000);
+				if(remainingSeconds <= 0)
+				{
+					time.setText("Time's up!");
+					
+					/*
+					 * TODO: get 'n' set result correctly!
+					 */
+					SessionState s = new SessionState();
+					s.setProgress(1337); 
+					setResult(Activity.RESULT_OK, s.asIntent());
+					
+					finish();
+					return;
+				}
+				int remainingMinutes = remainingSeconds/60;
+				remainingSeconds -= remainingMinutes*60;
+				
+				String remainingSecondsString = (remainingSeconds < 10 ? "0" : "") + remainingSeconds;
+				String remainingMinutesString = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
+				
+				time.setText(remainingMinutesString + ":" + remainingSecondsString);
 			}
 		};
 	}
@@ -67,15 +100,23 @@ public class LevelActivity extends Activity
 		super.onCreate(savedInstanceState);
 		Log.v(TAG,"onCreate(" + savedInstanceState + ")");
 		
+		if(savedInstanceState == null)	// first start or restart
+			timeManager.reset(true);
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 	 	setContentView(R.layout.l42_level);
 		renderView = (RenderView)findViewById(R.id.l42_RenderView);
-		fps = (TextView)findViewById(R.id.l42_fpsTextField);
 		score = (TextView)findViewById(R.id.l42_scoreTextField);
-		score.setText("100.00%");
+		time = (TextView)findViewById(R.id.l42_timeTextField);
+		fps = (TextView)findViewById(R.id.l42_fpsTextField);
+		
+		// set result in case the user cancels the activity
+		SessionState s = new SessionState();
+		s.setProgress(0); 
+		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 	
 	@Override
