@@ -12,6 +12,7 @@ import android.content.Context;
 import android.opengl.GLES10;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -36,6 +37,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
  */
 public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer {
 	
+	class FpsHandle implements Runnable{
+		  
+    	@Override
+        public void run() {
+            context.fpsChanged(timer.getFPS());
+        }
+    };
+	private FpsHandle fpsHandle;
+	
 	/** The screen width. */
 	private float screenWidth;
 	
@@ -58,7 +68,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private static RenderView instance;
 	
 	/** The Android context . */
-	private Context context; 
+	private LevelActivity context; 
 	
 	/** The main character. */
 	private MainChar mainChar; 
@@ -105,12 +115,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 *
 	 * @param context the Android context
 	 */
-	public RenderView(Context context)
+	public RenderView(Context context, AttributeSet attr)
 	{
-		
-		super(context);
+		super(context, attr);
 		timer = TimeUtil.getInstance();
-		this.context = context; 
+		this.context = (LevelActivity)context; 
 		setRenderer(this); 
 		// so that the key events can fire
         setFocusable(true);
@@ -119,6 +128,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         textureManager = TextureManager.getInstance();
         serializer = Serializer.getInstance();
         serializer.setContext(context); 
+        fpsHandle = new FpsHandle();
 	}
 	
 	/**
@@ -229,9 +239,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				
 		balloonHeight += dt*Settings.BALLOON_SPEED;
 		accTime += dt/1000;
-		if(accTime > 5)
+		if(accTime > 0.5)
 		{
-			System.out.println(timer.getFPS());
+			fpsChanged();
 			accTime = 0;
 		}
 		
@@ -640,6 +650,12 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         gl.glClearColor(0, 0, 0, 0);
         
         Settings.GLES11Supported = (gl instanceof GL11);
+	}
+	
+	public void fpsChanged() {
+		        
+        LevelActivity.handler.post(fpsHandle);
+		
 	}
 	
 	

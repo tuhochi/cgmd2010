@@ -8,11 +8,14 @@ import java.io.DataOutputStream;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
@@ -31,6 +34,10 @@ public class LevelActivity extends Activity implements OrientationListener {
 
 	/** The renderer. */
 	private RenderView renderer; 
+	
+	private TextView fpsText;
+	
+	public static final Handler handler = new Handler();
 	
 	/** The CONTEXT. */
 	private static Context CONTEXT; 
@@ -55,10 +62,12 @@ public class LevelActivity extends Activity implements OrientationListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
-		renderer = new RenderView(this);
+	 	
+	 	setContentView(R.layout.l23_level);
+		renderer = (RenderView)findViewById(R.id.l23_RenderView);
 		renderer.setOrientationListener(this);
-        setContentView(renderer);
+		fpsText = (TextView)findViewById(R.id.l23_TextViewFps);
+        
         CONTEXT = this; 
         OrientationManager.registerListener(this);
  
@@ -257,5 +266,10 @@ public class LevelActivity extends Activity implements OrientationListener {
 
 	    }
 	    return false;
+	}
+	
+	public void fpsChanged(float fps)
+	{
+		fpsText.setText(Math.round(fps) + " fps");
 	}
 }
