@@ -22,7 +22,7 @@ public class CollisionManager {
 	private final Vector3 pq;
 	private final Vector3 normalDistance;
 	
-	private final Vector3 centerDistance,objACurrDir,objBCurrDir;
+	private final Vector3 centerDistance,objACurrDir,objBCurrDir,toCenterVecA,toCenterVecB;
 	private Motion objAMotion,objBMotion;
 	
 	private Moveable objA,objB;
@@ -43,6 +43,8 @@ public class CollisionManager {
 		this.centerDistance = new Vector3();
 		this.objACurrDir = new Vector3();
 		this.objBCurrDir = new Vector3();
+		this.toCenterVecA = new Vector3();
+		this.toCenterVecB = new Vector3();
 		
 		this.minDistance = 0;
 	}
@@ -124,10 +126,10 @@ public class CollisionManager {
 					objACurrDir.multiply(objA.getMotion().getSpeed()*0.2f);
 					objBCurrDir.multiply(objB.getMotion().getSpeed()*0.2f);
 					
-					Vector3 toCenterVecA = new Vector3(centerDistance);
+					toCenterVecA.copy(centerDistance);
 					toCenterVecA.normalize().multiply(-objA.getBoundingSphereWorld().radius);
 					
-					Vector3 toCenterVecB = new Vector3(centerDistance);
+					toCenterVecB.copy(centerDistance);
 					toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
 					
 					objACurrDir.add(toCenterVecB);
