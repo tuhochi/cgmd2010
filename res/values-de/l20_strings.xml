@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="l20_help_head">Stufe 20</string>
-	<string name="l20_help_text">Beschreibung kommt in Kürze!</string>
+	<string name="l20_help_head">Stufe 20 - Bunny Shop</string>
+	<string name="l20_help_text">Unser Bunny geht Shoppen!
+	Es muss versuchen möglichst teure Produkte in seinen Einkaufswagen zu packen, um soviel Geld als möglich auszugeben.
+	Aber Vorsicht! Der Einkaufswagen kann schon voll werden, bevor die Kasse erreicht wird. Also muss darauf geachtet werden,
+	den Wagen nicht mit Sonderangeboten vollzustopfen und auch nicht an rutschigen Stellen am Weg auszurutschen. Werden die
+	Gegenstände, die man auf seiner Einkaufsliste hat, eingesammelt, verliert man ein paar extra Hasentaler.
+	Also, lasst das Shoppen beginnen!
+	</string>
 	<string name="l20_nameofthegame_full">Stufe 20</string>
 </resources>
