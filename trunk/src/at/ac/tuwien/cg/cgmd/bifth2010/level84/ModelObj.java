@@ -28,17 +28,19 @@ public class ModelObj extends Model implements Serializable
 	float[] tempVertices = new float[3];
 	float[] tempTexcoords = new float[2];
 	float[] tempNormals = new float[3];
-	byte[] tempIndexListfaces = new byte[3];
+	int[] tempIndexListfaces = new int[3];
 	
 	List<float[]> vertexList = new ArrayList<float[]>();
 	List<float[]> texcoordsList = new ArrayList<float[]>();
 	List<float[]> normalsList = new ArrayList<float[]>();
-	List<byte[]> faceList = new ArrayList<byte[]>();
+	List<int[]> faceList = new ArrayList<int[]>();
 	
 	float[] finalVertexList = new float[vertexList.size()*3];
 	float[] finalTexcoordsList = new float[texcoordsList.size()*2];
 	float[] finalNormalsList = new float[normalsList.size()*3];
-	byte[] indexList = new byte[faceList.size()*3];
+	byte[] finalIndexList = new byte[faceList.size()*3];
+	
+	FloatBuffer normalBuffer;
 	
 	public ModelObj()
 	{}	
@@ -52,19 +54,17 @@ public class ModelObj extends Model implements Serializable
 	public ModelObj(InputStream is, int modelTex, Context context)
 	{
 		
-	//	Log.i("Obj", "starting loading object");
+		Log.i("Obj", "starting loading object");
 		load(is,context);
-	//	Log.i("Obj", "init buffers");
-		//initBuffers();
+		Log.i("Obj", "init buffers");
+		initBuffers();
 		this.textureResource = modelTex;
-		//Log.i("Obj", "finished loading object");
+		Log.i("Obj", "finished loading object");
 	}
 
-	FloatBuffer normalBuffer;
-	
 	public void initBuffers()
 	{
-		numIndices = indexList.length;
+		numIndices = finalIndexList.length;
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(finalVertexList.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
@@ -78,14 +78,14 @@ public class ModelObj extends Model implements Serializable
 		textureBuffer.put(finalTexcoordsList);
 		textureBuffer.position(0);
 
-		byteBuf = ByteBuffer.allocateDirect(finalNormalsList.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		normalBuffer = byteBuf.asFloatBuffer();
-		normalBuffer.put(finalNormalsList);
-		normalBuffer.position(0);
+//		byteBuf = ByteBuffer.allocateDirect(finalNormalsList.length * 4);
+//		byteBuf.order(ByteOrder.nativeOrder());
+//		normalBuffer = byteBuf.asFloatBuffer();
+//		normalBuffer.put(finalNormalsList);
+//		normalBuffer.position(0);
 		
-		indexBuffer = ByteBuffer.allocateDirect(indexList.length);
-		indexBuffer.put(indexList);
+		indexBuffer = ByteBuffer.allocateDirect(finalIndexList.length);
+		indexBuffer.put(finalIndexList);
 		indexBuffer.position(0);
 	}
 	
@@ -100,14 +100,9 @@ public class ModelObj extends Model implements Serializable
 		List<float[]> texcoordsList = new ArrayList<float[]>();
 		List<float[]> normalsList = new ArrayList<float[]>();
 		
-		byte[] tempIndexListfaces = new byte[3];
-		List<byte[]> faceList = new ArrayList<byte[]>();
+		int[] tempIndexListfaces = new int[3];
+		List<int[]> faceList = new ArrayList<int[]>();
 		
-		int vertexPos = 0;
-		int texcoordPos = 0;
-		int normalsPos = 0;
-		int indexPos = 0;
-
 		Log.i("Obj", "before loading object");
         try {
             InputStreamReader isr = new InputStreamReader(is);            
@@ -120,42 +115,50 @@ public class ModelObj extends Model implements Serializable
             	{ 	// vertex
     				// e.g. v 1.000000 -1.000000 -1.000000
             		String[] values = line.split(" ");
-            		tempVertices[vertexPos] = Float.parseFloat(values[1]);
-            		tempVertices[vertexPos + 1] = Float.parseFloat(values[2]);
-            		tempVertices[vertexPos + 2] = Float.parseFloat(values[3]);
+            		//Log.i("obj:", "vertexvalues: " + values[1] + "/" + values[2] + "/" + values[3]);
+            		tempVertices = new float[3];
+            		tempVertices[0] = Float.parseFloat(values[1]);
+            		tempVertices[1] = Float.parseFloat(values[2]);
+            		tempVertices[2] = Float.parseFloat(values[3]);
             		vertexList.add(tempVertices);
             	}
             	else if(line.startsWith("vt "))
             	{	// texture coordinate
     				// e.g. vt 0.499997 0.250000
             		String[] values = line.split(" ");
-            		tempTexcoords[texcoordPos] = Float.parseFloat(values[1]);
-            		tempTexcoords[texcoordPos + 1] = Float.parseFloat(values[2]);
+            		tempTexcoords = new float[2];
+            		tempTexcoords[0] = Float.parseFloat(values[1]);
+            		tempTexcoords[1] = Float.parseFloat(values[2]);
+            		//Log.i("obj:", "tc: " + tempTexcoords[0] + "/" + tempTexcoords[1]);
             		texcoordsList.add(tempTexcoords);
             	}
             	else if(line.startsWith("vn "))
             	{	// normal
     				// e.g. vn 0.000000 0.000000 -1.000000
             		String[] values = line.split(" ");
-            		tempNormals[normalsPos] = Float.parseFloat(values[1]);
-            		tempNormals[normalsPos + 1]  = Float.parseFloat(values[2]);
-            		tempNormals[normalsPos + 2]  = Float.parseFloat(values[3]);
+            		tempNormals = new float[3];
+            		tempNormals[0] = Float.parseFloat(values[1]);
+            		tempNormals[1]  = Float.parseFloat(values[2]);
+            		tempNormals[2]  = Float.parseFloat(values[3]);
+            		//Log.i("obj:", "normal: " + tempNormals[0] + "/" + tempNormals[1] + "/" + tempNormals[2]);
             		normalsList.add(tempNormals);
             	}
-            	else if(line.startsWith("f"))
+            	else if(line.startsWith("f "))
             	{	// face (triangle)
         			// e.g. f 5/1/1 1/2/1 4/3/1
             		// f v/vt/vn
             		String[] values = line.split(" ");
-            		indexPos = 0;
-            		for(int i = 1; i < 4; i++)
-            		{
-            			String[] indicesStr = values[i].split("/");
-                		tempIndexListfaces[indexPos] = Byte.parseByte(indicesStr[0]); //vertex 
-                		tempIndexListfaces[indexPos + 1] = Byte.parseByte(indicesStr[1]); //texture coordinate
-                		tempIndexListfaces[indexPos + 2] = Byte.parseByte(indicesStr[2]); //normal
-                		faceList.add(tempIndexListfaces);
-            		}
+            		
+            			for (int i=1; i < 4; i++)
+            			{
+            				String[] indicesStr = values[i].split("/");
+//	            			Log.i("obj","faces: " + indicesStr[0] + indicesStr[1]+indicesStr[2]);
+	                		tempIndexListfaces = new int[3];
+	            			tempIndexListfaces[0] = Integer.valueOf(indicesStr[0]); //vertex 
+	                		tempIndexListfaces[1] = Integer.valueOf(indicesStr[1]); //texture coordinate
+	                		tempIndexListfaces[2] = Integer.valueOf(indicesStr[2]); //normal
+	                		faceList.add(tempIndexListfaces);
+            			}
             	}
             	
             	line = textReader.readLine();
@@ -171,30 +174,59 @@ public class ModelObj extends Model implements Serializable
         //build our arrays
         
         
-		int pos = 0;
-		Log.i("Facelist size", ": " + faceList.size());
+		String f1 = String.valueOf(faceList.size());
+		//Log.i("Facelist size", "facelistsize:  " + f1 );
+		int Vpos = 0;
+		int TCpos = 0;
+		int Npos = 0;
+		int Indexpos = 0;
+		
         for (int i=0; i < faceList.size(); i++)
         {
-        	byte[] tempface = faceList.get(i);
-        	float[] tempVertex = vertexList.get(tempface[0]-1);
-        	float[] tempTC = texcoordsList.get(tempface[1]-1);
-        	float[] tempNormal = normalsList.get(tempface[2]-1);
-        
-//        	finalVertexList[pos] = tempVertex[0]; 
-//        	finalTexcoordsList[pos] = tempTC[0];
-//        	finalNormalsList[pos] = tempNormal[0];
-//        	finalVertexList[pos+1] = tempVertex[1];
-//        	finalTexcoordsList[pos+1] = tempTC[1];
-//        	finalNormalsList[pos+1] = tempNormal[1];
-//        	finalVertexList[pos+2] = tempVertex[2];
-//        	finalTexcoordsList[pos+2] = tempTC[2];
-//        	finalNormalsList[pos+2] = tempNormal[2];
-//        	pos += 3;
+        	int[] tempface = faceList.get(i);
+
+        	float[] tempVertex = new float[3];
+        	float[] tempTC = new float[2];
+        	float[] tempNormal = new float[3];
+        	tempVertex = vertexList.get(tempface[0]-1);
+        	tempTC = texcoordsList.get(tempface[1]-1);
+        	tempNormal = normalsList.get(tempface[2]-1);
+
+        	//Log.i("tempface: ",i + " -> " + tempface[0] +"/"+ tempface[1]+"/"+ tempface[2]);
+//        	Log.i("tempVertex ",i + " tV-> " + tempVertex[0] +"/"+ tempVertex[1]+"/"+ tempVertex[2]);
+//        	Log.i("tempTC ",i + " tTC -> " + tempTC[0] +"/"+ tempTC[1]);
+//        	Log.i("tempNormal ",i + " tN -> " + tempNormal[0] +"/"+ tempNormal[1]+"/"+ tempNormal[2]);
+        	
+        	finalVertexList = new float[faceList.size()*3];
+        	finalTexcoordsList = new float[faceList.size()*2];
+        	finalNormalsList = new float[faceList.size()*3];
+        	finalIndexList = new byte[faceList.size()*3];
+        	finalIndexList[Indexpos] = (byte) tempface[0];
+        	Indexpos++;
+        	//Log.i("indexlist", String.valueOf(tempface[0]));
+//        	Log.i("Listsize V", String.valueOf(vertexList.size()));
+//        	Log.i("Listsize TC", String.valueOf(texcoordsList.size()));
+//        	Log.i("Listsize N", String.valueOf(normalsList.size()));
+        	
+        	finalVertexList[Vpos] = tempVertex[0]; 
+        	finalVertexList[Vpos + 1] = tempVertex[1];
+        	finalVertexList[Vpos + 2] = tempVertex[2];        	
+        	finalTexcoordsList[TCpos] = tempTC[0];
+        	finalTexcoordsList[TCpos + 1] = tempTC[1];
+        	finalNormalsList[Npos] = tempNormal[0];
+        	finalNormalsList[Npos + 1] = tempNormal[1];
+        	finalNormalsList[Npos + 2] = tempNormal[2];
+        	Vpos += 3;
+        	Npos += 3;
+        	TCpos += 2;
         }
         
 	}
-	
-	public void drawMesh(GL10 gl) {
+	/*
+	@Override
+	public void draw(GL10 gl) {
+		gl.glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		//Log.i("Draw","drawing obj-Model");
 		if (vertexBuffer != null && indexBuffer != null && numIndices > 0) {
 			
 			//Bind our only previously generated texture in this case
@@ -227,12 +259,12 @@ public class ModelObj extends Model implements Serializable
 	
 	/**
 	 * Update the model's transformations.
-	 */
+	 *//*
 	public void update(GL10 gl, double deltaTime) {
 		mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
 
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, -4);
-		//gl.glMultMatrixf(mTrans.toFloatArray(), 0);
-	}
+		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
+	}*/
 }
