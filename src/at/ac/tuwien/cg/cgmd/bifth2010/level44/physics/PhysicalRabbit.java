@@ -102,7 +102,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		
 		// set new position, if the position is on the screen
 		newX = Math.min(screenWidth, Math.max(0,newX));
-		newY = Math.min(screenHeight - sprite.getHeight(), newY);
+		newY = Math.min(screenHeight - sprite.getHeight(), Math.max(0,newY));
 		setPosition(newX,newY);
 	}
 
