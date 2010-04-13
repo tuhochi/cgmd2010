@@ -19,7 +19,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 
 public class PhysicalRabbit implements PhysicalObject {
 	/** the acceleration of a full wing-flap (vgl. PhysicalObject.GRAVITY) */
-	private static final float MAX_FLAP_ACCELERATION = 22.f;
+	private static final float MAX_FLAP_ACCELERATION = 19.f;
 	private static final float VELOCITY_FACTOR = 6000.f;
 	
 	/** the sprite showing the rabbit */
