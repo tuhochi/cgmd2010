@@ -173,6 +173,7 @@ public class LevelLoader {
 		}
 		if(info.equalsIgnoreCase("N")){
 			//Wassergraben
+			return R.drawable.l88_water;
 		}
 		if(info.equalsIgnoreCase("Z")){
 			//Zugbruecke

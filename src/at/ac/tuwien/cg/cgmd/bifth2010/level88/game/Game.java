@@ -15,7 +15,7 @@ public class Game {
 	private float elapsedSeconds;
 	public int screenWidth, screenHeight;
 	public float screenWidthScale, screenHeightScale;
-	private Context context;
+	public Context context;
 	public Textures textures;
 	private Vector2 cameraPos;
 	private float worldScale;
@@ -32,12 +32,12 @@ public class Game {
 		cameraPos = new Vector2();
 		worldScale = 0.3f;
 		
+		police = new ArrayList<Police> ();
+		stashes = new ArrayList<Stash> ();
+		
 		bunny = new Bunny(this);
 		map = new Map(this);
 		bunny.setPosition(3, 3); // TODO: Entfernen sobald Fileloader da ist
-
-		police = new ArrayList<Police> ();
-		stashes = new ArrayList<Stash> ();
 				
 		newTouch = false;
 		touchPosition = new Vector2();
