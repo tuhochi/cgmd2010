@@ -8,15 +8,22 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"/>
 	<TextView
-		android:id="@+id/l42_fpsTextField"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:gravity="top|right"
-		android:padding="6dip"/>
-	<TextView
 		android:id="@+id/l42_scoreTextField"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:gravity="top|left"
+		android:layout_gravity="top|left"
+		android:text="100.00%"
+		android:padding="6dip"/>
+	<TextView
+		android:id="@+id/l42_timeTextField"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="top|center"
+		android:padding="6dip"/>
+	<TextView
+		android:id="@+id/l42_fpsTextField"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="top|right"
 		android:padding="6dip"/>
 </FrameLayout>
