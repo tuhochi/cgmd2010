@@ -14,8 +14,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import android.content.Context;
 
 /**
- * This activity demonstrates the basic interaction with the framework. When the Finish button is pressed the a result is set and the activity is finished. 
- * @author Peter
+ * Entry point for the Level 77 BunnyBlock
+ * @author Gerd Katzenbeisser
  *
  */
 public class LevelActivity extends Activity
@@ -27,10 +27,32 @@ public class LevelActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		
-		gameView = new GameView(this);
+		setResult(RESULT_CANCELED);
+		
+		Callback<Integer> gameEnded = new Callback<Integer>()
+		{
+			
+			@Override
+			public void onSucces(Integer result)
+			{
+				SessionState s = new SessionState();
+				s.setProgress(result);				
+				setResult(RESULT_OK, s.asIntent());	
+				LevelActivity.this.finish();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				caught.printStackTrace();
+			}
+		};
+		
+		gameView = new GameView(this, gameEnded);
 		setContentView( gameView );		
 	}
 	
+
 
     @Override
 	protected void onPause() {
