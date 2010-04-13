@@ -7,15 +7,25 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
 public class Crosshairs {
+	private static final int MAX_DISTANCE_2 = 2500;
+	/** the green crosshairs */
 	private Sprite spriteGreen = null;
+	/** the red crosshairs */
 	private Sprite spriteRed = null;
-	private int width = 0;
-	private int height = 0;
+	/** the width of the screen */
+	private int screenWidth = 0;
+	/** the height of the screen */
+	private int screenHeight = 0;
+	/** the rabbit */
 	private PhysicalObject rabbit = null;
+	/** the desired x-position */
+	private float desiredX = 0.f;
+	/** the desired y-position */
+	private float desiredY = 0.f;
 	
 	public Crosshairs(Texture texture, int width, int height) {
-		this.width = width;
-		this.height = height;
+		this.screenWidth = width;
+		this.screenHeight = height;
 		
 		spriteRed = new Sprite(TextureParts.makeCrosshairsRed(texture));
 		spriteRed.setCenter(24, 24);
@@ -67,11 +77,27 @@ public class Crosshairs {
 		 float dx = rabbit.getX() - getX();
 		 float dy = rabbit.getY() - getY();
 		 
-		 return dx*dx + dy*dy < 900;
+		 // if distance < 40 => is near
+		 return dx*dx + dy*dy < MAX_DISTANCE_2;
+	}
+	
+	private void setDesiredPosition(float x, float y) {
+		desiredX = x;
+		desiredY = y;
 	}
 	
 	public void ai() {
-		setPosition((float)(width/2 + width/2.5*Math.sin((double)(System.currentTimeMillis()/4000.))),
-				    (float)(height/2 + height/3*Math.sin((double)(System.currentTimeMillis()/2000.))));
+		// crosshairs are not near the rabbit -> move in 8
+		if (!isNearRabbit()) {
+			setDesiredPosition((float)(screenWidth/2 + screenWidth/2.5*Math.sin((double)(System.currentTimeMillis()/4000.))),
+							   (float)(screenHeight/2 + screenHeight/3*Math.sin((double)(System.currentTimeMillis()/2000.))));
+		} else {
+			setDesiredPosition(rabbit.getX(), rabbit.getY());
+		}
+		
+		float dx = desiredX - getX();
+		float dy = desiredY - getY();
+		
+		move(dx/300.f, dy/300.f);
 	}
 }
