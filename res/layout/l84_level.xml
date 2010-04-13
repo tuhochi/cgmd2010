@@ -15,7 +15,8 @@
 	android:text="01"
  	android:id="@+id/l84_GemButton01"
   	android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:nextFocusUp="@+id/l84_GemButton04">
 </ImageButton>
 <ImageButton
 	android:text="02"
@@ -33,7 +34,8 @@
 	android:text="04"
  	android:id="@+id/l84_GemButton04"
   	android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:nextFocusDown="@+id/l84_GemButton01">
 </ImageButton>
 <TextView android:layout_above="@+id/l84_openglview" android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_TfFps"></TextView>
 </TableLayout>
