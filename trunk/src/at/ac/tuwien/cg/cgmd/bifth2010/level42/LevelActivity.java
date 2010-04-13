@@ -30,21 +30,32 @@ public class LevelActivity extends Activity
 	private TextView score;
 	
 	public final Handler handler;
-	public final Runnable uiUpdateRunnable;
+	public final Runnable fpsUpdateRunnable;
+	public final Runnable scoreUpdateRunnable;
 	
-	private final TimeManager timerManager = TimeManager.instance;
+	private final TimeManager timeManager = TimeManager.instance;
 	
 	public LevelActivity()
 	{
 		super();
 		instance = this;
 		handler = new Handler();
-		uiUpdateRunnable = new Runnable()
+		fpsUpdateRunnable = new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				updateUI();
+				fps.setText(timeManager.getFPS() + " fps");
+			}
+		};
+		scoreUpdateRunnable = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				/*
+				 * TODO: set correct score!
+				 */
 			}
 		};
 	}
@@ -63,6 +74,7 @@ public class LevelActivity extends Activity
 		renderView = (RenderView)findViewById(R.id.l42_RenderView);
 		fps = (TextView)findViewById(R.id.l42_fpsTextField);
 		score = (TextView)findViewById(R.id.l42_scoreTextField);
+		score.setText("100.00%");
 	}
 	
 	@Override
@@ -167,15 +179,6 @@ public class LevelActivity extends Activity
 				Log.e(TAG, "Failed to restore Scene state: ",t);
 			}
 		}
-	}
-	
-	private void updateUI()
-	{
-		fps.setText(timerManager.getFPS() + " fps");
-		/*
-		 * TODO: set correct score!
-		 */
-		score.setText("100.00%");
 	}
 
 	public static LevelActivity getInstance()
