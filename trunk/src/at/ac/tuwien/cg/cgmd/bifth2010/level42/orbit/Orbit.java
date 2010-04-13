@@ -21,6 +21,7 @@ public class Orbit extends Motion
 					scalingMorphSpeed,
 					centerDiffFactor,centerDiffStep,centerDiff,centerDiffIteration,
 					directionDiffFactor,directionDiffStep,directionDiff,directionDiffIteration,
+					centerVecCap,directionVecCap,
 					
 					//speed morphing
 					newSpeed,oldPerimeter,oldStepSize,
@@ -38,6 +39,7 @@ public class Orbit extends Motion
 	private final Matrix44  basicOrientation;
 	private SatelliteTransformation satTrans;
 	private Ellipse ellipse;
+
 	
 	protected Orbit()
 	{	
@@ -108,6 +110,10 @@ public class Orbit extends Motion
 			
 		//calc position on ellipse - build transformation matrix
 		evaluatePos();
+		
+		//check the limitations
+//		if(this.centerVec.length()>10 || this.directionVec.length()>10)
+//			Log.d(LevelActivity.TAG,"OUT centerVec="+centerVec.length()+" directionVec="+directionVec.length());
 	}
 	
 	private void updateSpeedMorphing(float dt)
@@ -149,9 +155,9 @@ public class Orbit extends Motion
 				centerDiff += centerDiffIteration;
 				
 				centerVec.copy(refCenterVec);
-				centerVec.multiply( 1 + centerDiffIteration);
+				centerVec.multiply(centerDiff);
 				
-				Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
+				//Log.d(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
 			}
 		}else{
 			if(centerDiffFactor>centerDiff){
@@ -163,9 +169,9 @@ public class Orbit extends Motion
 				centerDiff += centerDiffIteration;
 				
 				centerVec.copy(refCenterVec);
-				centerVec.multiply( 1 + centerDiffIteration);
+				centerVec.multiply(centerDiff);
 	
-				Log.i(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
+				//Log.d(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
 			}
 		}
 
@@ -178,9 +184,9 @@ public class Orbit extends Motion
 				directionDiff += directionDiffIteration;
 				
 				directionVec.copy(refDirectionVec);
-				directionVec.multiply( 1 + directionDiffIteration);
+				directionVec.multiply(directionDiff);
 				
-				Log.i(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
+				//Log.d(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
 			}
 		}else{
 			if(directionDiffFactor>directionDiff){
@@ -191,9 +197,9 @@ public class Orbit extends Motion
 				directionDiff += directionDiffIteration;
 				
 				directionVec.copy(refDirectionVec);
-				directionVec.multiply( 1 + directionDiffIteration);
+				directionVec.multiply(directionDiff);
 				
-				Log.i(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
+				//Log.d(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
 			}
 		}
 
@@ -247,6 +253,10 @@ public class Orbit extends Motion
 	
 	public void morph(Vector3 pushVec)
 	{
+		//stop scale morphing
+		directionDiffFactor = directionDiff;
+		centerDiffFactor = centerDiff;
+		
 		//approx current direction vec
 		currtDirApproximation.copy(ellipse.getPoint(u+step));
 		currtDirApproximation.subtract(position);
@@ -273,10 +283,19 @@ public class Orbit extends Motion
 		this.centerVec.subtract(this.centerPos);
 		
 		//cap
-		if(this.centerVec.length()>25)
-			this.centerVec.normalize().multiply(25);
-		if(this.directionVec.length()>23)
-			this.directionVec.normalize().multiply(23);
+		this.centerVecCap = 1;
+		this.directionVecCap = 1;
+		
+		if(this.centerVec.length()>10)
+			this.centerVecCap = 10/this.centerVec.length();
+		if(this.directionVec.length()>10)
+			this.directionVecCap = 10/this.directionVec.length();
+		
+		Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
+		
+		if(this.centerVecCap!=1 || this.directionVecCap != 1)
+			morphAxisScale(centerVecCap, directionVecCap, 10);
+			
 		if(this.newSpeed > 10)
 			this.newSpeed = 10;
 		
@@ -287,17 +306,14 @@ public class Orbit extends Motion
 		this.u = 0;
 
 		if(newSpeed<speed){
-			this.dynamicMorphSpeed = (newSpeed/speed)*200;
+			this.dynamicMorphSpeed = (newSpeed/speed)*120;
 			this.speed -= (pushVec.length()*0.25f);
 		}else{
-			this.dynamicMorphSpeed = (speed/newSpeed)*200;
+			this.dynamicMorphSpeed = (speed/newSpeed)*120;
 			this.speed += (pushVec.length()*0.25f);
 		}
 		//speedmorphing parameters
 		this.speedMorphStep = (this.newSpeed-this.speed)/100;
-		
-		Log.d(LevelActivity.TAG,"speedMorphStep="+speedMorphStep+ " dynamicMorphSpeed="+dynamicMorphSpeed+" speed="+speed+" newSpeed="+newSpeed);
-		
 		
 	}
 	

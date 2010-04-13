@@ -224,11 +224,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 					Orbit orbit = (Orbit)entity.getMotion();
 					orbit.morph(selectionDirection);
 					motionManager.changeSatelliteTransformation(entity, orbit.getCurrDirectionVec(), selectionDirection);
-					//						orbit.transformOrbit(new Vector3(orbit.entityPos).subtract(new Vector3(1,1,2)), 
-					//											 new Vector3(),
-					//											 new Vector3(0,0,-1),
-					//											 10);
-
 					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
 				}
 			}
