@@ -108,7 +108,7 @@ public class CollisionManager {
 				centerDistance.subtract(objA.getBoundingSphereWorld().center);
 				
 				if(centerDistance.length()+0.2 < 
-						objB.getBoundingSphereWorld().radius + objA.getBoundingSphereWorld().radius)
+						objA.getBoundingSphereWorld().radius + objB.getBoundingSphereWorld().radius)
 				{
 					objAMotion = objA.getMotion();
 					objBMotion = objB.getMotion();
@@ -121,13 +121,19 @@ public class CollisionManager {
 					objBCurrDir.copy(objB.getMotion().getCurrDirectionVec()).normalize();
 										
 					//weight with current speed
-					objACurrDir.multiply(objA.getMotion().getSpeed());
-					objBCurrDir.multiply(objB.getMotion().getSpeed());
+					objACurrDir.multiply(objA.getMotion().getSpeed()*0.2f);
+					objBCurrDir.multiply(objB.getMotion().getSpeed()*0.2f);
 					
-					objACurrDir.add(objBCurrDir);
+					Vector3 toCenterVecA = new Vector3(centerDistance);
+					toCenterVecA.normalize().multiply(-objA.getBoundingSphereWorld().radius);
 					
-					objA.getMotion().morph(objACurrDir);
-					objACurrDir.multiply(-1);
+					Vector3 toCenterVecB = new Vector3(centerDistance);
+					toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
+					
+					objACurrDir.add(toCenterVecB);
+					objBCurrDir.add(toCenterVecA);
+					
+					objA.getMotion().morph(objBCurrDir);
 					objB.getMotion().morph(objACurrDir);
 				}
 				
