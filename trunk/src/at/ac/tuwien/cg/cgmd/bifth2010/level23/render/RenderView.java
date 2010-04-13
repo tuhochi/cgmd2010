@@ -65,7 +65,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private float topBounds=100.0f;
 	
 	/** The balloon height. */
-	private float balloonHeight=0;
+	private float balloonHeight;
 	
 	/** The instance of the RenderView to pass it around. */
 	private static RenderView instance;
@@ -112,6 +112,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** The serializer. */
 	private Serializer serializer; 
 	
+	private ObstacleManager obstacleManager;
 	
 	/**
 	 * Instantiates a new render view.
@@ -133,6 +134,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         serializer.setContext(context); 
         fpsHandle = new FpsHandle();
         soundManager = new SoundManager(context);
+        obstacleManager = new ObstacleManager();
+        balloonHeight=0;
+        
 	}
 	
 	/**
@@ -237,6 +241,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
+		
 		timer.update();
 		
 		float dt = timer.getDt();
@@ -268,7 +273,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		mainChar.render();
 		hud.render();
 		
-		ObstacleManager.getInstance().renderVisibleObstacles((int)balloonHeight);
+		obstacleManager.renderVisibleObstacles((int)balloonHeight);
 		
 		Log.v("Balloon Height: ", String.valueOf(balloonHeight));
 		
@@ -329,6 +334,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	{	
 		Log.v("RenderView.java", "onSurfaceCreated");
 		textureManager.reset();
+		timer.reset();
 		setupGL(gl);
 		
 		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
@@ -336,8 +342,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		topBounds = rightBounds*aspectRatio;
 		
 		mainChar = new MainChar(Settings.MAINCHAR_WIDTH,Settings.MAINCHAR_HEIGHT,Settings.MAINCHAR_STARTPOS);
-
-		ObstacleManager.getInstance().generateObstacles();
+		
+		obstacleManager.generateObstacles();
 		
 		background = new Background();
 		

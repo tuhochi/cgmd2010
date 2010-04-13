@@ -178,4 +178,9 @@ public class TimeUtil {
 				scheduledTimers.get(i).update(dt);
 		}
 	}
+	
+	public void reset()
+	{
+		lastFrameTime = 0;
+	}
 }
