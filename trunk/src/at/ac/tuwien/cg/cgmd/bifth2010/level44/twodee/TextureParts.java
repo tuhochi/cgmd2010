@@ -20,6 +20,37 @@ public class TextureParts {
 	public static TexturePart getCoin(Texture texture) {
 		return new TexturePart(texture, 224, 224, 255, 255);
 	}
+	
+	/* Parts from the landscape texture */
+	
+	public static TexturePart makeSky(Texture texture) {
+		return new TexturePart(texture, 0, 0, 0+10, 0+320);
+	}
+
+	public static TexturePart makeCloud(Texture texture, int id) {
+		int pos = id%3;
+		
+		switch (pos) {
+			case 1:
+				return new TexturePart(texture, 280, 0, 280+133, 0+188);
+			case 2:
+				return new TexturePart(texture, 20, 218, 20+200, 218+144);
+			default:
+				return new TexturePart(texture, 20, 0, 20+250, 0+195);
+		}
+	}
+
+	public static TexturePart makeMeadow(Texture texture) {
+		return new TexturePart(texture, 0, 382, 0+930, 382+130);
+	}
+
+	public static TexturePart makeHills(Texture texture) {
+		return new TexturePart(texture, 234, 242, 234+790, 242+120);
+	}
+
+	public static TexturePart makeMountains(Texture texture) {
+		return new TexturePart(texture, 420, 0, 420+600, 0+210);
+	}
 
 	public static TexturePart makeCrosshairsRed(Texture texture) {
 		return new TexturePart(texture,48,0,96,48);

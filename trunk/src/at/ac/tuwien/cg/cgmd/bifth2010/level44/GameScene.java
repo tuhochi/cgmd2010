@@ -15,8 +15,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
@@ -24,6 +27,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private PhysicalObject rabbit;
 	/** the crosshairs that shoot on the rabbit */
 	private Crosshairs crosshairs;
+	private Landscape landscape;
+
 	/** thread for game logic */
 	private GameThread gameThread;
 	/** queue of all inputGestures to process */
@@ -40,6 +45,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
 		System.err.println("GameScene created");
 		rabbit = null;
+		landscape = null;
 		gameThread = null;
 	}
 
@@ -51,8 +57,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
-		if (rabbit != null) {
-			rabbit.draw(gl);
+		if (landscape != null) {
+			landscape.draw(gl);
 		}
 		
 		if (crosshairs != null) {
@@ -69,6 +75,15 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glOrthof(0, width, height, 0, 0, 1);
 		gl.glClearColorx((int)(255*.5), (int)(255*.7), 255, 255);
 	}
+	
+	private void configureTexture(GL10 gl, Texture texture) {
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.getTextureName());
+		gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
+	}
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -78,14 +93,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		Texture mainTexture = new Texture(gl, getContext(), R.drawable.l44_texture);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, mainTexture.getTextureName());
-		
-		/* Texture settings - might need some tweaking (FIXME) */
-		gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
+		configureTexture(gl, mainTexture);
 		
 		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
@@ -93,6 +101,12 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		crosshairs = new Crosshairs(new Texture(gl, getContext(), R.drawable.l44_crosshairs), this.getWidth(), this.getHeight());
 		crosshairs.setPosition(getWidth()/2, getHeight()/2 + 20);
 		crosshairs.setRabbit(rabbit);
+
+		Texture landscapeTexture = new Texture(gl, getContext(), R.drawable.l44_landscape);
+		configureTexture(gl, landscapeTexture);
+		
+		landscape = new Landscape(landscapeTexture, getWidth(), getHeight());
+		landscape.setRabbit((PhysicalRabbit)rabbit);
 		
 		restartGameThread();
 	}
@@ -100,8 +114,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private void restartGameThread() {
 		stopGameThread();
 		
-		if (rabbit != null) {
-			gameThread = new GameThread(this,rabbit,crosshairs);
+		if (rabbit != null && landscape != null && crosshairs != null) {
+			gameThread = new GameThread(this, rabbit, landscape, crosshairs);
 			gameThread.start();
 		}
 	}

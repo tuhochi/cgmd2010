@@ -6,6 +6,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 
 public class GameThread extends Thread {
 	private static final int FRAME_RATE = 200;
@@ -13,14 +14,16 @@ public class GameThread extends Thread {
 	private GameScene scene;
 	private PhysicalRabbit rabbit;
 	private Crosshairs crosshairs;
+	private Landscape landscape;
 	private boolean quit;
 	private InputGesture gesture = null;
 	private int frameRate = FRAME_RATE;
 
-	public GameThread(GameScene scene, PhysicalObject rabbit, Crosshairs crosshairs) {
+	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs) {
 		this.scene = scene;
 		this.rabbit = (PhysicalRabbit) rabbit;
 		this.crosshairs = crosshairs;
+		this.landscape = landscape;
 		this.quit = false;
 
 		// TODO Remove and make textures smaller
@@ -57,6 +60,7 @@ public class GameThread extends Thread {
 						rabbit.setVelocity(0.f);
 					}
 					
+					landscape.step();					
 
 					 /* old moving, maybe useful as intro
 					  * rabbit.setPosition((float)(scene.getWidth()/2 +
