@@ -7,10 +7,10 @@ import android.util.Log;
 
 public class Player {
 	
-	Quad hase = new Quad();
+	Quad hase;
 	Level level;
 	Camera camera;
-	Texture haseTex = new Texture();
+	Texture haseTex;
 	
 	public boolean doJump = false;
 	public boolean doMoveRight = false;
@@ -41,6 +41,9 @@ public class Player {
 	protected float[] lastPos = new float[2];
 	
 	public void init(GL10 gl, Level _level, Camera _camera) {
+		hase = new Quad();
+		haseTex = new Texture();
+		
 		hase.init(gl, -0.5f, -0.5f, 1.0f, 1.0f);
 		haseTex.create(R.drawable.l55_testtexture);
 		level = _level;

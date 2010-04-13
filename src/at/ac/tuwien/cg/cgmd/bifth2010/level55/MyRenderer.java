@@ -22,8 +22,11 @@ class MyRenderer implements MyOpenGLView.Renderer {
 		context=_context;
 	}
 	
-    public MyRenderer(Player _player) {
+    /*public MyRenderer(Player _player) {
     	player=_player;
+    }*/
+	
+	public MyRenderer() {
     }
 
     @Override
@@ -58,6 +61,8 @@ class MyRenderer implements MyOpenGLView.Renderer {
 
     @Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+    	Log.d("Renderer","onSurfaceChanged");
+    	
          gl.glViewport(0, 0, width, height);
 
          /*
@@ -131,7 +136,7 @@ class MyRenderer implements MyOpenGLView.Renderer {
          
          camera = new Camera(level);
          
-         //player=new Player();
+         player=new Player();
          player.init(gl, level, camera);
          
          ui=new Interface();

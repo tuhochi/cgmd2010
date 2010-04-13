@@ -30,6 +30,7 @@ public class Texture {
 	static void cleanUp() {
 		Log.d("Texture", "cleanUp");
 		loadedTex.clear();
+		activeTexture=-1;
 	}
 	
 	public void finalize() {
