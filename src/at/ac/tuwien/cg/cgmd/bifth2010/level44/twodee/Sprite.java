@@ -72,7 +72,15 @@ public class Sprite {
 	public float getY() {
 		return y;
 	}
-	
+
+	public float getWidth() {
+		return width;
+	}
+
+	public float getHeight() {
+		return height;
+	}
+
 	protected void onBeforeDraw(GL10 gl) {
 		/* Override this in subclasses to draw children, etc... */
 	}
