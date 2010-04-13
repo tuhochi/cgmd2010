@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level22;
+package at.ac.tuwien.cg.cgmd.bifth2010.level22.gamelogic;
 
 public class Mail {
 	

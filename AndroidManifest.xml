@@ -139,6 +139,17 @@
 		</activity>
 		
 		<activity
+			android:name=".level22.LevelActivity"
+			android:label="@string/L22nameofthegame"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level22.LAUNCH_LEVEL" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
 			android:name=".level23.HelpActivity"
 			android:label="@string/l23_nameofthegame_full">
 			<intent-filter>
