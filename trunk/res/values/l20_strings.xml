@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="l20_help_head">Level 20</string>
-	<string name="l20_help_text">Description coming soon!</string>
+	<string name="l20_help_head">Level 20 - Bunny Shop</string>
+	<string name="l20_help_text">Our bunny goes shopping! It has to try to collect the more
+	expensive products into its hopping cart to spend as much money as possible. But watch out! The
+	shopping cart might get full before the bunny is even at the register. So make sure not
+	to stuff the cart with bargain offers and watch out for slippery floor. Try to loose extra
+	money by collecting the items on your shopping list. So let the shopping begin! 
+	</string>
 	<string name="l20_nameofthegame_full">Level 20</string>
 </resources>

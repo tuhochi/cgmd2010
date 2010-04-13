@@ -23,18 +23,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class ResourceManager {
 	
-	protected static GL10 gl;
-	protected static Context context;
-	protected static Hashtable<Integer, Integer> textures;
+	protected GL10 gl;
+	protected Context context;
+	protected Hashtable<Integer, Integer> textures;
 
 	/**
 	 * @param gl
 	 * @param context
 	 */
-	public static void init(GL10 gl, Context context) {
-		ResourceManager.gl = gl;
-		ResourceManager.context = context;
-		
+	public ResourceManager(GL10 gl, Context context) {
+		this.gl = gl;
+		this.context = context;		
 		textures = new Hashtable<Integer, Integer>();
 	}
 	
@@ -42,7 +41,7 @@ public class ResourceManager {
 	 * @param resource
 	 * @return
 	 */
-	public static int loadTexture(final int resource) {
+	public int loadTexture(final int resource) {
 		
 		// Try to find the texture
 		Integer t = textures.get(resource);
@@ -76,20 +75,17 @@ public class ResourceManager {
 		//Create Linear Filtered Texture and bind it to texture
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture[0]);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR_MIPMAP_LINEAR); //GL_LINEAR_MIPMAP_LINEAR
-		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR_MIPMAP_LINEAR); 		
 		
 		if(gl instanceof GL11) {
-			gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-			
-		//
-		} else {
+			gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_GENERATE_MIPMAP, GL11.GL_TRUE);							
+		} 
+		else {
 			Toast.makeText(context, "GL11 not supported", 2);
 		}		
-		
+			
 		//Clean up
+		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 		bitmap.recycle();
 		
 		textures.put(resource, texture[0]);
