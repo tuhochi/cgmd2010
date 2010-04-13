@@ -9,9 +9,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 public class Crosshairs {
 	private Sprite spriteGreen = null;
 	private Sprite spriteRed = null;
+	private int width = 0;
+	private int height = 0;
 	private PhysicalObject rabbit = null;
 	
-	public Crosshairs(Texture texture) {
+	public Crosshairs(Texture texture, int width, int height) {
+		this.width = width;
+		this.height = height;
+		
 		spriteRed = new Sprite(TextureParts.makeCrosshairsRed(texture));
 		spriteRed.setCenter(24, 24);
 		
@@ -63,5 +68,10 @@ public class Crosshairs {
 		 float dy = rabbit.getY() - getY();
 		 
 		 return dx*dx + dy*dy < 900;
+	}
+	
+	public void ai() {
+		setPosition((float)(width/2 + width/2.5*Math.sin((double)(System.currentTimeMillis()/4000.))),
+				    (float)(height/2 + height/3*Math.sin((double)(System.currentTimeMillis()/2000.))));
 	}
 }

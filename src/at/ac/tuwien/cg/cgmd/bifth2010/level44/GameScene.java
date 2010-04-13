@@ -90,7 +90,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
 		
-		crosshairs = new Crosshairs(new Texture(gl, getContext(), R.drawable.l44_crosshairs));
+		crosshairs = new Crosshairs(new Texture(gl, getContext(), R.drawable.l44_crosshairs), this.getWidth(), this.getHeight());
 		crosshairs.setPosition(getWidth()/2, getHeight()/2 + 20);
 		crosshairs.setRabbit(rabbit);
 		
@@ -101,7 +101,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		stopGameThread();
 		
 		if (rabbit != null) {
-			gameThread = new GameThread(this,rabbit);
+			gameThread = new GameThread(this,rabbit,crosshairs);
 			gameThread.start();
 		}
 	}
