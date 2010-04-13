@@ -3,26 +3,22 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 public class TextureParts {
 	
-	/* Parts from the first 256x256 texture */
-	
 	public static TexturePart makeRabbitHead(Texture texture) {
-		return new TexturePart(texture, 0, 128, 191, 255);
+		return new TexturePart(texture, 0, 512+128, 191, 512+255);
 	}
 	
 	public static TexturePart makeWing(Texture texture) {
-		return new TexturePart(texture, 0, 0, 127, 127);
+		return new TexturePart(texture, 0, 512+0, 127, 512+127);
 	}
 	
 	public static TexturePart getBucket(Texture texture) {
-		return new TexturePart(texture, 128, 0, 255, 127);
+		return new TexturePart(texture, 128, 512+0, 255, 512+127);
 	}
 	
 	public static TexturePart getCoin(Texture texture) {
-		return new TexturePart(texture, 224, 224, 255, 255);
+		return new TexturePart(texture, 224, 512+224, 255, 512+255);
 	}
-	
-	/* Parts from the landscape texture */
-	
+		
 	public static TexturePart makeSky(Texture texture) {
 		return new TexturePart(texture, 0, 0, 0+10, 0+320);
 	}
@@ -53,10 +49,10 @@ public class TextureParts {
 	}
 
 	public static TexturePart makeCrosshairsRed(Texture texture) {
-		return new TexturePart(texture,48,0,96,48);
+		return new TexturePart(texture, 976, 426, 976+48, 426+48);
 	}
 	
 	public static TexturePart makeCrosshairsGreen(Texture texture) {
-		return new TexturePart(texture,0,0,48,48);
+		return new TexturePart(texture, 976, 376, 976+48, 376+48);
 	}
 }
