@@ -30,12 +30,9 @@ class MyRenderer implements MyOpenGLView.Renderer {
     }
 
     @Override
-	public void onDrawFrame(GL10 gl) {  	
+	public void onDrawFrame(GL10 gl) {
     	Timer.update();
     	
-    //	StateManager.update(Timer.dT);
-    	
-    	//gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	
@@ -57,6 +54,7 @@ class MyRenderer implements MyOpenGLView.Renderer {
     	
     	//Renders the user interface
     	ui.draw(gl); 	
+    	  
     }
 
     @Override
@@ -141,6 +139,8 @@ class MyRenderer implements MyOpenGLView.Renderer {
          
          ui=new Interface();
          ui.init(gl);
+         
+         Timer.lastTime=0;
     }
 
 }

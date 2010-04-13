@@ -49,6 +49,11 @@ public class Player {
 		level = _level;
 		camera = _camera;
 		
+		a[0]=0;
+		a[1]=0;
+		v[0]=0;
+		v[1]=0;
+		
 		for(int i=0;i<4;i++)
 			collisionThreshold[i] = 10000.0f;
 		
@@ -71,6 +76,8 @@ public class Player {
 	{		
 		//Check for coinChange
 		checkCoinChange(dt);
+		
+		Log.d("dT",Float.toString(dt));
 		
 		if (doMoveLeft) {
 			a[0] = -moveForce*dt;

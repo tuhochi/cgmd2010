@@ -33,14 +33,14 @@ public class Texture {
 		activeTexture=-1;
 	}
 	
-	public void finalize() {
+	/*public void finalize() {
 		Log.d("Texture", "finalize");
 		IntBuffer textures=IntBuffer.allocate(1);
-		textures.put(texture);
+		textures.put(0,texture);
 		gl.glDeleteTextures(1, textures);
 		
 		loadedTex.remove(texture);
-	}
+	}*/
 	
 	static public void setContext(Context _context) {
 		context=_context;
