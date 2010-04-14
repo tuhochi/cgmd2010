@@ -123,7 +123,8 @@
 		<activity
 			android:name=".level20.LevelActivity"
 			android:label="@string/l20_nameofthegame_full"
-			android:screenOrientation="portrait">
+         	android:configChanges="keyboardHidden|orientation"
+			android:screenOrientation="landscape">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level20.LAUNCH_LEVEL"></action>
 				<category android:name="android.intent.category.DEFAULT"></category>
