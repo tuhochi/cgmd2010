@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.physics;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
@@ -13,6 +15,8 @@ public class Crosshairs {
 	/** the milliseconds it takes to load and shoot if the crosshairs are green */
 	private static final int MILLISECONDS_TO_SHOOT = 3000;
 	
+	/** the GameScene */
+	private GameScene scene = null;
 	/** the green crosshairs */
 	private Sprite spriteGreen = null;
 	/** the red crosshairs */
@@ -32,7 +36,8 @@ public class Crosshairs {
 	/** timestamp, since the crosshairs turned green or -1 if they are red */
 	private long timeStamp = -1L;
 
-	public Crosshairs(Texture texture, int width, int height) {
+	public Crosshairs(GameScene scene, Texture texture, int width, int height) {
+		this.scene = scene;
 		this.screenWidth = width;
 		this.screenHeight = height;
 
@@ -161,11 +166,25 @@ public class Crosshairs {
 	 */
 	public void shoot() {
 		// play shooting sound
-		SoundPlayer.getInstance(null).play(SoundPlayer.SoundEffect.SHOT, 0.5f);
+		SoundPlayer.getInstance(scene.getContext()).play(SoundPlayer.SoundEffect.SHOT, 0.5f);
 		
 		// if the rabbit was hit, loose one coin
-		if (this.hits(rabbit))
+		if (this.hits(rabbit)) {
+			// vibrate after 100 ms
+			(new Thread() {
+				public void run() {
+					try {
+						Thread.sleep(100L);
+					} catch(Exception ex) {}
+					finally {
+						scene.getVibrator().vibrate(100L);
+					}
+				}
+			}).start();
+			
+			// loose a coin
 			rabbit.looseCoin();
+		}
 	}
 	
 	public boolean hits(PhysicalObject o) {
