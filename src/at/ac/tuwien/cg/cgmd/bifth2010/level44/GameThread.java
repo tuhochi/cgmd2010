@@ -32,6 +32,7 @@ public class GameThread extends Thread {
 
 	public void run() {
 		rabbit.resetStartTime(0);
+		TimeManager.getInstance().start();
 		
 		while (!quit) {
 			scene.queueEvent(new Runnable() {

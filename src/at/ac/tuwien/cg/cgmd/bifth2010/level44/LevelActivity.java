@@ -21,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Event;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Observer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.ShootEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.TimeEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.CoinBucketSprite;
 
 public class LevelActivity extends Activity implements Observer {
@@ -30,6 +31,8 @@ public class LevelActivity extends Activity implements Observer {
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
 	private TextView textCoins = null;
+	private TextView textTime = null;
+	private Runnable updateTime = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,11 +61,25 @@ public class LevelActivity extends Activity implements Observer {
 		textCoins.setGravity(Gravity.CENTER);
 		textCoins.setTextColor(Color.BLACK);  
 		textCoins.setBackgroundResource(R.drawable.l44_textbg);
-
+		
+		TextView spacer = new TextView(this);
+		
+		textTime = new TextView(this);
+		textTime.setText(TimeManager.getFullTimeString());
+		textTime.setTextSize(25);
+		textTime.setGravity(Gravity.CENTER);
+		textTime.setTextColor(Color.BLACK);  
+		textTime.setBackgroundResource(R.drawable.l44_textbg);
+		
 		LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-		llparams.weight = 0;
-		llparams.setMargins(10, 10, 10, 10);
-		llayout.addView(textCoins, llparams);
+        llparams.weight = 0;
+        llparams.setMargins(10, 10, 10, 10);
+        llayout.addView(textCoins, llparams);
+        LinearLayout.LayoutParams llparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        llparams2.weight = 1;
+        llparams2.setMargins(10, 10, 10, 10);
+        llayout.addView(spacer, llparams2);
+        llayout.addView(textTime, llparams);
 
 		Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		gestureDetector = new GestureDetector(new InputListener(scene, display.getWidth(), display.getHeight()));
@@ -137,6 +154,20 @@ public class LevelActivity extends Activity implements Observer {
 			if (shootEvent.getCoinCount() == 0) {
 				this.finishLevel(100);
 			}
+		} else if (event instanceof TimeEvent) {
+			class UpdateUI implements Runnable {
+				private String s;
+				public UpdateUI(String s) {
+					this.s = s;
+				}
+				@Override
+				public void run() {
+					textTime.setText(s);
+				}
+			};
+
+			Runnable r = new UpdateUI(event.toString());
+			handler.post(r);
 		}
 
 	}
