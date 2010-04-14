@@ -28,3 +28,11 @@ While in the Debug screen, press "Start Menu Activity" to load the Main Game scr
 
 Look at the blog post [http://apistudios.com/hosted/marzec/badlogic/wordpress/?p=21 here]. (Thx to MrM -> Thread in our [http://www.informatik-forum.at/showthread.php?79661-VertexBufferObject-Troubles-and-how-to-quot-solve-quot-them forum])
 However VBOs are *NOT* mandatory in CGMD!
+
+== How do I set the view to Landscape? ==
+
+Add "android:screenOrientation="landscape">" into your activity node in AndroidManifest.xml. 
+
+== How to switch between Portrait and Landscape view in the emulator? ==
+
+Press Ctrl-F11 or Ctrl-F12 to switch between the modes. 
