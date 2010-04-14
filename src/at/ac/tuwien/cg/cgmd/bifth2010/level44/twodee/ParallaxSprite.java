@@ -5,14 +5,6 @@ public class ParallaxSprite extends Sprite {
 	private float screenHeight;
 	private float distance;
 	private float yOffset;
-	
-	public float getYOffset() {
-		return yOffset;
-	}
-
-	public void setYOffset(float yOffset) {
-		this.yOffset = yOffset;
-	}
 
 	public ParallaxSprite(TexturePart texturePart, float screenWidth, float screenHeight) {
 		super(texturePart);
@@ -28,5 +20,13 @@ public class ParallaxSprite extends Sprite {
 		float xpos = (x/screenWidth);
 		float ypos = (y/screenHeight);
 		setPosition(xpos*(screenWidth-getWidth()), screenHeight+yOffset+screenHeight*.3f*distance*(1-ypos));
+	}
+	
+	public float getYOffset() {
+		return yOffset;
+	}
+
+	public void setYOffset(float yOffset) {
+		this.yOffset = yOffset;
 	}
 }
