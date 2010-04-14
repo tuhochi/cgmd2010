@@ -9,17 +9,19 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
-import android.opengl.Matrix;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 /**
- * @author Reinbert
+ * The standard RenderView enabling OpenGLES 10.
  *
+ * @author Ferdinand Pilz
+ * @author Reinhard Sprung
  */
 public class RenderView extends GLSurfaceView implements Renderer {
 
@@ -36,12 +38,13 @@ public class RenderView extends GLSurfaceView implements Renderer {
 
 	
 	/** The Activity Context */
-	private Activity activity;
-	private SessionState sessionState;		
-	private GameManager gameMgr;
+//	private Activity activity;
+//	private SessionState sessionState;		
+	private GameManager gameManager;
+	public TimeUtil timer;
 	
 	
-	private Cube cube;
+//	private Cube cube;
 
 
 	/**
@@ -60,12 +63,14 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		this.setFocusableInTouchMode(true);
 		
 		// Store Activity (= Context)
-		this.activity = activity;
+//		this.activity = activity;
 		// The SessionState is a convenience class to set a result
-		sessionState = new SessionState();
-		setProgress(0);
+//		sessionState = new SessionState();
+//		setProgress(0);
+
+		timer = TimeUtil.getInstance();
 		
-			
+		
 	}
 	
 	
@@ -77,21 +82,25 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {			
 
 		//Settings
+		gl.glClearColor(0.3f, 0.3f, 0.3f, 1); 				// Gray Background
+		gl.glClearDepthf(1);
+		
 //		gl.glDisable(GL10.GL_DITHER);				//Disable dithering ( NEW )
-		gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping
+		gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping		
 		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
-		gl.glClearColor(0, 0, 0, 1); 		//Gray Background
-		gl.glClearDepthf(1); 					//Depth Buffer Setup
-		gl.glEnable(GL10.GL_DEPTH_TEST); 			//Enables Depth Testing
+		
+		gl.glEnable(GL10.GL_DEPTH_TEST);				
 		gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
+		
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glFrontFace(GL10.GL_CCW);
 		
 		//Really Nice Perspective Calculations
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST); 
 		
-		gameMgr = new GameManager(gl, activity);
-
 		
-		
+		// Create this here, so we can pass "gl" to the GameManager.
+		gameManager = new GameManager(this, gl);
 	}
 
 	
@@ -102,16 +111,20 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		
-		gameMgr.update();
+		// Advance in time
+		timer.update();		
+		float dt = timer.getDt() * 0.001f;
+		
+		// Update the GameManager first
+		gameManager.update(dt);
 		
 		//Clear Screen And Depth Buffer
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
-		gl.glLoadIdentity();					//Reset The Current Modelview Matrix
-
-//		gl.glTranslatef(0.0f, 0.0f, -5f);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();		
 		
-		
-		gameMgr.renderEntities();
+		// And then draw it
+		gameManager.render(gl);
 
 	}
 
@@ -121,27 +134,19 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 
-		if(height == 0) { 						//Prevent A Divide By Zero By
-			height = 1; 						//Making Height Equal One
+		if(height == 0) {
+			height = 1;
 		}
 		
-//		System.out.println(width + " | " + height);
-//		System.out.println(getWidth() + " | " + getHeight());
-
-		gl.glViewport(0, 0, width, height); 	//Reset The Current Viewport
-		gl.glMatrixMode(GL10.GL_PROJECTION); 	//Select The Projection Matrix
-		gl.glLoadIdentity(); 					//Reset The Projection Matrix
+		gl.glViewport(0, 0, width, height);
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
 		
-		getWidth();
+		// Use an Ortho projection
+		gl.glOrthof(0, width, 0, height, 0, 10);
 
-		//Calculate The Aspect Ratio Of The Window
-//		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
-//		GLU.gluOrtho2D(gl, left, right, bottom, top)2D(gl, 0, width, 0, height);
-		
-		gl.glOrthof(0, width, 0, height, -10, 10);
-
-		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
-		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
 
 	}
 
@@ -157,20 +162,21 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		//
 		if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+			gameManager.scrollSpeed += 20f;
 		
 			
 		} else if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+			gameManager.scrollSpeed -= 20f;
 			
 			
 		} else if(keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 			
 			
 		} else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-		
+			
 			
 		} else if(keyCode == KeyEvent.KEYCODE_BACK) {
-			setProgress(5);
-			activity.finish();
+			
 			
 		} else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
 
@@ -188,20 +194,32 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		//
+		
+		// Be aware that the Y axis is opposite to the render Y axis. 
 		float x = event.getX();
-        float y = event.getY();
+        float y = getHeight() - event.getY();
         
-        //If a touch is moved on the screen
-        if(event.getAction() == MotionEvent.ACTION_MOVE) {
-        	//Calculate the change
-        	float dx = x - oldX;
-	        float dy = y - oldY;
-                	                
-        //A press on the screen
-        } else if(event.getAction() == MotionEvent.ACTION_UP) {
-
+        
+        
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        	
+        	gameManager.onTouch(x, y);
         }
+        
+
+//        Toast.makeText(getContext(), "Touch Event", 2);
+        
+        
+//        //If a touch is moved on the screen
+//        if(event.getAction() == MotionEvent.ACTION_MOVE) {
+//        	//Calculate the change
+//        	float dx = x - oldX;
+//	        float dy = y - oldY;
+//                	                
+//        //A press on the screen
+//        } else if(event.getAction() == MotionEvent.ACTION_UP) {
+//
+//        }
         
         //Remember the values
         oldX = x;
@@ -214,12 +232,12 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	/**
 	 * @param p
 	 */
-	public void setProgress(int p) {
-		
-		// We set the progress the user has made (must be between 0-100)
-		sessionState.setProgress(p);
-		// We call the activity's setResult method 
-		activity.setResult(Activity.RESULT_OK, sessionState.asIntent());
-		
-	}
+//	public void setProgress(int p) {
+//		
+//		// We set the progress the user has made (must be between 0-100)
+//		sessionState.setProgress(p);
+//		// We call the activity's setResult method 
+//		activity.setResult(Activity.RESULT_OK, sessionState.asIntent());
+//		
+//	}
 }
