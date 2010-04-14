@@ -276,10 +276,9 @@ public class ObstacleManager
 				glPushMatrix();		
 	
 					glScalef(tempObstacle.width,tempObstacle.height,1);	
-					if (!isGameOver())
-					glTranslatef(tempObstacle.position.x/(float)tempObstacle.width, (posY - currentHeight)/(float)tempObstacle.height, 0);
 					
-									
+					glTranslatef(tempObstacle.position.x/(float)tempObstacle.width, (posY - currentHeight)/(float)tempObstacle.height, 0);
+														
 					glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
 					
 				glPopMatrix();
