@@ -19,11 +19,19 @@ public class Bunny {
 	private Quad bunnyQuad;
 	private Vector2 groundYDir, groundXDir;
 
+	/**
+	 * @author Asperger, Radax
+	 *
+	 */
 	public enum MoveStatus {
 		STANDING, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
 	}
 	private MoveStatus moveStatus;
 	
+	
+	/**
+	 * @param _game
+	 */
 	public Bunny(Game _game) {
 		game = _game;
 		currentPosX = 0;
@@ -56,6 +64,10 @@ public class Bunny {
         bunnyQuad = new Quad(quadBase, xDir, yDir);
 	}
 	
+	
+	/**
+	 * @param elapsedSeconds
+	 */
 	public void update(float elapsedSeconds) {
         if( game.hasNewInput() ) {
            	Vector2 pos = new Vector2(game.touchPosition);
@@ -109,6 +121,10 @@ public class Bunny {
         }
 	}
 	
+	
+	/**
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		bunnyQuad.vbos.set(gl);
 
@@ -121,6 +137,11 @@ public class Bunny {
 		gl.glPopMatrix();
 	}
 	
+	
+	/**
+	 * @param x
+	 * @param y
+	 */
 	public void setPosition(int x, int y) {
 		currentPosX = x;
 		currentPosY = y;

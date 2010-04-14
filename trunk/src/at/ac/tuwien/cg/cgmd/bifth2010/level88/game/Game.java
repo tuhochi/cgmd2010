@@ -10,6 +10,11 @@ import android.opengl.GLU;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Textures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
+
+/**
+ * Game class for the main logic of the level
+ * @author Asperger, Radax
+ */
 public class Game {
 	private long newTime, oldTime;
 	private float elapsedSeconds;
@@ -21,12 +26,17 @@ public class Game {
 	private float worldScale;
 	public Map map;
 	public Bunny bunny;
-	private ArrayList<Police> police;
-	private ArrayList<Stash> stashes;
+	public ArrayList<Police> police;
+	public ArrayList<Stash> stashes;
 	
 	public boolean newTouch;
 	public Vector2 touchPosition;
 
+	
+	/**
+	 * Constructor
+	 * @param _context Context of the Android application
+	 */
 	public Game(Context _context) {
 		context = _context;
 		cameraPos = new Vector2();
@@ -37,7 +47,7 @@ public class Game {
 		
 		bunny = new Bunny(this);
 		map = new Map(this);
-		bunny.setPosition(3, 3); // TODO: Entfernen sobald Fileloader da ist
+		map.load();
 				
 		newTouch = false;
 		touchPosition = new Vector2();
@@ -48,35 +58,73 @@ public class Game {
         elapsedSeconds = 0;
 	}
 
+	
+	/**
+	 * Add a new stash
+	 * @param x x-position of the stash on the map
+	 * @param y y-position of the stash on the map
+	 * @param size size of the stash 
+	 */
 	public void addStash(int x, int y, int size) {
 		stashes.add(new Stash(this, x, y, size));
 	}
 	
+	
+	/**
+	 * Add a new police character
+	 * @param x x-position of the police start point on the map
+	 * @param y y-position of the police start point on the map
+	 */
 	public void addPolice(int x, int y) {
 		police.add(new Police(this, x, y));
 	}
 
+	
+	/**
+	 * Get information if there is a new input
+	 * @return information if there is a new input 
+	 */
 	public synchronized boolean hasNewInput() {
 		boolean old = newTouch;
 		newTouch = false;
 		return old;
 	}
 	
+	
+	/**
+	 * Method for the finger down movement
+	 * @param pos position of the finger
+	 */
 	public synchronized void fingerDown(Vector2 pos) {
 		touchPosition = new Vector2(pos);
 		newTouch = true;
 	}
 	
+	
+	/**
+	 * Method for the finger up movement
+	 * @param pos position of the finger
+	 */
 	public synchronized void fingerUp(Vector2 pos) {
 		touchPosition = new Vector2(pos);
 		newTouch = true;
 	}
 	
+	
+	/**
+	 * Method for the finger movement
+	 * @param pos position of the finger
+	 */
 	public synchronized void fingerMove(Vector2 pos) {
 		touchPosition = new Vector2(pos);
 		newTouch = true;
 	}
 	
+	
+	/**
+	 * Initialize the OpenGL context
+	 * @param gl OpenGLcontext of android
+	 */
 	public synchronized void init(GL10 gl) {
     	gl.glClearColor(1, 1, 1, 0);
 
@@ -98,6 +146,13 @@ public class Game {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	}
 	
+	
+	/**
+	 * Recalculation of the surface
+	 * @param gl OpenGL context of android
+	 * @param width width of the screen
+	 * @param height height of the screen
+	 */
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		screenWidth = width;
 		screenHeight = height;
@@ -117,6 +172,10 @@ public class Game {
         gl.glMatrixMode(GL10.GL_MODELVIEW);
 	}
 	
+	
+	/**
+	 * Update function for the screen
+	 */
 	public synchronized void update() {
 		Date date = new Date();
         oldTime = newTime;
@@ -136,6 +195,12 @@ public class Game {
         cameraPos.y = bunny.translateY + map.groundXDir.y/2.0f + map.groundYDir.y/2.0f;
 	}
 
+	
+	
+	/**
+	 * Draw the whole screen
+	 * @param gl OpenGL context of android
+	 */
 	public synchronized void draw(GL10 gl) {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
