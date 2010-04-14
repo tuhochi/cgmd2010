@@ -53,7 +53,7 @@ public class LevelActivity extends Activity implements Observer {
 		addContentView(llayout, params);
 
 		textCoins = new TextView(this);
-		textCoins.setText("Coins: " + CoinBucketSprite.FULL_COIN_COUNT);
+		textCoins.setText("" + CoinBucketSprite.FULL_COIN_COUNT);
 		textCoins.setTextSize(25);
 		textCoins.setGravity(Gravity.CENTER);
 		textCoins.setTextColor(Color.BLACK);  
@@ -117,6 +117,8 @@ public class LevelActivity extends Activity implements Observer {
 	@Override
 	public void notify(Event event) {
 		if (event instanceof ShootEvent) {
+			ShootEvent shootEvent = (ShootEvent)event;
+			
 			class UpdateUI implements Runnable {
 				private String s;
 				public UpdateUI(String s) {
@@ -130,6 +132,11 @@ public class LevelActivity extends Activity implements Observer {
 
 			Runnable r = new UpdateUI(event.toString());
 			handler.post(r);
+			
+			// every coin lost -> finish level with full points
+			if (shootEvent.getCoinCount() == 0) {
+				this.finishLevel(100);
+			}
 		}
 
 	}
