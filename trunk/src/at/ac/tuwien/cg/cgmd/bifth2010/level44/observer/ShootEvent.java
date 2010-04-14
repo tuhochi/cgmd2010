@@ -8,6 +8,10 @@ public class ShootEvent implements Event {
 	}
 	
 	public String toString() {
-		return "Coins: " + coinCount;
+		return String.valueOf(coinCount);
+	}
+	
+	public int getCoinCount() {
+		return coinCount;
 	}
 }

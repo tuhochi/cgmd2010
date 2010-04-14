@@ -171,21 +171,21 @@ public class Crosshairs extends Subject {
 		
 		// if the rabbit was hit, loose one coin
 		if (this.hits(rabbit)) {
-			// vibrate after 100 ms
+			// loose a coin
+			rabbit.looseCoin();
+			
+			// vibrate and notify UI to update TextView after a short period of time (when shot-sound is finished)
 			(new Thread() {
 				public void run() {
 					try {
-						Thread.sleep(500L);
+						Thread.sleep(400L);
 					} catch(Exception ex) {}
 					finally {
 						scene.getVibrator().vibrate(100L);
+						Crosshairs.this.notifyAll(new ShootEvent(rabbit.getCoinCount()));
 					}
 				}
 			}).start();
-			
-			// loose a coin
-			rabbit.looseCoin();
-			this.notifyAll(new ShootEvent(rabbit.getCoinCount()));
 		}
 	}
 	
