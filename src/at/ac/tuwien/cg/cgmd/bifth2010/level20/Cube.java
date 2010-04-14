@@ -291,34 +291,34 @@ public class Cube {
 	 * @param gl - The GL Context
 	 * @param bitmap - The bitmap to mipmap
 	 */
-	private void buildMipmap(GL10 gl, Bitmap bitmap) {
-		//
-		int level = 0;
-		//
-		int height = bitmap.getHeight();
-		int width = bitmap.getWidth();
-
-		//
-		while(height >= 1 || width >= 1) {
-			//First of all, generate the texture from our bitmap and set it to the according level
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, level, bitmap, 0);
-			
-			//
-			if(height == 1 || width == 1) {
-				break;
-			}
-
-			//Increase the mipmap level
-			level++;
-
-			//
-			height /= 2;
-			width /= 2;
-			Bitmap bitmap2 = Bitmap.createScaledBitmap(bitmap, width, height, true);
-			
-			//Clean up
-			bitmap.recycle();
-			bitmap = bitmap2;
-		}
-	}
+//	private void buildMipmap(GL10 gl, Bitmap bitmap) {
+//		//
+//		int level = 0;
+//		//
+//		int height = bitmap.getHeight();
+//		int width = bitmap.getWidth();
+//
+//		//
+//		while(height >= 1 || width >= 1) {
+//			//First of all, generate the texture from our bitmap and set it to the according level
+//			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, level, bitmap, 0);
+//			
+//			//
+//			if(height == 1 || width == 1) {
+//				break;
+//			}
+//
+//			//Increase the mipmap level
+//			level++;
+//
+//			//
+//			height /= 2;
+//			width /= 2;
+//			Bitmap bitmap2 = Bitmap.createScaledBitmap(bitmap, width, height, true);
+//			
+//			//Clean up
+//			bitmap.recycle();
+//			bitmap = bitmap2;
+//		}
+//	}
 }

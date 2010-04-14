@@ -10,11 +10,12 @@ import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import android.opengl.Matrix;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.Cube;
 
 /**
  * @author Reinbert
@@ -38,6 +39,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	private Activity activity;
 	private SessionState sessionState;		
 	private GameManager gameMgr;
+	
+	
+	private Cube cube;
 
 
 	/**
@@ -59,7 +63,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		this.activity = activity;
 		// The SessionState is a convenience class to set a result
 		sessionState = new SessionState();
-		setProgress(0);	
+		setProgress(0);
+		
 			
 	}
 	
@@ -72,10 +77,10 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {			
 
 		//Settings
-		gl.glDisable(GL10.GL_DITHER);				//Disable dithering ( NEW )
+//		gl.glDisable(GL10.GL_DITHER);				//Disable dithering ( NEW )
 		gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping
 		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
-		gl.glClearColor(1.0f, 0.0f, 0.0f, 1f); 	//Black Background
+		gl.glClearColor(0.7f, 0.7f, 0.7f, 1f); 		//Gray Background
 		gl.glClearDepthf(1.0f); 					//Depth Buffer Setup
 		gl.glEnable(GL10.GL_DEPTH_TEST); 			//Enables Depth Testing
 		gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
@@ -84,6 +89,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST); 
 		
 		gameMgr = new GameManager(gl, activity);
+
+		
 		
 	}
 
@@ -113,14 +120,22 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		if(height == 0) { 						//Prevent A Divide By Zero By
 			height = 1; 						//Making Height Equal One
 		}
+		
+//		System.out.println(width + " | " + height);
+//		System.out.println(getWidth() + " | " + getHeight());
 
 		gl.glViewport(0, 0, width, height); 	//Reset The Current Viewport
 		gl.glMatrixMode(GL10.GL_PROJECTION); 	//Select The Projection Matrix
 		gl.glLoadIdentity(); 					//Reset The Projection Matrix
+		
+		
+		
 
 		//Calculate The Aspect Ratio Of The Window
-		//GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
-		GLU.gluOrtho2D(gl, 0, this.getWidth(), 0, this.getHeight());
+//		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
+//		GLU.gluOrtho2D(gl, left, right, bottom, top)2D(gl, 0, width, 0, height);
+		
+		gl.glOrthof(0, width, 0, height, -1, 1);
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
 		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
