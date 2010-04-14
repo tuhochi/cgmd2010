@@ -8,8 +8,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
 
 /**
+ * Class for the stashes
  * @author Asperger, Radax
- *
  */
 public class Stash {
 	private Game game;
@@ -20,10 +20,11 @@ public class Stash {
 
 	
 	/**
-	 * @param _game
-	 * @param x
-	 * @param y
-	 * @param _size
+	 * Constructor
+	 * @param _game game context
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @param _size size of the stash
 	 */
 	public Stash(Game _game, int x, int y, int _size) {
 		game = _game;
@@ -57,7 +58,8 @@ public class Stash {
 	
 	
 	/**
-	 * @param elapsedSeconds
+	 * Method to update the stashes
+	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
     	// TODO
@@ -65,7 +67,8 @@ public class Stash {
 	
 	
 	/**
-	 * @param gl
+	 * Draw the stashes
+	 * @param gl OpenGL context of android
 	 */
 	public void draw(GL10 gl) {
 		stashQuad.vbos.set(gl);
@@ -90,8 +93,9 @@ public class Stash {
 	
 	
 	/**
-	 * @param x
-	 * @param y
+	 * Set the position of the stash
+	 * @param x x-coordinate
+	 * @param y y-coordinate
 	 */
 	public void setPosition(int x, int y) {
 		currentPosX = x;

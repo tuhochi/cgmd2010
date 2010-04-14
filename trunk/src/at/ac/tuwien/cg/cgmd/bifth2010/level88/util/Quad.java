@@ -1,12 +1,23 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.util;
 
 
+/**
+ * Class for representing a quad
+ * @author Asperger, Radax
+ */
 public class Quad {
 	private Vector2 position;
 	private Vector2 xDir;
 	private Vector2 yDir;
 	public Vertexbuffers vbos;
 	
+	
+	/**
+	 * Constructor
+	 * @param _position position of the quad
+	 * @param _xDir vector for the x-direction
+	 * @param _yDir vector for the y-direction
+	 */
 	public Quad(Vector2 _position, Vector2 _xDir, Vector2 _yDir) {
 		position = _position;
 		xDir = _xDir;

@@ -7,7 +7,15 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * Class for the vertexbuffers
+ * @author Asperger, Radax
+ */
 public class Vertexbuffers {
+	/**
+	 * Types for a vertex buffer
+	 * @author Asperger, Radax
+	 */
 	public enum Type {
 		INDEX,
 		POSITION,
@@ -18,6 +26,11 @@ public class Vertexbuffers {
 	private FloatBuffer texCoordBuffer;
 	public ShortBuffer indexBuffer;
 
+	/**
+	 * Set the data of the vertex buffer
+	 * @param type type of the vertices
+	 * @param vertices array of vertices
+	 */
 	public void setData(Type type, Vector2[] vertices) {
 		float[] data = new float[vertices.length * 2];
 		for(int i = 0; i < vertices.length; i++)
@@ -40,6 +53,11 @@ public class Vertexbuffers {
         }
 	}
 	
+	
+	/**
+	 * Set the data of the vertex buffer
+	 * @param vertices Array of vertices for the buffer
+	 */
 	public void setData(Short[] vertices)
 	{		
 		short[] data = new short[vertices.length];
@@ -53,6 +71,11 @@ public class Vertexbuffers {
         indexBuffer.position(0);
 	}
 	
+	
+	/**
+	 * Set the pointer of the buffer
+	 * @param gl OpenGL context of android
+	 */
 	public void set(GL10 gl)
 	{
         gl.glVertexPointer(2, GL10.GL_FLOAT, 0, posBuffer);

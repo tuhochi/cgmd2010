@@ -10,8 +10,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
 /**
+ * Class for the police
  * @author Asperger, Radax
- *
  */
 public class Police {
 	private Game game;
@@ -21,9 +21,10 @@ public class Police {
 
 	
 	/**
-	 * @param _game
-	 * @param x
-	 * @param y
+	 * Constructor
+	 * @param _game game context
+	 * @param x x-coordinate
+	 * @param y y-coordinate
 	 */
 	public Police(Game _game, int x, int y) {
 		game = _game;
@@ -56,7 +57,8 @@ public class Police {
 	
 	
 	/**
-	 * @param elapsedSeconds
+	 * Update the police 
+	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
     	// TODO
@@ -64,7 +66,8 @@ public class Police {
 	
 	
 	/**
-	 * @param gl
+	 * Draw the police
+	 * @param gl OpenGL context of android
 	 */
 	public void draw(GL10 gl) {
 		policeQuad.vbos.set(gl);
@@ -80,8 +83,9 @@ public class Police {
 	
 	
 	/**
-	 * @param x
-	 * @param y
+	 * Set the position of the police
+	 * @param x x-coordinate
+	 * @param y y-coordinate
 	 */
 	public void setPosition(int x, int y) {
 		currentPosX = x;
