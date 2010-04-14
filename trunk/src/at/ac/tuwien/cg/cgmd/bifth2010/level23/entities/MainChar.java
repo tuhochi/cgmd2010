@@ -1,14 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
-import static android.opengl.GLES10.GL_FLOAT;
-import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
-import static android.opengl.GLES10.glBindTexture;
-import static android.opengl.GLES10.glDrawArrays;
-import static android.opengl.GLES10.glPopMatrix;
-import static android.opengl.GLES10.glPushMatrix;
-import static android.opengl.GLES10.glRotatef;
-import static android.opengl.GLES10.glTexCoordPointer;
-import static android.opengl.GLES10.glTranslatef;
-import static android.opengl.GLES10.glVertexPointer;
+import static android.opengl.GLES10.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -77,6 +68,10 @@ public class MainChar implements SceneEntity {
 	private float xCoord; 
 	
 	private float yCoord; 
+	
+	private float gameOverAngle= (float)Math.PI*3f/2f;
+	
+	private float gameOverScale=1;
 	
 	/**
 	 * Default constructor
@@ -348,44 +343,51 @@ public class MainChar implements SceneEntity {
 	
 	public void renderGameOver(float dt) {
 		
-		glPushMatrix();
+		gameOverAngle += dt*0.005;
 		
-		if(position.x > 50)
-			xCoord = position.x - sumDt / 20;
-		else
-			xCoord = position.x + sumDt / 20; 
+		gameOverScale -= dt*0.0003;
 		
-		yCoord = (float)(Math.sin(sumDt/10)+1)*10;
-		glTranslatef(xCoord, yCoord, 0);
-		glRotatef(sumDt/5, 0, 0, 1); 
-		
-		if(!Settings.GLES11Supported) 
+		//animation over
+		if(gameOverScale > 0)
 		{
-			
-			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+			float radius = 25f;
 		
-			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-		
-		} 
-		else 
-		{
+			glPushMatrix();
 	
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
+			xCoord = position.x  + radius*(float)Math.cos(gameOverAngle); 
 			
-			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
+			yCoord = radius + radius*(float)Math.sin(gameOverAngle); 
+			glTranslatef(xCoord, yCoord, 0);
+			glScalef(gameOverScale, gameOverScale, 1.0f);
 			
-			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
-
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
+			if(!Settings.GLES11Supported) 
+			{
+				
+				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+			
+				glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+				glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+			
+			} 
+			else 
+			{
+		
+				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
+				
+				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+				GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
+				
+				GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
+	
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
+			}
+			
+			glPopMatrix();
+			
+			sumDt += dt; 
 		}
-		
-		glPopMatrix();
-		
-		sumDt += dt; 
 	}
 		
 }
