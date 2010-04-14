@@ -85,6 +85,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** The boolean that checks if the screen is pressed or released . */
 	private boolean released = true; 
 	
+	/** The boolean that states if the level is game over */
+	private boolean gameOver = false; 
+	
 	/** The last motion event. */
 	private MotionEvent lastMotionEvent = null; 
 	
@@ -112,7 +115,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** The serializer. */
 	private Serializer serializer; 
 	
+	/** The obstacle manager */
 	private ObstacleManager obstacleManager;
+	
 	
 	/**
 	 * Instantiates a new render view.
@@ -245,8 +250,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		timer.update();
 		
 		float dt = timer.getDt();
-				
-		balloonHeight += dt*Settings.BALLOON_SPEED;
+			
+		if (!isGameOver())
+			balloonHeight += dt*Settings.BALLOON_SPEED;
+		
 		accTime += dt/1000;
 		if(accTime > 0.5)
 		{
@@ -264,18 +271,24 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		fetchKeyMoveData();
 		
-		mainChar.update(dt,mainCharMoveDir);
-		background.update(dt);
-		
+		if(!isGameOver()) {
+			mainChar.update(dt,mainCharMoveDir);
+			background.update(dt);
+		}
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		background.render();
-		mainChar.render();
-		hud.render();
+		
+		if(!isGameOver()) {
+			mainChar.render();
+			hud.render();
+		} else {
+			mainChar.renderGameOver(dt);
+		}
 		
 		obstacleManager.renderVisibleObstacles((int)balloonHeight);
 		
-		Log.v("Balloon Height: ", String.valueOf(balloonHeight));
+		//Log.v("Balloon Height: ", String.valueOf(balloonHeight));
 		
 	}
 
@@ -334,7 +347,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	{	
 		Log.v("RenderView.java", "onSurfaceCreated");
 		textureManager.reset();
-		timer.reset();
+		
 		setupGL(gl);
 		
 		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
@@ -354,7 +367,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		background.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 	
-//		soundManager.startMusic();
+		setGameOver(false); 
+		
 	}
 		
 	/* (non-Javadoc)
@@ -423,6 +437,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 */
 	@Override
 	public boolean onTouchEvent(final MotionEvent evt) {
+		
 		if (evt.getAction() == MotionEvent.ACTION_DOWN) {
 			released = false;
 			lastMotionEvent = evt; 
@@ -443,6 +458,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 * @param evt the event delivered by touching the screen 
 	 */
 	public void handleOnTouchMovement(final MotionEvent evt) {
+		
+		if (isGameOver())
+			return; 
+		
 		queueEvent(new Runnable(){
 			public void run() 
 			{	
@@ -664,11 +683,32 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         Settings.GLES11Supported = (gl instanceof GL11);
 	}
 	
+	/** Adds the thread to the message queue
+	 * 
+	 */
 	public void fpsChanged() {
 		        
         LevelActivity.handler.post(fpsHandle);
 		
 	}
 	
+	/**
+	 * Sets the status of the level to game over or not
+	 * @param gameOver boolean indicates if the level is game over
+	 */
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver; 
+		mainChar.setGameOver(gameOver);	
+		background.setGameOver(gameOver); 
+		ObstacleManager.getInstance().setGameOver(gameOver);
+	}
+
+	/**
+	 * Checks if the level is game over
+	 * @return true if game over, else otherwise
+	 */
+	public boolean isGameOver() {
+		return gameOver; 
+	}
 	
 }

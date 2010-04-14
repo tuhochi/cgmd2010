@@ -1,5 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
-import static android.opengl.GLES10.*;
+import static android.opengl.GLES10.GL_FLOAT;
+import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES10.glBindTexture;
+import static android.opengl.GLES10.glDrawArrays;
+import static android.opengl.GLES10.glPopMatrix;
+import static android.opengl.GLES10.glPushMatrix;
+import static android.opengl.GLES10.glRotatef;
+import static android.opengl.GLES10.glTexCoordPointer;
+import static android.opengl.GLES10.glTranslatef;
+import static android.opengl.GLES10.glVertexPointer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,10 +17,10 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 
 /**
@@ -57,6 +66,18 @@ public class MainChar implements SceneEntity {
 	/** The move direction. */
 	private int moveDirection = 0;
 		
+	/** Boolean if main char is dead */
+	private boolean gameOver = false; 
+	 
+	/** sum of dt to coordinate the game over animation */
+	private float sumDt; 
+	
+	/** Boolean in which direction the parabola goes (true = left) */
+	
+	private float xCoord; 
+	
+	private float yCoord; 
+	
 	/**
 	 * Default constructor
 	 * Instantiates a new main char.
@@ -66,6 +87,7 @@ public class MainChar implements SceneEntity {
 		//create Default MainChar
 		this.height = 200f;
 		this.width = 100f;
+		this.sumDt = 0.f; 
 		
 		if (Settings.MAINCHARPOS != null)
 			this.position = Settings.MAINCHARPOS; 
@@ -138,7 +160,7 @@ public class MainChar implements SceneEntity {
 		{
 			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
 		}
-		
+			
 	}
 	
 
@@ -258,6 +280,27 @@ public class MainChar implements SceneEntity {
 		position.x += step;
 	}
 	
+	
+	/**
+	 * Indicates if the level is game over
+	 * @return true if the level is game over, false otherwise
+	 */
+	public boolean isGameOver() {
+		return gameOver; 
+	}
+	
+	/**
+	 * Sets the state of the level to game over or not
+	 * @param isGameOver the boolean indicating if the level is game over
+	 */
+	public void setGameOver(boolean isGameOver) {
+		this.gameOver = isGameOver; 
+		/*	if (gameOver)
+				if (RenderView.getInstance().isUseSensor())
+					RenderView.getInstance().switchSensor();*/
+		
+	}
+	
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.SceneEntity#render()
 	 */
@@ -270,6 +313,11 @@ public class MainChar implements SceneEntity {
 		glPushMatrix();
 		
 		glTranslatef(position.x, 0, 0);
+		
+		
+		if (isGameOver()) {
+			glRotatef(5, 1, 1, 1);
+		}
 		
 		if(!Settings.GLES11Supported) 
 		{
@@ -298,5 +346,46 @@ public class MainChar implements SceneEntity {
 		glPopMatrix();
 	}
 	
+	public void renderGameOver(float dt) {
+		
+		glPushMatrix();
+		
+		if(position.x > 50)
+			xCoord = position.x - sumDt / 20;
+		else
+			xCoord = position.x + sumDt / 20; 
+		
+		yCoord = (float)(Math.sin(sumDt/10)+1)*10;
+		glTranslatef(xCoord, yCoord, 0);
+		glRotatef(sumDt/5, 0, 0, 1); 
+		
+		if(!Settings.GLES11Supported) 
+		{
+			
+			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+		
+			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+		
+		} 
+		else 
+		{
 	
+			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
+			
+			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
+			
+			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
+
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
+		}
+		
+		glPopMatrix();
+		
+		sumDt += dt; 
+	}
+		
 }

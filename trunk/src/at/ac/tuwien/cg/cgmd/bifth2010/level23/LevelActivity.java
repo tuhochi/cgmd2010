@@ -21,8 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings; 
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 
 /**
  * The Class LevelActivity handles the Android Lifecycle for the level and takes care of the interaction with the use
@@ -48,7 +47,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	/** The Constant SENSOR_MENU_ITEM if a user wants to use the orientation sensor. */
 	private static final int SENSOR_MENU_ITEM = 1;
 	
-	private Vector2 mainCharPos; 
+	//private Vector2 mainCharPos; 
 	/**
 	 * called when the activity is created. Here, the window is created and the the UI is placed by RenderView renderer
 	 * @param savedInstanceState the Bundle received from Android 

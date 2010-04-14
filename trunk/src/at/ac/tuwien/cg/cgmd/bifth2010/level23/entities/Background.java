@@ -41,7 +41,7 @@ public class Background implements SceneEntity
 	private final float[] texCoords = {0.f, 0.5f, 1.f, 0.5f, 0.f, 0.f, 1.f, 0.f}; 
 	private float scrollSpeed = 0.01f;
 	private float positionY;
-
+	private boolean gameOver = false; 
 	private int vboId;
 	
 	/**
@@ -140,7 +140,9 @@ public class Background implements SceneEntity
 		glPushMatrix();
 		
 			//translate texture
-			glTranslatef(0, positionY, 0);
+			if(!isGameOver())
+				glTranslatef(0, positionY, 0);
+			
 			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 			if (!Settings.GLES11Supported) 
 			{
@@ -167,6 +169,22 @@ public class Background implements SceneEntity
 		glPopMatrix();
 		
 		glMatrixMode(GL_MODELVIEW);
+	}
+	
+	/**
+	 * Returns the state if the level is game over or not
+	 * @return true if level is game over, else otherwise
+	 */
+	public boolean isGameOver() {
+		return gameOver; 
+	}
+	
+	/**
+	 * Sets the game over state
+	 * @param isDead boolean which states if the level is game over
+	 */
+	public void setGameOver(boolean isGameOver) {
+		this.gameOver = isGameOver;
 	}
 
 }
