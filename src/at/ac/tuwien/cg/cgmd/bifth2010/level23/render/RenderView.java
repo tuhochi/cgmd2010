@@ -246,13 +246,16 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		
 		timer.update();
 		
 		float dt = timer.getDt();
-			
-		if (!isGameOver())
+				
+		if(!isGameOver()) 
+		{
 			balloonHeight += dt*Settings.BALLOON_SPEED;
+			mainChar.update(dt,mainCharMoveDir);
+			background.update(dt);
+		}
 		
 		accTime += dt/1000;
 		if(accTime > 0.5)
@@ -271,10 +274,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		fetchKeyMoveData();
 		
-		if(!isGameOver()) {
-			mainChar.update(dt,mainCharMoveDir);
-			background.update(dt);
-		}
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		background.render();
