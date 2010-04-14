@@ -685,10 +685,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** Adds the thread to the message queue
 	 * 
 	 */
-	public void fpsChanged() {
-		        
-        LevelActivity.handler.post(fpsHandle);
-		
+	public void fpsChanged() {	        
+        LevelActivity.handler.post(fpsHandle);	
 	}
 	
 	/**

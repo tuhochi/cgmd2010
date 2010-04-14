@@ -59,19 +59,18 @@ public class MainChar implements SceneEntity {
 		
 	/** Boolean if main char is dead */
 	private boolean gameOver = false; 
-	 
-	/** sum of dt to coordinate the game over animation */
-	private float sumDt; 
-	
-	/** Boolean in which direction the parabola goes (true = left) */
-	
+	 	
+	/** x-coordinate for gameover animation */
 	private float xCoord; 
 	
+	/** y-coordinate for gameover animation */
 	private float yCoord; 
 	
-	private float gameOverAngle= (float)Math.PI*3f/2f;
+	/** circle angle (in radiant) for gameover animation */
+	private float gameOverAngle;
 	
-	private float gameOverScale=1;
+	/** scale for gameover animation */
+	private float gameOverScale;
 	
 	/**
 	 * Default constructor
@@ -82,7 +81,9 @@ public class MainChar implements SceneEntity {
 		//create Default MainChar
 		this.height = 200f;
 		this.width = 100f;
-		this.sumDt = 0.f; 
+		
+		gameOverAngle= (float)Math.PI*3f/2f;
+		gameOverScale=1;
 		
 		if (Settings.MAINCHARPOS != null)
 			this.position = Settings.MAINCHARPOS; 
@@ -104,6 +105,10 @@ public class MainChar implements SceneEntity {
 	{
 		this.height = height;
 		this.width = width;
+		
+		gameOverAngle= (float)Math.PI*3f/2f;
+		gameOverScale=1;
+		
 		if (Settings.MAINCHARPOS != null)
 			this.position = Settings.MAINCHARPOS; 
 		else
@@ -341,6 +346,9 @@ public class MainChar implements SceneEntity {
 		glPopMatrix();
 	}
 	
+	/**
+	 * Renders the gameover animation
+	 */
 	public void renderGameOver(float dt) {
 		
 		gameOverAngle += dt*0.005;
@@ -360,22 +368,19 @@ public class MainChar implements SceneEntity {
 			glTranslatef(xCoord, yCoord, 0);
 			glScalef(gameOverScale, gameOverScale, 1.0f);
 			
+			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+			
 			if(!Settings.GLES11Supported) 
 			{
-				
-				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
-			
 				glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 				glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 			
 			} 
 			else 
 			{
-		
 				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
 				
-				glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 				GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
 				
 				GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
@@ -385,8 +390,6 @@ public class MainChar implements SceneEntity {
 			}
 			
 			glPopMatrix();
-			
-			sumDt += dt; 
 		}
 	}
 		
