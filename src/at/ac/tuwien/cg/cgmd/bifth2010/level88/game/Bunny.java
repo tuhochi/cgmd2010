@@ -1,6 +1,3 @@
-/**
- * 
- */
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -9,8 +6,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
+ * Class representing the bunny
  * @author Asperger, Radax
- *
  */
 public class Bunny {
 	private Game game;
@@ -20,8 +17,8 @@ public class Bunny {
 	private Vector2 groundYDir, groundXDir;
 
 	/**
+	 * Moving possibilities of the bunny
 	 * @author Asperger, Radax
-	 *
 	 */
 	public enum MoveStatus {
 		STANDING, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
@@ -30,7 +27,8 @@ public class Bunny {
 	
 	
 	/**
-	 * @param _game
+	 * Constructor
+	 * @param _game Game context
 	 */
 	public Bunny(Game _game) {
 		game = _game;
@@ -66,7 +64,8 @@ public class Bunny {
 	
 	
 	/**
-	 * @param elapsedSeconds
+	 * Method to update the position of the bunny
+	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
         if( game.hasNewInput() ) {
@@ -123,7 +122,8 @@ public class Bunny {
 	
 	
 	/**
-	 * @param gl
+	 * Draw the bunny
+	 * @param gl OpenGL context of android
 	 */
 	public void draw(GL10 gl) {
 		bunnyQuad.vbos.set(gl);
@@ -139,8 +139,9 @@ public class Bunny {
 	
 	
 	/**
-	 * @param x
-	 * @param y
+	 * Set the position of the bunny
+	 * @param x x-coordinate
+	 * @param y y-coordinate
 	 */
 	public void setPosition(int x, int y) {
 		currentPosX = x;

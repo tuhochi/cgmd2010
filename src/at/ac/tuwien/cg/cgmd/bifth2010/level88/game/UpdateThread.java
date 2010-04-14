@@ -4,16 +4,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.GLView;
 
 
 /**
+ * Class for updating the threads
  * @author Asperger, Radax
- *
  */
 public class UpdateThread extends Thread {
 	private Game game;
 	
 	
 	/**
-	 * @param view
-	 * @param _game
+	 * Constructor
+	 * @param view view of the android context
+	 * @param _game game context
 	 */
 	public UpdateThread(GLView view, Game _game)
 	{

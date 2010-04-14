@@ -13,6 +13,11 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+
+/**
+ * Texture class for level 88
+ * @author Asperger, Radax
+ */
 public class Textures {
 	private HashMap<Integer,Integer> resources2texIds;
 	private ArrayList<Integer> textureFiles;
@@ -21,6 +26,12 @@ public class Textures {
 	private Context context; 
 	private int lastBound;
 
+	
+	/**
+	 * Constructor
+	 * @param _gl OpenGL context of android
+	 * @param _context Android context
+	 */
 	public Textures(GL10 _gl, Context _context) {
 		context = _context;
 		gl = _gl;
@@ -63,6 +74,11 @@ public class Textures {
 		loadTextures();
 	}
 	
+	
+	/**
+	 * Bind the texture resource
+	 * @param resource resource to bind
+	 */
 	public void bind(int resource) {
 		if( lastBound != resource ) {
 			gl.glBindTexture(
@@ -73,6 +89,10 @@ public class Textures {
 		}
 	}
 	
+	
+	/**
+	 * Load the textures from the resource directory
+	 */
 	public void loadTextures() {
 		textureIds = new int[textureFiles.size()];
 		gl.glGenTextures(textureFiles.size(), textureIds, 0);
@@ -114,6 +134,11 @@ public class Textures {
 		}
 	}
 	
+	
+	/**
+	 * Add a new texture
+	 * @param resource texture to be added
+	 */
 	public void addTexture(int resource) {
 		if( textureFiles == null ) {
 			textureFiles = new ArrayList<Integer> ();
