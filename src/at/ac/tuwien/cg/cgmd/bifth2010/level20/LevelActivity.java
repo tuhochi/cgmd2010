@@ -6,15 +6,15 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
- * @author Reinbert
+ * The top level class of the game. 
  *
+ * @author Ferdinand Pilz
+ * @author Reinhard Sprung
  */
 public class LevelActivity extends Activity {
 
