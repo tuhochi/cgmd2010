@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Vibrator;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
@@ -23,10 +24,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
+	/** the context of the scene */
+	private Context context = null;
 	/** the flying rabbit */
 	private PhysicalObject rabbit;
 	/** the crosshairs that shoot on the rabbit */
 	private Crosshairs crosshairs;
+	/** the landscape moving with parallax-effect */
 	private Landscape landscape;
 
 	/** thread for game logic */
@@ -35,11 +39,18 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
 	/** soundPlayer */
 	private SoundPlayer player = null;
+	/** the system's vibrator */
+	private Vibrator vibrator = null;
+
 	
 	public GameScene(Context context) {
 		super(context);
 		
+		this.context = context;
+		
 		player = SoundPlayer.getInstance(context);
+		// get the system's vibrator
+		vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 		
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
@@ -98,7 +109,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
 		
-		crosshairs = new Crosshairs(mainTexture, this.getWidth(), this.getHeight());
+		crosshairs = new Crosshairs(this, mainTexture, this.getWidth(), this.getHeight());
 		crosshairs.setPosition(30, getHeight()/2);
 		crosshairs.setRabbit(rabbit);
 		
@@ -152,5 +163,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	
 	public SoundPlayer getSoundPlayer() {
 		return player;
+	}
+	
+	public Vibrator getVibrator() {
+		return vibrator;
 	}
 }
