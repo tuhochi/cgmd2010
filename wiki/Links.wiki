@@ -17,6 +17,8 @@ Here you can find some useful links for the project. If you find some links, ple
   * *[http://developer.android.com/videos/index.html Android Videos]*
   * *[http://developer.android.com/guide/developing/tools/emulator.html Android Emulator:]* Including "Controlling the Emulator"
   * *[http://code.google.com/intl/de-AT/events/io/2009/sessions/WritingRealTimeGamesAndroid.html Google I/O 2009 - Writing Real-Time Games for Android:]* Very good introduction in writing games on Android. Video and slides (PDF) are available!
+  * *[http://www.androidpit.de/de/android/wiki/view/Spieleentwicklung_101 Spieleentwicklung 101]:* Android, OpenGL ES & Game Developing Tutorial
+  * *[http://www.vogella.de/articles/Android/article.html Android Development with Eclipse - Tutorial]*
   * *[http://android-dls.com/wiki/index.php?title=Android_FAQ Android FAQ]*
   * *[http://source.android.com/submit-patches/code-style-guide Android Code Style Rules]*
   * *[http://openhandsetmagazine.com/2008/01/tips-how-to-install-apk-files-on-android-emulator/ How to install apk files on Android Emulator:]* If you want to try out some Android applications...
@@ -26,6 +28,8 @@ Here you can find some useful links for the project. If you find some links, ple
   * *Nehe Android Ports: [http://insanitydesign.com/wp/projects/nehe-android-ports/ 1] [http://code.google.com/p/nehe-android/ 2]*
   * *[http://www.khronos.org/opengles/ OpenGL ES Specification]*
   * *[http://stackoverflow.com/questions/2093594/opengl-extensions-available-on-different-android-devices OpenGL ES extensions of some Android devices]*
+  * *[http://insanitydesign.com/wp/category/android/ Various articles (issues) on OpenGL ES on Android]*
+  * *[http://apistudios.com/hosted/marzec/badlogic/wordpress/?p=21 Vertex Arrays & Vertex Buffer Object Madness!]:* Discussion of several problems with VBOs on Android
 
 == Books / Literature (Android & OpenGL ES) ==
 
