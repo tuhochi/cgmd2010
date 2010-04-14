@@ -8,11 +8,9 @@ import java.util.ArrayList;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Pair;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 //static imports
@@ -27,7 +25,6 @@ public class Model implements Moveable,Persistable
 	private final AxisAlignedBox3 boundingBox;
 	protected final Sphere boundingSphere;
 	private final Sphere boundingSphereWorld;
-	private ArrayList<Pair<Vector3, Model>> distances;
 	private Motion motion;
 	private boolean initialized;
 	
@@ -39,7 +36,6 @@ public class Model implements Moveable,Persistable
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
-		distances = new ArrayList<Pair<Vector3,Model>>();
 		initialized = false;
 	}
 	
@@ -110,7 +106,6 @@ public class Model implements Moveable,Persistable
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
 		boundingSphere = new Sphere(other.boundingSphere);
 		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
-		distances = other.distances;
 		int numGeoms = other.geometries.size();
 		for(int i=0; i<numGeoms; i++)
 			geometries.add(other.geometries.get(i));
@@ -161,11 +156,6 @@ public class Model implements Moveable,Persistable
 		geometries.add(geometry);
 		boundingBox.include(geometry.getBoundingBox());
 		boundingSphere.include(geometry.getBoundingSphere());
-	}
-	
-	public void setDistances(ArrayList<Pair<Vector3, Model>> distances)
-	{
-		this.distances = distances;
 	}
 
 	@Override
