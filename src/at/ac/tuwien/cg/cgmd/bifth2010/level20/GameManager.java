@@ -47,7 +47,8 @@ public class GameManager {
 //		cube.textures[1] = getTexture(R.drawable.l00_coin);
 //		cube.textures[2] = getTexture(R.drawable.l00_rabit_256);
 		
-		t = new Triangle();
+		t = new Triangle(480, 320);
+		t.texture = getTexture(R.drawable.l00_rabit_256);
 	}
 	
 
@@ -56,7 +57,7 @@ public class GameManager {
 	 */
 	public void update() {	
 		
-
+		t.updateUV(2.5f);
 	}
 	
 	public void renderEntities()

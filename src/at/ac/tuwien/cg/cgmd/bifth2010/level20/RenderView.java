@@ -80,8 +80,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 //		gl.glDisable(GL10.GL_DITHER);				//Disable dithering ( NEW )
 		gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping
 		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
-		gl.glClearColor(0.7f, 0.7f, 0.7f, 1f); 		//Gray Background
-		gl.glClearDepthf(1.0f); 					//Depth Buffer Setup
+		gl.glClearColor(0, 0, 0, 1); 		//Gray Background
+		gl.glClearDepthf(1); 					//Depth Buffer Setup
 		gl.glEnable(GL10.GL_DEPTH_TEST); 			//Enables Depth Testing
 		gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
 		
@@ -102,11 +102,15 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		
+		gameMgr.update();
+		
 		//Clear Screen And Depth Buffer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
 		gl.glLoadIdentity();					//Reset The Current Modelview Matrix
 
-		gl.glTranslatef(0.0f, 0.0f, -5f);
+//		gl.glTranslatef(0.0f, 0.0f, -5f);
+		
+		
 		gameMgr.renderEntities();
 
 	}
@@ -128,14 +132,13 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		gl.glMatrixMode(GL10.GL_PROJECTION); 	//Select The Projection Matrix
 		gl.glLoadIdentity(); 					//Reset The Projection Matrix
 		
-		
-		
+		getWidth();
 
 		//Calculate The Aspect Ratio Of The Window
 //		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 100.0f);
 //		GLU.gluOrtho2D(gl, left, right, bottom, top)2D(gl, 0, width, 0, height);
 		
-		gl.glOrthof(0, width, 0, height, -1, 1);
+		gl.glOrthof(0, width, 0, height, -10, 10);
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	//Select The Modelview Matrix
 		gl.glLoadIdentity(); 					//Reset The Modelview Matrix
