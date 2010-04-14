@@ -23,12 +23,13 @@ public class SceneEntity implements Moveable,Persistable
 	private Matrix44 transformation;
 	private Matrix44 transformation_temp;
 	private final Matrix44 basicOrientation;
-	private final ArrayList<Model> models;
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
 	private final Sphere boundingSphereWorld;
 	private Motion motion;
 	private boolean initialized;
+	
+	public final ArrayList<Model> models;
 	
 	public SceneEntity()
 	{

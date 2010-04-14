@@ -176,4 +176,10 @@ public class Model implements Moveable,Persistable
 										-boundingSphereWorld.center.z);
 		return basicOrientation;
 	}
+
+	@Override
+	public String getName() {
+		//TODO hack
+		return "";
+	}
 }

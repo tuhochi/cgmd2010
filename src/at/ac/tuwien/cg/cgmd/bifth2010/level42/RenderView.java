@@ -24,6 +24,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
@@ -187,7 +188,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		}
 		
 		motionManager.updateMotion(timer.getDeltaTsec());
-		collManager.doCollisionDetection();
+		collManager.doCollisionDetection(motionManager);
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
 		
 		/*
