@@ -143,7 +143,7 @@ public class CollisionManager {
 							planetCenterDistance.copy(planetEntity.getBoundingSphereWorld().center);
 							planetCenterDistance.subtract(collider.getBoundingSphereWorld().center);
 
-							if(planetCenterDistance.length()+0.4 < 
+							if(planetCenterDistance.length()+0.2 < 
 									planetEntity.getBoundingSphereWorld().radius + collider.getBoundingSphereWorld().radius)
 							{
 								Motion planetEntityMotion = planetEntity.getMotion();
@@ -154,7 +154,7 @@ public class CollisionManager {
 									planetEntityMotion = new DirectionalMotion(planetEntity.getBoundingSphereWorld().center,
 															pushVec,
 															1f,
-															null);
+															planetEntity.getBasicOrientation());
 									motionManager.addMotion(planetEntityMotion,planetEntity);
 									collider.getMotion().morph(pushVec);
 								}
