@@ -12,15 +12,14 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Vibrator;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Observer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
@@ -112,6 +111,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		crosshairs = new Crosshairs(this, mainTexture, this.getWidth(), this.getHeight());
 		crosshairs.setPosition(30, getHeight()/2);
 		crosshairs.setRabbit(rabbit);
+		crosshairs.addObserver((Observer)context);
 		
 		landscape = new Landscape(mainTexture, getWidth(), getHeight());
 		landscape.setRabbit((PhysicalRabbit)rabbit);

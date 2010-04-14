@@ -227,7 +227,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		this.setVelocity(0.f);
 	}
 	
-	public int getCointCount() {
+	public int getCoinCount() {
 		return sprite.getCoinCount();
 	}
 	

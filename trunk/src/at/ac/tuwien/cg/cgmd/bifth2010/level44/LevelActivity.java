@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -17,8 +18,14 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputListener;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Event;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Observer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.ShootEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.CoinBucketSprite;
 
-public class LevelActivity extends Activity {
+public class LevelActivity extends Activity implements Observer {
+	private final Handler handler = new Handler();
+
 	private GameScene scene;
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
@@ -32,30 +39,30 @@ public class LevelActivity extends Activity {
 		Window window = getWindow();
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
+
 		scene = new GameScene(this);
 		setContentView(scene);
-	
+
 		//setContentView(R.layout.l44_help);
 		//finishLevel(90);
-		
+
 		LinearLayout llayout = new LinearLayout(this);
-        llayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-        llayout.setOrientation(LinearLayout.HORIZONTAL);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
-        addContentView(llayout, params);
-        
-        textCoins = new TextView(this);
-        textCoins.setText("10");
-        textCoins.setTextSize(25);
-        textCoins.setGravity(Gravity.CENTER);
-        textCoins.setTextColor(Color.BLACK);  
-        textCoins.setBackgroundResource(R.drawable.l44_textbg);
-        
-        LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        llparams.weight = 0;
-        llparams.setMargins(10, 10, 10, 10);
-        llayout.addView(textCoins, llparams);
+		llayout.setGravity(Gravity.TOP | Gravity.LEFT);
+		llayout.setOrientation(LinearLayout.HORIZONTAL);
+		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
+		addContentView(llayout, params);
+
+		textCoins = new TextView(this);
+		textCoins.setText("Coins: " + CoinBucketSprite.FULL_COIN_COUNT);
+		textCoins.setTextSize(25);
+		textCoins.setGravity(Gravity.CENTER);
+		textCoins.setTextColor(Color.BLACK);  
+		textCoins.setBackgroundResource(R.drawable.l44_textbg);
+
+		LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+		llparams.weight = 0;
+		llparams.setMargins(10, 10, 10, 10);
+		llayout.addView(textCoins, llparams);
 
 		Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		gestureDetector = new GestureDetector(new InputListener(scene, display.getWidth(), display.getHeight()));
@@ -105,5 +112,25 @@ public class LevelActivity extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
+	}
+
+	@Override
+	public void notify(Event event) {
+		if (event instanceof ShootEvent) {
+			class UpdateUI implements Runnable {
+				private String s;
+				public UpdateUI(String s) {
+					this.s = s;
+				}
+				@Override
+				public void run() {
+					textCoins.setText(s);
+				}
+			};
+
+			Runnable r = new UpdateUI(event.toString());
+			handler.post(r);
+		}
+
 	}
 }
