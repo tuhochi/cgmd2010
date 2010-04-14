@@ -125,7 +125,9 @@ public class Crosshairs extends Subject {
 				// 3 Seconds since crosshairs turned green? -> shoot
 				if (timeStamp > 0 && System.currentTimeMillis() - timeStamp >= MILLISECONDS_TO_SHOOT) {
 					shoot();
+					// reset time and load-status
 					timeStamp = System.currentTimeMillis();
+					isLoaded = false;
 				}
 			}
 		}
