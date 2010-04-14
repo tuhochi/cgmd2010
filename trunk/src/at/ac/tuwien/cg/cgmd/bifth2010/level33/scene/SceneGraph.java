@@ -91,15 +91,12 @@ public class SceneGraph {
 		// load Objects
 		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_mauer_turm);
 		InputStream isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_mauer_turm);
-		
-		
 		geometry[GEOMETRY_WALL]= GeometryLoader.loadObj(gl, is,isImage);
 		
 		
 		
 		
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_steinmauer);
-		
+		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_way);
 		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_way);
 		geometry[GEOMETRY_WAY]= GeometryLoader.loadObj(gl, is,isImage);
 		
@@ -140,12 +137,12 @@ public class SceneGraph {
 		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_schatz);
 		geometry[GEOMETRY_TRASH]= GeometryLoader.loadObj(gl, is,isImage);
 		
-		
-		
-		
-		
+				
 		geometry[GEOMETRY_MAP] = new GeometryMap(gl);
-		geometry[GEOMETRY_SPRING] = new GeometrySpring(gl);
+		
+		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_brunnen);
+		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_brunnen);
+		geometry[GEOMETRY_SPRING]= GeometryLoader.loadObj(gl, is,isImage);
 		
 		// init geometry
 		for (int i=0;i<geometry.length;i++){
