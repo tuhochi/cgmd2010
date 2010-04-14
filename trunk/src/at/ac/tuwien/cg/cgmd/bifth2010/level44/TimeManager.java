@@ -103,7 +103,7 @@ public class TimeManager extends Subject {
 	}
 	
 	/**
-	 * @return string-represantation of the initial time
+	 * @return string-representation of the initial time
 	 */
 	public static String getFullTimeString() {
 		return String.valueOf(GAME_TIME_MILLIS/1000);

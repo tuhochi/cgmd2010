@@ -168,6 +168,11 @@ public class LevelActivity extends Activity implements Observer {
 
 			Runnable r = new UpdateUI(event.toString());
 			handler.post(r);
+			
+			// time is over -> quit level
+			if (TimeManager.getInstance().getRemainingTimeMillis() == 0) {
+				this.finishLevel((CoinBucketSprite.FULL_COIN_COUNT - scene.getRabbit().getCoinCount()) * 10);
+			}
 		}
 
 	}
