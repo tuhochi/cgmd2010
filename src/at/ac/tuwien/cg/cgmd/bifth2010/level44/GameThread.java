@@ -93,9 +93,9 @@ public class GameThread extends Thread {
 				Swipe swipe = (Swipe)gesture;
 				
 				if (swipe.isLeft()) {
-					soundPosition = 0.f;
+					soundPosition = 0.2f;
 				} else if (swipe.isRight()) {
-					soundPosition = 1.0f;
+					soundPosition = 0.8f;
 				}
 			}
 			

@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class CoinBucketSprite extends SpriteContainer {
 	/** number of coins at the beginning */
-	private static final int FULL_COIN_COUNT = 10;
+	public static final int FULL_COIN_COUNT = 10;
 	
 	public CoinBucketSprite(Texture texture) {
 		super(TextureParts.getBucket(texture));
