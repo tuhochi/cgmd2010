@@ -2,13 +2,16 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.physics;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.DoubleTap;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 
 /**
  * This class represents the flying rabbit
@@ -29,6 +32,8 @@ public class PhysicalRabbit implements PhysicalObject {
 	private float velocity = 0.f;
 	/** the time since last reset */
 	private long startTime = 0L;
+	/** the start time for coin drop */
+	private long coinStartTime = 0L;
 	/** the time since begin of last wing-flap */
 	private long lastWingTime = 0L;
 	/** queue of gestures to perform */
@@ -37,11 +42,18 @@ public class PhysicalRabbit implements PhysicalObject {
 	private int screenWidth;
 	/** height of the screen */
 	private int screenHeight;
+	/** is there currently a coin dropping? */
+	private boolean coinDrops = false;
+	/** the currently dropping coin */
+	private Sprite coinSprite;
 
-	public PhysicalRabbit(RabbitSprite rabbit, int screenWidth, int screenHeight) {
+	public PhysicalRabbit(RabbitSprite rabbit, Sprite coinSprite, int screenWidth, int screenHeight) {
 		this.sprite = rabbit;
+		this.coinSprite = coinSprite;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
+		
+		coinSprite.setScale(0.4f); //TODO: remove
 	}
 
 	public RabbitSprite getSprite() {
@@ -77,7 +89,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		if (sprite.wingsMovingDown()) {
 			// v = a * delta t
 			this.setVelocity(flapAcceleration * deltaTime);
-		} // if wings moving up, inhibit speed (needed? - FIXME) --myellow
+		} // if wings moving up, inhibit speed
 		else if (sprite.wingsMovingUp()) {
 			this.setVelocity(this.getVelocity() - 0.05f);	
 		}
@@ -102,6 +114,43 @@ public class PhysicalRabbit implements PhysicalObject {
 		newX = Math.min(screenWidth, Math.max(0,newX));
 		newY = Math.min(screenHeight - sprite.getHeight(), Math.max(-40,newY));
 		setPosition(newX,newY);
+		
+		if (coinDrops) {
+			moveCoin();
+		} else {
+			coinSprite.setPosition(newX, newY);
+		}
+	}
+
+	private void moveCoin() {
+		if (coinSprite.getY() < screenHeight) {
+			// angle is between -20 and +20 degrees
+			Random random = new Random();
+			float angle = random.nextInt(2) > 0 ? 35 : -35;
+			angle = (float)((90.f - angle) * Math.PI/180.);
+			// time since last reset
+			float time = (System.currentTimeMillis() - coinStartTime) / VELOCITY_FACTOR * 2;
+			// s = 1/2 * g * t^2
+			float sGravity = (1/2.f * PhysicalObject.GRAVITY * time * time);
+			float sMovement = 0.3f;
+			// sy = s * sin
+			float sMovementY = sMovement * (float)Math.sin(Math.abs(angle));
+			// sx = s * cos
+			float sMovementX = sMovement * (float)Math.cos(angle);
+			// new positions
+			float newY = coinSprite.getY() + sGravity;
+			float newX = coinSprite.getX();
+			
+			// add movements to position
+			newY -= sMovementY;
+			newX += sMovementX;
+			
+			coinSprite.setX(newX);
+			coinSprite.setY(newY);
+		} else {
+			coinDrops = false;
+			SoundPlayer.getInstance(null).play(SoundPlayer.SoundEffect.DROP, 0.5f);
+		}
 	}
 
 	@Override
@@ -193,6 +242,9 @@ public class PhysicalRabbit implements PhysicalObject {
 	public void draw(GL10 gl) {
 		if (sprite != null)
 			sprite.draw(gl);
+		
+		if (coinDrops)
+			coinSprite.draw(gl);
 	}
 
 	@Override
@@ -233,6 +285,9 @@ public class PhysicalRabbit implements PhysicalObject {
 	
 	public void looseCoin() {
 		sprite.looseCoin();
+		
+		coinDrops = true;
+		coinStartTime = System.currentTimeMillis() - 500;
 	}
 	
 	public boolean hasLanded() {

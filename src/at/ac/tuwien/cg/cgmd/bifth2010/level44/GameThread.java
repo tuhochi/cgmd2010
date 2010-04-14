@@ -9,15 +9,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 
 public class GameThread extends Thread {
-	private static final int FRAME_RATE = 200;
-
 	private GameScene scene;
 	private PhysicalRabbit rabbit;
 	private Crosshairs crosshairs;
 	private Landscape landscape;
 	private boolean quit;
 	private InputGesture gesture = null;
-	private int frameRate = FRAME_RATE;
 
 	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs) {
 		this.scene = scene;
@@ -37,13 +34,6 @@ public class GameThread extends Thread {
 		while (!quit) {
 			scene.queueEvent(new Runnable() {
 				public void run() {
-				/*	if (gesture == null || frameRate == 0) {
-						gesture = scene.getNextInputGesture();
-
-						if (frameRate == 0)
-							frameRate = FRAME_RATE;
-					}*/
-
 					// process input gesture 
 					gesture = scene.getNextInputGesture();
 					rabbit.processGesture(gesture); 
@@ -62,7 +52,11 @@ public class GameThread extends Thread {
 						scene.clearInputQueue();
 					}
 					
-					landscape.step();					
+					landscape.step();	
+					
+					if (TimeManager.getInstance().getRemainingTimeMillis() == 0) {
+						doQuit();
+					}
 
 					 /* old moving, maybe useful as intro
 					  * rabbit.setPosition((float)(scene.getWidth()/2 +
@@ -80,6 +74,8 @@ public class GameThread extends Thread {
 			} catch (InterruptedException ie) {
 			}
 		}
+		
+		
 	}
 
 	public void doQuit() {

@@ -14,19 +14,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Observer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
 	/** the context of the scene */
 	private Context context = null;
 	/** the flying rabbit */
-	private PhysicalObject rabbit;
+	private PhysicalRabbit rabbit;
 	/** the crosshairs that shoot on the rabbit */
 	private Crosshairs crosshairs;
 	/** the landscape moving with parallax-effect */
@@ -61,7 +62,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		//System.err.println("onDrawFrame");
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -78,7 +78,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		System.err.println("onSurfaceChanged");
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
@@ -97,7 +96,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		System.err.println("onSurfaceCreated");
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -105,7 +103,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		Texture mainTexture = new Texture(gl, getContext(), R.drawable.l44_texture);
 		configureTexture(gl, mainTexture);
 		
-		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), this.getWidth(), this.getHeight());
+		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), new Sprite(TextureParts.getCoin(mainTexture)), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
 		
 		crosshairs = new Crosshairs(this, mainTexture, this.getWidth(), this.getHeight());
@@ -171,5 +169,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	
 	public Vibrator getVibrator() {
 		return vibrator;
+	}
+	
+	public PhysicalRabbit getRabbit() {
+		return rabbit;
 	}
 }
