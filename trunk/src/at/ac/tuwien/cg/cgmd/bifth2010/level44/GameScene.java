@@ -111,10 +111,14 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		crosshairs = new Crosshairs(this, mainTexture, this.getWidth(), this.getHeight());
 		crosshairs.setPosition(30, getHeight()/2);
 		crosshairs.setRabbit(rabbit);
-		crosshairs.addObserver((Observer)context);
+		
 		
 		landscape = new Landscape(mainTexture, getWidth(), getHeight());
 		landscape.setRabbit((PhysicalRabbit)rabbit);
+		
+		// Observers for updating UI
+		crosshairs.addObserver((Observer)context);
+		TimeManager.getInstance().addObserver((Observer)context);
 		
 		restartGameThread();
 	}

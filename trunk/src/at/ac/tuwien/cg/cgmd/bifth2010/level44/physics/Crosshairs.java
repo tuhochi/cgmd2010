@@ -1,14 +1,18 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.physics;
 
+import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.ShootEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Subject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.TimeEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Util;
 
 public class Crosshairs extends Subject {
 	/** the squared distance which the crosshairs mustn't exceed to stay green */
@@ -36,6 +40,12 @@ public class Crosshairs extends Subject {
 	private boolean isLoaded = false;
 	/** timestamp, since the crosshairs turned green or -1 if they are red */
 	private long timeStamp = -1L;
+	
+	private FloatBuffer progressBarBuffer;
+	private float[] progressBarVertices = { 0.f, 0.f, 0.f, // bottom left
+										    140.f, 0.f, 0.f, // bottom right
+											0.f, 30.f, 0.f, // top left
+											140.f, 30.f, 0.f }; // top right
 
 	public Crosshairs(GameScene scene, Texture texture, int width, int height) {
 		this.scene = scene;
@@ -47,6 +57,8 @@ public class Crosshairs extends Subject {
 
 		spriteGreen = new Sprite(TextureParts.makeCrosshairsGreen(texture));
 		spriteGreen.setCenter(24, 24);
+		
+		progressBarBuffer = Util.floatArrayToBuffer(progressBarVertices);
 	}
 
 	public void setRabbit(PhysicalObject rabbit) {
@@ -58,6 +70,30 @@ public class Crosshairs extends Subject {
 			spriteGreen.draw(gl);
 		else
 			spriteRed.draw(gl);
+		
+		if (this.isLoaded) {
+			drawProgressBar(gl);
+		}
+	}
+
+	private void drawProgressBar(GL10 gl) {
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glPushMatrix();
+		
+		gl.glTranslatef(screenWidth/2.f - 70.f, 15.f, 0);
+		gl.glColor4f(1, 1, 1, 1);
+		
+		//Point to our vertex buffer
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, progressBarBuffer);
+		//Enable vertex buffer
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		//Draw the vertices as triangle strip
+		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, progressBarVertices.length / 3);
+		//Disable the client state before leaving
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		
+		/* Restore the Model-View matrix */
+		gl.glPopMatrix();
 	}
 
 	public void setX(float x) {
@@ -180,7 +216,7 @@ public class Crosshairs extends Subject {
 			(new Thread() {
 				public void run() {
 					try {
-						Thread.sleep(400L);
+						Thread.sleep(300L);
 					} catch(Exception ex) {}
 					finally {
 						scene.getVibrator().vibrate(100L);
