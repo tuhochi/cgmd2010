@@ -86,7 +86,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		//init temp vars
 		selectionDirection = new Vector3();
 		
-		scene = SceneLoader.getInstance().readScene("l42_simpleorbit");
+		scene = SceneLoader.getInstance().readScene("l42_orbit");
 		motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,2,10);
 		collManager = new CollisionManager(scene);
 		
