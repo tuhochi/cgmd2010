@@ -11,4 +11,5 @@ public interface Moveable {
 	public void setTransformation(Matrix44 transform);
 	public Matrix44 getTransformation();
 	public Sphere getBoundingSphereWorld();
+	public String getName();
 }

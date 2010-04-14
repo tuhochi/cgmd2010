@@ -13,21 +13,25 @@ public class DirectionalMotion extends Motion
 	private final Vector3 directionVec,currentPos,tempDirectionVec;
 	private float speed;
 	private SatelliteTransformation satTrans;
-	private Matrix44 transform;
+	private Matrix44 transform,basicOrientation;
 	
-	public DirectionalMotion(Vector3 startPos,Vector3 directionVec,float speed)
+	public DirectionalMotion(Vector3 startPos,Vector3 directionVec,float speed,Matrix44 basicOrientation)
 	{
 		//init
 		this();
 		this.directionVec.copy(directionVec.normalize());
 		this.currentPos.copy(startPos);
 		this.speed = speed;
+		
+		if(basicOrientation!=null)
+			this.basicOrientation.copy(basicOrientation);
 	}
 	
 	protected DirectionalMotion()
 	{
 		//init
 		this.transform = new Matrix44();
+		this.basicOrientation = new Matrix44();
 		this.directionVec = new Vector3();
 		this.currentPos = new Vector3();
 		this.tempDirectionVec = new Vector3();
@@ -41,6 +45,7 @@ public class DirectionalMotion extends Motion
 		currentPos.add(tempDirectionVec);
 	
 		transform.setIdentity();
+		transform.mult(basicOrientation);
 		
 		if(satTrans!=null){
 			satTrans.update(dt,speed);
