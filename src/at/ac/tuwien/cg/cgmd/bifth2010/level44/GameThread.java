@@ -103,11 +103,15 @@ public class GameThread extends Thread {
 		}
 		
 		if (crosshairs.changeLoadingState()) {
-			scene.queueEvent(new Runnable() {
+			(new Thread() {
 				public void run() {
+					try {
+						Thread.sleep(400L);
+					} catch(Exception ex) {}
+					
 					scene.getSoundPlayer().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
 				}
-			});
+			}).start();
 		}
 	}
 }
