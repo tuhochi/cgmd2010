@@ -1,6 +1,3 @@
-/**
- * 
- */
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
 import java.io.BufferedReader;
@@ -8,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Random;
 
-import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
@@ -17,11 +14,19 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
+ * The class representing the whole level
  * @author Asperger, Radax
- *
  */
 public class Map {
+	/**
+	 * The class representing one cell of the map with all the different variables
+	 * @author Asperger, Radax
+	 */
 	public class MapCell {
+		
+		/**
+		 * Constructor 
+		 */
 		public MapCell() {
 			x = y = -1;
 			groundRotation = 0;
@@ -39,6 +44,7 @@ public class Map {
 
 		public boolean isStreetForPolice;
 		public boolean isStreetForBunny;
+		public char type;
 	}
 
 	private Game game;
@@ -48,6 +54,11 @@ public class Map {
 	public Quad houseQuad;
 
 
+	/**
+	 * Constructor
+	 * @param _game Instance of the Game class to get the important context informations
+	 * 
+	 */
 	public Map(Game _game) {
 		game = _game;
 
@@ -67,94 +78,22 @@ public class Map {
 		houseQuadBase.x = -groundXDir.x;
 		houseQuad = new Quad(houseQuadBase, houseXDir, houseYDir);
 
-
-		//TODO hier loading machen, Cellgrˆﬂe bestimmen
-		load();
-
-		/*        
-		cells = new MapCell[7][7];
-		for(int x=0; x<cells.length; x++) {
-			for(int y=0; y<cells[0].length; y++) {
-				cells[x][y] = new MapCell();
-				cells[x][y].x = x;
-				cells[x][y].y = y;
-				cells[x][y].translateX = groundXDir.x*x + groundYDir.x*y;
-				cells[x][y].translateY = groundXDir.y*x + groundYDir.y*y;
-			}
-		}
-		 */	
-		//TODO machen das Defaultlevel
-		/*
-		for(int x=1; x<cells.length-1; x++) {
-			for(int y=1; y<cells[0].length-1; y++) {
-				cells[x][y].isStreetForBunny = true;
-				cells[x][y].groundTexture = R.drawable.l88_street_junction;
-			}
-		}
-		 */
-		// TODO: ersetzen durch File-Loader 
-		/*cells[2][2].groundTexture = R.drawable.l88_street_junction;
-
-		cells[0][2].groundTexture = R.drawable.l88_street_tjunction;
-		cells[0][2].groundRotation = 0;
-		cells[2][0].groundTexture = R.drawable.l88_street_tjunction;
-		cells[2][0].groundRotation = 1;
-		cells[4][2].groundTexture = R.drawable.l88_street_tjunction;
-		cells[4][2].groundRotation = 2;
-		cells[2][4].groundTexture = R.drawable.l88_street_tjunction;
-		cells[2][4].groundRotation = 3;
-
-		cells[0][0].groundTexture = R.drawable.l88_street_turn;
-		cells[0][0].groundRotation = 1;
-		cells[4][0].groundTexture = R.drawable.l88_street_turn;
-		cells[4][0].groundRotation = 2;
-		cells[0][4].groundTexture = R.drawable.l88_street_turn;
-		cells[0][4].groundRotation = 0;
-		cells[4][4].groundTexture = R.drawable.l88_street_turn;
-		cells[4][4].groundRotation = 3;
-
-		cells[1][0].groundTexture = R.drawable.l88_street_straight;
-		cells[1][0].groundRotation = 1;
-		cells[3][0].groundTexture = R.drawable.l88_street_straight;
-		cells[3][0].groundRotation = 1;
-		cells[1][2].groundTexture = R.drawable.l88_street_straight;
-		cells[1][2].groundRotation = 1;
-		cells[3][2].groundTexture = R.drawable.l88_street_straight;
-		cells[3][2].groundRotation = 1;
-		cells[1][4].groundTexture = R.drawable.l88_street_straight;
-		cells[1][4].groundRotation = 1;
-		cells[3][4].groundTexture = R.drawable.l88_street_straight;
-		cells[3][4].groundRotation = 1;
-
-		cells[0][1].groundTexture = R.drawable.l88_street_straight;
-		cells[0][1].groundRotation = 0;
-		cells[0][3].groundTexture = R.drawable.l88_street_straight;
-		cells[0][3].groundRotation = 0;
-		cells[2][1].groundTexture = R.drawable.l88_street_straight;
-		cells[2][1].groundRotation = 0;
-		cells[2][3].groundTexture = R.drawable.l88_street_straight;
-		cells[2][3].groundRotation = 0;
-		cells[4][1].groundTexture = R.drawable.l88_street_straight;
-		cells[4][1].groundRotation = 0;
-		cells[4][3].groundTexture = R.drawable.l88_street_tjunction;
-		cells[4][3].groundRotation = 0;
-
-		cells[5][3].groundTexture = R.drawable.l88_street_end;
-		cells[5][3].groundRotation = 3;
-
-
-		cells[1][1].houseTexture = R.drawable.l88_house_block5;
-		cells[3][1].houseTexture = R.drawable.l88_house_block2;
-		cells[3][3].houseTexture = R.drawable.l88_house_block3;
-		cells[1][3].houseTexture = R.drawable.l88_house_block4;*/
-
-
 	}
 
+	
+	/**
+	 * Update ability of the map
+	 * @param elapsedSeconds
+	 */
 	public void update(float elapsedSeconds) {
 
 	}
 
+	
+	/**
+	 * Draw the map
+	 * @param gl OpenGL-information to use in the context
+	 */
 	public void draw(GL10 gl) {
 		groundQuad.vbos.set(gl);
 		for(int x=0; x<cells.length; x++) {
@@ -191,12 +130,17 @@ public class Map {
 		}
 	}
 
+	
+	/**
+	 * Loading of the levelinformation of a txt-file
+	 */
 	public void load(){
 		InputStream is = game.context.getResources().openRawResource(R.raw.l88_level);
 		InputStreamReader irs = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(irs);
 
 		ArrayList<String> values = new ArrayList<String>();
+		Random r = new Random();
 
 		try {
 			String zeile = br.readLine();
@@ -207,11 +151,10 @@ public class Map {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		//TODO die Werte
+		
 		int h,w;
 		h = values.size() + 2;
 		w = values.get(0).length() + 2;
@@ -234,36 +177,180 @@ public class Map {
 				switch(zeichen[x]){
 				case 'X':
 				case 'x':
-					cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block1;
+
+					int t = (r.nextInt()%5);
+					switch(t){
+					case 0:
+						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block1;
+						break;
+					case 1:
+						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block2;
+						break;
+					case 2:
+						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block3;
+						break;
+					case 3:
+						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block4;
+						break;
+					case 4:
+						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block5;
+						break;
+					default:
+						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block1;
+						break;
+					}
+					cells[x+1][values.size()-y].type = 'x';
 					break;
 				case ' ':
 					//Straﬂe
+					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
+					cells[x+1][values.size()-y].type = 's';
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '1':
+					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
+					cells[x+1][values.size()-y].type = 's';
+					game.addStash(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y, 1);
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '2':
+					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
+					cells[x+1][values.size()-y].type = 's';
+					game.addStash(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y, 2);
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '3':
+					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
+					cells[x+1][values.size()-y].type = 's';
+					game.addStash(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y, 3);
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case 'B':
 				case 'b':
+					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
+					cells[x+1][values.size()-y].type = 's';
+					game.bunny.setPosition(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y);
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case 'P':
 				case 'p':
+					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
+					cells[x+1][values.size()-y].type = 's';
+					game.addPolice(cells[x+1][values.size()-y].x, cells[x+1][values.size()-y].y);
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
-						
-					
+
+
 				}
 
-			}
-
-
+			}//end for
 		}//end for
 
 
+		//Nun die Straﬂenorientierung anpassen
+		/*
+		 * 1 ist oben
+		 * 2 ist rechts
+		 * 4 ist unten
+		 * 8 ist links
+		 * bin‰res z‰hlen
+		 */
+		int counter = 0;
+
+		//startend immer von eins, da wir rund um den Level ne Puffer zone bauen
+		for(int x = 1; x <cells.length-1; x++ ){
+			for(int y = 1; y < cells[x].length-1; y++){
+
+				//zuvor abfragen ob dieses Feld ein Straﬂenfeld ist
+				if(cells[x][y].type == 's'){
+					counter = 0;
+
+					if(cells[x-1][y].type == 's'){
+						counter += 8;
+					}
+					if(cells[x+1][y].type == 's'){
+						counter += 2;
+					}
+					if(cells[x][y-1].type == 's'){
+						counter += 4;
+					}
+					if(cells[x][y+1].type == 's'){
+						counter += 1;
+					}
 
 
+					//Straﬂenanordnung
+					switch(counter){
+					case 1:
+						cells[x][y].groundTexture = R.drawable.l88_street_end;
+						cells[x][y].groundRotation = 2;
+						break;
+					case 2:
+						cells[x][y].groundTexture = R.drawable.l88_street_end;
+						cells[x][y].groundRotation = 1;
+						break;
+					case 3:
+						cells[x][y].groundTexture = R.drawable.l88_street_turn;
+						cells[x][y].groundRotation = 1;
+						break;
+					case 4:
+						cells[x][y].groundTexture = R.drawable.l88_street_end;
+						cells[x][y].groundRotation = 0;
+						break;
+					case 5:
+						cells[x][y].groundTexture = R.drawable.l88_street_straight;
+						cells[x][y].groundRotation = 0;
+						break;
+					case 6:
+						cells[x][y].groundTexture = R.drawable.l88_street_turn;
+						cells[x][y].groundRotation = 0;
+						break;
+					case 7:
+						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
+						cells[x][y].groundRotation = 0;
+						break;
+					case 8:
+						cells[x][y].groundTexture = R.drawable.l88_street_end;
+						cells[x][y].groundRotation = 3;
+						break;
+					case 9:
+						cells[x][y].groundTexture = R.drawable.l88_street_turn;
+						cells[x][y].groundRotation = 2;
+						break;
+					case 10:
+						cells[x][y].groundTexture = R.drawable.l88_street_straight;
+						cells[x][y].groundRotation = 1;
+						break;
+					case 11:
+						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
+						cells[x][y].groundRotation = 1;
+						break;
+					case 12:
+						cells[x][y].groundTexture = R.drawable.l88_street_turn;
+						cells[x][y].groundRotation = 3;
+						break;
+					case 13:
+						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
+						cells[x][y].groundRotation = 2;
+						break;
+					case 14:
+						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
+						cells[x][y].groundRotation = 3;
+						break;
+					case 15:
+						cells[x][y].groundTexture = R.drawable.l88_street_junction;
+						cells[x][y].groundRotation = 0;
+						break;
+
+					}//end switch
+				}
+			}
+		}
 	}
-
-
 }

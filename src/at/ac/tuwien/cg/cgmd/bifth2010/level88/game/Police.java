@@ -19,6 +19,12 @@ public class Police {
 	public float translateX, translateY;
 	private Quad policeQuad;
 
+	
+	/**
+	 * @param _game
+	 * @param x
+	 * @param y
+	 */
 	public Police(Game _game, int x, int y) {
 		game = _game;
 		setPosition(x, y);
@@ -48,10 +54,18 @@ public class Police {
         policeQuad = new Quad(quadBase, xDir, yDir);
 	}
 	
+	
+	/**
+	 * @param elapsedSeconds
+	 */
 	public void update(float elapsedSeconds) {
     	// TODO
 	}
 	
+	
+	/**
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		policeQuad.vbos.set(gl);
 
@@ -64,6 +78,11 @@ public class Police {
 		gl.glPopMatrix();
 	}
 	
+	
+	/**
+	 * @param x
+	 * @param y
+	 */
 	public void setPosition(int x, int y) {
 		currentPosX = x;
 		currentPosY = y;

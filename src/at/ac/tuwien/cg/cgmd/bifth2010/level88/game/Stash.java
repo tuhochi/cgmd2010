@@ -6,6 +6,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
+
+/**
+ * @author Asperger, Radax
+ *
+ */
 public class Stash {
 	private Game game;
 	private int currentPosX, currentPosY;
@@ -13,6 +18,13 @@ public class Stash {
 	private Quad stashQuad;
 	public int size;
 
+	
+	/**
+	 * @param _game
+	 * @param x
+	 * @param y
+	 * @param _size
+	 */
 	public Stash(Game _game, int x, int y, int _size) {
 		game = _game;
 		setPosition(x, y);
@@ -43,10 +55,18 @@ public class Stash {
         stashQuad = new Quad(quadBase, xDir, yDir);
 	}
 	
+	
+	/**
+	 * @param elapsedSeconds
+	 */
 	public void update(float elapsedSeconds) {
     	// TODO
 	}
 	
+	
+	/**
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		stashQuad.vbos.set(gl);
 
@@ -68,6 +88,11 @@ public class Stash {
 		gl.glPopMatrix();
 	}
 	
+	
+	/**
+	 * @param x
+	 * @param y
+	 */
 	public void setPosition(int x, int y) {
 		currentPosX = x;
 		currentPosY = y;
