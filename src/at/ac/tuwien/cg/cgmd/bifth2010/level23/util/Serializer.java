@@ -44,8 +44,8 @@ public class Serializer {
 	/** The constant for identifying the serialized background. */
 	public static int SERIALIZED_BACKGROUND = 1; 
 	
-	/** The Android context. */
-	private Context context;
+	/** the Android context */
+	private Context context; 
 	
 	/**
 	 * Instantiates a new serializer.
@@ -76,6 +76,9 @@ public class Serializer {
 	 *
 	 * @return the serialized objects
 	 */
+	
+	// because there is no way to eliminate the warning when casting to HashMap<Integer, SceneEntity>
+	@SuppressWarnings("unchecked")
 	public HashMap<Integer, SceneEntity> getSerializedObjects() {
 		objects.clear();
 		try {

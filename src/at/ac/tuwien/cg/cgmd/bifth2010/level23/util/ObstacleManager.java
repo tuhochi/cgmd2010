@@ -37,6 +37,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
  */
 public class ObstacleManager
 {
+	/**
+	 * Boolean to indicate if the level is game over
+	 */
+	private boolean gameOver = false; 
 	
 	/**
 	 * the unique serialVersionUID 
@@ -241,7 +245,7 @@ public class ObstacleManager
 		
 		//calculate current topBounds value for relative position
 		int topBounds = currentHeight+(int)RenderView.getInstance().getTopBounds();
-		Log.v("topBounds Height: ", String.valueOf(topBounds));
+		//Log.v("topBounds Height: ", String.valueOf(topBounds));
 		boolean renderNext = true;
 		boolean leastRenderedFound = false;
 		int i = leastRenderedObstacle;
@@ -272,14 +276,17 @@ public class ObstacleManager
 				glPushMatrix();		
 	
 					glScalef(tempObstacle.width,tempObstacle.height,1);	
+					if (!isGameOver())
 					glTranslatef(tempObstacle.position.x/(float)tempObstacle.width, (posY - currentHeight)/(float)tempObstacle.height, 0);
+					
 									
 					glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
 					
 				glPopMatrix();
 				
 				if(testCollisionWithMainChar(tempObstacle, currentHeight))
-					System.out.println("BAMM");
+					RenderView.getInstance().setGameOver(true); 
+					//System.out.println("BAMM");
 				
 				i++;
 			}
@@ -366,6 +373,22 @@ public class ObstacleManager
 
 
 		return true;
+	}
+	
+	/** Indicates if the level is game over
+	 * 
+	 * @return true if game over, false otherwise
+	 */
+	public boolean isGameOver() {
+		return gameOver; 
+	}
+	
+	/**
+	 * Sets the state if the level is game over
+	 * @param gameOver state of the level if game over 
+	 */
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver; 
 	}
 	
 }
