@@ -36,3 +36,11 @@ Add "android:screenOrientation="landscape">" into your activity node in AndroidM
 == How to switch between Portrait and Landscape view in the emulator? ==
 
 Press Ctrl-F11 or Ctrl-F12 to switch between the modes. 
+
+== How fast is the Nexus One? ==
+
+Extremely fast! And much faster than the first Android phone G1. Remember that when you test your level on the Nexus One. You can find some benchmarks on the net like  [http://www.androidpit.de/de/android/blog/391685/Nexus-One-im-Vergleich-mit-Milestone-G1-iPhone-Palm-Pre-Benchmarks this one].
+
+== We tried to test our level on the Nexus One, but got an "Re-installation failed due to different application signatures" - error. ==
+
+You have to uninstall BIFTH. "Click" on the menu button when you can see the home screen: Settings > Applications > Manage Applications > The Big Incredible and Funny ... > Uninstall. Of course you can enter 'adb uninstall at.ac.tuwien.cg.cgmd.bifth2010' in the shell as suggested in the console. Launch BIFTH via Eclipse once more.
