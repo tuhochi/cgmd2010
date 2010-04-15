@@ -75,6 +75,8 @@ public class TimeManager extends Subject {
 	public synchronized void pause() {
 		timeSoFar += System.currentTimeMillis() - timestamp;
 		paused = true;
+		
+		updateTime.stop();
 	}
 	
 	public synchronized void stop() {

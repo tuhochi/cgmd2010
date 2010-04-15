@@ -25,7 +25,7 @@ public class PhysicalRabbit implements PhysicalObject {
 	private static final float MAX_FLAP_ACCELERATION = 22.f;
 	/** factor for slowing down movement */
 	private static final float VELOCITY_FACTOR = 6000.f;
-	
+
 	/** the sprite showing the rabbit */
 	private RabbitSprite sprite = null;
 	/** the velocity of the rabbit */
@@ -52,7 +52,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		this.coinSprite = coinSprite;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		
+
 		coinSprite.setScale(0.4f); //TODO: remove
 	}
 
@@ -78,13 +78,13 @@ public class PhysicalRabbit implements PhysicalObject {
 		float flapAcceleration = MAX_FLAP_ACCELERATION;
 		// transform rotation to a real-world angle
 		float angle = (float)((90.f - sprite.getRotation()) * Math.PI/180.);
-		
+
 		if (currentGesture != null) {
 			// stärke des Auftriebs proportional zur Länge des Swipes (Doppeltap = Maximale Länge)
 			float p = currentGesture.getStrength() / Swipe.MAX_LENGTH;
 			flapAcceleration *= p;
 		}
-		
+
 		// if wings moving down, accelerate
 		if (sprite.wingsMovingDown()) {
 			// v = a * delta t
@@ -93,7 +93,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		else if (sprite.wingsMovingUp()) {
 			this.setVelocity(this.getVelocity() - 0.05f);	
 		}
-		
+
 		// s = 1/2 * g * t^2
 		float sGravity = (1/2.f * PhysicalObject.GRAVITY * time * time);
 		// s = v0 * t
@@ -105,23 +105,29 @@ public class PhysicalRabbit implements PhysicalObject {
 		// new positions
 		float newY = sprite.getY() + sGravity;
 		float newX = sprite.getX();
-		
+
 		// add movements to position
 		newY -= sMovementY;
 		newX += sMovementX;
-		
+
 		// set new position, if the position is on the screen
 		newX = Math.min(screenWidth, Math.max(0,newX));
 		newY = Math.min(screenHeight - sprite.getHeight(), Math.max(-40,newY));
 		setPosition(newX,newY);
-		
+
+		// currently dropping coin?
 		if (coinDrops) {
 			moveCoin();
-		} else {
+		} 
+		// move coin as the rabbit
+		else {
 			coinSprite.setPosition(newX, newY + 17);
 		}
 	}
 
+	/**
+	 * drop a coin to the bottom if the rabbit was hit
+	 */
 	private void moveCoin() {
 		if (coinSprite.getY() < screenHeight) {
 			// angle is 35 or -35 degrees
@@ -140,17 +146,40 @@ public class PhysicalRabbit implements PhysicalObject {
 			// new positions
 			float newY = coinSprite.getY() + sGravity;
 			float newX = coinSprite.getX();
-			
+
 			// add movements to position
 			newY -= sMovementY;
 			newX += sMovementX;
-			
+
 			coinSprite.setX(newX);
 			coinSprite.setY(newY);
-		} else {
+		} 
+		// bottom reached -> stop dropping coin
+		else {
 			coinDrops = false;
 			SoundPlayer.getInstance(null).play(SoundPlayer.SoundEffect.DROP, 0.5f);
 		}
+	}
+
+	/**
+	 * after a shot that hit jiggle the rabbit for a short period of time
+	 */
+	private void jiggle() {
+		(new Thread() {
+			public void run() {
+				for (int i=0; i<30;i++) {
+					if (i % 2 == 0) {
+						PhysicalRabbit.this.setPosition(PhysicalRabbit.this.getX() + 6, PhysicalRabbit.this.getY());
+					} else {
+						PhysicalRabbit.this.setPosition(PhysicalRabbit.this.getX() - 6, PhysicalRabbit.this.getY());
+					}
+					
+					try {
+						Thread.sleep(20L);
+					} catch(Exception ex) {}
+				}
+			}
+		}).start();
 	}
 
 	@Override
@@ -180,7 +209,7 @@ public class PhysicalRabbit implements PhysicalObject {
 				this.resetStartTime(1000);
 				this.rememberWingTime();
 			}
-			
+
 			if (currentGestureToPerform instanceof Swipe) {
 				Swipe swipe = (Swipe) currentGestureToPerform;
 
@@ -195,7 +224,7 @@ public class PhysicalRabbit implements PhysicalObject {
 				if (swipe.isLeft()) {
 					// perform one step of the flap and check if the flap is finished
 					// finshed = at top position again (-45/45 °)
-					 finished = sprite.flapLeftWing(swipe.getStrength());
+					finished = sprite.flapLeftWing(swipe.getStrength());
 
 					// current flap finished -> remove from input queue
 					if (finished) {
@@ -212,9 +241,9 @@ public class PhysicalRabbit implements PhysicalObject {
 				} else {
 					boolean finishedLeft = sprite.flapLeftWing(Swipe.MAX_LENGTH);
 					boolean finishedRight = sprite.flapRightWing(Swipe.MAX_LENGTH);
-					
+
 					finished = finishedLeft || finishedRight;
-					
+
 					if (finished) {
 						// set wings back to top position
 						sprite.resetWings();
@@ -223,12 +252,12 @@ public class PhysicalRabbit implements PhysicalObject {
 				}
 			} else if (currentGestureToPerform instanceof DoubleTap) {
 				//DoubleTap tap = (DoubleTap)currentGestureToPerform;
-				
+
 				boolean finishedLeft = sprite.flapLeftWing(Swipe.MAX_LENGTH);
 				boolean finishedRight = sprite.flapRightWing(Swipe.MAX_LENGTH);
-				
+
 				finished = finishedLeft || finishedRight;
-				
+
 				if (finished) {
 					// set wings back to top position
 					sprite.resetWings();
@@ -242,7 +271,7 @@ public class PhysicalRabbit implements PhysicalObject {
 	public void draw(GL10 gl) {
 		if (sprite != null)
 			sprite.draw(gl);
-		
+
 		if (coinDrops)
 			coinSprite.draw(gl);
 	}
@@ -252,15 +281,15 @@ public class PhysicalRabbit implements PhysicalObject {
 		if (sprite != null)
 			sprite.setPosition(x, y);
 	}
-	
+
 	public float getX() {
 		return sprite.getX();
 	}
-	
+
 	public float getY() {
 		return sprite.getY();
 	}
-	
+
 	public float getVelocity() {
 		return velocity;
 	}
@@ -273,23 +302,25 @@ public class PhysicalRabbit implements PhysicalObject {
 	public void resetStartTime(long delta) {
 		this.startTime = System.currentTimeMillis() - delta;
 	}
-	
+
 	public void rememberWingTime() {
 		this.lastWingTime = System.currentTimeMillis() - 1000;
 		this.setVelocity(0.f);
 	}
-	
+
 	public int getCoinCount() {
 		return sprite.getCoinCount();
 	}
-	
+
 	public void looseCoin() {
 		sprite.looseCoin();
-		
+
 		coinDrops = true;
 		coinStartTime = System.currentTimeMillis() - 500;
+
+		jiggle();
 	}
-	
+
 	public boolean hasLanded() {
 		return sprite.isUnder(screenHeight - 5);
 	}
