@@ -11,11 +11,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class Native
 {
 	
-	public native void pause();
-	public native void resume();
-	public native void touchesBegan(int [] touches);
-	public native void touchesMoved(int [] touches);
-	public native void touchesEnded(int [] touches);
+	public native void nativePause();
+	public native void nativeResume();
+	public native void nativeTouchesBegan(int [] touches);
+	public native void nativeTouchesMoved(int [] touches);
+	public native void nativeTouchesEnded(int [] touches);
 
 	private final static int BLOCK_DROPPED_SOUND = 0;
 	public static final int BLOCK_SWAPPED_SOUND = 1;
@@ -48,7 +48,7 @@ public class Native
 	 */
 	public void touchesBegan(float x, float y)
 	{
-		touchesBegan(singleTouch(x, y));
+		nativeTouchesBegan(singleTouch(x, y));
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class Native
 	 */
 	public void touchesMoved(float x, float y)
 	{
-		touchesMoved(singleTouch(x,y));
+		nativeTouchesMoved(singleTouch(x,y));
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class Native
 	 */
 	public void touchesEnded(float x, float y)
 	{
-		touchesEnded(singleTouch(x,y));		
+		nativeTouchesEnded(singleTouch(x,y));		
 	}
 	
 	/**
