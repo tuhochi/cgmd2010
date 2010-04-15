@@ -66,9 +66,9 @@ public class GameRenderer implements Renderer {
         // which one should NOT be drawn
         gl.glCullFace(GL10.GL_BACK);
         
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-		
+        //gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+        //gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+        
 		gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping 
 		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f); 	//Black Background
@@ -100,16 +100,5 @@ public class GameRenderer implements Renderer {
 		
 		this.level.draw(gl);
 		
-		gl.glLoadIdentity();
-		//Drawing
-		gl.glTranslatef(100.0f, 100.0f, 0.0f);		//Move 5 units into the screen
-		gl.glScalef(50.0f, 50.0f, 50.0f); 			//Scale the Cube to 80 percent, otherwise it would be too large for the screen
-		
-		//Rotate around the axis based on the rotation matrix (rotation, x, y, z)
-		gl.glRotatef(zrot, 0.0f, 0.0f, 1.0f);	//Z
-				
-		
-		//Change rotation factors (nice rotation)
-		zrot += 0.4f;
     }
 }

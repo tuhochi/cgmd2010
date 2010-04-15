@@ -24,18 +24,16 @@ public class GameView extends GLSurfaceView {
             _y = event.getY();
             this.touchedTime = System.currentTimeMillis();
         }
-        /*if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            final float xdiff = (_x - event.getX());
-            final float ydiff = (_y - event.getY());
+        
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+
             queueEvent(new Runnable() {
                 public void run() {
-                //  _renderer.setXAngle(_renderer.getXAngle() + ydiff);
-                //  _renderer.setYAngle(_renderer.getYAngle() + xdiff);
+            
                 }
             });
-            _x = event.getX();
-            _y = event.getY();
-        }*/
+        }
+        
         if (event.getAction() == MotionEvent.ACTION_UP) {
             _x = event.getX();
             _y = event.getY();
@@ -48,4 +46,30 @@ public class GameView extends GLSurfaceView {
         }
         return true;
     }
+    
+    @Override
+	public void onPause() {
+		if(((GameActivity)_renderer.context)._level != null)
+			((GameActivity)_renderer.context)._level.pause(true);
+		
+
+		//((GameActivity)_renderer.context)._level.suspend();
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
+	
+	public void onStart() {
+		//if(((GameActivity)_renderer.context)._level != null)
+			//((GameActivity)_renderer.context)._level.start();
+	}
+
+
+	public void onStop() {
+		//if(((GameActivity)_renderer.context)._level != null)
+			//((GameActivity)_renderer.context)._level.stop();
+	}
 }

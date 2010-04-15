@@ -30,6 +30,8 @@ public class Square {
 	private FloatBuffer textureBuffer;
 	/** Buffer holding the indices */
 	private ByteBuffer indexBuffer;
+	/** Buffer holding the colors */
+	private FloatBuffer colorBuffer;
 
 	/**
 	 * The initial vertex definition
@@ -60,6 +62,15 @@ public class Square {
 		0,1,3, 0,3,2,
 	};
 
+    /** The initial color definition */	
+    private float colors[] = {
+		// faces definition
+		1.0f, 1.0f, 1.0f, 
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+	};
+    
 	/**
 	 * The Square constructor.
 	 * 
@@ -82,6 +93,12 @@ public class Square {
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
+		
+		byteBuf = ByteBuffer.allocateDirect(colors.length*4);
+		byteBuf.order(ByteOrder.nativeOrder());
+	    colorBuffer = byteBuf.asFloatBuffer();
+	    colorBuffer.put(colors);
+	    colorBuffer.position(0);
 	}
 
 	/**
@@ -102,6 +119,7 @@ public class Square {
 		
 		//Enable the vertex and texture state
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+		gl.glColorPointer(3, GL10.GL_FLOAT, 0, colorBuffer);
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 		
 		//Draw the vertices as triangles, based on the Index Buffer information

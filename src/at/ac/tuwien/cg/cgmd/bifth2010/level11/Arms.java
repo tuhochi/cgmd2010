@@ -45,7 +45,7 @@ public class Arms {
 		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
 		this.angle = angle;
-		this.arm_position = 4.0f*arm_pos;
+		this.arm_position = 3.0f*arm_pos;
 	
 	}
 	
@@ -59,43 +59,47 @@ gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
 		Textures.tex.setTexture(arm_texture_id);
 		
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glTranslatef(0.0f, 10.0f, 0.0f);
-		gl.glTranslatef(-arm_position, 0.0f, 0.0f);
-		gl.glScalef(50.0f, 50.0f, 1.0f);
-		left_arm.draw(gl);
+		gl.glPushMatrix();
+			gl.glTranslatef(position.x, position.y, 0.0f);
+			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+			gl.glTranslatef(0.0f, 9.0f, 0.0f);
+			gl.glTranslatef(-arm_position, 0.0f, 0.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+			left_arm.draw(gl);
+		gl.glPopMatrix();
 		
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glTranslatef(0.0f, -10.0f, 0.0f);
-		gl.glTranslatef(arm_position, 0.0f, 0.0f);
-		gl.glScalef(50.0f, 50.0f, 1.0f);
-		right_arm.draw(gl);
+		gl.glPushMatrix();
+			gl.glTranslatef(position.x, position.y, 0.0f);
+			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+			gl.glTranslatef(0.0f, -9.0f, 0.0f);
+			gl.glTranslatef(arm_position, 0.0f, 0.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+			right_arm.draw(gl);
+		gl.glPopMatrix();
 		
 		gl.glColor4f(color_skin.r, color_skin.g, color_skin.b, 1.0f);
 		
 		Textures.tex.setTexture(hand_texture_id);
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glTranslatef(0.0f, 10.0f, 0.0f);
-		gl.glTranslatef(-arm_position, 0.0f, 0.0f);
-		gl.glScalef(50.0f, 50.0f, 1.0f);
-		left_hand.draw(gl);
+		gl.glPushMatrix();
+			gl.glTranslatef(position.x, position.y, 0.0f);
+			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+			gl.glTranslatef(0.0f, 9.0f, 0.0f);
+			gl.glTranslatef(-arm_position, 0.0f, 0.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+			left_hand.draw(gl);
+		gl.glPopMatrix();
 		
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glTranslatef(0.0f, -10.0f, 0.0f);
-		gl.glTranslatef(arm_position, 0.0f, 0.0f);
-		gl.glScalef(50.0f, 50.0f, 1.0f);
-		right_hand.draw(gl);
+		gl.glPushMatrix();
+			gl.glTranslatef(position.x, position.y, 0.0f);
+			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+			gl.glTranslatef(0.0f, -9.0f, 0.0f);
+			gl.glTranslatef(arm_position, 0.0f, 0.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+			right_hand.draw(gl);
+		gl.glPopMatrix();
 		
 	}
 	

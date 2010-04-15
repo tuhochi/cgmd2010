@@ -171,13 +171,12 @@ public class Pedestrian implements Target{
 	
 	public void draw(GL10 gl) {
 
-		//gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
-
-		legs.draw(gl);
-		arms.draw(gl);
-		torso.draw(gl);
-		head.draw(gl);
-		hair.draw(gl);
+		
+			legs.draw(gl);
+			arms.draw(gl);
+			torso.draw(gl);
+			head.draw(gl);
+			hair.draw(gl);
 	}
 	public float getAttractionRadius(){
 		return this.attractionRadius;

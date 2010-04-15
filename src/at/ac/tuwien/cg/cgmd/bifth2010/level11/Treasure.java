@@ -46,10 +46,11 @@ public class Treasure implements Target{
 
 		Textures.tex.setTexture(treasure_texture_id);
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glScalef(10.0f+this.value, 10.0f+this.value, 1.0f);
-		sprite.draw(gl);
+		gl.glPushMatrix();
+			gl.glTranslatef(position.x, position.y, 0.0f);
+			gl.glScalef(10.0f+this.value, 10.0f+this.value, 1.0f);
+			sprite.draw(gl);
+		gl.glPopMatrix();
 	}
 	public float getValue(){
 		return this.value;
