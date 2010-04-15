@@ -26,11 +26,14 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	public static final int BLOCK_DROPPED_SOUND = R.raw.l00_gold01;
 	public static final int BLOCK_SWAPPED_SOUND = R.raw.l00_gold02;
 	public static final int BLOCK_EXPLODE_SOUND = R.raw.l00_gold03;
+	public static final int	BLOCK_SOLVE_SOUND	= R.raw.l00_gold03;
 	
 	private static final int IDLE = 0;
 	private static final int PLAYING = 1;
 
 	private static final String	TAG	= "Audio";
+
+	
 	
 	private static java.util.Map<Integer, MediaPlayer> mps = new HashMap<Integer, MediaPlayer>();
 	private static java.util.Map<MediaPlayer, Boolean> mpBlocked = new HashMap<MediaPlayer, Boolean>();

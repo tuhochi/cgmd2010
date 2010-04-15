@@ -17,9 +17,10 @@ public class Native
 	public native void nativeTouchesMoved(int [] touches);
 	public native void nativeTouchesEnded(int [] touches);
 
-	private final static int BLOCK_DROPPED_SOUND = 0;
-	public static final int BLOCK_SWAPPED_SOUND = 1;
-	private final static int BLOCK_EXPLODE_SOUND = 2;	
+	private static final int BLOCK_DROPPED_SOUND = 0;
+	private static final int BLOCK_SWAPPED_SOUND = 1;
+	private static final int BLOCK_EXPLODE_SOUND = 2;
+	private static final int BLOCK_SOLVE_SOUND = 3;
 	
 	private Audio audio;
 	private Context context;
@@ -112,6 +113,9 @@ public class Native
 				break;
 			case BLOCK_EXPLODE_SOUND:
 				audio.playSound(Audio.BLOCK_EXPLODE_SOUND);
+				break;
+			case BLOCK_SOLVE_SOUND:
+				audio.playSound(Audio.BLOCK_SOLVE_SOUND);
 				break;
 			default:
 				System.out.println("Request to play unknown soundid " + soundid);
