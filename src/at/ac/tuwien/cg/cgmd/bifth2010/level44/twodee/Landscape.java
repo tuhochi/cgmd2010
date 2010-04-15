@@ -12,6 +12,7 @@ public class Landscape extends SpriteContainer {
 	private ParallaxSprite mountains = null;
 	private ParallaxSprite hills = null;
 	private ParallaxSprite meadow = null;
+	private Gradient sky = null;
 
 	private static final int CLOUDS = 3;
 	private Vector<Cloud> clouds = new Vector<Cloud>();
@@ -25,6 +26,15 @@ public class Landscape extends SpriteContainer {
 	public Landscape(Texture texture, float width, float height) {
 		super(TextureParts.makeSky(texture), width, height);
 		setCenter(0, 0);
+		
+		sky = new Gradient(width, height);
+		/**
+		 * The following color values are determined by using the
+		 * gradient template from the texture and determining the
+		 * RGB values of the top edge and bottom edge of it...
+		 **/
+		sky.setStartColor(0.4453125f, 0.62109375f, 0.80859375f);
+		sky.setStopColor(0.8671875f, 0.90625f, 0.953125f);
 		
 		mountains = new ParallaxSprite(TextureParts.makeMountains(texture), width, height);
 		hills = new ParallaxSprite(TextureParts.makeHills(texture), width, height);
@@ -50,6 +60,9 @@ public class Landscape extends SpriteContainer {
 
 	@Override
 	protected void onAfterDraw(GL10 gl) {
+		/* Draw the sky background gradient */
+		sky.draw(gl);
+
 		/* draw mountains and hills in the background */
 		mountains.draw(gl);
 		hills.draw(gl);
