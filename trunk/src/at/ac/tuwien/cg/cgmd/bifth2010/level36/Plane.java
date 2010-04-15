@@ -74,11 +74,11 @@ class Plane
 //        mNormalBuffer.put(normals);
 //        mNormalBuffer.position(0);
       
-        ByteBuffer tbb = ByteBuffer.allocateDirect(textureCoords.length*2);
-        tbb.order(ByteOrder.nativeOrder());
-        mTextureBuffer = tbb.asFloatBuffer();
-        mTextureBuffer.put(textureCoords);
-        mTextureBuffer.position(0);
+//        ByteBuffer tbb = ByteBuffer.allocateDirect(textureCoords.length*2);
+//        tbb.order(ByteOrder.nativeOrder());
+//        mTextureBuffer = tbb.asFloatBuffer();
+//        mTextureBuffer.put(textureCoords);
+//        mTextureBuffer.position(0);
 
         mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
         mIndexBuffer.put(indices);
@@ -91,7 +91,7 @@ class Plane
         gl.glVertexPointer(4,GL10.GL_FLOAT, 0, mVertexBuffer);
         //gl.glColorPointer(4, gl.GL_FIXED, 0, mColorBuffer);
         //gl.glNormalPointer(gl.GL_FLOAT, 0, mNormalBuffer);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
+        //gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
         gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuffer);
     }
 
