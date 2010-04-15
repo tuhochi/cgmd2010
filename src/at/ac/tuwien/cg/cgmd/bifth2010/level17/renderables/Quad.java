@@ -7,13 +7,22 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBufferType;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
-
+/**
+ * Class representing a quad
+ * @author MaMa
+ *
+ */
 public class Quad implements Renderable {
 
 	private VertexBuffer mVertexBuffer;
 	private VertexBuffer mTexCoordBuffer;
 	private VertexBuffer mIndexBuffer;
 	
+	/**
+	 * Creates a new quad
+	 * @param width The width of the quad
+	 * @param height The height of the quad
+	 */
     public Quad(float width, float height)
     {
     	float onef = 1.0f;
