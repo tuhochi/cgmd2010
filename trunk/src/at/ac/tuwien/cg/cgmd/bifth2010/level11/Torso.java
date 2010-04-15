@@ -38,16 +38,16 @@ public class Torso {
 		
 		gl.glColor4f(color.r, color.g, color.b, 1.0f);
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glScalef(50.0f, 50.0f, 1.0f);
-
-		Textures.tex.setTexture(shadow_texture_id);
-		shadow.draw(gl);
-
-		Textures.tex.setTexture(torso_texture_id);
-		torso.draw(gl);
+		gl.glPushMatrix();
+			gl.glTranslatef(position.x, position.y, 0.0f);
+			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+	
+			Textures.tex.setTexture(shadow_texture_id);
+			shadow.draw(gl);
+			Textures.tex.setTexture(torso_texture_id);
+			torso.draw(gl);	
+		gl.glPopMatrix();
 	}
 
 	public void setColor(Color c) {

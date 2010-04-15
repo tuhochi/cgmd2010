@@ -184,18 +184,15 @@ public class Level extends Thread {
 		textures.setTexture(R.drawable.l11_street_bg);
 
 		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		gl.glLoadIdentity();
-		gl.glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-		gl.glTranslatef(160.0f, -240.0f, 0.0f);
-		gl.glScalef(320.0f, 480.0f, 1.0f);
-		background.draw(gl);
-		
-		//gl.glEnable(GL10.GL_BLEND);
-		//gl.glDisable(GL10.GL_CULL_FACE);
-	
-		//gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-		//gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		gl.glPushMatrix();
+			gl.glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+			gl.glTranslatef(160.0f, -240.0f, 0.0f);
+			gl.glScalef(320.0f, 480.0f, 1.0f);
+			background.draw(gl);
+		gl.glPopMatrix();
+		
+	
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glDisable(GL10.GL_CULL_FACE);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -206,6 +203,7 @@ public class Level extends Thread {
 		for (int i=0; i < pedestrianList.size(); i++) {
 			((Pedestrian)pedestrianList.get(i)).draw(gl);
 		}
+		
 		gl.glDisable(GL10.GL_BLEND);
 	}
 	

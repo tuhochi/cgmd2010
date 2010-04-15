@@ -37,18 +37,14 @@ public class Head {
 	public void draw(GL10 gl) {
 		
 		gl.glColor4f(color.r, color.g, color.b, 1.0f);
-		
-		//gl.glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
-		
-		
 		Textures.tex.setTexture(head_texture_id);
 		
-		gl.glLoadIdentity();
-		gl.glTranslatef(position.x, position.y, 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glScalef(50.0f, 50.0f, 1.0f);
-		
-		head.draw(gl);
+		gl.glPushMatrix();
+			gl.glTranslatef(position.x, position.y, 0.0f);
+			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+			head.draw(gl);
+		gl.glPopMatrix();
 		
 	}
 

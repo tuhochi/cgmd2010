@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import android.app.Activity;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -9,7 +10,6 @@ public class GameActivity extends Activity {
 
 	private static final String LOG_TAG = GameActivity.class.getSimpleName();
     private GameView _gameView;
-    
     public Level _level;
     
     @Override
@@ -39,19 +39,29 @@ public class GameActivity extends Activity {
     
     
     @Override
-	protected void onPause() {
+    protected void onResume() {
+		//_level.pause(false);
+		//_level.resume();
+        _gameView.onResume();
+		super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        _gameView.onPause();
 		super.onPause();
-		_gameView.onPause();
-		_level.pause(true);
-		_level.suspend();
+    }
+    
+    @Override
+	protected void onStart() {
+    	_gameView.onStart();
+		super.onStart();
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		_gameView.onResume();
-		_level.pause(false);
-		_level.resume();
+	protected void onStop() {
+		_gameView.onStop();
+		super.onStop();
 	}
 
 }
