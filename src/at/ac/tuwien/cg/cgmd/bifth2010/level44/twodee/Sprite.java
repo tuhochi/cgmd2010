@@ -36,6 +36,10 @@ public class Sprite {
 		recalculateVtxCoords();
 	}
 	
+	protected void updateTexturePart(TexturePart texturePart) {
+		this.texturePart = texturePart;
+	}
+	
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
