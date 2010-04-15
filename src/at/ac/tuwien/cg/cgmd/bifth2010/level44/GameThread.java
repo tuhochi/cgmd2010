@@ -13,24 +13,40 @@ public class GameThread extends Thread {
 	private PhysicalRabbit rabbit;
 	private Crosshairs crosshairs;
 	private Landscape landscape;
+	private TimeManager timeManager;
 	private boolean quit;
 	private InputGesture gesture = null;
 
-	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs) {
+	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs, TimeManager timeManager) {
 		this.scene = scene;
 		this.rabbit = (PhysicalRabbit) rabbit;
 		this.crosshairs = crosshairs;
 		this.landscape = landscape;
+		this.timeManager = timeManager;
 		this.quit = false;
+	}
+	
+	/**
+	 * Determine if the level has been finished. The level is
+	 * finished when there are no coins left or when the time
+	 * is up.
+	 * 
+	 * @return True if the level has been finished by the user
+	 */
+	public boolean levelFinished() {
+		return rabbit.getCoinCount() == 0 || timeManager.timeIsUp();
 	}
 
 	public void run() {
 		rabbit.resetStartTime(0);
-		TimeManager.getInstance().start();
 		
 		while (!quit) {
 			scene.queueEvent(new Runnable() {
 				public void run() {
+					if (levelFinished()) {
+						scene.finishLevel();
+					}
+					
 					// process input gesture 
 					gesture = scene.getNextInputGesture();
 					rabbit.processGesture(gesture); 
@@ -49,8 +65,9 @@ public class GameThread extends Thread {
 						scene.clearInputQueue();
 					}
 					
-					landscape.step();	
-					
+					landscape.step();
+					timeManager.update();
+
 					/*if (TimeManager.getInstance().getRemainingTimeMillis() == 0) {
 						doQuit();
 					}*/
@@ -77,7 +94,6 @@ public class GameThread extends Thread {
 
 	public void doQuit() {
 		this.quit = true;
-		TimeManager.getInstance().stop();
 	}
 	
 	public void playSoundEffects(InputGesture gesture) {
