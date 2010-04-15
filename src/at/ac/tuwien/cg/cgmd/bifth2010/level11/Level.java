@@ -30,6 +30,7 @@ public class Level extends Thread {
 	
 	private Square background;
 	
+	private float maxPlayTime;
 	
 
 	private LinkedList<Treasure> treasureList;
@@ -53,6 +54,7 @@ public class Level extends Thread {
 		this.isPaused = false;
 		
 		timing = new Timing();
+		this.maxPlayTime = 60;
 
 	}
 	
@@ -157,8 +159,12 @@ public class Level extends Thread {
 				}
 			}
 		//}
+		if(this.timing.getCurrTime() > this.maxPlayTime)
+			this.isRunning = false;
 	}
 	private void generatePedestrians(int amount, float minDist){
+		timing.update();
+		System.out.println("Level generation started(time: "+timing.getCurrTime()+")");
 		Random rand = new Random();
 		Vector2 pos = new Vector2();
 		while(this.pedestrianList.size() < amount){
@@ -178,6 +184,8 @@ public class Level extends Thread {
 				this.pedestrianList.add(pedestrian);
 			}
 		}
+		timing.update();
+		System.out.println("Levelgeneration finished(time: "+timing.getCurrTime()+")");
 	}
 	public void draw(GL10 gl) {
 		// draw floor background image
@@ -207,4 +215,7 @@ public class Level extends Thread {
 		gl.glDisable(GL10.GL_BLEND);
 	}
 	
+	public float getRemainigTime(){
+		return this.maxPlayTime - this.timing.getCurrTime();
+	}
 }
