@@ -198,8 +198,20 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 * Writes to bundle
 	 * @param bundle the Bundle to write to
 	 */
-	public void writeToBundle(Bundle bundle) {
-		
+	public void writeToBundle(Bundle bundle) 
+	{
+		obstacleManager.writeToBundle(bundle);	
+		timer.writeToBundle(bundle);
+	}
+	
+	/**
+	 * Reads from bundle
+	 * @param bundle the Bundle to write to
+	 */
+	public void readFromBundle(Bundle bundle) 
+	{
+		obstacleManager.readFromBundle(bundle);
+		timer.readFromBundle(bundle);
 	}
 	
 	public void readFromStream(DataInputStream dis) {
@@ -725,13 +737,16 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		textureManager.reset();
 		timer.reset();
 		background.reset();
-		hud.reset();
 		mainChar.preprocess();
+		soundManager.reset();
+		hud.preprocess();
 		
 		if(!isInitialized)
 		{	
+			hud.reset();
 			mainChar.reset();
 			obstacleManager.reset();
+			timer.resetTimers();
 			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
 			isInitialized = true;
 		}

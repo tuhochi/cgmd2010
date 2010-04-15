@@ -37,7 +37,4 @@ public class Settings
 	
 	public static final float MAINCHAR_STARTPOSX = 50 - MAINCHAR_WIDTH/2f;
 	public static final float MAINCHAR_STARTPOSY = 0f;
-	
-	
-	public static Vector2 MAINCHARPOS;
 }

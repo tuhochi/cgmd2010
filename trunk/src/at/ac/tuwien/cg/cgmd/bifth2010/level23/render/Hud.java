@@ -1,11 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.BurnTimer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimingTask;
 
 /**
  * The Class Hud provides the HUD for activating boni and movement arrows
@@ -15,6 +19,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimingTask;
  */
 public class Hud 
 {
+	public static Hud instance;
 	
 	/** The gold bar button */
 	private Button goldButton;
@@ -26,37 +31,8 @@ public class Hud
 	private TimeUtil timeUtil; 
 	
 	private BurnTimer burnTimer = new BurnTimer();
-	
-	/**
-	 * Th Class BurnTimer handles all tasks needed for the money bonus 
-	 */
-	private class BurnTimer extends TimingTask
-	{
-		public float time=Settings.BURN_BOOST_TIME;
-		public float remainingTime=Settings.BURN_BOOST_TIME;
-		
-		/**
-		 * sets the balloon speed to the old value after the boost time ran up
-		 */
-		@Override
-		public void run() 
-		{
-			Settings.BALLOON_SPEED -= Settings.BURN_BOOST;
-			moneyButton.setActive(true);
-			isDead=true;
-			remainingTime = time;
-			SoundManager.instance.stopBoostSound();
-		}
 
-		@Override
-		public void update(float dt) 
-		{
-			remainingTime -= dt;
-			if(remainingTime <= 0)
-				run();
-		}
-		
-	}
+	private boolean wasRestored=false;
 	
 	/**
 	 * Instantiates a new hud, including the buttons and the timer for boost operation.
@@ -64,6 +40,7 @@ public class Hud
 	public Hud()
 	{
 		init();
+		instance=this;
 	}
 	
 	private void init()
@@ -72,7 +49,20 @@ public class Hud
 		float rightBounds = RenderView.getInstance().getRightBounds();
 		goldButton = new Button(10, 10, new Vector2(0,topBounds-10));
 		moneyButton = new Button(10, 10, new Vector2(rightBounds-10,topBounds-10));
+		moneyButton.preprocess();
+		goldButton.preprocess();
 		timeUtil = TimeUtil.getInstance();
+	}
+	
+	public void readFromStream(DataInputStream dis) throws IOException
+	{
+		moneyButton.setActive(dis.readBoolean());
+	}
+	
+	public void writeFromStream(DataOutputStream dos) throws IOException
+	{
+		dos.writeBoolean(moneyButton.isActive());
+		wasRestored=true;
 	}
 	
 	/**
@@ -126,8 +116,17 @@ public class Hud
 		moneyButton.render();
 	}
 	
+	public void preprocess()
+	{
+		moneyButton.preprocess();
+		goldButton.preprocess();
+	}
+	
 	public void reset()
 	{
-		init();
+		if(!wasRestored)
+			init();
+		else
+			wasRestored=false;
 	}
 }

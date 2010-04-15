@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
 import java.util.ArrayList;
 
+import android.os.Bundle;
+
 /**
  * The Class TimeUtil takes care of all tasks belonging to time.
  * @author Markus Ernst
@@ -11,6 +13,8 @@ public class TimeUtil {
 		
 	/** The instance of TimeUtil to pass around. */
 	private static TimeUtil instance;
+	
+	private boolean wasRestored=false;
 	
 	/** The dt. */
 	private float dt;
@@ -53,6 +57,18 @@ public class TimeUtil {
 			instance = new TimeUtil();
 		
 		return instance;
+	}
+	
+	public void writeToBundle(Bundle bundle) 
+	{
+		bundle.putSerializable("timers", scheduledTimers);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void readFromBundle(Bundle bundle) 
+	{
+		scheduledTimers = (ArrayList<TimingTask>)bundle.getSerializable("timers");
+		wasRestored = true;
 	}
 	
 	/**
@@ -182,5 +198,15 @@ public class TimeUtil {
 	public void reset()
 	{
 		lastFrameTime = 0;
+	}
+	
+	public void resetTimers()
+	{
+		if(!wasRestored)
+		{
+			scheduledTimers.clear();
+		}
+		else
+			wasRestored=false;
 	}
 }

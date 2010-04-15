@@ -55,4 +55,9 @@ public class SoundManager
 		//stop + prepare is slow
 		boostPlayer.pause();
 	}
+	
+	public void reset()
+	{
+		initAudio();
+	}
 }
