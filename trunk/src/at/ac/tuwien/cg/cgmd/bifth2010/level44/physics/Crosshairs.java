@@ -68,7 +68,7 @@ public class Crosshairs {
 	}
 
 	public void draw(GL10 gl) {
-		if (isNearRabbit())
+		if (isNearRabbit() && allowedToShoot())
 			spriteGreen.draw(gl);
 		else
 			spriteRed.draw(gl);
