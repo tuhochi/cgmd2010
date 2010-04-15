@@ -22,7 +22,7 @@ public class Sound {
 	}
 	
 	public static void playSelect() {
-	    if (!sound) return; // if sound is turned off no need to continue
+	    //if (!sound) return; // if sound is turned off no need to continue
 	    sounds.play(aviator, 1, 1, 1, 0, 1);
 	}
 	
