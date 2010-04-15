@@ -694,6 +694,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 * @param gameOver boolean indicates if the level is game over
 	 */
 	public void setGameOver(boolean gameOver) {
+
 		this.gameOver = gameOver; 
 		mainChar.setGameOver(gameOver);	
 		background.setGameOver(gameOver); 

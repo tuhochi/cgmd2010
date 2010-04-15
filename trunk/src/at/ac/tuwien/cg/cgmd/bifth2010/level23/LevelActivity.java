@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,10 +43,12 @@ public class LevelActivity extends Activity implements OrientationListener {
 	private static Context CONTEXT; 
 	
 	/** The instance of the LevelActivity to pass around. */
-	private static LevelActivity instance;
+	public static LevelActivity instance;
 	
 	/** The Constant SENSOR_MENU_ITEM if a user wants to use the orientation sensor. */
 	private static final int SENSOR_MENU_ITEM = 1;
+	
+	private Vibrator vibrator;
 	
 	//private Vector2 mainCharPos; 
 	/**
@@ -70,6 +73,8 @@ public class LevelActivity extends Activity implements OrientationListener {
         CONTEXT = this; 
         OrientationManager.registerListener(this);
  
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        
         instance = this;
 	}
 	
@@ -272,5 +277,10 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void fpsChanged(float fps)
 	{
 		fpsText.setText(Math.round(fps) + " fps");
+	}
+	
+	public void triggerVibrate(long millis)
+	{
+		vibrator.vibrate(millis);
 	}
 }
