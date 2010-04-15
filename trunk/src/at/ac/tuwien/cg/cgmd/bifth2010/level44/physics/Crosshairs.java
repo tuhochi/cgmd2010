@@ -42,6 +42,8 @@ public class Crosshairs extends Subject {
 	private boolean isLoaded = false;
 	/** timestamp, since the crosshairs turned green or -1 if they are red */
 	private long timeStamp = -1L;
+	/** timestamp of last shot */
+	private long timeOfLastShot = -1L;
 	
 	private FloatBuffer progressBarBuffer;
 	private float[] progressBarVertices = { -PROGRESSBAR_WIDTH/2, 0.f, 0.f, // bottom left
@@ -154,22 +156,23 @@ public class Crosshairs extends Subject {
 		} 
 		// rabbit is in the air
 		else {
-			// crosshairs are not near the rabbit -> move in form of lying 8
-			if (!isNearRabbit()) {
-				setDesiredPosition((float)(screenWidth/2 + screenWidth/2.5*Math.sin((double)(System.currentTimeMillis()/4000.))),
-						(float)(screenHeight/2 + screenHeight/3*Math.sin((double)(System.currentTimeMillis()/2000.))));
-			} 
-			// follow the rabbit
-			else {
+			// follow the rabbit if crosshairs are near and the last shot wasn't within last 1.5 seconds
+			if (isNearRabbit() && (timeOfLastShot == -1 || (System.currentTimeMillis() - timeOfLastShot) > 1500)) {
 				setDesiredPosition(rabbit.getX(), rabbit.getY());
 
 				// 3 Seconds since crosshairs turned green? -> shoot
 				if (timeStamp > 0 && System.currentTimeMillis() - timeStamp >= MILLISECONDS_TO_SHOOT) {
 					shoot();
 					// reset time and load-status
-					timeStamp = System.currentTimeMillis();
+					timeOfLastShot = System.currentTimeMillis();
+					timeStamp = -1L;
 					isLoaded = false;
 				}
+			} 
+			// crosshairs are not near the rabbit -> move in form of lying 8
+			else {
+				setDesiredPosition((float)(screenWidth/2 + screenWidth/2.5*Math.sin((double)(System.currentTimeMillis()/4000.))),
+						(float)(screenHeight/2 + screenHeight/3*Math.sin((double)(System.currentTimeMillis()/2000.))));
 			}
 		}
 

@@ -11,7 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.TimeEvent;
  */
 public class TimeManager extends Subject {
 	/** Time for the Level */
-	public static final int GAME_TIME_MILLIS = 90000; // 90 seconds
+	public static final int GAME_TIME_MILLIS = 99000; // 99 seconds
 	/** Singleton-Instance */
 	private static TimeManager singleton = null;
 	/** timestamp since start */
