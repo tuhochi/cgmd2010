@@ -24,7 +24,7 @@ public class Settings
 	
 	//item effects
 	/** The Constant BURN_BOOST. */
-	public static final float BURN_BOOST = -0.04f;
+	public static final float BURN_BOOST = 0.08f;
 	//time in milliseconds
 	/** The Constant BURN_BOOST_TIME. */
 	public static final long BURN_BOOST_TIME = 5000;
