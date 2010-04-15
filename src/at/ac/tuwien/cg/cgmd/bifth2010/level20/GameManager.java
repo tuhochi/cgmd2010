@@ -64,28 +64,20 @@ public class GameManager implements Renderable {
 	 */
 	public void createEntities() {
 		
-		shelf = new Shelf(480, 320);
+		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
 		shelf.texture = getTexture(R.drawable.l17_crate);
 		
-		ProductEntity re = new ProductEntity(100, 100, 1, 100, 100);
-		re.texture = getTexture(R.drawable.l20_icon);
-		re.setAngle(0);
-		entities.put(0, re);
+		int start = R.drawable.l88_stash_blue;
+		int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
 		
-		re = new ProductEntity(150, 150, 2, 100, 100);
-		re.texture = getTexture(R.drawable.l00_coin);
-		re.setAngle(0);
-		entities.put(1, re);
+		for (int i = 0; i < 20; i++) {
+			ProductEntity pe = new ProductEntity(	(float)Math.random() * (renderView.getWidth() - 100) + 50, 
+													(float)Math.random() * (renderView.getHeight() - 100) + 50, 1, 100, 100);
+			pe.texture = getTexture((int)(Math.random() * range) + start);
+			pe.angle = (float)Math.random() * 360;
+			entities.put(i, pe);
+		}
 		
-		re = new ProductEntity(300, 150, 3, 150, 100);
-		re.texture = getTexture(R.drawable.l17_crate);
-		re.setAngle(0);
-		entities.put(2, re);
-		
-//		pe = new ProductEntity(100, 100, 1, 100, 100);
-//		pe.texture = getTexture(R.drawable.l20_icon);
-//		pe.setAngle(45);
-//		entities.put(3, pe);
 		
 //		bunny.setId(BUNNY_ENTITY);
 //		bunny.setTextureId(textures.get(BUNNY_TEXTURE));
@@ -110,13 +102,15 @@ public class GameManager implements Renderable {
 		while(keys.hasMoreElements()) {
 			pe = entities.get(keys.nextElement());
 			
-			pe.setX(pe.x() - speed);
+			pe.x -= speed;
+			float rot = (1 - pe.y / (renderView.getHeight() * 0.5f)) * 15;
+			pe.angle += rot;
 			
-			if (pe.x() < -100) {
+			if (pe.x < -100) {
 				
-				pe.setX(renderView.getWidth() + 100);
-				pe.setY((float)Math.random() * renderView.getHeight());
-				pe.visible = true;
+				pe.x = renderView.getWidth() + (float)Math.random() * 300 + 50;
+				pe.y = (float)Math.random() * (renderView.getHeight() - 100) + 50;
+				pe.angle = (float)Math.random() * 360;
 			}
 		}
 	}
@@ -126,6 +120,8 @@ public class GameManager implements Renderable {
 	public void render(GL10 gl) {
 		
 		shelf.render(gl);
+		
+//		pe.render(gl);
 		
 		// Render entities.		
 		Enumeration<Integer> keys = entities.keys();
@@ -142,14 +138,17 @@ public class GameManager implements Renderable {
 		
 		
 		Enumeration<Integer> keys = entities.keys();
-		ProductEntity pe2 = null;
+		ProductEntity pe = null;
 		
 		while(keys.hasMoreElements()) {
 			
-			pe2 = entities.get(keys.nextElement());
+			pe = entities.get(keys.nextElement());
 			
-			if (pe2.visible && pe2.hitTest(x, y)) {
-				pe2.visible = false;
+			if (pe.visible && pe.hitTest(x, y)) {
+				pe.x = renderView.getWidth() + (float)Math.random() * 500 + 50;
+				pe.y = (float)Math.random() * (renderView.getHeight() - 100) + 50;
+				pe.angle = (float)Math.random() * 360;
+				break;
 			}
 		}
 		
