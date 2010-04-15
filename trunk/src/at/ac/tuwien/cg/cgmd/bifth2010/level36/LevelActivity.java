@@ -6,10 +6,16 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+
+import android.app.Activity;
+import android.content.Context;
+import android.opengl.GLSurfaceView;
+import android.os.Bundle;
 
 /**
  * 
@@ -17,17 +23,26 @@ import android.view.WindowManager;
  *
  */
 public class LevelActivity extends Activity {
-	public static Paint paint;
+	//public static Paint paint;
+	private GLSurfaceView mGLSurfaceView;
+	private Context context;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("LevelActivity::onCreate", "Start the program.");
 		super.onCreate(savedInstanceState);
-		//set fullscreen
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		Window window = getWindow();
-		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		context = this;
+        mGLSurfaceView = new GLSurfaceView(this);
+        mGLSurfaceView.setRenderer(new GameRenderer(true, context));
+        setContentView(mGLSurfaceView);
 		
-		setContentView(new GameView(this));
+		
+		//set fullscreen
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//Window window = getWindow();
+		//window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		/*setContentView(new GameView_New(this));
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setDither(true);
@@ -36,7 +51,7 @@ public class LevelActivity extends Activity {
 		paint.setStrokeJoin(Paint.Join.ROUND);
 		paint.setStrokeCap(Paint.Cap.ROUND);
 		paint.setStrokeWidth(40);
-		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));*/
 	}
 	
 	@Override
