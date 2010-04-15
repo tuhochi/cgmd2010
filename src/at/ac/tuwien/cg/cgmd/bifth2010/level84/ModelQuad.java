@@ -66,7 +66,7 @@ public class ModelQuad extends Model {
 	 * Update the model's transformations.
 	 */
 	public void update(GL10 gl, double deltaTime) {
-		//mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
+		mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
 
 		gl.glPushMatrix();
 		gl.glTranslatef(0, 0, -4);

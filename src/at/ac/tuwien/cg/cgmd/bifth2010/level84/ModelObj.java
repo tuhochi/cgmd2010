@@ -182,6 +182,7 @@ public class ModelObj extends Model implements Serializable
 		finalTexcoordsList = new float[texcoordsList.size() * 2];
 		finalNormalsList = new float[normalsList.size() * 3];
 		
+		/*
 		for (int i=0; i < vertexList.size();i++)
 		{
 			float[] tempVertex = new float[3];
@@ -212,20 +213,20 @@ public class ModelObj extends Model implements Serializable
         //	Log.i("finalList", "finalNormalsList: " + finalNormalsList[Npos] + "/" + finalNormalsList[Npos+1] + "/" + finalNormalsList[Npos+2]);
         	Npos += 3;
 		}
-
+*/
         for (int i=0; i < faceList.size(); i++)
         {
         	//Log.i("Round", "facelist-Round: " + i);
         	byte[] tempface = new byte[3];
         	tempface = faceList.get(i);
 
-//        	float[] tempVertex = new float[3];
-//        	float[] tempTC = new float[2];
-//        	float[] tempNormal = new float[3];
+        	float[] tempVertex = new float[3];
+        	float[] tempTC = new float[2];
+        	float[] tempNormal = new float[3];
         	
-//        	tempVertex = vertexList.get(tempface[0]-1);
-//        	tempTC = texcoordsList.get(tempface[1]-1);
-//        	tempNormal = normalsList.get(tempface[2]-1);
+        	tempVertex = vertexList.get(tempface[0]-1);
+        	tempTC = texcoordsList.get(tempface[1]-1);
+        	tempNormal = normalsList.get(tempface[2]-1);
 //
 //        	//Log.i("tempface: ",i + " -> " + tempface[0] +"/"+ tempface[1]+"/"+ tempface[2]);
 ////        	Log.i("tempVertex ",i + " tV-> " + tempVertex[0] +"/"+ tempVertex[1]+"/"+ tempVertex[2]);
@@ -251,17 +252,17 @@ public class ModelObj extends Model implements Serializable
         	//Log.i("indexlist", String.valueOf(finalIndexList[Indexpos]));
         	Indexpos++;
 //
-//        	finalVertexList[Vpos] = tempVertex[0]; 
-//        	finalVertexList[Vpos + 1] = tempVertex[1];
-//        	finalVertexList[Vpos + 2] = tempVertex[2];        	
-//        	finalTexcoordsList[TCpos] = tempTC[0];
-//        	finalTexcoordsList[TCpos + 1] = tempTC[1];
-//        	finalNormalsList[Npos] = tempNormal[0];
-//        	finalNormalsList[Npos + 1] = tempNormal[1];
-//        	finalNormalsList[Npos + 2] = tempNormal[2];
-//        	Vpos += 3;
-//        	Npos += 3;
-//        	TCpos += 2;
+        	finalVertexList[Vpos] = tempVertex[0]; 
+        	finalVertexList[Vpos + 1] = tempVertex[1];
+        	finalVertexList[Vpos + 2] = tempVertex[2];        	
+        	finalTexcoordsList[TCpos] = tempTC[0];
+        	finalTexcoordsList[TCpos + 1] = tempTC[1];
+        	finalNormalsList[Npos] = tempNormal[0];
+        	finalNormalsList[Npos + 1] = tempNormal[1];
+        	finalNormalsList[Npos + 2] = tempNormal[2];
+        	Vpos += 3;
+        	Npos += 3;
+        	TCpos += 2;
         }
         
 	}
