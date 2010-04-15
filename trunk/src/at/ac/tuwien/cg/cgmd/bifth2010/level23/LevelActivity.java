@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
@@ -263,9 +264,15 @@ public class LevelActivity extends Activity implements OrientationListener {
 	    {
 	    case SENSOR_MENU_ITEM:
 	    	if(renderer.isUseSensor())
+	    	{
 	    		item.setTitle("Turn on Sensor");
+	    		Toast.makeText(this, "Orientation Sensor is now off", Toast.LENGTH_SHORT).show();
+	    	}
 	    	else
+	    	{
 	    		item.setTitle("Turn off Sensor");
+	    		Toast.makeText(this, "Orientation Sensor is now on", Toast.LENGTH_SHORT).show();
+	    	}
 	        renderer.switchSensor();
 	        
 	        return true;

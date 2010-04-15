@@ -9,6 +9,10 @@ public class Settings
 {
 	/** The constant for balloon speed. */
 	public static int OBSTALE_START = 200;
+	
+	/** The constant for balloon speed. */
+	public static float BALLOON_STARTSPEED = 0.08f;
+	
 	/** The constant for balloon speed. */
 	public static float BALLOON_SPEED = 0.08f;
 	//units per millisecond
@@ -20,7 +24,7 @@ public class Settings
 	
 	//item effects
 	/** The Constant BURN_BOOST. */
-	public static final float BURN_BOOST = 0.1f;
+	public static final float BURN_BOOST = -0.04f;
 	//time in milliseconds
 	/** The Constant BURN_BOOST_TIME. */
 	public static final long BURN_BOOST_TIME = 5000;
@@ -31,7 +35,8 @@ public class Settings
 	public static final float MAINCHAR_WIDTH = 25f;
 	public static final float MAINCHAR_HEIGHT = 45f;
 	
-	public static final Vector2 MAINCHAR_STARTPOS = new Vector2(50 - MAINCHAR_WIDTH/2f,0);
+	public static final float MAINCHAR_STARTPOSX = 50 - MAINCHAR_WIDTH/2f;
+	public static final float MAINCHAR_STARTPOSY = 0f;
 	
 	
 	public static Vector2 MAINCHARPOS;

@@ -63,6 +63,11 @@ public class Hud
 	 */
 	public Hud()
 	{
+		init();
+	}
+	
+	private void init()
+	{
 		float topBounds = RenderView.getInstance().getTopBounds();
 		float rightBounds = RenderView.getInstance().getRightBounds();
 		goldButton = new Button(10, 10, new Vector2(0,topBounds-10));
@@ -119,5 +124,10 @@ public class Hud
 	{
 		goldButton.render();
 		moneyButton.render();
+	}
+	
+	public void reset()
+	{
+		init();
 	}
 }

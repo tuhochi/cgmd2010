@@ -24,6 +24,8 @@ public class MainChar implements SceneEntity {
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -8661277209785862751L;
 	
+	private boolean wasRestored=false;
+	
 	/** The width. */
 	private float width;
 	
@@ -79,19 +81,15 @@ public class MainChar implements SceneEntity {
 	public MainChar()
 	{
 		//create Default MainChar
-		this.height = 200f;
-		this.width = 100f;
+		this.height = Settings.MAINCHAR_HEIGHT;
+		this.width = Settings.MAINCHAR_WIDTH;
 		
 		gameOverAngle= (float)Math.PI*3f/2f;
 		gameOverScale=1;
 		
-		if (Settings.MAINCHARPOS != null)
-			this.position = Settings.MAINCHARPOS; 
-		else
-			this.position = new Vector2(200,0);
-		
-		preprocess();
-		
+		position = new Vector2();		
+		position.x = Settings.MAINCHAR_STARTPOSX;
+		position.y = Settings.MAINCHAR_STARTPOSY;	
 	}
 	
 	/**
@@ -109,10 +107,7 @@ public class MainChar implements SceneEntity {
 		gameOverAngle= (float)Math.PI*3f/2f;
 		gameOverScale=1;
 		
-		if (Settings.MAINCHARPOS != null)
-			this.position = Settings.MAINCHARPOS; 
-		else
-			this.position = position;
+		this.position = position;
 		
 		preprocess(); 
 	}
@@ -141,6 +136,7 @@ public class MainChar implements SceneEntity {
 		try {
 			position.x = dis.readFloat(); 
 			position.y = dis.readFloat(); 
+			wasRestored=true;
 			
 		} catch (Exception e) {
 			System.out.println("Error reading from stream in MainChar.java: "+e.getMessage());
@@ -151,7 +147,7 @@ public class MainChar implements SceneEntity {
 	 * Preprocesses, before the main character starts working 
 	 * creates the vertex and texture coordinate buffer and the vbo id 
 	 */
-	private void preprocess() {
+	public void preprocess() {
 		
 		GeometryManager geometryManager = GeometryManager.getInstance(); 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
@@ -391,6 +387,17 @@ public class MainChar implements SceneEntity {
 			
 			glPopMatrix();
 		}
+	}
+	
+	public void reset()
+	{
+		if(!wasRestored)
+		{
+			position.x = Settings.MAINCHAR_STARTPOSX;
+			position.y = Settings.MAINCHAR_STARTPOSY;
+		}
+		else
+			wasRestored = false;
 	}
 		
 }
