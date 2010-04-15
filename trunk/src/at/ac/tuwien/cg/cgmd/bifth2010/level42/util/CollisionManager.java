@@ -99,68 +99,85 @@ public class CollisionManager {
 		
 	}
 	
+	public boolean collisionDetected(Moveable a, Moveable b, float penetrationDepth, Vector3 centerDist)
+	{
+		if(centerDist == null)
+			centerDist = new Vector3();
+		
+		//calc distance between center points
+		centerDist.copy(b.getBoundingSphereWorld().center);
+		centerDist.subtract(a.getBoundingSphereWorld().center);
+		
+		if(centerDist.length()+ penetrationDepth < 
+					a.getBoundingSphereWorld().radius + b.getBoundingSphereWorld().radius)
+			return true;
+		
+		
+		return false;		
+	}
 	public void doCollisionDetection(MotionManager motionManager)
 	{
 		//for each entity
 		for(int i=0; i<entityList.size(); i++) 
 		{
 			objA = entityList.get(i);	
-			objAIsMoveable = (objA.getName().equals("GoldPlanet"))?false:true;
+			objAIsMoveable = (objA.getName().equals(Config.PLANET_NAME))?false:true;
 			
 			for(int j = i+1; j<entityList.size(); j++)
 			{
-				//detect collision
 				objB = entityList.get(j);
+				objBIsMoveable = (objB.getName().equals(Config.PLANET_NAME))?false:true;
 				
-				objBIsMoveable = (objB.getName().equals("GoldPlanet"))?false:true;
-				
-				//calc distance between center points
-				centerDistance.copy(objB.getBoundingSphereWorld().center);
-				centerDistance.subtract(objA.getBoundingSphereWorld().center);
-				
-				if(centerDistance.length()+0.2 < 
-						objA.getBoundingSphereWorld().radius + objB.getBoundingSphereWorld().radius)
+				//check for contact
+				if(collisionDetected(objA,objB,Config.COLLISION_PENETRATION_DEPTH,centerDistance))
 				{
-					if(objAIsMoveable||objBIsMoveable)
+					//collision detected
+					
+					//check for collision between satellite and planet
+					if(!objAIsMoveable||!objBIsMoveable)
 					{
+						
+						//distinguish entities
 						SceneEntity planet = null;
-						SceneEntity collider = null;
+						SceneEntity satellite = null;
 						
 						if(!objAIsMoveable){
 							planet = (SceneEntity) objA;
-							collider = (SceneEntity) objB;
+							satellite = (SceneEntity) objB;
 						}else{
 							planet = (SceneEntity) objB;
-							collider = (SceneEntity) objA;
+							satellite = (SceneEntity) objA;
 						}
 						
 						Vector3 planetCenterDistance = new Vector3();
 						Model planetEntity = null;
 						
+						//find out which part of the planet got hit
 						for(int u = 0; u < planet.models.size(); u++)
 						{
 							planetEntity = planet.models.get(u);
-							planetCenterDistance.copy(planetEntity.getBoundingSphereWorld().center);
-							planetCenterDistance.subtract(collider.getBoundingSphereWorld().center);
-
-							if(planetCenterDistance.length()+0.2 < 
-									planetEntity.getBoundingSphereWorld().radius + collider.getBoundingSphereWorld().radius)
+							
+							//check for contact
+							if(collisionDetected(planetEntity,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
 								Motion planetEntityMotion = planetEntity.getMotion();
 		
 								if(planetEntity.getMotion()==null)
 								{
+									
+									//TODO: reuse obj - sat ebenfalls ablenken - sattrafo
 									Vector3 pushVec = Vector3.subtract(planetEntity.getBoundingSphereWorld().center, planet.getBoundingSphereWorld().center);
 									planetEntityMotion = new DirectionalMotion(planetEntity.getBoundingSphereWorld().center,
 															pushVec,
 															1f,
 															planetEntity.getBasicOrientation());
 									motionManager.addMotion(planetEntityMotion,planetEntity);
-									collider.getMotion().morph(pushVec);
+									satellite.getMotion().morph(pushVec);
 								}
 							}
 						}						
 					}else{
+						
 						objAMotion = objA.getMotion();
 						objBMotion = objB.getMotion();
 						

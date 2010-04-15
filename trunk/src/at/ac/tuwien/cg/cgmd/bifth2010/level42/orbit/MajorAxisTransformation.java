@@ -11,7 +11,8 @@ public class MajorAxisTransformation extends SatelliteTransformation{
 
 	private float 	qx,qy,qz,
 					qxStep,qyStep,qzStep,
-					qxCurr,qyCurr,qzCurr;
+					qxCurr,qyCurr,qzCurr,
+					speed;
 	private final Matrix44 transform,basicOrientation;
 
 	public MajorAxisTransformation() 
@@ -20,7 +21,7 @@ public class MajorAxisTransformation extends SatelliteTransformation{
 		this.basicOrientation = new Matrix44();
 	}
 	
-	public MajorAxisTransformation(float qx, float qy, float qz, Matrix44 basicOrientation) 
+	public MajorAxisTransformation(float qx, float qy, float qz, float speed, Matrix44 basicOrientation) 
 	{
 		this();
 		
@@ -36,11 +37,13 @@ public class MajorAxisTransformation extends SatelliteTransformation{
 		this.qyCurr = 0;
 		this.qzCurr = 0;
 		
+		this.speed = speed;
+		
 		if(basicOrientation!=null)
 			this.basicOrientation.copy(basicOrientation);
 	}
 	
-	public void update(float dt,float speed)
+	public void update(float dt)
 	{
 		qxCurr += dt*qxStep*speed;
 		qyCurr += dt*qyStep*speed;

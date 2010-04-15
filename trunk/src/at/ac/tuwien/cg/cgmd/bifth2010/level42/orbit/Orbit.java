@@ -11,6 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Ellipse;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 public class Orbit extends Motion
 {
@@ -27,6 +28,7 @@ public class Orbit extends Motion
 					newSpeed,oldPerimeter,oldStepSize,
 					speedMorphStep,speedMorphIteration,dynamicMorphSpeed;
 
+	private boolean doCenterVecScaling,doDirectionVecScaling;
 	public final Vector3 position,
 						 entityPos,centerPos;
 					
@@ -93,6 +95,9 @@ public class Orbit extends Motion
 		
 	public void update(float dt)
 	{
+		//check the size and speed of the orbit
+		limitUniverse();
+		
 		//inc parameter
 		u+=(speed*step*dt);
 		if(u>=Constants.TWOPI)
@@ -100,7 +105,7 @@ public class Orbit extends Motion
 
 		//update sat transformation
 		if(satTrans!=null)
-			satTrans.update(dt,speed);
+			satTrans.update(dt);
 		
 		//update the morphing for the direction vec length
 		updateSpeedMorphing(dt);
@@ -113,7 +118,7 @@ public class Orbit extends Motion
 		
 		//check the limitations
 //		if(this.centerVec.length()>10 || this.directionVec.length()>10)
-//			Log.d(LevelActivity.TAG,"OUT centerVec="+centerVec.length()+" directionVec="+directionVec.length());
+//			Log.d(LevelActivity.TAG,"OUT centerVec="+centerVec.length()+" directionVec="+directionVec.length()+" speed="+speed);
 	}
 	
 	private void updateSpeedMorphing(float dt)
@@ -140,36 +145,34 @@ public class Orbit extends Motion
 			}
 				
 		
-			Log.d(LevelActivity.TAG,"Morph speed curr="+speed+" iteration="+speedMorphIteration+" newspeed="+newSpeed + " dynSpeed="+dynamicMorphSpeed);
+			//Log.d(LevelActivity.TAG,"Morph speed curr="+speed+" iteration="+speedMorphIteration+" newspeed="+newSpeed + " dynSpeed="+dynamicMorphSpeed);
 		}
 	}
 	
 	private void updateAxisScaling(float dt)
 	{
+		//store old perimeter for the updateStepSize method
+		oldPerimeter = ellipse.perimeter;
+		oldStepSize = step;
+		doCenterVecScaling = false;
+		doDirectionVecScaling = false;
+		
 		if(Math.signum(centerDiffStep)<0){
 			if(centerDiffFactor<centerDiff){
+				doCenterVecScaling = true;
 				centerDiffIteration = centerDiffStep * dt * scalingMorphSpeed;
+				
 				if(centerDiff+centerDiffIteration<centerDiffFactor)
 					centerDiffIteration = centerDiffFactor-centerDiff;
-				
-				centerDiff += centerDiffIteration;
-				
-				centerVec.copy(refCenterVec);
-				centerVec.multiply(centerDiff);
-				
 				//Log.d(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
 			}
 		}else{
 			if(centerDiffFactor>centerDiff){
+				doCenterVecScaling = true;
 				centerDiffIteration = centerDiffStep * dt * scalingMorphSpeed;
 			
 				if(centerDiff+centerDiffIteration>centerDiffFactor)
 					centerDiffIteration = centerDiffFactor-centerDiff;
-	
-				centerDiff += centerDiffIteration;
-				
-				centerVec.copy(refCenterVec);
-				centerVec.multiply(centerDiff);
 	
 				//Log.d(LevelActivity.TAG,"centerDiff "+centerDiff +" centerDiffFactor" +centerDiffFactor+" centerDiffIteration "+centerDiffIteration );
 			}
@@ -177,30 +180,43 @@ public class Orbit extends Motion
 
 		if(Math.signum(directionDiffStep)<0){
 			if(directionDiffFactor<directionDiff){
+				doDirectionVecScaling = true;
 				directionDiffIteration = directionDiffStep * dt * scalingMorphSpeed;
+				
 				if(directionDiff+directionDiffIteration<directionDiffFactor)
 					directionDiffIteration = directionDiffFactor-directionDiff;
-				
-				directionDiff += directionDiffIteration;
-				
-				directionVec.copy(refDirectionVec);
-				directionVec.multiply(directionDiff);
 				
 				//Log.d(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
 			}
 		}else{
 			if(directionDiffFactor>directionDiff){
+				doDirectionVecScaling = true;
 				directionDiffIteration = directionDiffStep * dt * scalingMorphSpeed;
+				
 				if(directionDiff+directionDiffIteration>directionDiffFactor)
 					directionDiffIteration = directionDiffFactor-directionDiff;
-				
-				directionDiff += directionDiffIteration;
-				
-				directionVec.copy(refDirectionVec);
-				directionVec.multiply(directionDiff);
-				
+
 				//Log.d(LevelActivity.TAG,"directionDiff "+directionDiff +" directionDiffFactor" +directionDiffFactor+" directionDiffIteration "+directionDiffIteration );
 			}
+		}
+		
+		if(doCenterVecScaling){
+			centerDiff += centerDiffIteration;
+			
+			centerVec.copy(refCenterVec);
+			centerVec.multiply(centerDiff);
+		}
+		
+		if(doDirectionVecScaling){
+			directionDiff += directionDiffIteration;
+			
+			directionVec.copy(refDirectionVec);
+			directionVec.multiply(directionDiff);
+		}
+		
+		if(doCenterVecScaling||doDirectionVecScaling){
+			//change the stepsize relative to the new orbitsize
+			updateStepSize();
 		}
 
 	}
@@ -247,9 +263,36 @@ public class Orbit extends Motion
 		directionDiffFactor = bAxisFactor;
 		directionDiffStep = (directionDiffFactor-1)/100;
 		directionDiff = 1;
+	
 	}
 	
+	private void limitUniverse()
+	{
+		this.centerVecCap = 1;
+		this.directionVecCap = 1;
+		
+		if(this.centerVec.length()>Config.UNIVERSE_CENTERLENGTH_LIMIT)
+			this.centerVecCap = Config.UNIVERSE_CENTERLENGTH_LIMIT/this.centerVec.length();
+		if(this.directionVec.length()>Config.UNIVERSE_DIRLENGTH_LIMIT)
+			this.directionVecCap = Config.UNIVERSE_DIRLENGTH_LIMIT/this.directionVec.length();
+		
+		//Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
+		
+		if(this.centerVecCap!=1 || this.directionVecCap != 1)
+			morphAxisScale(centerVecCap, directionVecCap, 20);
+		
+		if(this.newSpeed > Config.UNIVERSE_SPEED_LIMIT)
+			this.newSpeed = Config.UNIVERSE_SPEED_LIMIT;
+	}
 	
+	public void updateStepSize()
+	{
+		//!!!oldPerimeter and oldStepSize has to be already set
+		
+		this.ellipse.calcPerimeter();
+		//stepsize should be the same relative to the new perimeter
+		this.step = (oldStepSize*oldPerimeter)/ellipse.perimeter;
+	}
 	
 	public void morph(Vector3 pushVec)
 	{
@@ -282,29 +325,17 @@ public class Orbit extends Motion
 		this.centerVec.copy(this.entityPos);
 		this.centerVec.subtract(this.centerPos);
 		
-		//cap
-		this.centerVecCap = 1;
-		this.directionVecCap = 1;
+		//cap size and speed of orbit
+		//-> get the new speed value
+		limitUniverse();
 		
-		if(this.centerVec.length()>10)
-			this.centerVecCap = 10/this.centerVec.length();
-		if(this.directionVec.length()>10)
-			this.directionVecCap = 10/this.directionVec.length();
+		//change the stepsize relative to the new orbitsize
+		updateStepSize();
 		
-		Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
-		
-		if(this.centerVecCap!=1 || this.directionVecCap != 1)
-			morphAxisScale(centerVecCap, directionVecCap, 10);
-			
-		if(this.newSpeed > 10)
-			this.newSpeed = 10;
-		
-		this.ellipse.calcPerimeter();
-		
-		//stepsize should be the same relative to the new perimeter
-		this.step = (oldStepSize*oldPerimeter)/ellipse.perimeter;
+		//restart ellipse
 		this.u = 0;
 
+		//add dynamic speed boost :)
 		if(newSpeed<speed){
 			this.dynamicMorphSpeed = (newSpeed/speed)*120;
 			this.speed -= (pushVec.length()*0.25f);
