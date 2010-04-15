@@ -89,11 +89,11 @@ public class Background implements SceneEntity
 	 */
 	public void preprocess() {
 		
-		RenderView renderView = RenderView.getInstance(); 
-		GeometryManager geometryManager = GeometryManager.getInstance();
+		RenderView renderView = RenderView.instance; 
+		GeometryManager geometryManager = GeometryManager.instance;
 		
-		texCoordBuffer = GeometryManager.getInstance().createTexCoordBufferQuad(texCoords)[0];
-		vertexBuffer = GeometryManager.getInstance().createVertexBufferQuad(renderView.getRightBounds(), renderView.getTopBounds());
+		texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords)[0];
+		vertexBuffer = geometryManager.createVertexBufferQuad(renderView.getRightBounds(), renderView.getTopBounds());
 		//texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords);
 		if(Settings.GLES11Supported) 
 		{
@@ -117,7 +117,7 @@ public class Background implements SceneEntity
 	 */
 	public void update(float dt)
 	{
-		positionY -= dt*scrollSpeed/RenderView.getInstance().getTopBounds();
+		positionY -= dt*scrollSpeed/RenderView.instance.getTopBounds();
 		
 //		if(positionY <= renderView.getTopBounds()*-1)
 //		{

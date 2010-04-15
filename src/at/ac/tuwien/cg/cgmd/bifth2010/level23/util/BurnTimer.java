@@ -14,7 +14,13 @@ public class BurnTimer extends TimingTask
 
 	public float time = Settings.BURN_BOOST_TIME;
 	public float remainingTime = Settings.BURN_BOOST_TIME;
-
+	private int audioPlayerId;
+	
+	public BurnTimer(int audioPlayerId)
+	{
+		this.audioPlayerId = audioPlayerId;
+	}
+	
 	/**
 	 * sets the balloon speed to the old value after the boost time ran up
 	 */
@@ -24,7 +30,7 @@ public class BurnTimer extends TimingTask
 		Hud.instance.setMoneyButtonActive(true);
 		isDead = true;
 		remainingTime = time;
-		SoundManager.instance.stopBoostSound();
+		SoundManager.instance.startPlayer(audioPlayerId);
 	}
 
 	@Override

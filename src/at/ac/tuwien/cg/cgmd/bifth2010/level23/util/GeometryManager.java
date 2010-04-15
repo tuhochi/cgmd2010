@@ -14,14 +14,14 @@ import android.opengl.GLES11;
 public class GeometryManager {
 
 	/** The geometry manager. */
-	private static GeometryManager geometryManager; 
+	public static GeometryManager instance = new GeometryManager(); 
 	
 	
 	/**
 	 * Instantiates a new geometry manager.
 	 */
 	public GeometryManager() {
-		geometryManager = this; 
+		instance = this; 
 	}
 	
 	/**
@@ -165,16 +165,4 @@ public class GeometryManager {
 			
 			return vboId; 
 		}
-	
-	/**
-	 * Gets the singleton of GeometryManager.
-	 *
-	 * @return singleton of GeometryManager
-	 */
-	public static GeometryManager getInstance() {
-		if (geometryManager == null) 
-			geometryManager = new GeometryManager(); 
-		
-		return geometryManager; 
-	}
 }

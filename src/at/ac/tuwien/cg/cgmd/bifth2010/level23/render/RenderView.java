@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
@@ -28,7 +27,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 
 /**
@@ -46,6 +44,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
             context.fpsChanged(timer.getFPS());
         }
     };
+    
+    /** The instance of the RenderView to pass it around. */
+	public static RenderView instance;
     
     /** Indicates if the ObstacleManager should be reset */
     private boolean isInitialized = false;
@@ -73,10 +74,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	/** The balloon height. */
 	public float balloonHeight;
-	
-	/** The instance of the RenderView to pass it around. */
-	private static RenderView instance;
-	
+		
 	/** The Android context . */
 	private LevelActivity context; 
 	
@@ -134,19 +132,22 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public RenderView(Context context, AttributeSet attr)
 	{
 		super(context, attr);
-		timer = TimeUtil.getInstance();
+		instance=this;
+		
 		this.context = (LevelActivity)context; 
+		
 		setRenderer(this); 
-		// so that the key events can fire
         setFocusable(true);
         requestFocus();
-        instance=this;
-        textureManager = TextureManager.getInstance();
+        
+        timer = TimeUtil.instance;
+        textureManager = TextureManager.instance;
         serializer = Serializer.getInstance();
         serializer.setContext(context); 
         fpsHandle = new FpsHandle();
         soundManager = new SoundManager(context);
         obstacleManager = new ObstacleManager();
+        
         balloonHeight=0;   
         
         Display display = this.context.getWindowManager().getDefaultDisplay();
@@ -158,114 +159,34 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		background = new Background();
 	}
 	
-	/**
-	 * Gets the single instance of RenderView. Implements the singleton pattern
-	 *
-	 * @return singleton of RenderView
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceChanged(javax.microedition.khronos.opengles.GL10, int, int)
 	 */
-	public static RenderView getInstance()
-	{
-		return instance;
-	}
-	
 	/**
-	 * Writes to DataOutputStream 
-	 * @param dos the stream to write to 
+	 * called when the surface has changed (landscape to portrait, hw keyboard on etc)
+	 * Here, the screen parameters are set, viewport and projection are set
 	 */
-	public void writeToStream(DataOutputStream dos) {
-		try {
-			// local
-			dos.writeBoolean(isInitialized);
-			dos.writeBoolean(released);
-			dos.writeInt(mainCharMoveDir);
-			dos.writeFloat(balloonHeight);
-			
-			// remote
-			dos.writeFloat(timer.getAccFrameTimes());
-			dos.writeBoolean(hud.isMoneyButtonActive());
-			
-			// propagate
-			mainChar.writeToStream(dos); 
-			background.writeToStream(dos); 
-			ObstacleManager.getInstance().writeToStream(dos); 
-			
-		} catch (Exception e) {
-			System.out.println("Error writing to stream in RenderView: "+e.getMessage());
-		}
-	}
-	
-	/**
-	 * Writes to bundle
-	 * @param bundle the Bundle to write to
-	 */
-	public void writeToBundle(Bundle bundle) 
-	{
-		obstacleManager.writeToBundle(bundle);	
-		timer.writeToBundle(bundle);
-	}
-	
-	/**
-	 * Reads from bundle
-	 * @param bundle the Bundle to write to
-	 */
-	public void readFromBundle(Bundle bundle) 
-	{
-		obstacleManager.readFromBundle(bundle);
-		timer.readFromBundle(bundle);
-	}
-	
-	public void readFromStream(DataInputStream dis) {
-		try {
-			isInitialized = dis.readBoolean();
-			released = dis.readBoolean(); 
-			mainCharMoveDir = dis.readInt(); 
-			balloonHeight = dis.readFloat(); 
-			timer.setAccFrameTime(dis.readFloat()); 
-			hud.setMoneyButtonActive(dis.readBoolean());
-			mainChar.readFromStream(dis); 
-			background.readFromStream(dis); 
-			ObstacleManager.getInstance().readFromStream(dis); 
-			
-		} catch (Exception e) {
-			System.out.println("Error reading from stream in RenderView.java: "+e.getMessage()); 
-		}
-	}
-	/**
-	 * Persist scene entities to disk.
-	 */
-	public void persistSceneEntities(Bundle toSave) {
+	@Override
+	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		Log.v("RenderView.java", "onSurfaceChanged");
+		//setup the Viewport with an Orthogonal View 1 unit = 1 pixel
+		//0 0 is bottom left
 		
+		screenWidth = width;
+		screenHeight = height;
+		aspectRatio = screenHeight/screenWidth;
+		topBounds = rightBounds*aspectRatio;
 		
-		try {
-		//Serializer.getInstance().serializeObjects(mainChar, background);
-		//toSave.putSerializable("mainChar", mainChar);
-		/*toSave.putSerializable("background", background);
-		//toSave.putSerializable("OBSTACLE_MANAGER", ObstacleManager.getInstance());
-		toSave.putFloat("accFrameTime", timer.getAccFrameTimes());
-		toSave.putFloat("balloonHeight", balloonHeight);
-		toSave.putBoolean("moneyButtonActive", hud.isMoneyButtonActive());
-		*/
-		} catch (Throwable t) {
-			Log.e("Throwable in RenderView: ", t.getMessage());
-		}
-	}
-
-	/**
-	 * Restore scene entities from disk.
-	 */
-	public void restoreSceneEntities(Bundle toRestore) {
-		/*HashMap<Integer, SceneEntity> map = Serializer.getInstance().getSerializedObjects();
-		mainChar = (MainChar)map.get(Serializer.SERIALIZED_MAINCHAR);
-		background = (Background)map.get(Serializer.SERIALIZED_BACKGROUND);*/
-		//mainChar = (MainChar)toRestore.getSerializable("mainChar");
-		/*background = (Background)toRestore.getSerializable("background");
-		//ObstacleManager.setInstance((ObstacleManager)toRestore.getSerializable("OBSTACLE_MANAGER"));
-		timer.setAccFrameTime(toRestore.getFloat("accFrameTime"));
-		balloonHeight = toRestore.getFloat("balloonHeight");
-		hud.setMoneyButtonActive(toRestore.getBoolean("moneyButtonActive"));*/
+		gl.glViewport(0, 0, width, height);	
 		
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
+		gl.glOrthof(0.0f, rightBounds, 0.0f, topBounds, 0.0f, 1.0f);
+		
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();		
 	}
-	
+			
 	/* (non-Javadoc)
 	 * @see android.opengl.GLSurfaceView.Renderer#onDrawFrame(javax.microedition.khronos.opengles.GL10)
 	 */
@@ -320,50 +241,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		//Log.v("Balloon Height: ", String.valueOf(balloonHeight));
 		
 	}
-
-	/* (non-Javadoc)
-	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceChanged(javax.microedition.khronos.opengles.GL10, int, int)
-	 */
-	/**
-	 * called when the surface has changed (landscape to portrait, hw keyboard on etc)
-	 * Here, the screen parameters are set, viewport and projection are set
-	 */
-	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		Log.v("RenderView.java", "onSurfaceChanged");
-		//setup the Viewport with an Orthogonal View 1 unit = 1 pixel
-		//0 0 is bottom left
-		
-		screenWidth = width;
-		screenHeight = height;
-		aspectRatio = screenHeight/screenWidth;
-		topBounds = rightBounds*aspectRatio;
-		
-		gl.glViewport(0, 0, width, height);	
-		
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
-		gl.glOrthof(0.0f, rightBounds, 0.0f, topBounds, 0.0f, 1.0f);
-		
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();		
-	}
-
-	/**
-	 * Gets the position of the main char
-	 * @return the position of the main char 
-	 */
-	public Vector2 getMainCharPos() {
-		return mainChar.getPosition();
-	}
 	
-	/**
-	 * Sets the position of the main char
-	 * @param pos the position to set 
-	 */
-	public void setMainCharPos(Vector2 pos) {
-		mainChar.setPosition(pos);
-	}
 	/* (non-Javadoc)
 	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceCreated(javax.microedition.khronos.opengles.GL10, javax.microedition.khronos.egl.EGLConfig)
 	 */
@@ -409,18 +287,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		case KeyEvent.KEYCODE_DPAD_LEFT:
 			lastKeyMovement = MainChar.MOVE_LEFT;
-//			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break; 
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			lastKeyMovement = MainChar.MOVE_RIGHT;
-//			Log.i("moveDir: ", String.valueOf(mainCharMoveDir));
 			break;
-		/*case KeyEvent.KEYCODE_2: //down
-			mainChar.moveUpDown(-stepWidth);
-			break;
-		case KeyEvent.KEYCODE_3: //up
-			mainChar.moveUpDown(stepWidth);
-			break;*/
 		case KeyEvent.KEYCODE_S: 
 			switchSensor();
 			break;
@@ -429,18 +299,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		return true; 
 	}
 
-	/**
-	 * enables/disables the usage of the orientation sensor. Also registers or unregisters the listener for this sensor 
-	 */
-	public void switchSensor()
-	{
-		useSensor = !useSensor; 
-		if (useSensor)
-			OrientationManager.registerListener(orientationListener);
-		else
-			OrientationManager.unregisterListener(orientationListener);
-	}
-	
 	/**
 	 * Handles the event when a key is released
 	 * @param key the key affected
@@ -528,6 +386,18 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	}
 	
 	/**
+	 * enables/disables the usage of the orientation sensor. Also registers or unregisters the listener for this sensor 
+	 */
+	public void switchSensor()
+	{
+		useSensor = !useSensor; 
+		if (useSensor)
+			OrientationManager.registerListener(orientationListener);
+		else
+			OrientationManager.unregisterListener(orientationListener);
+	}
+	
+	/**
 	 * Gets the main char.
 	 *
 	 * @return the main char
@@ -536,32 +406,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		return mainChar;
 	}
 
-	/**
-	 * Sets the main char.
-	 *
-	 * @param background the background to set
-	 */
-	public void setBackgroundInstance(Background background) {
-		this.background = background;
-	}
-
-	/**
-	 * Gets the background.
-	 *
-	 * @return the background
-	 */
-	public Background getBackgroundInstance() {
-		return background;
-	}
-
-	/**
-	 * Sets the main char.
-	 *
-	 * @param mainChar the mainChar to set
-	 */
-	public void setMainCharInstance(MainChar mainChar) {
-		this.mainChar = mainChar;
-	}
 	/**
 	 * Fetches key move data.
 	 */
@@ -573,97 +417,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			lastKeyMovement = 0;
 		}
 	}
-	
-	/**
-	 * Gets the screen width.
-	 *
-	 * @return the screen width
-	 */
-	public float getScreenWidth() {
-		return screenWidth;
-	}
-
-	/**
-	 * Sets the screen width.
-	 *
-	 * @param screenWidth the screen width to set
-	 */
-	public void setScreenWidth(float screenWidth) {
-		this.screenWidth = screenWidth;
-	}
-
-	/**
-	 * Gets the screen height.
-	 *
-	 * @return the screen height
-	 */
-	public float getScreenHeight() {
-		return screenHeight;
-	}
-
-	/**
-	 * Sets the screen height.
-	 *
-	 * @param screenHeight the screen height to set
-	 */
-	public void setScreenHeight(float screenHeight) {
-		this.screenHeight = screenHeight;
-	}
-
-	/**
-	 * Gets the aspect ratio.
-	 *
-	 * @return the aspect ratio
-	 */
-	public float getAspectRatio() {
-		return aspectRatio;
-	}
-
-	/**
-	 * Sets the aspect ratio.
-	 *
-	 * @param aspectRatio the aspect ratio to set
-	 */
-	public void setAspectRatio(float aspectRatio) {
-		this.aspectRatio = aspectRatio;
-	}
-
-	/**
-	 * Gets the right bounds.
-	 *
-	 * @return the right bounds
-	 */
-	public float getRightBounds() {
-		return rightBounds;
-	}
-
-	/**
-	 * Sets the right bounds.
-	 *
-	 * @param rightBounds the right bounds to set
-	 */
-	public void setRightBounds(float rightBounds) {
-		this.rightBounds = rightBounds;
-	}
-
-	/**
-	 * Gets the top bounds.
-	 *
-	 * @return the top bounds
-	 */
-	public float getTopBounds() {
-		return topBounds;
-	}
-
-	/**
-	 * Sets the top bounds.
-	 *
-	 * @param topBounds the top bounds to set
-	 */
-	public void setTopBounds(float topBounds) {
-		this.topBounds = topBounds;
-	}
-		
+			
 	/**
 	 * Checks if orientation sensor is used.
 	 *
@@ -721,7 +475,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		this.gameOver = gameOver; 
 		mainChar.setGameOver(gameOver);	
 		background.setGameOver(gameOver); 
-		ObstacleManager.getInstance().setGameOver(gameOver);
+		obstacleManager.setGameOver(gameOver);
 	}
 
 	/**
@@ -749,6 +503,125 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
 			isInitialized = true;
 		}
+	}
+	
+	/**
+	 * Writes to DataOutputStream 
+	 * @param dos the stream to write to 
+	 */
+	public void writeToStream(DataOutputStream dos) {
+		try {
+			// local
+			dos.writeBoolean(isInitialized);
+			dos.writeBoolean(released);
+			dos.writeInt(mainCharMoveDir);
+			dos.writeFloat(balloonHeight);
+			
+			// remote
+			dos.writeFloat(timer.getAccFrameTimes());
+			dos.writeBoolean(hud.isMoneyButtonActive());
+			
+			// propagate
+			mainChar.writeToStream(dos); 
+			background.writeToStream(dos); 
+			obstacleManager.writeToStream(dos); 
+			
+		} catch (Exception e) {
+			System.out.println("Error writing to stream in RenderView: "+e.getMessage());
+		}
+	}
+	
+	/**
+	 * Writes to bundle
+	 * @param bundle the Bundle to write to
+	 */
+	public void writeToBundle(Bundle bundle) 
+	{
+		obstacleManager.writeToBundle(bundle);	
+		timer.writeToBundle(bundle);
+	}
+	
+	/**
+	 * Reads from bundle
+	 * @param bundle the Bundle to write to
+	 */
+	public void readFromBundle(Bundle bundle) 
+	{
+		obstacleManager.readFromBundle(bundle);
+		timer.readFromBundle(bundle);
+	}
+	
+	public void readFromStream(DataInputStream dis) {
+		try {
+			isInitialized = dis.readBoolean();
+			released = dis.readBoolean(); 
+			mainCharMoveDir = dis.readInt(); 
+			balloonHeight = dis.readFloat(); 
+			timer.setAccFrameTime(dis.readFloat()); 
+			hud.setMoneyButtonActive(dis.readBoolean());
+			mainChar.readFromStream(dis); 
+			background.readFromStream(dis); 
+			obstacleManager.readFromStream(dis); 
+			
+		} catch (Exception e) {
+			System.out.println("Error reading from stream in RenderView.java: "+e.getMessage()); 
+		}
+	}
+	/**
+	 * Persist scene entities to disk.
+	 */
+	public void persistSceneEntities(Bundle toSave) {
+		
+		
+		try {
+		//Serializer.getInstance().serializeObjects(mainChar, background);
+		//toSave.putSerializable("mainChar", mainChar);
+		/*toSave.putSerializable("background", background);
+		//toSave.putSerializable("OBSTACLE_MANAGER", ObstacleManager.getInstance());
+		toSave.putFloat("accFrameTime", timer.getAccFrameTimes());
+		toSave.putFloat("balloonHeight", balloonHeight);
+		toSave.putBoolean("moneyButtonActive", hud.isMoneyButtonActive());
+		*/
+		} catch (Throwable t) {
+			Log.e("Throwable in RenderView: ", t.getMessage());
+		}
+	}
+
+	/**
+	 * Restore scene entities from disk.
+	 */
+	public void restoreSceneEntities(Bundle toRestore) {
+		/*HashMap<Integer, SceneEntity> map = Serializer.getInstance().getSerializedObjects();
+		mainChar = (MainChar)map.get(Serializer.SERIALIZED_MAINCHAR);
+		background = (Background)map.get(Serializer.SERIALIZED_BACKGROUND);*/
+		//mainChar = (MainChar)toRestore.getSerializable("mainChar");
+		/*background = (Background)toRestore.getSerializable("background");
+		//ObstacleManager.setInstance((ObstacleManager)toRestore.getSerializable("OBSTACLE_MANAGER"));
+		timer.setAccFrameTime(toRestore.getFloat("accFrameTime"));
+		balloonHeight = toRestore.getFloat("balloonHeight");
+		hud.setMoneyButtonActive(toRestore.getBoolean("moneyButtonActive"));*/
+		
+	}
+	
+	/**
+	 * @return the aspectRatio
+	 */
+	public float getAspectRatio() {
+		return aspectRatio;
+	}
+
+	/**
+	 * @return the rightBounds
+	 */
+	public float getRightBounds() {
+		return rightBounds;
+	}
+
+	/**
+	 * @return the topBounds
+	 */
+	public float getTopBounds() {
+		return topBounds;
 	}
 	
 }

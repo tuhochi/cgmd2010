@@ -64,7 +64,7 @@ public class Button
 	
 	public void preprocess()
 	{
-		geometryManager = GeometryManager.getInstance(); 
+		geometryManager = GeometryManager.instance; 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
 		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
 		if(Settings.GLES11Supported) 

@@ -150,7 +150,7 @@ public class MainChar implements SceneEntity {
 	 */
 	public void preprocess() {
 		
-		GeometryManager geometryManager = GeometryManager.getInstance(); 
+		GeometryManager geometryManager = GeometryManager.instance; 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
 		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
 		if(Settings.GLES11Supported) 
@@ -235,7 +235,7 @@ public class MainChar implements SceneEntity {
 	public boolean isInboundsAfterStep(int moveDir, float stepWidth) {
 		if (moveDir > 0)
 		{
-	    	if (position.x + width + stepWidth <= RenderView.getInstance().getRightBounds()) //application width instead of fixed value
+	    	if (position.x + width + stepWidth <= RenderView.instance.getRightBounds()) //application width instead of fixed value
 	    	{ 
 	    		return true; 
 	    	}
@@ -257,7 +257,7 @@ public class MainChar implements SceneEntity {
 	 */
 	public void update(float dt, int moveDir)
 	{
-		RenderView renderer = RenderView.getInstance();
+		RenderView renderer = RenderView.instance;
 		float rightBounds = renderer.getRightBounds();
 		
 		if(moveDir == 0 || moveDir >0 && position.x == rightBounds - width 
@@ -390,7 +390,7 @@ public class MainChar implements SceneEntity {
 		}
 		else
 		{
-			LevelActivity.instance.setScore((int)(RenderView.getInstance().balloonHeight*Settings.SCOREHEIGHT_MODIFIER));
+			LevelActivity.instance.setScore((int)(RenderView.instance.balloonHeight*Settings.SCOREHEIGHT_MODIFIER));
 		}
 	}
 	

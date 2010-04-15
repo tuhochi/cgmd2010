@@ -21,10 +21,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 
 /**
@@ -74,9 +72,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 		fpsText = (TextView)findViewById(R.id.l23_TextViewFps);
         
         CONTEXT = this; 
-                        
-        SoundManager.instance.initAudio();
-		
+                        		
         OrientationManager.registerListener(this);
  
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

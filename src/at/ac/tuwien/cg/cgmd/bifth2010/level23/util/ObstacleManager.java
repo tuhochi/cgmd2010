@@ -51,7 +51,7 @@ public class ObstacleManager
 	private static final long serialVersionUID = -4564339113161027088L;
 
 	/** The instance of ObstacleManager to pass around. */
-	private static ObstacleManager instance;
+	public static ObstacleManager instance = new ObstacleManager();
 	
 	/** The array filled with random numbers. */
 	private int[] randomArray; 
@@ -132,27 +132,7 @@ public class ObstacleManager
 		leastRenderedObstacle = 0;
 		instance = this;
 	}
-	
-	/**
-	 * Gets the singleton of ObstacleManager.
-	 *
-	 * @return singleton of ObstacleManager
-	 */
-	public static ObstacleManager getInstance()
-	{
-		if(instance==null)
-			instance = new ObstacleManager();
-		return instance;		
-	}
-	
-	/**
-	 * Sets the instance
-	 * @param manager Instance to set to singleton
-	 */
-	public static void setInstance(ObstacleManager manager) {
-		instance = manager;
-	}
-	
+		
 	/**
 	 * Writes to stream
 	 * @param dos Stream to write to 
@@ -243,10 +223,10 @@ public class ObstacleManager
 	public void renderVisibleObstacles(int currentHeight)
 	{
 		if(mainChar == null)
-			mainChar = RenderView.getInstance().getMainCharInstance();
+			mainChar = RenderView.instance.getMainCharInstance();
 		
 		//calculate current topBounds value for relative position
-		int topBounds = currentHeight+(int)RenderView.getInstance().getTopBounds();
+		int topBounds = currentHeight+(int)RenderView.instance.getTopBounds();
 		//Log.v("topBounds Height: ", String.valueOf(topBounds));
 		boolean renderNext = true;
 		boolean leastRenderedFound = false;
@@ -287,7 +267,7 @@ public class ObstacleManager
 				
 				if(testCollisionWithMainChar(tempObstacle, currentHeight) && !gameOver)
 				{
-					RenderView.getInstance().setGameOver(true); 
+					RenderView.instance.setGameOver(true); 
 					LevelActivity.handler.post(
 							new Runnable()
 							{
