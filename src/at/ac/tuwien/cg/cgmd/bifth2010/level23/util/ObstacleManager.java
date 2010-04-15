@@ -243,7 +243,7 @@ public class ObstacleManager
 			
 			
 			//test visibility
-			if(posY > currentHeight && posY < topBounds)
+			if(posY > currentHeight-tempObstacle.height && posY < topBounds)
 			{
 				//visible
 				

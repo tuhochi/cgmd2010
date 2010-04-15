@@ -459,8 +459,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         Settings.GLES11Supported = (gl instanceof GL11);
 	}
 	
-	/** Adds the thread to the message queue
-	 * 
+	/** 
+	 * triggers fps textview in the activity thread
 	 */
 	public void fpsChanged() {	        
         LevelActivity.handler.post(fpsHandle);	
@@ -490,6 +490,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		return gameOver; 
 	}
 	
+	/**
+	 * Reset the scene and managers
+	 **/
 	public void reset()
 	{
 		textureManager.reset();
@@ -555,6 +558,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		timer.readFromBundle(bundle);
 	}
 	
+	/**
+	 * Reads from stream
+	 * @param dis the DataInputStream to read from
+	 */
 	public void readFromStream(DataInputStream dis) {
 		try {
 			isInitialized = dis.readBoolean();
@@ -570,41 +577,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		} catch (Exception e) {
 			System.out.println("Error reading from stream in RenderView.java: "+e.getMessage()); 
 		}
-	}
-	/**
-	 * Persist scene entities to disk.
-	 */
-	public void persistSceneEntities(Bundle toSave) {
-		
-		
-		try {
-		//Serializer.getInstance().serializeObjects(mainChar, background);
-		//toSave.putSerializable("mainChar", mainChar);
-		/*toSave.putSerializable("background", background);
-		//toSave.putSerializable("OBSTACLE_MANAGER", ObstacleManager.getInstance());
-		toSave.putFloat("accFrameTime", timer.getAccFrameTimes());
-		toSave.putFloat("balloonHeight", balloonHeight);
-		toSave.putBoolean("moneyButtonActive", hud.isMoneyButtonActive());
-		*/
-		} catch (Throwable t) {
-			Log.e("Throwable in RenderView: ", t.getMessage());
-		}
-	}
-
-	/**
-	 * Restore scene entities from disk.
-	 */
-	public void restoreSceneEntities(Bundle toRestore) {
-		/*HashMap<Integer, SceneEntity> map = Serializer.getInstance().getSerializedObjects();
-		mainChar = (MainChar)map.get(Serializer.SERIALIZED_MAINCHAR);
-		background = (Background)map.get(Serializer.SERIALIZED_BACKGROUND);*/
-		//mainChar = (MainChar)toRestore.getSerializable("mainChar");
-		/*background = (Background)toRestore.getSerializable("background");
-		//ObstacleManager.setInstance((ObstacleManager)toRestore.getSerializable("OBSTACLE_MANAGER"));
-		timer.setAccFrameTime(toRestore.getFloat("accFrameTime"));
-		balloonHeight = toRestore.getFloat("balloonHeight");
-		hud.setMoneyButtonActive(toRestore.getBoolean("moneyButtonActive"));*/
-		
 	}
 	
 	/**
