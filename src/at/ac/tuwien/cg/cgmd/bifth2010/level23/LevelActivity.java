@@ -24,6 +24,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 
 /**
  * The Class LevelActivity handles the Android Lifecycle for the level and takes care of the interaction with the use
@@ -117,10 +118,11 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 */
 	@Override
 	public void onPause() {
+		SoundManager.instance.releaseAudioResources();
 		super.onPause(); 
 		renderer.onPause();
+		
 		//renderer.persistSceneEntities();
-		Settings.MAINCHARPOS = renderer.getMainCharPos(); 
 	}
 	
 	/**
@@ -178,7 +180,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 		bos.close(); 
 		byte[] byteArray = bos.toByteArray(); 
 		
-		ObstacleManager.getInstance().writeToBundle(toSave);
+		renderer.writeToBundle(toSave);
+		
 		toSave.putByteArray("l42_persist", byteArray);
 
 		} catch (Exception e) {
@@ -204,7 +207,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 		dis.close(); 
 		bis.close(); 
 		
-		ObstacleManager.getInstance().readFromBundle(toRestore); 
+		renderer.readFromBundle(toRestore);
+		
 		} catch (Exception e) {
 			System.out.println("Error restoring from bundle in LevelAcitvity.java: "+e.getMessage()); 
 		}

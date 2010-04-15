@@ -60,6 +60,10 @@ public class Button
 		this.width = width;
 		this.height = height;
 		this.position = position;
+	}
+	
+	public void preprocess()
+	{
 		geometryManager = GeometryManager.getInstance(); 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
 		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
