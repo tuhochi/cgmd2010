@@ -59,4 +59,12 @@ public class TextureParts {
 	public static TexturePart makeCrosshairsGreen(Texture texture) {
 		return new TexturePart(texture, 976, 376, 976+48, 376+48);
 	}
+	
+	public static TexturePart makeAimBarBackground(Texture texture) {
+		return new TexturePart(texture, 370, 519, 370+185, 519+24);
+	}
+	
+	public static TexturePart makeAimBarForeground(Texture texture) {
+		return new TexturePart(texture, 370, 549, 370+185, 549+24);
+	}
 }

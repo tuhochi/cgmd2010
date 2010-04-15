@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.physics;
 
 import java.nio.FloatBuffer;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -9,6 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.ShootEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Subject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.TimeEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.AimBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
@@ -19,8 +21,10 @@ public class Crosshairs extends Subject {
 	private static final int MAX_DISTANCE_2 = 2500;
 	/** the milliseconds it takes to load and shoot if the crosshairs are green */
 	private static final int MILLISECONDS_TO_SHOOT = 3000;
-	/** the width of the progress bar */
-	private static final float PROGRESSBAR_WIDTH = 140.f;
+	/** milliseconds between two shots */
+	private static final int WAIT_TIME_BETWEEN_SHOTS = 3000;
+	/** amount of pixels for the maximum recoil position change */
+	private static final int RECOIL_STRENGTH = 50;
 	
 	/** the GameScene */
 	private GameScene scene = null;
@@ -45,11 +49,7 @@ public class Crosshairs extends Subject {
 	/** timestamp of last shot */
 	private long timeOfLastShot = -1L;
 	
-	private FloatBuffer progressBarBuffer;
-	private float[] progressBarVertices = { -PROGRESSBAR_WIDTH/2, 0.f, 0.f, // bottom left
-											 PROGRESSBAR_WIDTH/2, 0.f, 0.f, // bottom right
-											-PROGRESSBAR_WIDTH/2, 30.f, 0.f, // top left
-											 PROGRESSBAR_WIDTH/2 , 30.f, 0.f }; // top right
+	private AimBar aimBar = null;
 
 	public Crosshairs(GameScene scene, Texture texture, int width, int height) {
 		this.scene = scene;
@@ -62,7 +62,8 @@ public class Crosshairs extends Subject {
 		spriteGreen = new Sprite(TextureParts.makeCrosshairsGreen(texture));
 		spriteGreen.setCenter(24, 24);
 		
-		progressBarBuffer = Util.floatArrayToBuffer(progressBarVertices);
+		aimBar = new AimBar(texture);
+		aimBar.setPosition(screenWidth/2, screenHeight/8+aimBar.getHeight()/2);
 	}
 
 	public void setRabbit(PhysicalObject rabbit) {
@@ -76,31 +77,9 @@ public class Crosshairs extends Subject {
 			spriteRed.draw(gl);
 		
 		if (this.isLoaded) {
-			drawProgressBar(gl);
+			aimBar.setProgress(timeStamp > 0 ? Math.min(1.f, (float)(System.currentTimeMillis() - timeStamp) / (float)MILLISECONDS_TO_SHOOT) : 0f);
+			aimBar.draw(gl);
 		}
-	}
-
-	private void drawProgressBar(GL10 gl) {
-		float progress = timeStamp > 0 ? (System.currentTimeMillis() - timeStamp) / MILLISECONDS_TO_SHOOT : 0;
-		float progressWidth = progress * PROGRESSBAR_WIDTH;
-		
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glPushMatrix();
-		
-		gl.glTranslatef(screenWidth/2.f, 15.f, 0);
-		gl.glColor4f(1, 1, 1, 1);
-		
-		//Point to our vertex buffer
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, progressBarBuffer);
-		//Enable vertex buffer
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		//Draw the vertices as triangle strip
-		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, progressBarVertices.length / 3);
-		//Disable the client state before leaving
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		
-		/* Restore the Model-View matrix */
-		gl.glPopMatrix();
 	}
 
 	public void setX(float x) {
@@ -143,6 +122,10 @@ public class Crosshairs extends Subject {
 		desiredX = x;
 		desiredY = y;
 	}
+	
+	private boolean allowedToShoot() {
+		return (timeOfLastShot == -1 || (System.currentTimeMillis() - timeOfLastShot) > WAIT_TIME_BETWEEN_SHOTS);
+	}
 
 	/**
 	 * move the crosshairs if the rabbit has not landed
@@ -150,14 +133,14 @@ public class Crosshairs extends Subject {
 	 * they follow the rabbit if they are near him, otherwise the move in the form of a lying 8
 	 */
 	public void ai() {
-		// if rabbit has landed move to start position at the left
+		// if rabbit has landed move out of the screen at the top
 		if (rabbit.hasLanded()) {
-			setDesiredPosition(50, screenHeight/2);
+			setDesiredPosition(screenWidth/2, -spriteRed.getHeight());
 		} 
 		// rabbit is in the air
 		else {
 			// follow the rabbit if crosshairs are near and the last shot wasn't within last 1.5 seconds
-			if (isNearRabbit() && (timeOfLastShot == -1 || (System.currentTimeMillis() - timeOfLastShot) > 1500)) {
+			if (isNearRabbit() && allowedToShoot()) {
 				setDesiredPosition(rabbit.getX(), rabbit.getY());
 
 				// 3 Seconds since crosshairs turned green? -> shoot
@@ -188,7 +171,7 @@ public class Crosshairs extends Subject {
 	 * @return true, if the loading sound shall be played
 	 */
 	public boolean changeLoadingState() {
-		if (isNearRabbit()) {
+		if (isNearRabbit() && allowedToShoot()) {
 			// load and return true to play loading sound
 			if (!isLoaded) {
 				timeStamp = System.currentTimeMillis();
@@ -214,6 +197,9 @@ public class Crosshairs extends Subject {
 	public void shoot() {
 		// play shooting sound
 		SoundPlayer.getInstance(scene.getContext()).play(SoundPlayer.SoundEffect.SHOT, 0.5f);
+		
+		// position change caused by recoil of the rifle
+		setY(getY()-RECOIL_STRENGTH);
 		
 		// if the rabbit was hit, loose one coin
 		if (this.hits(rabbit)) {
