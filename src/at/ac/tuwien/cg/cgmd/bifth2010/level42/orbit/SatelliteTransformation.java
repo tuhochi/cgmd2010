@@ -11,7 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 public abstract class SatelliteTransformation implements Persistable{
 	
-	public abstract void update(float dt,float speed);
+	public abstract void update(float dt);
 
 	public abstract Matrix44 getTransform();
 	

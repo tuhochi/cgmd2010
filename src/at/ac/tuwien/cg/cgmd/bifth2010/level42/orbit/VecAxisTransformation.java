@@ -4,14 +4,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 public class VecAxisTransformation extends SatelliteTransformation{
 
 	private float qvStep,qvCurr;
 	public float qv;
+	public float speed;
 	private final Matrix44 transform,basicOrientation;
 	public final Vector3 axis;
 
@@ -22,13 +25,13 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		this.axis = new Vector3();
 	}
 	
-	public VecAxisTransformation(Vector3 axis, float qv, Matrix44 basicOrientation) 
+	public VecAxisTransformation(Vector3 axis, float qv, float speed, Matrix44 basicOrientation) 
 	{
 		this();
 		
 		this.qv = (float)Math.toRadians(qv);
-		this.qvStep = qv*Constants.TWOPI/100;
 		this.qvCurr = 0;
+		this.speed = speed;
 		
 		this.axis.copy(axis);
 
@@ -36,12 +39,13 @@ public class VecAxisTransformation extends SatelliteTransformation{
 			this.basicOrientation.copy(basicOrientation);
 	}
 	
-	public void update(float dt,float speed)
+	public void update(float dt)
 	{
-		qvCurr += dt*qvStep*speed;
+		qvCurr += dt*qv*speed;
 	
 		if(qvCurr>=Constants.TWOPI)
 			qvCurr-=Constants.TWOPI;
+		
 		
 		transform.setIdentity();
 		transform.mult(basicOrientation);
@@ -81,5 +85,14 @@ public class VecAxisTransformation extends SatelliteTransformation{
 	public void setBasicOrientaion(Matrix44 basicOrientation) {
 		this.qvCurr = 0;
 		this.basicOrientation.copy(basicOrientation);
+	}
+
+	public void setAngle(float angle) {
+		this.qv = angle;
+		//check the rotation/speed ratio
+		if((qv/speed)>Config.SATELLITE_ROTASPEED_RATIO)
+			this.speed = qv/Config.SATELLITE_ROTASPEED_RATIO;
+		
+		//Log.d(LevelActivity.TAG,"ratio="+(qv/speed));
 	}
 }

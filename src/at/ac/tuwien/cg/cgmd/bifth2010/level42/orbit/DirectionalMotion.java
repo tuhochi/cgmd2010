@@ -48,7 +48,7 @@ public class DirectionalMotion extends Motion
 		transform.mult(basicOrientation);
 		
 		if(satTrans!=null){
-			satTrans.update(dt,speed);
+			satTrans.update(dt);
 			transform.mult(satTrans.getTransform());
 		}
 		

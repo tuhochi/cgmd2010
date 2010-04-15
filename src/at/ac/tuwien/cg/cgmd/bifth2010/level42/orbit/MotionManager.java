@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -26,7 +28,9 @@ public class MotionManager {
 		int index = list.indexOf(entity);
 		if(index==-1){
 			entity.setMotion(motion);	
-			motion.setSatTrans(new VecAxisTransformation(Constants.Y_AXIS,1,null));
+			//TODO: reuse obj
+			if(motion.getSatTrans()==null)
+				motion.setSatTrans(new VecAxisTransformation(Constants.Y_AXIS,(float)Math.PI,5,null));
 			motion.setTransform(entity.getTransformation());
 			list.add(entity);
 		}
@@ -59,6 +63,7 @@ public class MotionManager {
 	
 	public void changeSatelliteTransformation(Moveable entity,Vector3 directionVec,Vector3 pushVec)
 	{
+		//TODO: reuse obj
 		Vector3 axis = Vector3.crossProduct(directionVec, pushVec);
 		axis.normalize();
 		SatelliteTransformation satTrafo = entity.getMotion().getSatTrans();
@@ -69,7 +74,12 @@ public class MotionManager {
 			Matrix44 temp = new Matrix44(vecSatTrafo.getTransform());
 			vecSatTrafo.setBasicOrientaion(temp);
 			vecSatTrafo.axis.copy(axis);
-			vecSatTrafo.qv = 5;
+			
+			Vector3 tempNormDirection = Vector3.normalize(directionVec);
+			Vector3 tempNormPush = Vector3.normalize(pushVec);
+		
+			vecSatTrafo.setAngle(Vector3.getAngle(tempNormDirection, tempNormPush));
+			//Log.d(LevelActivity.TAG,"satAngle="+vecSatTrafo.qv);
 		}
 	}
 	
@@ -85,6 +95,7 @@ public class MotionManager {
 		Vector3 a = new Vector3();
 		Vector3 b = new Vector3();
 		Vector3 center = new Vector3(0,0,0);
+		Orbit tempOrbit = null;
 		
 		for(int i=0;i<scene.sceneEntities.size();i++){
 			entity = scene.sceneEntities.get(i);
@@ -101,10 +112,10 @@ public class MotionManager {
 				rotation.transformPoint(a);
 				rotation.transformPoint(b);
 
-				addMotion(	new Orbit(	a,center,b,
+				tempOrbit = new Orbit(	a,center,b,
 										(float)rand.nextDouble()*maxSpeed + minSpeed,
-										entity.getBasicOrientation()),
-							entity);
+										entity.getBasicOrientation());
+				addMotion(tempOrbit,entity);
 			}
 		}
 	}
