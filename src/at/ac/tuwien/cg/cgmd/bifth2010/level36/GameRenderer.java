@@ -51,19 +51,19 @@ public class GameRenderer  implements GLSurfaceView.Renderer {
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
         //Camera
-        gluLookAt(gl, 0, 0, -10, 0, 0, 0, 0, 1, 0  );
+        gluLookAt(gl, 0, 0, -20, 0, 0, 0, 0, 1, 0  );
         //Camera Ende
 //        gl.glTranslatef(0, 0, -3.0f);
 //        gl.glRotatef(mAngle,        0, 1, 0);
 //        gl.glRotatef(mAngle*0.25f,  1, 0, 0);
 
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        //gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        //gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
         //gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
         
         gl.glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-        //mPlane.draw(gl);
+        mPlane.draw(gl);
         //mCube.draw(gl);
 
 //        gl.glRotatef(mAngle*2.0f, 0, 1, 1);
@@ -88,7 +88,7 @@ public class GameRenderer  implements GLSurfaceView.Renderer {
          gl.glMatrixMode(GL10.GL_PROJECTION);
          gl.glLoadIdentity();
          //gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
-         gluPerspective(gl, 60.0f, ratio, 0.1f, 100.0f);
+         gluPerspective(gl, 45.0f, ratio, 0.1f, 100.0f);
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -98,8 +98,8 @@ public class GameRenderer  implements GLSurfaceView.Renderer {
          * especially on software renderer.
          */
         gl.glDisable(GL10.GL_DITHER);
-        this.tm = new TextureManager(this.context);
-        this.texId = tm.loadTexture(gl, R.drawable.l36_los);
+//        this.tm = new TextureManager(this.context);
+//        this.texId = tm.loadTexture(gl, R.drawable.l36_los);
 
         /*
          * Some one-time OpenGL initialization can be made here
@@ -116,8 +116,8 @@ public class GameRenderer  implements GLSurfaceView.Renderer {
          gl.glEnable(GL10.GL_CULL_FACE);
          gl.glShadeModel(GL10.GL_SMOOTH);
          gl.glEnable(GL10.GL_DEPTH_TEST);
-         gl.glEnable(GL10.GL_TEXTURE_2D);
-         gl.glBindTexture(GL10.GL_TEXTURE_2D, this.texId);
+        // gl.glEnable(GL10.GL_TEXTURE_2D);
+        // gl.glBindTexture(GL10.GL_TEXTURE_2D, this.texId);
     }
 
 }
