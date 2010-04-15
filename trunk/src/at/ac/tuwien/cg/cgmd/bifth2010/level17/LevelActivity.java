@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 
@@ -82,6 +83,12 @@ public class LevelActivity extends Activity {
         
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  
   
+		//the SessionState is a convenience class to set a result
+		SessionState s = new SessionState();
+		//we set the progress the user has made (must be between 0-100)
+		s.setProgress(0);
+		//we call the activity's setResult method 
+		setResult(Activity.RESULT_OK, s.asIntent());
     }
 
     @Override

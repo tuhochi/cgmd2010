@@ -126,11 +126,12 @@ public class Level {
 
 		Vector3 playerPos = mPlayer.getPosition();
 		mSpeed.y -= elapsedSeconds * 2.0f;
+		mSpeed.y = (mSpeed.y < -60f) ? -60f : mSpeed.y;
 		moveDelta.y = Vector3.mult(mSpeed, elapsedSeconds).y;
 		updatePlayerPosition(moveDelta);
 		mNextHouse -= elapsedSeconds;
 		mNextBird -= elapsedSeconds;
-		if(mNextHouse < 0)
+		if(mHouses.size() < 40 && mNextHouse <= 0)
 		{
 			House newHouse = new House();
 			int size = (int)(Math.floor(Math.random() * 5.0));
@@ -144,7 +145,7 @@ public class Level {
 			newHouse.setPosition(newPos);
 			newHouse.setModel(mHouseModels[newHouse.getHouseSize()]);
 			mFadeHouses.add(newHouse);
-			mNextHouse = (float)Math.random() * 0.2f;
+			mNextHouse = (float)Math.random() * 0.1f;
 		}
 		if(mNextBird < 0)
 		{	
