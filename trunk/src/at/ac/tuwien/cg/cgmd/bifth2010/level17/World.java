@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 
 /**
@@ -58,4 +59,10 @@ public interface World {
 	 * @param pause The pause state that should be set
 	 */
 	public void setPause(boolean pause);
+	
+	/**
+	 * Save the actual gamestate
+	 * @param outState The bundle to save to
+	 */
+	public void onSaveInstanceState(Bundle outState);
 }

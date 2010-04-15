@@ -40,7 +40,7 @@ public class LevelActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mWorld = new NormalModeWorld(this, mHandler);
+        mWorld = new NormalModeWorld(this, mHandler, savedInstanceState);
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         mWindowSize = new Vector2((float)d.getWidth(), (float)d.getHeight());
@@ -131,6 +131,12 @@ public class LevelActivity extends Activity {
     	return super.onTouchEvent(event);
     }
     
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		mWorld.onSaveInstanceState(outState);
+		super.onSaveInstanceState(outState);
+	}
+
 	/**
 	 * Is called when the health of the player changes
 	 * @param hp The new health of the player
