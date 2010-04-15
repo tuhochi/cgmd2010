@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
@@ -33,7 +34,8 @@ public class GameManager implements Renderable {
 
 	public Activity activity;
 	public RenderView renderView;
-	public GL10 gl;
+	// NOTE: We can't store this, because it surely becomes invalid. 
+//	public GL10 gl;
 	
 	protected Shelf shelf;
 	public float scrollSpeed;
@@ -49,31 +51,31 @@ public class GameManager implements Renderable {
 		
 		this.activity = (Activity)renderView.getContext();
 		this.renderView = renderView;
-		this.gl = gl;
+//		this.gl = gl;
 		
 		textures = new Hashtable<Integer, Integer>();
 		entities = new Hashtable<Integer, ProductEntity>();
 		
-		scrollSpeed = 100f; // Pixel per second
-		createEntities();
+		scrollSpeed = 500f * 0.001f; // Pixel per second
+		createEntities(gl);
 	}
 	
 	
 	/**
 	 * 
 	 */
-	public void createEntities() {
+	public void createEntities(GL10 gl) {
 		
 		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
-		shelf.texture = getTexture(R.drawable.l17_crate);
-		
+		shelf.texture = getTexture(gl, R.drawable.l17_crate);
+				
 		int start = R.drawable.l88_stash_blue;
 		int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
 		
 		for (int i = 0; i < 20; i++) {
 			ProductEntity pe = new ProductEntity(	(float)Math.random() * (renderView.getWidth() - 100) + 50, 
 													(float)Math.random() * (renderView.getHeight() - 100) + 50, 1, 100, 100);
-			pe.texture = getTexture((int)(Math.random() * range) + start);
+			pe.texture = getTexture(gl, start + (i % range));
 			pe.angle = (float)Math.random() * 360;
 			entities.put(i, pe);
 		}
@@ -92,7 +94,7 @@ public class GameManager implements Renderable {
 		
 		// Move scrollSpeed pixel every second.
 		float speed = scrollSpeed * dt;
-		float shelfSpeed = speed / renderView.getWidth();
+		float shelfSpeed = (5.0f/3.0f) * speed / renderView.getWidth();
 		
 		shelf.scrollBy(shelfSpeed);
 		
@@ -103,8 +105,8 @@ public class GameManager implements Renderable {
 			pe = entities.get(keys.nextElement());
 			
 			pe.x -= speed;
-			float rot = (1 - pe.y / (renderView.getHeight() * 0.5f)) * 15;
-			pe.angle += rot;
+//			float rot = (1 - pe.y / (renderView.getHeight() * 0.5f)) * 15;
+//			pe.angle += rot;
 			
 			if (pe.x < -100) {
 				
@@ -147,7 +149,17 @@ public class GameManager implements Renderable {
 			if (pe.visible && pe.hitTest(x, y)) {
 				pe.x = renderView.getWidth() + (float)Math.random() * 500 + 50;
 				pe.y = (float)Math.random() * (renderView.getHeight() - 100) + 50;
-				pe.angle = (float)Math.random() * 360;
+//				pe.angle = (float)Math.random() * 360;
+				
+				int start = R.drawable.l88_stash_blue;
+				int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
+				
+				int texChoose = (int)(Math.random() * range) + start;
+				
+				// Avoid changing the texture while it is rendered
+//				pe.visible = false;
+				pe.texture = getTexture(null, texChoose); // HACK HACK!! If the texture isn't available yet, the game crashes!!
+//				pe.visible = true;
 				break;
 			}
 		}
@@ -157,11 +169,16 @@ public class GameManager implements Renderable {
 	
 	
 
-	/**
+
+	/** 
+	 * This method returns the texture id of the given resource file if already available or creates it on the fly. 
+	 * Note: You have to pass a valid GL everytime you use this method. 
+	 * 
+	 * @param gl Pass a valid GL here, or the texture id will always be 0. 
 	 * @param resource The resource identifier delivered by "at.ac.tuwien.cg.cgmd.bifth2010.R".
-	 * @returns The texture id of the file. 
+	 * @returns The texture id of the file.
 	 */
-	public int getTexture(int resource) {
+	public int getTexture(GL10 gl, int resource) {
 		
 		// Try to find the texture
 		Integer t = textures.get(resource);

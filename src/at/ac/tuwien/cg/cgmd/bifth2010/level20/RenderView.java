@@ -116,7 +116,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		// Advance in time
 		timer.update();		
-		float dt = timer.getDt() * 0.001f;
+		float dt = timer.getDt();
 		
 		// Update the GameManager first
 		gameManager.update(dt);
@@ -202,7 +202,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		float x = event.getX();
         float y = getHeight() - event.getY();
         
-        
+        gameManager.onTouch(x, y);
         
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
         	
