@@ -405,7 +405,6 @@ public class ObstacleManager
 	
 	public void reset()
 	{
-		System.out.println(wasRestored);
 		if(!wasRestored)
 		{
 			leastRenderedObstacle=0;

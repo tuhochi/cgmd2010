@@ -147,8 +147,15 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         fpsHandle = new FpsHandle();
         soundManager = new SoundManager(context);
         obstacleManager = new ObstacleManager();
-        balloonHeight=0;
+        balloonHeight=0;   
         
+        Display display = this.context.getWindowManager().getDefaultDisplay();
+		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
+		topBounds = rightBounds*aspectRatio;
+        
+        hud = new Hud();
+		mainChar = new MainChar();
+		background = new Background();
 	}
 	
 	/**
@@ -206,6 +213,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			mainChar.readFromStream(dis); 
 			background.readFromStream(dis); 
 			ObstacleManager.getInstance().readFromStream(dis); 
+			
 		} catch (Exception e) {
 			System.out.println("Error reading from stream in RenderView.java: "+e.getMessage()); 
 		}
@@ -354,20 +362,16 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{	
-		Log.v("RenderView.java", "onSurfaceCreated");
-		reset();
-		setupGL(gl);
-		
-		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
+		Display display = this.context.getWindowManager().getDefaultDisplay();
 		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
 		topBounds = rightBounds*aspectRatio;
 		
-		mainChar = new MainChar(Settings.MAINCHAR_WIDTH,Settings.MAINCHAR_HEIGHT,Settings.MAINCHAR_STARTPOS);
-				
-		background = new Background();
+		Log.v("RenderView.java", "onSurfaceCreated");
 		
-		hud = new Hud();
-				
+		setupGL(gl);
+		
+		reset();
+						
 		int resID = context.getResources().getIdentifier("l23_balloon", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		mainChar.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
@@ -720,10 +724,15 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	{
 		textureManager.reset();
 		timer.reset();
+		background.reset();
+		hud.reset();
+		mainChar.preprocess();
 		
 		if(!isInitialized)
-		{
+		{	
+			mainChar.reset();
 			obstacleManager.reset();
+			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
 			isInitialized = true;
 		}
 	}

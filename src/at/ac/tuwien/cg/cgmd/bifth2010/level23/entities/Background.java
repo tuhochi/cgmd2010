@@ -49,9 +49,8 @@ public class Background implements SceneEntity
 	 */
 	public Background()
 	{
-		//texCoordBuffer = new FloatBuffer[2];
+		//texCoordBuffer = new FloatBuffer[2];		
 		preprocess();
-		
 	}
 	
 	/**
@@ -88,7 +87,7 @@ public class Background implements SceneEntity
 	 * Creates the <code>FrontBuffer</code> used for rendering
 	 * It uses VBO if GLES11 is supported and vertex arrays otherwise
 	 */
-	private void preprocess() {
+	public void preprocess() {
 		
 		RenderView renderView = RenderView.getInstance(); 
 		GeometryManager geometryManager = GeometryManager.getInstance();
@@ -185,6 +184,11 @@ public class Background implements SceneEntity
 	 */
 	public void setGameOver(boolean isGameOver) {
 		this.gameOver = isGameOver;
+	}
+	
+	public void reset()
+	{
+		preprocess();
 	}
 
 }
