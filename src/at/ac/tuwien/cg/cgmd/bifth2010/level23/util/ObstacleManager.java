@@ -25,6 +25,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.os.Bundle;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Obstacle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
@@ -283,8 +284,19 @@ public class ObstacleManager
 					
 				glPopMatrix();
 				
-				if(testCollisionWithMainChar(tempObstacle, currentHeight))
+				if(testCollisionWithMainChar(tempObstacle, currentHeight) && !gameOver)
+				{
 					RenderView.getInstance().setGameOver(true); 
+					LevelActivity.handler.post(
+							new Runnable()
+							{
+						    	@Override
+						        public void run() 
+						    	{
+						            LevelActivity.instance.triggerVibrate(1000);
+						        }
+							});
+				}
 					//System.out.println("BAMM");
 				
 				i++;
