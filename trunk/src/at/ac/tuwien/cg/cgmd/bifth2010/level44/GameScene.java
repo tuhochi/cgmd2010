@@ -21,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TimeDisplay;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
@@ -34,12 +35,14 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private Landscape landscape;
 	/** a coin sprite for drawing the OSD */
 	private Sprite coin;
+	/** the time display sprite */
+	private Sprite timeDisplay;
 
 	/** thread for game logic */
 	private GameThread gameThread;
 	
 	private TimeManager timeManager;
-	
+
 	/** queue of all inputGestures to process */
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
 	/** soundPlayer */
@@ -63,6 +66,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		rabbit = null;
 		landscape = null;
 		coin = null;
+		timeDisplay = null;
 		gameThread = null;
 		timeManager = new TimeManager();
 	}
@@ -89,6 +93,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 				coin.setPosition(20+i*coin.getWidth()/2, 20);
 				coin.draw(gl);				
 			}
+		}
+		
+		if (timeDisplay != null) {
+			timeDisplay.draw(gl);
 		}
 	}
 
@@ -130,6 +138,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		landscape.setRabbit((PhysicalRabbit)rabbit);
 		
 		coin = new Sprite(TextureParts.makeCoin(mainTexture));
+		
+		timeDisplay = new TimeDisplay(mainTexture, timeManager);
+		timeDisplay.setPosition(getWidth()-timeDisplay.getWidth()-10, 10);
 		
 		restartGameThread();
 	}

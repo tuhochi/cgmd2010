@@ -42,6 +42,10 @@ public class TimeManager {
 		return Math.max(0, duration - elapsed);
 	}
 	
+	public long getDuration() {
+		return duration;
+	}
+	
 	public String toString() {
 		long millis = this.getRemainingTimeMillis();
 		int remainingSeconds = (int)(millis/1000);
