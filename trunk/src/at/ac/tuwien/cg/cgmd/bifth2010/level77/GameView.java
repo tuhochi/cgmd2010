@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -17,22 +18,43 @@ import android.view.MotionEvent;
 public class GameView extends GLSurfaceView
 {
 
+	protected static final String	TAG	= "GameView";
 	L77Renderer renderer;
 	Native jni;
 	Audio audio;
+	private int score;
+	private Callback<Integer> deleteMe;
 	
 	public GameView(Context context, Callback<Integer> gameEnded)
 	{
 		super(context);
 		audio = new Audio(context);
+		deleteMe = gameEnded;
+		
+		Callback<Integer> updateScore = new Callback<Integer>()
+		{
+			
+			@Override
+			public void onSucces(Integer result)
+			{
+				Log.i(TAG, "Received new score: " + result);
+				updateScore(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				Log.e(TAG, "Error while updating score");
+				caught.printStackTrace();
+			}
+		};
 		
 		// Test sounds
 		audio.playSound(Audio.BLOCK_DROPPED_SOUND);
 		audio.playSound(Audio.BLOCK_EXPLODE_SOUND);
-		audio.playSound(Audio.BLOCK_SWAPPED_SOUND);
-		
+		audio.playSound(Audio.BLOCK_SWAPPED_SOUND);		
 
-		jni = new Native(context, audio, gameEnded);
+		jni = new Native(context, audio, gameEnded, updateScore);
 		
 		setRenderer(new L77Renderer(true, context));
 	}
@@ -51,7 +73,18 @@ public class GameView extends GLSurfaceView
 			jni.touchesMoved(event.getX(), event.getY());
 		if (event.getAction() == MotionEvent.ACTION_UP)
 			jni.touchesEnded(event.getX(), event.getY());
-		
+			
 		return true;
-	}		
+	}
+	
+	
+	/**
+	 * Updates the current score
+	 * @param score
+	 */
+	private void updateScore(int score)
+	{
+		this.score = score;
+		// TODO Display score
+	}
 }

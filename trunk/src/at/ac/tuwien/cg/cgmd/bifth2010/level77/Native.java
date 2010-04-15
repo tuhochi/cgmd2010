@@ -10,16 +10,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class Native
 {
-//	library should already be loaded by LevelActivity
-//    static {
-//        System.loadLibrary("l77fireblocks");
-//    }
 	
-	public native void nativePause();
-	public native void nativeResume();
-	public native void nativeTouchesBegan(int [] touches);
-	public native void nativeTouchesMoved(int [] touches);
-	public native void nativeTouchesEnded(int [] touches);
+	public native void pause();
+	public native void resume();
+	public native void touchesBegan(int [] touches);
+	public native void touchesMoved(int [] touches);
+	public native void touchesEnded(int [] touches);
 
 	private final static int BLOCK_DROPPED_SOUND = 0;
 	public static final int BLOCK_SWAPPED_SOUND = 1;
@@ -27,13 +23,22 @@ public class Native
 	
 	private Audio audio;
 	private Context context;
-	private Callback<Integer> gameEnded;
+	private Callback<Integer> callbackGameEnded;
+	private Callback<Integer> callbackUpdateScore;
 	
-	public Native(Context context, Audio audio, Callback<Integer> gameEnded)
+	/**
+	 * Constructor for Native object
+	 * @param context
+	 * @param audio
+	 * @param gameEnded
+	 * @param updateScore
+	 */
+	public Native(Context context, Audio audio, Callback<Integer> gameEnded, Callback<Integer> updateScore)
 	{
 		this.audio = audio;
 		this.context = context;
-		this.gameEnded = gameEnded;
+		this.callbackGameEnded = gameEnded;
+		this.callbackUpdateScore = updateScore;
 	}
 	
 	/**
@@ -43,7 +48,7 @@ public class Native
 	 */
 	public void touchesBegan(float x, float y)
 	{
-		nativeTouchesBegan(singleTouch(x, y));
+		touchesBegan(singleTouch(x, y));
 	}
 	
 	/**
@@ -53,7 +58,7 @@ public class Native
 	 */
 	public void touchesMoved(float x, float y)
 	{
-		nativeTouchesMoved(singleTouch(x,y));
+		touchesMoved(singleTouch(x,y));
 	}
 	
 	/**
@@ -63,7 +68,7 @@ public class Native
 	 */
 	public void touchesEnded(float x, float y)
 	{
-		nativeTouchesEnded(singleTouch(x,y));		
+		touchesEnded(singleTouch(x,y));		
 	}
 	
 	/**
@@ -115,16 +120,28 @@ public class Native
 	}
 	
 	/**
+	 * Called by native code to update the score
+	 * @param score
+	 */
+	private void updateScore(int score)
+	{
+		if (score >= 0)
+			callbackUpdateScore.onSucces(score);
+		else
+			callbackUpdateScore.onFailure(new Throwable("Native code sent negative score: " + score));			
+	}
+	
+	/**
 	 * Called by native code when game is ended
 	 * @param score
 	 */
 	@SuppressWarnings("unused")
-	private void endGame(int score)
+	private void gameEnded(int score)
 	{
 		if (score >= 0)
-			gameEnded.onSucces(score / 1000);
+			callbackGameEnded.onSucces(score);
 		else
-			gameEnded.onFailure(new Throwable("Game ended with negative score: " + score));
+			callbackGameEnded.onFailure(new Throwable("Game ended with negative score: " + score));
 	}
 
 }

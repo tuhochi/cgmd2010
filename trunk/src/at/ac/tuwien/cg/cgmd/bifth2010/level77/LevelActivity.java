@@ -5,6 +5,7 @@ import android.app.Activity;
 //import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,19 +21,20 @@ import android.content.Context;
  */
 public class LevelActivity extends Activity
 {
+	protected static final String	TAG	= "LevelActivity";
+	private GameView gameView;
 	
 	// for c++ code
     static {
         System.loadLibrary("l77fireblocks");
     }
-    
-	private GameView gameView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		
+		Log.d(TAG, "Starting LevelActivity 77");
+
 		setResult(RESULT_CANCELED);
 		
 		Callback<Integer> gameEnded = new Callback<Integer>()
@@ -42,7 +44,8 @@ public class LevelActivity extends Activity
 			public void onSucces(Integer result)
 			{
 				SessionState s = new SessionState();
-				s.setProgress(result);				
+				s.setProgress(result / 100);		
+				Log.i(TAG, "Lost Gold: " + result / 100);
 				setResult(RESULT_OK, s.asIntent());	
 				LevelActivity.this.finish();
 			}
@@ -72,4 +75,5 @@ public class LevelActivity extends Activity
 		gameView.onResume();
 	}
 	
+
 }

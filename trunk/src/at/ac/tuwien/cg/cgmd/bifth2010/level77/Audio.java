@@ -1,26 +1,61 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
+import java.io.IOException;
+import java.util.HashMap;
+
+import android.R.bool;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Map;
 
 /**
  * This class handles all audio stuff
  * @author Gerd Katzenbeisser
  *
  */
-public class Audio
+public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedListener
 {
 	private Context context;
 	
 	public static final int BLOCK_DROPPED_SOUND = R.raw.l00_gold01;
-	public static final int BLOCK_SWAPPED_SOUND = R.raw.l00_gold01;
-	public static final int BLOCK_EXPLODE_SOUND = R.raw.l00_gold01;
+	public static final int BLOCK_SWAPPED_SOUND = R.raw.l00_gold02;
+	public static final int BLOCK_EXPLODE_SOUND = R.raw.l00_gold03;
 	
+	private static final int IDLE = 0;
+	private static final int PLAYING = 1;
+
+	private static final String	TAG	= "Audio";
+	
+	private static java.util.Map<Integer, MediaPlayer> mps = new HashMap<Integer, MediaPlayer>();
+	private static java.util.Map<MediaPlayer, Boolean> mpBlocked = new HashMap<MediaPlayer, Boolean>();
+
 	
 	public Audio (Context context)
 	{
 		this.context = context;
+				
+		putMp(BLOCK_DROPPED_SOUND);
+		putMp(BLOCK_EXPLODE_SOUND);
+		putMp(BLOCK_SWAPPED_SOUND);
+	}
+	
+	/**
+	 * Adds an Mediaplayer to the map mp identified by the resid
+	 * @param resid
+	 */
+	private void putMp(int resid)
+	{	
+		MediaPlayer mp = MediaPlayer.create(context, resid);
+		mp.setOnCompletionListener(this);
+		mp.setOnPreparedListener(this);
+		mps.put(resid, mp);
+		mpBlocked.put(mp, false);
 	}
 	
 	/**
@@ -29,8 +64,29 @@ public class Audio
 	 */
 	public void playSound(int soundid)
 	{
-		MediaPlayer mp = MediaPlayer.create(this.getContext(), soundid);
-		mp.start();
+		playSound(soundid, false);
+	}
+	
+	public void playSound(int soundid, boolean stopSound)
+	{
+		Log.d(TAG, "Start playback of soundid " + soundid);
+		
+		MediaPlayer mp = mps.get(soundid);
+        
+
+		if (mp != null)
+			if (mp.isPlaying() && stopSound && !mpBlocked.get(mp))
+			{
+				mpBlocked.put(mp, true);
+				mp.stop();
+				mp.prepareAsync();
+			} else if (!mp.isPlaying())
+			{
+				mp.start();
+			}
+		else
+			Log.e(TAG, "Error MediaPlayer is NULL");
+		Log.d(TAG, "Playback of soundid " + soundid + " started");
 	}
 
 
@@ -49,6 +105,25 @@ public class Audio
 	public Context getContext()
 	{
 		return context;
+	}
+
+	@Override
+	public boolean onError(MediaPlayer mp, int what, int extra)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mp)
+	{
+	//	mp.prepareAsync();		
+	}
+
+	@Override
+	public void onPrepared(MediaPlayer mp)
+	{
+		mpBlocked.put(mp, false);
 	}
 	
 }
