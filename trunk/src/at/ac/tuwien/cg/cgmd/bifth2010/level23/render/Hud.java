@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.BurnTimer;
@@ -30,9 +31,11 @@ public class Hud
 	/** The class handling time utilities */
 	private TimeUtil timeUtil; 
 	
-	private BurnTimer burnTimer = new BurnTimer();
+	private BurnTimer burnTimer;
 
 	private boolean wasRestored=false;
+	
+	private int boostAudioId;
 	
 	/**
 	 * Instantiates a new hud, including the buttons and the timer for boost operation.
@@ -40,18 +43,20 @@ public class Hud
 	public Hud()
 	{
 		init();
+		boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost,true);
+		burnTimer = new BurnTimer(boostAudioId);
 		instance=this;
 	}
 	
 	private void init()
 	{
-		float topBounds = RenderView.getInstance().getTopBounds();
-		float rightBounds = RenderView.getInstance().getRightBounds();
+		float topBounds = RenderView.instance.getTopBounds();
+		float rightBounds = RenderView.instance.getRightBounds();
 		goldButton = new Button(10, 10, new Vector2(0,topBounds-10));
 		moneyButton = new Button(10, 10, new Vector2(rightBounds-10,topBounds-10));
 		moneyButton.preprocess();
 		goldButton.preprocess();
-		timeUtil = TimeUtil.getInstance();
+		timeUtil = TimeUtil.instance;
 	}
 	
 	public void readFromStream(DataInputStream dis) throws IOException
@@ -100,7 +105,7 @@ public class Hud
 			moneyButton.setActive(false);
 			Settings.BALLOON_SPEED += Settings.BURN_BOOST;
 			timeUtil.scheduleTimer(burnTimer);
-			SoundManager.instance.startBoostSound();
+			SoundManager.instance.startPlayer(boostAudioId);
 			return true;
 		}
 		

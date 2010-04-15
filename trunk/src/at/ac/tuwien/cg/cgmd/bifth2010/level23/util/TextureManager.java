@@ -38,7 +38,7 @@ public class TextureManager {
 	private HashMap<Integer, Integer> textureMap;
 	
 	/** The instance of TextureManager to pass around. */
-	private static TextureManager instance; 
+	public static TextureManager instance = new TextureManager(); 
 	
 	/**
 	 * Instantiates a new texture manager.
@@ -129,20 +129,4 @@ public class TextureManager {
 		return textureMap.get(resId);
 	
 	}
-
-
-	/**
-	 * Gets the singleton of TextureManager.
-	 *
-	 * @return singleton of TextureManager
-	 */
-	public static TextureManager getInstance() {
-		if (instance == null)
-			instance = new TextureManager();
-		
-		return instance; 
-	}
-
-
-
 }

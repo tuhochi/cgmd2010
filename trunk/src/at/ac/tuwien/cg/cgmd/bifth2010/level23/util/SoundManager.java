@@ -1,76 +1,74 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class SoundManager 
 {
 	private Context context;
 	
-	private MediaPlayer musicPlayer;
-	private MediaPlayer boostPlayer;
+	private int numberOfPlayers=-1;
+	private ArrayList<MediaPlayer> players;
 	
 	public static SoundManager instance;
 	
 	public SoundManager(Context context)
 	{
 		this.context = context;
+		players = new ArrayList<MediaPlayer>();
 		instance = this;
 	}
 	
-	public void initAudio()
+	public int requestPlayer(int resId,boolean isLooping)
 	{
-		musicPlayer = MediaPlayer.create(context,R.raw.l00_map);
-		musicPlayer.setLooping(true);
-			
-		boostPlayer = MediaPlayer.create(context,R.raw.l23_boost);
-		boostPlayer.setLooping(true);		
+		numberOfPlayers++;
+		MediaPlayer newPlayer = MediaPlayer.create(context,resId);
+		newPlayer.setLooping(true);
+		
+		players.add(newPlayer);
+		
+		return numberOfPlayers;
 	}
 	
-	public void startMusic()
+	public void startPlayer(int id)
 	{
-		musicPlayer.start();
+		players.get(id).start();
+	}
+	
+	public void pausePlayer(int id)
+	{
+		players.get(id).pause();
 	}
 	
 	public void releaseAudioResources()
 	{
-		if(musicPlayer.isPlaying())
-			musicPlayer.stop();
-		musicPlayer.release();
-		
-		if(boostPlayer.isPlaying())
-			boostPlayer.stop();
-		boostPlayer.release();
+		for(int i=0;i<players.size();i++)
+		{
+			MediaPlayer tempPlayer = players.get(i);
+			if(tempPlayer.isPlaying())
+				tempPlayer.stop();
+			tempPlayer.release();
+		}
 	}
 	
 	public void stopAllAudio()
 	{
-		if(musicPlayer.isPlaying())
-			musicPlayer.stop();
-
-		if(boostPlayer.isPlaying())
-			boostPlayer.stop();
+		for(int i=0;i<players.size();i++)
+		{
+			players.get(i).stop();
+		}
 	}
-	
-	public void startBoostSound()
-	{
-		boostPlayer.start();
-	}
-	
-	public void stopBoostSound()
-	{
-		//stop + prepare is slow
-		boostPlayer.pause();
-	}
-	
+		
 	public void reset()
 	{
 		try {
-			musicPlayer.prepare();
-			boostPlayer.prepare();
+			for(int i=0;i<players.size();i++)
+			{
+				players.get(i).prepare();
+			}
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

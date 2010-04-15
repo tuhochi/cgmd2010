@@ -12,7 +12,7 @@ import android.os.Bundle;
 public class TimeUtil {
 		
 	/** The instance of TimeUtil to pass around. */
-	private static TimeUtil instance;
+	public static TimeUtil instance = new TimeUtil();;
 	
 	private boolean wasRestored=false;
 	
@@ -45,17 +45,10 @@ public class TimeUtil {
 		scheduledTimers = new ArrayList<TimingTask>();
 		instance = this;
 	}
-	
-	/**
-	 * Gets the singleton of TimeUtil.
-	 *
-	 * @return singleton of TimeUtil
-	 */
+		
+	//cause lvl20 is using it
 	public static TimeUtil getInstance()
 	{
-		if(instance == null)
-			instance = new TimeUtil();
-		
 		return instance;
 	}
 	
