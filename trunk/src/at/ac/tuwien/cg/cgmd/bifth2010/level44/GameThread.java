@@ -80,6 +80,7 @@ public class GameThread extends Thread {
 
 	public void doQuit() {
 		this.quit = true;
+		TimeManager.getInstance().stop();
 	}
 	
 	public void playSoundEffects(InputGesture gesture) {

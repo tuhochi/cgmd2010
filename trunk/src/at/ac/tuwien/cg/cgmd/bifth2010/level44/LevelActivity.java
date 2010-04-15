@@ -125,6 +125,7 @@ public class LevelActivity extends Activity implements Observer {
 		
 		if (scene != null) {
 			scene.onPause();
+			TimeManager.getInstance().pause();
 		}
 	}
 
