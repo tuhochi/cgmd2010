@@ -346,6 +346,24 @@
 			</intent-filter>
 		</activity>
 		
+		<activity
+			android:name=".level66.HelpActivity"
+			android:label="@string/l66_nameofthegame_full">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level66.LAUNCH_HELP" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
+			android:name=".level66.LevelActivity"
+			android:label="@string/l66_nameofthegame_full">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level66.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
+		
 		<activity android:label="@string/l83_title" android:name=".level83.HelpActivity">
 		  <intent-filter>
 		        <action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level83.LAUNCH_HELP"/>
@@ -386,16 +404,6 @@
 		</activity>
 		
 		<activity
-			android:name=".level66.HelpActivity"
-			android:screenOrientation="landscape"
-			android:label="@string/l66_nameofthegame_full">
-			<intent-filter>
-				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level66.LAUNCH_HELP"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-			</intent-filter>
-		</activity>
-
-		<activity
 			android:name=".level77.LevelActivity">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_LEVEL"/>
@@ -418,6 +426,8 @@
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
+	
+		
 	</application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
