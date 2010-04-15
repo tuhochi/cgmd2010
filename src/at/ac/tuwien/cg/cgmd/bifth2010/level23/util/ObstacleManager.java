@@ -43,6 +43,8 @@ public class ObstacleManager
 	 */
 	private boolean gameOver = false; 
 	
+	private boolean wasRestored = false;
+	
 	/**
 	 * the unique serialVersionUID 
 	 */
@@ -59,7 +61,7 @@ public class ObstacleManager
 	
 	//current position for generating obstacle, 80 = start position
 	/** The current position to start generating obstacles. */
-	private int currentPosition = 80;
+	private int currentPosition = Settings.OBSTALE_START;
 	
 	//lowest index of a visible obstacle in obstacles list
 	/** The least rendered obstacle. */
@@ -157,7 +159,6 @@ public class ObstacleManager
 	 */
 	public void writeToStream(DataOutputStream dos) {
 		try {
-			dos.writeInt(currentPosition);
 			dos.writeInt(leastRenderedObstacle);
 			
 		} catch(Exception e) {
@@ -183,7 +184,6 @@ public class ObstacleManager
 	 */
 	public void readFromStream(DataInputStream dis) {
 		try {
-			currentPosition = dis.readInt(); 
 			leastRenderedObstacle = dis.readInt(); 
 			
 		} catch(Exception e) {
@@ -194,6 +194,7 @@ public class ObstacleManager
 	@SuppressWarnings("unchecked")
 	public void readFromBundle(Bundle bundle) {
 		obstacles = (ArrayList<Obstacle>)bundle.getSerializable("obstacles");
+		wasRestored = true;
 	}
 	
 	/**
@@ -400,6 +401,20 @@ public class ObstacleManager
 	 */
 	public void setGameOver(boolean gameOver) {
 		this.gameOver = gameOver; 
+	}
+	
+	public void reset()
+	{
+		System.out.println(wasRestored);
+		if(!wasRestored)
+		{
+			leastRenderedObstacle=0;
+			currentPosition=Settings.OBSTALE_START;
+			obstacles.clear();
+			generateObstacles();
+		}
+		else
+			wasRestored=false;
 	}
 	
 }
