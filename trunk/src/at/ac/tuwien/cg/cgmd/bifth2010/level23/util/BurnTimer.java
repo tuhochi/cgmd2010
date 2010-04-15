@@ -30,7 +30,7 @@ public class BurnTimer extends TimingTask
 		Hud.instance.setMoneyButtonActive(true);
 		isDead = true;
 		remainingTime = time;
-		SoundManager.instance.startPlayer(audioPlayerId);
+		SoundManager.instance.pausePlayer(audioPlayerId);
 	}
 
 	@Override

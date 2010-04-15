@@ -473,6 +473,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void setGameOver(boolean gameOver) {
 
 		this.gameOver = gameOver; 
+		
+		if(gameOver)
+			soundManager.pauseAllAudio();
+		
 		mainChar.setGameOver(gameOver);	
 		background.setGameOver(gameOver); 
 		obstacleManager.setGameOver(gameOver);
