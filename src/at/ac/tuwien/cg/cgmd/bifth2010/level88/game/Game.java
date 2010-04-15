@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.GLU;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Textures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
@@ -16,6 +17,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * @author Asperger, Radax
  */
 public class Game {
+	public static final String TAG = "Game"; 
+	
 	private long newTime, oldTime;
 	private float elapsedSeconds;
 	public int screenWidth, screenHeight;
@@ -38,17 +41,15 @@ public class Game {
 	 * @param _context Context of the Android application
 	 */
 	public Game(Context _context) {
+		Log.d(TAG, "Game()");
+		
 		context = _context;
 		cameraPos = new Vector2();
-		worldScale = 0.3f;
+		worldScale = 0.2f;
 		
 		police = new ArrayList<Police> ();
 		stashes = new ArrayList<Stash> ();
-		
-		bunny = new Bunny(this);
-		map = new Map(this);
-		map.load();
-				
+			
 		newTouch = false;
 		touchPosition = new Vector2();
 
@@ -89,43 +90,22 @@ public class Game {
 		newTouch = false;
 		return old;
 	}
-	
-	
+
 	/**
-	 * Method for the finger down movement
+	 * Method for the touch events
 	 * @param pos position of the finger
 	 */
-	public synchronized void fingerDown(Vector2 pos) {
+	public synchronized void touchEvent(Vector2 pos) {
 		touchPosition = new Vector2(pos);
 		newTouch = true;
 	}
-	
-	
-	/**
-	 * Method for the finger up movement
-	 * @param pos position of the finger
-	 */
-	public synchronized void fingerUp(Vector2 pos) {
-		touchPosition = new Vector2(pos);
-		newTouch = true;
-	}
-	
-	
-	/**
-	 * Method for the finger movement
-	 * @param pos position of the finger
-	 */
-	public synchronized void fingerMove(Vector2 pos) {
-		touchPosition = new Vector2(pos);
-		newTouch = true;
-	}
-	
 	
 	/**
 	 * Initialize the OpenGL context
 	 * @param gl OpenGLcontext of android
 	 */
 	public synchronized void init(GL10 gl) {
+		Log.d(TAG, "init()");
     	gl.glClearColor(1, 1, 1, 0);
 
     	gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping
@@ -144,6 +124,11 @@ public class Game {
 		
 		//Really Nice Perspective Calculations
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+		
+		
+		bunny = new Bunny(this);
+		map = new Map(this);
+		map.load();
 	}
 	
 	
@@ -177,6 +162,8 @@ public class Game {
 	 * Update function for the screen
 	 */
 	public synchronized void update() {
+		if( bunny==null ) return;
+
 		Date date = new Date();
         oldTime = newTime;
 		newTime = date.getTime();
@@ -202,6 +189,8 @@ public class Game {
 	 * @param gl OpenGL context of android
 	 */
 	public synchronized void draw(GL10 gl) {
+		if( bunny==null ) return;
+		
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         gl.glLoadIdentity();

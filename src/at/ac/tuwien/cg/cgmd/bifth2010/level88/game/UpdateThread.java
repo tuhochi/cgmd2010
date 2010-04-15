@@ -31,7 +31,7 @@ public class UpdateThread extends Thread {
     	{
     		game.update(); 
     		try {
-				sleep(1000);
+				sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

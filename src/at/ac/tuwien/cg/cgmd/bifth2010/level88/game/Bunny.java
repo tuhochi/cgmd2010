@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
@@ -15,6 +16,7 @@ public class Bunny {
 	public float translateX, translateY;
 	private Quad bunnyQuad;
 	private Vector2 groundYDir, groundXDir;
+	private float waitingTime, maxWaitingTime;
 
 	/**
 	 * Moving possibilities of the bunny
@@ -37,6 +39,9 @@ public class Bunny {
 		translateX = 0;
 		translateY = 0;
 		moveStatus = MoveStatus.STANDING;
+		
+		maxWaitingTime = 1.0f;
+		waitingTime = 0;
 
 		float norm;
         groundYDir = new Vector2(-229, -169);
@@ -68,6 +73,10 @@ public class Bunny {
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
+		waitingTime += elapsedSeconds;
+		if( waitingTime < maxWaitingTime ) return;
+		waitingTime -= maxWaitingTime;
+		
         if( game.hasNewInput() ) {
            	Vector2 pos = new Vector2(game.touchPosition);
            	pos.mult(2);
@@ -80,20 +89,25 @@ public class Bunny {
            	float angleY = groundYDir.getAngle();
            	float distance  = pos.length();
            	
-           	if( distance < game.screenWidth/4 ) {
+           	if( distance < 50 ) {
            		moveStatus = MoveStatus.STANDING;
+           		Log.d("Bunny-Update", "STANDING");
            	}
            	else if( Math.abs(angle-angleX) < 30 ) {
            		moveStatus = MoveStatus.MOVE_RIGHT;
+           		Log.d("Bunny-Update", "MOVE_RIGHT");
            	}
            	else if( Math.abs(180+angle-angleX) < 30 ) {
            		moveStatus = MoveStatus.MOVE_LEFT;
+           		Log.d("Bunny-Update", "MOVE_LEFT");
            	}
            	else if( Math.abs(angle-angleY) < 30 ) {
            		moveStatus = MoveStatus.MOVE_UP;
+           		Log.d("Bunny-Update", "MOVE_UP");
            	}
            	else if( Math.abs(180+angle-angleY) < 30 ) {
            		moveStatus = MoveStatus.MOVE_DOWN;
+           		Log.d("Bunny-Update", "MOVE_DOWN");
            	}
         }
         

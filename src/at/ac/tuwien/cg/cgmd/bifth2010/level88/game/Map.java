@@ -178,7 +178,7 @@ public class Map {
 				case 'X':
 				case 'x':
 
-					int t = (r.nextInt()%5);
+					int t = Math.abs((r.nextInt()%5));
 					switch(t){
 					case 0:
 						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block1;
@@ -195,9 +195,9 @@ public class Map {
 					case 4:
 						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block5;
 						break;
-					default:
+					/*default:
 						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block1;
-						break;
+						break;*/
 					}
 					cells[x+1][values.size()-y].type = 'x';
 					break;
@@ -211,21 +211,21 @@ public class Map {
 				case '1':
 					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
-					game.addStash(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y, 1);
+					game.addStash(x+1, values.size()-y, 1);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '2':
 					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
-					game.addStash(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y, 2);
+					game.addStash(x+1, values.size()-y, 2);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '3':
 					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
-					game.addStash(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y, 3);
+					game.addStash(x+1, values.size()-y, 3);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
@@ -233,7 +233,7 @@ public class Map {
 				case 'b':
 					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
-					game.bunny.setPosition(cells[x+1][values.size()-y].x,cells[x+1][values.size()-y].y);
+					game.bunny.setPosition(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
@@ -241,7 +241,7 @@ public class Map {
 				case 'p':
 					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
-					game.addPolice(cells[x+1][values.size()-y].x, cells[x+1][values.size()-y].y);
+					game.addPolice(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
