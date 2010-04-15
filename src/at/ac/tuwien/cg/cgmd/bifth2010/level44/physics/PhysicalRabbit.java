@@ -118,21 +118,21 @@ public class PhysicalRabbit implements PhysicalObject {
 		if (coinDrops) {
 			moveCoin();
 		} else {
-			coinSprite.setPosition(newX, newY);
+			coinSprite.setPosition(newX, newY + 17);
 		}
 	}
 
 	private void moveCoin() {
 		if (coinSprite.getY() < screenHeight) {
-			// angle is between -20 and +20 degrees
-			Random random = new Random();
-			float angle = random.nextInt(2) > 0 ? 35 : -35;
+			// angle is 35 or -35 degrees
+			float angle = sprite.getRotation() < 0 ? 35 : -35;
+			// compute rad of angle
 			angle = (float)((90.f - angle) * Math.PI/180.);
 			// time since last reset
 			float time = (System.currentTimeMillis() - coinStartTime) / VELOCITY_FACTOR * 2;
 			// s = 1/2 * g * t^2
 			float sGravity = (1/2.f * PhysicalObject.GRAVITY * time * time);
-			float sMovement = 0.3f;
+			float sMovement = 0.25f;
 			// sy = s * sin
 			float sMovementY = sMovement * (float)Math.sin(Math.abs(angle));
 			// sx = s * cos

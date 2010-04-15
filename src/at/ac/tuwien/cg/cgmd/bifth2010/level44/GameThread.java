@@ -54,9 +54,9 @@ public class GameThread extends Thread {
 					
 					landscape.step();	
 					
-					if (TimeManager.getInstance().getRemainingTimeMillis() == 0) {
+					/*if (TimeManager.getInstance().getRemainingTimeMillis() == 0) {
 						doQuit();
-					}
+					}*/
 
 					 /* old moving, maybe useful as intro
 					  * rabbit.setPosition((float)(scene.getWidth()/2 +
