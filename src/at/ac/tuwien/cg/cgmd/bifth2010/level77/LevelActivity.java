@@ -20,6 +20,12 @@ import android.content.Context;
  */
 public class LevelActivity extends Activity
 {
+	
+	// for c++ code
+    static {
+        System.loadLibrary("l77fireblocks");
+    }
+    
 	private GameView gameView;
 	
 	@Override
@@ -65,4 +71,5 @@ public class LevelActivity extends Activity
 		super.onResume();
 		gameView.onResume();
 	}
+	
 }

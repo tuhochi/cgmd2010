@@ -46,11 +46,11 @@ public class GameView extends GLSurfaceView
 	public boolean onTouchEvent(final MotionEvent event)
 	{
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
-			jni.touchesBegan(event.getRawX(), event.getRawY());
+			jni.touchesBegan(event.getX(), event.getY());
 		if (event.getAction() == MotionEvent.ACTION_MOVE)
-			jni.touchesMoved(event.getRawX(), event.getRawY());
+			jni.touchesMoved(event.getX(), event.getY());
 		if (event.getAction() == MotionEvent.ACTION_UP)
-			jni.touchesEnded(event.getRawX(), event.getRawY());
+			jni.touchesEnded(event.getX(), event.getY());
 		
 		return true;
 	}		

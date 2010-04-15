@@ -1,22 +1,38 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
+import android.opengl.GLUtils;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.Cylinder;
 
 
 //one of the bloody things needed for getResources()
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 
 public class L77Renderer implements Renderer {
-	private float mAngle;
-	private Cylinder mCube;
+
+    
+	// c++ inteface/adaptors
+    private static native void nativeInit();
+    private static native void nativeDone();
+    private static native void nativeRender();
+    private static native void nativeResize(int w, int h);
+    //debug
+    private static native int nativeNumDrawn();
+    private static native int nativePushBitmap(int[] pixels, int w, int h);
+
     private boolean mTranslucentBackground;
     private Context mContext;
 
@@ -27,87 +43,69 @@ public class L77Renderer implements Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		// TODO Adapt CubeRend to perosnal stuff
-		 /*
-         * Usually, the first thing one might want to do is to clear
-         * the screen. The most efficient way of doing this is to use
-         * glClear().
-         */
-
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-
-        /*
-         * Now we're ready to draw some 3D objects
-         */
-
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
-        gl.glTranslatef(0, 0, -3.0f);
-        gl.glRotatef(mAngle,        0, 1, 0);
-        gl.glRotatef(mAngle*0.25f,  1, 0, 0);
-
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-
-        mCube.draw(gl);
-
-        gl.glRotatef(mAngle*2.0f, 0, 1, 1);
-        gl.glTranslatef(0.5f, 0.5f, 0.5f);
-
-        mCube.draw(gl);
-
-        mAngle += 1.2f;
-
-
+       nativeRender();
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		// TODO Change default
-        gl.glViewport(0, 0, width, height);
-
-        /*
-         * Set our projection matrix. This doesn't have to be done
-         * each time we draw, but usually a new projection needs to
-         * be set when the viewport is resized.
-         */
-
-        float ratio = (float) width / height;
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-        gl.glLoadIdentity();
-        gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
-
+		nativeResize(width, height);
+		Log.i("renderer", "surface changed/resized");
 	}
 
 	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		// TODO Change default stuff
-        /*
-         * By default, OpenGL enables features that improve quality
-         * but reduce performance. One might want to tweak that
-         * especially on software renderer.
-         */
-        gl.glDisable(GL10.GL_DITHER);
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {	
+ 		nativeInit();
+ 		
+ 		loadBitmapTest();
+ 		Log.i("renderer", "initiliased");
+	}
+	
+	public void loadBitmapTest()
+	{
+        InputStream is = mContext.getResources().openRawResource(R.drawable.l00_icon);
 
-        /*
-         * Some one-time OpenGL initialization can be made here
-         * probably based on features of this particular context
-         */
-         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
-                 GL10.GL_FASTEST);
-
-         if (mTranslucentBackground) {
-             gl.glClearColor(0,0,0,0);
-         } else {
-             gl.glClearColor(1,1,1,1);
-         }
-         gl.glEnable(GL10.GL_CULL_FACE);
-         gl.glShadeModel(GL10.GL_SMOOTH);
-         gl.glEnable(GL10.GL_DEPTH_TEST);
-         
-        mCube = new Cylinder(0.5f, 0.10f, (short) 10);
- 		mCube.setTexture(gl, mContext.getResources(), R.drawable.l00_coin);
- 		mCube.setColor(0.85f, 0.68f, 0.22f, 1.f);
+        Bitmap bitmap;
+		try {
+		    bitmap = BitmapFactory.decodeStream(is);
+		} finally {
+		    try {
+		        is.close();
+		    } catch(IOException e) {
+		    }
+		}
+		
+		//...or Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.imgname);
+		//1st method: GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+		//2nd method
+		int w = bitmap.getWidth();
+		int h = bitmap.getHeight();
+		
+		int[] pixels = new int[w * h]; 
+		bitmap.getPixels(pixels, 0, w, 0, 0, w, h); 
+		
+		for (int i = 0; i < w; i++)
+		{
+			for (int j = 0; j < h; j++)
+			{
+				if (i > 5 && i < (w - 5) &&
+						j > 5 && j < (h - 5))
+				{
+					pixels[j*w+i] = 0xff00ff00;
+				}
+				else
+				{
+					pixels[j*w+i] = 0x00770077;
+				}
+			}
+		}
+		
+		nativePushBitmap(pixels, w, h);
+		
+	}
+	
+	public void finalize()
+	{
+		nativeDone();
 	}
 
 }
