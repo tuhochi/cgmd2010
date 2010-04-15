@@ -110,6 +110,7 @@ public class LevelActivity extends Activity implements Observer {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		if (scene != null) {
 			scene.onResume();
 		}
@@ -121,6 +122,7 @@ public class LevelActivity extends Activity implements Observer {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
 		if (scene != null) {
 			scene.onPause();
 		}

@@ -19,6 +19,8 @@ public class Crosshairs extends Subject {
 	private static final int MAX_DISTANCE_2 = 2500;
 	/** the milliseconds it takes to load and shoot if the crosshairs are green */
 	private static final int MILLISECONDS_TO_SHOOT = 3000;
+	/** the width of the progress bar */
+	private static final float PROGRESSBAR_WIDTH = 140.f;
 	
 	/** the GameScene */
 	private GameScene scene = null;
@@ -42,10 +44,10 @@ public class Crosshairs extends Subject {
 	private long timeStamp = -1L;
 	
 	private FloatBuffer progressBarBuffer;
-	private float[] progressBarVertices = { 0.f, 0.f, 0.f, // bottom left
-										    140.f, 0.f, 0.f, // bottom right
-											0.f, 30.f, 0.f, // top left
-											140.f, 30.f, 0.f }; // top right
+	private float[] progressBarVertices = { -PROGRESSBAR_WIDTH/2, 0.f, 0.f, // bottom left
+											 PROGRESSBAR_WIDTH/2, 0.f, 0.f, // bottom right
+											-PROGRESSBAR_WIDTH/2, 30.f, 0.f, // top left
+											 PROGRESSBAR_WIDTH/2 , 30.f, 0.f }; // top right
 
 	public Crosshairs(GameScene scene, Texture texture, int width, int height) {
 		this.scene = scene;
@@ -77,10 +79,13 @@ public class Crosshairs extends Subject {
 	}
 
 	private void drawProgressBar(GL10 gl) {
+		float progress = timeStamp > 0 ? (System.currentTimeMillis() - timeStamp) / MILLISECONDS_TO_SHOOT : 0;
+		float progressWidth = progress * PROGRESSBAR_WIDTH;
+		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
 		
-		gl.glTranslatef(screenWidth/2.f - 70.f, 15.f, 0);
+		gl.glTranslatef(screenWidth/2.f, 15.f, 0);
 		gl.glColor4f(1, 1, 1, 1);
 		
 		//Point to our vertex buffer
@@ -171,7 +176,7 @@ public class Crosshairs extends Subject {
 		float dx = desiredX - getX();
 		float dy = desiredY - getY();
 
-		move(dx/250.f, dy/250.f);
+		move(dx/220.f, dy/220.f);
 	}
 
 	/**

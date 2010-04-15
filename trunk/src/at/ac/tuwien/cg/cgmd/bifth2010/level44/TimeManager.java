@@ -26,12 +26,12 @@ public class TimeManager extends Subject {
 	private TimeManager() {
 		updateTime = new Thread() {
 			public void run() {
-				while (true) {
+				while (getInstance().getRemainingTimeMillis() > 0) {
 					TimeManager.this.notifyAll(new TimeEvent());
 				
-					// update time every 300ms
+					// update time every 200ms
 					try {
-					Thread.sleep(300L);
+					Thread.sleep(200L);
 					} catch(Exception ex) { }
 				}
 			}
@@ -39,7 +39,7 @@ public class TimeManager extends Subject {
 	}
 	
 	
-	public static TimeManager getInstance() {
+	public static synchronized TimeManager getInstance() {
 		if (singleton == null) {
 			singleton = new TimeManager();
 		}
@@ -50,7 +50,7 @@ public class TimeManager extends Subject {
 	/**
 	 * resets the time
 	 */
-	public void reset() {
+	public synchronized void reset() {
 		timeSoFar = 0L;
 		paused = true;
 		
@@ -60,27 +60,32 @@ public class TimeManager extends Subject {
 	/**
 	 * starts the timer
 	 */
-	public void start() {
+	public synchronized void start() {
 		paused = false;
 		timestamp = System.currentTimeMillis();
 		timeSoFar = 0L;
 		
+		// start timer thread
 		updateTime.start();
-		
 	}
 	
 	/**
 	 * pauses the timer
 	 */
-	public void pause() {
+	public synchronized void pause() {
 		timeSoFar += System.currentTimeMillis() - timestamp;
 		paused = true;
+	}
+	
+	public synchronized void stop() {
+		paused = true;
+		updateTime.stop();
 	}
 	
 	/**
 	 * @return the remaining time in milliseconds for the level
 	 */
-	public long getRemainingTimeMillis() {
+	public synchronized long getRemainingTimeMillis() {
 		long time = timeSoFar;
 		
 		if (!paused) {
@@ -95,7 +100,7 @@ public class TimeManager extends Subject {
 	/**
 	 * string-representation of the remaining time
 	 */
-	public String toString() {
+	public synchronized String toString() {
 		long millis = this.getRemainingTimeMillis();
 		int remainingSeconds = (int)(millis/1000);
 		
