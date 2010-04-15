@@ -54,11 +54,13 @@ public class SoundManager
 		}
 	}
 	
-	public void stopAllAudio()
+	public void pauseAllAudio()
 	{
 		for(int i=0;i<players.size();i++)
 		{
-			players.get(i).stop();
+			MediaPlayer tempPlayer = players.get(i);
+			if(tempPlayer.isPlaying())
+				tempPlayer.pause();
 		}
 	}
 		

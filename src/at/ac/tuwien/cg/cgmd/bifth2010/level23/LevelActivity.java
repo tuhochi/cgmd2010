@@ -123,7 +123,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void onPause() {
 		super.onPause(); 
 		renderer.onPause();
-		SoundManager.instance.stopAllAudio();
+		SoundManager.instance.pauseAllAudio();
 		//renderer.persistSceneEntities();
 	}
 	

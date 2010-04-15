@@ -267,14 +267,14 @@ public class ObstacleManager
 				
 				if(testCollisionWithMainChar(tempObstacle, currentHeight) && !gameOver)
 				{
-					RenderView.instance.setGameOver(true); 
+					RenderView.instance.setGameOver(true);
 					LevelActivity.handler.post(
 							new Runnable()
 							{
 						    	@Override
 						        public void run() 
 						    	{
-						            LevelActivity.instance.triggerVibrate(1000);
+						            LevelActivity.instance.triggerVibrate(500);
 						        }
 							});
 				}
