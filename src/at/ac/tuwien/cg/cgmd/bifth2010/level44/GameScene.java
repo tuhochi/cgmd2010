@@ -103,7 +103,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		Texture mainTexture = new Texture(gl, getContext(), R.drawable.l44_texture);
 		configureTexture(gl, mainTexture);
 		
-		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), new Sprite(TextureParts.getCoin(mainTexture)), this.getWidth(), this.getHeight());
+		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), new Sprite(TextureParts.makeCoin(mainTexture)), this.getWidth(), this.getHeight());
 		rabbit.setPosition(getWidth()/2, getHeight()/2);
 		
 		crosshairs = new Crosshairs(this, mainTexture, this.getWidth(), this.getHeight());
