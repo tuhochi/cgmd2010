@@ -17,6 +17,8 @@ public class Level66View extends GLSurfaceView {
 		_renderer = new Level66Renderer();
         setRenderer(_renderer);
         
+        Sound.loadSound(getContext());
+        
         this.setFocusableInTouchMode(true);
 	}
 	
@@ -26,6 +28,7 @@ public class Level66View extends GLSurfaceView {
             queueEvent(new Runnable() {
                 public void run() {
                     _renderer.moveLeft();
+                    Sound.playSelect();
                 }});
             return true;
         }
