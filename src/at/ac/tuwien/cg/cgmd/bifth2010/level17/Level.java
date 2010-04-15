@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
@@ -28,15 +29,34 @@ public class Level {
 	private float mBlockSize = 5.0f;
 	private float mNextHouse = 0;
 	private float mNextBird = 0;
-	private Player mPlayer = new Player(new Vector3(0f, 30f, 0f), 1f, 3, 0);
+	private Player mPlayer;
 	private Quad mBird;
 	//private NormalModeWorld mWorld;
+	
+	public static final String PLAYER_LIFES = "feelGood";
+	public static final String PLAYER_MONEY = "muney";
+	public static final String LEVEL_SPEED = "whuuuiii";
+	
 	
 	/**
 	 * Level Class for Rendering Houses and other Objects.
 	 */
-	public Level(NormalModeWorld world)
+	public Level(NormalModeWorld world, Bundle savedInstance)
 	{
+		int money = 0;
+		int lifes = 3;
+		
+		if(savedInstance != null)
+		{
+			if(savedInstance.containsKey(PLAYER_MONEY))
+				money = savedInstance.getInt(PLAYER_MONEY);
+			if(savedInstance.containsKey(PLAYER_LIFES))
+				lifes = savedInstance.getInt(PLAYER_LIFES);
+			if(savedInstance.containsKey(LEVEL_SPEED))
+				mSpeed.y = savedInstance.getFloat(LEVEL_SPEED);
+		}
+
+        mPlayer = new Player(new Vector3(0f, 30f, 0f), 1f, lifes, money);
 		//mWorld = world;
 		for(int i = 0; i < 5; i++)
 			mHouseModels[i] = new HouseModel(mBlockSize, mBlockSize * ((float)i + 1.0f), mBlockSize);
@@ -46,6 +66,7 @@ public class Level {
         GLManager.getInstance().getTextures().add(R.drawable.l17_bird);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bier);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
+        
 	}
 	
 	/**
@@ -204,7 +225,17 @@ public class Level {
 		mPlayer.setPosition(Vector3.add(mPlayer.getPosition(), moveDelta));
 
 	}
-
+	
+	/**
+	 * Save the actual gamestate
+	 * @param outState The bundle to save to
+	 */
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putInt(PLAYER_MONEY, mPlayer.getMoney());
+		outState.putInt(PLAYER_LIFES, mPlayer.getLives());
+		outState.putFloat(LEVEL_SPEED, mSpeed.y);
+	}
+	
 	/**
 	 * Getter for the Player
 	 * @return The Player in the Level

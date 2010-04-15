@@ -88,4 +88,20 @@ public class Player {
 	public void setRadius(float radius) {
 		this.mRadius = radius;
 	}
+
+	public int getLives() {
+		return mLives;
+	}
+
+	public void setLives(int lives) {
+		this.mLives = lives;
+	}
+
+	public int getMoney() {
+		return mMoney;
+	}
+
+	public void setMoney(int money) {
+		this.mMoney = money;
+	}
 }

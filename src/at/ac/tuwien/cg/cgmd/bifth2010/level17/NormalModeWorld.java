@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
+import android.os.Bundle;
 import android.os.Handler;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLManager;
@@ -51,6 +52,8 @@ public class NormalModeWorld implements World, PlayerStateListener {
 
 	private Quad mBackground;
 	
+	private Bundle mSavedInstance;
+	
 	
     
 	/**
@@ -58,13 +61,14 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	 * @param context The context for acess to the UI
 	 * @param handler A handler for callbacks
 	 */
-    public NormalModeWorld(LevelActivity context, Handler handler)
+    public NormalModeWorld(LevelActivity context, Handler handler, Bundle savedInstance)
     {
         Date date = new Date();
         mTime = date.getTime();
         mOldTime = mTime;
         mContext = context;
         mHandler = handler;
+        mSavedInstance = savedInstance;
     }
     
     /**
@@ -172,7 +176,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	{
 		MatrixTrackingGL trackGl = (MatrixTrackingGL)gl;
         GLManager.getInstance().init(trackGl, mContext);
-        mLevel = new Level(this);
+        mLevel = new Level(this, mSavedInstance);
         mLevel.getPlayer().addPlayerStateListener(this);
         
         GLManager.getInstance().getTextures().loadTextures();
@@ -261,7 +265,8 @@ public class NormalModeWorld implements World, PlayerStateListener {
 		mPause = pause;
 	}
 
-
-	
-	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		mLevel.onSaveInstanceState(outState);
+	}
 }
