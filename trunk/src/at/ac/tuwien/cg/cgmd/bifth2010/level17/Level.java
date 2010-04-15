@@ -12,20 +12,26 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.HouseModel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
 
-
+/**
+ * Represents the level in the game. Holds the player, houses and birds
+ * @author MaMa
+ *
+ */
 public class Level {
 
 	private HouseModel[] mHouseModels = new HouseModel[5];
 	//private Vector3 mPosition = new Vector3(0, 0, 0);
 	private List<House> mHouses = new ArrayList<House>();
+	private List<House> mFadeHouses = new ArrayList<House>();
 	private List<Bird> mBirds = new ArrayList<Bird>();
-	private Vector3 mSpeed = new Vector3(0, -40.0f, 0);
+	private Vector3 mSpeed = new Vector3(0, -20.0f, 0);
 	private float mBlockSize = 5.0f;
 	private float mNextHouse = 0;
 	private float mNextBird = 0;
-	private Player mPlayer = new Player(new Vector3(0f, 30f, 0f), 1f, 3, 100);
+	private Player mPlayer = new Player(new Vector3(0f, 30f, 0f), 1f, 3, 0);
 	private Quad mBird;
 	//private NormalModeWorld mWorld;
+	
 	/**
 	 * Level Class for Rendering Houses and other Objects.
 	 */
@@ -36,10 +42,10 @@ public class Level {
 			mHouseModels[i] = new HouseModel(mBlockSize, mBlockSize * ((float)i + 1.0f), mBlockSize);
 		
 		mBird = new Quad(3.0f,3.0f);
-		
         GLManager.getInstance().getTextures().add(R.drawable.l17_crate);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bird);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bier);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
 	}
 	
 	/**
@@ -52,7 +58,22 @@ public class Level {
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
     	gl.glFrontFace(GL10.GL_CCW);
 		
+    	
+    	
 		gl.glPushMatrix();
+    	gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+    	gl.glEnable(GL10.GL_BLEND);
+    	gl.glDepthMask(false);
+		for (House house : mFadeHouses) {
+			float dist = (float)Math.abs(mPlayer.getPosition().y - house.getPosition().y) - (house.getSize().y / 2.0f);
+			float alpha = (dist - 100.0f) / 30.0f;
+	    	gl.glColor4f(1.0f,1.0f,1.0f, 1.0f - alpha);
+			house.draw();
+		}	
+    	gl.glColor4f(1.0f,1.0f,1.0f, 1.0f);
+    	gl.glDisable(GL10.GL_BLEND);
+    	gl.glDepthMask(true);
+		
 		for (House house : mHouses) {
 			house.draw();
 		}		
@@ -60,11 +81,6 @@ public class Level {
     	gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
     	gl.glEnable(GL10.GL_BLEND);
     	gl.glDepthMask(false);
-    	//gl.glDisable(GL10.GL_DEPTH_TEST);
-		
-		//for (Bird bird : mBirds) {
-			//bird.draw();
-		//}
 		for(int i = mBirds.size() - 1; i >= 0; i-- ){
 			mBirds.get(i).draw();
 		}
@@ -72,7 +88,6 @@ public class Level {
     	gl.glDisable(GL10.GL_BLEND);
 
     	gl.glDepthMask(true);
-    	//gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glPopMatrix();
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -89,6 +104,7 @@ public class Level {
 		//mPosition = Vector3.add(mPosition, moveDelta);
 
 		Vector3 playerPos = mPlayer.getPosition();
+		mSpeed.y -= elapsedSeconds * 2.0f;
 		moveDelta.y = Vector3.mult(mSpeed, elapsedSeconds).y;
 		updatePlayerPosition(moveDelta);
 		mNextHouse -= elapsedSeconds;
@@ -101,12 +117,12 @@ public class Level {
 			newHouse.setHouseSize(size, new Vector3(mBlockSize, mBlockSize * ((float)size + 1.0f), mBlockSize));
 			int xpos = (int)(Math.floor(Math.random() * 5.0)) - 2;
 			int zpos = (int)(Math.floor(Math.random() * 9.0)) - 4;
-			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 131.0f - (newHouse.getSize().y / 2.0f), zpos * mBlockSize + playerPos.z);
+			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 130.0f - (newHouse.getSize().y / 2.0f), zpos * mBlockSize + playerPos.z);
 			newPos.x -= newPos.x % mBlockSize;
 			newPos.z -= newPos.z % mBlockSize;
 			newHouse.setPosition(newPos);
 			newHouse.setModel(mHouseModels[newHouse.getHouseSize()]);
-			mHouses.add(newHouse);
+			mFadeHouses.add(newHouse);
 			mNextHouse = (float)Math.random() * 0.2f;
 		}
 		if(mNextBird < 0)
@@ -114,7 +130,7 @@ public class Level {
 			Bird newbird = new Bird();
 			float birdxpos = (float)((Math.floor(Math.random() * 5.0)) - 2) * mBlockSize;
 			float birdzpos = (float)((Math.floor(Math.random() * 9.0)) - 4) * mBlockSize;
-			Vector3 newPos = new Vector3(birdxpos + playerPos.x, playerPos.y - 131.0f, birdzpos + playerPos.z);
+			Vector3 newPos = new Vector3(birdxpos + playerPos.x, playerPos.y - 130.0f, birdzpos + playerPos.z);
 			newbird.setPosition(newPos);
 			newbird.setModel(mBird);
 			float rotation = (float)(Math.random() * 360);
@@ -129,6 +145,14 @@ public class Level {
 		}
 		
 		List<House> remove = new ArrayList<House>();
+		for (House house : mFadeHouses) {
+			if((float)Math.abs(playerPos.y - house.getPosition().y) - (house.getSize().y / 2.0f) < 100.0f)
+				remove.add(house);
+		}
+		mHouses.addAll(remove);
+		mFadeHouses.removeAll(remove);
+		
+		remove.clear();
 		for (House house : mHouses) {
 			if(house.getPosition().y - playerPos.y  + (house.getHouseSize() * mBlockSize / 2.0f) > 10.0f)
 				remove.add(house);
@@ -144,6 +168,10 @@ public class Level {
 		mBirds.removeAll(removeBird);
 	}
 	
+	/**
+	 * Recalculates the new Playerposition and do the collision detection
+	 * @param moveDelta A vector representing the distance the user dragged the view
+	 */
 	private void updatePlayerPosition(Vector3 moveDelta)
 	{
 		Vector3 newPos = Vector3.add(mPlayer.getPosition(), moveDelta);
@@ -177,6 +205,10 @@ public class Level {
 
 	}
 
+	/**
+	 * Getter for the Player
+	 * @return The Player in the Level
+	 */
 	public Player getPlayer() {
 		return mPlayer;
 	}

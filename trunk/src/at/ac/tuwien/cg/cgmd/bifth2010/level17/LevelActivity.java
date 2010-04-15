@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLView;
@@ -35,7 +34,7 @@ public class LevelActivity extends Activity {
 	private TextView mPointsText;
 	private Vibrator mVibrator;
 	
-	
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +81,7 @@ public class LevelActivity extends Activity {
         llayout.addView(mPointsText, llparams);
         
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  
+  
     }
 
     @Override
@@ -131,6 +131,10 @@ public class LevelActivity extends Activity {
     	return super.onTouchEvent(event);
     }
     
+	/**
+	 * Is called when the health of the player changes
+	 * @param hp The new health of the player
+	 */
     public void playerHPChanged(float hp)
     {
     	if(hp > 0)
@@ -143,6 +147,10 @@ public class LevelActivity extends Activity {
     	mVibrator.vibrate(milliseconds);  
     }    
     
+	/**
+	 * Is called when the money of the player changes
+	 * @param hp The new money of the player
+	 */
     public void playerMoneyChanged(int money)
     {
     	mPointsText.setText(Integer.toString(money)); 

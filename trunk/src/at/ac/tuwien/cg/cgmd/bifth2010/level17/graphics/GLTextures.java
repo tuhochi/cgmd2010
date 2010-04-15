@@ -12,6 +12,12 @@ import java.lang.Integer;
 import java.nio.ByteBuffer; 
 import java.nio.ByteOrder; 
 import java.nio.IntBuffer; 
+
+/**
+ * A TextureManager
+ * @author MaMa
+ *
+ */
 public class GLTextures { 
 	
 	private java.util.HashMap<Integer,Integer> textureMap; 
@@ -21,6 +27,11 @@ public class GLTextures {
 	private int[] textures; 
 	private int mActiveTex = 0;
 	
+	/**
+	 * Creates a new texture manager
+	 * @param gl The OpenGL context
+	 * @param context The Activity context
+	 */
 	public GLTextures(GL10 gl,Context context) 
 	{ 
 		this.gl = gl; 
@@ -28,6 +39,9 @@ public class GLTextures {
 		this.textureMap = new java.util.HashMap<Integer,Integer> (); 
 	} 
 	
+	/**
+	 * Loads the textures that where added with the add method
+	 */
 	public void loadTextures() 
 	{ 
 		int[] tmp_tex = new int[textureFiles.length]; 
@@ -64,6 +78,10 @@ public class GLTextures {
 		} 
 	} 
 	
+	/**
+	 * Sets a texture
+	 * @param id The Android id of the resource
+	 */
 	public void setTexture(int id) 
 	{ 
 		try 
@@ -108,6 +126,10 @@ public class GLTextures {
 		return bb; 
 	} 
 	
+	/**
+	 * Adds a new texture to the manager
+	 * @param resource The Android resource id of the image to add
+	 */
 	public void add(int resource) 
 	{ 
 		if(textureFiles==null) 

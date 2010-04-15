@@ -16,7 +16,11 @@ import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
-
+/**
+ * Class to load a obj model
+ * @author MaMa
+ *
+ */
 public class OBJModel implements Serializable
 {
     /**

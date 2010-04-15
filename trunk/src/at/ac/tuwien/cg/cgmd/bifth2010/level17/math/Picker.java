@@ -1,7 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
 
 import javax.microedition.khronos.opengles.GL10;
-import android.util.Log;
 
 /*** 
  * A Picker class that is used to transform screen space coordinates 
@@ -14,7 +13,7 @@ import android.util.Log;
  */
 public class Picker 
 {
-	private static final String LOG_TAG = "Picker";
+	//private static final String LOG_TAG = "Picker";
 	
 	// used to grab the current view and projection matrices
 	private MatrixGrabber mMatrixGrabber = new MatrixGrabber();

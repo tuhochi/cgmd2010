@@ -7,7 +7,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBufferType;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
-
+/**
+ * A model of a house
+ * @author MaMa
+ *
+ */
 public class HouseModel implements Renderable {
 
 	private VertexBuffer mVertexBuffer;

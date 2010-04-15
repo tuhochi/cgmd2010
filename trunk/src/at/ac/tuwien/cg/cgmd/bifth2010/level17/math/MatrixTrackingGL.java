@@ -17,8 +17,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
 
 
-import android.util.Log;
-
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

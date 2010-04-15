@@ -7,13 +7,21 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLSurfaceView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.World;
 
-
+/**
+ * Our own GlRenderer
+ * @author MaMa
+ *
+ */
 public class JMRenderer implements GLSurfaceView.Renderer {
 
     private boolean mTranslucentBackground;
     private World mWorld;
     
-    
+    /**
+     * Creates a new Renderer
+     * @param useTranslucentBackground Should we render to a transparent backgprund
+     * @param world The world
+     */
     public JMRenderer(boolean useTranslucentBackground, World world) {
         mTranslucentBackground = useTranslucentBackground;
         mWorld = world;

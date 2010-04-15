@@ -6,7 +6,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
 import android.os.Handler;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
@@ -14,10 +13,16 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Picker;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJRenderable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
 
+/**
+ * The implementation of the World we are using
+ * @author MaMa
+ *
+ */
 public class NormalModeWorld implements World, PlayerStateListener {
 
-	private static final String LOG_TAG = "World";
+	//private static final String LOG_TAG = "World";
 	
 	private Vector2 mTouchPos = null;
     private Vector2 mNewTouchPos = null;
@@ -43,10 +48,16 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	private OBJRenderable mObject;
 	
 	private boolean mPause = true;
+
+	private Quad mBackground;
 	
 	
     
-	
+	/**
+	 * Creates a new World
+	 * @param context The context for acess to the UI
+	 * @param handler A handler for callbacks
+	 */
     public NormalModeWorld(LevelActivity context, Handler handler)
     {
         Date date = new Date();
@@ -56,7 +67,9 @@ public class NormalModeWorld implements World, PlayerStateListener {
         mHandler = handler;
     }
     
-    
+    /**
+     * Update the world
+     */
 	public synchronized void update()
 	{
 		if(mPause)
@@ -86,31 +99,56 @@ public class NormalModeWorld implements World, PlayerStateListener {
         mLevel.update(mElapsedSeconds, moveDelta);
 	}
 	
+	/**
+	 * Render the world
+	 * @param gl The OpenGL Context
+	 */
 	public synchronized void draw(GL10 gl)
 	{
 
 		MatrixTrackingGL trackGl = (MatrixTrackingGL)gl;
 		trackGl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		float[] color = {1.0f,1.0f,1.0f,1.0f};
+
+		trackGl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
+		trackGl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		trackGl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		trackGl.glEnable(GL10.GL_TEXTURE_2D);
+		trackGl.glEnable(GL10.GL_CULL_FACE);	
+		gl.glFrontFace(GL10.GL_CCW);
+
+		//DRAW THE BACKGORUND
+    	gl.glPushMatrix();
+		trackGl.glMatrixMode(GL10.GL_MODELVIEW);
+		trackGl.glLoadIdentity();					
+		gl.glDepthMask(false);
+		Vector3 viewPos = new Vector3(0,10.0f,0);
+		Vector3 targetPos = Vector3.add(viewPos, mLookDirection);
+		GLU.gluLookAt(trackGl, viewPos.x, viewPos.y, viewPos.z, targetPos.x, targetPos.y, targetPos.z, mUp.x, mUp.y, mUp.z);
+    	GLManager.getInstance().getTextures().setTexture(R.drawable.l17_bg);
+    	mBackground.draw(gl);
+    	gl.glPopMatrix();
+    	gl.glDepthMask(true);
+    	
 		trackGl.glFogfv(GL10.GL_FOG_COLOR, color, 0);
 		trackGl.glFogf(GL10.GL_FOG_START, 70.0f);
 		trackGl.glFogf(GL10.GL_FOG_END, 130.0f);
 		trackGl.glFogf(GL10.GL_FOG_DENSITY, 0.5f);
 		trackGl.glFogx(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
 		trackGl.glEnable(GL10.GL_FOG);
-		trackGl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
-		trackGl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		trackGl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		trackGl.glEnable(GL10.GL_TEXTURE_2D);
-		trackGl.glEnable(GL10.GL_CULL_FACE);		
-		
+    	
 		SetViewMatrix(trackGl);
 
 		mLevel.draw(trackGl);
 
         trackGl.glDisable(GL10.GL_TEXTURE_2D);
+        trackGl.glDisable(GL10.GL_FOG);
 	}
 	
+	/**
+	 * Set the view matrix
+	 * @param trackGl The OpenGL context
+	 */
 	private void SetViewMatrix(MatrixTrackingGL trackGl)
 	{
 		trackGl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -126,6 +164,10 @@ public class NormalModeWorld implements World, PlayerStateListener {
 		mPicker.SetReferencePosition(targetPos);
 	}
 	
+	/**
+	 * Initialize the scene
+	 * @param gl The OpenGL context
+	 */
 	public synchronized void init(GL10 gl)
 	{
 		MatrixTrackingGL trackGl = (MatrixTrackingGL)gl;
@@ -133,9 +175,11 @@ public class NormalModeWorld implements World, PlayerStateListener {
         mLevel = new Level(this);
         mLevel.getPlayer().addPlayerStateListener(this);
         
-        //mObject = new OBJRenderable(OBJModel.load("l17_test.obj", mContext));
         GLManager.getInstance().getTextures().loadTextures();
 		mPause = false;
+
+		mBackground = new Quad(20f,20f);
+		
 	}
 
 
