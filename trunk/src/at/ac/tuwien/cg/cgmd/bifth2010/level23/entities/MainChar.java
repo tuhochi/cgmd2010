@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
@@ -386,6 +387,10 @@ public class MainChar implements SceneEntity {
 			}
 			
 			glPopMatrix();
+		}
+		else
+		{
+			LevelActivity.instance.setScore((int)(RenderView.getInstance().balloonHeight*Settings.SCOREHEIGHT_MODIFIER));
 		}
 	}
 	

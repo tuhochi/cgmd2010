@@ -72,7 +72,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private float topBounds=100.0f;
 	
 	/** The balloon height. */
-	private float balloonHeight;
+	public float balloonHeight;
 	
 	/** The instance of the RenderView to pass it around. */
 	private static RenderView instance;
@@ -738,7 +738,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		timer.reset();
 		background.reset();
 		mainChar.preprocess();
-		soundManager.reset();
 		hud.preprocess();
 		
 		if(!isInitialized)

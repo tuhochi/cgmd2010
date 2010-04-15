@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
@@ -73,11 +74,18 @@ public class LevelActivity extends Activity implements OrientationListener {
 		fpsText = (TextView)findViewById(R.id.l23_TextViewFps);
         
         CONTEXT = this; 
+                        
+        SoundManager.instance.initAudio();
+		
         OrientationManager.registerListener(this);
  
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         
         instance = this;
+        
+		SessionState s = new SessionState();
+		s.setProgress(0); 
+		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 	
 	/**
@@ -97,7 +105,6 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-		
 	}
 
 	/**
@@ -118,10 +125,9 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 */
 	@Override
 	public void onPause() {
-		SoundManager.instance.releaseAudioResources();
 		super.onPause(); 
 		renderer.onPause();
-		
+		SoundManager.instance.stopAllAudio();
 		//renderer.persistSceneEntities();
 	}
 	
@@ -133,6 +139,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void onResume() {
 		super.onResume(); 
 		renderer.onResume();
+		SoundManager.instance.reset();
 		//renderer.restoreSceneEntities();
 	}
 	
@@ -151,8 +158,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 */
 	@Override
 	public void onDestroy() {
-		
-		super.onDestroy();
+		super.onDestroy();	
+		SoundManager.instance.releaseAudioResources();
 		if (OrientationManager.isListening()) 
 			OrientationManager.unregisterListener(this);
 	}
@@ -293,5 +300,13 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void triggerVibrate(long millis)
 	{
 		vibrator.vibrate(millis);
+	}
+	
+	public void setScore(int score)
+	{
+		SessionState s = new SessionState();
+		s.setProgress(score);
+		setResult(Activity.RESULT_OK, s.asIntent());
+		this.finish();
 	}
 }
