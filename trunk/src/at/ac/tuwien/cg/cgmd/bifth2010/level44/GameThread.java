@@ -22,9 +22,6 @@ public class GameThread extends Thread {
 		this.crosshairs = crosshairs;
 		this.landscape = landscape;
 		this.quit = false;
-
-		// TODO Remove and make textures smaller
-		this.rabbit.getSprite().setScale(0.4f);
 	}
 
 	public void run() {

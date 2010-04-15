@@ -4,21 +4,25 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 public class TextureParts {
 	
 	public static TexturePart makeRabbitHead(Texture texture) {
-		return new TexturePart(texture, 0, 512+128, 191, 512+255);
+		return new TexturePart(texture, 70, 519, 70+100, 519+72);
 	}
 	
 	public static TexturePart makeWing(Texture texture) {
-		return new TexturePart(texture, 0, 512+0, 127, 512+127);
+		return new TexturePart(texture, 0, 519, 0+55, 519+60);
 	}
 	
-	public static TexturePart getBucket(Texture texture) {
-		return new TexturePart(texture, 128, 512+0, 255, 512+127);
+	public static TexturePart makeBucketBack(Texture texture) {
+		return new TexturePart(texture, 180, 519, 180+61, 519+58);
 	}
 	
-	public static TexturePart getCoin(Texture texture) {
-		return new TexturePart(texture, 224, 512+224, 255, 512+255);
+	public static TexturePart makeBucket(Texture texture) {
+		return new TexturePart(texture, 260, 519, 260+61, 519+54);
 	}
-		
+
+	public static TexturePart makeCoin(Texture texture) {
+		return new TexturePart(texture, 340, 519, 340+19, 519+19);
+	}
+	
 	public static TexturePart makeSky(Texture texture) {
 		return new TexturePart(texture, 0, 0, 0+10, 0+320);
 	}

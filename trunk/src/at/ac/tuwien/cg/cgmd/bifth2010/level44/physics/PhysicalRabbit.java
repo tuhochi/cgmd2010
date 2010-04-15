@@ -52,8 +52,6 @@ public class PhysicalRabbit implements PhysicalObject {
 		this.coinSprite = coinSprite;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-
-		coinSprite.setScale(0.4f); //TODO: remove
 	}
 
 	public RabbitSprite getSprite() {
@@ -80,7 +78,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		float angle = (float)((90.f - sprite.getRotation()) * Math.PI/180.);
 
 		if (currentGesture != null) {
-			// stŠrke des Auftriebs proportional zur LŠnge des Swipes (Doppeltap = Maximale LŠnge)
+			// stï¿½rke des Auftriebs proportional zur Lï¿½nge des Swipes (Doppeltap = Maximale Lï¿½nge)
 			float p = currentGesture.getStrength() / Swipe.MAX_LENGTH;
 			flapAcceleration *= p;
 		}
@@ -223,7 +221,7 @@ public class PhysicalRabbit implements PhysicalObject {
 				// check in which half of the screen the input was detected
 				if (swipe.isLeft()) {
 					// perform one step of the flap and check if the flap is finished
-					// finshed = at top position again (-45/45 ¡)
+					// finshed = at top position again (-45/45 ï¿½)
 					finished = sprite.flapLeftWing(swipe.getStrength());
 
 					// current flap finished -> remove from input queue

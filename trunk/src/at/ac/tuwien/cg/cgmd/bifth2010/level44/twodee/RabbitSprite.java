@@ -34,20 +34,20 @@ public class RabbitSprite extends SpriteContainer {
 
 	public RabbitSprite(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
-		setCenter(84, 64);
+		setCenter(45, 42);
 
 		leftWing = new Sprite(TextureParts.makeWing(texture));
-		leftWing.setCenter(128, 64);
-		leftWing.setPosition(0, -10);
+		leftWing.setCenter(leftWing.getWidth(), leftWing.getHeight()/2);
+		leftWing.setPosition(0, -5);
 		leftWing.setRotation(ANGLE_MAX);
 
 		rightWing = new Sprite(TextureParts.makeWing(texture).setMirror(Mirror.HORIZONTAL));
-		rightWing.setCenter(0, 64);
-		rightWing.setPosition(0, -10);
+		rightWing.setCenter(0, rightWing.getHeight()/2);
+		rightWing.setPosition(0, -5);
 		rightWing.setRotation(-ANGLE_MAX);
 
 		coinBucket = new CoinBucketSprite(texture);
-		coinBucket.setPosition(0, 50);
+		coinBucket.setPosition(0, 20);
 
 		addChild(leftWing);
 		addChild(rightWing);
@@ -130,7 +130,7 @@ public class RabbitSprite extends SpriteContainer {
 	 * performs one step of flapping the left wing
 	 * 
 	 * @param swipeLength the length of the swipe (longer swipe -> longer flap)
-	 * @return true, if the flap is finished (wing in top-position again (45 ¡)
+	 * @return true, if the flap is finished (wing in top-position again (45 ï¿½)
 	 */
 	public boolean flapLeftWing(float swipeLength) {
 		float newAngle = leftWing.getRotation();
