@@ -6,9 +6,6 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.ShootEvent;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Subject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.TimeEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.AimBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
@@ -16,7 +13,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Util;
 
-public class Crosshairs extends Subject {
+public class Crosshairs {
 	/** the squared distance which the crosshairs mustn't exceed to stay green */
 	private static final int MAX_DISTANCE_2 = 2500;
 	/** the milliseconds it takes to load and shoot if the crosshairs are green */
@@ -214,7 +211,6 @@ public class Crosshairs extends Subject {
 					} catch(Exception ex) {}
 					finally {
 						scene.getVibrator().vibrate(100L);
-						Crosshairs.this.notifyAll(new ShootEvent(rabbit.getCoinCount()));
 					}
 				}
 			}).start();

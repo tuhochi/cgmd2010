@@ -12,10 +12,10 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Vibrator;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.observer.Observer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.CoinBucketSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
@@ -25,16 +25,21 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
 public class GameScene extends GLSurfaceView implements Renderer {
 	/** the context of the scene */
-	private Context context = null;
+	private LevelActivity activity = null;
 	/** the flying rabbit */
 	private PhysicalRabbit rabbit;
 	/** the crosshairs that shoot on the rabbit */
 	private Crosshairs crosshairs;
 	/** the landscape moving with parallax-effect */
 	private Landscape landscape;
+	/** a coin sprite for drawing the OSD */
+	private Sprite coin;
 
 	/** thread for game logic */
 	private GameThread gameThread;
+	
+	private TimeManager timeManager;
+	
 	/** queue of all inputGestures to process */
 	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
 	/** soundPlayer */
@@ -43,10 +48,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private Vibrator vibrator = null;
 
 	
-	public GameScene(Context context) {
+	public GameScene(LevelActivity context) {
 		super(context);
 		
-		this.context = context;
+		this.activity = context;
 		
 		player = SoundPlayer.getInstance(context);
 		// get the system's vibrator
@@ -57,7 +62,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		System.err.println("GameScene created");
 		rabbit = null;
 		landscape = null;
+		coin = null;
 		gameThread = null;
+		timeManager = new TimeManager();
 	}
 
 	@Override
@@ -73,6 +80,15 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		if (crosshairs != null) {
 			crosshairs.draw(gl);
+		}
+		
+		if (rabbit != null && coin != null) {
+			int coins = rabbit.getCoinCount();
+			
+			for (int i=0; i<coins; i++) {
+				coin.setPosition(20+i*coin.getWidth()/2, 20);
+				coin.draw(gl);				
+			}
 		}
 	}
 
@@ -110,13 +126,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		crosshairs.setPosition(30, getHeight()/2);
 		crosshairs.setRabbit(rabbit);
 		
-		
 		landscape = new Landscape(mainTexture, getWidth(), getHeight());
 		landscape.setRabbit((PhysicalRabbit)rabbit);
 		
-		// Observers for updating UI
-		crosshairs.addObserver((Observer)context);
-		TimeManager.getInstance().addObserver((Observer)context);
+		coin = new Sprite(TextureParts.makeCoin(mainTexture));
 		
 		restartGameThread();
 	}
@@ -124,8 +137,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private void restartGameThread() {
 		stopGameThread();
 		
-		if (rabbit != null && landscape != null && crosshairs != null) {
-			gameThread = new GameThread(this, rabbit, landscape, crosshairs);
+		if (rabbit != null && landscape != null && crosshairs != null && timeManager != null) {
+			gameThread = new GameThread(this, rabbit, landscape, crosshairs, timeManager);
 			gameThread.start();
 		}
 	}
@@ -135,6 +148,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 			gameThread.doQuit();
 			gameThread = null;
 		}	
+		
+		if (timeManager != null) {
+			timeManager.onPause();
+		}
 	}
 	
 	@Override
@@ -173,5 +190,13 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	
 	public PhysicalRabbit getRabbit() {
 		return rabbit;
+	}
+
+	public int getScore() {
+		return (CoinBucketSprite.FULL_COIN_COUNT - rabbit.getCoinCount())*10;
+	}
+	
+	public void finishLevel() {
+		activity.finishLevel(getScore());
 	}
 }
