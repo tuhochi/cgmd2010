@@ -37,4 +37,6 @@ public class Settings
 	
 	public static final float MAINCHAR_STARTPOSX = 50 - MAINCHAR_WIDTH/2f;
 	public static final float MAINCHAR_STARTPOSY = 0f;
+	
+	public static final float SCOREHEIGHT_MODIFIER = 0.01f;
 }
