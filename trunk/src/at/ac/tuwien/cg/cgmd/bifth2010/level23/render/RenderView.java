@@ -38,6 +38,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
  */
 public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer {
 	
+	 /** FpsHandle Class */
 	class FpsHandle implements Runnable{
 		  
     	@Override
@@ -45,8 +46,14 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
             context.fpsChanged(timer.getFPS());
         }
     };
+    
+    /** Indicates if the ObstacleManager should be reset */
+    private boolean isInitialized = false;
+    
+    /** Handles fps TextView */
 	private FpsHandle fpsHandle;
 	
+	/** The Sound Manager */
 	private SoundManager soundManager;
 	
 	/** The screen width. */
@@ -161,6 +168,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void writeToStream(DataOutputStream dos) {
 		try {
 			// local
+			dos.writeBoolean(isInitialized);
 			dos.writeBoolean(released);
 			dos.writeInt(mainCharMoveDir);
 			dos.writeFloat(balloonHeight);
@@ -189,6 +197,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	public void readFromStream(DataInputStream dis) {
 		try {
+			isInitialized = dis.readBoolean();
 			released = dis.readBoolean(); 
 			mainCharMoveDir = dis.readInt(); 
 			balloonHeight = dis.readFloat(); 
@@ -246,6 +255,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
+		
 		timer.update();
 		
 		float dt = timer.getDt();
@@ -345,8 +355,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{	
 		Log.v("RenderView.java", "onSurfaceCreated");
-		textureManager.reset();
-		
+		reset();
 		setupGL(gl);
 		
 		Display display = LevelActivity.getInstance().getWindowManager().getDefaultDisplay();
@@ -354,9 +363,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		topBounds = rightBounds*aspectRatio;
 		
 		mainChar = new MainChar(Settings.MAINCHAR_WIDTH,Settings.MAINCHAR_HEIGHT,Settings.MAINCHAR_STARTPOS);
-		
-		obstacleManager.generateObstacles();
-		
+				
 		background = new Background();
 		
 		hud = new Hud();
@@ -707,6 +714,18 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 */
 	public boolean isGameOver() {
 		return gameOver; 
+	}
+	
+	public void reset()
+	{
+		textureManager.reset();
+		timer.reset();
+		
+		if(!isInitialized)
+		{
+			obstacleManager.reset();
+			isInitialized = true;
+		}
 	}
 	
 }

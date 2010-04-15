@@ -7,7 +7,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
  */
 public class Settings 
 {
-	
+	/** The constant for balloon speed. */
+	public static int OBSTALE_START = 200;
 	/** The constant for balloon speed. */
 	public static float BALLOON_SPEED = 0.08f;
 	//units per millisecond
