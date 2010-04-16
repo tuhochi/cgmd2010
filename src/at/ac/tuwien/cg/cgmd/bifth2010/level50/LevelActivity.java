@@ -22,7 +22,7 @@ public class LevelActivity extends Activity {
    		setContentView(mGLView);
     }
 	
-	@Override
+/*	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (true)//(new GestureDetector()).onTouchEvent(event))
 		{
@@ -33,7 +33,9 @@ public class LevelActivity extends Activity {
 			return true;
 		} else
 	    	return false;
-	}
+	}*/
+	
+	
 
     @Override
     public void onPause() {
