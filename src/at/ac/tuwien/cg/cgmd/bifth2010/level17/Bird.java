@@ -19,7 +19,7 @@ public class Bird {
 	private Renderable mModel;
 	
 	/**
-	 * Empty Contructor
+	 * Empty Constructor
 	 */
 	public Bird() {}
 	
