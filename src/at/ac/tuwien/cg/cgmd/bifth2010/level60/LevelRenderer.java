@@ -26,13 +26,16 @@ public class LevelRenderer implements Renderer {
 		tablet = new Tablet(context, 50, 50, 0, 0, R.drawable.l60_icon);
 	}
 	
+	public void moveObject(int x, int y) {
+		tablet.move(x, y);
+	}
+	
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(0, 0, -1.0f);
-		tablet.move(1, 1);
 		tablet.draw(gl);
 	}
 
