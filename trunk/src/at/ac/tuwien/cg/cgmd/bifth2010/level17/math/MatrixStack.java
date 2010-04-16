@@ -23,6 +23,7 @@ import java.nio.IntBuffer;
 
 /**
  * A matrix stack, similar to OpenGL ES's internal matrix stack.
+ * @author Android SDK
  */
 public class MatrixStack {
     public MatrixStack() {

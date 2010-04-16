@@ -7,7 +7,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Renderable;
 
 /**
- * Represents a Bird int he game
+ * Represents a Bird in the game
  * @author MaMa
  *
  */

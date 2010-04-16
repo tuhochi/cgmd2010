@@ -95,6 +95,12 @@ public class Picker
 		return new Vector3(worldSpace);
 	}
 	
+	/**
+	 * Calculates a screen space coordinate value from a given device coordinate value.
+	 * Can be used for both x or y coordinates.
+	 * 
+	 * @param device - device coordinate value
+	 */
 	private float Device2ScreenSpace(float device)
 	{
 		float screen = device *= 2f;
