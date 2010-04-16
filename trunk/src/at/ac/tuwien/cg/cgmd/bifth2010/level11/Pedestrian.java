@@ -153,6 +153,8 @@ public class Pedestrian implements Target{
 				}
 			}
 		}else{//no target
+			//this.temp.set((float)Math.sin(angle)*deltaTime*moveSpeed, (float)Math.cos(angle)*deltaTime*moveSpeed);
+			//position.add(this.temp);
 			legs.update(position, angle, 0.0f);
 			arms.update(position, angle, 0.0f);
 		}

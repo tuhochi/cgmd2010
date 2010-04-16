@@ -41,6 +41,8 @@ public class Level extends Thread {
 	private Context context;
 	
 	private Timing timing;
+	private float grabbedTreasureValueOfDeletedTreasures;
+	private float grabbedTreasureValue;
 	
 	public Level(float sizeX, float sizeY) {
 		//Log.i(LOG_TAG, "Level(float, float)");
@@ -49,6 +51,8 @@ public class Level extends Thread {
 		this.sizeY = sizeY;
 		treasureList = new LinkedList<Treasure>();
 		pedestrianList = new LinkedList<Pedestrian>();
+		this.grabbedTreasureValueOfDeletedTreasures = 0;
+		this.grabbedTreasureValue = 0;
 		
 		this.isRunning = true;
 		this.isPaused = false;
@@ -114,13 +118,13 @@ public class Level extends Thread {
 			update();
 		}
 	}
-	public synchronized void pause(boolean pause){
+	public  void pause(boolean pause){
 		this.isPaused = pause;
 	}
-	public synchronized void addTreasure(Treasure treasure){
+	public  void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
 	}
-	private synchronized void update() {
+	private  void update() {
 		//synchronized(this){
 			timing.update();
 			for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
@@ -132,6 +136,7 @@ public class Level extends Thread {
 				for (int j=0; j < treasureList.size(); j++){//search the cuurent target
 					Treasure treasure = ((Treasure)treasureList.get(j));
 					if(treasure.getValue() == 0.0f){
+						this.grabbedTreasureValueOfDeletedTreasures += treasure.getStartingValue();
 						treasure = null;
 						treasureList.remove(j);
 						j--;
@@ -139,7 +144,7 @@ public class Level extends Thread {
 					}
 					if((rating =
 						(tempDist = pedestrian.getPosition().distance(treasure.getPosition()))
-						/ treasure.getValue()) //TODO: determine, how to rate a target
+						/ (treasure.getValue()+1)) //TODO: determine, how to rate a target
 							< bestRating){
 						if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttracktionRadius()){
 							pedestrian.setTargetTreasure(treasure);
@@ -158,13 +163,16 @@ public class Level extends Thread {
 					}
 				}
 			}
+			//calc already grabbed treasure value
+			this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
+			for (int j=0; j < treasureList.size(); j++){
+				this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
+			}
 		//}
 		if(this.timing.getCurrTime() > this.maxPlayTime)
 			this.isRunning = false;
 	}
 	private void generatePedestrians(int amount, float minDist){
-		timing.update();
-		System.out.println("Level generation started(time: "+timing.getCurrTime()+")");
 		Random rand = new Random();
 		Vector2 pos = new Vector2();
 		while(this.pedestrianList.size() < amount){
@@ -184,8 +192,6 @@ public class Level extends Thread {
 				this.pedestrianList.add(pedestrian);
 			}
 		}
-		timing.update();
-		System.out.println("Levelgeneration finished(time: "+timing.getCurrTime()+")");
 	}
 	public void draw(GL10 gl) {
 		// draw floor background image
@@ -211,11 +217,12 @@ public class Level extends Thread {
 		for (int i=0; i < pedestrianList.size(); i++) {
 			((Pedestrian)pedestrianList.get(i)).draw(gl);
 		}
-		
 		gl.glDisable(GL10.GL_BLEND);
 	}
-	
+	public float getGrabbedTreasureValue(){
+		return this.grabbedTreasureValue;
+	}
 	public float getRemainigTime(){
-		return this.maxPlayTime - this.timing.getCurrTime();
+		return this.maxPlayTime-this.timing.getCurrTime();
 	}
 }
