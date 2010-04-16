@@ -1,10 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
-import android.util.Log;
+import javax.microedition.khronos.opengles.GL10;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Class representing the bunny
@@ -12,7 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Bunny {
 	private Game game;
-	private int currentPosX, currentPosY;
+	public int currentPosX, currentPosY;
 	public float translateX, translateY;
 	private Quad bunnyQuad;
 	private Vector2 groundYDir, groundXDir;
@@ -40,8 +40,7 @@ public class Bunny {
 		translateY = 0;
 		moveStatus = MoveStatus.STANDING;
 		
-		
-		maxWaitingTime = 1.0f;
+		maxWaitingTime = 0.7f;
 		waitingTime = 0;
 
 		float norm;
@@ -92,23 +91,18 @@ public class Bunny {
            	
            	if( distance < 50 ) {
            		moveStatus = MoveStatus.STANDING;
-           		Log.d("Bunny-Update", "STANDING");
            	}
            	else if( Math.abs(angle-angleX) < 30 ) {
            		moveStatus = MoveStatus.MOVE_RIGHT;
-           		Log.d("Bunny-Update", "MOVE_RIGHT");
            	}
            	else if( Math.abs(180+angle-angleX) < 30 ) {
            		moveStatus = MoveStatus.MOVE_LEFT;
-           		Log.d("Bunny-Update", "MOVE_LEFT");
            	}
            	else if( Math.abs(angle-angleY) < 30 ) {
            		moveStatus = MoveStatus.MOVE_UP;
-           		Log.d("Bunny-Update", "MOVE_UP");
            	}
            	else if( Math.abs(180+angle-angleY) < 30 ) {
            		moveStatus = MoveStatus.MOVE_DOWN;
-           		Log.d("Bunny-Update", "MOVE_DOWN");
            	}
         }
         

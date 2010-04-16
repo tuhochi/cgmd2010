@@ -4,7 +4,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level88;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.UpdateThread;
 
 /**
  * Class for the general vieing context of android
