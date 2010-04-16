@@ -40,14 +40,14 @@ public class GameActivity extends Activity {
     
     @Override
     protected void onResume() {
-		//_level.pause(false);
-		//_level.resume();
+		_level.pause(false);
         _gameView.onResume();
 		super.onResume();
     }
 
     @Override
     protected void onPause() {
+    	_level.pause(true);
         _gameView.onPause();
 		super.onPause();
     }

@@ -18,8 +18,8 @@ import android.util.Log;
 public class GameRenderer implements Renderer {
 	private static final String LOG_TAG = GameRenderer.class.getSimpleName();
     
-    private float _width = 480.0f;
-    private float _height = 320.0f;
+    public float _width = 480.0f;
+    public float _height = 320.0f;
     
     float zrot;
 
@@ -28,7 +28,7 @@ public class GameRenderer implements Renderer {
     Textures texture;
     Context context;
 	
-	private Level level;
+	public Level level;
 	
 	public GameRenderer(Context context) {
 		//Log.i(LOG_TAG, "GameRenderer()");
@@ -52,7 +52,7 @@ public class GameRenderer implements Renderer {
         
         gl.glOrthof(0.0f, _width, 0.0f, _height, -1.0f, 100.0f);
         gl.glViewport(0, 0, (int) _width, (int) _height);
-        
+        gl.glScalef(this._width/this.level.sizeX, this._height/this.level.sizeY, 1.0f);
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glEnable(GL10.GL_DEPTH_TEST);
         

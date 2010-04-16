@@ -10,9 +10,10 @@ public class Treasure implements Target{
 	private Vector2 position;
 	private static final int treasure_texture_id = R.drawable.l11_treasure;
 	private Square sprite;
+	private float startingValue;
 	public Treasure(float value, float attractionRadius, Vector2 position){
-		this.value = value;
-		//System.out.println(value);
+		this.startingValue = value;
+		this.value = this.startingValue;
 		this.attractionRadius = attractionRadius;
 		this.position = position;
 		this.sprite = new Square();
@@ -27,7 +28,7 @@ public class Treasure implements Target{
 	 */
 	public boolean grabValue(float value){
 		this.value -= value;
-		if(this.value > 1)
+		if(this.value > 0)
 			return true;
 		else{
 			this.value = 0;
@@ -54,5 +55,11 @@ public class Treasure implements Target{
 	}
 	public float getValue(){
 		return this.value;
+	}
+	public float getGrabbedValue(){
+		return this.startingValue - this.value;
+	}
+	public float getStartingValue(){
+		return this.startingValue;
 	}
 }
