@@ -71,8 +71,8 @@ public class RenderManager implements Renderer {
 		fps++;
 		
 		gl.glLoadIdentity();
-		gl.glPushMatrix();
-		gl.glLoadMatrixf(accelerometer.getMDeviceOrientation(), 0);
+		//gl.glPushMatrix();
+		//gl.glLoadMatrixf(accelerometer.getMDeviceOrientation(), 0);
 		
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext()) {
@@ -81,7 +81,7 @@ public class RenderManager implements Renderer {
 			m.draw(gl);
 		}
 		
-		gl.glPopMatrix();
+		//gl.glPopMatrix();
 	}
 
 	/**
