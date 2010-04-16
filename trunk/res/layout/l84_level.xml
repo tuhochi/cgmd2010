@@ -11,6 +11,7 @@
  android:id="@+id/l84_TableLayout" 
  android:layout_width="wrap_content" 
  android:layout_height="wrap_content" android:layout_marginTop="15pt">
+ <TextView android:layout_above="@+id/l84_openglview" android:text="Points" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_Points"></TextView>
 <ImageButton
 	android:text="01"
  	android:id="@+id/l84_GemButton01"
@@ -37,7 +38,7 @@
     android:layout_height="wrap_content"
     android:nextFocusDown="@+id/l84_GemButton01">
 </ImageButton>
-<TextView android:layout_above="@+id/l84_openglview" android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_TfFps"></TextView>
+<TextView android:layout_above="@+id/l84_openglview" android:text="fps" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_TfFps"></TextView>
 </TableLayout>
 
 </RelativeLayout>
