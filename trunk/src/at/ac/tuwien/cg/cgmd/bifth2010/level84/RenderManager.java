@@ -27,6 +27,7 @@ public class RenderManager implements Renderer {
 	
 	private TextView tfFps;
 	private int fps = 0;
+	private ProgressManager progman;
 	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
@@ -101,6 +102,10 @@ public class RenderManager implements Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
+		//init progressmanager and set progress to 0
+		progman = new ProgressManager();
+		progman.setProgress(0);
+		
 		//Load textures of all available models.
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext())
