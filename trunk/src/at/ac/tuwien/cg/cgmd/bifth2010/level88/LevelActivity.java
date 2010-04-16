@@ -18,6 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Bunny.MoveStatus;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
@@ -26,8 +27,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
+ * Class for the general level activity of level 88
  * @author Asperger, Radax
- *
  */
 public class LevelActivity extends Activity{
 	public static final String TAG = "LevelActivity"; 
@@ -37,6 +38,9 @@ public class LevelActivity extends Activity{
 	private Game game;
 	private Vector2 windowSize;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate()");
@@ -64,19 +68,27 @@ public class LevelActivity extends Activity{
 
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	public void onPause() {
 		super.onPause(); 
 		Log.d(TAG, "onPause()");
 		glSurfaceView.onPause();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	public void onResume() {
 		super.onResume(); 
 		Log.d(TAG, "onResume()");
 		glSurfaceView.onResume();
 	}
 	
-	@Override
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+	 */
 	protected void onStart()
 	{
 		super.onStart();
@@ -107,6 +119,11 @@ public class LevelActivity extends Activity{
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
+		//Save the position
+		outState.putIntArray("Position", game.bunny.getPosition());
+		//Save the direction of the movement
+		outState.putString("Direction", game.bunny.moveStatus.toString());
+		
 		super.onSaveInstanceState(outState);
 		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
 	}
@@ -115,6 +132,15 @@ public class LevelActivity extends Activity{
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
 		super.onRestoreInstanceState(savedInstanceState);
+		//Restore the position
+		int[] pos = savedInstanceState.getIntArray("Position");
+		game.bunny.setPosition(pos[0], pos[1]);
+		//Restore the direction
+		String move = savedInstanceState.getString("Direction");
+		game.bunny.setMovement(move);
+
 		Log.v(TAG,"onRestoreInstanceState(" + savedInstanceState + ")");
 	}
+    
+
 }

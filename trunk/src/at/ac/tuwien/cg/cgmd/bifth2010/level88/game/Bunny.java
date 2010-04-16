@@ -25,7 +25,7 @@ public class Bunny {
 	public enum MoveStatus {
 		STANDING, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
 	}
-	private MoveStatus moveStatus;
+	public MoveStatus moveStatus;
 	
 	
 	/**
@@ -39,6 +39,7 @@ public class Bunny {
 		translateX = 0;
 		translateY = 0;
 		moveStatus = MoveStatus.STANDING;
+		
 		
 		maxWaitingTime = 1.0f;
 		waitingTime = 0;
@@ -163,5 +164,40 @@ public class Bunny {
 		
 		translateX = currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x;
 		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
+	}
+	
+	/**
+	 * Get the position of the bunny as an int array
+	 * @return current position of the bunny
+	 */
+	public int[] getPosition(){
+		int[] pos = {currentPosX, currentPosY};
+		return pos;
+	}
+	
+	/**
+	 * Method for restoring the movement
+	 * @param move name of the movement
+	 */
+	public void setMovement(String move){
+		
+		if(move.equalsIgnoreCase("STANDING")){
+			moveStatus = MoveStatus.STANDING;
+		}
+		else if(move.equalsIgnoreCase("MOVE_LEFT")){
+			moveStatus = MoveStatus.MOVE_LEFT;
+		}
+		else if(move.equalsIgnoreCase("MOVE_RIGHT")){
+			moveStatus = MoveStatus.MOVE_RIGHT;
+		}
+		else if(move.equalsIgnoreCase("MOVE_UP")){
+			moveStatus = MoveStatus.MOVE_UP;
+		}
+		else if(move.equalsIgnoreCase("MOVE_DOWN")){
+			moveStatus = MoveStatus.MOVE_DOWN;
+		}
+		else {
+			moveStatus = MoveStatus.STANDING;
+		}
 	}
 }
