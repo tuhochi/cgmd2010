@@ -34,7 +34,7 @@ public class LevelActivity extends Activity {
 	private TextView mSpacer;
 	private TextView mPointsText;
 	private Vibrator mVibrator;
-	
+	private int mCurrentMoney; 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +82,7 @@ public class LevelActivity extends Activity {
         llayout.addView(mPointsText, llparams);
         
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  
-  
-		//the SessionState is a convenience class to set a result
-		SessionState s = new SessionState();
-		//we set the progress the user has made (must be between 0-100)
-		s.setProgress(0);
-		//we call the activity's setResult method 
-		setResult(Activity.RESULT_OK, s.asIntent());
+        mCurrentMoney = 0;
     }
 
     @Override
@@ -113,10 +107,16 @@ public class LevelActivity extends Activity {
 		super.onStart();
 	}
 
-	@Override
+    @Override
 	protected void onStop() {
 		mNormalModeView.onStop();
 		super.onStop();
+    }
+
+	@Override
+	public void finish() {
+		updateProgressResult();
+		super.finish();
 	}
 
 	@Override
@@ -153,7 +153,8 @@ public class LevelActivity extends Activity {
     	if(hp > 0)
     		mHealthText.setText(Integer.toString((int)hp));
     	else
-    		mHealthText.setText(getString(getResources().getIdentifier("l17_gameover_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")));
+    		finish();
+    		//mHealthText.setText(getString(getResources().getIdentifier("l17_gameover_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")));
     	  
     	// 1. Vibrate for 1000 milliseconds  
     	long milliseconds = 100;  
@@ -167,5 +168,23 @@ public class LevelActivity extends Activity {
     public void playerMoneyChanged(int money)
     {
     	mPointsText.setText(Integer.toString(money)); 
+    	mCurrentMoney = money;
+    	if (money >= 100)
+    		finish();
+    }
+
+    
+	/**
+	 * stores the current player progress in a SessionState variable and sets it as the activity result.
+	 * @param progess The current progress (0-100)
+	 */
+    private void updateProgressResult()
+    {
+		//the SessionState is a convenience class to set a result
+		SessionState s = new SessionState();
+		//we set the progress the user has made (must be between 0-100)
+		s.setProgress(Math.min(Math.max(mCurrentMoney, 0), 100));
+		//we call the activity's setResult method 
+		setResult(Activity.RESULT_OK, s.asIntent());
     }
 }
