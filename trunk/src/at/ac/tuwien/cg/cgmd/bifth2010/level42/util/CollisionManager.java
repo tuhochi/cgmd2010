@@ -99,23 +99,26 @@ public class CollisionManager {
 		
 	}
 	
-	public boolean collisionDetected(Moveable a, Moveable b, float penetrationDepth, Vector3 centerDist)
+	private static boolean collisionDetected(Moveable objA, Moveable objB, float penetrationDepth, Vector3 centerDistance)
 	{
-		if(centerDist == null)
-			centerDist = new Vector3();
+		if(centerDistance == null)
+			centerDistance = new Vector3();
 		
 		//calc distance between center points
-		centerDist.copy(b.getBoundingSphereWorld().center);
-		centerDist.subtract(a.getBoundingSphereWorld().center);
+		centerDistance.copy(objB.getBoundingSphereWorld().center);
+		centerDistance.subtract(objA.getBoundingSphereWorld().center);
 		
-		if(centerDist.length()+ penetrationDepth < 
-					a.getBoundingSphereWorld().radius + b.getBoundingSphereWorld().radius)
+		if(centerDistance.length()+ penetrationDepth < 
+					objA.getBoundingSphereWorld().radius + objB.getBoundingSphereWorld().radius)
 			return true;
 		
 		
 		return false;		
 	}
-	public void doCollisionDetection(MotionManager motionManager)
+	
+	
+	
+	public void doCollisionDetection()
 	{
 		//for each entity
 		for(int i=0; i<entityList.size(); i++) 
@@ -171,7 +174,7 @@ public class CollisionManager {
 															pushVec,
 															1f,
 															planetEntity.getBasicOrientation());
-									motionManager.addMotion(planetEntityMotion,planetEntity);
+									MotionManager.instance.addMotion(planetEntityMotion,planetEntity);
 									satellite.getMotion().morph(pushVec);
 								}
 							}
@@ -188,7 +191,7 @@ public class CollisionManager {
 													Constants.DUMMY_INIT_VEC,
 													0.1f,
 													null);
-							motionManager.addMotion(objAMotion,objA);
+							MotionManager.instance.addMotion(objAMotion,objA);
 						}
 						
 	
@@ -199,7 +202,7 @@ public class CollisionManager {
 													Constants.DUMMY_INIT_VEC,
 													0.1f,
 													null);
-							motionManager.addMotion(objBMotion,objB);
+							MotionManager.instance.addMotion(objBMotion,objB);
 						}
 						
 						
@@ -221,6 +224,10 @@ public class CollisionManager {
 						
 						objA.getMotion().morph(objBCurrDir);
 						objB.getMotion().morph(objACurrDir);
+						
+						//TODO: getCurrDirectionVec verhindern!
+						MotionManager.instance.changeSatelliteTransformation(objA, objA.getMotion().getCurrDirectionVec(), objBCurrDir,Config.INTERSATELLITE_SPEEDROTA_RATIO);
+						MotionManager.instance.changeSatelliteTransformation(objB, objB.getMotion().getCurrDirectionVec(), objACurrDir,Config.INTERSATELLITE_SPEEDROTA_RATIO);
 					}
 				}
 				

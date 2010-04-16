@@ -10,17 +10,25 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 public class MotionManager {
 	
 	private final ArrayList<Moveable> list;
 	public static final MotionManager instance = new MotionManager();
 	
+	//temp vars
+	private final Vector3 satTransformAxis,tempDirectionVec,tempPushVec;
+	private final Matrix44 tempBasicOrientation;
 	private Moveable tempEntity;
 	
 	private MotionManager()
 	{
 		list =  new ArrayList<Moveable>();
+		satTransformAxis = new Vector3();
+		tempDirectionVec = new Vector3();
+		tempPushVec = new Vector3();
+		tempBasicOrientation = new Matrix44();
 	}
 	
 	public void addMotion(Motion motion,Moveable entity)
@@ -61,25 +69,33 @@ public class MotionManager {
 		list.clear();
 	}
 	
-	public void changeSatelliteTransformation(Moveable entity,Vector3 directionVec,Vector3 pushVec)
+	public void changeSatelliteTransformation(Moveable entity,Vector3 directionVec,Vector3 pushVec, float speedRotationRatio)
 	{
-		//TODO: reuse obj
-		Vector3 axis = Vector3.crossProduct(directionVec, pushVec);
-		axis.normalize();
-		SatelliteTransformation satTrafo = entity.getMotion().getSatTrans();
-		VecAxisTransformation vecSatTrafo;
+		//generate new rotation axis
+		Vector3.crossProduct(directionVec, pushVec, satTransformAxis);
+		satTransformAxis.normalize();
 		
-		if(satTrafo!=null && satTrafo instanceof VecAxisTransformation){
-			vecSatTrafo = (VecAxisTransformation)satTrafo;
-			Matrix44 temp = new Matrix44(vecSatTrafo.getTransform());
-			vecSatTrafo.setBasicOrientaion(temp);
-			vecSatTrafo.axis.copy(axis);
+		
+		SatelliteTransformation currSatTransform = (VecAxisTransformation)entity.getMotion().getSatTrans();
+		VecAxisTransformation vecSatTransform;
+		
+		if(currSatTransform!=null && currSatTransform instanceof VecAxisTransformation)
+		{
+			vecSatTransform = (VecAxisTransformation)currSatTransform;
+			tempBasicOrientation.copy(vecSatTransform.getTransform());
 			
-			Vector3 tempNormDirection = Vector3.normalize(directionVec);
-			Vector3 tempNormPush = Vector3.normalize(pushVec);
+			//set current transformation (rotation) as basic orientation
+			vecSatTransform.setBasicOrientaion(tempBasicOrientation);
+			//set new rotation axis
+			vecSatTransform.axis.copy(satTransformAxis);
+	
+			tempDirectionVec.copy(directionVec).normalize();
+			tempPushVec.copy(pushVec).normalize();
 		
-			vecSatTrafo.setAngle(Vector3.getAngle(tempNormDirection, tempNormPush));
-			//Log.d(LevelActivity.TAG,"satAngle="+vecSatTrafo.qv);
+			//set the new rotation angle
+			vecSatTransform.setAngle(Vector3.getAngle(tempDirectionVec, tempPushVec),speedRotationRatio);
+			
+			//Log.d(LevelActivity.TAG,"satAngle="+vecSatTransform.qv);
 		}
 	}
 	

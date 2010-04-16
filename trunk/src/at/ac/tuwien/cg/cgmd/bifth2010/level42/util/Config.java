@@ -16,6 +16,7 @@ public class Config
 	public static float UNIVERSE_DIRLENGTH_LIMIT = 10;
 	public static float UNIVERSE_SPEED_LIMIT = 10;
 	
-	public static float SATELLITE_ROTASPEED_RATIO = 0.25f;
+	public static float SATELLITE_SPEEDROTA_RATIO = 4f;
+	public static float INTERSATELLITE_SPEEDROTA_RATIO = 6f;
 	public static float COLLISION_PENETRATION_DEPTH = 0.2f;
 }
