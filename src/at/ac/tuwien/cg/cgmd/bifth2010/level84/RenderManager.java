@@ -27,6 +27,7 @@ public class RenderManager implements Renderer {
 	
 	private TextView tfFps;
 	private int fps = 0;
+	private TextView tPoints;
 	private ProgressManager progman;
 	
 	/** Handler for FPS timer */
@@ -44,6 +45,7 @@ public class RenderManager implements Renderer {
 		this.models = models;
 		this.accelerometer = accelerometer;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
+		this.tPoints = (TextView) activity.findViewById(R.id.l84_Points);
 
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
