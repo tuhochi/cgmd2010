@@ -5,9 +5,10 @@ import java.util.Date;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
 import android.opengl.GLU;
+import android.os.Handler;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Textures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
@@ -23,8 +24,9 @@ public class Game {
 	private float elapsedSeconds;
 	public int screenWidth, screenHeight;
 	public float screenWidthScale, screenHeightScale;
-	public Context context;
+	public LevelActivity context;
 	public Textures textures;
+	private Handler handler;
 	private Vector2 cameraPos;
 	private float worldScale;
 	public Map map;
@@ -34,18 +36,22 @@ public class Game {
 	
 	public boolean newTouch;
 	public Vector2 touchPosition;
+	
+	public int gold;
 
 	
 	/**
 	 * Constructor
 	 * @param _context Context of the Android application
 	 */
-	public Game(Context _context) {
+	public Game(LevelActivity _context, Handler _handler) {
 		Log.d(TAG, "Game()");
-		
+
 		context = _context;
+		handler = _handler;
 		cameraPos = new Vector2();
 		worldScale = 0.2f;
+		gold = 100;
 		
 		police = new ArrayList<Police> ();
 		stashes = new ArrayList<Stash> ();
@@ -58,7 +64,43 @@ public class Game {
         oldTime = newTime;
         elapsedSeconds = 0;
 	}
+	
+	public void policeCatchesBunny() {
+		class R implements Runnable{
+        	@Override
+            public void run() {
+        		context.endLevel();
+            }
+        };
+        Runnable r = new R();
+        handler.post(r);		
+	}
+	
+	public void looseGold(int lostGold) {
+		gold -= lostGold;
+		if( gold <= 0 ) {
+			gold = 0;
 
+			class R implements Runnable{
+	        	@Override
+	            public void run() {
+	        		context.endLevel();
+	            }
+	        };
+	        Runnable r = new R();
+	        handler.post(r);
+		}
+		else {
+			class R implements Runnable{
+	        	@Override
+	            public void run() {
+	        		context.updateTexts();
+	            }
+	        };
+	        Runnable r = new R();
+	        handler.post(r);			
+		}
+	}
 	
 	/**
 	 * Add a new stash
@@ -95,7 +137,7 @@ public class Game {
 	 * Method for the touch events
 	 * @param pos position of the finger
 	 */
-	public synchronized void touchEvent(Vector2 pos) {
+	public void touchEvent(Vector2 pos) {
 		touchPosition = new Vector2(pos);
 		newTouch = true;
 	}
@@ -169,10 +211,10 @@ public class Game {
 		newTime = date.getTime();
         elapsedSeconds = (newTime - oldTime) / 1000.0f;
 
+        bunny.update(elapsedSeconds);
         for(int i=0; i<stashes.size(); i++) {
         	stashes.get(i).update(elapsedSeconds);
         }
-        bunny.update(elapsedSeconds);
         for(int i=0; i<police.size(); i++) {
         	police.get(i).update(elapsedSeconds);
         }

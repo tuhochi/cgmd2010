@@ -3,6 +3,9 @@
  */
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -18,7 +21,18 @@ public class Police {
 	private int currentPosX, currentPosY;
 	public float translateX, translateY;
 	private Quad policeQuad;
+	private boolean wasStuckLastFrame;
 
+	private float waitingTime, maxWaitingTime;
+
+	/**
+	 * Moving possibilities of the police
+	 * @author Asperger, Radax
+	 */
+	public enum MoveStatus {
+		STANDING, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
+	}
+	public MoveStatus moveStatus;
 	
 	/**
 	 * Constructor
@@ -30,6 +44,10 @@ public class Police {
 		game = _game;
 		setPosition(x, y);
 
+		moveStatus = MoveStatus.MOVE_LEFT;
+		maxWaitingTime = 1.0f;
+		waitingTime = 0;
+		wasStuckLastFrame=false;
 		
 		float norm;
         Vector2 groundYDir = new Vector2(-229, -169);
@@ -56,12 +74,104 @@ public class Police {
 	}
 	
 	
+	private MoveStatus getBunnyDir() {
+		int bx = game.bunny.currentPosX;
+		int by = game.bunny.currentPosY;
+		
+		if( bx!=currentPosX && by!=currentPosY ) return MoveStatus.STANDING;
+		
+		int x1, x2, y1, y2;
+		x1 = currentPosX-1;
+		x2 = currentPosX+1;
+		y1 = currentPosY-1;
+		y2 = currentPosY+1;
+		while( game.map.cells[x1][currentPosY].isStreetForPolice ) x1--;
+		while( game.map.cells[x2][currentPosY].isStreetForPolice ) x2++;
+		while( game.map.cells[currentPosX][y1].isStreetForPolice ) y1--;
+		while( game.map.cells[currentPosX][y2].isStreetForPolice ) y2++;
+		
+		if( bx <= x1 ) return MoveStatus.STANDING;
+		else if( bx >= x2 ) return MoveStatus.STANDING;
+		else if( by <= y1 ) return MoveStatus.STANDING;
+		else if( by >= y2 ) return MoveStatus.STANDING;
+		
+		if( bx < currentPosX ) return MoveStatus.MOVE_LEFT;
+		else if( bx > currentPosX ) return MoveStatus.MOVE_RIGHT;
+		else if( by < currentPosY ) return MoveStatus.MOVE_DOWN;
+		else /*if( by > currentPosY )*/ return MoveStatus.MOVE_UP;
+	}
+	
 	/**
 	 * Update the police 
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
-    	// TODO
+		waitingTime += elapsedSeconds;
+		if( waitingTime < maxWaitingTime ) return;
+		waitingTime -= maxWaitingTime;
+		
+		if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
+			game.policeCatchesBunny();
+			return;
+		}
+
+		int mx=0, my=0; 
+		MoveStatus newMoveDir = getBunnyDir();
+		
+		if( newMoveDir==MoveStatus.STANDING ) { // Hase nicht sichtbar
+			ArrayList<MoveStatus> dirs = new ArrayList<MoveStatus>();
+			if( game.map.cells[currentPosX][currentPosY].numStreetNeighboursPolice==1 || wasStuckLastFrame )
+			{
+				if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice )
+					dirs.add(MoveStatus.MOVE_RIGHT);
+				if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice )
+					dirs.add(MoveStatus.MOVE_LEFT);
+				if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice )
+					dirs.add(MoveStatus.MOVE_UP);
+				if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice )
+					dirs.add(MoveStatus.MOVE_DOWN);
+			}
+			else {
+				if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice && moveStatus!=MoveStatus.MOVE_LEFT )
+					dirs.add(MoveStatus.MOVE_RIGHT);
+				if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice && moveStatus!=MoveStatus.MOVE_RIGHT )
+					dirs.add(MoveStatus.MOVE_LEFT);
+				if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice && moveStatus!=MoveStatus.MOVE_DOWN )
+					dirs.add(MoveStatus.MOVE_UP);
+				if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice && moveStatus!=MoveStatus.MOVE_UP )
+					dirs.add(MoveStatus.MOVE_DOWN);
+			}
+
+			if( dirs.size()==1 ) {
+				newMoveDir = dirs.get(0);
+			}
+			else {
+				Random r = new Random();
+				newMoveDir = dirs.get(r.nextInt(dirs.size()));
+			}
+		}
+		moveStatus = newMoveDir;
+
+		if( newMoveDir!=MoveStatus.STANDING ) {
+			if( newMoveDir==MoveStatus.MOVE_LEFT ) mx=-1;
+			else if( newMoveDir==MoveStatus.MOVE_RIGHT ) mx=1;
+			else if( newMoveDir==MoveStatus.MOVE_DOWN ) my=-1;
+			else if( newMoveDir==MoveStatus.MOVE_UP ) my=1;
+			
+			if( !game.map.cells[currentPosX+mx][currentPosY+my].isPolicePresent ) {
+				game.map.movePolice(currentPosX, currentPosY, currentPosX+mx, currentPosY+my);
+				setPosition(currentPosX+mx, currentPosY+my);
+				wasStuckLastFrame=false;
+			}
+			else {
+				wasStuckLastFrame=true;
+			}
+		}
+		
+		if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
+			game.policeCatchesBunny();
+			return;
+		}
 	}
 	
 	
@@ -95,3 +205,4 @@ public class Police {
 		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
 	}
 }
+

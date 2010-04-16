@@ -10,4 +10,5 @@
 <string name="l88_mode_pause">Paused \nDruecke rauf um weiterzuspielen</string>
 <string name="l88_mode_loose">Spiel vorbei\nScore: </string>
 <string name="l88_layout_text"></string>
+<string name="l88_gold_text">Gold:</string>
 </resources>

@@ -1,30 +1,26 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level88;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
-import android.view.MotionEvent;
-import android.view.Window;
-import android.view.WindowManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Bunny.MoveStatus;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.View.OnTouchListener;
-import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.View.OnTouchListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
 /**
  * Class for the general level activity of level 88
@@ -33,10 +29,12 @@ import android.view.View;
 public class LevelActivity extends Activity{
 	public static final String TAG = "LevelActivity"; 
 	
+	private final Handler handler = new Handler();
 	private GLSurfaceView glSurfaceView;
 	private GLView normalModeView;
 	private Game game;
 	private Vector2 windowSize;
+	private TextView goldText;
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -53,11 +51,28 @@ public class LevelActivity extends Activity{
         Display d = wm.getDefaultDisplay();
         windowSize = new Vector2((float)d.getWidth(), (float)d.getHeight());
 	 	
-	 	game = new Game(this);
+	 	game = new Game(this, handler);
 
 	 	normalModeView = new GLView(this, game);
 	 	glSurfaceView = normalModeView; 
         setContentView(glSurfaceView);
+        
+        LinearLayout llayout = new LinearLayout(this);
+        llayout.setGravity(Gravity.TOP | Gravity.LEFT);
+        llayout.setOrientation(LinearLayout.HORIZONTAL);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
+        addContentView(llayout, params);
+        
+        goldText = new TextView(this);
+        goldText.setTextSize(25);
+        goldText.setGravity(Gravity.CENTER);
+        goldText.setTextColor(Color.WHITE);  
+        goldText.setBackgroundResource(R.drawable.l88_text);
+        
+        LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        llparams.weight = 0;
+        llparams.setMargins(10, 10, 10, 10);
+        llayout.addView(goldText, llparams);
         
         glSurfaceView.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
@@ -66,6 +81,28 @@ public class LevelActivity extends Activity{
 			}
         });
 
+        updateTexts();
+        
+       //the SessionState is a convenience class to set a result
+		SessionState s = new SessionState();
+		//we set the progress the user has made (must be between 0-100)
+		s.setProgress(100-game.gold);
+		//we call the activity's setResult method 
+		setResult(Activity.RESULT_OK, s.asIntent());
+	}
+	
+	public void endLevel() {
+		//the SessionState is a convenience class to set a result
+		SessionState s = new SessionState();
+		//we set the progress the user has made (must be between 0-100)
+		s.setProgress(100-game.gold);
+		//we call the activity's setResult method 
+		setResult(Activity.RESULT_OK, s.asIntent());
+		LevelActivity.this.finish();
+	}
+	
+	public void updateTexts() {
+   		goldText.setText(" " + getString(getResources().getIdentifier("l88_gold_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")) + game.gold + " ");
 	}
 	
 	/* (non-Javadoc)

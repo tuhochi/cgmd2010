@@ -17,8 +17,10 @@ public class Stash {
 	public float translateX, translateY;
 	private Quad stashQuad;
 	public int size;
-
 	
+	private float hideTime, maxHideTime;
+
+
 	/**
 	 * Constructor
 	 * @param _game game context
@@ -31,6 +33,8 @@ public class Stash {
 		setPosition(x, y);
 		size = _size;
 
+		maxHideTime = 120;
+		hideTime = 0;
 		
 		float norm;
         Vector2 groundYDir = new Vector2(-229, -169);
@@ -62,7 +66,15 @@ public class Stash {
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
-    	// TODO
+		if( hideTime>0 ) {
+			hideTime -= elapsedSeconds;
+			return;
+		}
+
+		if( currentPosX==game.bunny.currentPosX && currentPosY==game.bunny.currentPosY ) {
+			game.looseGold(10*size);
+			hideTime = maxHideTime;
+		}
 	}
 	
 	
@@ -71,6 +83,7 @@ public class Stash {
 	 * @param gl OpenGL context of android
 	 */
 	public void draw(GL10 gl) {
+		if( hideTime>0 ) return;
 		stashQuad.vbos.set(gl);
 
 		gl.glPushMatrix();
@@ -90,8 +103,7 @@ public class Stash {
 		
 		gl.glPopMatrix();
 	}
-	
-	
+
 	/**
 	 * Set the position of the stash
 	 * @param x x-coordinate

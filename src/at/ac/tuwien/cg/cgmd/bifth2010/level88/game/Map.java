@@ -7,11 +7,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.util.Log;
+import javax.microedition.khronos.opengles.GL10;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * The class representing the whole level
@@ -34,6 +34,8 @@ public class Map {
 			houseTexture = -1;
 			isStreetForPolice=false;
 			isStreetForBunny=false;
+			isPolicePresent=false;
+			numStreetNeighboursPolice=0;
 		}
 
 		public int x, y;
@@ -44,6 +46,8 @@ public class Map {
 
 		public boolean isStreetForPolice;
 		public boolean isStreetForBunny;
+		public boolean isPolicePresent;
+		public int numStreetNeighboursPolice;
 		public char type;
 	}
 
@@ -130,7 +134,11 @@ public class Map {
 		}
 	}
 
-	
+	public void movePolice(int fromX, int fromY, int toX, int toY) {
+		cells[fromX][fromY].isPolicePresent = false;
+		cells[toX][toY].isPolicePresent = true;
+	}
+
 	/**
 	 * Loading of the levelinformation of a txt-file
 	 */
@@ -195,9 +203,6 @@ public class Map {
 					case 4:
 						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block5;
 						break;
-					/*default:
-						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block1;
-						break;*/
 					}
 					cells[x+1][values.size()-y].type = 'x';
 					break;
@@ -244,6 +249,7 @@ public class Map {
 					game.addPolice(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
+					cells[x+1][values.size()-y].isPolicePresent = true;
 					break;
 
 
@@ -271,6 +277,11 @@ public class Map {
 				if(cells[x][y].type == 's'){
 					counter = 0;
 
+					if(cells[x-1][y].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
+					if(cells[x+1][y].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
+					if(cells[x][y-1].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
+					if(cells[x][y+1].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
+					
 					if(cells[x-1][y].type == 's'){
 						counter += 8;
 					}
