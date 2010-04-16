@@ -1,14 +1,26 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
 
+/**
+ * A 4x4 Matrix
+ * @author MaMa
+ *
+ */
 public class Matrix4x4
 {
 	public float[][] m = new float[4][4];
 
+	/**
+	 * Empty Constructor, create Identity Matrix
+	 */
 	public Matrix4x4 ()
 	{
 		setIdentity ();
 	}
 
+	/**
+	 * Copy Constructor
+	 * @param copy The matrix to copy
+	 */
 	public Matrix4x4 (Matrix4x4 copy)
 	{
 		for (int r=0; r<4; r++)
@@ -16,6 +28,9 @@ public class Matrix4x4
 				m[r][c] = copy.m[r][c];
 	}
 
+	/**
+	 * sets the Matrix to the Identity Matrix
+	 */
 	public void setIdentity ()
 	{
 		for (int r=0; r<4; r++)
@@ -23,6 +38,12 @@ public class Matrix4x4
 				m[r][c] = (r==c) ? 1.0f : 0.0f;
 	}
 
+	/**
+	 * Creates a scaling matrix
+	 * @param sx the scaling factor in x direction
+	 * @param sy the scaling factor in y direction
+	 * @param sz the scaling factor in z direction
+	 */
 	public Matrix4x4 setScale (float sx, float sy, float sz)
 	{
 		m[0][0] = sx; m[0][1] =  0; m[0][2] =  0; m[0][3] =  0;
@@ -33,6 +54,10 @@ public class Matrix4x4
 		return (this);
 	}
 
+	/**
+	 * Creates a rotation matrix around the x axis
+	 * @param alpha The angle to rotate
+	 */
 	public static Matrix4x4 RotateX (float alpha)
 	{
 		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
@@ -46,6 +71,10 @@ public class Matrix4x4
 		return retMat;
 	}
 
+	/**
+	 * Creatse a rotation matrix around the y axis
+	 * @param alpha The angle to rotate
+	 */
 	public static Matrix4x4 RotateY (float alpha)
 	{
 		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
@@ -59,7 +88,10 @@ public class Matrix4x4
 		return retMat;
 	}
 
-	
+	/**
+	 * Creates a rotation matrix around the z axis
+	 * @param alpha The angle to rotate
+	 */
 	public static Matrix4x4 RotateZ (float alpha)
 	{
 		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
@@ -73,6 +105,11 @@ public class Matrix4x4
 		return retMat;
 	}
 
+	/**
+	 * Creates a rotation matrix around an arbitrary axis
+	 * @param alpha The angle to rotate
+	 * @param axis the axis to rotate around
+	 */
 	public static Matrix4x4 RotateAxis (float alpha, Vector3 axis)
 	{
 		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
@@ -86,6 +123,12 @@ public class Matrix4x4
 		return retMat;
 	}
 
+	/**
+	 * Creates a translation matrix
+	 * @param tx The amount to translate in x direction
+	 * @param ty The amount to translate in y direction
+	 * @param tz The amount to translate in z direction
+	 */
 	public static Matrix4x4 Translate (float tx, float ty, float tz)
 	{
 		Matrix4x4 retMat = new Matrix4x4();
@@ -97,6 +140,11 @@ public class Matrix4x4
 		return retMat;
 	}
 
+	/**
+	 * Multiplies two matrices
+	 * @param left Left Matrix
+	 * @param right Right Matrix
+	 */
 	public static Matrix4x4 mult (Matrix4x4 left, Matrix4x4 right)
 	{
 		Matrix4x4 retMat = new Matrix4x4();
@@ -120,6 +168,10 @@ public class Matrix4x4
 		return retMat;
 	}
 
+	/**
+	 * Transforms a point in space with the current matrix
+	 * @param in The point to transform
+	 */
 	public Vector3 transformPoint (Vector3 in)
 	{
 		Vector3 retVec = new Vector3();
@@ -128,7 +180,11 @@ public class Matrix4x4
 		retVec.z = m[2][0]*in.x + m[2][1]*in.y + m[2][2]*in.z;
 		return retVec;
 	}
-	
+
+	/**
+	 * Transforms a point in space with the current matrix
+	 * @param in The point to transform
+	 */
 	public Vector4 transformPoint (Vector4 in)
 	{
 		Vector4 retVec = new Vector4();
@@ -138,7 +194,10 @@ public class Matrix4x4
 		retVec.w = m[3][0]*in.x + m[3][1]*in.y + m[3][2]*in.z + m[3][3]*in.w;
 		return retVec;
 	}
-	
+
+	/**
+	 * Creates a float array from the current matrix
+	 */
 	public float[] toFloatArray()
 	{
 		float[] array = new float[16];
@@ -152,7 +211,11 @@ public class Matrix4x4
 
 		return array;
 	}
-	
+
+	/**
+	 * Creates a matrix from a float array
+	 * @param array The float array
+	 */
 	public void fromFloatArray(float[] array)
 	{
 		for(int i = 0; i < 4; i++)
@@ -177,7 +240,10 @@ public class Matrix4x4
 		
 		return ret;
 	}
-	
+
+	/**
+	 * Returns the inverse matrix of the current one
+	 */
 	public Matrix4x4 InvertedCopy()
 	{
         // http://www.cvl.iis.u-tokyo.ac.jp/~miyazaki/tech/teche23.html

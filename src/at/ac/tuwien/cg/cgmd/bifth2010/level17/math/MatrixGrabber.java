@@ -18,7 +18,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
 
 import javax.microedition.khronos.opengles.GL10;
 
-
+/**
+ * A class used to record the modelView and projection matrix state set by the gl context
+ * @author Android SDK
+ *
+ */
 public class MatrixGrabber {
     public MatrixGrabber() {
         mModelView = new float[16];

@@ -38,6 +38,8 @@ import javax.microedition.khronos.opengles.GL11Ext;
  * to differences in the way the math is implemented by GLMatrixWrapper
  * as compared to the way the math is implemented by the OpenGL ES
  * driver.
+ * 
+ * @author Android SDK
  */
 public class MatrixTrackingGL implements GL, GL10, GL10Ext, GL11, GL11Ext {
     private GL10 mgl;
