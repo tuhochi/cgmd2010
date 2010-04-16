@@ -17,26 +17,26 @@
  	android:id="@+id/l84_GemButton01"
   	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:nextFocusUp="@+id/l84_GemButton04">
+    android:nextFocusUp="@+id/l84_GemButton04" android:background="@drawable/l84_gem1">
 </ImageButton>
 <ImageButton
 	android:text="02"
  	android:id="@+id/l84_GemButton02"
   	android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content" android:background="@drawable/l84_gem2">
 </ImageButton>
 <ImageButton
 	android:text="03"
  	android:id="@+id/l84_GemButton03"
   	android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content" android:background="@drawable/l84_gem3">
 </ImageButton>
 <ImageButton
 	android:text="04"
  	android:id="@+id/l84_GemButton04"
   	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:nextFocusDown="@+id/l84_GemButton01">
+    android:nextFocusDown="@+id/l84_GemButton01" android:background="@drawable/l84_gem4">
 </ImageButton>
 <TextView android:layout_above="@+id/l84_openglview" android:text="fps" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_TfFps"></TextView>
 </TableLayout>
