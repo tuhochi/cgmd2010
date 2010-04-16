@@ -18,11 +18,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 
 public class LevelRenderer implements Renderer {
-	private Tablet tablet = new Tablet();
+	private Tablet tablet;
 	private Context context;
 	
 	public LevelRenderer(Context context) {
 		this.context = context;
+		tablet = new Tablet(context, 0, 0, 0, 0, 0);
 	}
 	
 	@Override
@@ -56,36 +57,5 @@ public class LevelRenderer implements Renderer {
 	    gl.glBlendFunc(GL10.GL_ONE, GL10.GL_SRC_COLOR);
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);		
-		
-		gl.glGenTextures(1, texture);
-		
-		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.l60_icon);
-		ByteBuffer bb = extract(bmp);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.get(0));
-		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, bmp.getWidth(), bmp.getHeight(), 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb); 
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 	}
-	
-	private static ByteBuffer extract(Bitmap bmp) {
-		ByteBuffer bb = ByteBuffer.allocateDirect(bmp.getHeight() * bmp.getWidth() * 4);
-		bb.order(ByteOrder.BIG_ENDIAN);
-		IntBuffer ib = bb.asIntBuffer();
-		// Convert ARGB -> RGBA
-		for (int y = bmp.getHeight() - 1; y > -1; y--)	{
-			for (int x = 0; x < bmp.getWidth(); x++) {
-				int pix = bmp.getPixel(x, bmp.getHeight() - y - 1);
-				int alpha = ((pix >> 24) & 0xFF);
-				int red = ((pix >> 16) & 0xFF);
-				int green = ((pix >> 8) & 0xFF);
-				int blue = ((pix) & 0xFF);
-
-				ib.put(red << 24 | green << 16 | blue << 8 | alpha);
-			}
-		}
-		bb.position(0);
-		return bb; 
-	}
-	
-	IntBuffer texture = IntBuffer.allocate(1);
 }
