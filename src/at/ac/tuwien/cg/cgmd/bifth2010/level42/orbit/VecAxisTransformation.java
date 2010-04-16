@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -87,12 +88,12 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		this.basicOrientation.copy(basicOrientation);
 	}
 
-	public void setAngle(float angle) {
+	public void setAngle(float angle,float ratio) {
 		this.qv = angle;
-		//check the rotation/speed ratio
-		if((qv/speed)>Config.SATELLITE_ROTASPEED_RATIO)
-			this.speed = qv/Config.SATELLITE_ROTASPEED_RATIO;
+		//check the speed/rotation ratio
+		if((speed/qv)<ratio)
+			this.qv = this.speed/ratio;
 		
-		//Log.d(LevelActivity.TAG,"ratio="+(qv/speed));
+		//Log.d(LevelActivity.TAG,"ratio="+(speed/qv) + " speed="+speed+" qv="+qv);
 	}
 }

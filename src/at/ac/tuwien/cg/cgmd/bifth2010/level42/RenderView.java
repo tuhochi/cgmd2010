@@ -188,7 +188,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		}
 		
 		motionManager.updateMotion(timer.getDeltaTsec());
-		collManager.doCollisionDetection(motionManager);
+		collManager.doCollisionDetection();
 		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
 		
 		/*
@@ -250,7 +250,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 				{
 					Orbit orbit = (Orbit)entity.getMotion();
 					orbit.morph(selectionDirection);
-					motionManager.changeSatelliteTransformation(entity, orbit.getCurrDirectionVec(), selectionDirection);
+					motionManager.changeSatelliteTransformation(entity, orbit.getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
 					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
 				}
 			}
