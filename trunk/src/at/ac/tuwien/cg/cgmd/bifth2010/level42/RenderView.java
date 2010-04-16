@@ -226,7 +226,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 			SceneEntity entity = collManager.intersectRay(cam.eyePosition, rayDirection);
 
 			//entity selected
-			if(entity!=null)
+			if(entity!=null && !entity.getName().equals(Config.PLANET_NAME))
 			{
 				selectionDirection.copy(cam.viewPosition);
 				selectionDirection.subtract(cam.eyePosition);
