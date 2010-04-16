@@ -32,9 +32,31 @@ public class Tablet {
 	private FloatBuffer texCoordBuffer;
 	IntBuffer texture = IntBuffer.allocate(1);
 	private Context context;
-
+	
+	private int width;
+	private int height;
+	private int x;
+	private int y;
+	private int resource_id;
+	private int rotation_angle;
+	private float scale_x;
+	private float scale_y;
+	
 	public Tablet(Context context, int width, int height, int x, int y, int resource_id) {
 		this.context = context;
+		
+		vertices[1] = width;
+		vertices[6] = height;
+		vertices[9] = height;
+		vertices[10] = width;
+		
+		this.width = width;
+		this.height = height;
+		this.x = x;
+		this.y = y;
+		this.resource_id = resource_id;
+		scale_x = 1;
+		scale_y = 1;
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
@@ -55,10 +77,24 @@ public class Tablet {
 		texCoordBuffer.position(0);
 	}
 	
+	public void move(int xwise, int ywise) {
+		x += xwise;
+		y += ywise;
+	}
+	
+	public void scale(int scale_x, int scale_y) {
+		this.scale_x = scale_x;
+		this.scale_y = scale_y;
+	}
+	
+	public void rotate(int angle) {
+		this.rotation_angle = angle;
+	}
+	
 	public void draw(GL10 gl) {
 		gl.glGenTextures(1, texture);
 		
-		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.l60_icon);
+		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resource_id);
 		ByteBuffer bb = extract(bmp);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.get(0));
 		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, bmp.getWidth(), bmp.getHeight(), 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb); 
@@ -74,9 +110,15 @@ public class Tablet {
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(x, y, 0);
+		gl.glScalef(scale_x, scale_y, 0);
+		gl.glRotatex(rotation_angle, 0, 0, 1);
+		
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
+		gl.glPopMatrix();
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisable(GL10.GL_CULL_FACE);
 	}

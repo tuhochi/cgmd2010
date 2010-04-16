@@ -10,12 +10,14 @@ import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class LevelActivity extends Activity {
+	GLSurfaceView glv;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		GLSurfaceView glv = new GLSurfaceView(this);
+		glv = new GLSurfaceView(this);
 		glv.setRenderer(new LevelRenderer(this));
 		setContentView(glv);
 		return;
