@@ -1,13 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level50;
 
-import java.nio.IntBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -22,11 +18,14 @@ public class LevelRenderer implements Renderer {
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
+		gl.glPushMatrix();
 		gl.glLoadIdentity();
-		//gl.glTranslatef(0, 0, -4);
+		gl.glTranslatef(positionX, positionY, 0);
 		
 		// Draw our square.
 		square.draw(gl);
+		
+		gl.glPopMatrix();
 	}
 
 	@Override
@@ -65,8 +64,15 @@ public class LevelRenderer implements Renderer {
 		square = new Square(gl, context);
 	}
 	
+	void movePlayer(float x, float y) {
+		positionX += x;
+		positionY += y;
+	}
+	
 	// Initialize our square.
 	Square square;
 	Context context;
+	float positionX = 0;
+	float positionY = 0;
 
 }
