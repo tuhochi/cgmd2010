@@ -143,7 +143,7 @@
 			android:name=".level22.LevelActivity"
 			android:label="@string/L22nameofthegame"
             android:configChanges="orientation"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level22.LAUNCH_LEVEL" />
 				<category android:name="android.intent.category.DEFAULT" />
