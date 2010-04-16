@@ -18,7 +18,7 @@ public class LevelActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         WindowManager.LayoutParams.FLAG_FULLSCREEN); // (NEW)
 
-        mGLView = new LevelSurfaceView(this);
+        mGLView = new LevelSurfaceView(this); 
    		setContentView(mGLView);
     }
 	
