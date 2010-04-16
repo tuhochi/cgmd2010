@@ -179,6 +179,17 @@
 		</activity>
 		
 		<activity
+			android:name=".level30.LevelActivity"
+			android:label="@string/l30_nameofthegame_full"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level30.LAUNCH_LEVEL" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</activity>
+		
+		<activity
 			android:name=".level84.HelpActivity">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level84.LAUNCH_HELP"/>
