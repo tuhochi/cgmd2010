@@ -11,7 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.Cube;
 public class GameWorld {
 
 	Cube cube;
-	float mAngle = 0.0;
+	float mAngle = 0.0f;
 	
 	public synchronized void Framemove()
 	{
