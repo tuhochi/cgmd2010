@@ -4,14 +4,14 @@ import static android.opengl.GLES10.GL_PROJECTION;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.glLoadIdentity;
 import static android.opengl.GLES10.glMatrixMode;
-import static android.opengl.GLU.gluOrtho2D;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
+import android.opengl.GLU;
+import at.ac.tuwien.cg.cgmd.bifth2010.level22.gamelogic.MailDataBase;
 
 
 public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Renderer {
@@ -21,19 +21,27 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 		
 		super( context );
 		setRenderer( this );
+		SpamRenderer.context = context;
 	}
 	@Override
 	public void onDrawFrame(GL10 arg0) 
 	{
 	
 		arg0.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		arg0.glClearColor(1.0f, 0.0f, 0.0f, 0.5f);
+		arg0.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 		arg0.glClearDepthf(1.0f);
 		arg0.glEnable(GL10.GL_DEPTH_TEST);
 		arg0.glDepthFunc(GL10.GL_LEQUAL);
 		arg0.glShadeModel(GL10.GL_SMOOTH);
+		arg0.glEnable(GL10.GL_TEXTURE_2D);
+		arg0.glEnable(GL10.GL_CULL_FACE);
 		
-		// TODO : Draw my scene
+		cachedRenderContext = arg0;
+		
+		MailSceneObject.init( arg0, context );
+		MailDataBase.displayMails( arg0 );
+		
+		arg0.glDisable( GL10.GL_TEXTURE_2D );
 	}
 
 	@Override
@@ -43,8 +51,10 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 		gl.glViewport(0, 0, width, height);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		gluOrtho2D( gl, 0, 0, width, height );
+		GLU.gluPerspective( gl, 30.0f, ( float ) width / height, 1.0f, 100.0f );
 		glMatrixMode(GL_MODELVIEW);
+		
+		cachedRenderContext = gl;
 	}
 
 	@Override
@@ -52,6 +62,13 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 		// TODO Auto-generated method stub
 		
 	}
-
 	
+	public static GL10 getActContext ()
+	{
+		
+		return cachedRenderContext;
+	}
+
+	private static GL10 cachedRenderContext;
+	private static Context context;
 }
