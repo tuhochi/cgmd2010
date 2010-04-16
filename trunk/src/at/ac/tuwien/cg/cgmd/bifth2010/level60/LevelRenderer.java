@@ -23,7 +23,7 @@ public class LevelRenderer implements Renderer {
 	
 	public LevelRenderer(Context context) {
 		this.context = context;
-		tablet = new Tablet(context, 0, 0, 0, 0, 0);
+		tablet = new Tablet(context, 50, 50, 0, 0, R.drawable.l60_icon);
 	}
 	
 	@Override
@@ -32,6 +32,7 @@ public class LevelRenderer implements Renderer {
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(0, 0, -1.0f);
+		tablet.move(1, 1);
 		tablet.draw(gl);
 	}
 
