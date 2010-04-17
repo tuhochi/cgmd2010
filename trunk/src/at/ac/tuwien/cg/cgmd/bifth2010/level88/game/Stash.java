@@ -116,4 +116,21 @@ public class Stash {
 		translateX = currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x;
 		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
 	}
+	
+	
+	/**
+	 * Get the hide time of the stash
+	 * @return the hide time of the stash
+	 */
+	public float getHideTime(){
+		return hideTime;
+	}
+	
+	/**
+	 * Set the hide time of the stash after restoration
+	 * @param time hide time of the stash
+	 */
+	public void setHideTime(float time){
+		hideTime = time;
+	}
 }

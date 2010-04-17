@@ -194,4 +194,21 @@ public class Bunny {
 			moveStatus = MoveStatus.STANDING;
 		}
 	}
+	
+	/**
+	 * Get the waiting time of the bunny
+	 * @return waiting time of the bunny
+	 */
+	public float getWaitingTime(){
+		return waitingTime;
+	}
+	
+	
+	/**
+	 * Set the waiting time of the bunny after restoration
+	 * @param wait waiting time of the bunny
+	 */
+	public void setWaitingTime(float wait){
+		waitingTime = wait;
+	}
 }

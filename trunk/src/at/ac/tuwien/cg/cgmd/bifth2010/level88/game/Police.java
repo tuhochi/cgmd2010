@@ -1,6 +1,3 @@
-/**
- * 
- */
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
 import java.util.ArrayList;
@@ -9,6 +6,7 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Bunny.MoveStatus;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
@@ -74,6 +72,10 @@ public class Police {
 	}
 	
 	
+	/**
+	 * Get the direction of the bunny 
+	 * @return direction the bunny is currently heading to
+	 */
 	private MoveStatus getBunnyDir() {
 		int bx = game.bunny.currentPosX;
 		int by = game.bunny.currentPosY;
@@ -203,6 +205,57 @@ public class Police {
 		
 		translateX = currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x;
 		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
+	}
+	
+	/**
+	 * Get the current position of the police
+	 * @return the current position of the police
+	 */
+	public int[] getPosition(){
+		int[] pos = {currentPosX, currentPosY};
+		return pos; 
+	}
+	
+	/**
+	 * Get the waiting time of the police
+	 * @return the waiting time of the police
+	 */
+	public float getWaitingTime(){
+		return waitingTime;
+	}
+	
+	/**
+	 * Set the waiting time of the police after restoration
+	 * @param wait waiting time of the police
+	 */
+	public void setWaitingTime(float wait){
+		waitingTime = wait;
+	}
+	
+	/**
+	 * Method for restoring the movement
+	 * @param move name of the movement
+	 */
+	public void setMovement(String move){
+		
+		if(move.equalsIgnoreCase("STANDING")){
+			moveStatus = MoveStatus.STANDING;
+		}
+		else if(move.equalsIgnoreCase("MOVE_LEFT")){
+			moveStatus = MoveStatus.MOVE_LEFT;
+		}
+		else if(move.equalsIgnoreCase("MOVE_RIGHT")){
+			moveStatus = MoveStatus.MOVE_RIGHT;
+		}
+		else if(move.equalsIgnoreCase("MOVE_UP")){
+			moveStatus = MoveStatus.MOVE_UP;
+		}
+		else if(move.equalsIgnoreCase("MOVE_DOWN")){
+			moveStatus = MoveStatus.MOVE_DOWN;
+		}
+		else {
+			moveStatus = MoveStatus.STANDING;
+		}
 	}
 }
 
