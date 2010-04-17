@@ -49,7 +49,7 @@ public class SoundManager
 	public int requestPlayer(int resId,boolean isLooping)
 	{
 		MediaPlayer newPlayer = MediaPlayer.create(context,resId);
-		newPlayer.setLooping(true);
+		newPlayer.setLooping(isLooping);
 		
 		players.add(newPlayer);
 		
