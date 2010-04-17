@@ -1,10 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
+import static android.opengl.GLES10.GL_FLOAT;
 import static android.opengl.GLES10.GL_TEXTURE_2D;
-import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
-import static android.opengl.GLES10.GL_UNSIGNED_SHORT;
 import static android.opengl.GLES10.glDisable;
-import static android.opengl.GLES10.glDrawElements;
+import static android.opengl.GLES10.glDrawArrays;
 import static android.opengl.GLES10.glEnable;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
@@ -14,15 +13,13 @@ import static android.opengl.GLES10.glVertexPointer;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.opengl.GLES11;
 import android.os.Bundle;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
@@ -43,6 +40,9 @@ public class ObstacleManager
 	 */
 	private boolean gameOver = false; 
 	
+	/**
+	 * Boolean to indicate if the activity was restored from bundle
+	 */
 	private boolean wasRestored = false;
 	
 	/**
@@ -59,9 +59,8 @@ public class ObstacleManager
 	/** The random generator. */
 	private Random randomGenerator;
 	
-	//current position for generating obstacle, 80 = start position
 	/** The current position to start generating obstacles. */
-	private int currentPosition = Settings.OBSTALE_START;
+	private int currentPosition = Settings.OBSTACLE_START;
 	
 	//lowest index of a visible obstacle in obstacles list
 	/** The least rendered obstacle. */
@@ -111,12 +110,11 @@ public class ObstacleManager
 	
 	/** The arraylist of obstacles. */
 	private ArrayList<Obstacle> obstacles;
-	
-	/** The index buffer. */
-	private ShortBuffer indexBuffer;
-	
+		
 	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
+
+	private int vboId;
 	
 	/**
 	 * Instantiates a new obstacle manager.
@@ -126,7 +124,6 @@ public class ObstacleManager
 		randomGenerator = new Random(System.currentTimeMillis());
 		randomArray = new int[100];
 		obstacles = new ArrayList<Obstacle>();
-		createVertexBuffer();
 		genArrayWithProbability();
 		currentPosition = 80;
 		leastRenderedObstacle = 0;
@@ -171,6 +168,10 @@ public class ObstacleManager
 		}
 	}
 	
+	/**
+	 * Reads from bundle
+	 * @param bundle the bundle to read from
+	 */
 	@SuppressWarnings("unchecked")
 	public void readFromBundle(Bundle bundle) {
 		obstacles = (ArrayList<Obstacle>)bundle.getSerializable("obstacles");
@@ -234,7 +235,18 @@ public class ObstacleManager
 		
 		//disable textures just for testing
 		glDisable(GL_TEXTURE_2D);
-		glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+		
+		if(!Settings.GLES11Supported) 
+		{
+			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+		
+		} 
+		else 
+		{
+			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
+			
+			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
+		}
 		
 		while(renderNext && i != NR_OF_OBSTACLES)
 		{
@@ -261,7 +273,7 @@ public class ObstacleManager
 					
 					glTranslatef(tempObstacle.position.x/(float)tempObstacle.width, (posY - currentHeight)/(float)tempObstacle.height, 0);
 														
-					glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, indexBuffer);
+					glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 					
 				glPopMatrix();
 				
@@ -299,40 +311,15 @@ public class ObstacleManager
 	/**
 	 * Creates the vertex buffer.
 	 */
-	private void createVertexBuffer()
+	public void preprocess()
 	{
-		float[] vertices = new float[12];
-		
-		//just a sample
-		//bottom left
-		vertices[0] = 0.f;
-		vertices[1] = 0.f;
-		vertices[2] = 0.f;
-		//bottom right
-		vertices[3] = 1.f;
-		vertices[4] = 0.f;
-		vertices[5] = 0.f;
-		//top left
-		vertices[6] = 0.f;
-		vertices[7]= 1.f;
-		vertices[8]= 0.f;
-		//top right
-		vertices[9] = 1.f;
-		vertices[10] = 1.f;
-		vertices[1] = 0.f;		
-		
-		ByteBuffer vertexBBuffer = ByteBuffer.allocateDirect(vertices.length * 4);
-		vertexBBuffer.order(ByteOrder.nativeOrder());
-		vertexBuffer = vertexBBuffer.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);	
-		
-		short[] indices = { 0, 1, 2, 3 };
-		ByteBuffer indexBBuffer = ByteBuffer.allocateDirect(indices.length * 2);
-		indexBBuffer.order(ByteOrder.nativeOrder());
-		indexBuffer = indexBBuffer.asShortBuffer();
-		indexBuffer.put(indices);
-		indexBuffer.position(0);	
+		GeometryManager geometryManager = GeometryManager.instance; 
+		vertexBuffer = geometryManager.createVertexBufferQuad(1f, 1f);
+		FloatBuffer texCoordBuffer = geometryManager.createTexCoordBufferQuad();
+		if(Settings.GLES11Supported) 
+		{
+			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+		}
 	}
 	
 	/**
@@ -383,12 +370,15 @@ public class ObstacleManager
 		this.gameOver = gameOver; 
 	}
 	
+	/**
+	 * Reset the ObstacleManager
+	 */
 	public void reset()
 	{
 		if(!wasRestored)
 		{
 			leastRenderedObstacle=0;
-			currentPosition=Settings.OBSTALE_START;
+			currentPosition=Settings.OBSTACLE_START;
 			obstacles.clear();
 			generateObstacles();
 		}
