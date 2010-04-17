@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -36,8 +37,10 @@ public class LevelActivity extends Activity implements OrientationListener {
 	/** The renderer. */
 	private RenderView renderer; 
 	
+	/** The TextView to show fps */
 	private TextView fpsText;
 	
+	/** The Handler for LevelActivity */
 	public static final Handler handler = new Handler();
 	
 	/** The CONTEXT. */
@@ -49,6 +52,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	/** The Constant SENSOR_MENU_ITEM if a user wants to use the orientation sensor. */
 	private static final int SENSOR_MENU_ITEM = 1;
 	
+	/** The Vibrator to trigger phone vibration */
 	private Vibrator vibrator;
 	
 	//private Vector2 mainCharPos; 
@@ -66,6 +70,9 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	 	
+	 	//set dedicated volume buttons to control music volume
+	 	setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
 	 	setContentView(R.layout.l23_level);
 		renderer = (RenderView)findViewById(R.id.l23_RenderView);
 		renderer.setOrientationListener(this);
@@ -288,16 +295,29 @@ public class LevelActivity extends Activity implements OrientationListener {
 	    return false;
 	}
 	
+	
+	/**
+	 * Called when the games fps have changed
+	 * @param fps new fps value
+	 */
 	public void fpsChanged(float fps)
 	{
 		fpsText.setText(Math.round(fps) + " fps");
 	}
 	
+	/**
+	 * Trigger the phones vibration with a specific length
+	 * @param millis time of the vibration length in millis
+	 */
 	public void triggerVibrate(long millis)
 	{
 		vibrator.vibrate(millis);
 	}
 	
+	/**
+	 * Set the score for the framework
+	 * @param score Score to set
+	 */
 	public void setScore(int score)
 	{
 		SessionState s = new SessionState();
