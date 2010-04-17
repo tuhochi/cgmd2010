@@ -10,10 +10,28 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.MainThread;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.MailSceneObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.SpamRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.MailSceneObject.SuccessState;
 
+/**
+ * 
+ * This class is responsible for the whole game logic. It keeps track of the current player progress,
+ * and delegates important actions like the scene update to the appropriate classes.
+ * 
+ * @author Sulix
+ */
 public class GameLogic extends Thread {
 
+	/**
+	 * Initializes the game logic. If the activity was stopped and deleted from memory, the previous state
+	 * will be reconstructed.
+	 * 
+	 * @param loadedState The previous state, if there was any
+	 * @param context The current view context of the main activity
+	 * @param spawnCooldown This variable tells us, how much time needs to pass, until the next mail object will be spawned ( in ms )
+	 * @param moneyCount Keeps track of the player progress, in this case the money
+	 * @param sourceActivity A link to the calling activity
+	 */
 	public static void init ( Bundle loadedState, Context context, long spawnCooldown, long moneyCount, LevelActivity sourceActivity )
 	{
 		
@@ -34,6 +52,13 @@ public class GameLogic extends Thread {
 		if ( loadedState != null )	loadPersistentState( loadedState );
 	}
 	
+	/**
+	 * Sets the appropriate text view targets, required for displaying the current games state
+	 * 
+	 * @param typ_ Textview for the typed in text
+	 * @param rem_ Textview for the required text
+	 * @param mon_ Textview for the money state
+	 */
 	public static void setTextViews ( TextView typ_, TextView rem_, TextView mon_ )
 	{
 		
@@ -42,6 +67,9 @@ public class GameLogic extends Thread {
 		currentMoney = mon_;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#run()
+	 */
 	public void run ()
 	{
 		
@@ -70,20 +98,20 @@ public class GameLogic extends Thread {
 		}
 	}
 	
+	/**
+	 * Stops the game logic and the associated thread
+	 */
 	public static synchronized void kill ()
 	{
 		
 		active = false;
-	}
-	
-	public static synchronized void destroy_ ()
-	{
-		
-		GameLogic.kill();
 		
 		MailSceneObject.uninit();
 	}
 	
+	/**
+	 * Updates the current game state
+	 */
 	public static synchronized void update ()
 	{
 		
@@ -134,12 +162,21 @@ public class GameLogic extends Thread {
 		mainThread.post( uiThread );
 	}
 	
+	/**
+	 * Puts a new character into the character queue
+	 * 
+	 * @param the actual key input
+	 * @return true on success
+	 */
 	public static synchronized boolean putChar ( char input )
 	{
 		
 		return bufferedInput.offer( input );
 	}
 	
+	/**
+	 * @return The part of the mail string, which was already typed in
+	 */
 	public static synchronized String getTypedIn ()
 	{
 		
@@ -148,6 +185,9 @@ public class GameLogic extends Thread {
 		return "";
 	}
 	
+	/**
+	 * @return the part of the mail string, which still has to be typed in
+	 */
 	public static synchronized String getRemaining ()
 	{
 		
@@ -156,18 +196,31 @@ public class GameLogic extends Thread {
 		return "";
 	}
 	
+	/**
+	 * @return the current money state, as string
+	 */
 	public static synchronized String getMoney ()
 	{
 		
 		return Integer.toString( ( int ) money );
 	}
 	
+	/**
+	 * @return the current money state, as integer
+	 */
 	public static synchronized int getMoneyState ()
 	{
 		
 		return ( int ) money;
 	}
 	
+	/** 
+	 * Updates the display with the current values
+	 * 
+	 * @param tI Represents the part of the current mail string, which was already typed in
+	 * @param rem Represents the part of the current mail string, which still has to be typed in
+	 * @param mon The players money
+	*/
 	public static void updateTextBoxes ( String tI, String rem, String mon)
 	{
 		
@@ -176,12 +229,22 @@ public class GameLogic extends Thread {
 		currentMoney.setText( mon );
 	}
 	
+	/**
+	 * Sets the handler, required for the generation of a thread running in the same process as the main activity
+	 * 
+	 * @param threadGen the appropriate handler
+	 */
 	public static synchronized void setThread ( Handler threadGen )
 	{
 		
 		mainThread  = threadGen;
 	}
 	
+	/**
+	 * Save the current game state for persistency
+	 * 
+	 * @param target the target bundle where the state should be saved in
+	 */
 	public static synchronized void makePersistentState ( Bundle target )
 	{
 		
@@ -196,6 +259,11 @@ public class GameLogic extends Thread {
 		MailDataBase.makePersistentState( target );
 	}
 	
+	/**
+	 * Load the previous state of the GameLogic
+	 * 
+	 * @param target the source boundle where the state should be loaded from
+	 */
 	public static synchronized void loadPersistentState ( Bundle target )
 	{
 		
@@ -210,6 +278,9 @@ public class GameLogic extends Thread {
 		actMail = MailDataBase.getMailMesh( 0 );
 	}
 	
+	/**
+	 * @return is true, when the game logic is still running
+	 */
 	public static boolean isRunning ()
 	{
 		

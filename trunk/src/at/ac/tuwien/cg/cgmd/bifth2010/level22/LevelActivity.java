@@ -18,8 +18,18 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.gamelogic.GameLogic;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.SpamRenderer;
 
+/**
+ *
+ * The activity of Level 22. Manages all Layout associated processes as well as all the threads
+ * attached to this activity
+ * 
+ * @author Sulix
+ */
 public class LevelActivity extends Activity {
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -82,12 +92,13 @@ public class LevelActivity extends Activity {
 		MainThread.setVibrator( (Vibrator) getSystemService( Context.VIBRATOR_SERVICE ) );
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#dispatchKeyEvent(android.view.KeyEvent)
+	 */
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		
 		int keycode = event.getKeyCode();
-		
-		boolean handled = super.dispatchKeyEvent(event);
 		
 		if ( event.getAction() == KeyEvent.ACTION_UP )
 		{
@@ -139,35 +150,53 @@ public class LevelActivity extends Activity {
 			case KeyEvent.KEYCODE_SPACE : return GameLogic.putChar( ' ' );
 			case KeyEvent.KEYCODE_SOFT_LEFT : return GameLogic.putChar( '(' );
 			case KeyEvent.KEYCODE_SOFT_RIGHT : return GameLogic.putChar( ')' );
-			case KeyEvent.KEYCODE_BACK : onStop();
+			case KeyEvent.KEYCODE_BACK : quit(); finish();
 			}
 		}
 		
-		return handled;
+		return super.dispatchKeyEvent(event);
 	}
 
 	private GameLogic gameThread;
 	private Handler myThread;
 	InputMethodManager inputManager;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override
 	protected void onPause() {
 		
 		super.onPause();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestart()
+	 */
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
+
+		SpamRenderer.activate();
+		
 		super.onRestart();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
+
+		SessionState quitState = new SessionState();
+		quitState.setProgress( GameLogic.getMoneyState() );
+		setResult(Activity.RESULT_OK, quitState.asIntent());
+		
 		super.onResume();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
 	@Override
 	protected void onStart() 
 	{
@@ -184,9 +213,13 @@ public class LevelActivity extends Activity {
 		super.onStart();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
 	@Override
 	protected void onStop() {
 		
+		SpamRenderer.deactivate();
 		GameLogic.kill();
 		
 		SessionState quitState = new SessionState();
@@ -197,6 +230,9 @@ public class LevelActivity extends Activity {
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) 
 	{
@@ -207,19 +243,25 @@ public class LevelActivity extends Activity {
 		super.onSaveInstanceState(outState);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	protected void onDestroy() 
 	{
-
-		GameLogic.destroy_();
 		
 		super.onDestroy();
 	}
 	
+	/**
+	 * Tells the application to save the current state and stop the game iteration. Call this method
+	 * if you want to end the activity
+	 */
 	public void quit ()
 	{
 		
-		GameLogic.destroy_();
+		SpamRenderer.deactivate();	
+		GameLogic.kill();
 		
 		SessionState quitState = new SessionState();
 		quitState.setProgress( GameLogic.getMoneyState() );
