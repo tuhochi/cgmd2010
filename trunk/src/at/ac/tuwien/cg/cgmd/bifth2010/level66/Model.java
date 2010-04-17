@@ -7,8 +7,15 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Model {
+import android.content.Context;
+import android.os.Handler;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+	
+public class Model{
+   
+	private Context mContext;
+	
 	private float _posX;
 	private float _posY;
 	private float _posZ;
@@ -64,7 +71,7 @@ public class Model {
 											0.0f, 0.0f, 1.0f, 0.3f,
 											0.0f, 0.0f, 1.0f, 0.3f
 	};
-	
+
 	public void move(float x, float y, float z)
 	{
 		_posX += x;
@@ -82,8 +89,12 @@ public class Model {
 		_posZ += _velocityZ;
 	}
 	
-	public Model()
+	@SuppressWarnings("static-access")
+	public Model(String filename, Context context)
 	{
+		this.mContext = context;
+		//load Model
+		this.load(filename, mContext);
 		// set initial position
 		_posX = 0.0f;
 		_posY = 0.0f;
@@ -123,12 +134,15 @@ public class Model {
         _coordColorBuffer.position(0);
 	}
 	
-	
-	public void load(String filename)
+
+	public static void load(String filename, Context mContext)
 	{
 		// TODO: load from file
+		@SuppressWarnings("unused")
+		OBJRenderable load = new OBJRenderable(OBJModel.load(filename, mContext));
+		System.out.print("lol");
 	}
-	
+
 	public void render(GL10 gl)
 	{
 		if( _renderCoord )
