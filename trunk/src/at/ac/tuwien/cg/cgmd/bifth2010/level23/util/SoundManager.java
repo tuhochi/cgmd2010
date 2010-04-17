@@ -75,6 +75,16 @@ public class SoundManager
 	}
 	
 	/**
+	 * Sets the volume for a specific player
+	 * @param id playerid of the player to set the volume
+	 * @param volume Volume to set for the specific player
+	 */
+	public void setVolumeForPlayer(int id, float volume)
+	{
+		players.get(id).setVolume(volume, volume);
+	}
+	
+	/**
 	 * Free media player resources
 	 */
 	public void releaseAudioResources()
