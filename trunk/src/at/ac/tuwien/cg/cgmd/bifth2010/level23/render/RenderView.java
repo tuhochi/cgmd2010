@@ -29,7 +29,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
-
 /**
  * The Class RenderView implements the renderer to render all needed objects.
  * @author Markus Ernst
@@ -129,6 +128,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	/** boolean indicating the first start */
 	private boolean firstStart; 
+	
+	private CutScenes cutScenes;
 
 	
 	/**
@@ -154,6 +155,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         fpsHandle = new FpsHandle();
         soundManager = new SoundManager(context);
         obstacleManager = new ObstacleManager();
+        cutScenes = new CutScenes();
         
         balloonHeight=0;   
         
@@ -179,9 +181,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		Log.v("RenderView.java", "onSurfaceChanged");
-		//setup the Viewport with an Orthogonal View 1 unit = 1 pixel
-		//0 0 is bottom left
-		
+
 		screenWidth = width;
 		screenHeight = height;
 		aspectRatio = screenHeight/screenWidth;
@@ -206,7 +206,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		
 		timer.update();
 		
 		float dt = timer.getDt();
@@ -238,7 +237,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
 		background.render();
-		
+				
 		if(!isGameOver()) {
 			mainChar.render();
 			hud.render();
@@ -518,6 +517,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		background.reset();
 		mainChar.preprocess();
 		hud.preprocess();
+		cutScenes.preprocess();
+		obstacleManager.preprocess();
 		
 		if(!isInitialized)
 		{	

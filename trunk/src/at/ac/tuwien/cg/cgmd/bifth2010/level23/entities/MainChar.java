@@ -93,7 +93,7 @@ public class MainChar implements SceneEntity {
 	public MainChar()
 	{
 		//create Default MainChar
-		this.height = Settings.MAINCHAR_HEIGHT;
+		this.height = Math.round(Settings.MAINCHAR_HEIGHT*RenderView.instance.getAspectRatio());
 		this.width = Settings.MAINCHAR_WIDTH;
 		
 		gameOverAngle= (float)Math.PI*3f/2f;
@@ -327,15 +327,10 @@ public class MainChar implements SceneEntity {
 		
 		glTranslatef(position.x, 0, 0);
 		
-		
-		if (isGameOver()) {
-			glRotatef(5, 1, 1, 1);
-		}
+		glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 		
 		if(!Settings.GLES11Supported) 
-		{
-			
-			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
+		{			
 			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
 		
 			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
@@ -344,16 +339,13 @@ public class MainChar implements SceneEntity {
 		} 
 		else 
 		{
-	
 			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
 			
-			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
 			
 			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
 
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
 		}
 		
 		glPopMatrix();
@@ -381,15 +373,11 @@ public class MainChar implements SceneEntity {
 		{
 			float radius = 25f;
 		
-			
 			glPushMatrix();
 	
-			glRotatef(xCoord, 0, 0, 1); 
-			glPopMatrix(); 
-			glPushMatrix();
 			xCoord = position.x  + radius*(float)Math.cos(gameOverAngle); 
+			yCoord = radius + radius*(float)Math.sin(gameOverAngle);
 			
-			yCoord = radius + radius*(float)Math.sin(gameOverAngle); 
 			glTranslatef(xCoord, yCoord, 0);
 			glScalef(gameOverScale, gameOverScale, 1.0f);
 			
@@ -411,7 +399,6 @@ public class MainChar implements SceneEntity {
 				GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
 	
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
-				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
 			}
 			
 			glPopMatrix();

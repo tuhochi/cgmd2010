@@ -161,8 +161,6 @@ public class Background implements SceneEntity
 				GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
 
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
-				
-				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
 			}
 		
 		glPopMatrix();
