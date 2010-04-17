@@ -22,10 +22,16 @@ public class Tablet {
 		};
 	private short[] indices = { 0, 1, 2, 0, 2, 3 };
 	private float texCoords[] = {
+			///1.0f, 0.0f,
+			//0.0f, 0.0f,
+			//0.0f, 1.0f,
+			//1.0f, 1.0f
+			
 			1.0f, 0.0f,
 			0.0f, 0.0f,
 			0.0f, 1.0f,
 			1.0f, 1.0f
+
 	};
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer indexBuffer;
@@ -75,6 +81,14 @@ public class Tablet {
 		texCoordBuffer = tbb.asFloatBuffer();
 		texCoordBuffer.put(texCoords);
 		texCoordBuffer.position(0);
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
 	}
 	
 	public void move(int xwise, int ywise) {

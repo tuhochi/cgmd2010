@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 
 public class LevelActivity extends Activity {
 	GLSurfaceView glv;
@@ -28,7 +29,7 @@ public class LevelActivity extends Activity {
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		SessionState s = new SessionState();
-		s.setProgress(1);
+		s.setProgress(1);  //set progress to score!
 		setResult(Activity.RESULT_OK, s.asIntent());
 		finish();
 		return true;
