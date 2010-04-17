@@ -27,6 +27,7 @@ public class GameLogic extends Thread {
 		money = moneyCount;
 		myContext = context;
 		passedMails = 0;
+		active = false;
 		
 		bufferedInput = new ArrayBlockingQueue< Character >( 100 );
 		
@@ -207,6 +208,12 @@ public class GameLogic extends Thread {
 		MailDataBase.loadPersistentState( target );
 		
 		actMail = MailDataBase.getMailMesh( 0 );
+	}
+	
+	public static boolean isRunning ()
+	{
+		
+		return active;
 	}
 	
 	private static long prevTime;

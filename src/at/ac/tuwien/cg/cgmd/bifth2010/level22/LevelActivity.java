@@ -169,9 +169,17 @@ public class LevelActivity extends Activity {
 	}
 
 	@Override
-	protected void onStart() {
+	protected void onStart() 
+	{
 		
-		gameThread.start();
+		inputManager.toggleSoftInput( InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY );
+		
+		if ( !GameLogic.isRunning() )	
+		{
+		
+			gameThread = new GameLogic();
+			gameThread.start();
+		}
 		
 		super.onStart();
 	}
@@ -179,13 +187,13 @@ public class LevelActivity extends Activity {
 	@Override
 	protected void onStop() {
 		
-		super.onStop();
-		
 		GameLogic.kill();
 		
 		SessionState quitState = new SessionState();
 		quitState.setProgress( GameLogic.getMoneyState() );
 		setResult(Activity.RESULT_OK, quitState.asIntent());
+		
+		super.onStop();
 	}
 	
 
@@ -193,19 +201,19 @@ public class LevelActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) 
 	{
 		
-		super.onSaveInstanceState(outState);
-		
 		GameLogic.makePersistentState( outState );
 		outState.putBoolean( "isLoadable", true );
+		
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	protected void onDestroy() 
 	{
-		
-		super.onDestroy();
 
 		GameLogic.destroy_();
+		
+		super.onDestroy();
 	}
 	
 	public void quit ()
