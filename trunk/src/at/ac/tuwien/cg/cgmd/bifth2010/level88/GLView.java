@@ -16,7 +16,7 @@ public class GLView extends GLSurfaceView {
     /**
      * Constructor
      * @param context context of android
-     * @param _game Game context of the level
+     * @param _game The game
      */
     public GLView(Context context, Game _game) 
     {

@@ -51,12 +51,21 @@ public class LevelActivity extends Activity{
         Display d = wm.getDefaultDisplay();
         windowSize = new Vector2((float)d.getWidth(), (float)d.getHeight());
 	 	
+        /*
+         * Create a new game
+         */
 	 	game = new Game(this, handler);
 
+	 	/*
+	 	 * Create the GLView and set it as the content view
+	 	 */
 	 	normalModeView = new GLView(this, game);
 	 	glSurfaceView = normalModeView; 
         setContentView(glSurfaceView);
         
+        /*
+         * Create texts that are shown in the screen
+         */
         LinearLayout llayout = new LinearLayout(this);
         llayout.setGravity(Gravity.TOP | Gravity.LEFT);
         llayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -74,6 +83,9 @@ public class LevelActivity extends Activity{
         llparams.setMargins(10, 10, 10, 10);
         llayout.addView(goldText, llparams);
         
+        /*
+         * Create a listener for touch events
+         */
         glSurfaceView.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				game.touchEvent(new Vector2(event.getX() / windowSize.x, event.getY() / windowSize.y));
@@ -82,18 +94,10 @@ public class LevelActivity extends Activity{
         });
 
         updateTexts();
-        
-       //the SessionState is a convenience class to set a result
-		SessionState s = new SessionState();
-		//we set the progress the user has made (must be between 0-100)
-		s.setProgress(100-game.gold);
-		//we call the activity's setResult method 
-		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 	
-	
 	/**
-	 * End of the level 
+	 * End the LevelActivity and set progress as result 
 	 */
 	public void endLevel() {
 		//the SessionState is a convenience class to set a result
@@ -112,7 +116,7 @@ public class LevelActivity extends Activity{
 	public void updateTexts() {
    		goldText.setText(" " + getString(getResources().getIdentifier("l88_gold_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")) + game.gold + " ");
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onPause()
 	 */
@@ -120,6 +124,9 @@ public class LevelActivity extends Activity{
 		super.onPause(); 
 		Log.d(TAG, "onPause()");
 		glSurfaceView.onPause();
+		if( game!=null ) {
+			game.pause();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -160,83 +167,68 @@ public class LevelActivity extends Activity{
 		super.onDestroy();
 		Log.v(TAG, "onDestroy()");
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
-		//Save the position
-		outState.putIntArray("Position", game.bunny.getPosition());
-		//Save the direction of the movement
-		outState.putString("Direction", game.bunny.moveStatus.toString());
-		//waiting time of the bunny
-		outState.putFloat("Waiting", game.bunny.getWaitingTime());
-		//Save the amount of gold left
-		outState.putInt("Gold", game.getGold());
-		
-		//Save the number of police
-		outState.putInt("CntPolice", game.getCntPolice());
-		//Iterate over the number of police
-		for(int i = 0; i < game.getCntPolice(); i++){
-			String temp = new String(i + "Position");
-			//Save the position of the police
-			outState.putIntArray(temp, game.police.get(i).getPosition());
-			temp = new String(i + "Time");
-			//Save the waiting time
-			outState.putFloat(temp, game.police.get(i).getWaitingTime());
-			temp = new String(i + "Move");
-			//Save the movement
-			outState.putString(temp, game.police.get(i).moveStatus.toString());
-		}
-		
-		//Save the number of stashes
-		outState.putInt("CntStash", game.getCntStash());
-		for(int i = 0; i < game.getCntStash(); i++){
-			String temp = new String(i + "STime");
-			outState.putFloat(temp, game.stashes.get(i).getHideTime());
-		}
-		
 		super.onSaveInstanceState(outState);
 		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
+		
+		// Save Game
+		outState.putInt("game.gold", game.gold);
+		
+		// Save Bunny
+		outState.putInt("game.bunny.currentPosX", game.bunny.currentPosX);
+		outState.putInt("game.bunny.currentPosY", game.bunny.currentPosY);
+		outState.putInt("game.bunny.moveStatus", game.bunny.moveStatus);
+		outState.putFloat("game.bunny.waitingTime", game.bunny.waitingTime);
+		
+		// Save Police
+		for(int i=0; i<game.police.size(); i++) {
+			outState.putInt("game.police.get("+i+").currentPosX", game.police.get(i).currentPosX);
+			outState.putInt("game.police.get("+i+").currentPosY", game.police.get(i).currentPosY);
+			outState.putInt("game.police.get("+i+").moveStatus", game.police.get(i).moveStatus);
+			outState.putFloat("game.police.get("+i+").waitingTime", game.police.get(i).waitingTime);	
+		}
+
+		// Save Stashes
+		for(int i=0; i<game.stashes.size(); i++) {
+			outState.putFloat("game.stashes.get("+i+").hideTime", game.stashes.get(i).hideTime);	
+		}
 	}
 	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
 		super.onRestoreInstanceState(savedInstanceState);
-		//Restore the position
-		int[] pos = savedInstanceState.getIntArray("Position");
-		game.bunny.setPosition(pos[0], pos[1]);
-		//Restore the direction
-		String move = savedInstanceState.getString("Direction");
-		game.bunny.setMovement(move);
-		//Restore the waiting time of the bunny
-		game.bunny.setWaitingTime(savedInstanceState.getFloat("Waiting"));
-		//Restore the amount of gold left
-		game.setGold(savedInstanceState.getInt("Gold"));
-		
-		//Restore the police
-		int cntpolice = savedInstanceState.getInt("CntPolice");
-		//Iterate over the number of police
-		for(int i = 0; i < cntpolice; i++){
-			String temp = new String(i + "Position");
-			pos = savedInstanceState.getIntArray(temp);
-			game.police.get(i).setPosition(pos[0], pos[1]);
-			game.map.movePolice(pos[0], pos[1], pos[0], pos[1]);
-			temp = new String(i + "Time");
-			game.police.get(i).setWaitingTime(savedInstanceState.getFloat(temp));
-			temp = new String(i + "Move");
-			game.police.get(i).setMovement(savedInstanceState.getString(temp));
-		}
-		
-		//Restore the stashes
-		int cntstash = savedInstanceState.getInt("CntStash");
-		for(int i = 0; i < cntstash; i++){
-			String temp = new String(i + "STime");
-			game.stashes.get(i).setHideTime(savedInstanceState.getFloat(temp));
-		}
-
 		Log.v(TAG,"onRestoreInstanceState(" + savedInstanceState + ")");
-	}
-    
+		
+		// Restore Game
+		game.gold = savedInstanceState.getInt("game.gold");
+		
+		// Restore Bunny
+		game.bunny.setPosition(
+				savedInstanceState.getInt("game.bunny.currentPosX"),
+				savedInstanceState.getInt("game.bunny.currentPosY")
+			);
+		game.bunny.moveStatus = savedInstanceState.getInt("game.bunny.moveStatus");
+		game.bunny.waitingTime = savedInstanceState.getFloat("game.bunny.waitingTime");
+		
+		// Restore Police
+		for(int i=0; i<game.police.size(); i++) {
+			game.police.get(i).setPosition(
+					savedInstanceState.getInt("game.police.get("+i+").currentPosX"),
+					savedInstanceState.getInt("game.police.get("+i+").currentPosY")
+				);
+			game.police.get(i).moveStatus = savedInstanceState.getInt("game.police.get("+i+").moveStatus");
+			game.police.get(i).waitingTime = savedInstanceState.getFloat("game.police.get("+i+").waitingTime");
+		}
 
+		// Restore Stashes
+		for(int i=0; i<game.stashes.size(); i++) {
+			game.stashes.get(i).hideTime = savedInstanceState.getFloat("game.stashes.get("+i+").hideTime");
+		}
+		
+		updateTexts();
+	}
 }

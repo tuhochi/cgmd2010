@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
+import java.util.ArrayList;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -16,17 +18,18 @@ public class Bunny {
 	public float translateX, translateY;
 	private Quad bunnyQuad;
 	private Vector2 groundYDir, groundXDir;
-	private float waitingTime, maxWaitingTime;
+	public float waitingTime, maxWaitingTime;
 
 	/**
 	 * Moving possibilities of the bunny
 	 * @author Asperger, Radax
 	 */
-	public enum MoveStatus {
-		STANDING, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
-	}
-	public MoveStatus moveStatus;
-	
+	public static final int STANDING = 0;
+	public static final int MOVE_LEFT = 1;
+	public static final int MOVE_RIGHT = 2;
+	public static final int MOVE_UP = 3;
+	public static final int MOVE_DOWN = 4;
+	public int moveStatus;
 	
 	/**
 	 * Constructor
@@ -38,9 +41,9 @@ public class Bunny {
 		currentPosY = 0;
 		translateX = 0;
 		translateY = 0;
-		moveStatus = MoveStatus.STANDING;
+		moveStatus = STANDING;
 		
-		maxWaitingTime = 0.7f;
+		maxWaitingTime = 0.75f;
 		waitingTime = 0;
 
 		float norm;
@@ -69,7 +72,10 @@ public class Bunny {
 	
 	
 	/**
-	 * Method to update the position of the bunny
+	 * Update the bunny:
+	 * - check if the user wants to change the movement direction of the bunny
+	 * - auto-turn at corners
+	 * - move bunny forward
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
@@ -77,55 +83,97 @@ public class Bunny {
 		if( waitingTime < maxWaitingTime ) return;
 		waitingTime -= maxWaitingTime;
 		
+		/*
+		 * If there is a new user input
+		 */
         if( game.hasNewInput() ) {
+        	/*
+        	 * Calculate a vector that points to the touch position (relativ to the center
+        	 * of the screen).
+        	 */
            	Vector2 pos = new Vector2(game.touchPosition);
            	pos.mult(2);
            	pos.add(new Vector2(-1,-1));
            	pos.x *= game.screenWidth;
            	pos.y *= game.screenHeight;
 
+           	/*
+           	 * Calculate angle of the touch vector, the base vectors. And calculate the
+           	 * distance of the touch to the center of the screen. 
+           	 */
            	float angle = pos.getAngle();
            	float angleX = groundXDir.getAngle();
            	float angleY = groundYDir.getAngle();
            	float distance  = pos.length();
            	
+           	/*
+           	 * Check where the user has touched the screen and what he wanted to do
+           	 */
            	if( distance < 50 ) {
-           		moveStatus = MoveStatus.STANDING;
+           		moveStatus = STANDING;
            	}
            	else if( Math.abs(angle-angleX) < 30 ) {
-           		moveStatus = MoveStatus.MOVE_RIGHT;
+           		moveStatus = MOVE_RIGHT;
            	}
            	else if( Math.abs(180+angle-angleX) < 30 ) {
-           		moveStatus = MoveStatus.MOVE_LEFT;
+           		moveStatus = MOVE_LEFT;
            	}
            	else if( Math.abs(angle-angleY) < 30 ) {
-           		moveStatus = MoveStatus.MOVE_UP;
+           		moveStatus = MOVE_UP;
            	}
            	else if( Math.abs(180+angle-angleY) < 30 ) {
-           		moveStatus = MoveStatus.MOVE_DOWN;
+           		moveStatus = MOVE_DOWN;
            	}
         }
         
-        if( moveStatus != MoveStatus.STANDING ) {
+        /*
+         * If the bunny isn't standing
+         */
+        if( moveStatus != STANDING ) {
         	int x=currentPosX, y=currentPosY, nx=0, ny=0;
-        	if( moveStatus == MoveStatus.MOVE_LEFT ) {
-        		nx--;
+        	
+        	/*
+			 * Calculate shift relativ to the current position
+			 */
+        	if( moveStatus == MOVE_LEFT )		nx--;
+        	else if( moveStatus == MOVE_RIGHT )	nx++;
+        	else if( moveStatus == MOVE_DOWN )	ny--;
+        	else if( moveStatus == MOVE_UP )	ny++;
+        	
+        	/*
+        	 * If the bunny can't move forward (no street there) and there are just two possible move directions
+        	 * available (one where we came from): search for the available direction
+        	 * This will make the bunny turn at corners.
+        	 */
+        	if( !game.map.cells[x+nx][y+ny].isStreetForBunny && game.map.cells[x][y].numStreetNeighboursBunny==2 ) {
+        		ArrayList<Integer> dirs = new ArrayList<Integer>();
+   				if( game.map.cells[currentPosX+1][currentPosY].isStreetForBunny && moveStatus!=MOVE_LEFT )
+   					dirs.add(MOVE_RIGHT);
+   				if( game.map.cells[currentPosX-1][currentPosY].isStreetForBunny && moveStatus!=MOVE_RIGHT )
+   					dirs.add(MOVE_LEFT);
+   				if( game.map.cells[currentPosX][currentPosY+1].isStreetForBunny && moveStatus!=MOVE_DOWN )
+   					dirs.add(MOVE_UP);
+   				if( game.map.cells[currentPosX][currentPosY-1].isStreetForBunny && moveStatus!=MOVE_UP )
+   					dirs.add(MOVE_DOWN);
+
+   				moveStatus = dirs.get(0);
+   				/*
+   				 * Calculate shift relativ to the current position. It has to be done again since the move direction changed
+   				 */
+   				nx=ny=0;
+   	        	if( moveStatus == MOVE_LEFT )		nx--;
+   	        	else if( moveStatus == MOVE_RIGHT )	nx++;
+   	        	else if( moveStatus == MOVE_DOWN )	ny--;
+   	        	else if( moveStatus == MOVE_UP )	ny++;
         	}
-        	else if( moveStatus == MoveStatus.MOVE_RIGHT ) {
-        		nx++;
-        	}
-        	else if( moveStatus == MoveStatus.MOVE_DOWN ) {
-        		ny--;
-        	}
-        	else if( moveStatus == MoveStatus.MOVE_UP ) {
-        		ny++;
-        	}
+
+        	/*
+        	 * If the bunny can move forward: move it
+        	 * The bunny might not move when he reaches a t-junction
+        	 */
         	if( game.map.cells[x+nx][y+ny].isStreetForBunny ) {
     			setPosition(x+nx, y+ny);
     		}
-        	else {
-        		moveStatus = MoveStatus.STANDING; // TODO: es wäre besser wenn der Hase automatisch um ecken biegt (falls vorhanden)
-        	}
         }
 	}
 	
@@ -158,57 +206,5 @@ public class Bunny {
 		
 		translateX = currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x;
 		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
-	}
-	
-	/**
-	 * Get the position of the bunny as an int array
-	 * @return current position of the bunny
-	 */
-	public int[] getPosition(){
-		int[] pos = {currentPosX, currentPosY};
-		return pos;
-	}
-	
-	/**
-	 * Method for restoring the movement
-	 * @param move name of the movement
-	 */
-	public void setMovement(String move){
-		
-		if(move.equalsIgnoreCase("STANDING")){
-			moveStatus = MoveStatus.STANDING;
-		}
-		else if(move.equalsIgnoreCase("MOVE_LEFT")){
-			moveStatus = MoveStatus.MOVE_LEFT;
-		}
-		else if(move.equalsIgnoreCase("MOVE_RIGHT")){
-			moveStatus = MoveStatus.MOVE_RIGHT;
-		}
-		else if(move.equalsIgnoreCase("MOVE_UP")){
-			moveStatus = MoveStatus.MOVE_UP;
-		}
-		else if(move.equalsIgnoreCase("MOVE_DOWN")){
-			moveStatus = MoveStatus.MOVE_DOWN;
-		}
-		else {
-			moveStatus = MoveStatus.STANDING;
-		}
-	}
-	
-	/**
-	 * Get the waiting time of the bunny
-	 * @return waiting time of the bunny
-	 */
-	public float getWaitingTime(){
-		return waitingTime;
-	}
-	
-	
-	/**
-	 * Set the waiting time of the bunny after restoration
-	 * @param wait waiting time of the bunny
-	 */
-	public void setWaitingTime(float wait){
-		waitingTime = wait;
 	}
 }

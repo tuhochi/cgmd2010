@@ -36,6 +36,7 @@ public class Map {
 			isStreetForBunny=false;
 			isPolicePresent=false;
 			numStreetNeighboursPolice=0;
+			numStreetNeighboursBunny=0;
 		}
 
 		public int x, y;
@@ -48,6 +49,7 @@ public class Map {
 		public boolean isStreetForBunny;
 		public boolean isPolicePresent;
 		public int numStreetNeighboursPolice;
+		public int numStreetNeighboursBunny;
 		public char type;
 	}
 
@@ -86,7 +88,7 @@ public class Map {
 
 	
 	/**
-	 * Update ability of the map
+	 * Update the map
 	 * @param elapsedSeconds
 	 */
 	public void update(float elapsedSeconds) {
@@ -136,7 +138,7 @@ public class Map {
 
 	
 	/**
-	 * Move the police from one position to the next to save the presence
+	 * Move the police from one position to the next to save the presence in the map
 	 * @param fromX x-position of the old position
 	 * @param fromY y-position of the old position
 	 * @param toX x-position of the new position
@@ -289,6 +291,11 @@ public class Map {
 					if(cells[x+1][y].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
 					if(cells[x][y-1].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
 					if(cells[x][y+1].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
+					
+					if(cells[x-1][y].isStreetForBunny ) cells[x][y].numStreetNeighboursBunny++;
+					if(cells[x+1][y].isStreetForBunny ) cells[x][y].numStreetNeighboursBunny++;
+					if(cells[x][y-1].isStreetForBunny ) cells[x][y].numStreetNeighboursBunny++;
+					if(cells[x][y+1].isStreetForBunny ) cells[x][y].numStreetNeighboursBunny++;
 					
 					if(cells[x-1][y].type == 's'){
 						counter += 8;

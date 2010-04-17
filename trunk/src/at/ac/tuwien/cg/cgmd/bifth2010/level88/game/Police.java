@@ -6,7 +6,6 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Bunny.MoveStatus;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
@@ -16,21 +15,24 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  */
 public class Police {
 	private Game game;
-	private int currentPosX, currentPosY;
+	public int currentPosX;
+	public int currentPosY;
 	public float translateX, translateY;
 	private Quad policeQuad;
 	private boolean wasStuckLastFrame;
 
-	private float waitingTime, maxWaitingTime;
+	public float waitingTime, maxWaitingTime;
 
 	/**
 	 * Moving possibilities of the police
 	 * @author Asperger, Radax
 	 */
-	public enum MoveStatus {
-		STANDING, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN
-	}
-	public MoveStatus moveStatus;
+	public static final int STANDING = 0;
+	public static final int MOVE_LEFT = 1;
+	public static final int MOVE_RIGHT = 2;
+	public static final int MOVE_UP = 3;
+	public static final int MOVE_DOWN = 4;
+	public int moveStatus;
 	
 	/**
 	 * Constructor
@@ -42,8 +44,8 @@ public class Police {
 		game = _game;
 		setPosition(x, y);
 
-		moveStatus = MoveStatus.MOVE_LEFT;
-		maxWaitingTime = 1.0f;
+		moveStatus = MOVE_LEFT;
+		maxWaitingTime = 0.75f;
 		waitingTime = 0;
 		wasStuckLastFrame=false;
 		
@@ -73,15 +75,23 @@ public class Police {
 	
 	
 	/**
-	 * Get the direction of the bunny 
-	 * @return direction the bunny is currently heading to
+	 * Search for the direction where the police would have to
+	 * move to catch the bunny. Returns STANDING if bunny not
+	 * visible.
+	 * @return direction the direction of the bunny
 	 */
-	private MoveStatus getBunnyDir() {
+	private int getBunnyDir() {
 		int bx = game.bunny.currentPosX;
 		int by = game.bunny.currentPosY;
 		
-		if( bx!=currentPosX && by!=currentPosY ) return MoveStatus.STANDING;
+		/*
+		 * Bunny must be in the same row or the same column
+		 */
+		if( bx!=currentPosX && by!=currentPosY ) return STANDING;
 		
+		/*
+		 * Find the min/max x/y coordinates the police can see
+		 */
 		int x1, x2, y1, y2;
 		x1 = currentPosX-1;
 		x2 = currentPosX+1;
@@ -92,19 +102,26 @@ public class Police {
 		while( game.map.cells[currentPosX][y1].isStreetForPolice ) y1--;
 		while( game.map.cells[currentPosX][y2].isStreetForPolice ) y2++;
 		
-		if( bx <= x1 ) return MoveStatus.STANDING;
-		else if( bx >= x2 ) return MoveStatus.STANDING;
-		else if( by <= y1 ) return MoveStatus.STANDING;
-		else if( by >= y2 ) return MoveStatus.STANDING;
+		/*
+		 * If bunny is outside the min/max coordinates it can't be seen
+		 */
+		if( bx <= x1 ) return STANDING;
+		else if( bx >= x2 ) return STANDING;
+		else if( by <= y1 ) return STANDING;
+		else if( by >= y2 ) return STANDING;
 		
-		if( bx < currentPosX ) return MoveStatus.MOVE_LEFT;
-		else if( bx > currentPosX ) return MoveStatus.MOVE_RIGHT;
-		else if( by < currentPosY ) return MoveStatus.MOVE_DOWN;
-		else /*if( by > currentPosY )*/ return MoveStatus.MOVE_UP;
+		/*
+		 * With the previous tests we have figured out that the bunny must be visible
+		 * Test where it is and return the direction.
+		 */
+		if( bx < currentPosX ) return MOVE_LEFT;
+		else if( bx > currentPosX ) return MOVE_RIGHT;
+		else if( by < currentPosY ) return MOVE_DOWN;
+		else /*if( by > currentPosY )*/ return MOVE_UP;
 	}
 	
 	/**
-	 * Update the police 
+	 * Update the police (search for bunny and move the police)
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
@@ -112,38 +129,59 @@ public class Police {
 		if( waitingTime < maxWaitingTime ) return;
 		waitingTime -= maxWaitingTime;
 		
+		/*
+		 * If the bunny and the police are at the same place: bunny cought!
+		 */
 		if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
 			game.policeCatchesBunny();
 			return;
 		}
 
-		int mx=0, my=0; 
-		MoveStatus newMoveDir = getBunnyDir();
+		int mx=0, my=0;
+		/*
+		 * Search if bunny is visible
+		 */
+		int newMoveDir = getBunnyDir();
 		
-		if( newMoveDir==MoveStatus.STANDING ) { // Hase nicht sichtbar
-			ArrayList<MoveStatus> dirs = new ArrayList<MoveStatus>();
+		/*
+		 * If bunny is not visible
+		 */
+		if( newMoveDir==STANDING ) {
+			ArrayList<Integer> dirs = new ArrayList<Integer>();
+			/*
+			 * If the current position the police is standing at is a blind end (or the police was stuck
+			 * couldn't move in the last frame), find all possible ways the police could move to 
+			 */
 			if( game.map.cells[currentPosX][currentPosY].numStreetNeighboursPolice==1 || wasStuckLastFrame )
 			{
 				if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice )
-					dirs.add(MoveStatus.MOVE_RIGHT);
+					dirs.add(MOVE_RIGHT);
 				if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice )
-					dirs.add(MoveStatus.MOVE_LEFT);
+					dirs.add(MOVE_LEFT);
 				if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice )
-					dirs.add(MoveStatus.MOVE_UP);
+					dirs.add(MOVE_UP);
 				if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice )
-					dirs.add(MoveStatus.MOVE_DOWN);
+					dirs.add(MOVE_DOWN);
 			}
+			/*
+			 * If the police isn't at a blind end, search for all possible move directions, except the one
+			 * the police came from
+			 */
 			else {
-				if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice && moveStatus!=MoveStatus.MOVE_LEFT )
-					dirs.add(MoveStatus.MOVE_RIGHT);
-				if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice && moveStatus!=MoveStatus.MOVE_RIGHT )
-					dirs.add(MoveStatus.MOVE_LEFT);
-				if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice && moveStatus!=MoveStatus.MOVE_DOWN )
-					dirs.add(MoveStatus.MOVE_UP);
-				if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice && moveStatus!=MoveStatus.MOVE_UP )
-					dirs.add(MoveStatus.MOVE_DOWN);
+				if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice && moveStatus!=MOVE_LEFT )
+					dirs.add(MOVE_RIGHT);
+				if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice && moveStatus!=MOVE_RIGHT )
+					dirs.add(MOVE_LEFT);
+				if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice && moveStatus!=MOVE_DOWN )
+					dirs.add(MOVE_UP);
+				if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice && moveStatus!=MOVE_UP )
+					dirs.add(MOVE_DOWN);
 			}
 
+			/*
+			 * Select a random direction from the collected directions.
+			 * All of this directions are valid (so the next field is a street for the police).
+			 */
 			if( dirs.size()==1 ) {
 				newMoveDir = dirs.get(0);
 			}
@@ -154,29 +192,49 @@ public class Police {
 		}
 		moveStatus = newMoveDir;
 
-		if( newMoveDir!=MoveStatus.STANDING ) {
-			if( newMoveDir==MoveStatus.MOVE_LEFT ) mx=-1;
-			else if( newMoveDir==MoveStatus.MOVE_RIGHT ) mx=1;
-			else if( newMoveDir==MoveStatus.MOVE_DOWN ) my=-1;
-			else if( newMoveDir==MoveStatus.MOVE_UP ) my=1;
+		/*
+		 * If the police isn't standing
+		 */
+		if( newMoveDir!=STANDING ) {
+			/*
+			 * Calculate shift relativ to the current position
+			 */
+			if( newMoveDir==MOVE_LEFT ) mx=-1;
+			else if( newMoveDir==MOVE_RIGHT ) mx=1;
+			else if( newMoveDir==MOVE_DOWN ) my=-1;
+			else if( newMoveDir==MOVE_UP ) my=1;
 			
+
+			/*
+			 * If the police can move forward (so if there is no other police standing at
+			 * the target position), move the police forward.
+			 */
 			if( !game.map.cells[currentPosX+mx][currentPosY+my].isPolicePresent ) {
 				game.map.movePolice(currentPosX, currentPosY, currentPosX+mx, currentPosY+my);
 				setPosition(currentPosX+mx, currentPosY+my);
 				wasStuckLastFrame=false;
 			}
+			/*
+			 * If a police is standing at the target position: don't move this police but
+			 * mark it as stuck
+			 */
 			else {
 				wasStuckLastFrame=true;
 			}
 		}
 		
+		/*
+		 * If the bunny and the police are at the same place: bunny cought!
+		 * This has to be tested again. The first test checks for the case that the bunny moved onto
+		 * the position of the police, while this case checks for the case the police moved onto
+		 * the position of the bunny.
+		 */
 		if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
 			game.policeCatchesBunny();
 			return;
 		}
 	}
-	
-	
+
 	/**
 	 * Draw the police
 	 * @param gl OpenGL context of android
@@ -195,7 +253,7 @@ public class Police {
 	
 	
 	/**
-	 * Set the position of the police
+	 * Set the position of the police and calculate translation Vector
 	 * @param x x-coordinate
 	 * @param y y-coordinate
 	 */
@@ -205,57 +263,6 @@ public class Police {
 		
 		translateX = currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x;
 		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
-	}
-	
-	/**
-	 * Get the current position of the police
-	 * @return the current position of the police
-	 */
-	public int[] getPosition(){
-		int[] pos = {currentPosX, currentPosY};
-		return pos; 
-	}
-	
-	/**
-	 * Get the waiting time of the police
-	 * @return the waiting time of the police
-	 */
-	public float getWaitingTime(){
-		return waitingTime;
-	}
-	
-	/**
-	 * Set the waiting time of the police after restoration
-	 * @param wait waiting time of the police
-	 */
-	public void setWaitingTime(float wait){
-		waitingTime = wait;
-	}
-	
-	/**
-	 * Method for restoring the movement
-	 * @param move name of the movement
-	 */
-	public void setMovement(String move){
-		
-		if(move.equalsIgnoreCase("STANDING")){
-			moveStatus = MoveStatus.STANDING;
-		}
-		else if(move.equalsIgnoreCase("MOVE_LEFT")){
-			moveStatus = MoveStatus.MOVE_LEFT;
-		}
-		else if(move.equalsIgnoreCase("MOVE_RIGHT")){
-			moveStatus = MoveStatus.MOVE_RIGHT;
-		}
-		else if(move.equalsIgnoreCase("MOVE_UP")){
-			moveStatus = MoveStatus.MOVE_UP;
-		}
-		else if(move.equalsIgnoreCase("MOVE_DOWN")){
-			moveStatus = MoveStatus.MOVE_DOWN;
-		}
-		else {
-			moveStatus = MoveStatus.STANDING;
-		}
 	}
 }
 

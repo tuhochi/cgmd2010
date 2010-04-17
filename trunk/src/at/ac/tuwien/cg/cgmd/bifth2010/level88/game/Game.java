@@ -60,6 +60,10 @@ public class Game {
 		police = new ArrayList<Police> ();
 		stashes = new ArrayList<Stash> ();
 			
+		bunny = new Bunny(this);
+		map = new Map(this);
+		map.load();
+
 		newTouch = false;
 		touchPosition = new Vector2();
 
@@ -67,6 +71,8 @@ public class Game {
         newTime = date.getTime();
         oldTime = newTime;
         elapsedSeconds = 0;
+        
+        Log.d(TAG, "Game() - end");
 	}
 	
 	/**
@@ -135,8 +141,7 @@ public class Game {
 	public void addStash(int x, int y, int size) {
 		stashes.add(new Stash(this, x, y, size));
 	}
-	
-	
+
 	/**
 	 * Add a new police character
 	 * @param x x-position of the police start point on the map
@@ -151,7 +156,7 @@ public class Game {
 	 * Get information if there is a new input
 	 * @return information if there is a new input 
 	 */
-	public synchronized boolean hasNewInput() {
+	public boolean hasNewInput() {
 		boolean old = newTouch;
 		newTouch = false;
 		return old;
@@ -190,11 +195,6 @@ public class Game {
 		
 		//Really Nice Perspective Calculations
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-		
-		
-		bunny = new Bunny(this);
-		map = new Map(this);
-		map.load();
 	}
 	
 	
@@ -225,9 +225,9 @@ public class Game {
 	
 	
 	/**
-	 * Update function for the screen
+	 * Update the game and all its components
 	 */
-	public synchronized void update() {
+	public void update() {
 		if( bunny==null ) return;
 
 		Date date = new Date();
@@ -236,25 +236,35 @@ public class Game {
         elapsedSeconds = (newTime - oldTime) / 1000.0f;
 
         bunny.update(elapsedSeconds);
-        for(int i=0; i<stashes.size(); i++) {
-        	stashes.get(i).update(elapsedSeconds);
+        if( bunny.moveStatus != Bunny.STANDING ) { // standing bunny = pause
+	        for(int i=0; i<stashes.size(); i++) {
+	        	stashes.get(i).update(elapsedSeconds);
+	        }
+	        for(int i=0; i<police.size(); i++) {
+	        	police.get(i).update(elapsedSeconds);
+	        }
+	        map.update(elapsedSeconds);
         }
-        for(int i=0; i<police.size(); i++) {
-        	police.get(i).update(elapsedSeconds);
-        }
-        map.update(elapsedSeconds);
 
         cameraPos.x = bunny.translateX + map.groundXDir.x/2.0f + map.groundYDir.x/2.0f;
         cameraPos.y = bunny.translateY + map.groundXDir.y/2.0f + map.groundYDir.y/2.0f;
 	}
 
-	
+	/**
+	 * Set the game to pause (bunny not moving)
+	 * @param gl OpenGL context of android
+	 */
+	public void pause() {
+		if( bunny!=null ) {
+			bunny.moveStatus = Bunny.STANDING;
+		}
+	}
 	
 	/**
 	 * Draw the whole screen
 	 * @param gl OpenGL context of android
 	 */
-	public synchronized void draw(GL10 gl) {
+	public void draw(GL10 gl) {
 		if( bunny==null ) return;
 		
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -274,43 +284,5 @@ public class Game {
         }
         
         bunny.draw(gl);
-	}
-	
-	
-	/**
-	 * Get the amount of gold left
-	 * @return the amount of gold left
-	 */
-	public int getGold(){
-		return gold;
-	}
-	
-	
-	/**
-	 * Set the amount of gold left after restoration
-	 * @param g amount of gold
-	 */
-	public void setGold(int g){
-		gold = g;
-	}
-	
-	
-	/**
-	 * Get the number of police in the level
-	 * @return the number of police
-	 */
-	public int getCntPolice(){	
-		return police.size();
-	}
-	
-	
-	/**
-	 * Get the number of stashes in the level
-	 * @return the number of stashes
-	 */
-	public int getCntStash(){
-		return stashes.size();
-	}
-	
-	
+	}	
 }

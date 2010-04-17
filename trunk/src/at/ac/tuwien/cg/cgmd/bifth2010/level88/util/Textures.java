@@ -119,7 +119,7 @@ public class Textures {
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
 			
 			//Create Nearest Filtered Texture
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 
 			//Different possible texture parameters, e.g. GL10.GL_CLAMP_TO_EDGE
