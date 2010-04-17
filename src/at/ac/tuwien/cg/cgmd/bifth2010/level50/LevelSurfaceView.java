@@ -11,6 +11,7 @@ public class LevelSurfaceView extends GLSurfaceView {
 		super(context);
 		mRenderer = new LevelRenderer(context);
         setRenderer(mRenderer);
+        setFocusableInTouchMode(true);
 
 	}
 	
@@ -25,39 +26,36 @@ public class LevelSurfaceView extends GLSurfaceView {
     }
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		queueEvent(new Runnable(){
-            public void run() {
-                mRenderer.movePlayer(0.1f,0.1f);
-            }});
-		switch(keyCode) {
-		case KeyEvent.KEYCODE_0:
-			queueEvent(new Runnable(){
-				public void run() {
-					mRenderer.movePlayer(0.0f,-0.1f);
-            }});
-			break;
-		case KeyEvent.KEYCODE_DPAD_DOWN:
-			queueEvent(new Runnable(){
-				public void run() {
-					mRenderer.movePlayer(0.0f,0.1f);
-            }});
-			break;
-		case KeyEvent.KEYCODE_DPAD_LEFT:
-			queueEvent(new Runnable(){
-				public void run() {
-					mRenderer.movePlayer(-0.1f,0.0f);
-            }});
-			break;
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			queueEvent(new Runnable(){
-				public void run() {
-					mRenderer.movePlayer(0.1f,0.0f);
-            }});
-			break;
-		default:
-				//return false;
-		}
-        return true;
+		if (event.getAction() == KeyEvent.ACTION_DOWN)
+			switch(keyCode) {
+			case KeyEvent.KEYCODE_DPAD_UP:
+				queueEvent(new Runnable(){
+					public void run() {
+						mRenderer.movePlayer(0.0f,-0.01f);
+	            }});
+				break;
+			case KeyEvent.KEYCODE_DPAD_DOWN:
+				queueEvent(new Runnable(){
+					public void run() {
+						mRenderer.movePlayer(0.0f,0.01f);
+	            }});
+				break;
+			case KeyEvent.KEYCODE_DPAD_LEFT:
+				queueEvent(new Runnable(){
+					public void run() {
+						mRenderer.movePlayer(-0.01f,0.0f);
+	            }});
+				break;
+			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				queueEvent(new Runnable(){
+					public void run() {
+						mRenderer.movePlayer(0.01f,0.0f);
+	            }});
+				break;
+			default:
+					//return false;
+			}
+        return super.onKeyDown(keyCode, event);
 		
     }
 
