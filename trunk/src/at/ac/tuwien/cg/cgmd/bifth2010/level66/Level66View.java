@@ -14,20 +14,19 @@ public class Level66View extends GLSurfaceView {
 	public Level66View(Context context) {
 		super(context);
 		
-		_renderer = new Level66Renderer();
+		_renderer = new Level66Renderer(context);
         setRenderer(_renderer);
-        
+        //load test sound/s
         Sound.loadSound(getContext());
-        
         this.setFocusableInTouchMode(true);
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		System.out.println(keyCode);
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
             queueEvent(new Runnable() {
                 public void run() {
                     _renderer.moveLeft();
+                    //play sound on klick
                     Sound.playSelect();
                 }});
             return true;
