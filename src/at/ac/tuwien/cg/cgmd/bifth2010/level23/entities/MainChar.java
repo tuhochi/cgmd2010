@@ -357,8 +357,12 @@ public class MainChar implements SceneEntity {
 		{
 			float radius = 25f;
 		
+			
 			glPushMatrix();
 	
+			glRotatef(xCoord, 0, 0, 1); 
+			glPopMatrix(); 
+			glPushMatrix();
 			xCoord = position.x  + radius*(float)Math.cos(gameOverAngle); 
 			
 			yCoord = radius + radius*(float)Math.sin(gameOverAngle); 
