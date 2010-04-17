@@ -358,8 +358,17 @@
 		</activity>
 		
 		<activity
+			android:name=".level60.LevelActivity"
+			android:screenOrientation="landscape">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level60.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
+		
+		<activity
 			android:name=".level66.HelpActivity"
-			android:label="@string/l66_nameofthegame_full">
+			android:screenOrientation="landscape">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level66.LAUNCH_HELP" />
 				<category android:name="android.intent.category.DEFAULT" />
