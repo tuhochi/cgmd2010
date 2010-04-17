@@ -8,6 +8,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 
@@ -15,10 +16,15 @@ public class Level66Renderer implements Renderer {
 
 	// model for testing purpose only
 	private Model testModel;
+	private Context mContext;
 	
 	// screen dimension
     private float _width = 320f;
     private float _height = 480f;
+	
+	public Level66Renderer(Context context){
+		this.mContext = context;
+	}
 	
 	@Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -61,7 +67,8 @@ public class Level66Renderer implements Renderer {
 	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 	    
-	    testModel = new Model();
+	    //load and render model
+	    testModel = new Model("l66_baum.obj", mContext);
     }
 	
 	@Override
