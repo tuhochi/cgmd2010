@@ -37,7 +37,7 @@ public class LevelRenderer implements Renderer {
 		// Reset the projection matrix
 		gl.glLoadIdentity();
 		// Calculate the aspect ratio of the window
-		GLU.gluOrtho2D(gl, 0.0f, 1.0f, 1.0f, 0.0f);
+		GLU.gluOrtho2D(gl, 0.0f, width, height, 0.0f);
 		//GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
 		// Select the modelview matrix
 		gl.glMatrixMode(GL10.GL_MODELVIEW);

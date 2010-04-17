@@ -12,14 +12,13 @@ public class LevelSurfaceView extends GLSurfaceView {
 		mRenderer = new LevelRenderer(context);
         setRenderer(mRenderer);
         setFocusableInTouchMode(true);
-
 	}
 	
 	public boolean onTouchEvent(final MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 	        queueEvent(new Runnable(){
 	            public void run() {
-	                mRenderer.movePlayer(0.01f,0.01f);
+	                mRenderer.movePlayer(5.0f,5.0f);
 	            }});
         	return true;
 		} else return false;
@@ -31,29 +30,27 @@ public class LevelSurfaceView extends GLSurfaceView {
 			case KeyEvent.KEYCODE_DPAD_UP:
 				queueEvent(new Runnable(){
 					public void run() {
-						mRenderer.movePlayer(0.0f,-0.01f);
+						mRenderer.movePlayer(0.0f,-5.0f);
 	            }});
 				break;
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 				queueEvent(new Runnable(){
 					public void run() {
-						mRenderer.movePlayer(0.0f,0.01f);
+						mRenderer.movePlayer(0.0f,5.0f);
 	            }});
 				break;
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 				queueEvent(new Runnable(){
 					public void run() {
-						mRenderer.movePlayer(-0.01f,0.0f);
+						mRenderer.movePlayer(-5.0f,0.0f);
 	            }});
 				break;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
 				queueEvent(new Runnable(){
 					public void run() {
-						mRenderer.movePlayer(0.01f,0.0f);
+						mRenderer.movePlayer(5.0f,0.0f);
 	            }});
 				break;
-			default:
-					//return false;
 			}
         return super.onKeyDown(keyCode, event);
 		
