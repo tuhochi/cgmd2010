@@ -16,8 +16,21 @@ import android.content.Context;
 import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.MailSceneObject;
 
+/**
+ * Manages all the mails stored in the database, allows for fetching of specific mails and construction of
+ * MailSceneObjects.
+ * 
+ * @author Sulix
+ *
+ */
 public class MailDataBase {
 	
+	/**
+	 * Initializes the database
+	 * 
+	 * @param filename the filename of the persistent database ( currently not used )
+	 * @param context the main activities context
+	 */
 	public static void init ( String filename, Context context )
 	{
 		
@@ -56,6 +69,9 @@ public class MailDataBase {
 		try { stringData.close(); } catch ( IOException bla ){};
 	}
 	
+	/**
+	 * Initializes the database without reading any persistent mails
+	 */
 	public static void init ()
 	{
 		
@@ -66,6 +82,13 @@ public class MailDataBase {
 		mailMeshes = new ArrayList< MailSceneObject >();
 	}
 	
+	/**
+	 * Returns one random mail object from the database, constructs a new MailSceneObject, and stores it
+	 * into the scene object database
+	 * 
+	 * @param creationContext the main activities context
+	 * @return the fetched mail scene object
+	 */
 	public static MailSceneObject getRandomMail( Context creationContext )
 	{
 		
@@ -77,6 +100,11 @@ public class MailDataBase {
 		return newMesh;
 	}
 	
+	/**
+	 * Updates the state of all currently registered mail scene objects
+	 * 
+	 * @param dt the timed passed between the current and the previous iteration in ms
+	 */
 	public static void iterate ( long dt )
 	{
 		
@@ -87,6 +115,11 @@ public class MailDataBase {
 		}
 	}
 	
+	/**
+	 * Removes the actual mail scene object, and fetches the next one in order
+	 * 
+	 * @return the next mail scene object
+	 */
 	public static MailSceneObject nextMail ()
 	{
 		
@@ -97,12 +130,23 @@ public class MailDataBase {
 		return null;
 	}
 	
+	/**
+	 * Adds a new mail object to the database
+	 * 
+	 * @param newMail the new mail
+	 */
 	public static void insertMail( Mail newMail )
 	{
 		
 		mailRepository.add( mailRepository.size(), newMail );
 	}
 	
+	/**
+	 * Adds a new rich mail object to the database
+	 * 
+	 * @param displayName the string which should be displayed
+	 * @see Mail
+	 */
 	public static void insertRichMail ( String displayName )
 	{
 		
@@ -110,6 +154,13 @@ public class MailDataBase {
 		MailDataBase.insertMail( newMail );
 	}
 	
+	/**
+	 * Adds a new viagra mail object to the database
+	 * 
+	 * @param displayName the string which should be displayed
+	 * @param requiredInput the string which should be entered by the user
+	 * @see Mail
+	 */
 	public static void insertViagraMail( String displayName, String requiredInput )
 	{
 		
@@ -117,6 +168,11 @@ public class MailDataBase {
 		MailDataBase.insertMail( newMail );
 	}
 	
+	/**
+	 * Renders the currently registered mail scene objects
+	 * 
+	 * @param renderContext the current render context
+	 */
 	public static void displayMails ( GL10 renderContext )
 	{
 		
@@ -127,6 +183,11 @@ public class MailDataBase {
 		}
 	}
 	
+	/**
+	 * Store the current database state into the bundle and make it persistent
+	 * 
+	 * @param target the target bundle where the state should be saved into
+	 */
 	public static synchronized void makePersistentState ( Bundle target )
 	{
 		
@@ -153,6 +214,11 @@ public class MailDataBase {
 		target.putShortArray( "checkingindices", checkingIndices );
 	}
 	
+	/**
+	 * Restore the previous state
+	 * 
+	 * @param target the bundle where the previous state should be read from
+	 */
 	public static void loadPersistentState ( Bundle target )
 	{
 		
@@ -173,6 +239,12 @@ public class MailDataBase {
 		}
 	}
 	
+	/**
+	 * Fetches a specific mail scene object
+	 * 
+	 * @param index the index of the required mail scene object
+	 * @return the appropriate mail scene object
+	 */
 	public static MailSceneObject getMailMesh ( int index )
 	{
 		

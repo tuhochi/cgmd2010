@@ -20,11 +20,23 @@ import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.gamelogic.Mail;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.*;
 
+/**
+ * A mail instance which encapsulates it's state together with it's scene state, game state and rendering informations.
+ * 
+ * @author Sulix
+ *
+ */
 public class MailSceneObject 
 {
 	
 	public enum SuccessState { Pending, Win, Loose };
 	
+	/**
+	 * Initializes the common data for all mail scene objects. Initializes the textures
+	 * 
+	 * @param renderContext the actual render context
+	 * @param context the main activities context
+	 */
 	public static void init ( GL10 renderContext, Context context )
 	{
 		
@@ -59,6 +71,9 @@ public class MailSceneObject
 		}
 	}
 	
+	/**
+	 * Frees the texture memory
+	 */
 	public static synchronized void uninit ()
 	{
 		
@@ -67,6 +82,13 @@ public class MailSceneObject
 		SpamRenderer.getActContext().glDeleteTextures( 2, texture, 0 );
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param myMail the maildata associated with this scene object
+	 * @param lifeTime the lifetime of this mail in ms, also specifying the animation time
+	 * @param context the main activities context
+	 */
 	public MailSceneObject ( Mail myMail, float lifeTime, Context context )
 	{
 		
@@ -140,6 +162,12 @@ public class MailSceneObject
 		actCheckingIndex = 0;
 	}
 	
+	/**
+	 * Updates the position of the current mail scene object
+	 * 
+	 * @param deltaT the passed time between the current and the previous frame
+	 * @return is false, if the mail passed it's lifetime
+	 */
 	public boolean updatePosition ( float deltaT )
 	{
 		
@@ -164,12 +192,20 @@ public class MailSceneObject
 		return true;
 	}
 	
+	/**
+	 * @return the depth component of the current mail scene objects position
+	 */
 	float getDepth()
 	{
 		
 		return position.z;
 	}
 	
+	/**
+	 * Renders the current mail scene object
+	 * 
+	 * @param renderContext the current rendering context
+	 */
 	public void display ( GL10 renderContext )
 	{
 		
@@ -197,18 +233,30 @@ public class MailSceneObject
 		renderContext.glPopMatrix();
 	}
 	
+	/**
+	 * @return the encapsulated mail object
+	 */
 	public Mail getMail()
 	{
 		
 		return myMail;
 	}
 	
+	/**
+	 * End this mail scene objects lifetime
+	 */
 	public void kill ()
 	{
 		
 		isAlive = false;
 	}
 	
+	/**
+	 * Check if the previously entered letter fulfills the input requirements of the encapsulated mail object
+	 * 
+	 * @param input the next character
+	 * @return Loose - the current characters do not match, Win - All characters did match, Pending - the current characters do match
+	 */
 	public SuccessState checkLetter ( char input )
 	{
 		
@@ -220,45 +268,73 @@ public class MailSceneObject
 		return SuccessState.Pending;
 	}
 	
+	/**
+	 * @return true, if this mail scene object is still active
+	 */
 	public boolean isAlive ()
 	{
 		
 		return isAlive;
 	}
 	
+	/**
+	 * @return the already typed in portion of the encapsulated mails required input string
+	 */
 	public String getTypedIn ()
 	{
 		
 		return myMail.getDisplayName().substring( 0, actCheckingIndex );
 	}
 	
+	/**
+	 * @return the still remaining portion of the encapsulated mails required input string
+	 */
 	public String getRemaining ()
 	{
 		
 		return myMail.getDisplayName().substring( actCheckingIndex );
 	}
 
+	/**
+	 * @return the time this mail scene object is already alive in ms
+	 */
 	public float getAccTime() {
 		
 		return accTime;
 	}
 
+	/**
+	 * @return the scale factor, which the time interval between two iterations is multiplied with
+	 */
 	public float getScaleFactor() {
 		
 		return scaleFactor;
 	}
 
+	/**
+	 * @return the index, which indicates which character of the required input string should be compared with the users input next
+	 */
 	public short getActCheckingIndex() {
 		
 		return actCheckingIndex;
 	}
 
+	/**
+	 * @return the display name of the encapsulated mail object
+	 */
 	public String getMailName()
 	{
 		
 		return myMail.getDisplayName();
 	}
 	
+	/**
+	 * Restores the previous state of this mail scene object
+	 * 
+	 * @param target the bundle where the state should be read from
+	 * @param sourceMail the previously encapsulated mail object
+	 * @param index the index position, at which the state should be fetched from the appropriate bundle arrays
+	 */
 	public void loadPersistentState ( Bundle target, Mail sourceMail, int index )
 	{
 		
