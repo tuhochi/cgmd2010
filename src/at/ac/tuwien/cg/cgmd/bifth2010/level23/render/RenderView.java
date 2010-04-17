@@ -249,12 +249,15 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		obstacleManager.renderVisibleObstacles((int)balloonHeight);
 		
 		//Log.v("Balloon Height: ", String.valueOf(balloonHeight));
-		
 		if (firstStart) {
-			SoundManager.instance.startPlayer(startAudioId);
+			if (soundManager.isPlaying(startAudioId))
+					soundManager.pausePlayer(startAudioId);
+			
+			soundManager.startPlayer(startAudioId);
 			firstStart = false; 
 		}
 		
+	
 	}
 	
 	/* (non-Javadoc)
