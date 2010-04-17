@@ -7,6 +7,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
 import android.opengl.GLES10;
 import android.opengl.GLSurfaceView;
@@ -123,6 +124,12 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** The obstacle manager */
 	private ObstacleManager obstacleManager;
 	
+	/** the id from the audio player for start sound */
+	private int startAudioId; 
+	
+	/** boolean indicating the first start */
+	private boolean firstStart; 
+
 	
 	/**
 	 * Instantiates a new render view.
@@ -157,6 +164,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         hud = new Hud();
 		mainChar = new MainChar();
 		background = new Background();
+		
+		startAudioId = SoundManager.instance.requestPlayer(R.raw.l23_timerandstart, false);
+		firstStart = true; 
 	}
 	
 	/* (non-Javadoc)
@@ -239,6 +249,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		obstacleManager.renderVisibleObstacles((int)balloonHeight);
 		
 		//Log.v("Balloon Height: ", String.valueOf(balloonHeight));
+		
+		if (firstStart) {
+			SoundManager.instance.startPlayer(startAudioId);
+			firstStart = false; 
+		}
 		
 	}
 	

@@ -106,6 +106,7 @@ public class Hud
 			Settings.BALLOON_SPEED += Settings.BURN_BOOST;
 			timeUtil.scheduleTimer(burnTimer);
 			SoundManager.instance.startPlayer(boostAudioId);
+			
 			return true;
 		}
 		
