@@ -18,22 +18,22 @@ public class Square {
 
 	int tex[]=new int[6];
 	private IntBuffer texBuf=IntBuffer.wrap(tex);
-	private static final int TEX_SIZE=40;
+	private static final int TEX_SIZE=100;
 	Context context;
 	
 	// Our vertices.
 	private float vertices[] = {
-		       0.2f,  0.2f, 0.0f,  // 0, Top Left
-		       0.2f,  0.8f, 0.0f,  // 1, Bottom Left
-		       0.8f,  0.8f, 0.0f,  // 2, Bottom Right
-		       0.8f,  0.2f, 0.0f  // 3, Top Right
+		       50.0f,  50.0f, 0.0f,  // 0, Top Left
+		       50.0f, 100.0f, 0.0f,  // 1, Bottom Left
+		      100.0f, 100.0f, 0.0f,  // 2, Bottom Right
+		      100.0f,  50.0f, 0.0f  // 3, Top Right
 		};
 	
 	private float texcoord[] = {
-		       0.0f,  0.0f,
 		       0.0f,  1.0f,
-		       1.0f,  1.0f,
-		       1.0f,  0.0f
+		       0.0f,  0.0f,
+		       1.0f,  0.0f,
+		       1.0f,  1.0f
 		};
 
 	// The order we like to connect them.
@@ -71,7 +71,7 @@ public class Square {
 		texcoordBuffer.position(0);
 		
 		gl.glGenTextures(1, texBuf);
-		LoadTexture(0,R.drawable.l50_icon,gl,context);
+		LoadTexture(0,R.drawable.l50_rabbit_small,gl,context);
 	}
 
 	/**
