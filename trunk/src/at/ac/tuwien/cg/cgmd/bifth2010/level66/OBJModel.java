@@ -49,7 +49,7 @@ public class OBJModel implements Serializable
 		mIndices = indices;
 		mNumVertices = indices.size();
 	}
-	
+	/*
 	public void write(String file)
 	{
 		try {
@@ -76,9 +76,8 @@ public class OBJModel implements Serializable
 		}
 		
 		return model;
-	}
-	
-
+	}	
+*/
 	public List getVertices() {
 		return mVertices;
 	}
