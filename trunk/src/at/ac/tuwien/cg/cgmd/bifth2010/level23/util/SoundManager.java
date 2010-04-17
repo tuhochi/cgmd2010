@@ -75,6 +75,14 @@ public class SoundManager
 	}
 	
 	/**
+	 * Returns if the current player is still playing
+	 * @param id the id for the requested player
+	 * @return true if playing, false otherwise
+	 */
+	public boolean isPlaying(int id) {
+		return players.get(id).isPlaying();
+	}
+	/**
 	 * Sets the volume for a specific player
 	 * @param id playerid of the player to set the volume
 	 * @param volume Volume to set for the specific player
@@ -119,6 +127,7 @@ public class SoundManager
 		try {
 			for(int i=0;i<players.size();i++)
 			{
+				players.get(i).stop();
 				players.get(i).prepare();
 			}
 		} catch (IllegalStateException e) {

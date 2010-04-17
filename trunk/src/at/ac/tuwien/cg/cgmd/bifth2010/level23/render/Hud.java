@@ -43,7 +43,7 @@ public class Hud
 	public Hud()
 	{
 		init();
-		boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost,true);
+		boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
 		burnTimer = new BurnTimer(boostAudioId);
 		instance=this;
 	}
@@ -106,7 +106,6 @@ public class Hud
 			Settings.BALLOON_SPEED += Settings.BURN_BOOST;
 			timeUtil.scheduleTimer(burnTimer);
 			SoundManager.instance.startPlayer(boostAudioId);
-			
 			return true;
 		}
 		

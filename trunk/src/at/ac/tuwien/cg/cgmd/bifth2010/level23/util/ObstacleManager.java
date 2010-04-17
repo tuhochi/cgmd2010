@@ -94,7 +94,7 @@ public class ObstacleManager
 	
 	/** The probability for obstacle type 4. */
 	public final static int TYPE4_PROB = 25;
-	
+
 	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
 	/** The Constant HORIZONTAL_SPACING to define the horizontal spacing between obstacles. */
 	public final static int HORIZONTAL_SPACING = 100;

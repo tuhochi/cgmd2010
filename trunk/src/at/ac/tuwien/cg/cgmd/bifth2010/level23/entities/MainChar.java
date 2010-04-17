@@ -7,11 +7,13 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 
@@ -75,6 +77,15 @@ public class MainChar implements SceneEntity {
 	/** scale for gameover animation */
 	private float gameOverScale;
 	
+	/** id for the audio for the game over sound */
+	private int audioIdGameOverSound; 
+	
+	/** boolean indicating whether the sound has been already played or not*/
+	private boolean soundPlayed; 
+	
+	/** SoundManager for handling audio */
+	private SoundManager soundManager; 
+	
 	/**
 	 * Default constructor
 	 * Instantiates a new main char.
@@ -111,6 +122,7 @@ public class MainChar implements SceneEntity {
 		this.position = position;
 		
 		preprocess(); 
+		
 	}
 	
 	/**
@@ -157,6 +169,10 @@ public class MainChar implements SceneEntity {
 		{
 			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
 		}
+		
+		soundPlayed = false; 
+		audioIdGameOverSound = SoundManager.instance.requestPlayer(R.raw.l23_crashsound, false);
+		soundManager = SoundManager.instance; 
 			
 	}
 	
@@ -348,6 +364,14 @@ public class MainChar implements SceneEntity {
 	 */
 	public void renderGameOver(float dt) {
 		
+		if(!soundPlayed) {
+			soundManager.startPlayer(audioIdGameOverSound);
+			soundPlayed = true; 
+		}
+		
+		if (soundManager.isPlaying(audioIdGameOverSound))
+			soundManager.setVolumeForPlayer(audioIdGameOverSound, gameOverScale);
+		
 		gameOverAngle += dt*0.005;
 		
 		gameOverScale -= dt*0.0003;
@@ -394,6 +418,7 @@ public class MainChar implements SceneEntity {
 		}
 		else
 		{
+			soundManager.pausePlayer(audioIdGameOverSound);
 			LevelActivity.instance.setScore((int)(RenderView.instance.balloonHeight*Settings.SCOREHEIGHT_MODIFIER));
 		}
 	}
