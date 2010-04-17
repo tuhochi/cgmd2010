@@ -13,12 +13,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  */
 public class Stash {
 	private Game game;
-	private int currentPosX, currentPosY;
+	public int currentPosX, currentPosY;
 	public float translateX, translateY;
 	private Quad stashQuad;
 	public int size;
-	
-	private float hideTime, maxHideTime;
+	public float hideTime, maxHideTime;
 
 
 	/**
@@ -62,7 +61,7 @@ public class Stash {
 	
 	
 	/**
-	 * Method to update the stashes
+	 * Update the stash: check if stash is active and check if bunny has reached the stash
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
@@ -79,7 +78,7 @@ public class Stash {
 	
 	
 	/**
-	 * Draw the stashes
+	 * Draw the stash
 	 * @param gl OpenGL context of android
 	 */
 	public void draw(GL10 gl) {
@@ -105,7 +104,7 @@ public class Stash {
 	}
 
 	/**
-	 * Set the position of the stash
+	 * Set the position of the stash and calculate translation vector
 	 * @param x x-coordinate
 	 * @param y y-coordinate
 	 */
@@ -116,21 +115,5 @@ public class Stash {
 		translateX = currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x;
 		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
 	}
-	
-	
-	/**
-	 * Get the hide time of the stash
-	 * @return the hide time of the stash
-	 */
-	public float getHideTime(){
-		return hideTime;
-	}
-	
-	/**
-	 * Set the hide time of the stash after restoration
-	 * @param time hide time of the stash
-	 */
-	public void setHideTime(float time){
-		hideTime = time;
-	}
+
 }
