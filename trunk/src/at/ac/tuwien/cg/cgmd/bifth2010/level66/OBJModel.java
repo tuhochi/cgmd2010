@@ -49,7 +49,7 @@ public class OBJModel implements Serializable
 		mIndices = indices;
 		mNumVertices = indices.size();
 	}
-	/*
+	
 	public void write(String file)
 	{
 		try {
@@ -67,8 +67,7 @@ public class OBJModel implements Serializable
 	{
 		OBJModel model = null;
     	try {
-    		//InputStream fis = context.openRawResource(R.raw.l66_baum);
-    		InputStream fis = context.getAssets().open(fileName);
+    		InputStream fis = context.getResources().openRawResource(R.raw.l66_baum); 	
 			ObjectInputStream stream = new ObjectInputStream(fis);
 			model = (OBJModel)stream.readObject();
 		} catch (Exception e) {
@@ -76,8 +75,9 @@ public class OBJModel implements Serializable
 		}
 		
 		return model;
-	}	
-*/
+	}
+	
+
 	public List getVertices() {
 		return mVertices;
 	}
