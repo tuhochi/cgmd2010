@@ -91,6 +91,10 @@ public class LevelActivity extends Activity{
 		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 	
+	
+	/**
+	 * End of the level 
+	 */
 	public void endLevel() {
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
@@ -101,6 +105,10 @@ public class LevelActivity extends Activity{
 		LevelActivity.this.finish();
 	}
 	
+	
+	/**
+	 * Update the screen texts 
+	 */
 	public void updateTexts() {
    		goldText.setText(" " + getString(getResources().getIdentifier("l88_gold_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")) + game.gold + " ");
 	}
@@ -160,6 +168,32 @@ public class LevelActivity extends Activity{
 		outState.putIntArray("Position", game.bunny.getPosition());
 		//Save the direction of the movement
 		outState.putString("Direction", game.bunny.moveStatus.toString());
+		//waiting time of the bunny
+		outState.putFloat("Waiting", game.bunny.getWaitingTime());
+		//Save the amount of gold left
+		outState.putInt("Gold", game.getGold());
+		
+		//Save the number of police
+		outState.putInt("CntPolice", game.getCntPolice());
+		//Iterate over the number of police
+		for(int i = 0; i < game.getCntPolice(); i++){
+			String temp = new String(i + "Position");
+			//Save the position of the police
+			outState.putIntArray(temp, game.police.get(i).getPosition());
+			temp = new String(i + "Time");
+			//Save the waiting time
+			outState.putFloat(temp, game.police.get(i).getWaitingTime());
+			temp = new String(i + "Move");
+			//Save the movement
+			outState.putString(temp, game.police.get(i).moveStatus.toString());
+		}
+		
+		//Save the number of stashes
+		outState.putInt("CntStash", game.getCntStash());
+		for(int i = 0; i < game.getCntStash(); i++){
+			String temp = new String(i + "STime");
+			outState.putFloat(temp, game.stashes.get(i).getHideTime());
+		}
 		
 		super.onSaveInstanceState(outState);
 		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
@@ -175,6 +209,31 @@ public class LevelActivity extends Activity{
 		//Restore the direction
 		String move = savedInstanceState.getString("Direction");
 		game.bunny.setMovement(move);
+		//Restore the waiting time of the bunny
+		game.bunny.setWaitingTime(savedInstanceState.getFloat("Waiting"));
+		//Restore the amount of gold left
+		game.setGold(savedInstanceState.getInt("Gold"));
+		
+		//Restore the police
+		int cntpolice = savedInstanceState.getInt("CntPolice");
+		//Iterate over the number of police
+		for(int i = 0; i < cntpolice; i++){
+			String temp = new String(i + "Position");
+			pos = savedInstanceState.getIntArray(temp);
+			game.police.get(i).setPosition(pos[0], pos[1]);
+			game.map.movePolice(pos[0], pos[1], pos[0], pos[1]);
+			temp = new String(i + "Time");
+			game.police.get(i).setWaitingTime(savedInstanceState.getFloat(temp));
+			temp = new String(i + "Move");
+			game.police.get(i).setMovement(savedInstanceState.getString(temp));
+		}
+		
+		//Restore the stashes
+		int cntstash = savedInstanceState.getInt("CntStash");
+		for(int i = 0; i < cntstash; i++){
+			String temp = new String(i + "STime");
+			game.stashes.get(i).setHideTime(savedInstanceState.getFloat(temp));
+		}
 
 		Log.v(TAG,"onRestoreInstanceState(" + savedInstanceState + ")");
 	}

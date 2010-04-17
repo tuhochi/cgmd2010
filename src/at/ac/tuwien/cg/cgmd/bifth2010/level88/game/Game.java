@@ -17,6 +17,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * Game class for the main logic of the level
  * @author Asperger, Radax
  */
+/**
+ * @author Asperger
+ *
+ */
 public class Game {
 	public static final String TAG = "Game"; 
 	
@@ -65,7 +69,14 @@ public class Game {
         elapsedSeconds = 0;
 	}
 	
+	/**
+	 * Method for the actions if the bunny has been caught by the police
+	 */
 	public void policeCatchesBunny() {
+		/**
+		 * Handler class for a thread to end the level
+		 * @author Asperger, Radax
+		 */
 		class R implements Runnable{
         	@Override
             public void run() {
@@ -76,11 +87,20 @@ public class Game {
         handler.post(r);		
 	}
 	
+	
+	/**
+	 * Method to loose the gold and probably end the level if there has been no more gold left
+	 * @param lostGold
+	 */
 	public void looseGold(int lostGold) {
 		gold -= lostGold;
 		if( gold <= 0 ) {
 			gold = 0;
-
+			
+			/**
+			 * Handler class for a thread to end the level
+			 * @author Asperger, Radax
+			 */
 			class R implements Runnable{
 	        	@Override
 	            public void run() {
@@ -91,6 +111,10 @@ public class Game {
 	        handler.post(r);
 		}
 		else {
+			/**
+			 * Handler class for a thread to update the texts on the screen
+			 * @author Asperger, Radax
+			 */
 			class R implements Runnable{
 	        	@Override
 	            public void run() {
@@ -251,4 +275,42 @@ public class Game {
         
         bunny.draw(gl);
 	}
+	
+	
+	/**
+	 * Get the amount of gold left
+	 * @return the amount of gold left
+	 */
+	public int getGold(){
+		return gold;
+	}
+	
+	
+	/**
+	 * Set the amount of gold left after restoration
+	 * @param g amount of gold
+	 */
+	public void setGold(int g){
+		gold = g;
+	}
+	
+	
+	/**
+	 * Get the number of police in the level
+	 * @return the number of police
+	 */
+	public int getCntPolice(){	
+		return police.size();
+	}
+	
+	
+	/**
+	 * Get the number of stashes in the level
+	 * @return the number of stashes
+	 */
+	public int getCntStash(){
+		return stashes.size();
+	}
+	
+	
 }

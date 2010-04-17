@@ -134,13 +134,21 @@ public class Map {
 		}
 	}
 
+	
+	/**
+	 * Move the police from one position to the next to save the presence
+	 * @param fromX x-position of the old position
+	 * @param fromY y-position of the old position
+	 * @param toX x-position of the new position
+	 * @param toY y-position of the new position
+	 */
 	public void movePolice(int fromX, int fromY, int toX, int toY) {
 		cells[fromX][fromY].isPolicePresent = false;
 		cells[toX][toY].isPolicePresent = true;
 	}
 
 	/**
-	 * Loading of the levelinformation of a txt-file
+	 * Loading of the level information of a txt-file
 	 */
 	public void load(){
 		InputStream is = game.context.getResources().openRawResource(R.raw.l88_level);
