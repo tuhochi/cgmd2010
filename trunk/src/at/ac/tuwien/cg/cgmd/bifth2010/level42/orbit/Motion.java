@@ -10,22 +10,76 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
+
+/**
+ * This class represents an object motion
+ *
+ * @author Alex Druml
+ * @author Lukas Rössler
+ */
 public abstract class Motion implements Persistable
 {
 	/*
 	 * Subclasses of Motion *need* a default constructor!
 	 */
+	
+	/**
+	 * Do the next iteration step 
+	 * @param dt delta time between frames for a frame-independent motion
+	 */
 	public abstract void update(float dt);
+	
+	/**
+	 * Gets the generated transformation matrix 
+	 * @return the generated transformation matrix 
+	 */
 	public abstract Matrix44 getTransform();
+	
+	/**
+	 * Sets the transformation matrix 
+	 * @param transform the new transformation matrix
+	 */
 	public abstract void setTransform(Matrix44 transform);
-	public abstract void setSatTrans(SatelliteTransformation satTrans);
+	
+	/**
+	 * Gets the satellite transformation
+	 * @return the satellite transformation
+	 */
 	public abstract SatelliteTransformation getSatTrans();
+	
+	/**
+	 * Sets the satellite transformation
+	 * @param satTrans the new satellite transformation
+	 */
+	public abstract void setSatTrans(SatelliteTransformation satTrans);
+	
+	/**
+	 * Get an approximation for the direction vector at the current position
+	 * @return approximation for the direction vector
+	 */
 	public abstract Vector3 getCurrDirectionVec();
-	public abstract void persist(DataOutputStream dos) throws IOException;
-	public abstract void restore(DataInputStream dis) throws IOException;
+	
+	/**
+	 * Gets the motion speed
+	 * @return the speed of the motion
+	 */
 	public abstract float getSpeed();
+	
+	/**
+	 * Dynamic change of the motion by the given push vector
+	 * @param pushVec the change of the motion
+	 */
 	public abstract void morph(Vector3 pushVec);
 	
+	public abstract void persist(DataOutputStream dos) throws IOException;
+	public abstract void restore(DataInputStream dis) throws IOException;
+
+	/**
+	 * Restore a Motion
+	 * @param dis the data input stream
+	 * @param className the name of the class that should get restored
+	 * @return the restored motion
+	 */
 	public static Motion restore(DataInputStream dis, String className)
 	{
 		try
@@ -33,9 +87,6 @@ public abstract class Motion implements Persistable
 			Class<?> c = Class.forName(className);
 			Motion m = (Motion)c.newInstance();
 			m.restore(dis);
-			/*
-			 * TODO: uncomment the following line!
-			 */
 			return m;
 		}
 		catch (Throwable t)

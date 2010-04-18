@@ -189,7 +189,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		motionManager.updateMotion(timer.getDeltaTsec());
 		collManager.doCollisionDetection();
-		cam.updatePosition(0.0f,0.0f,0.0f, 1.0f);
+		cam.updatePosition(Config.UNIVERSE_CENTER, 1.0f);
 		
 		/*
 		 * Update FPS

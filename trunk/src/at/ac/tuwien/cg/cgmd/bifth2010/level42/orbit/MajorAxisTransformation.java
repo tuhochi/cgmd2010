@@ -104,11 +104,11 @@ public class MajorAxisTransformation extends SatelliteTransformation{
 	}
 	
 	@Override
-	public Matrix44 getBasicOrientaion() {
+	public Matrix44 getBasicOrientation() {
 		return basicOrientation;
 	}
 	@Override
-	public void setBasicOrientaion(Matrix44 basicOrientation) {
+	public void setBasicOrientation(Matrix44 basicOrientation) {
 		this.basicOrientation.copy(basicOrientation);
 	}
 }

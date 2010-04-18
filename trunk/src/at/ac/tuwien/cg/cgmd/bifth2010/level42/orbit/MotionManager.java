@@ -10,26 +10,42 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
+/**
+ * The MotionManager handles the linking between objects 
+ * (entities) and their motion
+ * @author Alex Druml
+ * @author Lukas Rössler
+ */
 public class MotionManager {
 	
-	private final ArrayList<Moveable> list;
+	private final ArrayList<Movable> list;
+	
+	/** Manager Singleton */
 	public static final MotionManager instance = new MotionManager();
 	
 	//temp vars
 	private final Vector3 satTransformAxis,tempDirectionVec,tempPushVec;
 	private final Matrix44 tempBasicOrientation;
-	private Moveable tempEntity;
+	private Movable tempEntity;
 	
+	/**
+	 * Instantiates a new motion manager.
+	 */
 	private MotionManager()
 	{
-		list =  new ArrayList<Moveable>();
+		list =  new ArrayList<Movable>();
 		satTransformAxis = new Vector3();
 		tempDirectionVec = new Vector3();
 		tempPushVec = new Vector3();
 		tempBasicOrientation = new Matrix44();
 	}
 	
-	public void addMotion(Motion motion,Moveable entity)
+	/**
+	 * Register and link a movable object/entity to a motion
+	 * @param motion the motion of the object
+	 * @param entity the object
+	 */
+	public void addMotion(Motion motion,Movable entity)
 	{
 		int index = list.indexOf(entity);
 		if(index==-1){
@@ -42,17 +58,33 @@ public class MotionManager {
 		}
 	}
 	
-	public Moveable getMotion(int index)
+	/**
+	 * Gets the motion of an entity
+	 *
+	 * @param index the index in the list
+	 * @return the linked motion
+	 */
+	public Movable getMotion(int index)
 	{
 		return list.get(index);
 	}
 	
-	public Moveable getMotion(Moveable entity)
+	/**
+	 * Gets the motion of an entity
+	 *
+	 * @param entity the entity reference
+	 * @return the linked motion
+	 */
+	public Movable getMotion(Movable entity)
 	{
 		return list.get(list.indexOf(entity));
 	}
 	
 	
+	/**
+	 * Update all registered motions (next iteration step)
+	 * @param dt the delta time between frames for a frame-independent motion
+	 */
 	public void updateMotion(float dt)
 	{
 		for(int i=0; i<list.size();i++)
@@ -62,12 +94,23 @@ public class MotionManager {
 		}
 	}
 	
+	/**
+	 * Clear the list of movable objects and their motions
+	 */
 	public void reset()
 	{
 		list.clear();
 	}
 	
-	public void changeSatelliteTransformation(Moveable entity,Vector3 directionVec,Vector3 pushVec, float speedRotationRatio)
+	/**
+	 * Change the satellite transformation
+	 * @param entity object holding the satellite transformation
+	 * @param directionVec the direction vector at the current position
+	 * @param pushVec the representing change of the transformation
+	 * @param speedRotationRatio the speed/rotation ratio for speed limiting
+	 */
+	public void changeSatelliteTransformation(	Movable entity,Vector3 directionVec,
+												Vector3 pushVec, float speedRotationRatio)
 	{
 		//generate new rotation axis
 		Vector3.crossProduct(directionVec, pushVec, satTransformAxis);
@@ -83,7 +126,7 @@ public class MotionManager {
 			tempBasicOrientation.copy(vecSatTransform.getTransform());
 			
 			//set current transformation (rotation) as basic orientation
-			vecSatTransform.setBasicOrientaion(tempBasicOrientation);
+			vecSatTransform.setBasicOrientation(tempBasicOrientation);
 			//set new rotation axis
 			vecSatTransform.axis.copy(satTransformAxis);
 	
@@ -97,6 +140,22 @@ public class MotionManager {
 		}
 	}
 	
+	
+	/**
+	 * Generate random orbits for each satellite in the scene
+	 *
+	 * @param scene the hole scene
+	 * @param minSpeed the minimal speed of the satellites
+	 * @param maxSpeed the maximal speed of the satellites
+	 * @param minQx the minimal x - axis rotation
+	 * @param maxQx the maximal x - axis rotation
+	 * @param minQz the minimal z - axis rotation
+	 * @param maxQz the maximal z - axis rotation
+	 * @param minDistance the minimal distance of the satellites
+	 * @param maxDistance the maximal distance of the satellites
+	 * @param minDistanceRatio the minimal distance ratio
+	 * @param maxDistanceRatio the maximal distance ratio
+	 */
 	public void generateRandomOrbit(	Scene scene,
 										float minSpeed,float maxSpeed,
 										float minQx,float maxQx,

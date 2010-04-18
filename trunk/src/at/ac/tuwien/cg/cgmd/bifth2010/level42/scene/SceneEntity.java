@@ -14,10 +14,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
-public class SceneEntity implements Moveable,Persistable
+public class SceneEntity implements Movable,Persistable
 {
 	private String name;
 	private Matrix44 transformation;

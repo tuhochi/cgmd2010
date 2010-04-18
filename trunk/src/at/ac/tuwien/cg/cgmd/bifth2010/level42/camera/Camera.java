@@ -13,12 +13,30 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 //static imports
 import static android.opengl.GLES10.*;
 
+/**
+ * The Class Camera represents a spherical camera model
+ * 
+ * @author Alex Druml
+ * @author Lukas Rössler
+ */
 public class Camera implements Persistable
 {
 	private final OGLManager oglManager = OGLManager.instance;
 	
-	public final Vector3 viewPosition, eyePosition, upVector, 
-					inverseViewVector, rightVector;
+	/** The view position. */
+	public final Vector3 viewPosition;
+	
+	/** The eye/cam position. */
+	public final Vector3 eyePosition;
+	
+	/** The up vector. */
+	public final Vector3 upVector;
+	
+	/** The inverse view vector (view position -> eye position) */
+	public final Vector3 inverseViewVector;
+	
+	/** The right vector. */
+	public final Vector3 rightVector;
 	
 	private float 	minAltitude,maxAltitude, azimuth, altitude, 
 					currentAzimuth, currentAltitude, motionFactor,
@@ -32,6 +50,18 @@ public class Camera implements Persistable
 	//temp vectors
 	private Vector3 qyAxis,tempInverseViewVec,viewVecXZProjection;
 	
+	/**
+	 * Instantiates a new camera
+	 *
+	 * @param distance the distance to the view position
+	 * @param minAltitude the minimal altitude angle
+	 * @param maxAltitude the maximal altitude angle
+	 * @param initAzimuth the initial azimuth angle
+	 * @param initAltitude the initial altitude angle 
+	 * @param motionFactor the motion speed factor 
+	 * @param minDistance the minimal distance
+	 * @param maxDistance the maximal distance
+	 */
 	public Camera(	float distance,float minAltitude,float maxAltitude,
 					float initAzimuth, float initAltitude, float motionFactor,
 					float minDistance, float maxDistance)
@@ -73,6 +103,9 @@ public class Camera implements Persistable
 		upVector.normalize();
 	}
 	
+	/**
+	 * Process the camera transformation
+	 */
 	public void look()
 	{
 		Matrix44 modelview = oglManager.getModelview();
@@ -82,6 +115,14 @@ public class Camera implements Persistable
 		glLoadMatrixf(modelview.getArray16(), 0);
 	}
 	
+	
+	/**
+	 * Change the camera position by detecting the relative horizontal and 
+	 * vertical movement of the input
+	 * 
+	 * @param xDiff the relative horizontal movement
+	 * @param yDiff the relative vertical movement
+	 */
 	public void setMouseDiff(float xDiff, float yDiff)
 	{
 		//set new desired angle 
@@ -94,6 +135,13 @@ public class Camera implements Persistable
 			altitude = minAltitude;
 	}
 	
+	/**
+	 * Change the camera position by detecting the relative horizontal and
+	 * vertical movement of the input.
+	 *
+	 * @param x the absolute x value
+	 * @param y the absolute y value
+	 */
 	public void setMousePosition(float x, float y)
 	{
 		//calc difference to last position
@@ -105,11 +153,22 @@ public class Camera implements Persistable
 		setMouseDiff(xDiff, yDiff);
 	}
 	
+	
+	/**
+	 * Gets the distance between eye and viewpoint
+	 *
+	 * @return the distance between eye and viewpoint
+	 */
 	public float getDistance()
 	{
 		return distance;
 	}
 
+	/**
+	 * Sets the distance between eye and viewpoint limited by the values given 
+	 * by instantiation 
+	 * @param newDistance the new distance between eye and viewpoint
+	 */
 	public void setDistance(float newDistance)
 	{
 		if(newDistance > maxDistance)
@@ -126,18 +185,24 @@ public class Camera implements Persistable
 		this.distance = newDistance;
 	}
 	
-	public void updatePosition(float posX, float posY, float posZ, float dt)
+
+	/**
+	 * Update the camera position and iteration of the camera motion
+	 *
+	 * @param viewPos the view position
+	 * @param dt the delta time between frames
+	 */
+	public void updatePosition(Vector3 viewPos, float dt)
 	{
 		//set view position
-		viewPosition.x = posX;
-		viewPosition.y = posY;
-		viewPosition.z = posZ;
+		viewPosition.copy(viewPos);
 		
 		//iterate 
 		float azimuthDiff = azimuth - currentAzimuth;
 		float altitudeDiff = altitude - currentAltitude;
 		float distanceDiff = distance - currentDistance;
 
+		//evaluate only on change
 		if(azimuthDiff!=0||altitudeDiff!=0||distanceDiff!=0)
 		{
 			
@@ -188,6 +253,12 @@ public class Camera implements Persistable
 		}
 	}
 	
+	/**
+	 * Sets the last position for the relative motion measurement
+	 *
+	 * @param x the last absolute x position
+	 * @param y the last absolute y position
+	 */
 	public void setLastPosition(int x, int y)
 	{
 		this.lastPosition[0] = x;
