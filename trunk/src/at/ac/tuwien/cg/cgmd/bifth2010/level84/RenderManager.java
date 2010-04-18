@@ -57,6 +57,7 @@ public class RenderManager implements Renderer {
 		}, 1000, 1000);
 	}
 	
+	
 	/**
 	 * Main draw method. Updates and renders all available models.
 	 */

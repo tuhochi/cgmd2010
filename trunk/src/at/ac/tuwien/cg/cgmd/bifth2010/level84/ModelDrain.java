@@ -74,6 +74,7 @@ public class ModelDrain extends Model {
 		this.setTexture(drainstyle);
 		this.setPosition(xPos);
 		this.modeltype = 1;
+		this.drainPos = 0;
 	}
 	
 	public int  getModeltype()
@@ -119,7 +120,7 @@ public class ModelDrain extends Model {
 	
 	public float getPosition()
 	{
-		return drainPos;
+		return this.drainPos;
 	}
 	
 	/**
@@ -129,8 +130,8 @@ public class ModelDrain extends Model {
 		
 		gl.glPushMatrix();
 		streetPos -= streetSpeed;
-		drainPos = streetPos + this.xPos;
-		gl.glTranslatef(drainPos, 0, streetLevel);
+		this.drainPos = streetPos + this.xPos;
+		gl.glTranslatef(this.drainPos, 0, streetLevel);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 	
