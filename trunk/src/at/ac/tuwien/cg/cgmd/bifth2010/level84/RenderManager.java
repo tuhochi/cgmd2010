@@ -21,6 +21,7 @@ public class RenderManager implements Renderer {
 
 	private LevelActivity activity;
 	private List<Model> models;
+	private List<ModelDrain> drainList;
 	private long lastTime = 0;
 	private Accelerometer accelerometer;
 	
@@ -39,9 +40,10 @@ public class RenderManager implements Renderer {
 		}
 	};
 	
-	public RenderManager(LevelActivity activity, List<Model> models, Accelerometer accelerometer) {
+	public RenderManager(LevelActivity activity, List<Model> models, List<ModelDrain> drains, Accelerometer accelerometer) {
 		this.activity = activity;
 		this.models = models;
+		this.drainList = drains;
 		this.accelerometer = accelerometer;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 		this.tPoints = (TextView) activity.findViewById(R.id.l84_Points);

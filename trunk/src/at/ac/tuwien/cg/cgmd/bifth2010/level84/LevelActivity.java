@@ -14,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class LevelActivity extends Activity implements OnClickListener {
 
 	private List<Model> models;
+	private List<ModelDrain> drainList; //list for collision detection
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
@@ -28,11 +29,11 @@ public class LevelActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l84_level);
-		
 		models = new LinkedList<Model>();
+		drainList = new LinkedList<ModelDrain>();
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
-		renderManager = new RenderManager(this, models, accelerometer);
+		renderManager = new RenderManager(this, models, drainList, accelerometer);
 		
 		openglview.setRenderer(renderManager);
 		
@@ -55,10 +56,13 @@ public class LevelActivity extends Activity implements OnClickListener {
 		//add drains
 		drain = new ModelDrain(0,2.0f);
 		models.add(drain);
+		drainList.add(drain);
 		drain = new ModelDrain(1,4.0f);
 		models.add(drain);
+		drainList.add(drain);
 		drain = new ModelDrain(2,5.0f);
 		models.add(drain);
+		drainList.add(drain);
 		
 		//add gems
 		gem1 = new ModelGem(R.drawable.l84_gem1);
