@@ -1,31 +1,29 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer;
 
-import java.util.ArrayList;
+import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.GeometryFactory;
+import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.game.PipeGame;
 
 /**
- * Game scene.
- * @author herrjohann
+ * Game scene. Holds all game relevant data.
  */
 public class GameScene {
 
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
-	
-	/** List of game objects */
-	private ArrayList<Geometry> geoms;
+	PipeGame pipe; //< Pipe game
+	int width;     //< Width of the screen
+	int height;    //< Height of the screen
 	
 	
 	// ----------------------------------------------------------------------------------
 	// -- Ctor / Dtor ----
 	
 	/**
-	 * Ctor. Create game scene.
+	 * Create game scene.
 	 */
-	public GameScene() 
-	{
+	public GameScene() {
 		
 	}
 	
@@ -33,29 +31,50 @@ public class GameScene {
 	// ----------------------------------------------------------------------------------
 	// -- Public methods ----
 	
-	public void create(int windowWidth, int windowHeight)
-	{
-		createGeometry();
+	/**
+	 * Set screen dimension.
+	 * @param width screen width
+	 * @param height screen height
+	 */
+	public void setDimension(int width, int height) {
+		this.width  = width;
+		this.height = height;
 	}
+	
 	
 	/**
-	 * Return geometry
+	 * Create game scene.
+	 * Attention: OpenGL context must exist.
 	 */
-	public ArrayList<Geometry> getGeometry() {
-		return geoms;
+	public void create() {
+		pipe = new PipeGame();
 	}
 	
-	
-	// ----------------------------------------------------------------------------------
-	// -- Private methods ----
 	
 	/**
-	 * Create game objects
+	 * Update game scene
+	 * @param dt The delta frame time.
 	 */
-	private void createGeometry() {
-		geoms = new ArrayList<Geometry>();
-		GeometryFactory gf = new GeometryFactory();
-		Geometry geom = gf.createQuad(1, 1);
-		geoms.add(geom);
+	public void update(float dt) {
+		
 	}
+	
+	
+	/**
+	 * Draw game scene
+	 * @param gl OpenGL
+	 */
+	public void draw(GL10 gl) {
+		pipe.draw(gl);
+	}
+	
+	
+	/**
+	 * OnClick event
+	 * @param event The event.
+	 */
+	public void onClick(MotionEvent event) {
+		pipe.onClick(event);
+	}
+	
 }
