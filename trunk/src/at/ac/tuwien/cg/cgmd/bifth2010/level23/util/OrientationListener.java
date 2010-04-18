@@ -8,8 +8,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
  * component's <code>addOrientationListener<code> method. When
  * the orientation event occurs, that object's appropriate
  * method is invoked.
- *
- * @see OrientationEvent
  * 
  * @author Markus Ernst
  * @author Florian Felberbauer

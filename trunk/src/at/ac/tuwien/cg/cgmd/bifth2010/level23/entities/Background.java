@@ -178,7 +178,7 @@ public class Background implements SceneEntity
 	
 	/**
 	 * Sets the game over state
-	 * @param isDead boolean which states if the level is game over
+	 * @param isGameOver boolean which states if the level is game over
 	 */
 	public void setGameOver(boolean isGameOver) {
 		this.gameOver = isGameOver;

@@ -29,7 +29,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 /**
  * The Class LevelActivity handles the Android Lifecycle for the level and takes care of the interaction with the use
  * @author Markus Ernst
- * @Author Florian Felberbauer
+ * @author Florian Felberbauer
  */
 
 public class LevelActivity extends Activity implements OrientationListener {
