@@ -21,19 +21,24 @@ import android.opengl.GLES11;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
 
+/**
+ * OpenGL Texture Wrapper
+ */
 public class GlTexture {
 
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
-	private int[] texId; //< texture handle
+	private int[] texId;   //< Texture handle
+	private int   width;   //< Width of the texture
+	private int   height;  //< Height of the texture
 	
 	
 	// ----------------------------------------------------------------------------------
 	// -- Ctor ----
 	
 	/**
-	 * Ctor.
+	 * Create OpenGL Texture.
 	 * @param resid Resource-ID
 	 */
 	public GlTexture(int resid) {
@@ -53,6 +58,24 @@ public class GlTexture {
 	}
 	
 	
+	/**
+	 * Return texture width.
+	 * @return width of the texture
+	 */
+	public int getWidth() {
+		return width;
+	}
+	
+	
+	/**
+	 * Return texture height
+	 * @return height of the texture
+	 */
+	public int getHeight() {
+		return height;
+	}
+	
+	
 	// ----------------------------------------------------------------------------------
 	// -- Private methods ----
 	
@@ -65,7 +88,6 @@ public class GlTexture {
 			Context     ctx   = LevelActivity.getInstance();
 			InputStream is    = ctx.getResources().openRawResource(resid);
 			Bitmap      bmp   = BitmapFactory.decodeStream(is);
-			
 			is.close();
 			
 			texId = new int[1];
@@ -75,6 +97,9 @@ public class GlTexture {
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 			glTexParameterf(GL_TEXTURE_2D, GLES11.GL_GENERATE_MIPMAP, GL_TRUE);
 			texImage2D(GL_TEXTURE_2D, 0, bmp, 0);
+			
+			width  = bmp.getWidth();
+			height = bmp.getHeight();
 			bmp.recycle();
 		}
 		catch(IOException e) {
