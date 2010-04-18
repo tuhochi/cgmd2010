@@ -8,7 +8,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 public class Settings 
 {
 	/** The constant for balloon speed. */
-	public static int OBSTACLE_START = 200;
+	public static int OBSTACLE_START = 500;
 	
 	/** The constant for balloon speed. */
 	public static float BALLOON_STARTSPEED = 0.08f;

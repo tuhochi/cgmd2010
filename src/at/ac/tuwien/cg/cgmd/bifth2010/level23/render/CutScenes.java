@@ -7,8 +7,10 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
+import android.sax.StartElementListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 
 /**
  * The Class CutScenes handles cutscene rendering.
@@ -32,6 +34,8 @@ public class CutScenes
 	/** The current time in intro rendering. */
 	private float introTime;
 	
+	private final float introStartScale=50;
+	
 	/** The current scaling for intro quad. */
 	private float introScale=50;
 	
@@ -40,6 +44,14 @@ public class CutScenes
 	
 	/** The time a full fade takes in millseconds */
 	private final float FADE_TIME = 3000;
+	
+	public int introTexId;
+	
+	private float introTexShift=0;
+	
+	private boolean introInGoState=false;
+	
+	private float introTexScale = 1;
 	
 	/**
 	 * Loads the geometry
@@ -60,40 +72,75 @@ public class CutScenes
 	 * Renders the introscene
 	 * @param dt
 	 */
-	public void renderIntroScene(float dt) 
+	public boolean renderIntroScene(float dt) 
 	{
 		bindBuffers();
 		
 		introTime += dt *0.05f;
 		introScale -= dt*0.05f;
 		
-		glPushMatrix();
-		
-		glScalef(introScale, introScale, 1f);
-		glTranslatef((RenderView.instance.getRightBounds()/2f-introScale/2f)/introScale, 
-				(RenderView.instance.getTopBounds()/2-introScale/2f)/introScale, 0f);		
-		
-		glBindTexture(GL10.GL_TEXTURE_2D, textureIdIntro);
-
-		if (!Settings.GLES11Supported) 
+		if(introScale<=0)
 		{
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBufferIntro);
-		} 
+			if(!introInGoState)
+			{
+				introScale=introStartScale;
+				introTexShift += 1;
+			}
+			else
+			{
+				return true;
+			}
 
-		glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+			
+			if(introTexShift == 3)
+			{
+				introInGoState = true;
+				introTexShift = 1.5f;
+				introTexScale=2;
+			}
+		}
+			glBindTexture(GL_TEXTURE_2D, introTexId);
+			
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix();
+			
+				glScalef(introTexScale*(1f/5f), 1, 1);	
+				glTranslatef(introTexShift, 0, 0);
+					
+			glMatrixMode(GL_MODELVIEW);
+			
+			glPushMatrix();
+			
+			glScalef(introScale, introScale, 1f);
+			glTranslatef((RenderView.instance.getRightBounds()/2f-introScale/2f)/introScale, 
+					(RenderView.instance.getTopBounds()/2-introScale/2f)/introScale, 0f);		
+	
+			if (!Settings.GLES11Supported) 
+			{
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBufferIntro);
+			} 
+	
+			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+			glMatrixMode(GL_TEXTURE);
+			glPopMatrix();
+			
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
 		
-		glPopMatrix();
+		return false;
 	}
 	
 	/**
-	 * Fades the whole screen in FADE_TIME milliseconds
 	 * @param dt
+	 * @return
 	 */
-	public void renderFade(float dt)
+	public boolean renderFade(float dt)
 	{
-		bindBuffers();
 		fadeAlpha -= dt*1/FADE_TIME;
-			
+		
+		if(fadeAlpha<=0)
+			return true;
+		
 		glDisable(GL_TEXTURE_2D);
 		glColor4f(0, 0, 0, fadeAlpha);
 		
@@ -106,6 +153,8 @@ public class CutScenes
 		glPopMatrix();
 		glColor4f(1, 1, 1, 1);
 		glEnable(GL_TEXTURE_2D);
+		
+		return false;
 	}
 	
 	/**
