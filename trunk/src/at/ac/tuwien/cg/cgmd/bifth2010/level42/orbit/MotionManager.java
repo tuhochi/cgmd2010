@@ -3,8 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -103,7 +101,8 @@ public class MotionManager {
 										float minSpeed,float maxSpeed,
 										float minQx,float maxQx,
 										float minQz,float maxQz,
-										int minDistance,int maxDistance	)
+										int minDistance,int maxDistance,
+										float minDistanceRatio, float maxDistanceRatio)
 	{
 		Matrix44 rotation = new Matrix44();
 		SceneEntity entity = null;
@@ -111,27 +110,54 @@ public class MotionManager {
 		Vector3 a = new Vector3();
 		Vector3 b = new Vector3();
 		Vector3 center = new Vector3(0,0,0);
-		Orbit tempOrbit = null;
+		Vector3 rotationAxis = new Vector3();
+		Orbit generatedOrbit = null;
+		
+		VecAxisTransformation satTransform = null;
 		
 		for(int i=0;i<scene.sceneEntities.size();i++){
 			entity = scene.sceneEntities.get(i);
 			if(entity.getName().startsWith("Satellite_")){
 				
-				//generate random setup
+				//generate the orthonormal axis for the ellipse
+				a.x = ((float)rand.nextDouble()*(maxDistance-minDistance) + minDistance);
+				a.x = (rand.nextBoolean())? a.x*-1 : a.x;
 				
-				a.x = (float)rand.nextInt(2*maxDistance) - 2*minDistance;
-				b.z = (float)rand.nextInt(2*maxDistance) - 2*minDistance;
+				/** generate a similar value for b over the <code>distanceRatio</code> */
+				b.z = a.x *((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio);
+				b.z = (rand.nextBoolean())? b.z*-1 : b.z;
+				
+//				Log.d(LevelActivity.TAG," a.x="+a.x+" b.z="+b.z + " rand="+((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio));
+				
 				rotation.setIdentity();
 				rotation.addRotateY((float)rand.nextDouble()*Constants.TWOPI);
-				rotation.addRotateX((float)rand.nextDouble()*maxQx + minQx);
-				rotation.addRotateZ((float)rand.nextDouble()*maxQz + minQz);
+				rotation.addRotateX((float)rand.nextDouble()*(maxQx - minQx) + minQx);
+				rotation.addRotateZ((float)rand.nextDouble()*(maxQz - minQz) + minQz);
 				rotation.transformPoint(a);
 				rotation.transformPoint(b);
 
-				tempOrbit = new Orbit(	a,center,b,
+//				Log.d(LevelActivity.TAG," 	qx="+(float)rand.nextDouble()*(maxQx - minQx) + minQx
+//										+ " qz="+(float)rand.nextDouble()*(maxQz - minQz) + minQz);
+							
+				generatedOrbit = new Orbit(	a,center,b,
 										(float)rand.nextDouble()*maxSpeed + minSpeed,
 										entity.getBasicOrientation());
-				addMotion(tempOrbit,entity);
+				
+				//generate random satellite transformation
+				rotationAxis.x = (float)rand.nextDouble();
+				rotationAxis.y = (float)rand.nextDouble();
+				rotationAxis.z = (float)rand.nextDouble();
+				rotationAxis.normalize();
+				
+				satTransform = new VecAxisTransformation(	rotationAxis,
+															1,
+															(float)rand.nextDouble() * 5 + 1, //empiric values :) 
+															null );
+				
+				satTransform.setAngle((float)rand.nextDouble()+0.1f, Config.INTERSATELLITE_SPEEDROTA_RATIO);
+				
+				generatedOrbit.setSatTrans(satTransform);
+				addMotion(generatedOrbit,entity);
 			}
 		}
 	}

@@ -27,7 +27,10 @@ public class CollisionManager {
 	private final Vector3 pq;
 	private final Vector3 normalDistance;
 	
-	private final Vector3 centerDistance,objACurrDir,objBCurrDir,toCenterVecA,toCenterVecB;
+	private final Vector3 centerDistance, planetCenterDistance,
+						  objACurrDir,objBCurrDir,
+						  objAPushVec,objBPushVec,planetPushVec,
+					      toCenterVecA,toCenterVecB;
 	private Motion objAMotion,objBMotion;
 	
 	private Moveable objA,objB;
@@ -46,8 +49,15 @@ public class CollisionManager {
 		this.normalDistance = new Vector3();
 		
 		this.centerDistance = new Vector3();
+		this.planetCenterDistance = new Vector3();
+		
 		this.objACurrDir = new Vector3();
 		this.objBCurrDir = new Vector3();
+		
+		this.objAPushVec = new Vector3();
+		this.objBPushVec = new Vector3();
+		this.planetPushVec = new Vector3();
+		
 		this.toCenterVecA = new Vector3();
 		this.toCenterVecB = new Vector3();
 		
@@ -152,7 +162,7 @@ public class CollisionManager {
 							satellite = (SceneEntity) objA;
 						}
 						
-						Vector3 planetCenterDistance = new Vector3();
+						
 						Model planetEntity = null;
 						
 						//find out which part of the planet got hit
@@ -168,14 +178,16 @@ public class CollisionManager {
 								if(planetEntity.getMotion()==null)
 								{
 									
-									//TODO: reuse obj - sat ebenfalls ablenken - sattrafo
-									Vector3 pushVec = Vector3.subtract(planetEntity.getBoundingSphereWorld().center, planet.getBoundingSphereWorld().center);
-									planetEntityMotion = new DirectionalMotion(planetEntity.getBoundingSphereWorld().center,
-															pushVec,
-															1f,
-															planetEntity.getBasicOrientation());
+									//TODO: sat ebenfalls ablenken? - sattrafo
+									planetPushVec.copy(planetEntity.getBoundingSphereWorld().center);
+									planetPushVec.subtract(planet.getBoundingSphereWorld().center);
+									
+									planetEntityMotion = new DirectionalMotion(	planetEntity.getBoundingSphereWorld().center,
+																				planetPushVec,
+																				1f,
+																				planetEntity.getBasicOrientation());
 									MotionManager.instance.addMotion(planetEntityMotion,planetEntity);
-									satellite.getMotion().morph(pushVec);
+									satellite.getMotion().morph(planetPushVec);
 								}
 							}
 						}						
@@ -219,15 +231,17 @@ public class CollisionManager {
 						toCenterVecB.copy(centerDistance);
 						toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
 						
-						objACurrDir.add(toCenterVecB);
-						objBCurrDir.add(toCenterVecA);
+						objAPushVec.copy(objBCurrDir);
+						objAPushVec.add(toCenterVecA);
+
+						objBPushVec.copy(objACurrDir);
+						objBPushVec.add(toCenterVecB);
+
+						objA.getMotion().morph(objAPushVec);
+						objB.getMotion().morph(objBPushVec);
 						
-						objA.getMotion().morph(objBCurrDir);
-						objB.getMotion().morph(objACurrDir);
-						
-						//TODO: getCurrDirectionVec verhindern!
-						MotionManager.instance.changeSatelliteTransformation(objA, objA.getMotion().getCurrDirectionVec(), objBCurrDir,Config.INTERSATELLITE_SPEEDROTA_RATIO);
-						MotionManager.instance.changeSatelliteTransformation(objB, objB.getMotion().getCurrDirectionVec(), objACurrDir,Config.INTERSATELLITE_SPEEDROTA_RATIO);
+						MotionManager.instance.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
+						MotionManager.instance.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
 					}
 				}
 				

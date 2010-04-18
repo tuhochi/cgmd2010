@@ -91,12 +91,14 @@ public class Orbit extends Motion
 		
 		//stepsize relative so perimeter
 		this.step = Constants.TWOPI/ellipse.perimeter;
+		
+		//check the size and speed of the orbit
+		limitUniverse();
+		
 	}
 		
 	public void update(float dt)
-	{
-		//check the size and speed of the orbit
-		limitUniverse();
+	{	
 		
 		//inc parameter
 		u+=(speed*step*dt);
@@ -106,7 +108,7 @@ public class Orbit extends Motion
 		//update sat transformation
 		if(satTrans!=null)
 			satTrans.update(dt);
-		
+			
 		//update the morphing for the direction vec length
 		updateSpeedMorphing(dt);
 		
@@ -263,7 +265,6 @@ public class Orbit extends Motion
 		directionDiffFactor = bAxisFactor;
 		directionDiffStep = (directionDiffFactor-1)/100;
 		directionDiff = 1;
-	
 	}
 	
 	private void limitUniverse()
@@ -273,16 +274,19 @@ public class Orbit extends Motion
 		
 		if(this.centerVec.length()>Config.UNIVERSE_CENTERLENGTH_LIMIT)
 			this.centerVecCap = Config.UNIVERSE_CENTERLENGTH_LIMIT/this.centerVec.length();
+		
 		if(this.directionVec.length()>Config.UNIVERSE_DIRLENGTH_LIMIT)
 			this.directionVecCap = Config.UNIVERSE_DIRLENGTH_LIMIT/this.directionVec.length();
 		
-		//Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
+		Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
 		
-		if(this.centerVecCap!=1 || this.directionVecCap != 1)
+		if((this.centerVecCap!=1 || this.directionVecCap != 1)){
 			morphAxisScale(centerVecCap, directionVecCap, 20);
+		}
 		
-		if(this.newSpeed > Config.UNIVERSE_SPEED_LIMIT)
+		if(this.newSpeed > Config.UNIVERSE_SPEED_LIMIT){
 			this.newSpeed = Config.UNIVERSE_SPEED_LIMIT;
+		}
 	}
 	
 	public void updateStepSize()
