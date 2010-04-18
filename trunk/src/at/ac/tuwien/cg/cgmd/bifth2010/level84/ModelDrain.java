@@ -13,7 +13,7 @@ public class ModelDrain extends Model {
 	 * drain main class
 	 */
 
-	private float qs = 0.5f;
+	private float qs = 0.8f;
 	
 	/** Quad vertices */
 	protected float vertices[] = {
