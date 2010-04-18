@@ -4,42 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.NormalModeWorld;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLView;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer.RendererView;
 
+/**
+ * Level Activity.
+ */
 public class LevelActivity extends Activity {
 
-	private static LevelActivity instance;
-	private RendererView rendererView; //< Renderer view
-		
-	public void onCreate(Bundle savedInstanceState) 
-	{
-		super.onCreate(savedInstanceState);
-		
-		//set fullscreen
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-       
-        //get display
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display d = wm.getDefaultDisplay();
-        
-        //create
-   		rendererView = new RendererView(this,d.getWidth(),d.getHeight());
-   		
-   		//set
-   		setContentView(rendererView);
-   		
-   		instance = this;
-	}
+	// ----------------------------------------------------------------------------------
+	// -- Members ----
 	
+	private static LevelActivity instance; //< Level activity instance for global access
+	private RendererView rendererView;     //< Renderer view
+		
+	
+	// ----------------------------------------------------------------------------------
+	// -- Static methods ----
 	
 	/**
 	 * Return instance.
@@ -48,4 +30,35 @@ public class LevelActivity extends Activity {
 	public static LevelActivity getInstance() {
 		return instance;
 	}
+	
+	
+	// ----------------------------------------------------------------------------------
+	// -- Public methods ----
+	
+	/**
+	 * Create level activity.
+	 * @param Bundle.
+	 */
+	public void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+		
+		// Set fullscreen
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+       
+        // Get display
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display d = wm.getDefaultDisplay();
+        
+        // Create renderer view
+   		rendererView = new RendererView(this,d.getWidth(), d.getHeight());
+   		setContentView(rendererView);
+   		
+   		// Set instance for global access
+   		instance = this;
+	}
+	
+	
+	
 }
