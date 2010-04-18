@@ -61,6 +61,7 @@ public class MaterialManager
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient.asArray, 0);
 	        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse.asArray, 0);
 	        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular.asArray, 0);
+	        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, material.emissive.asArray, 0);
 	        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.ks);
 	        if(textureEnabled && material.texId == -1)
 	        	glDisable(GL_TEXTURE_2D);
@@ -84,11 +85,11 @@ public class MaterialManager
 	 * adds a material
 	 * @return the name of the new material
 	 */
-	public Material addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, String textureFilename)
+	public Material addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, Color4 emissive, float ks, String textureFilename)
 	{
 		if(materials.containsKey(name))
 			Log.w(LevelActivity.TAG, "Material '" + name + "' already exists, replacing...");
-		Material m = new Material(name, ambient, diffuse, specular, ks, textureFilename);
+		Material m = new Material(name, ambient, diffuse, specular, emissive, ks, textureFilename);
 		materials.put(name, m);
 		return m;
 	}
@@ -96,13 +97,13 @@ public class MaterialManager
 	/*
 	 * @return creates the material if it doesn't exist yet and returns it
 	 */
-	public Material getMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, String textureFilename)
+	public Material getMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, Color4 emissive, float ks, String textureFilename)
 	{
 		if(materials.containsKey(name))
 			return materials.get(name);
 		else
 		{
-			Material m = new Material(name, ambient, diffuse, specular, ks, textureFilename);
+			Material m = new Material(name, ambient, diffuse, specular, emissive, ks, textureFilename);
 			materials.put(name, m);
 			return m;
 		}
@@ -114,17 +115,19 @@ public class MaterialManager
 		private final Color4 ambient;
 		private final Color4 diffuse;
 		private final Color4 specular;
+		private final Color4 emissive;
 		private final float ks;
 		private final Bitmap tex;
 		private int texId;
 		private boolean initialized;
 		
-		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, float ks, String textureFilename)
+		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, Color4 emissive, float ks, String textureFilename)
 		{
 			this.name = name;
 			this.ambient = ambient;
 			this.diffuse = diffuse;
 			this.specular = specular;
+			this.emissive = emissive;
 			this.ks = ks;
 			
 			if(!textureFilename.equals(""))
