@@ -11,24 +11,24 @@ import android.content.Context;
 import android.os.Handler;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-	
-public class Model{
-   
+
+public class Model {
+
 	private Context mContext;
+
+	protected float _posX;
+	protected float _posY;
+	protected float _posZ;
 	
-	private float _posX;
-	private float _posY;
-	private float _posZ;
+	protected float _roll;
+	protected float _pitch;
+	protected float _yaw;
 	
-	private float _rotX;
-	private float _rotY;
-	private float _rotZ;
+	protected float _scale;
 	
-	private float _scale;
-	
-	private float _velocityX;
-	private float _velocityY;
-	private float _velocityZ;
+	protected float _boundX;
+	protected float _boundY;
+	protected float _boundZ;
 	
 	private ShortBuffer _indexBuffer;
 	private FloatBuffer _vertexBuffer;
@@ -72,43 +72,60 @@ public class Model{
 											0.0f, 0.0f, 1.0f, 0.3f
 	};
 
-	public void move(float x, float y, float z)
-	{
-		_posX += x;
-		_posY += y;
-		_posZ += z;
-		//_rotX += y;
-		//_rotY += z;
-		//_rotZ += x;
-	}
-	
-	public void move()
-	{
-		_posX += _velocityX;
-		_posY += _velocityY;
-		_posZ += _velocityZ;
-	}
-	
-	@SuppressWarnings("static-access")
+	@SuppressWarnings("static-access")	
 	public Model(String filename, Context context)
 	{
 		this.mContext = context;
 		//load Model
-		this.load(filename, mContext);
+		this.load(ffilename, mContext);
 		// set initial position
 		_posX = 0.0f;
 		_posY = 0.0f;
 		_posZ = -5.0f;
 		
-		_rotX = 0.0f;
-		_rotY = 0.0f;
-		_rotZ = 0.0f;
+		_roll = 0.0f;
+		_pitch = 0.0f;
+		_yaw = 0.0f;
 		
-		_velocityX = 0.0f;
-		_velocityY = 0.0f;
-		_velocityZ = 0.0f;
+		_scale = 0.5f;
 		
-		_scale = 0.2f;
+		// only render coordination system - testing purpose only
+		_renderCoord = true;
+		
+		ByteBuffer vbb = ByteBuffer.allocateDirect(_coordVertices.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        _coordVertexBuffer = vbb.asFloatBuffer();
+        
+        ByteBuffer ibb = ByteBuffer.allocateDirect(_coordIndices.length * 2);
+        ibb.order(ByteOrder.nativeOrder());
+        _coordIndexBuffer = ibb.asShortBuffer();
+        
+        ByteBuffer cbb = ByteBuffer.allocateDirect(_coordColors.length * 4);
+        cbb.order(ByteOrder.nativeOrder());
+        _coordColorBuffer = cbb.asFloatBuffer();
+        
+        _coordVertexBuffer.put(_coordVertices);
+        _coordIndexBuffer.put(_coordIndices);
+        _coordColorBuffer.put(_coordColors);
+        
+        _coordVertexBuffer.position(0);
+        _coordIndexBuffer.position(0);
+        _coordColorBuffer.position(0);
+	}
+
+	public Model()
+	{
+
+		// set initial position
+		_posX = 0.0f;
+		_posY = 0.0f;
+		_posZ = -5.0f;
+		
+		_roll = 0.0f;
+		_pitch = 0.0f;
+		_yaw = 0.0f;
+		
+		_scale = 0.5f;
 		
 		// only render coordination system - testing purpose only
 		_renderCoord = true;
@@ -134,7 +151,6 @@ public class Model{
         _coordColorBuffer.position(0);
 	}
 	
-
 	public static void load(String filename, Context mContext)
 	{
 		// TODO: load from file
@@ -142,7 +158,7 @@ public class Model{
 		OBJRenderable load = new OBJRenderable(OBJModel.load(filename, mContext));
 		System.out.print("lol");
 	}
-
+	
 	public void render(GL10 gl)
 	{
 		if( _renderCoord )
