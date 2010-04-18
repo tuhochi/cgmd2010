@@ -113,10 +113,10 @@ public class RenderManager implements Renderer {
 		while(i.hasNext())
 			i.next().loadGLTexture(gl, (Context)this.activity);
 		
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glClearDepthf(1.0f);
 		gl.glEnable(GL10.GL_DEPTH_TEST);

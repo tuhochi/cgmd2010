@@ -59,33 +59,6 @@ public class ModelObj extends Model implements Serializable
 	{
 		numIndices = finalIndexList.length;
 	
-//		Log.i("buffers", "numindices " + numIndices);
-//		Log.i("buffers", "Vertex " + finalVertexList.length);
-//		ByteBuffer byteBuf = ByteBuffer.allocateDirect(finalVertexList.length * 4);
-//		byteBuf.order(ByteOrder.nativeOrder());
-//		vertexBuffer = byteBuf.asFloatBuffer();
-//		vertexBuffer.put(finalVertexList);
-//		vertexBuffer.position(0);
-//
-//		Log.i("buffers", "TC " + finalTexcoordsList.length);
-//		byteBuf = ByteBuffer.allocateDirect(finalTexcoordsList.length * 4);
-//		byteBuf.order(ByteOrder.nativeOrder());
-//		textureBuffer = byteBuf.asFloatBuffer();
-//		textureBuffer.put(finalTexcoordsList);
-//		textureBuffer.position(0);
-//
-//		Log.i("buffers", "Normals " + finalNormalsList.length);
-//		byteBuf = ByteBuffer.allocateDirect(finalNormalsList.length * 4);
-//		byteBuf.order(ByteOrder.nativeOrder());
-//		normalBuffer = byteBuf.asFloatBuffer();
-//		normalBuffer.put(finalNormalsList);
-//		normalBuffer.position(0);
-//		
-//		Log.i("buffers", "Index " + finalIndexList.length);
-//		indexBuffer = ByteBuffer.allocateDirect(finalIndexList.length);
-//		indexBuffer.put(finalIndexList);
-//		indexBuffer.position(0);
-		
 		Log.i("buffers", "numindices " + numIndices);
 		Log.i("buffers", "Vertex " + finalVertexList.length);
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(finalVertexList.length * 4);
