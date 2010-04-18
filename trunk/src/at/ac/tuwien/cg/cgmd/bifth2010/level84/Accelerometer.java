@@ -14,11 +14,11 @@ import android.util.Log;
  */
 public class Accelerometer extends OrientationEventListener{
 	
-	private int orientation = 0;
+	private int orientation = 180;
 	private boolean isOrientationAvailable;
 	
 	public Accelerometer (Context context) {
-		super(context, SensorManager.SENSOR_DELAY_GAME);
+		super(context, SensorManager.SENSOR_DELAY_FASTEST);
 		
 		isOrientationAvailable = this.canDetectOrientation();
 		
@@ -30,7 +30,7 @@ public class Accelerometer extends OrientationEventListener{
 	
 	public void onOrientationChanged(int orientation) {
 		//Log.i("orientation", orientation + "¡");
-		this.orientation = orientation;
+		this.orientation = orientation - 90;
 	}
 
 	/**

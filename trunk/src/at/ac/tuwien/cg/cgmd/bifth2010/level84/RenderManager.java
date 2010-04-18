@@ -73,18 +73,20 @@ public class RenderManager implements Renderer {
 		fps++;
 		
 		gl.glLoadIdentity();
-		gl.glPushMatrix();
-		gl.glRotatef(accelerometer.getOrientation(), 0, 0, 1);
+		//gl.glPushMatrix();
+		//gl.glRotatef(accelerometer.getOrientation(), 0, 0, 1);
 		//Log.i("renderer", "rotating to " + accelerometer.getOrientation() + "¡");
+		
+		
 		
 		ListIterator<Model> i = models.listIterator();
 		while(i.hasNext()) {
 			Model m = i.next();
-			m.update(gl, deltaTime);
+			m.update(gl, deltaTime, accelerometer.getOrientation());
 			m.draw(gl);
 		}
 		
-		gl.glPopMatrix();
+		//gl.glPopMatrix();
 	}
 
 	/**

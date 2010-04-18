@@ -15,10 +15,12 @@ public class LevelActivity extends Activity implements OnClickListener {
 
 	private List<Model> models;
 	private List<ModelDrain> drainList; //list for collision detection
+	
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
 	
+	private ModelStreet street;
 	private ModelDrain drain;
 	
 	private ModelGem gem1;
@@ -52,7 +54,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 
 	private void loadModels() {
 		//add street
-		models.add(new ModelStreet(R.drawable.l84_tex_street));
+		street = new ModelStreet(60.0f, R.drawable.l84_tex_street);
+		models.add(street);
 		
 		//add drains
 		drain = new ModelDrain(0,2.0f);

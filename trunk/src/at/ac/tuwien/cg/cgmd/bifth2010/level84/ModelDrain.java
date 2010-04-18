@@ -13,7 +13,7 @@ public class ModelDrain extends Model {
 	 * drain main class
 	 */
 
-	private float qs = 0.8f;
+	private float qs = 0.5f;
 	
 	/** Quad vertices */
 	protected float vertices[] = {
@@ -73,14 +73,8 @@ public class ModelDrain extends Model {
 		this();
 		this.setTexture(drainstyle);
 		this.setPosition(xPos);
-		this.modeltype = 1;
-		this.drainPos = 0;
 	}
 	
-	public int  getModeltype()
-	{
-		return this.modeltype;
-	}
 	/**
 	 * @param drainstyle set the texture for the different drain shapes
 	 */
@@ -120,20 +114,19 @@ public class ModelDrain extends Model {
 	
 	public float getPosition()
 	{
-		return this.drainPos;
+		return this.xPos;
 	}
 	
 	/**
 	 * Update the model's transformations.
 	 */
-	public void update(GL10 gl, double deltaTime) {
+	public void update(GL10 gl, double deltaTime, float deviceRotation) {
+		streetPos -= streetSpeed;
+		drainPos = streetPos + this.xPos;
 		
 		gl.glPushMatrix();
-		streetPos -= streetSpeed;
-		this.drainPos = streetPos + this.xPos;
-		gl.glTranslatef(this.drainPos, 0, streetLevel);
+		gl.glRotatef(deviceRotation, 0, 0, 1);
+		gl.glTranslatef(-drainPos, 0, streetLevel);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
-	
-	
 }
