@@ -68,7 +68,6 @@ public class TimeUtil {
 	 * Schedules timer.
 	 *
 	 * @param task the TimerTask to schedule
-	 * @param delay the delay
 	 */
 	public void scheduleTimer(TimingTask task)
 	{
