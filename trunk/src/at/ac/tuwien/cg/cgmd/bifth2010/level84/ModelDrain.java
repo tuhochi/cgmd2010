@@ -3,7 +3,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class Drain extends Model {
+import javax.microedition.khronos.opengles.GL10;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+
+public class ModelDrain extends Model {
 
 	/**
 	 * drain main class
@@ -28,16 +32,20 @@ public class Drain extends Model {
 	/** Quad indices */
 	private byte indices[] = {0,1,3, 0,3,2};
 	
-	private int texture_drain0 = -1; //drain with no holes
-	private int texture_drain1 = -1; //drain for gem1
-	private int texture_drain2 = -1; //drain for gem2
-	private int texture_drain3 = -1; //drain for gem3
-	private int texture_drain4 = -1; //drain for gem4
+	private int texture_drain0 = R.drawable.l00_coin; //drain with no holes
+	private int texture_drain1 = R.drawable.l00_coin; //drain for gem1
+	private int texture_drain2 = R.drawable.l00_coin; //drain for gem2
+	private int texture_drain3 = R.drawable.l00_coin; //drain for gem3
+	private int texture_drain4 = R.drawable.l00_coin; //drain for gem4
 	
 	private float xPos = 0;
 	private float orientation = 0;
 	
-	public Drain()
+	private float streetPos = 2.0f; //street position at startup
+	private float streetSpeed = 0.05f; //speed of street translation
+	private float streetLevel = -10f; //z-pos of street
+	
+	public ModelDrain()
 	{
 		numIndices = indices.length;
 		
@@ -58,11 +66,11 @@ public class Drain extends Model {
 		indexBuffer.position(0);
 	}
 	
-	public Drain(int drainstyle)
+	public ModelDrain(int drainstyle, float xPos)
 	{
 		this();
 		this.setTexture(drainstyle);
-		
+		this.setPosition(xPos);
 	}
 	
 	/**
@@ -99,7 +107,18 @@ public class Drain extends Model {
 	 */
 	public void setPosition(float xOffset)
 	{
-		xPos = xOffset;
+		this.xPos = xOffset;
+	}
+	
+	/**
+	 * Update the model's transformations.
+	 */
+	public void update(GL10 gl, double deltaTime) {
+		
+		gl.glPushMatrix();
+		streetPos -= streetSpeed;
+		gl.glTranslatef(streetPos + this.xPos, 0, streetLevel);
+		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 	
 	
