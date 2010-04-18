@@ -28,10 +28,15 @@ public class ModelGem extends Model {
 		/** Quad indices */
 		private byte indices[] = {0,1,3, 0,3,2};
 		
+		private final float gemStartpos = -2f; 
 		private boolean visibility = false;
 		private float gemRotation = 0.0f;
-		private float gemPos = -2f;
+		private float gemPos = gemStartpos;
 		private float fallSpeed = 0.0f;
+		private boolean active = false;
+		
+		//TODO: ev. suebergabe des wertes ??
+		private float streetLevel = -10f;
 		
 		/**
 		 * Creates a new quad.
@@ -91,6 +96,29 @@ public class ModelGem extends Model {
 		{
 			gemRotation += 0.5f;
 		}
+
+		public void resetPosition()
+		{
+			gemPos = gemStartpos;
+		}
+		
+		public void startFall()
+		{
+			this.setVisible();
+			active = true;
+		}
+		
+		public void endFall()
+		{
+			this.setInvisible();
+			resetPosition();
+		}
+		
+		public boolean checkCollision()
+		{
+				if (gemPos <= streetLevel)	{ return true;}
+				else return false;
+		}
 		
 		/**
 		 * Update the model's transformations.
@@ -99,12 +127,20 @@ public class ModelGem extends Model {
 			
 			if (visibility)
 			{
-				fallSpeed += 0.005f;
-				gemPos -= fallSpeed;
-				//mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
-				gl.glPushMatrix();
-				gl.glTranslatef(0, 0, gemPos);
-				gl.glMultMatrixf(mTrans.toFloatArray(), 0);
+				if (!checkCollision())
+				{
+					fallSpeed += 0.005f;
+					gemPos -= fallSpeed;
+					//mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
+					gl.glPushMatrix();
+					gl.glTranslatef(0, 0, gemPos);
+					gl.glMultMatrixf(mTrans.toFloatArray(), 0);
+				}
+				else
+				{
+					//TODO: check ausrichtung, punkte, ...
+					endFall();
+				}
 			}
 		}
 }
