@@ -20,6 +20,11 @@ public class LevelActivity extends Activity implements OnClickListener {
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
 	
+	private ModelGem gem1;
+	private ModelGem gem2;
+	private ModelGem gem3;
+	private ModelGem gem4;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l84_level);
@@ -44,7 +49,16 @@ public class LevelActivity extends Activity implements OnClickListener {
 	}
 
 	private void loadModels() {
-		models.add(new ModelQuad(R.drawable.l00_coin));
+		models.add(new ModelQuad(R.drawable.l00_coin)); //add street quad
+		//add gems
+		gem1 = new ModelGem(R.drawable.l84_gem1);
+		models.add(gem1);
+		gem2 = new ModelGem(R.drawable.l84_gem2);
+		models.add(gem2);
+		gem3 = new ModelGem(R.drawable.l84_gem3);
+		models.add(gem3);
+		gem4 = new ModelGem(R.drawable.l84_gem4);
+		models.add(gem4);
 		
 		//TODO: loading obj-files
 		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l33_stone);
@@ -68,18 +82,18 @@ public class LevelActivity extends Activity implements OnClickListener {
 		int selectedButton = 0;
 		
 		switch(v.getId()) {
-		case R.id.l84_GemButton01: selectedButton = 1; break;
-		case R.id.l84_GemButton02: selectedButton = 2; break;
-		case R.id.l84_GemButton03: selectedButton = 3; break;
-		case R.id.l84_GemButton04: selectedButton = 4; break;
+		case R.id.l84_GemButton01: selectedButton = 1; gem1.setVisible(); break;
+		case R.id.l84_GemButton02: selectedButton = 2; gem2.setVisible();break;
+		case R.id.l84_GemButton03: selectedButton = 3; gem3.setVisible();break;
+		case R.id.l84_GemButton04: selectedButton = 4; gem4.setVisible();break;
 		}
 			
-		Context context = getApplicationContext();
-		CharSequence text = "You pressed Button #" + selectedButton;
-		int duration = Toast.LENGTH_SHORT;
-
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.show();
+//		Context context = getApplicationContext();
+//		CharSequence text = "You pressed Button #" + selectedButton;
+//		int duration = Toast.LENGTH_SHORT;
+//
+//		Toast toast = Toast.makeText(context, text, duration);
+//		toast.show();
 	}
 
 	public void setModels(List<Model> models) {
