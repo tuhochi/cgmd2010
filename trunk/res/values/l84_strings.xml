@@ -2,23 +2,19 @@
 <resources>
     <string name="l84_help_title">I throw my gems into the drain</string>
     <string name="l84_help_subtitle">
-     Als Sie eines Tages eine ruhige Straße entlang wandern, 
-     verspüren Sie plötzlich den akuten Drang, Ihre <b>Juwelensammlung loszuwerden.</b> 
-     Die Straße verfügt glücklicherweise über <b>zahlreiche Kanaldeckel</b>, deren 
-     Öffnungen jedoch <b>verschieden geformt</b> sind. <b>Kurzum: Nicht jedes Juwel 
-     passt überall rein</b>. Falls aber doch, muss es beim Abwurf noch <b>passend 
-     ausgerichtet</b> sein!</string>
-    <string name="l84_help_contenttitle">Detailbeschreibung:</string>
+    One day walking along a quiet street, you suddenly get the urge <b>to get rid of
+    your gem collection</b>. Luckily the street has <b>plenty of drains</b>, each of them with
+    <b>holes in different shape styles</b>. <b>In short: Not every gem fits in every drain 
+     </b>. But if you have chosen the right one, it also has to be <b>aligned in the right way!</b></string>
+    <string name="l84_help_contenttitle">Full description:</string>
     <string name="l84_help_content">
-     Sie wandern in Richtung des rechten Spielfeldrandes. Nach der Reihe finden Sie verschieden 
-     gegossene Kanaldeckel und müssen somit den entsprechenden Edelstein erwischen. Dazu haben Sie
-     am linken Bildschirmrand Ihre verschiedenen Juwelentypen im Überblick (4 an der Zahl) - 
-     die sich in Ihrer grundlegenden Form unterscheiden. Wählen Sie den aktuell passenden Typ durch 
-     Berührung aus. 
-     Doch damit ist es nicht getan: Das Juwel fliegt nun in Richtung Erde/Kanaldeckel - muss aber noch 
-     in seiner Orientierung beeinflusst werden (Sie haben dazu spezielles Jedi-Training absolviert). 
-     Drehen Sie Ihr Device solange, bis der Stein passt. Der Stein fällt grundsätzlich langsam, wenn Sie 
-     aber überzeugt sind, dass alles passt, können Sie auch den Fall beschleunigen (Tap auf den Screen). 
-     Nach jedem geworfenen Stein wandern Sie weiter in der Hoffnung, ihr Vermögen den Kanal runterzuspülen ...
+    You walk towards the right side of the game area. From time to time you get past drains with holes in different
+    shape styles - you have to find the right gem in your inventory. Therefore you have on the left screen area
+    different kinds of gems (4 in total) - each of them different in their styles. You choose a gem by pressing it. 
+     But that is not the end of the story: Now the gem is falling towards the drain and you have to align its orientation
+     (Therefore you have successfully completed Jedi-training).     
+     Rotate your device until the gem fits. Normally the gem is falling slowly, but if you are confident you can
+     push the speed (Tap on the screen).
+     After each casted gem you keep on walking with the hope, to flush your funds into the drain ...
     </string> 
 </resources>
