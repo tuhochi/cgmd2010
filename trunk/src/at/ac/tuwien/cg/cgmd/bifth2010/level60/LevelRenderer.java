@@ -27,9 +27,6 @@ public class LevelRenderer implements Renderer {
 	
 	public LevelRenderer(Context context) {
 		this.context = context;
-		background = new Tablet(context, 500, 500, 0, 0, R.drawable.l60_town);
-		cop = new Tablet(context, 50, 50, 20, 100, R.drawable.l60_cop_front_l);
-		tablet = new Tablet(context, 50, 50, 0, 0, R.drawable.l60_bunny_front);
 	}
 	
 	public void moveObject(int x, int y) {
@@ -37,8 +34,8 @@ public class LevelRenderer implements Renderer {
 		int yPos = tablet.getY();
 		
 		if (x + xPos >= 0 && x + xPos <= screenWidth &&
-				y + yPos >= 0 && y + yPos <= screenHeight
-				&& !checkCollision(xPos,yPos,x,y))
+			y + yPos >= 0 && y + yPos <= screenHeight
+			&& !checkCollision(xPos,yPos,x,y))
 		{
 			tablet.move(x, y);
 		}
@@ -53,9 +50,9 @@ public class LevelRenderer implements Renderer {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		gl.glTranslatef(0, 0, -1.0f);
+		background.draw(gl);
 		tablet.draw(gl);
 		cop.draw(gl);
-		//background.draw(gl);
 	}
 
 	@Override
@@ -84,5 +81,10 @@ public class LevelRenderer implements Renderer {
 	    //gl.glBlendFunc(GL10.GL_ONE, GL10.GL_SRC_COLOR);
 		gl.glDepthFunc(GL10.GL_LEQUAL);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);		
+		
+		
+		background = new Tablet(context, 400, 320, 0, 0, R.drawable.l60_town_small, gl);
+		cop = new Tablet(context, 50, 50, 20, 100, R.drawable.l60_cop_front_l, gl);
+		tablet = new Tablet(context, 70, 70, 0, 0, R.drawable.l60_bunny_front, gl);
 	}
 }

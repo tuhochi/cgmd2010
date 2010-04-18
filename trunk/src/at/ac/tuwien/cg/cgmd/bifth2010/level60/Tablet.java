@@ -22,15 +22,11 @@ public class Tablet {
 		};
 	private short[] indices = { 0, 1, 2, 0, 2, 3 };
 	private float texCoords[] = {
-			///1.0f, 0.0f,
-			//0.0f, 0.0f,
-			//0.0f, 1.0f,
-			//1.0f, 1.0f
 			
-			1.0f, 0.0f,
 			0.0f, 0.0f,
 			0.0f, 1.0f,
-			1.0f, 1.0f
+			1.0f, 1.0f,
+			1.0f, 0.0f
 
 	};
 	private FloatBuffer vertexBuffer;
@@ -48,7 +44,10 @@ public class Tablet {
 	private float scale_x;
 	private float scale_y;
 	
-	public Tablet(Context context, int width, int height, int x, int y, int resource_id) {
+	Bitmap bmp;
+	ByteBuffer bb;
+	
+	public Tablet(Context context, int width, int height, int x, int y, int resource_id, GL10 gl) {
 		this.context = context;
 		
 		vertices[1] = width;
@@ -81,6 +80,11 @@ public class Tablet {
 		texCoordBuffer = tbb.asFloatBuffer();
 		texCoordBuffer.put(texCoords);
 		texCoordBuffer.position(0);
+		
+		gl.glGenTextures(1, texture);
+		
+		bmp = BitmapFactory.decodeResource(context.getResources(), resource_id);
+		bb = extract(bmp);
 	}
 	
 	public int getX() {
@@ -106,10 +110,10 @@ public class Tablet {
 	}
 	
 	public void draw(GL10 gl) {
-		gl.glGenTextures(1, texture);
+	//	gl.glGenTextures(1, texture);
 		
-		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resource_id);
-		ByteBuffer bb = extract(bmp);
+	//	Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resource_id);
+//		ByteBuffer bb = extract(bmp);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.get(0));
 		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, bmp.getWidth(), bmp.getHeight(), 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb); 
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
