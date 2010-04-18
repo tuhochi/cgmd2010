@@ -1,21 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer;
 
-import java.util.ArrayList;
-
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.GlTexture;
 
 /**
- * @author herrjohann
+ * RenderTask.
  */
 public class RenderTask implements Renderer {
 
@@ -30,7 +23,7 @@ public class RenderTask implements Renderer {
 	// -- Ctor ----
 	
 	/**
-	 * Ctor.
+	 * Create render task.
 	 * @param The game scene.
 	 */
 	public RenderTask(GameScene scene) {
@@ -52,13 +45,15 @@ public class RenderTask implements Renderer {
 		gl.glEnable(GL10.GL_CULL_FACE);
 		gl.glCullFace(GL10.GL_BACK);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		
-		/*
-		 * EDIT BY PONTOMEDON, UNCOMMENT THE FOLLOWING LINE!
-		 * 
-		 * missing resource 'l70_spritetest' caused compile error!
-		 */
-//		tex = new GlTexture(R.drawable.l70_spritetest);
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+
+		Log.i("RenderTask", "scene create");
+		scene.create();
+		Log.i("RenderTask", "after scene create");
+		synchronized(scene) {
+			scene.notify();
+		}
+		Log.i("RenderTask", "notify");
 	}
 	
 	
@@ -85,13 +80,8 @@ public class RenderTask implements Renderer {
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		
-		gl.glMatrixMode(GL10.GL_TEXTURE);
-		gl.glTranslatef(0.01f, 0, 0);
-		//gl.glLoadIdentity();
-		
+			
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		gl.glColor4f(0.8f, 0.5f, 0.0f, 1.0f);
 		synchronized(scene) {
 			try {
 				scene.wait();
@@ -99,12 +89,7 @@ public class RenderTask implements Renderer {
 			catch(InterruptedException e) {
 				
 			}
-			gl.glActiveTexture(0);
-			tex.bind();
-			ArrayList<Geometry> geoms = scene.getGeometry();
-			for (Geometry it : geoms) {
-				it.draw(gl);
-			}
+			scene.draw(gl);
 		}
 		
 		Log.i("Renderer", "onDrawFrame");

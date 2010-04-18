@@ -1,13 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import android.util.Log;
 import android.view.KeyEvent;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
+import android.view.MotionEvent;
 
+/**
+ * Update task.
+ */
 public class UpdateTask implements Runnable {
 
 	// ----------------------------------------------------------------------------------
@@ -20,7 +21,8 @@ public class UpdateTask implements Runnable {
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
-	private LinkedList<KeyEvent> inputs; //< all input events
+	private LinkedList<KeyEvent>    inputKeys; //< all key input events
+	private LinkedList<MotionEvent> inputMotions; //< all motion input events
 	private boolean isRunning;   //< true if the game is running
 	private GameScene scene;     //< Game scene
 	private boolean isLeft;      //< Left key is pressed
@@ -36,7 +38,8 @@ public class UpdateTask implements Runnable {
 	 */
 	public UpdateTask(GameScene scene) {
 		this.scene = scene;
-		inputs = new LinkedList<KeyEvent>();
+		inputKeys = new LinkedList<KeyEvent>();
+		inputMotions = new LinkedList<MotionEvent>();
 	}
 	
 	
@@ -48,6 +51,16 @@ public class UpdateTask implements Runnable {
 	 */
 	@Override
 	public void run() {
+		try {
+			synchronized(scene) {
+				Log.i("UpdateTask", "before wait");
+				scene.wait();
+			}
+		}
+		catch(InterruptedException e) {
+			
+		}
+		Log.i("UpdateTask", "after wait");
 		isRunning = true;
 		
 		float dt = 0.0f;
@@ -56,12 +69,8 @@ public class UpdateTask implements Runnable {
 		long  begTime = System.nanoTime();
 		while (isRunning) {
 			
-			synchronized(inputs) {
-				doInput();
-				inputs.notify();
-			}
-			
 			synchronized(scene) {
+				doInput();
 				update(dt);
 				scene.notify();
 			}
@@ -85,11 +94,20 @@ public class UpdateTask implements Runnable {
 	
 	
 	/**
-	 * Return list with all input events.
+	 * Return list with all key input events.
 	 * @return List with input events.
 	 */
-	public LinkedList<KeyEvent> getInputs() {
-		return inputs;
+	public LinkedList<KeyEvent> getInputKeys() {
+		return inputKeys;
+	}
+	
+	
+	/**
+	 * Return list with all motion input events.
+	 * @return List with input events.
+	 */
+	public LinkedList<MotionEvent> getInputMotions() {
+		return inputMotions;
 	}
 	
 	
@@ -100,8 +118,8 @@ public class UpdateTask implements Runnable {
 	 * Process input.
 	 */
 	private void doInput() {
-		while (!inputs.isEmpty()) {
-			KeyEvent key = inputs.remove();
+		while (!inputKeys.isEmpty()) {
+			KeyEvent key = inputKeys.remove();
 			int keycode       = key.getKeyCode();
 			boolean isPressed = key.getAction() == KeyEvent.ACTION_DOWN;
 			if (keycode == KeyEvent.KEYCODE_A) {
@@ -110,6 +128,11 @@ public class UpdateTask implements Runnable {
 			else if (keycode == KeyEvent.KEYCODE_D) {
 				isRight = isPressed;
 			}
+		}
+		
+		while (!inputMotions.isEmpty()) {
+			MotionEvent inp = inputMotions.remove();
+			scene.onClick(inp);
 		}
 	}
 	
@@ -120,18 +143,6 @@ public class UpdateTask implements Runnable {
 	 */
 	private void update(float dt) {
 		
-		ArrayList<Geometry> geoms = scene.getGeometry();
-		for (Geometry it : geoms) {
-			if (isLeft) {
-				it.pos[0] -= 0.1;
-			}
-			if (isRight) {
-				it.pos[0] += 0.1;
-			}
-			//it.pos[1] += 0.1;
-			if (it.pos[1] > 1.0) {
-				it.pos[1] = -1.0f;
-			}
-		}
+		scene.update(dt);
 	}
 }
