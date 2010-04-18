@@ -9,7 +9,6 @@ import java.nio.FloatBuffer;
 import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
@@ -19,9 +18,7 @@ public class Geometry implements Persistable
 	public static final int VERTEX_LENGTH = 3;
 	public static final int TEXCOORD_LENGTH = 2;
 	
-	private final MaterialManager materialManager = MaterialManager.instance;
 	private final OGLManager oglManager = OGLManager.instance;
-	private final Material material;
 	private final FloatBuffer vertices, normals, texcoords;
 	private final AxisAlignedBox3 boundingBox;
 	private final Sphere boundingSphere;
@@ -36,9 +33,8 @@ public class Geometry implements Persistable
 	private final int texcoordOffset;
 	private boolean initialized;
 	
-	public Geometry(Material material, FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, Sphere boundingSphere, int numVertices)
+	public Geometry(FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, Sphere boundingSphere, int numVertices)
 	{
-		this.material = material;
 		this.vertices = vertices;
 		this.normals = normals;
 		this.texcoords = texcoords;
@@ -101,8 +97,6 @@ public class Geometry implements Persistable
 					GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, texcoordOffset, nrOfTexcoordBytes, texcoords);
 			}
 			
-			material.init();
-			
 			initialized = true;
 		}
 	}
@@ -110,23 +104,18 @@ public class Geometry implements Persistable
 	void deInit()
 	{
 		initialized = false;
-		
-		material.deInit();
 	}
 	
 	public void persist(DataOutputStream dos)
 	{
-		material.persist(dos);
 	}
 	
 	public void restore(DataInputStream dis)
 	{
-		material.restore(dis);
 	}
 	
 	public void render(int rendermode)
 	{
-		materialManager.bindMaterial(material);
 		oglManager.clientState(vertices != null, normals != null, texcoords != null);
 		
 		switch(rendermode)
