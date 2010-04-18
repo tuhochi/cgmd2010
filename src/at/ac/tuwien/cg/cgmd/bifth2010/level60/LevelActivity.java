@@ -12,22 +12,22 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 
 public class LevelActivity extends Activity {
-	GLSurfaceView glv;
-	LevelRenderer lr;
+	private LevelSurfaceView glv;
+	private LevelRenderer lr;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		glv = new GLSurfaceView(this);
-		lr = new LevelRenderer(this);
-		glv.setRenderer(lr);
-		setContentView(glv);
-		return;
+        glv = new LevelSurfaceView(this);
+    	//	lr = new LevelRenderer(this);
+    	//	glv.setRenderer(lr);
+    		setContentView(glv);
+    		return;
 	}
 	
-	public boolean onTouchEvent(MotionEvent event) {
+	/**	public boolean onTouchEvent(MotionEvent event) {
 		SessionState s = new SessionState();
 		s.setProgress(1);  //set progress to score!
 		setResult(Activity.RESULT_OK, s.asIntent());
@@ -51,5 +51,32 @@ public class LevelActivity extends Activity {
 			break;
 		}
 		return super.onKeyDown(keyCode, event);
-	}
+	}*/
+	
+	SessionState state;
+	
+    @Override
+    public void onPause() {
+        super.onPause();
+        state = glv.pause();
+        setResult(Activity.RESULT_OK, state.asIntent());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        glv.resume();
+    }
+    
+	 @Override
+	    protected void onDestroy() {
+	    	super.onDestroy();
+	    	state = glv.getState();
+	    	setResult(Activity.RESULT_OK, state.asIntent());
+	    //	finish();
+	    }
+	
+    ////on finish
+	//setResult(Activity.RESULT_OK, s.asIntent());
+	//finish();
 }
