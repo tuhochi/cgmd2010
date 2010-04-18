@@ -30,6 +30,8 @@ public class ModelGem extends Model {
 		
 		private boolean visibility = false;
 		private float gemRotation = 0.0f;
+		private float startPos = -2f;
+		private float fallSpeed = 0.0f;
 		
 		/**
 		 * Creates a new quad.
@@ -98,9 +100,11 @@ public class ModelGem extends Model {
 			
 			if (visibility)
 			{
+				fallSpeed += 0.005f;
+				startPos -= fallSpeed;
 				mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
 				gl.glPushMatrix();
-				gl.glTranslatef(0, 0, -2);
+				gl.glTranslatef(0, 0, startPos);
 				gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 			}
 		}
