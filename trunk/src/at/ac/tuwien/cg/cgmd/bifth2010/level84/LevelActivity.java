@@ -52,7 +52,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 
 	private void loadModels() {
 		//add street
-		models.add(new ModelQuad(R.drawable.l00_coin));
+		models.add(new ModelStreet(R.drawable.l84_tex_street));
+		
 		//add drains
 		drain = new ModelDrain(0,2.0f);
 		models.add(drain);
