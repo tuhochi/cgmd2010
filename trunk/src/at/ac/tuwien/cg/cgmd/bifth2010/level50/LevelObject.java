@@ -13,7 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class Square {
+public class LevelObject {
 	
 
 	int tex[]=new int[6];
@@ -21,12 +21,17 @@ public class Square {
 	private static final int TEX_SIZE=100;
 	Context context;
 	
+	float x, y;
+	int width, height;
+	int id;
+	
+	
 	// Our vertices.
 	private float vertices[] = {
-		       50.0f,  50.0f, 0.0f,  // 0, Top Left
-		       50.0f, 100.0f, 0.0f,  // 1, Bottom Left
-		      100.0f, 100.0f, 0.0f,  // 2, Bottom Right
-		      100.0f,  50.0f, 0.0f  // 3, Top Right
+		       0.0f, 0.0f, 0.0f,  // 0, Top Left
+		       0.0f, 1.0f, 0.0f,  // 1, Bottom Left
+		       1.0f, 1.0f, 0.0f,  // 2, Bottom Right
+		       1.0f, 0.0f, 0.0f   // 3, Top Right
 		};
 	
 	private float texcoord[] = {
@@ -45,8 +50,13 @@ public class Square {
 	// Our index buffer.
 	private ShortBuffer indexBuffer;
 
-	public Square(GL10 gl, Context context) {
+	public LevelObject(GL10 gl, Context context, float x, float y, int width, int height, int id) {
 		this.context = context;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.id = id;
 		
 		// a float is 4 bytes, therefore we multiply the number if
 		// vertices with 4.
@@ -71,7 +81,7 @@ public class Square {
 		texcoordBuffer.position(0);
 		
 		gl.glGenTextures(1, texBuf);
-		LoadTexture(0,R.drawable.l50_rabbit_small,gl,context);
+		LoadTexture(0,id,gl,context);
 	}
 
 	/**
@@ -97,42 +107,58 @@ public class Square {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texBuf.get(0));      
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
         gl.glTexCoordPointer(2, GL10.GL_FLOAT,0, texcoordBuffer);
+        
+        gl.glPushMatrix();
+		gl.glLoadIdentity();
+		gl.glTranslatef(x, y, 0);
+		gl.glScalef((float)width, (float)height, 1.0f);
 
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_SHORT, indexBuffer);
+		
+		gl.glPopMatrix();
 
-		// Disable the vertices buffer.
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glDisable(GL10.GL_TEXTURE_2D);
 
-		// Disable face culling.
 		gl.glDisable(GL10.GL_CULL_FACE);
+	}
+	
+	void move(float x, float y) {
+		this.x += x;
+		this.y += y;
 	}
 	
 	private void LoadTexture(int num, int id, GL10 gl, Context context)
 	{
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texBuf.get(num));				
-		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), id);		
-		int pixels[]=new int[TEX_SIZE*TEX_SIZE];
-		bmp.getPixels(pixels, 0, TEX_SIZE, 0, 0, TEX_SIZE, TEX_SIZE);
-		int pix1[]=new int[TEX_SIZE*TEX_SIZE];
-		for(int i=0; i<TEX_SIZE; i++)
+		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), id);
+		
+		if (width == 0) width = bmp.getWidth();
+		if (height == 0) height = bmp.getHeight();
+		int w = bmp.getWidth();
+		int h = bmp.getHeight();
+		
+		int pixels[]=new int[w*h];
+		bmp.getPixels(pixels, 0, w, 0, 0, w, h);
+		int pix1[]=new int[w*h];
+		for(int i=0; i<w; i++)
         {
-             for(int j=0; j<TEX_SIZE; j++)
+             for(int j=0; j<h; j++)
              {
                   //correction of R and B
-                  int pix=pixels[i*TEX_SIZE+j];
+                  int pix=pixels[i*h+j];
                   int pb=(pix>>16)&0xff;
                   int pr=(pix<<16)&0x00ff0000;
                   int px1=(pix&0xff00ff00) | pr | pb;
                   //correction of rows
-                  pix1[(TEX_SIZE-i-1)*TEX_SIZE+j]=px1;
+                  pix1[(w-i-1)*h+j]=px1;
              }
         }     
 		
 		IntBuffer tbuf=IntBuffer.wrap(pix1);
 		tbuf.position(0);		
-		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, TEX_SIZE, TEX_SIZE, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, tbuf);		
+		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, w, h, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, tbuf);		
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );											
 	}
