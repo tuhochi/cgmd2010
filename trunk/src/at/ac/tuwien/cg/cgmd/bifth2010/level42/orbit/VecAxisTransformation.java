@@ -91,6 +91,7 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		dos.writeFloat(qv);
 		dos.writeFloat(qvStep);
 		dos.writeFloat(qvCurr);
+		dos.writeFloat(speed);
 		axis.persist(dos);
 		basicOrientation.persist(dos);
 	}
@@ -100,6 +101,7 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		this.qv = dis.readFloat();
 		this.qvStep = dis.readFloat();
 		this.qvCurr = dis.readFloat();
+		this.speed = dis.readFloat();
 		axis.restore(dis);
 		basicOrientation.restore(dis);
 	}
