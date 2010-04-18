@@ -66,8 +66,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 		drainList.add(drain);
 		drain = new ModelDrain(3,32.0f);
 		models.add(drain);
+		drainList.add(drain);
 		drain = new ModelDrain(4,42.0f);
 		models.add(drain);
+		drainList.add(drain);
 		
 		//add gems
 		gem1 = new ModelGem(R.drawable.l84_gem1);
@@ -102,10 +104,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 		int selectedButton = 0;
 		
 		switch(v.getId()) {
-		case R.id.l84_GemButton01: selectedButton = 1; gem1.changeVisibility(); break;
-		case R.id.l84_GemButton02: selectedButton = 2; gem2.changeVisibility();break;
-		case R.id.l84_GemButton03: selectedButton = 3; gem3.changeVisibility();break;
-		case R.id.l84_GemButton04: selectedButton = 4; gem4.changeVisibility();break;
+		case R.id.l84_GemButton01: selectedButton = 1; gem1.startFall(); break;
+		case R.id.l84_GemButton02: selectedButton = 2; gem2.startFall();break;
+		case R.id.l84_GemButton03: selectedButton = 3; gem3.startFall();break;
+		case R.id.l84_GemButton04: selectedButton = 4; gem4.startFall();break;
 //		case R.id.l84_GemButton03: selectedButton = 3; gem1.rotateLeft(); break;
 //		case R.id.l84_GemButton04: selectedButton = 4; gem1.rotateRight(); break;
 		}

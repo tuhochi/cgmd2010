@@ -34,7 +34,6 @@ public class ModelStreet extends Model {
 	private float streetSpeed = 0.05f; //speed of street translation
 	private float streetLevel = -10f; //z-pos of street
 	
-	
 	/**
 	 * Creates a new quad.
 	 */
@@ -65,6 +64,12 @@ public class ModelStreet extends Model {
 	public ModelStreet(int textureResource) {
 		this();
 		this.textureResource = textureResource;
+		this.modeltype = 0;
+	}
+	
+	public int getModeltype()
+	{
+		return this.modeltype;
 	}
 	
 	

@@ -37,6 +37,8 @@ public class Model {
 	/** Transformation matrix */
 	protected Matrix4x4 mTrans = new Matrix4x4();
 
+	protected int modeltype = -1;
+	
 	/**
 	 * Creates a new model.
 	 */
@@ -50,6 +52,12 @@ public class Model {
 	public Model(int textureResource) {
 		this();
 		this.textureResource = textureResource;
+		this.modeltype = -1;
+	}
+	
+	public int  getModeltype()
+	{
+		return this.modeltype;
 	}
 	
 	/**

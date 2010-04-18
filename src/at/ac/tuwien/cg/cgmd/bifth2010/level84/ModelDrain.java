@@ -73,8 +73,13 @@ public class ModelDrain extends Model {
 		this();
 		this.setTexture(drainstyle);
 		this.setPosition(xPos);
+		this.modeltype = 1;
 	}
 	
+	public int  getModeltype()
+	{
+		return this.modeltype;
+	}
 	/**
 	 * @param drainstyle set the texture for the different drain shapes
 	 */
@@ -114,7 +119,7 @@ public class ModelDrain extends Model {
 	
 	public float getPosition()
 	{
-		return this.xPos;
+		return drainPos;
 	}
 	
 	/**
