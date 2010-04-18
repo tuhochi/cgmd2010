@@ -49,10 +49,9 @@ public class GameView extends GLSurfaceView
 			}
 		};
 		
-		// Test sounds
-		audio.playSound(Audio.BLOCK_DROPPED_SOUND);
-		audio.playSound(Audio.BLOCK_EXPLODE_SOUND);
-		audio.playSound(Audio.BLOCK_SWAPPED_SOUND);		
+		// Play the theme song
+		audio.playSound(Audio.BUNNY_BLOCK_THEME);
+
 
 		jni = new Native(context, audio, gameEnded, updateScore);
 		

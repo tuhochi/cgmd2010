@@ -19,8 +19,11 @@ public class Native
 
 	private static final int BLOCK_DROPPED_SOUND = 0;
 	private static final int BLOCK_SWAPPED_SOUND = 1;
-	private static final int BLOCK_EXPLODE_SOUND = 2;
-	private static final int BLOCK_SOLVE_SOUND = 3;
+	private static final int BLOCK_EXPLODE_SOUND_1 = 2;
+	private static final int BLOCK_EXPLODE_SOUND_2 = 3;
+	private static final int BLOCK_EXPLODE_SOUND_3 = 4;
+	private static final int BLOCK_EXPLODE_SOUND_4 = 5;
+	private static final int BLOCK_SOLVE_SOUND = 6;
 	
 	private Audio audio;
 	private Context context;
@@ -111,8 +114,17 @@ public class Native
 			case BLOCK_SWAPPED_SOUND:
 				audio.playSound(Audio.BLOCK_SWAPPED_SOUND);
 				break;
-			case BLOCK_EXPLODE_SOUND:
-				audio.playSound(Audio.BLOCK_EXPLODE_SOUND);
+			case BLOCK_EXPLODE_SOUND_1:
+				audio.playSound(Audio.BLOCK_EXPLODE_SOUND_1);
+				break;
+			case BLOCK_EXPLODE_SOUND_2:
+				audio.playSound(Audio.BLOCK_EXPLODE_SOUND_2);
+				break;
+			case BLOCK_EXPLODE_SOUND_3:
+				audio.playSound(Audio.BLOCK_EXPLODE_SOUND_3);
+				break;
+			case BLOCK_EXPLODE_SOUND_4:
+				audio.playSound(Audio.BLOCK_EXPLODE_SOUND_4);
 				break;
 			case BLOCK_SOLVE_SOUND:
 				audio.playSound(Audio.BLOCK_SOLVE_SOUND);
