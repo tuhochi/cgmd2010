@@ -4,13 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class LevelActivity extends Activity implements OnClickListener {

@@ -13,10 +13,10 @@ public class ModelGem extends Model {
 	
 		/** Quad vertices */
 		protected float vertices[] = {
-				-qs, -qs, qs, //v0
-		    	qs, -qs, qs,  //v1
-		    	-qs, qs, qs,  //v2
-		    	qs, qs, qs,   //v3
+				-qs, -qs, 1.0f, //v0
+		    	qs, -qs, 1.0f,  //v1
+		    	-qs, qs, 1.0f,  //v2
+		    	qs, qs, 1.0f,   //v3
 		};
 		/** Quad texcoords */
 		protected float texture[] = {
@@ -30,7 +30,7 @@ public class ModelGem extends Model {
 		
 		private boolean visibility = false;
 		private float gemRotation = 0.0f;
-		private float startPos = -2f;
+		private float gemPos = -2f;
 		private float fallSpeed = 0.0f;
 		
 		/**
@@ -85,7 +85,6 @@ public class ModelGem extends Model {
 		public void rotateLeft()
 		{
 			gemRotation -= 0.5f;
-			
 		}
 		
 		public void rotateRight()
@@ -101,10 +100,10 @@ public class ModelGem extends Model {
 			if (visibility)
 			{
 				fallSpeed += 0.005f;
-				startPos -= fallSpeed;
-				mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
+				gemPos -= fallSpeed;
+				//mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
 				gl.glPushMatrix();
-				gl.glTranslatef(0, 0, startPos);
+				gl.glTranslatef(0, 0, gemPos);
 				gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 			}
 		}
