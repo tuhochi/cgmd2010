@@ -114,7 +114,7 @@ public class DirectionalMotion extends Motion
 
 	@Override
 	public void morph(Vector3 pushVec) {
-		// TODO Auto-generated method stub
+		// TODO: ablenkung
 		
 	}
 }
