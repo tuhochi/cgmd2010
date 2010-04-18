@@ -10,12 +10,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 public class ModelQuad extends Model {
 	
+	float qs = 3.0f; //quadsize
+	
 	/** Quad vertices */
 	protected float vertices[] = {
-			-1.0f, -1.0f, 1.0f, //v0
-	    	1.0f, -1.0f, 1.0f,  //v1
-	    	-1.0f, 1.0f, 1.0f,  //v2
-	    	1.0f, 1.0f, 1.0f,   //v3
+			-qs, -qs, 1.0f, //v0
+	    	qs, -qs, 1.0f,  //v1
+	    	-qs, qs, 1.0f,  //v2
+	    	qs, qs, 1.0f,   //v3
 	};
 	/** Quad texcoords */
 	protected float texture[] = {
@@ -29,6 +31,7 @@ public class ModelQuad extends Model {
 	
 	private float streetPos = 2.0f; //street position at startup
 	private float streetSpeed = 0.05f; //speed of street translation
+	private float streetLevel = -10f; //z-pos of street
 	
 	
 	/**
@@ -72,7 +75,7 @@ public class ModelQuad extends Model {
 
 		gl.glPushMatrix();
 		streetPos -= streetSpeed;
-		gl.glTranslatef(streetPos, 0, -10);
+		gl.glTranslatef(streetPos, 0, streetLevel);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 }
