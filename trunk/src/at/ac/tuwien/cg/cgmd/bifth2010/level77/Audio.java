@@ -23,10 +23,15 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 {
 	private Context context;
 	
-	public static final int BLOCK_DROPPED_SOUND = R.raw.l00_gold01;
-	public static final int BLOCK_SWAPPED_SOUND = R.raw.l00_gold02;
-	public static final int BLOCK_EXPLODE_SOUND = R.raw.l00_gold03;
-	public static final int	BLOCK_SOLVE_SOUND	= R.raw.l00_gold03;
+	public static final int BUNNY_BLOCK_THEME = R.raw.l77_bunnyblock_theme;
+	
+	public static final int BLOCK_DROPPED_SOUND = R.raw.l77_block_dropped;
+	public static final int BLOCK_SWAPPED_SOUND = R.raw.l77_block_swapped;
+	public static final int BLOCK_EXPLODE_SOUND_1 = R.raw.l77_block_explode_1;
+	public static final int BLOCK_EXPLODE_SOUND_2 = R.raw.l77_block_explode_1;
+	public static final int BLOCK_EXPLODE_SOUND_3 = R.raw.l77_block_explode_1;
+	public static final int BLOCK_EXPLODE_SOUND_4 = R.raw.l77_block_explode_1;
+	public static final int	BLOCK_SOLVE_SOUND	= R.raw.l77_block_solve;
 	
 	private static final int IDLE = 0;
 	private static final int PLAYING = 1;
@@ -43,9 +48,14 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	{
 		this.context = context;
 				
+		putMp(BUNNY_BLOCK_THEME);
 		putMp(BLOCK_DROPPED_SOUND);
-		putMp(BLOCK_EXPLODE_SOUND);
+		putMp(BLOCK_EXPLODE_SOUND_1);
+		putMp(BLOCK_EXPLODE_SOUND_2);
+		putMp(BLOCK_EXPLODE_SOUND_3);
+		putMp(BLOCK_EXPLODE_SOUND_4);
 		putMp(BLOCK_SWAPPED_SOUND);
+
 	}
 	
 	/**
