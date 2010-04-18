@@ -72,6 +72,10 @@ public class ModelStreet extends Model {
 		return this.modeltype;
 	}
 	
+	public float getStreetTranslation()
+	{
+		return streetPos;
+	}
 	
 	/**
 	 * Update the model's transformations.
