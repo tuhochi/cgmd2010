@@ -359,7 +359,7 @@
 		
 		<activity
 			android:name=".level60.LevelActivity"
-			android:screenOrientation="portrait">>
+			android:screenOrientation="landscape">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level60.LAUNCH_LEVEL"/>
 				<category android:name="android.intent.category.DEFAULT"/>
