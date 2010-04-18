@@ -463,8 +463,8 @@ public class MyHexagonGrid implements Drawable,Animatable{
 			if(map[xGrid][yGrid] == GRID_WALL)
 				map[xGrid][yGrid] = GRID_NULL;
 			else
-				//map[xGrid][yGrid] = GRID_CUSTOM_WALL;
-				map[xGrid][yGrid] = GRID_DOLLAR;
+				map[xGrid][yGrid] = GRID_CUSTOM_WALL;
+				//map[xGrid][yGrid] = GRID_DOLLAR;
 			
 			return true;
 		}
