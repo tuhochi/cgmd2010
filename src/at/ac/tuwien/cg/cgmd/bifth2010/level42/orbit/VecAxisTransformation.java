@@ -8,14 +8,35 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
+/**
+ * The Class VecAxisTransformation represents a satellite 
+ * transformation around a vector axis
+ *
+ * @author Alex Druml
+ * @author Lukas Rössler
+ */
 public class VecAxisTransformation extends SatelliteTransformation{
 
 	private float qvStep,qvCurr;
+	
+	/** The rotation angle */
 	public float qv;
+	
+	/** The transformation speed */
 	public float speed;
-	private final Matrix44 transform,basicOrientation;
+
+	/** The transformation matrix */
+	private final Matrix44 transform;
+	
+	/** The basic orientation of the object */
+	private final Matrix44 basicOrientation;
+	
+	/** The axis. */
 	public final Vector3 axis;
 
+	/**
+	 * Instantiates a new vector axis transformation
+	 */
 	public VecAxisTransformation() 
 	{
 		this.transform = new Matrix44();
@@ -23,6 +44,14 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		this.axis = new Vector3();
 	}
 	
+	/**
+	 * Instantiates a new vector axis transformation
+	 *
+	 * @param axis the axis used for the transformation
+	 * @param qv the angle 
+	 * @param speed the transformation speed
+	 * @param basicOrientation the basic orientation of the object
+	 */
 	public VecAxisTransformation(Vector3 axis, float qv, float speed, Matrix44 basicOrientation) 
 	{
 		this();
@@ -75,16 +104,25 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		basicOrientation.restore(dis);
 	}
 
+	
 	@Override
-	public Matrix44 getBasicOrientaion() {
+	public Matrix44 getBasicOrientation() {
 		return basicOrientation;
 	}
+
 	@Override
-	public void setBasicOrientaion(Matrix44 basicOrientation) {
+	public void setBasicOrientation(Matrix44 basicOrientation) {
 		this.qvCurr = 0;
 		this.basicOrientation.copy(basicOrientation);
 	}
 
+	/**
+	 * Sets a new angle for the transformation. The new angle is limited by the
+	 * given <code>ratio</code> regarding the current speed and is used to 
+	 * avoid a too high rotation speed
+	 * @param angle the new transformation angle
+	 * @param ratio the limiting ratio
+	 */
 	public void setAngle(float angle,float ratio) {
 		this.qv = angle;
 		//check the speed/rotation ratio

@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,10 +12,18 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
+/**
+ * The Class Orbit represents a elliptic motion
+ * 
+ * @author Alex Druml
+ * @author Lukas Rössler
+ */
 public class Orbit extends Motion
 {
-
-	private float 	speed,u,step,
+	
+	/** The iteration speed */
+	private float 	speed;
+	private float  	u,step,
 
 					//scale morphing
 					scalingMorphSpeed,
@@ -29,20 +36,40 @@ public class Orbit extends Motion
 					speedMorphStep,speedMorphIteration,dynamicMorphSpeed;
 
 	private boolean doCenterVecScaling,doDirectionVecScaling;
-	public final Vector3 position,
-						 entityPos,centerPos;
+	
+	/** The position on the ellipse */
+	public final Vector3 position;
+	
+	/** The entity position is equivalent to the initial position (u=0) */
+	public final Vector3 entityPos;
+	
+	/** The center position of the orbit */
+	public final Vector3 centerPos;
 					
-							//orbit morphing
-	private final Vector3 	centerVec,directionVec,
-							currtDirApproximation,tempDirectionVec,
-							refDirectionVec,refCenterVec;
+	/** Represents the vector from the initial position (u=0) to the center of the orbit (a - axis) */
+	private final Vector3 centerVec;
 
+	/** The direction vector encodes the iteration direction (cw,ccw) and the b axis */
+	private final Vector3 directionVec;
+	
+	private final Vector3 currtDirApproximation,tempDirectionVec,
+						  refDirectionVec,refCenterVec;
+
+	/** The generated transformation matrix */
 	private Matrix44 transform;
+	
+	/** The basic orientation of the object */
 	private final Matrix44  basicOrientation;
+	
+	/** The satellite transformation of the object */
 	private SatelliteTransformation satTrans;
+	
+	/** The mathematical basis of the orbit */
 	private Ellipse ellipse;
 
-	
+	/**
+	 * Instantiates a new orbit.
+	 */
 	protected Orbit()
 	{	
 		//init
@@ -62,7 +89,21 @@ public class Orbit extends Motion
 
 		u = 0;
 	}
-	
+
+	/**
+	 * Instantiates a new orbit.
+	 * 
+	 * @param entityPos
+	 *            the entity position is equivalent to the initial position (u=0)
+	 * @param centerPos
+	 *            the center position of the orbit
+	 * @param directionVec
+	 *            the direction vector encodes the iteration direction (cw,ccw) and the b axis
+	 * @param speed
+	 *            the iteration speed
+	 * @param basicOrientation
+	 *            the basic orientation of the object
+	 */
 	public Orbit(	Vector3 entityPos,Vector3 centerPos,
 					Vector3 directionVec,
 					float speed, 
@@ -86,7 +127,9 @@ public class Orbit extends Motion
 		if(basicOrientation!=null)
 			this.basicOrientation.copy(basicOrientation);
 		
-		//generate ellipse from vec
+		/**
+		 * INFO: the given vectors are used per reference!
+		 */
 		this.ellipse = new Ellipse(this.centerPos,this.centerVec,this.directionVec);
 		
 		//stepsize relative so perimeter
@@ -96,7 +139,12 @@ public class Orbit extends Motion
 		limitUniverse();
 		
 	}
-		
+	
+	/**
+	 * Iterate over the orbit
+	 * @param dt
+	 *            delta time between frames for a frame-independent motion
+	 */
 	public void update(float dt)
 	{	
 		
@@ -123,6 +171,11 @@ public class Orbit extends Motion
 //			Log.d(LevelActivity.TAG,"OUT centerVec="+centerVec.length()+" directionVec="+directionVec.length()+" speed="+speed);
 	}
 	
+	/**
+	 * Update the linear transition of the speed
+	 * @param dt
+	 *            delta time between frames for a frame-independent transition
+	 */
 	private void updateSpeedMorphing(float dt)
 	{
 		if(speed!=newSpeed)
@@ -151,6 +204,11 @@ public class Orbit extends Motion
 		}
 	}
 	
+	/**
+	 * Update the linear axis scaling
+	 * @param dt
+	 *            delta time between frames for a frame-independent transition
+	 */
 	private void updateAxisScaling(float dt)
 	{
 		//store old perimeter for the updateStepSize method
@@ -223,6 +281,9 @@ public class Orbit extends Motion
 
 	}
 	
+	/**
+	 * Evaluate the current position along the ellipse
+	 */
 	private void evaluatePos()
 	{
 		//evaluate ellipse
@@ -234,7 +295,7 @@ public class Orbit extends Motion
 		//set basic orientation
 		transform.mult(basicOrientation);
 				
-		//object transf.
+		//object transformation
 		if(satTrans!=null)
 			transform.mult(satTrans.getTransform());
 		
@@ -242,16 +303,18 @@ public class Orbit extends Motion
 		transform.addTranslate(position.x,position.y,position.z);
 	}
 
-	
-	
-	public void setSatTrans(SatelliteTransformation satTrans) {
-		this.satTrans = satTrans;
-	}
 
-	public Matrix44 getTransform() {
-		return transform;
-	}
 
+	/**
+	 * Provides a linear scaling of the orbit`s axis
+	 * 
+	 * @param aAxisFactor
+	 *            the scaling factor for the a axis - center vector (1 = no change)
+	 * @param bAxisFactor
+	 *            the scaling factor for the b axis - direction vector (1 = no change)
+	 * @param morphSpeed
+	 *            the transition speed
+	 */
 	public void morphAxisScale(float aAxisFactor,float bAxisFactor,float morphSpeed)
 	{
 		scalingMorphSpeed = morphSpeed;
@@ -267,6 +330,9 @@ public class Orbit extends Motion
 		directionDiff = 1;
 	}
 	
+	/**
+	 * Limit universe according to the limits set in the @see Config
+	 */
 	private void limitUniverse()
 	{
 		this.centerVecCap = 1;
@@ -289,7 +355,12 @@ public class Orbit extends Motion
 		}
 	}
 	
-	public void updateStepSize()
+	/**
+	 * Change the step size relative to the new perimeter
+	 * <code>oldPerimeter</code> and <code>oldStepSize</code> 
+	 * has to be set before calling this method
+	 */
+	private void updateStepSize()
 	{
 		//!!!oldPerimeter and oldStepSize has to be already set
 		
@@ -450,8 +521,18 @@ public class Orbit extends Motion
 		this.transform = transform;		
 	}
 
+
 	@Override
 	public float getSpeed() {
 		return this.speed;
+	}
+	
+
+	public void setSatTrans(SatelliteTransformation satTrans) {
+		this.satTrans = satTrans;
+	}
+
+	public Matrix44 getTransform() {
+		return transform;
 	}
 }

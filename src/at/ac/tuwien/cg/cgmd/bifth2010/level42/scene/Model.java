@@ -10,14 +10,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 //static imports
 import static android.opengl.GLES10.*;
 
-public class Model implements Moveable,Persistable
+public class Model implements Movable,Persistable
 {
 	private final MaterialManager materialManager = MaterialManager.instance;
 	

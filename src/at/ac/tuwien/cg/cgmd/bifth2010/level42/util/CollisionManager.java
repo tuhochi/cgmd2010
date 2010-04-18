@@ -9,20 +9,31 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Model;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 
+/**
+ * This Manager handles the selection and collisions between objects
+ *
+ * @author Alex Druml
+ * @author Lukas Rössler
+ */
 public class CollisionManager {
 
 	private ArrayList<SceneEntity> entityList;
 	private SceneEntity entity,nearestEntity;
 	
-	private final Vector3 p; // punkt auf der gerade
-	private final Vector3 a; // richtungsvektor der gerade
-	private final Vector3 q; // punkt der auf abstand getestet werden soll
+	/** The point on the line */
+	private final Vector3 p;
+	
+	/** The direction vector of the line */
+	private final Vector3 a;
+	
+	/** The point which distance should be evaluated */
+	private final Vector3 q;
 	
 	private final Vector3 pq;
 	private final Vector3 normalDistance;
@@ -33,11 +44,16 @@ public class CollisionManager {
 					      toCenterVecA,toCenterVecB;
 	private Motion objAMotion,objBMotion;
 	
-	private Moveable objA,objB;
+	private Movable objA,objB;
 	
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
 	
+	
+	/**
+	 * Instantiates a new collision manager.
+	 * @param scene the scene
+	 */
 	public CollisionManager(Scene scene)
 	{
 		this.entityList = scene.sceneEntities;
@@ -64,6 +80,14 @@ public class CollisionManager {
 		this.minDistance = 0;
 	}
 	
+	/**
+	 * Shoot a ray through the scene and detect nearest intersection with the 
+	 * objects
+	 *
+	 * @param origin the origin of the ray
+	 * @param direction the ray direction
+	 * @return the nearest SceneEntity intersected by the ray
+	 */
 	public SceneEntity intersectRay(Vector3 origin,Vector3 direction)
 	{
 		a.copy(direction);
@@ -109,7 +133,18 @@ public class CollisionManager {
 		
 	}
 	
-	private static boolean collisionDetected(Moveable objA, Moveable objB, float penetrationDepth, Vector3 centerDistance)
+	/**
+	 * Detect the collision between <code>objA</code> and <code>objB</code> 
+	 *
+	 * @param objA the object a
+	 * @param objB the object b
+	 * @param penetrationDepth the depth that the objects has to penetrate 
+	 * each other
+	 * @param centerDistance the vector between the center of 
+	 * the bounding spheres of each object
+	 * @return true, if there is a collision otherwise false
+	 */
+	private static boolean collisionDetected(Movable objA, Movable objB, float penetrationDepth, Vector3 centerDistance)
 	{
 		if(centerDistance == null)
 			centerDistance = new Vector3();
@@ -128,6 +163,9 @@ public class CollisionManager {
 	
 	
 	
+	/**
+	 * Do collision detection between all objects in the scene
+	 */
 	public void doCollisionDetection()
 	{
 		//for each entity
