@@ -542,6 +542,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			dos.writeBoolean(released);
 			dos.writeInt(mainCharMoveDir);
 			dos.writeFloat(balloonHeight);
+			dos.writeBoolean(gameOver);
 			
 			// remote
 			dos.writeFloat(timer.getAccFrameTimes());
@@ -587,6 +588,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			released = dis.readBoolean(); 
 			mainCharMoveDir = dis.readInt(); 
 			balloonHeight = dis.readFloat(); 
+			gameOver = dis.readBoolean();
+			
 			timer.setAccFrameTime(dis.readFloat()); 
 			hud.setMoneyButtonActive(dis.readBoolean());
 			mainChar.readFromStream(dis); 
