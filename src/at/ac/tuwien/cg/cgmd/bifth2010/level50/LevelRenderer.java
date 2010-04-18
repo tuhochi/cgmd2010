@@ -50,8 +50,8 @@ public class LevelRenderer implements Renderer {
 		//level = new LevelCollision(context, R.drawable.l50_level_collision);
 		
 		bunny = new LevelObject(gl, context, 0, 0, 50, 50, R.drawable.l50_rabbit_small);
-		new LevelObject(gl, context, 0, 0, 0, 0, R.drawable.l50_level01_colll);
-		new LevelObject(gl, context, 0, 100, 50, 50, R.drawable.l50_level01_colll);
+//		new LevelObject(gl, context, 0, 0, 0, 0, R.drawable.l50_level01_colll);
+//		new LevelObject(gl, context, 0, 100, 50, 50, R.drawable.l50_level01_colll);
 
 	}
 	
