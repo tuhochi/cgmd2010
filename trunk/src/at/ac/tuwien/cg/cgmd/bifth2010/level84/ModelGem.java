@@ -100,6 +100,7 @@ public class ModelGem extends Model {
 		public void resetPosition()
 		{
 			gemPos = gemStartpos;
+			fallSpeed = 0;
 		}
 		
 		public void startFall()
