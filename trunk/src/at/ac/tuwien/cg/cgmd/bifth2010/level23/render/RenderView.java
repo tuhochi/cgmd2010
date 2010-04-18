@@ -1,4 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
+import static android.opengl.GLES10.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -48,6 +49,12 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
     /** The instance of the RenderView to pass it around. */
 	public static RenderView instance;
     
+	public static int gameState=0;
+	
+	public static final int INTRO=0;
+	public static final int INGAME=1;
+	public static final int GAMEOVER=2;
+	
     /** Indicates if the ObstacleManager should be reset */
     private boolean isInitialized = false;
     
@@ -130,7 +137,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private boolean firstStart; 
 	
 	private CutScenes cutScenes;
-
 	
 	/**
 	 * Instantiates a new render view.
@@ -209,13 +215,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		timer.update();
 		
 		float dt = timer.getDt();
-				
-		if(!isGameOver()) 
-		{
-			balloonHeight += dt*Settings.BALLOON_SPEED;
-			mainChar.update(dt,mainCharMoveDir);
-			background.update(dt);
-		}
 		
 		accTime += dt/1000;
 		if(accTime > 0.5)
@@ -235,17 +234,30 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		fetchKeyMoveData();
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		
-		background.render();
 				
-		if(!isGameOver()) {
-			mainChar.render();
-			hud.render();
-		} else {
-			mainChar.renderGameOver(dt);
-		}
-		
-		obstacleManager.renderVisibleObstacles((int)balloonHeight);
+		System.out.println(gameState);
+		switch(gameState)
+		{
+			case INTRO:
+				if(cutScenes.renderIntroScene(dt))
+					gameState=INGAME;
+				break;
+			case INGAME:	
+				balloonHeight += dt*Settings.BALLOON_SPEED;
+				mainChar.update(dt,mainCharMoveDir);
+				background.update(dt);
+				
+				background.render();
+				obstacleManager.renderVisibleObstacles((int)balloonHeight);
+				hud.render();
+				mainChar.render();
+				break;
+			case GAMEOVER:		
+				background.render();
+				mainChar.renderGameOver(dt);
+				obstacleManager.renderVisibleObstacles((int)balloonHeight);
+				break;
+		}		
 		
 		//Log.v("Balloon Height: ", String.valueOf(balloonHeight));
 		if (firstStart) {
@@ -283,7 +295,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		mainChar.setTextureID(textureManager.getTextureId(context.getResources(), resID));
 		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		background.setTextureID(textureManager.getTextureId(context.getResources(), resID));
-	
+		resID = context.getResources().getIdentifier("l23_intro", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		cutScenes.introTexId = textureManager.getTextureId(context.getResources(), resID);
 		setGameOver(false); 
 		
 	}
@@ -489,10 +502,14 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 */
 	public void setGameOver(boolean gameOver) {
 
+		
 		this.gameOver = gameOver; 
 		
 		if(gameOver)
+		{
 			soundManager.pauseAllAudio();
+			gameState = GAMEOVER;
+		}
 		
 		mainChar.setGameOver(gameOver);	
 		background.setGameOver(gameOver); 
@@ -520,6 +537,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		cutScenes.preprocess();
 		obstacleManager.preprocess();
 		
+		
 		if(!isInitialized)
 		{	
 			hud.reset();
@@ -527,6 +545,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			obstacleManager.reset();
 			timer.resetTimers();
 			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
+			gameState = INTRO;
 			isInitialized = true;
 		}
 	}
@@ -538,6 +557,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void writeToStream(DataOutputStream dos) {
 		try {
 			// local
+			dos.writeInt(gameState);
 			dos.writeBoolean(isInitialized);
 			dos.writeBoolean(released);
 			dos.writeInt(mainCharMoveDir);
@@ -584,6 +604,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 */
 	public void readFromStream(DataInputStream dis) {
 		try {
+			gameState = dis.readInt();
 			isInitialized = dis.readBoolean();
 			released = dis.readBoolean(); 
 			mainCharMoveDir = dis.readInt(); 
