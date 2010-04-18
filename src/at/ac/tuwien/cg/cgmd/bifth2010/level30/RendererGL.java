@@ -29,7 +29,7 @@ public class RendererGL implements GLSurfaceView.Renderer {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
 				GL10.GL_NICEST);
 
-		gl.glClearColor(1.0f,0,0,1.0f);
+		gl.glClearColor(1.0f,1.0f,1.0f,1.0f);
 
 		gl.glDisable(GL10.GL_CULL_FACE);
 		gl.glShadeModel(GL10.GL_SMOOTH);
