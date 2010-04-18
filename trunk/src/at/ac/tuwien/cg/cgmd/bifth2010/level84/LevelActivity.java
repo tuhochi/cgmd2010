@@ -82,10 +82,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 		int selectedButton = 0;
 		
 		switch(v.getId()) {
-		case R.id.l84_GemButton01: selectedButton = 1; gem1.setVisible(); break;
-		case R.id.l84_GemButton02: selectedButton = 2; gem2.setVisible();break;
-		case R.id.l84_GemButton03: selectedButton = 3; gem3.setVisible();break;
-		case R.id.l84_GemButton04: selectedButton = 4; gem4.setVisible();break;
+		case R.id.l84_GemButton01: selectedButton = 1; gem1.changeVisibility(); break;
+		case R.id.l84_GemButton02: selectedButton = 2; gem2.changeVisibility();break;
+		case R.id.l84_GemButton03: selectedButton = 3; gem3.changeVisibility();break;
+		case R.id.l84_GemButton04: selectedButton = 4; gem4.changeVisibility();break;
 		}
 			
 //		Context context = getApplicationContext();

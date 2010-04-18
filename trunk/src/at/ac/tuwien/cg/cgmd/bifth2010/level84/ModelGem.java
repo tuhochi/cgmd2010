@@ -7,7 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class ModelGem extends Model {
 
-	float qs = 0.5f; //quadsize
+	float qs = 0.3f; //quadsize
 	
 		/** Quad vertices */
 		protected float vertices[] = {
@@ -18,10 +18,10 @@ public class ModelGem extends Model {
 		};
 		/** Quad texcoords */
 		protected float texture[] = {
-				0.0f, 0.0f,
-		    	0.0f, 1.0f,
-		    	1.0f, 0.0f,
-		    	1.0f, 1.0f, 
+				0.0f, 1.0f,
+		    	1.0f, 1.0f,
+		    	0.0f, 0.0f,
+		    	1.0f, 0.0f, 
 		};
 		/** Quad indices */
 		private byte indices[] = {0,1,3, 0,3,2};
@@ -72,6 +72,10 @@ public class ModelGem extends Model {
 			this.visibility = false;
 		}
 		
+		public void changeVisibility()
+		{
+			this.visibility = !this.visibility;
+		}
 		
 		public void rotateLeft()
 		{
