@@ -133,6 +133,12 @@ public class MainChar implements SceneEntity {
 		try {
 			dos.writeFloat(position.x); 
 			dos.writeFloat(position.y);
+			dos.writeBoolean(gameOver);
+			if(gameOver)
+			{
+				dos.writeFloat(gameOverAngle);
+				dos.writeFloat(gameOverScale);
+			}
 			
 		} catch (Exception e) {
 			System.out.println("Error writing to stream in MainChar.java: "+e.getMessage());
@@ -149,6 +155,12 @@ public class MainChar implements SceneEntity {
 		try {
 			position.x = dis.readFloat(); 
 			position.y = dis.readFloat(); 
+			gameOver = dis.readBoolean();
+			if(gameOver)
+			{
+				gameOverAngle = dis.readFloat();
+				gameOverScale = dis.readFloat();
+			}
 			wasRestored=true;
 			
 		} catch (Exception e) {
