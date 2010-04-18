@@ -72,7 +72,7 @@ public class ModelQuad extends Model {
 
 		gl.glPushMatrix();
 		streetPos -= streetSpeed;
-		gl.glTranslatef(streetPos, 0, -4);
+		gl.glTranslatef(streetPos, 0, -10);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 }
