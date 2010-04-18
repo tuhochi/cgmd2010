@@ -5,6 +5,8 @@ import java.nio.ByteOrder;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
+
 public class ModelGem extends Model {
 
 	float qs = 0.3f; //quadsize
@@ -27,6 +29,7 @@ public class ModelGem extends Model {
 		private byte indices[] = {0,1,3, 0,3,2};
 		
 		private boolean visibility = false;
+		private float gemRotation = 0.0f;
 		
 		/**
 		 * Creates a new quad.
@@ -79,22 +82,23 @@ public class ModelGem extends Model {
 		
 		public void rotateLeft()
 		{
-			
+			gemRotation -= 0.5f;
 			
 		}
 		
 		public void rotateRight()
 		{
-			
+			gemRotation += 0.5f;
 		}
 		
 		/**
 		 * Update the model's transformations.
 		 */
 		public void update(GL10 gl, double deltaTime) {
-			//mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
+			
 			if (visibility)
 			{
+				mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
 				gl.glPushMatrix();
 				gl.glTranslatef(0, 0, -2);
 				gl.glMultMatrixf(mTrans.toFloatArray(), 0);
