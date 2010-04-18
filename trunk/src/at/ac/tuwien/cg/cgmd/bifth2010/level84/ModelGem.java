@@ -69,8 +69,13 @@ public class ModelGem extends Model {
 			this();
 			this.textureResource = textureResource;
 			this.visibility = false;
+			this.modeltype = 2;
 		}
 		
+		public int getModeltype()
+		{
+			return this.modeltype;
+		}
 		
 		public void setVisible()
 		{
@@ -106,12 +111,13 @@ public class ModelGem extends Model {
 		public void startFall()
 		{
 			this.setVisible();
-			active = true;
+			this.active = true;
 		}
 		
 		public void endFall()
 		{
 			this.setInvisible();
+			this.active = false;
 			resetPosition();
 		}
 		
@@ -130,7 +136,7 @@ public class ModelGem extends Model {
 		 */
 		public void update(GL10 gl, double deltaTime) {
 			
-			if (visibility)
+			if (this.active)
 			{
 				if (!checkCollision())
 				{
