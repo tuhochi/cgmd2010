@@ -64,7 +64,7 @@ public class Model {
 	 * Updates the model's transformation(s).
 	 * @param deltaTime
 	 */
-	public void update(GL10 gl, double deltaTime) {
+	public void update(GL10 gl, double deltaTime, float deviceRotation) {
 		gl.glPushMatrix();
 	}
 	
@@ -79,7 +79,7 @@ public class Model {
 		
 			//Bind our only previously generated texture in this case
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
-			
+
 			//Point to our buffers
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);

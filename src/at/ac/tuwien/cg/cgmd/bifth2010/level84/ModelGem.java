@@ -134,7 +134,7 @@ public class ModelGem extends Model {
 		/**
 		 * Update the model's transformations.
 		 */
-		public void update(GL10 gl, double deltaTime) {
+		public void update(GL10 gl, double deltaTime, float deviceRotation) {
 			
 			if (this.active)
 			{
