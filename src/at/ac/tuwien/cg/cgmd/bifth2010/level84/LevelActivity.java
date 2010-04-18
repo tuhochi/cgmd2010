@@ -18,6 +18,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
 	
+	private ModelDrain drain;
+	
 	private ModelGem gem1;
 	private ModelGem gem2;
 	private ModelGem gem3;
@@ -44,10 +46,20 @@ public class LevelActivity extends Activity implements OnClickListener {
 		b4.setOnClickListener(this);
 		
 		loadModels();
+		
 	}
 
 	private void loadModels() {
-		models.add(new ModelQuad(R.drawable.l00_coin)); //add street quad
+		//add street
+		models.add(new ModelQuad(R.drawable.l00_coin));
+		//add drains
+		drain = new ModelDrain(0,2.0f);
+		models.add(drain);
+		drain = new ModelDrain(1,4.0f);
+		models.add(drain);
+		drain = new ModelDrain(2,5.0f);
+		models.add(drain);
+		
 		//add gems
 		gem1 = new ModelGem(R.drawable.l84_gem1);
 		models.add(gem1);
@@ -63,6 +75,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 		//models.add(new ModelObj(modelFile1, R.drawable.l00_coin));
 	}
 
+	
 	@Override
 	protected void onPause() {
 		super.onPause();

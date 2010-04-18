@@ -14,7 +14,6 @@ import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
