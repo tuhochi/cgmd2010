@@ -47,7 +47,7 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	public Audio (Context context)
 	{
 		this.context = context;
-				
+
 		putMp(BUNNY_BLOCK_THEME);
 		putMp(BLOCK_DROPPED_SOUND);
 		putMp(BLOCK_EXPLODE_SOUND_1);
@@ -55,7 +55,12 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 		putMp(BLOCK_EXPLODE_SOUND_3);
 		putMp(BLOCK_EXPLODE_SOUND_4);
 		putMp(BLOCK_SWAPPED_SOUND);
-
+	}
+	
+	public static void AudioTest()
+	{
+		Log.d("l77native", "audio callback!!!!");
+		//putMp(BLOCK_DROPPED_SOUND);
 	}
 	
 	/**

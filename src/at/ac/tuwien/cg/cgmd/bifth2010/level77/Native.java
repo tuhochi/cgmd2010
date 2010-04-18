@@ -16,6 +16,8 @@ public class Native
 	public native void nativeTouchesBegan(int [] touches);
 	public native void nativeTouchesMoved(int [] touches);
 	public native void nativeTouchesEnded(int [] touches);
+	// sounds
+	public native void nativeRegisterAudio(Audio a);
 
 	private static final int BLOCK_DROPPED_SOUND = 0;
 	private static final int BLOCK_SWAPPED_SOUND = 1;
@@ -53,6 +55,9 @@ public class Native
 	public void touchesBegan(float x, float y)
 	{
 		nativeTouchesBegan(singleTouch(x, y));
+		
+		Audio.AudioTest();
+		nativeRegisterAudio(audio);
 	}
 	
 	/**
