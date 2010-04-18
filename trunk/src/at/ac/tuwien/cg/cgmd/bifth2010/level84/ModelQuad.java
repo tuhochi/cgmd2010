@@ -27,6 +27,9 @@ public class ModelQuad extends Model {
 	/** Quad indices */
 	private byte indices[] = {0,1,3, 0,3,2};
 	
+	private float streetPos = 2.0f; //street position at startup
+	private float streetSpeed = 0.05f; //speed of street translation
+	
 	
 	/**
 	 * Creates a new quad.
@@ -65,10 +68,11 @@ public class ModelQuad extends Model {
 	 * Update the model's transformations.
 	 */
 	public void update(GL10 gl, double deltaTime) {
-		mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
+		//mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
 
 		gl.glPushMatrix();
-		gl.glTranslatef(0, 0, -4);
+		streetPos -= streetSpeed;
+		gl.glTranslatef(streetPos, 0, -4);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 }
