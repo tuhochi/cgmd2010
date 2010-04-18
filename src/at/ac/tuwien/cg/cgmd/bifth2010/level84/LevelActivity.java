@@ -58,12 +58,16 @@ public class LevelActivity extends Activity implements OnClickListener {
 		drain = new ModelDrain(0,2.0f);
 		models.add(drain);
 		drainList.add(drain);
-		drain = new ModelDrain(1,4.0f);
+		drain = new ModelDrain(1,12.0f);
 		models.add(drain);
 		drainList.add(drain);
-		drain = new ModelDrain(2,5.0f);
+		drain = new ModelDrain(2,22.0f);
 		models.add(drain);
 		drainList.add(drain);
+		drain = new ModelDrain(3,32.0f);
+		models.add(drain);
+		drain = new ModelDrain(4,42.0f);
+		models.add(drain);
 		
 		//add gems
 		gem1 = new ModelGem(R.drawable.l84_gem1);

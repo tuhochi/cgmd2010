@@ -10,14 +10,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 public class ModelStreet extends Model {
 	
-	float qs = 3.0f; //quadsize
+	float qh = 6.0f; //street height
+	float ql = 35.f; //street length
 	
 	/** Quad vertices */
 	protected float vertices[] = {
-			-qs, -qs, 1.0f, //v0
-	    	qs, -qs, 1.0f,  //v1
-	    	-qs, qs, 1.0f,  //v2
-	    	qs, qs, 1.0f,   //v3
+			-ql, -qh, 1.0f, //v0
+	    	ql, -qh, 1.0f,  //v1
+	    	-ql, qh, 1.0f,  //v2
+	    	ql, qh, 1.0f,   //v3
 	};
 	/** Quad texcoords */
 	protected float texture[] = {
@@ -29,7 +30,7 @@ public class ModelStreet extends Model {
 	/** Quad indices */
 	private byte indices[] = {0,1,3, 0,3,2};
 	
-	private float streetPos = 2.0f; //street position at startup
+	private float streetPos = ql; //street position at startup
 	private float streetSpeed = 0.05f; //speed of street translation
 	private float streetLevel = -10f; //z-pos of street
 	
