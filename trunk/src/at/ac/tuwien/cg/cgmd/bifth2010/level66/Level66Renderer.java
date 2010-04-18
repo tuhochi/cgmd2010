@@ -1,10 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -15,7 +10,7 @@ import android.opengl.GLU;
 public class Level66Renderer implements Renderer {
 
 	// model for testing purpose only
-	private Model testModel;
+	private PlayerAircraft testModel;
 	private Context mContext;
 	
 	// screen dimension
@@ -33,7 +28,6 @@ public class Level66Renderer implements Renderer {
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
         
-        float size = 1.0f; 
         float ratio = _width / _height;
         // perspective:
         GLU.gluLookAt(gl, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -48,7 +42,7 @@ public class Level66Renderer implements Renderer {
         gl.glEnable(GL10.GL_DEPTH_TEST);
         
 	    // define the color we want to be displayed as the "clipping wall"
-	    gl.glClearColor(0f, 0f, 0f, 1.0f);
+	    gl.glClearColor(0.235f, 0.329f, 0.408f, 1.0f);
 	    
 	    // enable the differentiation of which side may be visible 
 	    gl.glEnable(GL10.GL_CULL_FACE);
@@ -64,10 +58,12 @@ public class Level66Renderer implements Renderer {
 	    gl.glShadeModel(GL10.GL_LINE_SMOOTH);
 	    gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);
 	    
+	    
 	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 	    
-	    //load and render model
+		//load and render model
+	    //testModel = new PlayerAircraft();
 	    testModel = new Model("l66_baum.obj", mContext);
     }
 	
@@ -88,27 +84,28 @@ public class Level66Renderer implements Renderer {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
        
        // render model
+       testModel.move();
        testModel.render(gl);
     }
 	
 	public void moveRight()
 	{
-		testModel.move( 0.05f, 0.0f, 0.0f );
+		testModel.moveRight();
 	}
 	
 	public void moveLeft()
 	{
-		testModel.move( -0.05f, 0.0f, 0.0f);
+		testModel.moveLeft();
 	}
 	
 	public void moveUp()
 	{
-		testModel.move( 0.0f, 0.05f, 0.0f);
+		testModel.moveUp();
 	}
 	
 	public void moveDown()
 	{
-		testModel.move( 0.0f, -0.05f, 0.0f);
+		testModel.moveDown();
 	}
 	
 	
