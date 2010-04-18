@@ -19,10 +19,10 @@ public class ModelQuad extends Model {
 	};
 	/** Quad texcoords */
 	protected float texture[] = {
-			0.0f, 0.0f,
-	    	0.0f, 1.0f,
-	    	1.0f, 0.0f,
-	    	1.0f, 1.0f, 
+			0.0f, 1.0f,
+	    	1.0f, 1.0f,
+	    	0.0f, 0.0f,
+	    	1.0f, 0.0f
 	};
 	/** Quad indices */
 	private byte indices[] = {0,1,3, 0,3,2};
