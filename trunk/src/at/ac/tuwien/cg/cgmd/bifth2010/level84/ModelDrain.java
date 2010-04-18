@@ -45,6 +45,8 @@ public class ModelDrain extends Model {
 	private float streetSpeed = 0.05f; //speed of street translation
 	private float streetLevel = -10f; //z-pos of street
 	
+	private float drainPos = 0;
+	
 	public ModelDrain()
 	{
 		numIndices = indices.length;
@@ -110,6 +112,11 @@ public class ModelDrain extends Model {
 		this.xPos = xOffset;
 	}
 	
+	public float getPosition()
+	{
+		return this.xPos;
+	}
+	
 	/**
 	 * Update the model's transformations.
 	 */
@@ -117,7 +124,8 @@ public class ModelDrain extends Model {
 		
 		gl.glPushMatrix();
 		streetPos -= streetSpeed;
-		gl.glTranslatef(streetPos + this.xPos, 0, streetLevel);
+		drainPos = streetPos + this.xPos;
+		gl.glTranslatef(drainPos, 0, streetLevel);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 	
