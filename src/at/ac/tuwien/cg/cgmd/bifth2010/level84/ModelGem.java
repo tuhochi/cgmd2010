@@ -116,7 +116,11 @@ public class ModelGem extends Model {
 		
 		public boolean checkCollision()
 		{
-				if (gemPos <= streetLevel)	{ return true;}
+				if (gemPos <= streetLevel)
+				{
+					
+					return true;
+				}
 				else return false;
 		}
 		
