@@ -54,6 +54,7 @@ for(numMaterials)
 	ambient					float[4]		ambient color
 	diffuse					float[4]		diffuse color
 	specular				float[4]		specular color
+	emissive				float[4]		emissive color
 	ks						float			specular reflecion coefficient
 	textureFilename			String			texture filename, "" if no texture present
 }
@@ -122,7 +123,7 @@ for(numSceneEntities)
 
 public class SceneLoader
 {
-	private static final int CURRENT_VERSION = 3;
+	private static final int CURRENT_VERSION = 4;
 	private static final SceneLoader instance = new SceneLoader();
 	
 	private SceneLoader()
@@ -177,12 +178,15 @@ public class SceneLoader
 				
 				readFloatArray(temp4, dis);
 				Color4 specular = new Color4(temp4);
+				
+				readFloatArray(temp4, dis);
+				Color4 emissive = new Color4(temp4);
 			
 				float ks = dis.readFloat();
 				
 				String textureFilename = dis.readUTF();
 				
-				materials.put(name, materialManager.addMaterial(name, ambient, diffuse, specular, ks, textureFilename));
+				materials.put(name, materialManager.addMaterial(name, ambient, diffuse, specular, emissive, ks, textureFilename));
 			}
 			
 			/*
