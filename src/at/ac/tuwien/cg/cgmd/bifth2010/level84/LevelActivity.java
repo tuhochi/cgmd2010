@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -49,7 +47,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 		models.add(new ModelQuad(R.drawable.l00_coin));
 		
 		//TODO: loading obj-files
-		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l84_quad);
+		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l33_stone);
 		//models.add(new ModelObj(modelFile1, R.drawable.l00_coin));
 	}
 
