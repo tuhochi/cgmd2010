@@ -112,6 +112,44 @@ public class Matrix44 implements Persistable
 	}
 	
 	/*
+	 * Returns a new rotation matrix corresponding to a quaternion
+	 * specified by x,y,z,w
+	 */
+	public static Matrix44 fromQuaternion(float x, float y, float z, float w)
+	{
+		return new Matrix44().setFromQuaternion(x, y, z, w);
+	}
+	
+	/*
+	 * Sets this to be a rotation matrix corresponding to a quaternion
+	 * specified by x,y,z,w
+	 */
+	public Matrix44 setFromQuaternion(float x, float y, float z, float w)
+	{
+	    m[0][0] = 1.0f - 2.0f * ( y * y + z * z );
+	    m[0][1] = 2.0f * ( x * y - w * z );	
+	    m[0][2] = 2.0f * ( x * z + w * y );
+	    m[0][3] = 0.0f;
+
+	    m[1][0] = 2.0f * ( x * y + w * z );
+	    m[1][1] = 1.0f - 2.0f * ( x * x + z * z );
+	    m[1][2] = 2.0f * ( y * z - w * x );
+	    m[1][3] = 0.0f;
+	    
+	    m[2][0] = 2.0f * ( x * z - w * y );
+	    m[2][1] = 2.0f * ( y * z + w * x );
+	    m[2][2] = 1.0f - 2.0f * ( x * x + y * y );
+	    m[2][3] = 0.0f;
+
+	    m[3][0] = 0.0f;
+	    m[3][1] = 0.0f;
+	    m[3][2] = 0.0f;
+	    m[3][3] = 1.0f;
+
+	    return this;
+	}
+	
+	/*
 	 * Sets this to be a scale matrix
 	 * @return this
 	 */
@@ -143,6 +181,21 @@ public class Matrix44 implements Persistable
 		temp.setScale(sx, sy, sz).mult(this);
 		set(temp.m);
 		return this;
+	}
+	
+	public Matrix44 setScale(Vector3 scale)
+	{
+		return setScale(scale.x, scale.y, scale.z);
+	}
+	
+	public static Matrix44 getScale(Vector3 scale)
+	{
+		return getScale(scale.x, scale.y, scale.z);
+	}
+	
+	public Matrix44 addScale(Vector3 scale)
+	{
+		return addScale(scale.x, scale.y, scale.z);
 	}
 
 	/*
