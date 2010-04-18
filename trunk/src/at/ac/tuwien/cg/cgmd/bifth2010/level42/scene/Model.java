@@ -11,6 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Moveable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 //static imports
@@ -18,10 +19,13 @@ import static android.opengl.GLES10.*;
 
 public class Model implements Moveable,Persistable
 {
+	private final MaterialManager materialManager = MaterialManager.instance;
+	
 	private Matrix44 transformation;
 	private Matrix44 transformation_temp;
 	private final Matrix44 basicOrientation;
 	private final ArrayList<Geometry> geometries;
+	private final ArrayList<Material> materials;
 	private final AxisAlignedBox3 boundingBox;
 	protected final Sphere boundingSphere;
 	private final Sphere boundingSphereWorld;
@@ -33,10 +37,28 @@ public class Model implements Moveable,Persistable
 		transformation = new Matrix44();
 		basicOrientation = new Matrix44();
 		geometries = new ArrayList<Geometry>();
+		materials = new ArrayList<Material>();
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
 		initialized = false;
+	}
+	
+	public Model(Model other)
+	{
+		geometries = new ArrayList<Geometry>();
+		materials = new ArrayList<Material>();
+		basicOrientation = new Matrix44();
+		transformation = new Matrix44(other.transformation);
+		boundingBox = new AxisAlignedBox3(other.boundingBox);
+		boundingSphere = new Sphere(other.boundingSphere);
+		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
+		int numGeoms = other.geometries.size();
+		for(int i=0; i<numGeoms; i++)
+		{
+			geometries.add(other.geometries.get(i));
+			materials.add(other.materials.get(i));
+		}
 	}
 	
 	void init()
@@ -46,7 +68,10 @@ public class Model implements Moveable,Persistable
 			ArrayList<Geometry> geometries = this.geometries;
 			int size = geometries.size();
 			for(int i=0; i<size; i++)
+			{
 				geometries.get(i).init();
+				materials.get(i).init();
+			}
 			
 			initialized = true;
 		}
@@ -59,7 +84,10 @@ public class Model implements Moveable,Persistable
 		ArrayList<Geometry> geometries = this.geometries;
 		int size = geometries.size();
 		for(int i=0; i<size; i++)
+		{
 			geometries.get(i).deInit();
+			materials.get(i).deInit();
+		}
 	}
 	
 	public void persist(DataOutputStream dos) throws IOException
@@ -67,7 +95,10 @@ public class Model implements Moveable,Persistable
 		ArrayList<Geometry> geometries = this.geometries;
 		int size = geometries.size();
 		for(int i=0; i<size; i++)
+		{
 			geometries.get(i).persist(dos);
+			materials.get(i).persist(dos);
+		}
 		transformation.persist(dos);
 		
 		if(motion != null)
@@ -86,7 +117,10 @@ public class Model implements Moveable,Persistable
 		ArrayList<Geometry> geometries = this.geometries;
 		int size = geometries.size();
 		for(int i=0; i<size; i++)
+		{
 			geometries.get(i).restore(dis);
+			materials.get(i).restore(dis);
+		}
 		transformation_temp.restore(dis);
 		if(dis.readBoolean())
 		{
@@ -98,26 +132,16 @@ public class Model implements Moveable,Persistable
 			motion = null;
 	}
 	
-	public Model(Model other)
-	{
-		geometries = new ArrayList<Geometry>();
-		basicOrientation = new Matrix44();
-		transformation = new Matrix44(other.transformation);
-		boundingBox = new AxisAlignedBox3(other.boundingBox);
-		boundingSphere = new Sphere(other.boundingSphere);
-		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
-		int numGeoms = other.geometries.size();
-		for(int i=0; i<numGeoms; i++)
-			geometries.add(other.geometries.get(i));
-	}
-	
 	public void render(int rendermode)
 	{
 		glPushMatrix();
 		glMultMatrixf(transformation.getArray16(), 0);
 		int numGeoms = geometries.size();
 		for(int i=0; i<numGeoms; i++)
+		{
+			materialManager.bindMaterial(materials.get(i));
 			geometries.get(i).render(rendermode);
+		}
 		glPopMatrix();
 	}
 	
@@ -151,9 +175,10 @@ public class Model implements Moveable,Persistable
 		this.transformation_temp = transformation;
 	}
 	
-	public void add(Geometry geometry)
+	public void add(Geometry geometry, Material material)
 	{
 		geometries.add(geometry);
+		materials.add(material);
 		boundingBox.include(geometry.getBoundingBox());
 		boundingSphere.include(geometry.getBoundingSphere());
 	}

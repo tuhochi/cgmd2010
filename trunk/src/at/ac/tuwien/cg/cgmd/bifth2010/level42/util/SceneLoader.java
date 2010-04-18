@@ -31,9 +31,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 #		optional textureFilename; identified by a name
 #	- Geometry
 #		A Geometry is a set of Vertices (forming Triangles), along with their normals
-#		and (optionally) their texcoords. Each Geometry has a Material and is identified by a name
+#		and (optionally) their texcoords. Each Geometry is identified by a name
 #	- Model
-#		A Model is a set of Geometries, identified by a name
+#		A Model is a set of Geometries, identified by a name, each having it's own Material
 #	- SceneEntity
 #		A SceneEntity is a set of Models, each having it's own Transformation Matrix. Furthermore
 #		the SceneEntity as whole has a Transformation Matrix as well, and is identified by a name
@@ -66,7 +66,6 @@ numGeometries				int				Number of Geometries in this file
 for(numGeometries)
 {
 	geometryName			String			Name of this Geometry (must be unique)
-	materialName			String			Material of this Geometry
 	boundingBoxMin			float[3]		Minimum Point of the bounding box
 	boundingBoxMax			float[3]		Maximum Point of the bounding box
 	boundingSphereCenter	float[3]		Center of the bounding sphere
@@ -101,6 +100,7 @@ for(numModels)
 	for(numGeoms)
 	{
 		geometry			String			A Geometry, identified by its name
+		materialName		String			Material of this Geometry
 	}
 }
 
@@ -123,7 +123,7 @@ for(numSceneEntities)
 
 public class SceneLoader
 {
-	private static final int CURRENT_VERSION = 4;
+	private static final int CURRENT_VERSION = 5;
 	private static final SceneLoader instance = new SceneLoader();
 	
 	private SceneLoader()
@@ -197,11 +197,6 @@ public class SceneLoader
 			{
 				String name = dis.readUTF();
 				
-				String materialName = dis.readUTF();
-				Material m = materials.get(materialName);
-				if(m==null)
-					throw new IOException("Geometry " + name + " specifies an invalid Material " + materialName);
-				
 				readFloatArray(temp3, dis);
 				Vector3 boundingBoxMin = new Vector3(temp3);
 				readFloatArray(temp3, dis);
@@ -228,7 +223,7 @@ public class SceneLoader
 					texcoords = new float[numVertices*2];
 					readFloatArray(texcoords, dis);
 				}
-				geometries.put(name, new Geometry(m, arrayToBuffer(vertices), arrayToBuffer(normals), arrayToBuffer(texcoords), boundingBox, boundingSphere, numVertices));
+				geometries.put(name, new Geometry(arrayToBuffer(vertices), arrayToBuffer(normals), arrayToBuffer(texcoords), boundingBox, boundingSphere, numVertices));
 			}
 			
 			/*
@@ -248,7 +243,13 @@ public class SceneLoader
 					Geometry geometry = geometries.get(geometryName);
 					if(geometry == null)
 						throw new IOException("Model " + name + " specifies an invalid Geometry " + geometryName);
-					m.add(geometry);
+					
+					String materialName = dis.readUTF();
+					Material mat = materials.get(materialName);
+					if(mat==null)
+						throw new IOException("Model " + name + " specifies an invalid Material " + materialName);
+					
+					m.add(geometry, mat);
 				}
 				
 				models.put(name, m);
