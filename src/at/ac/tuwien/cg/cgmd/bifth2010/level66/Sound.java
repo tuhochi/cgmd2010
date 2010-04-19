@@ -1,48 +1,56 @@
+/**
+ * Flight66 - a trip to hell
+ * 
+ * @author brm, dwi
+ * 
+ */
 package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.media.MediaPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class Sound {
 	private static SoundPool sounds;
 	private static int aviator;
-	private static MediaPlayer music;
-	private static boolean sound = false;
+	private static float sound_volume= 1.0f;
+	private static int max_streams=1;
+	private static boolean sound_active = false;
 	
 	public static void loadSound(Context context) {
-	    //sound = SilhouPreferences.sound(context); // should there be sound?
-	    sounds = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+	    sounds = new SoundPool(max_streams, AudioManager.STREAM_MUSIC, 0);
 	    
-	    aviator = sounds.load(context, R.raw.l66_starting, 1);
-	    
-	    //music = MediaPlayer.create(context, R.raw.silhouette2);
+	    // load all sounds needed | param 1 has no effect maybe in future android versions
+	    aviator = sounds.load(context, R.raw.l66_proper, 1);
+		
+	    // check the volume of the system
+		AudioManager mgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		sound_volume = (float)mgr.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+		// check if sound is activated
+		SharedPreferences settings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
+		sound_active = settings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
 	}
 	
-	public static void playSelect() {
-	    //if (!sound) return; // if sound is turned off no need to continue
-	    sounds.play(aviator, 1, 1, 1, 0, 1);
+	public static void playSound(float playback_rate) {
+		//playback_rate means the playback speed 2.0 twice as fast
+	    if (!sound_active) return; // if sound is turned off no need to continue
+	    sounds.play(aviator, sound_volume, sound_volume, 1, -1, playback_rate);
 	}
 	
-	public static final void playMusic() {
-	    if (!sound) return;
-	    if (!music.isPlaying()) {
-	    music.seekTo(0);
-	    music.start();
-	    }
+	public static void resumeSound() {
+	    if (!sound_active) return; // if sound is turned off no need to continue
+	    sounds.resume(aviator);
 	}
 	
-	public static final void pauseMusic() {
-	    if (!sound) return;
-	    if (music.isPlaying()) music.pause();
+	public static void pauseSound() {
+	    if (!sound_active) return; // if sound is turned off no need to continue
+	    sounds.pause(aviator);
 	}
 	
-	public static final void release() {
-	    if (!sound) return;
+	public static void destroySound() {
 	    sounds.release();
-	    music.stop();
-	    music.release();
 	}
 }
