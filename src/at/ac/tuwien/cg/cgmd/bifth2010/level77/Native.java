@@ -43,6 +43,10 @@ public class Native
 		this.context = context;
 		this.callbackGameEnded = gameEnded;
 		this.callbackUpdateScore = updateScore;
+		
+		
+		//Audio.AudioTest();
+		audio.registerNativeCall();
 	}
 	
 	/**
@@ -53,10 +57,6 @@ public class Native
 	public void touchesBegan(float x, float y)
 	{
 		nativeTouchesBegan(singleTouch(x, y));
-		
-		//Audio.AudioTest();
-		audio.AudioCaller();
-
 	}
 	
 	/**
