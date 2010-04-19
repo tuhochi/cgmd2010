@@ -112,8 +112,8 @@ public abstract class Tower extends GLObject {
 	
 	
 	public Projectile getProjectile(){
-		if (mFlyingProjectiles.isEmpty()) System.out.println("EEEEEEEEEEEEEK!!!");
-		return mFlyingProjectiles.element(); //achtung, kann null zurückgeben
+		if (mFlyingProjectiles.isEmpty()) return null;
+		else return mFlyingProjectiles.element(); //achtung, kann null zurückgeben
 	}
 	
 

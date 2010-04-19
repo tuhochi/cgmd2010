@@ -16,7 +16,7 @@ public class BasicTower extends Tower {
 	}
 	
 	
-	public void initProjectiles( float speed, int dmg, float interval ){
+	public void initProjectiles( float speed, short dmg, float interval ){
 		mProjectiles = new BasicProjectile[ Definitions.BASIC_PROJECTILE_POOL ];
 		mShootingInterval = interval;
 		for( int i = 0; i < mProjectiles.length; i++){

@@ -16,7 +16,7 @@ public abstract class GLObject {
 	protected float mX = 0;
 	protected float mSpeed = 0;  //pixel/sec
 	private boolean mActive = false;
-	private float mCollisionPointX = -1;
+	protected float mCollisionPointX = -1;
 	
 	
 	public void draw( GL10 gl ){
@@ -53,12 +53,11 @@ public abstract class GLObject {
 	}
 	
 	public float distanceX( float x ){
-		return x-mX; //bei -? achtung!
+		return x- this.getX(); //bei -? achtung!
 	}
 	
 	public float collideX( GLObject obj ){
 		float d = this.distanceX( obj.getX() );
-		if((int)d == 0) Log.d("COL", "COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		if (mSpeed == 0 ) return mX; //nicht bewegendes Object, Kollisionspunkt immer da wo es steht
 		float sec = d / mSpeed;
 		float sec2 = sec * 0.5f;

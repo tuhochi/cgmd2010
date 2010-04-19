@@ -36,6 +36,7 @@ public class MoneyCarrier extends GLObject {
 
 	public void deactivate(){
 		super.setActiveState(false);
+		mCollisionPointX = -1;
 	}
 	
 	public void init(float xCentr, float yCentr, int type){
@@ -122,8 +123,16 @@ public class MoneyCarrier extends GLObject {
 		
 		//calculate actual position
 		mX = mStartPos + mMovePos;
-		//Log.d("CARRIER", "x = " + mX);
-		
+		//do collision damage!
+		if( mMovePos <= mCollisionPointX && mCollisionPointX != -1 ){
+			mHp -= mDamageAtCollisionPoint;
+			System.out.println("Damage done at Carrier!");
+			mCollisionPointX = -1;
+		}
+		if( mHp <= 0 ){
+			this.deactivate();
+			System.out.println("Carrier Destroyed!");
+		}
 	}
 	
 	

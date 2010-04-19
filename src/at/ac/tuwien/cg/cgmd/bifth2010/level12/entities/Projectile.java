@@ -9,10 +9,10 @@ import java.nio.ByteOrder;
 public abstract class Projectile extends GLObject{
 	
 	private double mLastFrametime = -1;
-	private float mDmg = 0.0f;
+	private short mDmg = 10;
 	private float mXTranslate = -1.0f;
 	
-	public Projectile( float speed, float dmg ){
+	public Projectile( float speed, short dmg ){
 		mSpeed = speed;
 		mDmg = dmg;
 		mColor[0] = 1.0f;
@@ -70,11 +70,23 @@ public abstract class Projectile extends GLObject{
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
 		super.draw(gl);
 		gl.glPopMatrix();
+		if( mCollisionPointX <= mXTranslate && mCollisionPointX > -1 ) this.reset();
 	}
 	
 	@Override
 	public float getX(){
 		return mXTranslate; //returns the bullet real position because it gets translatet und not moved
+	}
+
+
+	public short getDamage() {
+		return mDmg;
+	}
+	
+	private void reset(){
+		mXTranslate = 0.0f;
+		this.setActiveState(false);
+		mCollisionPointX = -1;
 	}
 	
 }
