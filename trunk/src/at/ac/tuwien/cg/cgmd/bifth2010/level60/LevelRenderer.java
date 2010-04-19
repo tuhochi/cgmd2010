@@ -80,7 +80,7 @@ public class LevelRenderer implements Renderer {
 					block = manager.getGameObject("streetHor");
 					break;
 					case 2: 
-					block = manager.getGameObject("streetVerr");
+					block = manager.getGameObject("streetVer");
 					break;
 					case 3:
 					block = manager.getGameObject("intersection");
