@@ -25,10 +25,19 @@ public class MyTexture {
 		this.resourceId = id;
 	}
 	
+	/**
+	 * Creates a new Texture from the assets with the filename.
+	 * @param file
+	 */
 	public MyTexture(String file){
 		this.file = file;
 	}
 	
+	/**
+	 * Loads a bitmap into opengl.
+	 * @param file - bitmap
+	 * @param gl
+	 */
 	public void loadTexture(Bitmap file, GL10 gl){
 		
 		int[] num = new int[1];
@@ -63,7 +72,10 @@ public class MyTexture {
 	}
 	
 
-	
+	/**
+	 * Deletes the texture from the opengl context.
+	 * @param gl
+	 */
 	public void Dispose(GL10 gl) {
 		int[] num = {handle};
 		

@@ -39,6 +39,12 @@ public class MyWaypoint {
 	public int x,y;
 	public boolean endpoint;
 
+	/**
+	 * Creates a new waypoint.
+	 * @param x - x map coordinate 
+	 * @param y - y map coordinate
+	 * @param endpoint - true if walkable, false otherwise
+	 */
 	public MyWaypoint(int x, int y, boolean endpoint) {
 		this.x = x;
 		this.y = y;
