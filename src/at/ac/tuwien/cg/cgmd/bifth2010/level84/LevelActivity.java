@@ -13,29 +13,30 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class LevelActivity extends Activity implements OnClickListener {
 
-	private List<Model> models;
-	private List<ModelDrain> drainList; //list for collision detection
+	private ModelStreet street;
+	private List<ModelDrain> drains;
+	private List<Model> gems;
+	
+	private ModelGem gemRound;
+	private ModelGem gemDiamond;
+	private ModelGem gemRect;
+	private ModelGem gemOct;
 	
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
 	
-	private ModelStreet street;
-	private ModelDrain drain;
-	
-	private ModelGem gem1;
-	private ModelGem gem2;
-	private ModelGem gem3;
-	private ModelGem gem4;
-	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l84_level);
-		models = new LinkedList<Model>();
-		drainList = new LinkedList<ModelDrain>();
+		
+		drains = new LinkedList<ModelDrain>();
+		gems = new LinkedList<Model>();
+		loadModels();
+		
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
-		renderManager = new RenderManager(this, models, drainList, accelerometer);
+		renderManager = new RenderManager(this, street, gems, accelerometer);
 		
 		openglview.setRenderer(renderManager);
 		
@@ -47,42 +48,29 @@ public class LevelActivity extends Activity implements OnClickListener {
 		b3.setOnClickListener(this);
 		ImageButton b4 = (ImageButton) findViewById(R.id.l84_GemButton04);
 		b4.setOnClickListener(this);
-		
-		loadModels();
-		
 	}
 
 	private void loadModels() {
-		//add street
-		street = new ModelStreet(60.0f, R.drawable.l84_tex_street);
-		models.add(street);
 		
-		//add drains
-		drain = new ModelDrain(0,2.0f);
-		models.add(drain);
-		drainList.add(drain);
-		drain = new ModelDrain(1,12.0f);
-		models.add(drain);
-		drainList.add(drain);
-		drain = new ModelDrain(2,22.0f);
-		models.add(drain);
-		drainList.add(drain);
-		drain = new ModelDrain(3,32.0f);
-		models.add(drain);
-		drainList.add(drain);
-		drain = new ModelDrain(4,42.0f);
-		models.add(drain);
-		drainList.add(drain);
+		//Create drains
+		drains.add(new ModelDrain(0,2.0f));
+		drains.add(new ModelDrain(1,12.0f));
+		drains.add(new ModelDrain(2,22.0f));
+		drains.add(new ModelDrain(3,32.0f));
+		drains.add(new ModelDrain(4,42.0f));
 		
-		//add gems
-		gem1 = new ModelGem(R.drawable.l84_gem1);
-		models.add(gem1);
-		gem2 = new ModelGem(R.drawable.l84_gem2);
-		models.add(gem2);
-		gem3 = new ModelGem(R.drawable.l84_gem3);
-		models.add(gem3);
-		gem4 = new ModelGem(R.drawable.l84_gem4);
-		models.add(gem4);
+		//Create street
+		street = new ModelStreet(60.0f, 9.0f, R.drawable.l84_tex_street, drains);
+		
+		//Create gems
+		gemRound = new ModelGem(R.drawable.l84_gem_round);
+		gems.add(gemRound);
+		gemDiamond = new ModelGem(R.drawable.l84_gem_diamond);
+		gems.add(gemDiamond);
+		gemRect = new ModelGem(R.drawable.l84_gem_rect);
+		gems.add(gemRect);
+		gemOct = new ModelGem(R.drawable.l84_gem_oct);
+		gems.add(gemOct);
 		
 		//TODO: loading obj-files
 		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l33_stone);
@@ -104,30 +92,11 @@ public class LevelActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		int selectedButton = 0;
-		
 		switch(v.getId()) {
-		case R.id.l84_GemButton01: selectedButton = 1; gem1.startFall(); break;
-		case R.id.l84_GemButton02: selectedButton = 2; gem2.startFall();break;
-		case R.id.l84_GemButton03: selectedButton = 3; gem3.startFall();break;
-		case R.id.l84_GemButton04: selectedButton = 4; gem4.startFall();break;
-//		case R.id.l84_GemButton03: selectedButton = 3; gem1.rotateLeft(); break;
-//		case R.id.l84_GemButton04: selectedButton = 4; gem1.rotateRight(); break;
+		case R.id.l84_GemButton01: gemRound.startFall(); break;
+		case R.id.l84_GemButton02: gemDiamond.startFall(); break;
+		case R.id.l84_GemButton03: gemRect.startFall(); break;
+		case R.id.l84_GemButton04: gemOct.startFall(); break;
 		}
-			
-//		Context context = getApplicationContext();
-//		CharSequence text = "You pressed Button #" + selectedButton;
-//		int duration = Toast.LENGTH_SHORT;
-//
-//		Toast toast = Toast.makeText(context, text, duration);
-//		toast.show();
-	}
-
-	public void setModels(List<Model> models) {
-		this.models = models;
-	}
-
-	public List<Model> getModels() {
-		return models;
 	}
 }

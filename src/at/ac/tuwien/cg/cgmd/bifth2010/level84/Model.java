@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -36,8 +37,27 @@ public class Model {
 	
 	/** Transformation matrix */
 	protected Matrix4x4 mTrans = new Matrix4x4();
+	/** Rotation angle of the device in degrees */
+	protected float deviceRotation;
+	/** Delta time between the current and the last frame */
+	protected double deltaTime;
 
-	protected int modeltype = -1;
+	/** Quad vertices */
+	protected float vertices[] = {
+		-1.0f, -1.0f, 1.0f,
+		 1.0f, -1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,
+	};
+	/** Quad texcoords */
+	protected float texture[] = {
+		0.0f, 1.0f,
+	    1.0f, 1.0f,
+	    0.0f, 0.0f,
+	    1.0f, 0.0f
+	};
+	/** Quad indices */
+	protected byte indices[] = {0,1,3, 0,3,2};
 	
 	/**
 	 * Creates a new model.
@@ -52,20 +72,38 @@ public class Model {
 	public Model(int textureResource) {
 		this();
 		this.textureResource = textureResource;
-		this.modeltype = -1;
 	}
 	
-	public int  getModeltype()
-	{
-		return this.modeltype;
+	/**
+	 * Fills vertex/texture/index-buffers.
+	 */
+	protected void fillBuffers() {
+		numIndices = indices.length;
+		
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		vertexBuffer = byteBuf.asFloatBuffer();
+		vertexBuffer.put(vertices);
+		vertexBuffer.position(0);
+
+		byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		textureBuffer = byteBuf.asFloatBuffer();
+		textureBuffer.put(texture);
+		textureBuffer.position(0);
+
+		indexBuffer = ByteBuffer.allocateDirect(indices.length);
+		indexBuffer.put(indices);
+		indexBuffer.position(0);
 	}
-	
+
 	/**
 	 * Updates the model's transformation(s).
 	 * @param deltaTime
 	 */
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
-		gl.glPushMatrix();
+		this.deltaTime = deltaTime;
+		this.deviceRotation = deviceRotation;
 	}
 	
 	/**
@@ -73,8 +111,7 @@ public class Model {
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
-		//Log.i("Draw","drawing model");
-		
+
 		if (vertexBuffer != null && indexBuffer != null && numIndices > 0) {
 		
 			//Bind our only previously generated texture in this case
@@ -98,8 +135,6 @@ public class Model {
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		}
-		
-		gl.glPopMatrix();
 	}
 	
 	/**
@@ -109,8 +144,8 @@ public class Model {
 	 * @param context - The Activity context
 	 */
 	public void loadGLTexture(GL10 gl, Context context) {
-		if (textureResource != -1) {
-			
+		
+		if (textureResource != -1) {			
 			//Get the texture from the Android resource directory
 			InputStream is = context.getResources().openRawResource(textureResource);
 			Bitmap bitmap = null;

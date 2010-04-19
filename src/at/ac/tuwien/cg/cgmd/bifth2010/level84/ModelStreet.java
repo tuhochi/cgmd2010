@@ -1,70 +1,52 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
+import android.content.Context;
 
 public class ModelStreet extends Model {
 	
-	float length = 9f; //length along the x-axis.
+	float width;
+	float height;
 	
-	/** Quad vertices */
-	protected float vertices[] = {
-			-length, -length, 1.0f, //v0
-			length, -length, 1.0f,  //v1
-	    	-length, length, 1.0f,  //v2
-	    	length, length, 1.0f,   //v3
-	};
-	/** Quad texcoords */
-	protected float texture[] = {
-			0.0f, 1.0f,
-	    	1.0f, 1.0f,
-	    	0.0f, 0.0f,
-	    	1.0f, 0.0f
-	};
-	/** Quad indices */
-	private byte indices[] = {0,1,3, 0,3,2};
+	List<ModelDrain> drains;
 	
-	private float streetPos = 0f; //street position at startup
-	private float streetSpeed = 0.05f; //speed of street translation
-	private float streetLevel = -10f; //z-pos of street
+	private float streetPos; //street position at startup
+	private float streetSpeed = 10f; //speed of street translation
+	private float streetLevel = -10f; //z-position of street
 	
 	/**
-	 * Creates a new quad.
+	 * Creates a new street.
+	 * @param width The street's length
+	 * @param textureResource The street's texture
+	 * @param drains List containing all drains
 	 */
-	public ModelStreet() {
-		fillBuffers();
-	}
-	
-	/**
-	 * Creates a new quad with an initial texture resource.
-	 * @param textureResource
-	 */
-	public ModelStreet(float length, int textureResource) {
-		this.length = length;
+	public ModelStreet(float width, float height, int textureResource, List<ModelDrain> drains) {
+		this.width = width;
+		this.height = height;
 		this.textureResource = textureResource;
+		this.drains = drains;
 		
-		vertices[0] = vertices[6] = -length/2.0f;
-		vertices[3] = vertices[9] = length/2.0f;
+		//Adjust the width of Model's quad.
+		vertices[0] = vertices[6] = -width/2.0f;
+		vertices[3] = vertices[9] = width/2.0f;
 		
-		texture[2] = texture[6] = length / 20f;
+		//Adjust the height of Model's quad.
+		vertices[1] = vertices[4] = -height/2.0f;
+		vertices[7] = vertices[10] = height/2.0f;
 		
-		streetPos = length / 2.0f;
+		//Adjust the texture coordinates of Model's quad.
+		texture[2] = texture[6] = width / height;
+		
+		streetPos = width / 2.0f;
 		
 		fillBuffers();
 	}
 	
-	public int getModeltype()
-	{
-		return this.modeltype;
-	}
-	
-	public float getStreetTranslation()
-	{
+	public float getStreetTranslation() {
 		return streetPos;
 	}
 	
@@ -74,30 +56,34 @@ public class ModelStreet extends Model {
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
 		//mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
 		streetPos -= streetSpeed;
-		
-		gl.glPushMatrix();
-		gl.glRotatef(deviceRotation, 0, 0, 1);
-		gl.glTranslatef(-streetPos, 0, streetLevel);
-		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 	}
 	
-	private void fillBuffers() {
-		numIndices = indices.length;
+	public void draw(GL10 gl) {
+		gl.glPushMatrix();
+		gl.glRotatef(deviceRotation, 0, 0, 1);
+		gl.glTranslatef((float)(-streetPos * deltaTime), 0, streetLevel);
+		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
-
-		byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
-
-		indexBuffer = ByteBuffer.allocateDirect(indices.length);
-		indexBuffer.put(indices);
-		indexBuffer.position(0);
+		super.draw(gl);
+		
+		ListIterator<ModelDrain> i = drains.listIterator();
+		while(i.hasNext()) {
+			ModelDrain drain = i.next();
+		
+			gl.glPushMatrix();
+			gl.glTranslatef(drain.getPosition(), 0, 0);
+			drain.draw(gl);
+			gl.glPopMatrix();
+		}
+		
+		gl.glPopMatrix();
+	}
+	
+	public void loadGLTexture(GL10 gl, Context context) {
+		super.loadGLTexture(gl, context);
+		
+		ListIterator<ModelDrain> i = drains.listIterator();
+		while(i.hasNext())
+			i.next().loadGLTexture(gl, context);
 	}
 }

@@ -13,24 +13,7 @@ public class ModelDrain extends Model {
 	 * drain main class
 	 */
 
-	private float qs = 0.5f;
-	
-	/** Quad vertices */
-	protected float vertices[] = {
-			-qs, -qs, 1.0f, //v0
-	    	qs, -qs, 1.0f,  //v1
-	    	-qs, qs, 1.0f,  //v2
-	    	qs, qs, 1.0f,   //v3
-	};
-	/** Quad texcoords */
-	protected float texture[] = {
-			0.0f, 1.0f,
-	    	1.0f, 1.0f,
-	    	0.0f, 0.0f,
-	    	1.0f, 0.0f, 
-	};
-	/** Quad indices */
-	private byte indices[] = {0,1,3, 0,3,2};
+	private float width = 0.5f;
 	
 	private int texture_drain0 = R.drawable.l00_coin; //drain with no holes
 	private int texture_drain1 = R.drawable.l00_coin; //drain for gem1
@@ -38,41 +21,24 @@ public class ModelDrain extends Model {
 	private int texture_drain3 = R.drawable.l00_coin; //drain for gem3
 	private int texture_drain4 = R.drawable.l00_coin; //drain for gem4
 	
-	private float xPos = 0;
 	private float orientation = 0;
 	
-	private float streetPos = 2.0f; //street position at startup
-	private float streetSpeed = 0.05f; //speed of street translation
-	private float streetLevel = -10f; //z-pos of street
+	private float pos;
 	
-	private float drainPos = 0;
-	
-	public ModelDrain()
+	public ModelDrain(int drainstyle, float pos)
 	{
-		numIndices = indices.length;
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
-
-		byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
-
-		indexBuffer = ByteBuffer.allocateDirect(indices.length);
-		indexBuffer.put(indices);
-		indexBuffer.position(0);
-	}
-	
-	public ModelDrain(int drainstyle, float xPos)
-	{
-		this();
 		this.setTexture(drainstyle);
-		this.setPosition(xPos);
+		this.setPosition(pos);
+		
+		//Adjust the width of Model's quad.
+		vertices[0] = vertices[6] = -width/2.0f;
+		vertices[3] = vertices[9] = width/2.0f;
+		
+		//Adjust the height of Model's quad.
+		vertices[1] = vertices[4] = -width/2.0f;
+		vertices[7] = vertices[10] = width/2.0f;
+		
+		fillBuffers();
 	}
 	
 	/**
@@ -107,26 +73,26 @@ public class ModelDrain extends Model {
 	/**
 	 * @param xOffset position of the drain on the street
 	 */
-	public void setPosition(float xOffset)
+	public void setPosition(float pos)
 	{
-		this.xPos = xOffset;
+		this.pos = pos;
 	}
 	
 	public float getPosition()
 	{
-		return this.xPos;
+		return this.pos;
 	}
 	
 	/**
 	 * Update the model's transformations.
 	 */
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
-		streetPos -= streetSpeed;
+		/*streetPos -= streetSpeed;
 		drainPos = streetPos + this.xPos;
 		
 		gl.glPushMatrix();
 		gl.glRotatef(deviceRotation, 0, 0, 1);
 		gl.glTranslatef(-drainPos, 0, streetLevel);
-		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
+		gl.glMultMatrixf(mTrans.toFloatArray(), 0);*/
 	}
 }
