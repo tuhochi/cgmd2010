@@ -20,10 +20,12 @@ public class LevelObject {
 	private IntBuffer texBuf=IntBuffer.wrap(tex);
 	private static final int TEX_SIZE=100;
 	Context context;
+	private LevelCollision level;
 	
 	float x, y;
 	int width, height;
 	int id;
+	float movement[] = new float[4];
 	
 	
 	// Our vertices.
@@ -50,8 +52,9 @@ public class LevelObject {
 	// Our index buffer.
 	private ShortBuffer indexBuffer;
 
-	public LevelObject(GL10 gl, Context context, float x, float y, int width, int height, int id) {
+	public LevelObject(GL10 gl, Context context, LevelCollision level, float x, float y, int width, int height, int id) {
 		this.context = context;
+		this.level = level;
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -110,6 +113,11 @@ public class LevelObject {
         
         gl.glPushMatrix();
 		gl.glLoadIdentity();
+		float xn = x-movement[2]+movement[3];
+		float yn = y-movement[0]+movement[1];
+		if (!testCollision(x, y)){
+			x = xn; y = yn;
+		}
 		gl.glTranslatef(x, y, 0);
 		gl.glScalef((float)width, (float)height, 1.0f);
 
@@ -125,8 +133,23 @@ public class LevelObject {
 	}
 	
 	void move(float x, float y) {
-		this.x += x;
-		this.y += y;
+		if (testCollision(x,y)) {
+			this.x += x;
+			this.y += y;
+		}
+	}
+	
+	void move(int direction, float amount) {
+		movement[direction] = amount;
+	}
+	
+	boolean testCollision(float x, float y) {
+		if ((level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 /*&&
+				(level.TestCollision((int) Math.floor((this.x+x+width)/20), (int) Math.floor((this.y+y)*20))&0x00ffffff) != 0 &&
+				(level.TestCollision((int) Math.floor((this.x+x+width)/20), (int) Math.floor((this.y+y+height)*20))&0x00ffffff) != 0 &&
+				(level.TestCollision((int) Math.floor((this.x+x)/20), (int) Math.floor((this.y+y+height)*20))&0x00ffffff) != 0*/) {
+			return false;
+		} else return true;
 	}
 	
 	private void LoadTexture(int num, int id, GL10 gl, Context context)
@@ -138,26 +161,26 @@ public class LevelObject {
 		if (height == 0) height = bmp.getHeight();
 		int w = bmp.getWidth();
 		int h = bmp.getHeight();
-		
+
 		int pixels[]=new int[w*h];
 		bmp.getPixels(pixels, 0, w, 0, 0, w, h);
 		int pix1[]=new int[w*h];
-		for(int i=0; i<w; i++)
+		for(int i=0; i<h; i++)
         {
-             for(int j=0; j<h; j++)
+             for(int j=0; j<w; j++)
              {
                   //correction of R and B
-                  int pix=pixels[i*h+j];
+                  int pix=pixels[i*w+j];
                   int pb=(pix>>16)&0xff;
                   int pr=(pix<<16)&0x00ff0000;
                   int px1=(pix&0xff00ff00) | pr | pb;
                   //correction of rows
-                  pix1[(w-i-1)*h+j]=px1;
+                  pix1[(h-i-1)*w+j]=px1;
              }
         }     
 		
 		IntBuffer tbuf=IntBuffer.wrap(pix1);
-		tbuf.position(0);		
+//		ib.position(0);		
 		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, w, h, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, tbuf);		
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );											
