@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -10,6 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.LevelHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 
 public class GameView extends GLSurfaceView implements OnGestureListener  {
@@ -24,7 +26,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 	public static Vector2f diffTouch = new Vector2f();	// difference to the last touch
 	public static boolean running = true;
 	
-	long stopTime = 0;
+	
 	
 	public GameView(Context context) {
 		super(context);
@@ -33,12 +35,20 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 		
 		gestureScanner = new GestureDetector(this);
 		
+		StopTimer t = new StopTimer();
 		LevelHandler level = new LevelHandler();// init new Level here!
+		t.logTime("Level Generierung dauerte:");
+		
 		sceneGraph = new SceneGraph(level,context);
 		renderer = new GameRenderer();
 		setRenderer(renderer);
 
 	}
+	
+
+	
+	
+	
 
 	/**
 	 * the onTouchEvent handle the advanced Gesture Scanner
@@ -71,7 +81,7 @@ public class GameView extends GLSurfaceView implements OnGestureListener  {
 
 	@Override
 	public void onLongPress(MotionEvent e) {
-		SceneGraph.camera.switchZoom();
+		//SceneGraph.camera.switchZoom();
 		System.out.println("onLongPress");
 	}
 
