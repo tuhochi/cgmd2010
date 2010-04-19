@@ -39,6 +39,10 @@ public class Accelerometer extends OrientationEventListener{
 	public int getOrientation() {
 		return orientation;
 	}
+	
+	public void setOrientation(int r) {
+		this.orientation = r;
+	}
 
 	/**
 	 * @return the isOrientationAvailable

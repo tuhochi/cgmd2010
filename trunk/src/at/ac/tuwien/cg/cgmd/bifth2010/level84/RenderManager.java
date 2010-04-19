@@ -66,6 +66,10 @@ public class RenderManager implements Renderer {
 		
 		Date time = new Date();
 		long currentTime = time.getTime();
+		
+		if (lastTime == 0)
+			lastTime = time.getTime();
+		
 		double deltaTime = (double)(currentTime - lastTime) / 1000.0;
 		lastTime = time.getTime();
 		
