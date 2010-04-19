@@ -10,12 +10,13 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLU;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector3;
 
 
-public class GameWorld {
+public class GameWorld extends Thread {
 
 	
     private float elapsedSeconds;
@@ -45,6 +46,38 @@ public class GameWorld {
 	
 	private float currentMoney;
 	
+	private boolean isFinished;
+	
+	public float getCurrentMoney() 
+	{
+		return currentMoney;	
+	}
+
+	
+    public void run() 
+    {
+    	while(isFinished==false)	
+    	{
+    		Framemove(); 
+    		try {
+				sleep(20);
+			} catch (InterruptedException e) {				
+			}			
+    	}
+    	
+    	Log.d("L30", "level finished");
+    	
+    	class FinishRunnable implements Runnable{
+        	@Override
+            public void run() {
+                context.finish();
+            }
+        };
+        
+        Runnable finishRunnable = new FinishRunnable();
+        handler.post(finishRunnable);	
+    }
+    
 	
 	enum TransactionType {BUY, SELL, NOTHING};	
 	private TransactionType transactionType[];
@@ -60,6 +93,8 @@ public class GameWorld {
 	
     public GameWorld(LevelActivity levelActivity, Handler _handler, Bundle _savedInstance)
     {
+    	isFinished = false;
+    	
     	context = levelActivity;
     	handler = _handler;
     	savedInstance = _savedInstance;
@@ -72,13 +107,19 @@ public class GameWorld {
 		if(pause)
 			return;
 		
+		if (isInitialized==false)
+			return;
+		
+		if (isFinished==true)
+			return;
+		
 		oldTime = time;        
         Date date = new Date();
         time = date.getTime();
         elapsedSeconds = (time - oldTime) / 1000.0f;
         
         float oldProgress = progress;
-        progress += elapsedSeconds/5.0f;
+        progress += elapsedSeconds/2.0f;
         	
         //update the money
         
@@ -89,16 +130,24 @@ public class GameWorld {
         	
         	if (transactionType[i] == TransactionType.BUY)
         	{
-        		currentMoney += (newPrice-oldPrice)*100000.0f;
+        		currentMoney += (newPrice-oldPrice)*200000.0f;
         	}        
         }		
         
         moneyChanged(currentMoney);
+        
+        if (progress>((float)numElements)*pointDistance)
+        {
+        	isFinished = true;
+		}
+        
+        
 	}	
 	
 	
 	public synchronized void Init(GL10 gl)
 	{		
+		
 		numGraphs = 4;
 		numElements = 512;
 		elementsPerObject = 6; // two triangles per quad
@@ -115,7 +164,7 @@ public class GameWorld {
 		}
 
 		
-		graphWidth = 0.1f;
+		graphWidth = 0.15f;
 		pointDistance = 0.1f;
 		
 		int verticesPerObject = elementsPerObject*3;
@@ -128,18 +177,18 @@ public class GameWorld {
 		       
 		stockMarket = new float[numGraphs][numElements+1];
 		
-		float maxRange = 2.0f;
+		float maxRange = 0.8f;
 		
 		//fill with random numbers		
 		for (int i=0; i<numGraphs; i++)
 		{
-			float current = ((float) Math.random()- 0.5f)/10.0f;
+			float current = ((float) Math.random()- 0.5f)/20.0f;
 			
 			for (int j=0;j<numElements; j++)
 			{		
 				stockMarket[i][j] = current;
 				
-				float next = current + ((float)Math.random()-0.5f)/10.0f;
+				float next = current + ((float)Math.random()-0.5f)/4.0f;
 				
 				//clamp to sane values
 				next = Math.min(Math.max(next,-maxRange), maxRange);
@@ -224,7 +273,7 @@ public class GameWorld {
 		float[] vertices2 = new float[3*6];
 		float[] normals2 = new float[3*6];
 		
-		float quadSize = 0.05f;
+		float quadSize = graphWidth/2.0f;
 		int cnt=0;
 		
 		//triangle 1
@@ -291,8 +340,8 @@ public class GameWorld {
 		for (int i=0; i<2; i++)
 		{
 			normals2[cnt++] = 0.0f;
-			normals2[cnt++] = 1.0f;
 			normals2[cnt++] = 0.0f;
+			normals2[cnt++] = 1.0f;
 		}
 		
 		byteBuf = ByteBuffer.allocateDirect(vertices2.length*4);
@@ -312,28 +361,25 @@ public class GameWorld {
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	
 		gl.glLoadIdentity();
 		
-		float[] lightAmbient = {0.1f, 0.1f, 0.1f, 1.0f};
-		float[] lightDiffuse = {1.0f, 0.2f, 0.2f, 1.0f};
-		float[] lightPosition = {0.0f, 2.0f, 2.0f, 1.0f};			
+		GLU.gluLookAt(gl, 0.0f, 1.0f, -3, 0, 0, 1, 0, 1, 0);
+		
+		float[] lightAmbient = {0.5f, 0.5f, 0.5f, 1.0f};
+		float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};
+		float[] lightPosition = {0.0f, 4.0f, 2.0f, 1.0f};			
 		
 		initLight(gl, GL10.GL_LIGHT0, lightAmbient, lightDiffuse, lightPosition);        		
         gl.glEnable(GL10.GL_LIGHT0);
         
 		
-		float[] lightAmbient2 = {0.1f, 0.1f, 0.1f, 1.0f};
-		float[] lightDiffuse2 = {0.2f, 1.0f, 0.2f, 1.0f};
-		float[] lightPosition2 = {1.0f, -2.0f, 2.0f, 1.0f};
+        float[] lightAmbient2 = {0.5f, 0.5f, 0.5f, 1.0f};
+		float[] lightDiffuse2 = {1.0f, 1.0f, 1.0f, 1.0f};
+		float[] lightPosition2 = {2.0f, -4.0f, 2.0f, 1.0f};
 		
 		initLight(gl, GL10.GL_LIGHT1, lightAmbient2, lightDiffuse2, lightPosition2);        		
         gl.glEnable(GL10.GL_LIGHT1);       
        
         
-        float[] lightAmbient3 = {1.0f, 0.0f, 0.0f, 1.0f};
-        float[] lightDiffuse3 = {0.0f, 0.0f, 0.0f, 1.0f};
-        float[] lightPosition3 = {1.0f, -2.0f, 2.0f, 1.0f};
-		
-		initLight(gl, GL10.GL_LIGHT2, lightAmbient3, lightDiffuse3, lightPosition3);  
-        
+   
 		 gl.glEnable(GL10.GL_LIGHTING);
 		 
         Date date = new Date();
@@ -395,8 +441,7 @@ public class GameWorld {
 		gl.glFrontFace(GL10.GL_CCW);
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	
-		gl.glLoadIdentity(); 
-		GLU.gluLookAt(gl, 0, 1.0f, -2, 0, 0, 1, 0, 1, 0);
+
 		
 		/*float[] fogColor = {1.0f,1.0f,1.0f,1.0f};
 		gl.glFogfv(GL10.GL_FOG_COLOR, fogColor, 0);
@@ -406,21 +451,43 @@ public class GameWorld {
 		gl.glFogx(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
 		gl.glEnable(GL10.GL_FOG);*/
 		
-		float totalWidth = 2.0f;
+		float[] red = {1.0f,0.0f,0.0f, 1.0f};
+		float[] green = {0.0f,1.0f,0.0f, 1.0f};
+		float[] blue = {0.0f,0.0f,1.0f, 1.0f};
+		float[] orange = {1.0f,0.5f,0.0f, 1.0f};		
+		float[] black = {0.0f,0.0f,0.0f, 1.0f};
+		float[] grey = {0.1f,0.1f,0.1f, 1.0f};
+		
+		float totalWidth = 3.0f;
 		
 		for (int i=0; i<numGraphs; i++)
 		{
-			gl.glEnable(GL10.GL_LIGHT0);
-			gl.glEnable(GL10.GL_LIGHT1);
-			gl.glDisable(GL10.GL_LIGHT2);
+			switch (i%4)
+			{
+			case 0: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, red,0); break;
+			case 1: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, green,0);break;
+			case 2: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, blue,0);break;
+			case 3: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, orange,0);	break;		
+			}
+			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, grey,0);
 			
 		 
-			float graphXcoord = ((float)i/(float)(numGraphs-1))*totalWidth - totalWidth/2.0f  - graphWidth/2.0f;
-			graphXcoord = -graphXcoord;
+			float graphXcoord = ((float)i/(float)(numGraphs-1))*totalWidth - totalWidth/2.0f;
+			graphXcoord = -graphXcoord - graphWidth/2.0f;
+			
+			if (i<(numGraphs/2))
+			{				
+				graphXcoord+=0.3f;
+			}
+			else
+				graphXcoord-=0.3f;
+				
+			
+			float graphYcoord = 0.0f;
 			
 			gl.glPushMatrix();
 			
-			gl.glTranslatef(graphXcoord, 0, -progress);
+			gl.glTranslatef(graphXcoord, graphYcoord, -progress);
 			
 			//Point to our buffers
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer[i]);			
@@ -432,36 +499,44 @@ public class GameWorld {
 			gl.glPopMatrix();			
 			gl.glPushMatrix();
 			
-		
-			gl.glDisable(GL10.GL_LIGHT0);
-			gl.glDisable(GL10.GL_LIGHT1);
-			gl.glEnable(GL10.GL_LIGHT2);
+
+			switch (i%4)
+			{
+			case 0: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, red,0); break;
+			case 1: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, green,0);break;
+			case 2: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, blue,0);break;
+			case 3: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, orange,0);	break;		
+			}
+			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, black,0);
 			
 			//draw quads at current price
 			float price = getCurrentPrice(i);
 			
-			gl.glTranslatef(graphXcoord  + graphWidth/2.0f,price, 0.0f);
+			gl.glTranslatef(graphXcoord  + graphWidth/2.0f,price+graphYcoord, 0.0f);
 			
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferIndicatorLine);			
-			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicatorLine);
-			
+			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicatorLine);			
 			//Draw the vertices as triangles, based on the Index Buffer information
 			gl.glDrawArrays(GL10.GL_TRIANGLES, 0, 6);
 			
+			gl.glLineWidth(2.0f);
+			
 			gl.glPopMatrix();	
 			gl.glPushMatrix();
+
+			
+	
 			
 			if (transactionType[i]==TransactionType.BUY)
-			{
-				gl.glTranslatef(graphXcoord,transactionAmount[i], 0.0f);
-				
+				gl.glTranslatef(graphXcoord+graphWidth/2.0f,transactionAmount[i]+graphYcoord, 0.0f);
+			else
+				gl.glTranslatef(graphXcoord+graphWidth/2.0f,price+graphYcoord, 0.0f);
+					
+			
 				gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferIndicator);			
-				gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicator);
-				
+				gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicator);						
 				gl.glDrawArrays(GL10.GL_LINES, 0, 2);
-				gl.glTranslatef(graphWidth,0.0f, 0.0f);				
-				gl.glDrawArrays(GL10.GL_LINES, 0, 2);
-			}			
+			
 			
 			gl.glPopMatrix();				
 			
@@ -485,14 +560,14 @@ public class GameWorld {
 		gl.glViewport(0, 0, width, height); 	
 		gl.glMatrixMode(GL10.GL_PROJECTION); 	
 		gl.glLoadIdentity(); 
-		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 0.1f, 200.0f);	
+		GLU.gluPerspective(gl, 60.0f, (float)width / (float)height, 0.1f, 200.0f);	
 	}
 
 	float getPrice(int graphNum, float time)
 	{
 		float timeScaled = time/pointDistance;
 		
-		if ((int)progress < numElements-1)	
+		if ((int)timeScaled < (numElements-1))	
 		{
 			//linear interpolate
 			float a = stockMarket[graphNum][(int)timeScaled];

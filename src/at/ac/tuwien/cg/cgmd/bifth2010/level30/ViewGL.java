@@ -10,7 +10,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector2;
 public class ViewGL extends GLSurfaceView {
 	
 	private RendererGL renderer;
-	private GameThread gameThread;
 	private GameWorld gameWorld;
 	
 	
@@ -20,9 +19,6 @@ public class ViewGL extends GLSurfaceView {
         gameWorld = world;          
         renderer = new RendererGL(world);  
         setRenderer(renderer);
-        
-        gameThread = new GameThread(world);
-        gameThread.start();   
     }     
 	
 	
@@ -60,13 +56,13 @@ public class ViewGL extends GLSurfaceView {
 	
 
 	public void onStart() {
-		if(gameThread != null && !gameThread.isAlive() && gameWorld != null)
-			gameThread.start();
+		if(gameWorld != null && !gameWorld.isAlive())
+			gameWorld.start();
 	}
 
 	public void onStop() {
-		if(gameThread != null && gameThread.isAlive())
-			gameThread.stop();
+		if(gameWorld != null && gameWorld.isAlive())
+			gameWorld.stop();
 	}
 	
 	
