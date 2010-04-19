@@ -35,8 +35,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     public GameRenderer(boolean useTranslucentBackground, Context context) {
         this.mTranslucentBackground = useTranslucentBackground;
         this.context = context;
-        this.cam = new Camera();
-       	this.cam.lookAt(0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        //this.cam = new Camera();
+       	//this.cam.lookAt(0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
         //is = this.context.getResources().openRawResource(R.drawable.l36_los);
     }
@@ -57,8 +57,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         //Camera
-        glMultMatrixf(this.cam.getMatrix().getArray(), 0);
-        //gluLookAt(gl, 0, 0, -20, 0, 0, 0, 0, 1, 0  );  
+        //glMultMatrixf(this.cam.getMatrix().getArray(), 0);
+        gluLookAt(gl, 0, 0, -20, 0, 0, 0, 0, 1, 0  );  
      
         //Camera Ende
 //        gl.glTranslatef(0, 0, -3.0f);
@@ -95,20 +95,20 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     	
     	
     	glViewport(0, 0, width, height);
-    	if (glIsEnabled(GL_VIEWPORT)) {
-    		System.out.println("VIEWPORT IS ENABLED.");
-    		int[] view = new int[4];
-    		glGetIntegerv(GL_VIEWPORT, view, 0);
-    		for (int i = 0; i < view.length; i++) {
-    			System.out.println("View "+i+" "+view[i]);
-    		}
-    		
+//    	if (glIsEnabled(GL_VIEWPORT)) {
+//    		System.out.println("VIEWPORT IS ENABLED.");
+//    		int[] view = new int[4];
+//    		glGetIntegerv(GL_VIEWPORT, view, 0);
+//    		for (int i = 0; i < view.length; i++) {
+//    			System.out.println("View "+i+" "+view[i]);
+//    		}
+//    		
 //    		IntBuffer ib = IntBuffer.allocate(4);
 //    		glGetIntegerv(GL_VIEWPORT, view, 0);
 //    		for (int i = 0; i < ib.array().length; i++) {
 //    			System.out.println("View 2 "+i+" "+ib.get(i));
 //    		}
-    	}
+//    	}
 
          /*
           * Set our projection matrix. This doesn't have to be done
