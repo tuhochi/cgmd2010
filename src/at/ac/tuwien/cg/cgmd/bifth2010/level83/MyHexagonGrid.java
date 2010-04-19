@@ -27,7 +27,14 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	private int textureHandle_r;
 	private int textureHandle_dollar;
 	
+	/**
+	 * Stores the dimmension of the laoded map.
+	 */
 	private int mapWidth, mapHeight;
+	
+	/**
+	 * Stores the map.
+	 */
 	private byte[][] map;
 	private float scroll=0;
 	private MySprite character;
@@ -284,6 +291,12 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		
 	}
 	
+	/**
+	 * Checks if the character is in the sourounding of the detonated bomb.
+	 * @param x - x position on the map
+	 * @param y - y position on the map
+	 * @return
+	 */
 	public boolean checkBombRadius(int x, int y){
 		int s = (x%2 == 0)?1:-1;
 		int[][] check = {{x,y},{x-1,y+s},{x-1,y},{x+1,y},{x+1,y+s}};
@@ -299,6 +312,9 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		return ok;
 	}
 	
+	/**
+	 * Checks if the current position of the character contains dollar items.
+	 */
 	public void checkDollar(){
 		
 		if(map[CHARACTER_POSITION+xMin][characterLevel+1] == GRID_DOLLAR){
@@ -481,6 +497,13 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	
 	}
 	
+	/**
+	 * Calculates the physical values for a jump.
+	 * @param h - delta y in grid coordinates
+	 * @param s - defines the angular point. If h is negativ the angular point is s, otherwise h+s.
+	 * @param width
+	 * @return
+	 */
 	public float jump(float h, float s, float width) {
 		
 		float v,g,l=0,xEnd,x;
@@ -559,6 +582,10 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		return false;
 	}
 	
+	/**
+	 * Places Dollar items randomly on the grid.
+	 * @param num - amount of items 
+	 */
 	public void placeDollar(int num) {
 		ArrayList<Integer> list = new ArrayList<Integer>(mapHeight);
 		
