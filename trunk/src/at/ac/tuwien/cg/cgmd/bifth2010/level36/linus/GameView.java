@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level36.linus;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,8 +8,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class GameView extends View {
@@ -23,7 +26,8 @@ public class GameView extends View {
 	
 	public GameView(Context c) {
 		super(c);
-		mBitmap = Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
+		Display display = ((WindowManager)c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
+		mBitmap = Bitmap.createBitmap(display.getWidth(), display.getHeight(), Bitmap.Config.ARGB_8888);
 		background = BitmapFactory.decodeResource(getResources(), R.drawable.l36_los_h);
 		mCanvas = new Canvas(mBitmap);
 		mCanvas.drawBitmap(background, 0,0, mBitmapPaint);
