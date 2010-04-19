@@ -10,7 +10,7 @@ import android.opengl.GLU;
 public class Level66Renderer implements Renderer {
 
 	// model for testing purpose only
-	private PlayerAircraft testModel;
+	private Model testModel;
 	private Context mContext;
 	
 	// screen dimension
@@ -63,8 +63,8 @@ public class Level66Renderer implements Renderer {
 	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 	    
 		//load and render model
-	    //testModel = new PlayerAircraft();
-	    testModel = new Model("l66_baum.obj", mContext);
+	    testModel = new PlayerAircraft();
+	    //testModel = new Model("l66_baum.obj", mContext);
     }
 	
 	@Override
@@ -84,28 +84,33 @@ public class Level66Renderer implements Renderer {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
        
        // render model
-       testModel.move();
+       if( testModel instanceof PlayerAircraft)
+    	   ((PlayerAircraft) testModel).move();
        testModel.render(gl);
     }
 	
 	public void moveRight()
 	{
-		testModel.moveRight();
+		 if( testModel instanceof PlayerAircraft)
+			 ((PlayerAircraft) testModel).moveRight();
 	}
 	
 	public void moveLeft()
 	{
-		testModel.moveLeft();
+		 if( testModel instanceof PlayerAircraft)
+			 ((PlayerAircraft) testModel).moveLeft();
 	}
 	
 	public void moveUp()
 	{
-		testModel.moveUp();
+		if( testModel instanceof PlayerAircraft)
+			 ((PlayerAircraft) testModel).moveUp();
 	}
 	
 	public void moveDown()
 	{
-		testModel.moveDown();
+		if( testModel instanceof PlayerAircraft)
+			 ((PlayerAircraft) testModel).moveDown();
 	}
 	
 	
