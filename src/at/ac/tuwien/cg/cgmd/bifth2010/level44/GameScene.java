@@ -187,7 +187,11 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	}
 	
 	public InputGesture getNextInputGesture() {
-		return input;
+		/* get the next input gesture and remove it
+		 * if it exists at all (set to null) */
+		InputGesture result = input;
+		input = null;
+		return result;
 	}
 	
 	public SoundPlayer getSoundPlayer() {

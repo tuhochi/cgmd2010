@@ -38,6 +38,11 @@ public class LevelActivity extends Activity {
 				return false;
 			}
 		};
+		
+		/* Default result when user exits the activity */
+		SessionState s = new SessionState();
+		s.setProgress(0);
+		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 
 	public void finishLevel(int score) {
