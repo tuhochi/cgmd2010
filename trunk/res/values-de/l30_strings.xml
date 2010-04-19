@@ -3,7 +3,7 @@
 
 <string name="l30_nameofthegame_full">Stockmarket Loser</string>
 <string name="l30_HelpActivity_Title">Stockmarket Loser</string>
-<string name="l30_HelpActivity_Text1">Todo: Translate. What\'s the quickest way to lose money? Right, invest it in the stock market! Your goal is to lose a lot of money by buying and selling company shares.</string>
-<string name="l30_HelpActivity_Text2">Todo: Translate. Multiple graphs of stock prices fly towards you in glorious 3D. In contrast to reality you can see a little bit in the future how the market price develops. Buy and sell shares by hitting the buttons. Try to buy when the market price is high, and sell when the price is low.</string>
+<string name="l30_HelpActivity_Text1">Wie kann man am schnellsten Geld verlieren? Richtig, in Aktien investieren! Dein Ziel ist es so viel Geld wie möglich durch den Kauf von Aktien zu verlieren.</string>
+<string name="l30_HelpActivity_Text2">Mehrere Aktienkurse fliegen auf dich in fantastischer 3D Graphik zu. Im Gegensatz zur Realität kannst du ein bisschen in die Zukunft schauen wie sich die Kurse verändern. Kaufe Aktien wenn der Kurs hoch ist, und verkaufe sie bei niedrigem Kurs.</string>
 
 </resources>
