@@ -42,15 +42,15 @@ public class Model {
 	protected FloatBuffer _colorBuffer;
 	protected FloatBuffer _texCoordBuffer;
 	
+	protected int _cntVertices;
+	
 	protected boolean _renderCoord;
 	
 	protected ShortBuffer _coordIndexBuffer;
 	protected FloatBuffer _coordVertexBuffer;
 	protected FloatBuffer _coordColorBuffer;
 	
-	private static float _coordVertices[];
-	
-	 /*= { 0.0f, 0.0f, 0.0f,
+	private static float _coordVertices[]= { 0.0f, 0.0f, 0.0f,
 											  1.0f, 0.0f, 0.0f,
 											  0.0f, 0.0f, 0.0f,
 											  0.0f, 1.0f, 0.0f,
@@ -63,10 +63,10 @@ public class Model {
 											  0.0f, 0.0f, 0.0f,
 											  0.0f, 0.0f, -1.0f
 											};
-	*/
-	private static short _coordIndices[]; /* ={ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };*/
 	
-	private static float _coordColors[]; /*= { 1.0f, 0.0f, 0.0f, 1.0f,
+	private static short _coordIndices[]  ={ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+	
+	private static float _coordColors[] = { 1.0f, 0.0f, 0.0f, 1.0f,
 											1.0f, 0.0f, 0.0f, 1.0f,
 											0.0f, 1.0f, 0.0f, 1.0f,
 											0.0f, 1.0f, 0.0f, 1.0f,
@@ -78,56 +78,23 @@ public class Model {
 											0.0f, 1.0f, 0.0f, 0.3f,
 											0.0f, 0.0f, 1.0f, 0.3f,
 											0.0f, 0.0f, 1.0f, 0.3f
-	};*/
+										  };
 
-	@SuppressWarnings("static-access")	
+	//@SuppressWarnings("static-access")	
 	public Model(String filename, Context context)
 	{
-		this.mContext = context;
-		//load Model
-		this.load(filename, mContext);
-		// set initial position
-		_posX = 0.0f;
-		_posY = 0.0f;
-		_posZ = -5.0f;
-		
-		_roll = 0.0f;
-		_pitch = 0.0f;
-		_yaw = 0.0f;
-		
-		_scale = 0.5f;
-		
-		// only render coordination system - testing purpose only
-		_renderCoord = true;
-		
-		ByteBuffer vbb = ByteBuffer.allocateDirect(_coordVertices.length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        _coordVertexBuffer = vbb.asFloatBuffer();
-        
-        ByteBuffer ibb = ByteBuffer.allocateDirect(_coordIndices.length * 2);
-        ibb.order(ByteOrder.nativeOrder());
-        _coordIndexBuffer = ibb.asShortBuffer();
-        
-        ByteBuffer cbb = ByteBuffer.allocateDirect(_coordColors.length * 4);
-        cbb.order(ByteOrder.nativeOrder());
-        _coordColorBuffer = cbb.asFloatBuffer();
-        
-        _coordVertexBuffer.put(_coordVertices);
-        _coordIndexBuffer.put(_coordIndices);
-        _coordColorBuffer.put(_coordColors);
-        
-        _coordVertexBuffer.position(0);
-        _coordIndexBuffer.position(0);
-        _coordColorBuffer.position(0);
+		this(context);
 	}
 
-	public Model()
+	public Model(Context context)
 	{
 
+		this.mContext = context;
+		
 		// set initial position
 		_posX = 0.0f;
 		_posY = 0.0f;
-		_posZ = -5.0f;
+		_posZ = 0.0f;
 		
 		_roll = 0.0f;
 		_pitch = 0.0f;
@@ -135,8 +102,10 @@ public class Model {
 		
 		_scale = 0.5f;
 		
+		_cntVertices = 0;
+		
 		// only render coordination system - testing purpose only
-		_renderCoord = true;
+		_renderCoord = false;
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(_coordVertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
@@ -159,7 +128,7 @@ public class Model {
         _coordColorBuffer.position(0);
 	}
 	
-	public static void load(String filename, Context mContext)
+	public void load(String filename, Context mContext)
 	{
 		// TODO: load from file
 		//OBJRenderable load = new OBJRenderable(OBJModel.load(filename, mContext));
@@ -169,7 +138,7 @@ public class Model {
         List<Short> indices = new LinkedList<Short>();
         
 		try {
-	    	InputStream is = mContext.getResources().openRawResource(R.raw.l66_baum); 			
+	    	InputStream is = mContext.getResources().openRawResource(R.raw.l66_airplane); 			
 	        is.available();
 	        InputStreamReader isr = new InputStreamReader(is);            
 	        BufferedReader textReader = new BufferedReader(isr);
@@ -234,6 +203,77 @@ public class Model {
         }
 		
 		//vertices.toArray(_coordVertices);
+		
+		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.toArray().length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        _vertexBuffer = vbb.asFloatBuffer();
+        
+        ByteBuffer ibb = ByteBuffer.allocateDirect(indices.toArray().length * 2);
+        ibb.order(ByteOrder.nativeOrder());
+        _indexBuffer = ibb.asShortBuffer();
+        
+        _cntVertices = indices.toArray().length;
+        
+        ByteBuffer nbb = ByteBuffer.allocateDirect(normals.toArray().length * 4);
+        nbb.order(ByteOrder.nativeOrder());
+        _normalBuffer = nbb.asFloatBuffer();
+        
+        ByteBuffer tbb = ByteBuffer.allocateDirect(texCoords.toArray().length * 4);
+        tbb.order(ByteOrder.nativeOrder());
+        _texCoordBuffer = tbb.asFloatBuffer();
+        
+        ByteBuffer cbb = ByteBuffer.allocateDirect(vertices.toArray().length / 3 * 4 * 4);
+        cbb.order(ByteOrder.nativeOrder());
+        _colorBuffer = cbb.asFloatBuffer();
+        
+        float[] tmpVertices = new float[vertices.size()];
+        short[] tmpIndices = new short[indices.size()];
+        float[] tmpNormals = new float[normals.size()];
+        float[] tmpTexCoords = new float[texCoords.size()];
+        float[] tmpColors = new float [vertices.size() / 3 * 4];
+        
+		for(int i=0; i < vertices.size(); i++){
+			tmpVertices[i]=vertices.get(i).floatValue();
+		}
+		
+		for(int i=0; i < indices.size(); i++){
+			tmpIndices[i]=indices.get(i).shortValue();
+		}
+		
+		for(int i=0; i < normals.size(); i++){
+			tmpNormals[i]=normals.get(i).floatValue();
+		}
+		
+		for(int i=0; i < texCoords.size(); i++){
+			tmpTexCoords[i]=texCoords.get(i).floatValue();
+		}
+		
+		for(int i=0; i < vertices.size() / 3 * 4; i++){
+			tmpColors[i]= 1.0f;
+		}
+		
+		_vertexBuffer.put(tmpVertices);
+		_indexBuffer.put(tmpIndices);
+		_normalBuffer.put(tmpNormals);
+		_texCoordBuffer.put(tmpTexCoords);
+		_colorBuffer.put(tmpColors);
+        
+        /*
+        float[] tmp = new float[vertices.size()];
+        tmp = vertices.toArray( tmp );
+        _vertexBuffer.put( vertices.toArray( tmp ) );
+        _vertexBuffer.put
+        _indexBuffer.put(indices);
+        _normalBuffer.put(normals);
+        _texCoordBuffer.put(texCoords);
+        */
+        _vertexBuffer.position(0);
+        _indexBuffer.position(0);
+        _normalBuffer.position(0);
+        _texCoordBuffer.position(0);
+        _colorBuffer.position(0);
+        
+        /*
 		_coordVertices = new float[vertices.size()];
 		for(int i=0; i < vertices.size(); i++){
 			_coordVertices[i]=vertices.get(i).floatValue();
@@ -243,8 +283,10 @@ public class Model {
 		for(int i=0; i < indices.size(); i++){
 			_coordIndices[i]=indices.get(i).shortValue();
 		}
+		
+		*/
 		//.toArray(_coordVertices);
-		System.out.print("lol");
+		//System.out.print("lol");
 	}
 	
 	public void render(GL10 gl)
@@ -277,7 +319,7 @@ public class Model {
 		    gl.glLoadIdentity();
 		    
 		 // set translation
-		    gl.glTranslatef(-_posX, -_posY, -_posZ);
+		    gl.glTranslatef(_posX, _posY, _posZ);
 		    // set scale
 		    gl.glScalef(_scale, _scale, _scale);
 		    // set rotation
@@ -285,7 +327,7 @@ public class Model {
 		    gl.glRotatef( _yaw, 0.0f, 1.0f, 0.0f);
 		    gl.glRotatef(-_roll, 0.0f, 0.0f, 1.0f);
 		    
-		    gl.glDrawElements(GL10.GL_TRIANGLES, _indexBuffer.array().length, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
+		    gl.glDrawElements(GL10.GL_TRIANGLES, _cntVertices, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
 		}
 	}
 }
