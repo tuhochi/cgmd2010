@@ -81,7 +81,7 @@ public class GameWorld extends Thread {
 			}			
     	}
     	
-    	Log.d("L30", "level finished");
+    	Log.d("l30", "level finished");
     	
     	if (currentMoney<0.0f)
     	{
@@ -110,6 +110,8 @@ public class GameWorld extends Thread {
 	 */
     public GameWorld(LevelActivity levelActivity, Handler _handler, Bundle _savedInstance)
     {
+    	Log.d("l30", "GameWorld constructor");
+    	
     	isFinished = false;
     	
     	context = levelActivity;
@@ -129,6 +131,39 @@ public class GameWorld extends Thread {
 		
 		transactionType = new TransactionType[numGraphs];
 		transactionAmount = new float[numGraphs];
+		
+		for (int i=0; i<numGraphs; i++)
+		{
+			transactionType[i] = TransactionType.NOTHING;
+			transactionAmount[i] = 0.0f;		
+		}
+		
+		//fill with random numbers. numbers are a markov chain.		
+		stockMarket = new float[numGraphs][numElements+1];
+		float maxRange = 0.8f;
+		
+		//fill with random numbers. numbers are a markov chain.		
+		for (int i=0; i<numGraphs; i++)
+		{
+			float current = ((float) Math.random()- 0.5f)/20.0f;
+			
+			for (int j=0;j<numElements; j++)
+			{		
+				stockMarket[i][j] = current;
+				
+				float next = current + ((float)Math.random()-0.5f)/4.0f;
+				
+				//clamp to sane values
+				next = Math.min(Math.max(next,-maxRange), maxRange);
+				
+				current = next;
+			}
+			stockMarket[i][numElements] = current;
+		}
+		
+        Date date = new Date();
+        time = date.getTime();
+        oldTime = time;
 
     }	
     
@@ -185,36 +220,23 @@ public class GameWorld extends Thread {
 	 */
 	public synchronized void Init(GL10 gl)
 	{				
-		//initialize the graphs and vbos		
-		for (int i=0; i<numGraphs; i++)
-		{
-			transactionType[i] = TransactionType.NOTHING;
-			transactionAmount[i] = 0.0f;		
-		}
+		Log.d("l30", "GameWorld init");
 		
+		//initialize the graphs and vbos
 		//create arrays for vbo data
 		int verticesPerObject = elementsPerObject*3;		
 		float normals[][] = new float[numGraphs][numElements*verticesPerObject];
 		float vertices[][] = new float[numGraphs][numElements*verticesPerObject];		
 		vertexBuffer = new FloatBuffer[numElements];
 		normalBuffer = new FloatBuffer[numElements];
-		       
-		stockMarket = new float[numGraphs][numElements+1];
-		float maxRange = 0.8f;
 		
-		//fill with random numbers. numbers are a markov chain.		
+		//put stockmarket into vbo
 		for (int i=0; i<numGraphs; i++)
 		{
-			float current = ((float) Math.random()- 0.5f)/20.0f;
-			
 			for (int j=0;j<numElements; j++)
 			{		
-				stockMarket[i][j] = current;
-				
-				float next = current + ((float)Math.random()-0.5f)/4.0f;
-				
-				//clamp to sane values
-				next = Math.min(Math.max(next,-maxRange), maxRange);
+				float current = stockMarket[i][j];
+				float next = stockMarket[i][j+1];
 				
 				int cnt = 0;
 				int offset = j*verticesPerObject;
@@ -243,13 +265,12 @@ public class GameWorld extends Thread {
 				
 				vertices[i][offset+(cnt++)] = 0.0f; //x
 				vertices[i][offset+(cnt++)] = current; //y
-				vertices[i][offset+(cnt++)] = (float)j * pointDistance; //z		
+				vertices[i][offset+(cnt++)] = (float)j * pointDistance; //z
 
-				current = next;
-				
+				current = next;				
 			}
 			
-			stockMarket[i][numElements] = current;
+			
 		
 			//calc normals
 			for (int j=0;j<numElements; j++)
@@ -401,11 +422,14 @@ public class GameWorld extends Thread {
         
 		gl.glEnable(GL10.GL_LIGHTING);
 		 
+
+        
+        isInitialized = true;
+        
+        //make sure there is a sane timestep
         Date date = new Date();
         time = date.getTime();
         oldTime = time;
-        
-        isInitialized = true;
         
 	}
 	
@@ -662,6 +686,14 @@ public class GameWorld extends Thread {
 	 */
 	public synchronized void SetPause(boolean _pause)
 	{
+		//change from pause to non-pause? make sure timestep is sane...
+		if ((pause==true)&&(_pause==false))
+		{		
+	        Date date = new Date();
+	        time = date.getTime();
+	        oldTime = time;
+		}
+		
 		pause = _pause;
 	}
 

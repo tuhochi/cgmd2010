@@ -17,6 +17,7 @@ public class RendererGL implements GLSurfaceView.Renderer {
 	 */
 	public RendererGL(GameWorld world) {
 		gameWorld = world;
+		
 	}
 
 	/* Draw the frame
@@ -55,5 +56,6 @@ public class RendererGL implements GLSurfaceView.Renderer {
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA,GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		gameWorld.Init(gl);
+		
 	}
 }

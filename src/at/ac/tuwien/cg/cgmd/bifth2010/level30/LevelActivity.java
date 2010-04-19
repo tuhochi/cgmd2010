@@ -121,6 +121,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	    
 		money = 1000000;
 		
+		
 		gameWorld.start();
 		
 	    mp = MediaPlayer.create(this, R.raw.l00_menu);
@@ -252,6 +253,13 @@ public class LevelActivity extends Activity implements OnClickListener {
 	}
 	
 	@Override
+	protected void  onRestoreInstanceState(Bundle state)
+	{
+		onCreate(state);
+		Log.d("l30","onRestoreInstanceState");
+	}
+	
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		Log.d("l30","onDestroy");
@@ -275,12 +283,13 @@ public class LevelActivity extends Activity implements OnClickListener {
 	/*
 	 * Called from gameworld through handler. Save state&Quit
 	 */
+    @Override
 	public void finish() {	
-		Log.d("L30", "LevelActivity.finish");
+		
 		updateProgressResult();	
 		mp.stop();
 		super.finish();
-		Log.d("l10","finish");
+		Log.d("l30","finish");
 	}
 	
 	/*
