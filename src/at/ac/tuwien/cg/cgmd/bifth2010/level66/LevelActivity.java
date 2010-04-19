@@ -15,4 +15,16 @@ public class LevelActivity extends Activity {
         setContentView(_level66View);
 	}
 	
+    @Override
+    protected void onResume() {
+        super.onResume();
+        _level66View.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        _level66View.onPause();
+    }
+    
 }
