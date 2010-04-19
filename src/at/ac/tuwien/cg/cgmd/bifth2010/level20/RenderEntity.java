@@ -15,6 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class RenderEntity extends GameEntity implements Renderable {
 
 	protected int texture;
+//	protected float scale;	// We change width and height directly
 	protected boolean visible;	
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
@@ -28,11 +29,14 @@ public class RenderEntity extends GameEntity implements Renderable {
 	 * @param height The height of the entity.
 	 */
 	public RenderEntity(float x, float y, float z, float width, float height) {
-		texture = -1;
+		
+		// INFO: Changed this initial value to 1 to get a white quad on screen everytime
+		texture = 0;
 		visible = true;
 		setPos(x, y);
-		setZ(z);
+		this.z = z;
 		setDim(width, height);
+//		scale = 1;
 		
 		float hWidth = width * 0.5f;
 		float hHeight = height * 0.5f;
@@ -65,7 +69,8 @@ public class RenderEntity extends GameEntity implements Renderable {
 	@Override
 	public void render(GL10 gl) {
 		
-		if (!visible || texture < 0)
+		// Remove texture, because it is always valid, even if 0
+		if (!visible)
 			return;
 		
 

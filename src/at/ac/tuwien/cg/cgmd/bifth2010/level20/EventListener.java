@@ -8,9 +8,14 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
  * event manager.
  * 
  * @see EventManager
- * @author Pilzinho
+ * @author Ferdinand Pilz
+ * @author Reinhard Sprung
  */
 public interface EventListener {
 
-	public void handleEvent(int eventID, Object eventData);	
+	/**
+	 * @param eventId The event id. @see EventManager
+	 * @param eventData An arbitrary Object passed to the listener. 
+	 */
+	public void handleEvent(int eventId, Object eventData);	
 }

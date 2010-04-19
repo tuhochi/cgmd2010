@@ -3,6 +3,7 @@
  */
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -11,10 +12,15 @@ import java.util.ListIterator;
  * the connected event listeners.
  * 
  * @see EventListener
- * @author Pilzinho
- *
+ * @author Ferdinand Pilz
+ * @author Reinhard Sprung
  */
 public class EventManager {
+	
+	// TODO: @Ferdi: Hast du dir das so gedacht? Oder Enum? Ich überlass das Design vom Eventmanager dir :P
+	public static final int ANIMATION_COMPLETE = 1;
+	
+	
 	/**
 	 * The singleton instance of the event manager.
 	 */
@@ -28,7 +34,9 @@ public class EventManager {
 	 * The private constructor of the event manager.
 	 * Use getInstance() to get hold of the manager.
 	 */
-	private EventManager() {}
+	private EventManager() {
+		listeners = new LinkedList<EventListener>();
+	}
 
 	/**
 	 * Returns the singleton instance of the event manager.
