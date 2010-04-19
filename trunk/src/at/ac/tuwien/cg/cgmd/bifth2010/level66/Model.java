@@ -77,7 +77,7 @@ public class Model {
 	{
 		this.mContext = context;
 		//load Model
-		this.load(ffilename, mContext);
+		this.load(filename, mContext);
 		// set initial position
 		_posX = 0.0f;
 		_posY = 0.0f;
@@ -173,9 +173,9 @@ public class Model {
 		    // set scale
 		    gl.glScalef( _scale, _scale, _scale);
 		    // set rotation
-		    gl.glRotatef( _rotX, 1.0f, 0.0f, 0.0f);
-		    gl.glRotatef( _rotY, 0.0f, 1.0f, 0.0f);
-		    gl.glRotatef( _rotZ, 0.0f, 0.0f, 1.0f);
+		    gl.glRotatef( _pitch, 1.0f, 0.0f, 0.0f);
+		    gl.glRotatef( _yaw, 0.0f, 1.0f, 0.0f);
+		    gl.glRotatef(-_roll, 0.0f, 0.0f, 1.0f);
 		    
 		    gl.glDrawElements(GL10.GL_LINES, 12, GL10.GL_UNSIGNED_SHORT, _coordIndexBuffer);
 		}
@@ -193,9 +193,9 @@ public class Model {
 		    // set scale
 		    gl.glScalef(_scale, _scale, _scale);
 		    // set rotation
-		    gl.glRotatef(-_rotX, 1.0f, 0.0f, 0.0f);
-		    gl.glRotatef(-_rotY, 0.0f, 1.0f, 0.0f);
-		    gl.glRotatef(-_rotZ, 0.0f, 0.0f, 1.0f);
+		    gl.glRotatef( _pitch, 1.0f, 0.0f, 0.0f);
+		    gl.glRotatef( _yaw, 0.0f, 1.0f, 0.0f);
+		    gl.glRotatef(-_roll, 0.0f, 0.0f, 1.0f);
 		    
 		    gl.glDrawElements(GL10.GL_TRIANGLES, _indexBuffer.array().length, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
 		}
