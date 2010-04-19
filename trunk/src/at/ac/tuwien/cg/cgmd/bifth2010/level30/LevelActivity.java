@@ -7,6 +7,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -110,24 +111,14 @@ public class LevelActivity extends Activity implements OnClickListener {
         	uiButtonBuy[i].setOnClickListener(this);
         }
             
-        /* for (int i=0; i<4; i++)
-        {        	
-        	uiButtonSell[i] = new Button(this);
-        	uiButtonSell[i].setText("Sell");
-        	uiButtonSell[i].setTextSize(25);
-        	uiButtonSell[i].setGravity(Gravity.CENTER);
-        	uiButtonSell[i].setTextColor(Color.WHITE);
-        	uiButtonSell[i].setTag(new Pair<Integer,Integer>(1,i));        	
-        	buttonLayoutSell.addView(uiButtonSell[i]);
-        	uiButtonSell[i].setOnClickListener(this);        	
-        }*/
-        
-
-		
+    		
 		SessionState s = new SessionState();
 		s.setProgress(0);		
 		setResult(Activity.RESULT_OK, s.asIntent());	   
 	    
+		money = 1000000;
+		
+		gameWorld.start();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -146,12 +137,14 @@ public class LevelActivity extends Activity implements OnClickListener {
 				{				
 					gameWorld.StockMarketTransaktion(num, TransactionType.BUY);
 		
+					b.setTextColor(Color.MAGENTA);
 					b.setText("SELL");
 					b.setWidth(buttonWidth);
 				}
 				else if (b.getText()=="SELL")
 				{				
 					gameWorld.StockMarketTransaktion(num, TransactionType.SELL);
+					b.setTextColor(Color.BLACK);
 					b.setText("BUY");
 					b.setWidth(buttonWidth);
 				}
@@ -208,14 +201,31 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-	}  
-        
+	}
 	
-    public void playerMoneyChanged(float money)
+	private int money;
+	
+    public void playerMoneyChanged(float _money)
     {
-    	uiScoreText.setText(Integer.toString((int)money)+"$"); 
+    	money = (int)_money;
+    	uiScoreText.setText(Integer.toString(money)+"$"); 
     }
 
+	public void finish() {	
+		Log.d("L30", "LevelActivity.finish");
+		updateProgressResult();			
+		super.finish();
+	}
+	
+    private void updateProgressResult()
+    {
+		//the SessionState is a convenience class to set a result
+		SessionState s = new SessionState();
+		//we set the progress the user has made (must be between 0-100)
+		s.setProgress((int)Math.min(Math.max( (1000000.0f - money)/10000.0f, 0.0f), 100.0f));
+		//we call the activity's setResult method 
+		setResult(Activity.RESULT_OK, s.asIntent());
+    }
 	
 
 }
