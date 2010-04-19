@@ -16,6 +16,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicProjectile;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Projectile;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Zombie;
 
 public class GLView extends GLSurfaceView implements Renderer {
 	private Gamefield mGamefield = null;
@@ -46,6 +47,8 @@ public class GLView extends GLSurfaceView implements Renderer {
 	private int dmg = 9;
 	private float shootingInterval = 3;
 	
+	private Zombie testzombie = new Zombie();
+	
 	public GLView(Context context, float w, float h) {
 		super(context);
 		this.setRenderer( this );
@@ -66,7 +69,8 @@ public class GLView extends GLSurfaceView implements Renderer {
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		gl.glTranslatef(0.0f, 0.0f, -50.0f);
+		//gl.glTranslatef(0.0f, 0.0f, -50.0f);
+		testzombie.draw(gl);
 		mGamefield.draw(gl);	
 		for ( int i = 0; i < mBasicTower.length; i++) if(mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl);	
 		
