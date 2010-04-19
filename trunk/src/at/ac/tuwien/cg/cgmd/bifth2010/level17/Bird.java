@@ -42,7 +42,7 @@ public class Bird {
 	 * Render the bird
 	 */
 	public void draw() {
-		GLManager.getInstance().getTextures().setTexture(R.drawable.l17_bird);
+		GLManager.getInstance().getTextures().setTexture(R.drawable.l17_vogel);
 		MatrixTrackingGL gl = GLManager.getInstance().getGLContext();
 		gl.glPushMatrix();
 		gl.glTranslatef(mPosition);
