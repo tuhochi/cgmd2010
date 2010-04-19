@@ -59,7 +59,7 @@ public class Level {
         mPlayer = new Player(new Vector3(0f, 30f, 0f), 1f, lifes, money);
 		//mWorld = world;
 		for(int i = 0; i < 5; i++)
-			mHouseModels[i] = new HouseModel(mBlockSize, mBlockSize * ((float)i + 1.0f), mBlockSize);
+			mHouseModels[i] = new HouseModel(mBlockSize, mBlockSize * ((float)i + 1.0f), mBlockSize, i+1);
 		
 		mBird = new Quad(3.0f,3.0f);
         GLManager.getInstance().getTextures().add(R.drawable.l17_crate);

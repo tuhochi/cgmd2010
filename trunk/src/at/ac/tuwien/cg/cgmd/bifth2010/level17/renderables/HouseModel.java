@@ -24,7 +24,7 @@ public class HouseModel implements Renderable {
      * @param height height of the cube
      * @param depth depth of the cube
      */
-    public HouseModel(float width, float height, float depth)
+    public HouseModel(float width, float height, float depth, int repeat)
     {
 
     	Vector3 vertices[] = {						//Vertices according to faces
@@ -66,23 +66,23 @@ public class HouseModel implements Renderable {
 
     			new Vector2(0.0f, 0.0f), 
     			new Vector2(0.0f, 1.0f), 
-    			new Vector2(1.0f, 0.0f), 
-    			new Vector2(1.0f, 1.0f),
+    			new Vector2(repeat, 0.0f), 
+    			new Vector2(repeat, 1.0f),
 	
     			new Vector2(0.0f, 0.0f),
     			new Vector2(0.0f, 1.0f), 
-    			new Vector2(1.0f, 0.0f),
-    			new Vector2(1.0f, 1.0f),
+    			new Vector2(repeat, 0.0f),
+    			new Vector2(repeat, 1.0f),
 	
     			new Vector2(0.0f, 0.0f), 
     			new Vector2(0.0f, 1.0f), 
-    			new Vector2(1.0f, 0.0f), 
-    			new Vector2(1.0f, 1.0f),
+    			new Vector2(repeat, 0.0f), 
+    			new Vector2(repeat, 1.0f),
 	
     			new Vector2(0.0f, 0.0f), 
     			new Vector2(0.0f, 1.0f), 
-    			new Vector2(1.0f, 0.0f), 
-    			new Vector2(1.0f, 1.0f),
+    			new Vector2(repeat, 0.0f), 
+    			new Vector2(repeat, 1.0f),
 	
     			new Vector2(0.0f, 0.0f), 
     			new Vector2(0.0f, 1.0f), 
