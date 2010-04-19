@@ -27,7 +27,7 @@ public class Level66View extends GLSurfaceView {
                 public void run() {
                     _renderer.moveLeft();
                     //play sound on klick
-                    Sound.playSelect();
+                    //Sound.playSelect();
                 }});
             return true;
         }
@@ -49,6 +49,13 @@ public class Level66View extends GLSurfaceView {
             queueEvent(new Runnable() {
                 public void run() {
                     _renderer.moveDown();
+                }});
+            return true;
+        }
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+            queueEvent(new Runnable() {
+                public void run() {
+                    _renderer.moveSpecial();
                 }});
             return true;
         }
