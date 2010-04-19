@@ -16,6 +16,14 @@ public class Level66Renderer implements Renderer {
 	// screen dimension
     private float _width = 320f;
     private float _height = 480f;
+    
+    private float[] _lightAmbient = { 0.0f, 0.0f, 0.0f, 1.0f };
+    private float[] _lightDiffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+    private float[] _lightSpecular = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+    private float[] _lightPosition = { -20.0f, 20.0f, -20.0f };
+    private float[] _matSpecular = { 1.0f, 1.0f, 1.0f, 1.0f };
+    private float[] _matShininess = { 50.0f };
 	
 	public Level66Renderer(Context context){
 		this.mContext = context;
@@ -62,8 +70,19 @@ public class Level66Renderer implements Renderer {
 	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
 	    
+	    gl.glMaterialfv(GL10.GL_FRONT, GL10.GL_SPECULAR, _matSpecular, 0);
+	    gl.glMaterialfv(GL10.GL_FRONT, GL10.GL_SHININESS, _matShininess, 0);
+	   
+	    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, _lightAmbient, 0);
+	    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, _lightDiffuse, 0);
+	    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPECULAR, _lightSpecular, 0);
+	    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, _lightPosition, 0);
+
+	    gl.glEnable(GL10.GL_LIGHTING);
+	    gl.glEnable(GL10.GL_LIGHT0);
+	 
 		//load and render model
-	    testModel = new PlayerAircraft();
+	    testModel = new PlayerAircraft(mContext);
 	    //testModel = new Model("l66_baum.obj", mContext);
     }
 	
