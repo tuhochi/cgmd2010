@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.util.Log;
 
 public class ModelStreet extends Model {
 	
@@ -15,7 +16,7 @@ public class ModelStreet extends Model {
 	List<ModelDrain> drains;
 	
 	private float streetPos; //street position at startup
-	private float streetSpeed = 10f; //speed of street translation
+	private float streetSpeed = 5f; //speed of street translation
 	private float streetLevel = -10f; //z-position of street
 	
 	/**
@@ -41,13 +42,9 @@ public class ModelStreet extends Model {
 		//Adjust the texture coordinates of Model's quad.
 		texture[2] = texture[6] = width / height;
 		
-		streetPos = width / 2.0f;
+		streetPos = -width / 2.0f;
 		
 		fillBuffers();
-	}
-	
-	public float getStreetTranslation() {
-		return streetPos;
 	}
 	
 	/**
@@ -55,13 +52,18 @@ public class ModelStreet extends Model {
 	 */
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
 		//mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
-		streetPos -= streetSpeed;
+		super.update(gl, deltaTime, deviceRotation);
+		float deltaSpeed = (float)((double)streetSpeed * deltaTime);
+		
+		Log.i("delta", "deltaTime: " + deltaTime + " - deltaSpeed: " + deltaSpeed + " - streetSpeed: " + streetSpeed);
+		streetPos += deltaSpeed;
+		Log.i("streetPos", "pos: " + streetPos);
 	}
 	
 	public void draw(GL10 gl) {
 		gl.glPushMatrix();
 		gl.glRotatef(deviceRotation, 0, 0, 1);
-		gl.glTranslatef((float)(-streetPos * deltaTime), 0, streetLevel);
+		gl.glTranslatef(streetPos, 0, streetLevel);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 		
 		super.draw(gl);

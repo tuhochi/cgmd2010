@@ -12,13 +12,12 @@ public class ModelGem extends Model {
 	float width = 0.3f; //quadsize
 		
 	private final float gemStartpos = -2f; 
-	private boolean visibility = false;
 	private float gemRotation = 0.0f;
 	private float gemPos = gemStartpos;
 	private float fallSpeed = 0.0f;
-	private boolean active = false;
+	private boolean isFalling = false;
 	
-	//TODO: ev. suebergabe des wertes ??
+	//TODO: ev. Ÿbergabe des wertes ??
 	private float streetLevel = -10f;
 	
 	/**
@@ -44,27 +43,7 @@ public class ModelGem extends Model {
 	public ModelGem(int textureResource) {
 		this();
 		this.textureResource = textureResource;
-		this.visibility = false;
-	}
-	
-	public void setVisible() {
-		this.visibility = true;
-	}
-	
-	public void setInvisible() {
-		this.visibility = false;
-	}
-	
-	public void changeVisibility() {
-		this.visibility = !this.visibility;
-	}
-	
-	public void rotateLeft() {
-		gemRotation -= 0.5f;
-	}
-	
-	public void rotateRight() {
-		gemRotation += 0.5f;
+		this.isFalling = false;
 	}
 
 	public void resetPosition() {
@@ -73,13 +52,11 @@ public class ModelGem extends Model {
 	}
 	
 	public void startFall()	{
-		this.setVisible();
-		this.active = true;
+		this.isFalling = true;
 	}
 	
 	public void endFall() {
-		this.setInvisible();
-		this.active = false;
+		this.isFalling = false;
 		resetPosition();
 	}
 	
@@ -96,7 +73,7 @@ public class ModelGem extends Model {
 	 */
 	public void update(GL10 gl, double deltaTime) {
 		
-		if (this.active) {
+		if (this.isFalling) {
 			if (!checkCollision()) {
 				fallSpeed += 5f * deltaTime;
 				gemPos -= fallSpeed;
@@ -111,13 +88,15 @@ public class ModelGem extends Model {
 	public void draw(GL10 gl) {
 
 		//mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
-		gl.glPushMatrix();
-		gl.glTranslatef(0, 0, gemPos);
-		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
-		
-		super.draw(gl);
-		
-		gl.glPopMatrix();
+		if (this.isFalling) {
+			gl.glPushMatrix();
+			gl.glTranslatef(0, 0, gemPos);
+			gl.glMultMatrixf(mTrans.toFloatArray(), 0);
+			
+			super.draw(gl);
+			
+			gl.glPopMatrix();
+		}
 	}
 }
 

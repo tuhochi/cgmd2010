@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class LevelActivity extends Activity implements OnClickListener {
+public class LevelActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
 
 	private ModelStreet street;
 	private List<ModelDrain> drains;
@@ -48,6 +50,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 		b3.setOnClickListener(this);
 		ImageButton b4 = (ImageButton) findViewById(R.id.l84_GemButton04);
 		b4.setOnClickListener(this);
+		
+		SeekBar accelBar = (SeekBar) findViewById(R.id.l84_accelbar);
+		accelBar.setOnSeekBarChangeListener(this);
+		accelBar.setMax(360);
 	}
 
 	private void loadModels() {
@@ -98,5 +104,21 @@ public class LevelActivity extends Activity implements OnClickListener {
 		case R.id.l84_GemButton03: gemRect.startFall(); break;
 		case R.id.l84_GemButton04: gemOct.startFall(); break;
 		}
+	}
+
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress,
+			boolean fromUser) {
+		accelerometer.setOrientation(progress - 90);
+	}
+
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
+		// TODO Auto-generated method stub	
 	}
 }

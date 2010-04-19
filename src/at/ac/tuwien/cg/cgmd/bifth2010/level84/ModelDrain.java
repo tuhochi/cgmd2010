@@ -15,11 +15,11 @@ public class ModelDrain extends Model {
 
 	private float width = 0.5f;
 	
-	private int texture_drain0 = R.drawable.l00_coin; //drain with no holes
-	private int texture_drain1 = R.drawable.l00_coin; //drain for gem1
-	private int texture_drain2 = R.drawable.l00_coin; //drain for gem2
-	private int texture_drain3 = R.drawable.l00_coin; //drain for gem3
-	private int texture_drain4 = R.drawable.l00_coin; //drain for gem4
+	private int texture_drain0 = R.drawable.l84_drain_closed; //drain with no holes
+	private int texture_drain1 = R.drawable.l84_drain_round; //drain for gem1
+	private int texture_drain2 = R.drawable.l84_drain_diamond; //drain for gem2
+	private int texture_drain3 = R.drawable.l84_drain_rect; //drain for gem3
+	private int texture_drain4 = R.drawable.l84_drain_oct; //drain for gem4
 	
 	private float orientation = 0;
 	
@@ -67,8 +67,7 @@ public class ModelDrain extends Model {
 	public float getOrientationAngle()
 	{
 		return this.orientation;
-	}
-	
+	}	
 	
 	/**
 	 * @param xOffset position of the drain on the street
@@ -81,18 +80,5 @@ public class ModelDrain extends Model {
 	public float getPosition()
 	{
 		return this.pos;
-	}
-	
-	/**
-	 * Update the model's transformations.
-	 */
-	public void update(GL10 gl, double deltaTime, float deviceRotation) {
-		/*streetPos -= streetSpeed;
-		drainPos = streetPos + this.xPos;
-		
-		gl.glPushMatrix();
-		gl.glRotatef(deviceRotation, 0, 0, 1);
-		gl.glTranslatef(-drainPos, 0, streetLevel);
-		gl.glMultMatrixf(mTrans.toFloatArray(), 0);*/
 	}
 }
