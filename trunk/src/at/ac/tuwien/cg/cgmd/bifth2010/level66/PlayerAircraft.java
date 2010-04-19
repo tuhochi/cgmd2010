@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+
 public class PlayerAircraft extends Model {
 	
 	private int _accX;
@@ -27,14 +29,23 @@ public class PlayerAircraft extends Model {
 	private float _special_roll;
 	private int _special_roll_dir;
 	
-	public PlayerAircraft()
+	public PlayerAircraft(Context context)
 	{
-		super();
+		super(context);
+		
+		this.load("l66_baum.obj", context);
+		
+		// only render coordination system - testing purpose only
+		_renderCoord = true;
 		
 		_accX = 0;
 		_accY = 0;
 		
 		_special = 0;
+		
+		_posZ = -5.0f;
+		
+		_scale = 0.05f;
 		
 		_cnt_frames_x = 0;
 		_cnt_frames_y = 0;
@@ -237,21 +248,27 @@ public class PlayerAircraft extends Model {
 		{
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, _vertexBuffer);
 	        gl.glColorPointer(4, GL10.GL_FLOAT, 0, _colorBuffer);
-	        gl.glNormalPointer(GL10.GL_FLOAT, 0, _normalBuffer);
-	        gl.glTexCoordPointer(3, GL10.GL_FLOAT, 0, _texCoordBuffer);
+	        //gl.glNormalPointer(GL10.GL_FLOAT, 0, _normalBuffer);
+	        //gl.glTexCoordPointer(3, GL10.GL_FLOAT, 0, _texCoordBuffer);
 	    
 		    gl.glLoadIdentity();
 		    
-		 // set translation
-		    gl.glTranslatef(-_posX, -_posY, -_posZ);
+		    // set translation
+		    gl.glTranslatef(_posX, _posY, _posZ);
 		    // set scale
 		    gl.glScalef(_scale, _scale, _scale);
 		    // set rotation
+		    gl.glRotatef( -90, 1.0f, 0.0f, 0.0f);
 		    gl.glRotatef( _pitch, 1.0f, 0.0f, 0.0f);
 		    gl.glRotatef( _yaw, 0.0f, 1.0f, 0.0f);
-		    gl.glRotatef(-_roll, 0.0f, 0.0f, 1.0f);
 		    
-		    gl.glDrawElements(GL10.GL_TRIANGLES, _indexBuffer.array().length, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
+		    if ( _special == SPECIAL_ROLL )
+		    	gl.glRotatef(-_roll + _special_roll_dir * _special_roll, 0.0f, 0.0f, 1.0f);
+		    else
+		    	gl.glRotatef(-_roll, 0.0f, 0.0f, 1.0f);
+		    
+		    //gl.glDrawElements(GL10.GL_TRIANGLES, _indexBuffer.array().length / 4, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
+		    gl.glDrawElements(GL10.GL_TRIANGLES, _cntVertices, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
 		}
 	}
 }
