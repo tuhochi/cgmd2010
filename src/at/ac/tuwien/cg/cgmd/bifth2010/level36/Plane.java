@@ -5,7 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.FloatBuffer;
 
-import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.*;
 
 /**
  * A vertex shaded cube.
@@ -23,24 +23,31 @@ class Plane
         };
         
         float normals[] =  {
+        		0.0f, 0.0f, -1.0f, 
         		0.0f, 0.0f, -1.0f,
+        		0.0f, 0.0f, -1.0f, 
         		0.0f, 0.0f, -1.0f,
-        		0.0f, 0.0f, -1.0f,
-        		0.0f, 0.0f, -1.0f,	
         };
         
+//        float textureCoords[] = {
+//        		0.0f, 0.0f, 1.0f, 1.0f,
+//        		1.0f, 0.0f, 1.0f, 1.0f,
+//        		0.0f, 1.0f, 1.0f, 1.0f,
+//        		1.0f, 1.0f, 1.0f, 1.0f,
+//        };
+        
         float textureCoords[] = {
-        		0.0f, 0.0f,
-        		1.0f, 0.0f,
-        		0.0f, 1.0f,
+        		0.0f, 0.0f, 
+        		1.0f, 0.0f, 
+        		0.0f, 1.0f, 
         		1.0f, 1.0f
         };
         
-        int colors[] = {
-                0, 0, 0, one,
-                one, 0, 0, one,
-                one, one, 0, one,
-                0, one, 0, one
+        float colors[] = {
+                0.0f, 0.0f, 0.0f, 1.0f,
+                1.0f, 0.0f, 0.0f, 1.0f,
+                1.0f, 1.0f, 0.0f, 1.0f,
+                0.0f, 1.0f, 0.0f, 1.0f
         };
         
         byte indices[] = {
@@ -62,23 +69,23 @@ class Plane
         mVertexBuffer.put(vertices);
         mVertexBuffer.position(0);
         
-//        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length*4);
-//        cbb.order(ByteOrder.nativeOrder());
-//        mColorBuffer = cbb.asIntBuffer();
-//        mColorBuffer.put(colors);
-//        mColorBuffer.position(0);
+        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length*4);
+        cbb.order(ByteOrder.nativeOrder());
+        mColorBuffer = cbb.asFloatBuffer();
+        mColorBuffer.put(colors);
+        mColorBuffer.position(0);
         
-//        ByteBuffer nbb = ByteBuffer.allocateDirect(normals.length*3);
-//        nbb.order(ByteOrder.nativeOrder());
-//        mNormalBuffer = nbb.asFloatBuffer();
-//        mNormalBuffer.put(normals);
-//        mNormalBuffer.position(0);
-      
-//        ByteBuffer tbb = ByteBuffer.allocateDirect(textureCoords.length*2);
-//        tbb.order(ByteOrder.nativeOrder());
-//        mTextureBuffer = tbb.asFloatBuffer();
-//        mTextureBuffer.put(textureCoords);
-//        mTextureBuffer.position(0);
+        ByteBuffer nbb = ByteBuffer.allocateDirect(normals.length*4);
+        nbb.order(ByteOrder.nativeOrder());
+        mNormalBuffer = nbb.asFloatBuffer();
+        mNormalBuffer.put(normals);
+        mNormalBuffer.position(0);
+     
+        ByteBuffer tbb = ByteBuffer.allocateDirect(textureCoords.length*4);
+        tbb.order(ByteOrder.nativeOrder());
+        mTextureBuffer = tbb.asFloatBuffer();
+        mTextureBuffer.put(textureCoords);
+        mTextureBuffer.position(0);
 
         mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
         mIndexBuffer.put(indices);
@@ -89,15 +96,15 @@ class Plane
     {
         gl.glFrontFace(gl.GL_CW);
         gl.glVertexPointer(4,GL10.GL_FLOAT, 0, mVertexBuffer);
-        //gl.glColorPointer(4, gl.GL_FIXED, 0, mColorBuffer);
-        //gl.glNormalPointer(gl.GL_FLOAT, 0, mNormalBuffer);
-        //gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
+        //gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
+        gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
+        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
         gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuffer);
     }
 
     private FloatBuffer   mVertexBuffer;
     private FloatBuffer   mNormalBuffer;
-    private IntBuffer	mColorBuffer;
+    private FloatBuffer	  mColorBuffer;
     private FloatBuffer   mTextureBuffer;
-    private ByteBuffer  mIndexBuffer;
+    private ByteBuffer    mIndexBuffer;
 }

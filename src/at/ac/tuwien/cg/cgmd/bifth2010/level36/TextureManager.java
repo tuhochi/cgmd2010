@@ -37,7 +37,7 @@ public class TextureManager {
 	}
 	
 	public int loadTexture(GL10 gl, int resId) {
-		InputStream is = context.getResources().openRawResource(resId);
+		InputStream is = this.context.getResources().openRawResource(resId);
 		Bitmap bitmap = null;
 		try
 		{

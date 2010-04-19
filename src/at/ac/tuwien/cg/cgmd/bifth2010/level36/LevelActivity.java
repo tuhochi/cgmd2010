@@ -21,6 +21,7 @@ import android.view.View.OnTouchListener;
 public class LevelActivity extends Activity {
 	//public static Paint paint;
 	private GLSurfaceView mGLSurfaceView;
+	private GameView_New gameView; 
 	private Context context;
 	private OnTouchListener touchListener = new OnTouchListener() {
 		public boolean onTouch(View v, MotionEvent e) {
@@ -40,10 +41,14 @@ public class LevelActivity extends Activity {
 		Log.d("LevelActivity::onCreate", "Start the program.");
 		super.onCreate(savedInstanceState);
 		context = this;
-        mGLSurfaceView = new GLSurfaceView(this);
-        mGLSurfaceView.setRenderer(new GameRenderer(true, context));
-        setContentView(mGLSurfaceView);
+		//EDITED 1504
+        //mGLSurfaceView = new GLSurfaceView(this);
+        //mGLSurfaceView.setRenderer(new GameRenderer(true, context));
+        //setContentView(mGLSurfaceView);
+		//EDITED 1504
 		
+		gameView = new GameView_New(this);
+		setContentView(gameView);
 		
 		//set fullscreen
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
