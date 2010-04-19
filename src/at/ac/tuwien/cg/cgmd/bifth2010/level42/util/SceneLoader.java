@@ -23,119 +23,138 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 
-/*
-# AndroidModel format (*.aom) layout. The whole thing is usually GZIPed.
-# Entities:
-#	- Material
-#		A Material is a set of ambient, diffuse and specular colors, a ks and an
-#		optional textureFilename; identified by a name
-#	- Geometry
-#		A Geometry is a set of Vertices (forming Triangles), along with their normals
-#		and (optionally) their texcoords. Each Geometry is identified by a name
-#	- Model
-#		A Model is a set of Geometries, identified by a name, each having it's own Material
-#	- SceneEntity
-#		A SceneEntity is a set of Models, each having it's own Transformation Matrix. Furthermore
-#		the SceneEntity as whole has a Transformation Matrix as well, and is identified by a name
-
-#----------
-# Header
-#----------
-4ndr01dM0d3l				String			Magic Bytes
-version						int				The current Version of this Format
-
-#----------
-# Materials
-#----------
-numMaterials				int				Number of Materials in this file
-for(numMaterials)
-{
-	name					String			Name of this Material (must be unique)
-	ambient					float[4]		ambient color
-	diffuse					float[4]		diffuse color
-	specular				float[4]		specular color
-	emissive				float[4]		emissive color
-	ks						float			specular reflecion coefficient
-	textureFilename			String			texture filename, "" if no texture present
-}
-
-#----------
-# Geometries
-#----------
-numGeometries				int				Number of Geometries in this file
-for(numGeometries)
-{
-	geometryName			String			Name of this Geometry (must be unique)
-	boundingBoxMin			float[3]		Minimum Point of the bounding box
-	boundingBoxMax			float[3]		Maximum Point of the bounding box
-	boundingSphereCenter	float[3]		Center of the bounding sphere
-	boundingSphereRadius	float			Radius of the bounding sphere
-	numVertices				int				Number of Vertices of this Geometry
-	for(numVertices)	
-	{
-		vertex				float[3]		A Vertex
-	}
-	for(numVertices)	
-	{
-		normal				float[3]		A Normal
-	}
-	hasTexcoords			boolean			If we have Texcoords
-	if(hasTexcoords)
-	{
-		for(numTexcoords)
-		{
-			texcoord		float[2]		A Texcoord
-		}
-	}
-}
-
-#----------
-# Models
-#----------
-numModels					int				Number of Models in this file
-for(numModels)
-{
-	modelName				String			Name of this Model (must be unique)
-	numGeoms				int				Number of Geometries in this Model
-	for(numGeoms)
-	{
-		geometry			String			A Geometry, identified by its name
-		materialName		String			Material of this Geometry
-	}
-}
-
-#----------
-# SceneEntities
-#----------
-numSceneEntities			int				Number of Scene Entities in this file
-for(numSceneEntities)
-{
-	SceneEntityName			String			Name of this SceneEntity (must be unique)
-	sceneTransformation		float[16]		Transformation matrix of this SceneEntity (regarding world)
-	numModls				int				Number of Models in this SceneEntity
-	for(numModls)
-	{
-		modelTransformation	float[16]		Transformation matrix of this Model (regarding the Scene Entity)
-		model				String			A Model, identified by its name
-	}
-}
-*/
-
+/**
+ * # AndroidModel format (*.aom) layout. The whole thing is usually GZIPed.
+ * # Entities:
+ * #	- Material
+ * #		A Material is a set of ambient, diffuse and specular colors, a ks and an
+ * #		optional textureFilename; identified by a name
+ * #	- Geometry
+ * #		A Geometry is a set of Vertices (forming Triangles), along with their normals
+ * #		and (optionally) their texcoords. Each Geometry is identified by a name
+ * #	- Model
+ * #		A Model is a set of Geometries, identified by a name, each having it's own Material
+ * #	- SceneEntity
+ * #		A SceneEntity is a set of Models, each having it's own Transformation Matrix. Furthermore
+ * #		the SceneEntity as whole has a Transformation Matrix as well, and is identified by a name
+ * 
+ * #----------
+ * # Header
+ * #----------
+ * 4ndr01dM0d3l				String			Magic Bytes
+ * version						int				The current Version of this Format
+ * 
+ * #----------
+ * # Materials
+ * #----------
+ * numMaterials				int				Number of Materials in this file
+ * for(numMaterials)
+ * {
+ * 	name					String			Name of this Material (must be unique)
+ * 	ambient					float[4]		ambient color
+ * 	diffuse					float[4]		diffuse color
+ * 	specular				float[4]		specular color
+ * 	emissive				float[4]		emissive color
+ * 	ks						float			specular reflecion coefficient
+ * 	textureFilename			String			texture filename, "" if no texture present
+ * }
+ * 
+ * #----------
+ * # Geometries
+ * #----------
+ * numGeometries				int				Number of Geometries in this file
+ * for(numGeometries)
+ * {
+ * 	geometryName			String			Name of this Geometry (must be unique)
+ * 	boundingBoxMin			float[3]		Minimum Point of the bounding box
+ * 	boundingBoxMax			float[3]		Maximum Point of the bounding box
+ * 	boundingSphereCenter	float[3]		Center of the bounding sphere
+ * 	boundingSphereRadius	float			Radius of the bounding sphere
+ * 	numVertices				int				Number of Vertices of this Geometry
+ * 	for(numVertices)	
+ * 	{
+ * 		vertex				float[3]		A Vertex
+ * 	}
+ * 	for(numVertices)	
+ * 	{
+ * 		normal				float[3]		A Normal
+ * 	}
+ * 	hasTexcoords			boolean			If we have Texcoords
+ * 	if(hasTexcoords)
+ * 	{
+ * 		for(numTexcoords)
+ * 		{
+ * 			texcoord		float[2]		A Texcoord
+ * 		}
+ * 	}
+ * }
+ * 
+ * #----------
+ * # Models
+ * #----------
+ * numModels					int				Number of Models in this file
+ * for(numModels)
+ * {
+ * 	modelName				String			Name of this Model (must be unique)
+ * 	numGeoms				int				Number of Geometries in this Model
+ * 	for(numGeoms)
+ * 	{
+ * 		geometry			String			A Geometry, identified by its name
+ * 		materialName		String			Material of this Geometry
+ * 	}
+ * }
+ * 
+ * #----------
+ * # SceneEntities
+ * #----------
+ * numSceneEntities			int				Number of Scene Entities in this file
+ * for(numSceneEntities)
+ * {
+ * 	SceneEntityName			String			Name of this SceneEntity (must be unique)
+ * 	sceneTransformation		float[16]		Transformation matrix of this SceneEntity (regarding world)
+ * 	numModls				int				Number of Models in this SceneEntity
+ * 	for(numModls)
+ * 	{
+ * 		modelTransformation	float[16]		Transformation matrix of this Model (regarding the Scene Entity)
+ * 		model				String			A Model, identified by its name
+ * 	}
+ * }
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class SceneLoader
 {
+	
+	/** The Constant CURRENT_VERSION. */
 	private static final int CURRENT_VERSION = 5;
+	
+	/** The Constant instance. */
 	private static final SceneLoader instance = new SceneLoader();
 	
+	/**
+	 * Instantiates a new scene loader.
+	 */
 	private SceneLoader()
 	{
 		
 	}
 	
+	/**
+	 * Gets the single instance of SceneLoader.
+	 *
+	 * @return single instance of SceneLoader
+	 */
 	public static SceneLoader getInstance()
 	{
 		return instance;
 	}
 	
+	/**
+	 * Read scene.
+	 *
+	 * @param filename the filename
+	 * @return the scene
+	 */
 	public Scene readScene(String filename)
 	{
 		long startTime = System.currentTimeMillis();
@@ -311,12 +330,25 @@ public class SceneLoader
 		return scene;
 	}
 	
+	/**
+	 * Read float array.
+	 *
+	 * @param arr the array to write to
+	 * @param dis the DataInputStream to read from
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	private void readFloatArray(float[] arr, DataInputStream dis) throws IOException
 	{
 		for(int i=0; i<arr.length; i++)
 			arr[i] = dis.readFloat();
 	}
 	
+	/**
+	 * Array to buffer.
+	 *
+	 * @param data the array to read from
+	 * @return the float buffer
+	 */
 	private FloatBuffer arrayToBuffer(float[] data)
 	{
 		if(data == null)

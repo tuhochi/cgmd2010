@@ -70,8 +70,8 @@ public class Ellipse
 	{
         //pos = center + a cos(t) + b sin(t) - thx to dr. math 
 
-		aCost.copy(a);
-		bSint.copy(b);
+		aCost.set(a);
+		bSint.set(b);
 
 		cost = (float)Math.cos(t);
 		sint = (float)Math.sin(t);
@@ -80,11 +80,11 @@ public class Ellipse
 		bSint.multiply(sint);
 		
 		//... a cos(t) + b sin(t)
-		sumAB.copy(aCost);
+		sumAB.set(aCost);
 		sumAB.add(bSint);
 		
 		//center + a cos(t) + b sin(t)
-		pos.copy(center);
+		pos.set(center);
 		pos.add(sumAB);
 		
 		return pos;

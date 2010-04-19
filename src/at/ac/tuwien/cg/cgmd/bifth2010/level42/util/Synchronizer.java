@@ -2,18 +2,34 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * The Class Synchronizer.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class Synchronizer
 {
+	/** The lock. */
 	private ReentrantLock lock = new ReentrantLock();
+	
+	/** The prerender Condition. */
 	private Condition prerender = lock.newCondition();
+	
+	/** The logic Condition. */
 	private Condition logic = lock.newCondition();
 
 	// init lastLogicFrame one lower than lastPreRenderFrame,
 	// to let the logic frame run once before starting to render
 	private int lastLogicFrame = -1;
+	
 	private int lastPreRenderFrame = 0;
+	
 	public boolean running = true;
 
+	/**
+	 * Reset.
+	 */
 	public void reset()
 	{
 		lock.lock();
@@ -24,6 +40,9 @@ public class Synchronizer
 		lock.unlock();
 	}
 	
+	/**
+	 * Wait for logic.
+	 */
 	public void waitForLogic()
 	{
 		if(!running)
@@ -40,6 +59,9 @@ public class Synchronizer
 		lock.unlock();
 	}
 
+	/**
+	 * Wait for pre render.
+	 */
 	public void waitForPreRender()
 	{
 		if(!running)
@@ -56,6 +78,9 @@ public class Synchronizer
 		lock.unlock();
 	}
 
+	/**
+	 * Pre render done.
+	 */
 	public void preRenderDone()
 	{
 		lock.lock();
@@ -64,6 +89,9 @@ public class Synchronizer
 		lock.unlock();
 	}
 
+	/**
+	 * Logic done.
+	 */
 	public void logicDone()
 	{
 		lock.lock();
@@ -72,6 +100,11 @@ public class Synchronizer
 		lock.unlock();
 	}
 
+	/**
+	 * Toggles this Synchronizer active
+	 *
+	 * @param running the new active
+	 */
 	public void setActive(boolean running)
 	{
 		if(this.running == running)
@@ -86,10 +119,5 @@ public class Synchronizer
 			logic.signal();
 			lock.unlock();
 		}
-	}
-	
-	public void blockLogic(boolean block)
-	{
-		
 	}
 }

@@ -12,17 +12,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class Orbit represents a elliptic motion
- * 
+ * The Class Orbit represents a elliptic motion.
+ *
  * @author Alex Druml
  * @author Lukas Roessler
  */
 public class Orbit extends Motion
 {
 	
-	/** The iteration speed */
+	/** The iteration speed. */
 	private float 	speed;
+	
+	/** The dynamic morph speed. */
 	private float  	u,step,
 
 					//scale morphing
@@ -35,36 +38,38 @@ public class Orbit extends Motion
 					newSpeed,oldPerimeter,oldStepSize,
 					speedMorphStep,speedMorphIteration,dynamicMorphSpeed;
 
+	/** The do direction vec scaling. */
 	private boolean doCenterVecScaling,doDirectionVecScaling;
 	
-	/** The position on the ellipse */
+	/** The position on the ellipse. */
 	public final Vector3 position;
 	
-	/** The entity position is equivalent to the initial position (u=0) */
+	/** The entity position is equivalent to the initial position (u=0). */
 	public final Vector3 entityPos;
 	
-	/** The center position of the orbit */
+	/** The center position of the orbit. */
 	public final Vector3 centerPos;
 					
-	/** Represents the vector from the initial position (u=0) to the center of the orbit (a - axis) */
+	/** Represents the vector from the initial position (u=0) to the center of the orbit (a - axis). */
 	private final Vector3 centerVec;
 
-	/** The direction vector encodes the iteration direction (cw,ccw) and the b axis */
+	/** The direction vector encodes the iteration direction (cw,ccw) and the b axis. */
 	private final Vector3 directionVec;
 	
+	/** The ref center vec. */
 	private final Vector3 currtDirApproximation,tempDirectionVec,
 						  refDirectionVec,refCenterVec;
 
-	/** The generated transformation matrix */
+	/** The generated transformation matrix. */
 	private Matrix44 transform;
 	
-	/** The basic orientation of the object */
+	/** The basic orientation of the object. */
 	private final Matrix44  basicOrientation;
 	
-	/** The satellite transformation of the object */
+	/** The satellite transformation of the object. */
 	private SatelliteTransformation satTrans;
 	
-	/** The mathematical basis of the orbit */
+	/** The mathematical basis of the orbit. */
 	private Ellipse ellipse;
 
 	/**
@@ -117,11 +122,11 @@ public class Orbit extends Motion
 		this.speed = speed;
 		this.newSpeed = speed;
 		
-		this.entityPos.copy(entityPos);
-		this.centerPos.copy(centerPos);
-		this.directionVec.copy(directionVec);
+		this.entityPos.set(entityPos);
+		this.centerPos.set(centerPos);
+		this.directionVec.set(directionVec);
 		
-		this.centerVec.copy(this.entityPos);
+		this.centerVec.set(this.entityPos);
 		this.centerVec.subtract(this.centerPos);
 
 		if(basicOrientation!=null)
@@ -141,9 +146,9 @@ public class Orbit extends Motion
 	}
 	
 	/**
-	 * Iterate over the orbit
-	 * @param dt
-	 *            delta time between frames for a frame-independent motion
+	 * Iterate over the orbit.
+	 *
+	 * @param dt delta time between frames for a frame-independent motion
 	 */
 	public void update(float dt)
 	{	
@@ -172,9 +177,9 @@ public class Orbit extends Motion
 	}
 	
 	/**
-	 * Update the linear transition of the speed
-	 * @param dt
-	 *            delta time between frames for a frame-independent transition
+	 * Update the linear transition of the speed.
+	 *
+	 * @param dt delta time between frames for a frame-independent transition
 	 */
 	private void updateSpeedMorphing(float dt)
 	{
@@ -205,9 +210,9 @@ public class Orbit extends Motion
 	}
 	
 	/**
-	 * Update the linear axis scaling
-	 * @param dt
-	 *            delta time between frames for a frame-independent transition
+	 * Update the linear axis scaling.
+	 *
+	 * @param dt delta time between frames for a frame-independent transition
 	 */
 	private void updateAxisScaling(float dt)
 	{
@@ -263,14 +268,14 @@ public class Orbit extends Motion
 		if(doCenterVecScaling){
 			centerDiff += centerDiffIteration;
 			
-			centerVec.copy(refCenterVec);
+			centerVec.set(refCenterVec);
 			centerVec.multiply(centerDiff);
 		}
 		
 		if(doDirectionVecScaling){
 			directionDiff += directionDiffIteration;
 			
-			directionVec.copy(refDirectionVec);
+			directionVec.set(refDirectionVec);
 			directionVec.multiply(directionDiff);
 		}
 		
@@ -282,12 +287,12 @@ public class Orbit extends Motion
 	}
 	
 	/**
-	 * Evaluate the current position along the ellipse
+	 * Evaluate the current position along the ellipse.
 	 */
 	private void evaluatePos()
 	{
 		//evaluate ellipse
-		position.copy(ellipse.getPoint(u));
+		position.set(ellipse.getPoint(u));
 				
 		//reset transformation
 		transform.setIdentity();
@@ -306,20 +311,17 @@ public class Orbit extends Motion
 
 
 	/**
-	 * Provides a linear scaling of the orbit`s axis
-	 * 
-	 * @param aAxisFactor
-	 *            the scaling factor for the a axis - center vector (1 = no change)
-	 * @param bAxisFactor
-	 *            the scaling factor for the b axis - direction vector (1 = no change)
-	 * @param morphSpeed
-	 *            the transition speed
+	 * Provides a linear scaling of the orbit`s axis.
+	 *
+	 * @param aAxisFactor the scaling factor for the a axis - center vector (1 = no change)
+	 * @param bAxisFactor the scaling factor for the b axis - direction vector (1 = no change)
+	 * @param morphSpeed the transition speed
 	 */
 	public void morphAxisScale(float aAxisFactor,float bAxisFactor,float morphSpeed)
 	{
 		scalingMorphSpeed = morphSpeed;
-		refCenterVec.copy(centerVec);
-		refDirectionVec.copy(directionVec);
+		refCenterVec.set(centerVec);
+		refDirectionVec.set(directionVec);
 		
 		centerDiffFactor = aAxisFactor;
 		centerDiffStep = (centerDiffFactor-1)/100;
@@ -331,7 +333,7 @@ public class Orbit extends Motion
 	}
 	
 	/**
-	 * Limit universe according to the limits set in the @see Config
+	 * Limit universe according to the limits set in the @see Config.
 	 */
 	private void limitUniverse()
 	{
@@ -357,8 +359,8 @@ public class Orbit extends Motion
 	
 	/**
 	 * Change the step size relative to the new perimeter
-	 * <code>oldPerimeter</code> and <code>oldStepSize</code> 
-	 * has to be set before calling this method
+	 * <code>oldPerimeter</code> and <code>oldStepSize</code>
+	 * has to be set before calling this method.
 	 */
 	private void updateStepSize()
 	{
@@ -369,6 +371,9 @@ public class Orbit extends Motion
 		this.step = (oldStepSize*oldPerimeter)/ellipse.perimeter;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#morph(at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3)
+	 */
 	public void morph(Vector3 pushVec)
 	{
 		//stop scale morphing
@@ -376,12 +381,12 @@ public class Orbit extends Motion
 		centerDiffFactor = centerDiff;
 		
 		//approx current direction vec
-		currtDirApproximation.copy(ellipse.getPoint(u+step));
+		currtDirApproximation.set(ellipse.getPoint(u+step));
 		currtDirApproximation.subtract(position);
 		currtDirApproximation.normalize();
 		
 		//new speed evaluation
-		tempDirectionVec.copy(currtDirApproximation);
+		tempDirectionVec.set(currtDirApproximation);
 		tempDirectionVec.multiply(speed);
 		tempDirectionVec.add(pushVec);
 		newSpeed = tempDirectionVec.length();
@@ -395,9 +400,9 @@ public class Orbit extends Motion
 		oldStepSize = step;
 		
 		//update ellipse
-		this.entityPos.copy(this.position);
-		this.directionVec.copy(currtDirApproximation);
-		this.centerVec.copy(this.entityPos);
+		this.entityPos.set(this.position);
+		this.directionVec.set(currtDirApproximation);
+		this.centerVec.set(this.entityPos);
 		this.centerVec.subtract(this.centerPos);
 		
 		//cap size and speed of orbit
@@ -423,6 +428,9 @@ public class Orbit extends Motion
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#persist(java.io.DataOutputStream)
+	 */
 	@Override
 	public void persist(DataOutputStream dos) throws IOException
 	{
@@ -462,6 +470,9 @@ public class Orbit extends Motion
 			dos.writeBoolean(false);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#restore(java.io.DataInputStream)
+	 */
 	@Override
 	public void restore(DataInputStream dis) throws IOException
 	{
@@ -503,35 +514,53 @@ public class Orbit extends Motion
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#getSatTrans()
+	 */
 	@Override
 	public SatelliteTransformation getSatTrans() {
 		return satTrans;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#getCurrDirectionVec()
+	 */
 	@Override
 	public Vector3 getCurrDirectionVec() {
 		//approx current direction vec
-		currtDirApproximation.copy(ellipse.getPoint(u+step));
+		currtDirApproximation.set(ellipse.getPoint(u+step));
 		currtDirApproximation.subtract(position);
 		return currtDirApproximation;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setTransform(at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44)
+	 */
 	@Override
 	public void setTransform(Matrix44 transform) {
 		this.transform = transform;		
 	}
 
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#getSpeed()
+	 */
 	@Override
 	public float getSpeed() {
 		return this.speed;
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setSatTrans(at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation)
+	 */
 	public void setSatTrans(SatelliteTransformation satTrans) {
 		this.satTrans = satTrans;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#getTransform()
+	 */
 	public Matrix44 getTransform() {
 		return transform;
 	}

@@ -13,26 +13,69 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
+/**
+ * The Class Geometry.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class Geometry implements Persistable
 {
+	/** The Constant VERTEX_LENGTH. */
 	public static final int VERTEX_LENGTH = 3;
+	
+	/** The Constant TEXCOORD_LENGTH. */
 	public static final int TEXCOORD_LENGTH = 2;
 	
+	/** The ogl manager. */
 	private final OGLManager oglManager = OGLManager.instance;
+	
+	/** The Buffers. */
 	private final FloatBuffer vertices, normals, texcoords;
+	
+	/** The bounding box. */
 	private final AxisAlignedBox3 boundingBox;
+	
+	/** The bounding sphere. */
 	private final Sphere boundingSphere;
+	
+	/** The number of vertices. */
 	private final int numVertices;
+	
+	/** The nr of vertex bytes. */
 	private final int nrOfVertexBytes;
+	
+	/** The nr of normal bytes. */
 	private final int nrOfNormalBytes;
+	
+	/** The nr of texcoord bytes. */
 	private final int nrOfTexcoordBytes;
 	
+	/** The vbo id. */
 	private int vboID;
+	
+	/** The vertex offset. */
 	private final int vertexOffset;
+	
+	/** The normal offset. */
 	private final int normalOffset;
+	
+	/** The texcoord offset. */
 	private final int texcoordOffset;
+
+	/** if this is initialized. */
 	private boolean initialized;
 	
+	/**
+	 * Instantiates a new geometry.
+	 *
+	 * @param vertices the vertices
+	 * @param normals the normals
+	 * @param texcoords the texcoords
+	 * @param boundingBox the bounding box
+	 * @param boundingSphere the bounding sphere
+	 * @param numVertices the num vertices
+	 */
 	public Geometry(FloatBuffer vertices, FloatBuffer normals, FloatBuffer texcoords, AxisAlignedBox3 boundingBox, Sphere boundingSphere, int numVertices)
 	{
 		this.vertices = vertices;
@@ -74,6 +117,9 @@ public class Geometry implements Persistable
 			texcoordOffset = 0;
 	}
 	
+	/**
+	 * Inits the Geometry
+	 */
 	void init()
 	{
 		if(!initialized)
@@ -101,19 +147,33 @@ public class Geometry implements Persistable
 		}
 	}
 	
+	/**
+	 * De-inits the Geometry
+	 */
 	void deInit()
 	{
 		initialized = false;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#persist(java.io.DataOutputStream)
+	 */
 	public void persist(DataOutputStream dos)
 	{
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#restore(java.io.DataInputStream)
+	 */
 	public void restore(DataInputStream dis)
 	{
 	}
 	
+	/**
+	 * Render.
+	 *
+	 * @param rendermode the rendermode
+	 */
 	public void render(int rendermode)
 	{
 		oglManager.clientState(vertices != null, normals != null, texcoords != null);
@@ -148,15 +208,28 @@ public class Geometry implements Persistable
 		}
 	}
 	
+	/**
+	 * Update.
+	 */
 	public void update()
 	{
 	}
 	
+	/**
+	 * Gets the bounding box.
+	 *
+	 * @return the bounding box
+	 */
 	public AxisAlignedBox3 getBoundingBox()
 	{
 		return boundingBox;
 	}
 	
+	/**
+	 * Gets the bounding sphere.
+	 *
+	 * @return the bounding sphere
+	 */
 	public Sphere getBoundingSphere()
 	{
 		return boundingSphere;

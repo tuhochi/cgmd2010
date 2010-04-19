@@ -6,30 +6,62 @@ import android.opengl.GLU;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
+/**
+ * The Class OGLManager.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class OGLManager
 {
+	
+	/** The Constant instance. */
 	public static final OGLManager instance = new OGLManager();
 
+	/** whether the vertex client state is set */
 	private boolean clientStateVertices;
+	
+	/** whether the normal client state is set */
 	private boolean clientStateNormals;
+	
+	/** whether the texcoord client state is set */
 	private boolean clientStateTexcoords;
 
+	/** The currently bound vbo */
 	private int currentlyBoundVBO;
 
+	/** The modelview matrix */
 	private Matrix44 modelview;
+	
+	/** The projection matrix */
 	private Matrix44 projection;
+	
+	/** The viewport as returned by glViewport */
 	private int[] viewport;
 
-	//vars for unproject
+	//temp vars for unproject
+	/** The viewport array4. */
 	private int[] viewportArray4;
+	
+	/** The modelview array16. */
 	private float[] modelviewArray16;
+	
+	/** The projection array16. */
 	private float[] projectionArray16;
 	
+	/** The window. */
 	private float[] window;
+	
+	/** The unprojected pos. */
 	private float[] unprojectedPos;
+	
+	/** The unprojected pos vec. */
 	private Vector3 unprojectedPosVec;
 
 	
+	/**
+	 * Instantiates a new OGL manager.
+	 */
 	private OGLManager()
 	{
 		clientStateVertices = false;
@@ -47,6 +79,9 @@ public class OGLManager
 		unprojectedPosVec = new Vector3();
 	}
 
+	/**
+	 * Reset.
+	 */
 	public void reset()
 	{
 		clientStateVertices = false;
@@ -55,6 +90,13 @@ public class OGLManager
 		currentlyBoundVBO = 0;
 	}
 	
+	/**
+	 * sets Client states, minimizes state changes
+	 *
+	 * @param vertices whether the vertex client state should be enabled
+	 * @param normals whether the normal client state should be enabled
+	 * @param texcoords whether the texcoord client state should be enabled
+	 */
 	public void clientState(boolean vertices, boolean normals, boolean texcoords)
 	{
 		if(vertices && !clientStateVertices)
@@ -73,6 +115,11 @@ public class OGLManager
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
 
+	/**
+	 * Binds vbo, if it is not already bound
+	 *
+	 * @param id the id
+	 */
 	public void bindVBO(int id)
 	{
 		if(id != currentlyBoundVBO)
@@ -82,21 +129,47 @@ public class OGLManager
 		}
 	}
 
+	/**
+	 * Gets the modelview.
+	 *
+	 * @return the modelview
+	 */
 	public synchronized Matrix44 getModelview()
 	{
 		return modelview;
 	}
 
+	/**
+	 * Gets the projection.
+	 *
+	 * @return the projection
+	 */
 	public synchronized Matrix44 getProjection()
 	{
 		return projection;
 	}
 
+	/**
+	 * Gets the viewport.
+	 *
+	 * @return the viewport
+	 */
 	public synchronized int[] getViewport()
 	{
 		return viewport;
 	}
 
+	/**
+	 * Gl frustum infinite.
+	 *
+	 * @param left the left
+	 * @param right the right
+	 * @param bottom the bottom
+	 * @param top the top
+	 * @param zNear the z near
+	 * @param zFar the z far
+	 * @param result the result
+	 */
 	public void glFrustumInfinite(float left, float right, float bottom, float top, float zNear, float zFar, Matrix44 result)
 	{
 		float x, y, a, b, c, d;
@@ -125,6 +198,15 @@ public class OGLManager
 				0, 0, d, 0);
 	}
 
+	/**
+	 * Glu look at.
+	 *
+	 * @param eyePos the eye pos
+	 * @param inverseForwardNormalized the inverse forward normalized
+	 * @param rightNormalized the right normalized
+	 * @param upNormalized the up normalized
+	 * @param result the result
+	 */
 	public void gluLookAt(Vector3 eyePos, Vector3 inverseForwardNormalized, Vector3 rightNormalized, Vector3 upNormalized, Matrix44 result)
 	{
 		float[] view = result.getArray16();
@@ -148,6 +230,13 @@ public class OGLManager
 		result.set(view);
 	}
 	
+	/**
+	 * Un project.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return the vector3
+	 */
 	public Vector3 unProject(int x, int y)
 	{
 		viewportArray4 = getViewport();

@@ -19,25 +19,53 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
+/**
+ * The Class LevelActivity.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class LevelActivity extends Activity
 {
+	/** The Constant TAG. */
 	public static final String TAG = "Signanzorbit";
+	
+	/** The Constant SCENE_STATE_KEY. */
 	public static final String SCENE_STATE_KEY = "l42_state";
 	
+	/** The instance. */
 	private static LevelActivity instance;
 	
+	/** The render view. */
 	private RenderView renderView;
+	
+	/** The score TextView. */
 	private TextView score;
+	
+	/** The time TextView. */
 	private TextView time;
+	
+	/** The fps TextView. */
 	private TextView fps;
 	
+	/** The handler. */
 	public final Handler handler;
+	
+	/** The fps update runnable. */
 	public final Runnable fpsUpdateRunnable;
+	
+	/** The score update runnable. */
 	public final Runnable scoreUpdateRunnable;
+	
+	/** The remaining game time runnable. */
 	public final Runnable remainingGameTimeRunnable;
 	
+	/** The time manager. */
 	private final TimeManager timeManager = TimeManager.instance;
 	
+	/**
+	 * Instantiates a new level activity.
+	 */
 	public LevelActivity()
 	{
 		super();
@@ -94,6 +122,9 @@ public class LevelActivity extends Activity
 		};
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -119,6 +150,9 @@ public class LevelActivity extends Activity
 		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
 	@Override
 	protected void onStart()
 	{
@@ -126,6 +160,9 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onStart()");
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestart()
+	 */
 	@Override
 	protected void onRestart()
 	{
@@ -133,6 +170,9 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onRestart()");
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override
 	protected void onResume()
 	{
@@ -143,6 +183,9 @@ public class LevelActivity extends Activity
 		renderView.onResume();
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override
 	protected void onPause()
 	{
@@ -152,6 +195,9 @@ public class LevelActivity extends Activity
 		renderView.onPause();
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
 	@Override
 	protected void onStop()
 	{
@@ -159,6 +205,9 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onStop()");
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	protected void onDestroy()
 	{
@@ -166,6 +215,9 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onDestroy()");
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
 	{
@@ -192,6 +244,9 @@ public class LevelActivity extends Activity
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
@@ -223,6 +278,11 @@ public class LevelActivity extends Activity
 		}
 	}
 
+	/**
+	 * Gets the single instance of LevelActivity.
+	 *
+	 * @return single instance of LevelActivity
+	 */
 	public static LevelActivity getInstance()
 	{
 		return instance;

@@ -6,28 +6,73 @@ import java.io.IOException;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
+/**
+ * The Class Matrix44.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class Matrix44 implements Persistable
 {
+	/**
+	 * [row][col]
+	 */
 	public final float m[][] = new float[4][4];
+	/**
+	 * column major
+	 */
 	private final float m16[] = new float[16];
 	private Matrix44 temp;
 	private Vector3 tempV = new Vector3();
 
+	/**
+	 * Instantiates a new matrix44 as identity
+	 */
 	public Matrix44()
 	{
 		setIdentity();
 	}
 	
+	/**
+	 * copy constructor
+	 *
+	 * @param other the other
+	 */
 	public Matrix44(Matrix44 other)
 	{
 		set(other.m);
 	}
 	
+	/**
+	 * Instantiates a new matrix44.
+	 *
+	 * @param m16 the m16 (column major)
+	 */
 	public Matrix44(float[] m16)
 	{
 		set(m16);
 	}
 	
+	/**
+	 * Instantiates a new matrix44.
+	 *
+	 * @param m00 the m00
+	 * @param m10 the m10
+	 * @param m20 the m20
+	 * @param m30 the m30
+	 * @param m01 the m01
+	 * @param m11 the m11
+	 * @param m21 the m21
+	 * @param m31 the m31
+	 * @param m02 the m02
+	 * @param m12 the m12
+	 * @param m22 the m22
+	 * @param m32 the m32
+	 * @param m03 the m03
+	 * @param m13 the m13
+	 * @param m23 the m23
+	 * @param m33 the m33
+	 */
 	public Matrix44(
 			float m00, float m10, float m20, float m30, 
 			float m01, float m11, float m21, float m31, 
@@ -37,6 +82,9 @@ public class Matrix44 implements Persistable
 		set(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#persist(java.io.DataOutputStream)
+	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
 		for(int c=0; c<4; c++)
@@ -44,6 +92,9 @@ public class Matrix44 implements Persistable
 				dos.writeFloat(m[r][c]);
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#restore(java.io.DataInputStream)
+	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
 		for(int c=0; c<4; c++)
@@ -51,6 +102,11 @@ public class Matrix44 implements Persistable
 				m[r][c] = dis.readFloat();
 	}
 	
+	/**
+	 * Gets the array16.
+	 *
+	 * @return this as a column major float[16]
+	 */
 	public float[] getArray16()
 	{
 		int i = 0;
@@ -60,6 +116,11 @@ public class Matrix44 implements Persistable
 		return m16;
 	}
 	
+	/**
+	 * Sets this from a [row][col] array
+	 *
+	 * @param other the array
+	 */
 	public void set(float[][] other)
 	{
 		for(int r=0; r<4; r++)
@@ -67,6 +128,11 @@ public class Matrix44 implements Persistable
 				m[r][c] = other[r][c];
 	}
 	
+	/**
+	 * Sets this from a column major array
+	 *
+	 * @param m16 the array
+	 */
 	public void set(float[] m16)
 	{
 		int i = 0;
@@ -75,6 +141,26 @@ public class Matrix44 implements Persistable
 				m[r][c] = m16[i++];
 	}
 	
+	/**
+	 * Sets this from 16 floats
+	 *
+	 * @param m00 the m00
+	 * @param m10 the m10
+	 * @param m20 the m20
+	 * @param m30 the m30
+	 * @param m01 the m01
+	 * @param m11 the m11
+	 * @param m21 the m21
+	 * @param m31 the m31
+	 * @param m02 the m02
+	 * @param m12 the m12
+	 * @param m22 the m22
+	 * @param m32 the m32
+	 * @param m03 the m03
+	 * @param m13 the m13
+	 * @param m23 the m23
+	 * @param m33 the m33
+	 */
 	public void set(
 			float m00, float m10, float m20, float m30, 
 			float m01, float m11, float m21, float m31, 
@@ -99,6 +185,9 @@ public class Matrix44 implements Persistable
 		m[3][3] = m33;
 	}
 	
+	/**
+	 * Sets this to an identity.
+	 */
 	public void setIdentity()
 	{
 		for(int r=0; r<4; r++)
@@ -106,23 +195,40 @@ public class Matrix44 implements Persistable
 				m[r][c] = (r==c) ? 1 : 0;
 	}
 	
+	/**
+	 * Copy method
+	 *
+	 * @param other the other
+	 */
 	public void copy(Matrix44 other)
 	{
 		set(other.m);
 	}
-	
-	/*
+
+	/**
 	 * Returns a new rotation matrix corresponding to a quaternion
 	 * specified by x,y,z,w
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 * @param w the w
+	 * @return the matrix44
 	 */
 	public static Matrix44 fromQuaternion(float x, float y, float z, float w)
 	{
 		return new Matrix44().setFromQuaternion(x, y, z, w);
 	}
 	
-	/*
+	/**
 	 * Sets this to be a rotation matrix corresponding to a quaternion
 	 * specified by x,y,z,w
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param z the z
+	 * @param w the w
+	 * @return the matrix44
 	 */
 	public Matrix44 setFromQuaternion(float x, float y, float z, float w)
 	{
@@ -148,9 +254,13 @@ public class Matrix44 implements Persistable
 
 	    return this;
 	}
-	
-	/*
+
+	/**
 	 * Sets this to be a scale matrix
+	 *
+	 * @param sx the sx
+	 * @param sy the sy
+	 * @param sz the sz
 	 * @return this
 	 */
 	public Matrix44 setScale(float sx, float sy, float sz)
@@ -162,17 +272,26 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 	
-	/*
-	 * @return a scale matrix
+	/**
+	 * Gets a scale Matrix44
+	 *
+	 * @param sx the sx
+	 * @param sy the sy
+	 * @param sz the sz
+	 * @return a new Matrix44, set to be a scale matrix
 	 */
 	public static Matrix44 getScale(float sx, float sy, float sz)
 	{
 		return new Matrix44().setScale(sx, sy, sz);
 	}
 	
-	/*
+	/**
 	 * Generates a ScaleMatrix from sx,sy,sz and sets this=ScaleMatrix*this
-	 * @return this 
+	 *
+	 * @param sx the sx
+	 * @param sy the sy
+	 * @param sz the sz
+	 * @return this
 	 */
 	public Matrix44 addScale(float sx, float sy, float sz)
 	{
@@ -183,23 +302,43 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 	
+	/**
+	 * Sets this to be a scale matrix
+	 *
+	 * @param scale the scale
+	 * @return this
+	 */
 	public Matrix44 setScale(Vector3 scale)
 	{
 		return setScale(scale.x, scale.y, scale.z);
 	}
 	
+	/**
+	 * Gets a scale matrix
+	 *
+	 * @param scale the scale
+	 * @return a new Matrix44, set to be a scale matrix
+	 */
 	public static Matrix44 getScale(Vector3 scale)
 	{
 		return getScale(scale.x, scale.y, scale.z);
 	}
 	
+	/**
+	 * Generates a ScaleMatrix from scale and sets this=ScaleMatrix*this
+	 *
+	 * @param scale the scale
+	 * @return this
+	 */
 	public Matrix44 addScale(Vector3 scale)
 	{
 		return addScale(scale.x, scale.y, scale.z);
 	}
 
-	/*
+	/**
 	 * Sets this to be a rotateX matrix
+	 *
+	 * @param alpha the angle
 	 * @return this
 	 */
 	public Matrix44 setRotateX(float alpha)
@@ -212,17 +351,22 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 
-	/*
-	 * @return a rotateX matrix
+	/**
+	 * Gets a rotateX matrix.
+	 *
+	 * @param alpha the alpha
+	 * @return a new Matrix44, set to be a rotateX matrix
 	 */
 	public static Matrix44 getRotateX(float alpha)
 	{
 		return new Matrix44().setRotateX(alpha);
 	}
 	
-	/*
+	/**
 	 * Generates a RotateXMatrix from alpha and sets this=RotateXMatrix*this
-	 * @return this 
+	 *
+	 * @param alpha the angle
+	 * @return this
 	 */
 	public Matrix44 addRotateX(float alpha)
 	{
@@ -233,8 +377,10 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 
-	/*
+	/**
 	 * Sets this to be a rotateY matrix
+	 *
+	 * @param alpha the angle
 	 * @return this
 	 */
 	public Matrix44 setRotateY(float alpha)
@@ -247,17 +393,22 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 
-	/*
-	 * @return a rotateY matrix
+	/**
+	 * Gets a rotateY matrix.
+	 *
+	 * @param alpha the alpha
+	 * @return a new Matrix44, set to be a rotateY matrix
 	 */
 	public static Matrix44 getRotateY(float alpha)
 	{
 		return new Matrix44().setRotateY(alpha);
 	}
 	
-	/*
+	/**
 	 * Generates a RotateYMatrix from alpha and sets this=RotateYMatrix*this
-	 * @return this 
+	 *
+	 * @param alpha the angle
+	 * @return this
 	 */
 	public Matrix44 addRotateY(float alpha)
 	{
@@ -268,8 +419,10 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 
-	/*
+	/**
 	 * Sets this to be a rotateZ matrix
+	 *
+	 * @param alpha the alpha
 	 * @return this
 	 */
 	public Matrix44 setRotateZ(float alpha)
@@ -282,17 +435,22 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 
-	/*
-	 * @return a rotateZ matrix
+	/**
+	 * Gets a rotateZ matrix.
+	 *
+	 * @param alpha the alpha
+	 * @return a new Matrix44, set to be a rotateZ matrix
 	 */
 	public static Matrix44 getRotateZ(float alpha)
 	{
 		return new Matrix44().setRotateZ(alpha);
 	}
-	
-	/*
+
+	/**
 	 * Generates a RotateZMatrix from alpha and sets this=RotateZMatrix*this
-	 * @return this 
+	 *
+	 * @param alpha the alpha
+	 * @return this
 	 */
 	public Matrix44 addRotateZ(float alpha)
 	{
@@ -303,9 +461,12 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 	
-	/*
+	/**
 	 * Sets this to a RotateMatrix around axis with angle alpha
-	 * @return this;
+	 *
+	 * @param axis the axis
+	 * @param alpha the angle
+	 * @return this
 	 */
 	public Matrix44 setRotate(Vector3 axis, float alpha)
 	{
@@ -317,18 +478,25 @@ public class Matrix44 implements Persistable
 		m[3][0] =     0; 											m[3][1] =     0; 											m[3][2] =     0;											m[3][3] = 1;
 		return this;
 	}
-	
-	/*
+
+	/**
+	 * Gets the rotate Matrix44
+	 *
+	 * @param axis the axis
+	 * @param alpha the alpha
 	 * @return a RotateMatrix around axis with angle alpha
 	 */
 	public static Matrix44 getRotate(Vector3 axis, float alpha)
 	{
 		return new Matrix44().setRotate(axis, alpha);
 	}
-	
-	/*
+
+	/**
 	 * Generates a RotateMatrix around axis with angle alpha and sets this=RotateMatrix*this
-	 * @return this;
+	 *
+	 * @param axis the axis
+	 * @param alpha the alpha
+	 * @return this
 	 */
 	public Matrix44 addRotate(Vector3 axis, float alpha)
 	{
@@ -338,9 +506,13 @@ public class Matrix44 implements Persistable
 		set(temp.m);
 		return this;
 	}
-	
-	/*
+
+	/**
 	 * Sets this to be a translate matrix
+	 *
+	 * @param tx the tx
+	 * @param ty the ty
+	 * @param tz the tz
 	 * @return this
 	 */
 	public Matrix44 setTranslate(float tx, float ty, float tz)
@@ -351,18 +523,27 @@ public class Matrix44 implements Persistable
 		m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
 		return this;
 	}
-	
-	/*
-	 * @return a translate matrix
+
+	/**
+	 * Gets a translate Matrix
+	 *
+	 * @param tx the tx
+	 * @param ty the ty
+	 * @param tz the tz
+	 * @return new Matrix, set to be a translate matrix
 	 */
 	public static Matrix44 getTranslate(float tx, float ty, float tz)
 	{
 		return new Matrix44().setTranslate(tx, ty, tz);
 	}
-	
-	/*
+
+	/**
 	 * Generates a TranslateMatrix from tx,ty,tz and sets this=TranslateMatrix*this
-	 * @return this 
+	 *
+	 * @param tx the tx
+	 * @param ty the ty
+	 * @param tz the tz
+	 * @return this
 	 */
 	public Matrix44 addTranslate(float tx, float ty, float tz)
 	{
@@ -372,9 +553,11 @@ public class Matrix44 implements Persistable
 		set(temp.m);
 		return this;
 	}
-	
-	/*
+
+	/**
 	 * Sets this = this*right and returns this
+	 *
+	 * @param right the right
 	 * @return this
 	 */
 	public Matrix44 mult(Matrix44 right)
@@ -401,16 +584,22 @@ public class Matrix44 implements Persistable
 		return this;
 	}
 	
-	/*
-	 * @return left*right
+	/**
+	 * Multiplies two Matrix44
+	 *
+	 * @param left the left
+	 * @param right the right
+	 * @return a new Matrix, set to left*right
 	 */
 	public static Matrix44 mult(Matrix44 left, Matrix44 right)
 	{
 		return new Matrix44(left).mult(right);
 	}
 	
-	/*
-	 * @return this*in
+	/**
+	 * Transforms a point.
+	 *
+	 * @param in the point to transform
 	 */
 	public void transformPoint(Vector3 in)
 	{
@@ -426,8 +615,10 @@ public class Matrix44 implements Persistable
 		in.z = z;
 	}
 	
-	/*
-	 * @return this*in
+	/**
+	 * Transforms a point.
+	 *
+	 * @param in the point to transform
 	 */
 	public void transformPoint(Vector4 in)
 	{
@@ -441,10 +632,15 @@ public class Matrix44 implements Persistable
 		in.w = w;
 	}
 	
+	/**
+	 * Transforms a sphere.
+	 *
+	 * @param in the sphere to transform
+	 */
 	public void transformSphere(Sphere inout)
 	{
 		// make tempV a point on the hull
-		tempV.copy(1,0,0).multiply(inout.radius).add(inout.center);
+		tempV.set(1,0,0).multiply(inout.radius).add(inout.center);
 		
 		// transform both points
 		transformPoint(inout.center);
@@ -456,9 +652,14 @@ public class Matrix44 implements Persistable
 		inout.radius = tempV.length();
 	}
 	
+	/**
+	 * Transforms a sphere.
+	 *
+	 * @param in the sphere to transform
+	 */
 	public void transformSphere(Sphere in, Sphere out)
 	{
-		out.center.copy(in.center);
+		out.center.set(in.center);
 		out.radius = in.radius;
 		transformSphere(out);
 	}
