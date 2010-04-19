@@ -20,7 +20,7 @@ public class LevelRenderer implements Renderer {
 		
 		
 		
-		// Draw our square.
+		b.draw(gl);
 		bunny.draw(gl);
 		
 	}
@@ -47,11 +47,10 @@ public class LevelRenderer implements Renderer {
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		
-		//level = new LevelCollision(context, R.drawable.l50_level_collision);
+		level = new LevelCollision(context, R.drawable.l50_level01_coll);
 		
-		bunny = new LevelObject(gl, context, 0, 0, 50, 50, R.drawable.l50_rabbit_small);
-//		new LevelObject(gl, context, 0, 0, 0, 0, R.drawable.l50_level01_colll);
-//		new LevelObject(gl, context, 0, 100, 50, 50, R.drawable.l50_level01_colll);
+		bunny = new LevelObject(gl, context, level, 0, 0, 50, 50, R.drawable.l50_rabbit_small);
+		b = new LevelObject(gl, context, level, 0, 0, 200, 200, R.drawable.l50_level01_coll);
 
 	}
 	
@@ -59,8 +58,12 @@ public class LevelRenderer implements Renderer {
 		bunny.move(x,y);
 	}
 	
+	void movePlayer(int direction, float amount) {
+		bunny.move(direction,amount);
+	}
+	
 	LevelCollision level;
-	LevelObject bunny;
+	LevelObject bunny, a, b;
 	Context context;
 	float positionX = 0;
 	float positionY = 0;
