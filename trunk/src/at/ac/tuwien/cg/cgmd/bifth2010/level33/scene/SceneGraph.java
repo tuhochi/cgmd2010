@@ -29,6 +29,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryTrash;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWall;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWay;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
 public class SceneGraph {
 
@@ -62,6 +63,8 @@ public class SceneGraph {
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	
+	StopTimer frameTimer = new StopTimer();
+	
 	
 	 
 	public SceneGraph(LevelHandler level, Context context) {
@@ -78,16 +81,13 @@ public class SceneGraph {
 	 */
 	public static void init(GL10 gl) {
 		
-		
-		
-//		if(SceneGraph.init)
-//			return;
-//		SceneGraph.init=true;
-			
+		StopTimer t = new StopTimer();
 		
 		SceneGraph.camera = new Camera();
 		geometry = new Geometry[17];
 
+		
+		
 		// load Objects
 		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_mauer_turm);
 		InputStream isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_mauer_turm);
@@ -101,26 +101,10 @@ public class SceneGraph {
 		geometry[GEOMETRY_WAY]= GeometryLoader.loadObj(gl, is,isImage);
 		
 		
-		//
-	
 
-//			
-//		
-//		
-// 		//System.out.println("ok");
-//		
-//		
-		
 		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_character);
 		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_character);
-		
 		geometry[GEOMETRY_CHARACTER]=  GeometryLoader.loadObj(gl, is,isImage);
-		
-		//geometry[GEOMETRY_WAY]=  new GeometryWay(gl);
-		
-		
-		
-		
 		
 		
 		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_stone);
@@ -136,10 +120,13 @@ public class SceneGraph {
 		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_schatz);
 		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_schatz);
 		geometry[GEOMETRY_TRASH]= GeometryLoader.loadObj(gl, is,isImage);
+
 		
+		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_map);
+		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_map);
+		geometry[GEOMETRY_MAP]= GeometryLoader.loadObj(gl, is,isImage);
 				
-		geometry[GEOMETRY_MAP] = new GeometryMap(gl);
-		
+
 		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_brunnen);
 		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_brunnen);
 		geometry[GEOMETRY_SPRING]= GeometryLoader.loadObj(gl, is,isImage);
@@ -151,9 +138,8 @@ public class SceneGraph {
 				geometry[i].render();
 		}
 //		
+		t.logTime("Geometry laden und init dauerte:");
 		
-
-	
 	}
 
 	/**
@@ -163,6 +149,7 @@ public class SceneGraph {
 	 */
 	public void render(GL10 gl) {
 	//	Log.d("Frame", "--");
+
 		
 		// start time measurement
 		framesSinceLastSecound++;
@@ -176,6 +163,7 @@ public class SceneGraph {
 			deltaTimeCount = 0f;
 		}
 
+		
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		// Set the background color to black ( rgba ).
@@ -185,26 +173,43 @@ public class SceneGraph {
 		// Depth buffer setup.
 		gl.glClearDepthf(1.0f);
 		// Enables depth testing.
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
+		
+		
 		gl.glEnable(GL10.GL_DEPTH_TEST);
+		
+
+        gl.glDepthFunc(GL10.GL_LEQUAL);
+		gl.glDepthMask(true);
 		// The type of depth testing to do.
-		gl.glDepthFunc(GL10.GL_LEQUAL);
+		//gl.glDepthFunc(GL10.GL_LEQUAL);
 		// Really nice perspective calculations.
 //		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 
+
+		
+	
+		
+		
+		
 		// updateLogic
 		level.updateLogic();
 
+		
 
 		// upadate Camera
 		camera.lookAt(gl);
+		
+		
 
 		// now start
 
 		// now render the Scene
 		renderScene(gl);
 
-		// ?? sleep rest of time?
 
+		// ?? sleep rest of time?
 	}
 
 
@@ -221,7 +226,7 @@ public class SceneGraph {
 			Log.d("pos",lastPos.x+" "+lastPos.y);
 		}
 		
-		
+		//int tempytpe=-100;
 		
 		// easy culling
 		if(Camera.zoom==Camera.standardZoom){
@@ -233,22 +238,45 @@ public class SceneGraph {
 //			for(int y=0;y<level.worldDim.y;y++){
 //			for(int x=0;x<level.worldDim.x;x++){
 			
-			// frustum
+			// way (surface)
+			for(int y=frustumMin.y;y<frustumMax.y;y++){
+				for(int x=frustumMin.x;x<frustumMax.x;x++){
+
+					if(level.getWorldEntry(x, y)!=GEOMETRY_WALL)
+					{	
+						glPushMatrix();
+						gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
+						geometry[GEOMETRY_WAY].render();
+						glPopMatrix();
+					}
+				}
+			}
+			
+//			// wall 
+//			for(int y=frustumMin.y;y<frustumMax.y;y++){
+//				for(int x=frustumMin.x;x<frustumMax.x;x++){
+//
+//					if(level.getWorldEntry(x, y)==GEOMETRY_WALL)
+//					{	
+//						glPushMatrix();
+//						gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
+//						geometry[GEOMETRY_WALL].render();
+//						glPopMatrix();
+//					}
+//				}
+//			}
+			// rest
 			for(int y=frustumMin.y;y<frustumMax.y;y++){
 				for(int x=frustumMin.x;x<frustumMax.x;x++){
 					
 					int type = level.getWorldEntry(x, y);
-					
-				glPushMatrix();
-
-				gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
-			
-				geometry[type].render();	
-				// render way if no wall
-				if(type!=GEOMETRY_WALL)
-					geometry[GEOMETRY_WAY].render();
-				
-				glPopMatrix();
+					if(type!=GEOMETRY_WAY)
+					{
+					glPushMatrix();
+					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
+					geometry[type].render();
+					glPopMatrix();
+					}
 				}
 			}
 			
@@ -256,7 +284,7 @@ public class SceneGraph {
 			
 		}
 		
-		// render the whol world
+		// render the whole world
 		else
 		{
 		//	glPushMatrix();

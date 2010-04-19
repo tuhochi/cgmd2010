@@ -131,7 +131,12 @@ public class LevelHandler {
 		else if (diff.y < 0)
 			step.y = -1;
 
-		gameCharacterPosition.add(step.divide(0.2f/SceneGraph.deltaTime));
+		Log.d("deltaTime",String.valueOf(SceneGraph.deltaTime));
+		
+		if(SceneGraph.deltaTime<0.2f)
+			gameCharacterPosition.add(step.divide(0.2f/SceneGraph.deltaTime));
+		else
+			gameCharacterPosition.add(step);
 		
 		
 
@@ -150,21 +155,70 @@ public class LevelHandler {
 		}
 		
 		//update Level
-		if(gameCharacterPosition.x%1==0 && gameCharacterPosition.y%1==0)
+		//if(gameCharacterPosition.x%1==0 && gameCharacterPosition.y%1==0)
 			updateLevelAfterStep();
 	}
 
+
+	/**
+	 * The world will be updated
+	 */
+	private void updateLevelAfterStep() {
+		
+		int worldIndex = getWorldId(Math.round((gameCharacterPosition.x)), Math.round((gameCharacterPosition.y)));
+		
+//		int rows = new Float(gameCharacterPosition.y).intValue();
+//		int columns = new Float(gameCharacterPosition.x).intValue();
+//		Log.d("worldIndex1", String.valueOf(worldIndex));
+//		worldIndex = worldDim.y*rows+columns;
+//		Log.d("worldIndex2", String.valueOf(worldIndex));
+//		
+		
+		if(world[worldIndex]!=1)
+		{
+			if(LevelActivity.IS_MUSIC_ON)
+			{
+				if(world[worldIndex]==SceneGraph.GEOMETRY_STONE)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_BARREL)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_TRASH)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
+					LevelActivity.vibrator.vibrate(120L);  
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_SPRING)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
+				}
+				else if(world[worldIndex]==SceneGraph.GEOMETRY_MAP)
+				{
+					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
+				}
+			}
+			world[worldIndex]=1;
+			
+			
+			
+			//AlphaBLENDING
+			//TODO
+		}
+		LevelActivity.soundHandler.releaseActivityAudioPlayer();
+	}
 
 	/**
 	 * 
 	 * @param pos of the desired Entry
 	 * @return the Entry
 	 */
-	public int getWorldEntry(Vector2i pos){
-		Vector2i real= getRealWorldCoordinate(pos);
-		return world[real.y*worldDim.x+real.x];
+	public int getWorldEntry(Vector2i pos){		
+		
+		return world[getWorldId(pos)];
 	}
-	
 	/**
 	 * look to getWorldEntry(Vector2i pos)
 	 */
@@ -172,6 +226,15 @@ public class LevelHandler {
 		return getWorldEntry(new Vector2i(x,y));
 	}
 	
+	public int getWorldId(int x, int y){
+		return getWorldId(new Vector2i(x,y));
+	}
+	
+	private int getWorldId(Vector2i pos) {
+		Vector2i real= getRealWorldCoordinate(pos);
+		return	real.y*worldDim.x+real.x;
+	}
+
 	private Vector2i getRealWorldCoordinate(Vector2i pos) {
 		Vector2f real= getRealWorldCoordinate(new Vector2f(pos.x, pos.y));
 		return new Vector2i((int)real.x,(int)real.y);
@@ -287,50 +350,6 @@ public class LevelHandler {
 		return false;
 	}
 	
-	/**
-	 * The world will be updated
-	 */
-	private void updateLevelAfterStep() {
-		
-		int rows = new Float(gameCharacterPosition.y).intValue();
-		int columns = new Float(gameCharacterPosition.x).intValue();
-		int worldIndex = worldDim.y*rows+columns;
-		if(world[worldIndex]!=1)
-		{
-			if(LevelActivity.IS_MUSIC_ON)
-			{
-				if(world[worldIndex]==SceneGraph.GEOMETRY_STONE)
-				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
-				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_BARREL)
-				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
-				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_TRASH)
-				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
-					LevelActivity.vibrator.vibrate(120L);  
-				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_SPRING)
-				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
-				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_MAP)
-				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
-				}
-			}
-			world[worldIndex]=1;
-			
-			
-			
-			//AlphaBLENDING
-			//TODO
-		}
-		LevelActivity.soundHandler.releaseActivityAudioPlayer();
-	}
-
 	public void steerTouchEvent(Vector2f lastTouch) {
 		
 		// calculate Position 

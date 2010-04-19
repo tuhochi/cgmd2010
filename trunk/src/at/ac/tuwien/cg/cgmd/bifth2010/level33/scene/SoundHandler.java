@@ -112,6 +112,8 @@ public class SoundHandler {
 	 */
 	public void playActivitySound(int soundIndex) {
 			
+		
+		
 		if(activityAudioPlayer1==null)
 		{
 			initActivityPlayer(1, soundIndex);

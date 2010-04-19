@@ -240,7 +240,7 @@ public class Geometry {
 		if (!init)
 			init();
 
-		if (this == lastGeometry && wasInit) {
+		if (this == Geometry.lastGeometry && wasInit) {
 			gl.glDrawArrays(getPrimitiveType(type), offset, numVertices);
 			return;
 		} else {
@@ -291,7 +291,8 @@ public class Geometry {
 		}
 
 		gl.glDrawArrays(getPrimitiveType(type), offset, numVertices);
-		lastGeometry = this;
+		
+		Geometry.lastGeometry = this;
 	}
 
 	public void render() {
