@@ -183,8 +183,9 @@ public class MainChar implements SceneEntity {
 		}
 		
 		soundPlayed = false; 
-		audioIdGameOverSound = SoundManager.instance.requestPlayer(R.raw.l23_crashsound, false);
 		soundManager = SoundManager.instance; 
+		audioIdGameOverSound = soundManager.requestPlayer(R.raw.l23_crashsound, false);
+		
 			
 	}
 	
