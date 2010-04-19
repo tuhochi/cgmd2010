@@ -5,5 +5,5 @@
 <string name="l30_HelpActivity_Title">Stockmarket Loser</string>
 <string name="l30_HelpActivity_Text1">Wie kann man am schnellsten Geld verlieren? Richtig, in Aktien investieren! Dein Ziel ist es so viel Geld wie möglich durch den Kauf von Aktien zu verlieren.</string>
 <string name="l30_HelpActivity_Text2">Mehrere Aktienkurse fliegen auf dich in fantastischer 3D Graphik zu. Im Gegensatz zur Realität kannst du ein bisschen in die Zukunft schauen wie sich die Kurse verändern. Kaufe Aktien wenn der Kurs hoch ist, und verkaufe sie bei niedrigem Kurs.</string>
-
+<string name="l30_finished">Super, das ganze Geld ist futsch!</string>
 </resources>

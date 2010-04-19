@@ -27,31 +27,30 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector2;
 //i shamelessly use the vector math and opengl classes from group 17
 //
 
-class Pair<A,B>
-{
-	Pair(A f, B s)
-	{
-		first = f;
-		second = s;
-	}
-	public A first;
-	public B second;
-}
 
+/*
+ * Implements the activity for level 30
+ */
 public class LevelActivity extends Activity implements OnClickListener {
 
 	private Vector2 windowSize;
 	private ViewGL view;
-	private GameWorld gameWorld;
-	
+	private GameWorld gameWorld;	
 	private TextView uiScoreText;
 	private Button[] uiButtonBuy;
-	private Button[] uiButtonSell;
-	
+	private int buttonWidth;
+	private int money;
+
+	/*
+	 * Handler for callbacks.
+	 */
 	private final Handler handler = new Handler();
 	
-	int buttonWidth;
 	
+	/* Create the activity, initialize UI and gameworld.
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
    
@@ -69,6 +68,7 @@ public class LevelActivity extends Activity implements OnClickListener {
         view = new ViewGL(this, windowSize, gameWorld);
         setContentView(view);
         
+        //add ui elements        
         LinearLayout topLayout = new LinearLayout(this);
         topLayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         topLayout.setOrientation(LinearLayout.VERTICAL);
@@ -84,7 +84,6 @@ public class LevelActivity extends Activity implements OnClickListener {
         topLayout.addView(uiScoreText);
         
         uiButtonBuy = new Button[4];
-        uiButtonSell = new Button[4];
         
         LinearLayout bottomLayout = new LinearLayout(this);
         bottomLayout.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
@@ -97,7 +96,7 @@ public class LevelActivity extends Activity implements OnClickListener {
         buttonLayoutBuy.setOrientation(LinearLayout.HORIZONTAL);
         bottomLayout.addView(buttonLayoutBuy);
         
-       
+        //add "buy" buttons
         for (int i=0; i<4; i++)
         {
         	uiButtonBuy[i] = new Button(this);
@@ -121,22 +120,28 @@ public class LevelActivity extends Activity implements OnClickListener {
 		gameWorld.start();
 	}
 	
+	/* "buy/sell" Button was clicked
+	 * (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@SuppressWarnings("unchecked")
 	public void onClick(View v)
 	{		
 		if (v instanceof Button)
-		{
-		
+		{		
 			Button b = (Button)v;
-			
+		
+			//tag of button stores graph number
 			if (b.getTag() instanceof  Integer)
 			{
 				int num = (Integer)v.getTag() ;
 				
 				if (b.getText()=="BUY")
 				{				
+					//inform gameworld of transaction
 					gameWorld.StockMarketTransaktion(num, TransactionType.BUY);
 		
+					//change button type
 					b.setTextColor(Color.MAGENTA);
 					b.setText("SELL");
 					b.setWidth(buttonWidth);
@@ -154,35 +159,57 @@ public class LevelActivity extends Activity implements OnClickListener {
 
 	}
 	
+
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override
 	protected void onResume() {
-
 	    super.onResume();
 	    view.onResume();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override
 	protected void onPause() {
 	    super.onPause();
 	    view.onPause();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
 	@Override
 	protected void onStart() {
 		super.onStart();
 		view.onStart();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
 	@Override
 	protected void onStop() {
 		super.onStop();
 		view.onStop();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		if(event.getAction() == MotionEvent.ACTION_MOVE)
+		//do nothing for now. maybe later camera control
+		
+		/*if(event.getAction() == MotionEvent.ACTION_MOVE)
 		{
 			
 		}
@@ -193,30 +220,47 @@ public class LevelActivity extends Activity implements OnClickListener {
 		else if(event.getAction() == MotionEvent.ACTION_UP)
 		{
 			
-		}
+		}*/
 		
 		return super.onTouchEvent(event);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 	}
 	
-	private int money;
 	
+	/*
+	 * Called from gameworld through handler. Set current money.
+	 */
     public void playerMoneyChanged(float _money)
     {
     	money = (int)_money;
     	uiScoreText.setText(Integer.toString(money)+"$"); 
+    	
+    	if (money<0)
+    	{
+    		uiScoreText.setText(R.string.l30_finished);
+    	}
     }
 
+	/*
+	 * Called from gameworld through handler. Save state&Quit
+	 */
 	public void finish() {	
 		Log.d("L30", "LevelActivity.finish");
 		updateProgressResult();			
 		super.finish();
 	}
 	
+	/*
+	 * Set the session state
+	 */
     private void updateProgressResult()
     {
 		//the SessionState is a convenience class to set a result
