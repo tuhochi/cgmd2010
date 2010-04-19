@@ -65,7 +65,8 @@
 		
 		<activity
 			android:name=".level12.HelpActivity"
-			android:label="@string/l12_title">
+			android:label="@string/l12_title"
+			android:screenOrientation="landscape">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level12.LAUNCH_HELP"/>
 				<category android:name="android.intent.category.DEFAULT"/>
