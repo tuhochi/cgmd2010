@@ -7,7 +7,6 @@ import java.io.IOException;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DirectionalMotion represents a directed linear motion.
  *
@@ -17,17 +16,25 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 public class DirectionalMotion extends Motion
 {
 	
-	/** The temp direction vec. */
-	private final Vector3 directionVec,currentPos,tempDirectionVec;
+	/** The direction of the movement */
+	private final Vector3 directionVec;
 	
-	/** The speed. */
+	/** The current position of the object */
+	private final Vector3 currentPos;
+	
+	private final Vector3 tempDirectionVec;
+	
+	/** The motion speed. */
 	private float speed;
 	
-	/** The sat trans. */
+	/** The satellite transformation */
 	private SatelliteTransformation satTrans;
 	
-	/** The basic orientation. */
-	private Matrix44 transform,basicOrientation;
+	/** The transformation matrix */
+	private Matrix44 transform;
+	
+	/** The basic orientation of the object */
+	private Matrix44 basicOrientation;
 	
 	/**
 	 * Instantiates a new directional motion.

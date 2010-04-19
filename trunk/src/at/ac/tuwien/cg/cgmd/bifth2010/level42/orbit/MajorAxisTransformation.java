@@ -7,6 +7,13 @@ import java.io.IOException;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MajorAxisTransformation represents a rotation over the major axis.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class MajorAxisTransformation extends SatelliteTransformation
 {
 
@@ -14,14 +21,32 @@ public class MajorAxisTransformation extends SatelliteTransformation
 					qxStep,qyStep,qzStep,
 					qxCurr,qyCurr,qzCurr,
 					speed;
-	private final Matrix44 transform,basicOrientation;
+	
 
+	/** The transformation matrix */
+	private final Matrix44 transform;
+	
+	/** The basic orientation of the object */
+	private final Matrix44 basicOrientation;
+
+	/**
+	 * Instantiates a new major axis transformation.
+	 */
 	public MajorAxisTransformation() 
 	{
 		this.transform = new Matrix44();
 		this.basicOrientation = new Matrix44();
 	}
 	
+	/**
+	 * Instantiates a new major axis transformation.
+	 *
+	 * @param qx the rotation over the x axis
+	 * @param qy the rotation over the y axis
+	 * @param qz the rotation over the z axis
+	 * @param speed the relative rotation speed
+	 * @param basicOrientation the basic orientation of the object
+	 */
 	public MajorAxisTransformation(float qx, float qy, float qz, float speed, Matrix44 basicOrientation) 
 	{
 		this();
@@ -64,7 +89,7 @@ public class MajorAxisTransformation extends SatelliteTransformation
 		transform.addRotateZ(qzCurr);
 		
 	}
-
+	
 	public Matrix44 getTransform() {
 		return transform;
 	}	
@@ -87,6 +112,7 @@ public class MajorAxisTransformation extends SatelliteTransformation
 		this.basicOrientation.persist(dos);
 	}
 	
+	
 	public void restore(DataInputStream dis) throws IOException
 	{
 		this.qx = dis.readFloat();
@@ -104,10 +130,13 @@ public class MajorAxisTransformation extends SatelliteTransformation
 		this.basicOrientation.restore(dis);
 	}
 	
+	
 	@Override
 	public Matrix44 getBasicOrientation() {
 		return basicOrientation;
 	}
+	
+	
 	@Override
 	public void setBasicOrientation(Matrix44 basicOrientation) {
 		this.basicOrientation.copy(basicOrientation);
