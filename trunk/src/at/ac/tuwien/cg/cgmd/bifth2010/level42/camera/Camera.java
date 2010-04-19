@@ -17,7 +17,7 @@ import static android.opengl.GLES10.*;
  * The Class Camera represents a spherical camera model
  * 
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class Camera implements Persistable
 {

@@ -6,7 +6,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
  * This Class represents the configuration for the level 42
  *
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class Config
 {

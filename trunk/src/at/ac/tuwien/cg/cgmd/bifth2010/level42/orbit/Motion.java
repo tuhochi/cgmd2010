@@ -15,7 +15,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
  * This class represents an object motion
  *
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public abstract class Motion implements Persistable
 {
