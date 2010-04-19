@@ -74,7 +74,7 @@ public class Landscape extends SpriteContainer {
 		
 		hills.setYOffset(-50);
 		mountains.setYOffset(-40);
-		meadow.setYOffset(-35);
+		meadow.setYOffset(-15);
 		
 		parallaxSprites.add(mountains);
 		parallaxSprites.add(hills);
