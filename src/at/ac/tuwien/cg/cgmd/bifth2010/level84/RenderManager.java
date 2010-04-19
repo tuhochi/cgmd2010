@@ -40,11 +40,12 @@ public class RenderManager implements Renderer {
 		}
 	};
 	
-	public RenderManager(LevelActivity activity, ModelStreet street, List<Model> gems, Accelerometer accelerometer) {
+	public RenderManager(LevelActivity activity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman) {
 		this.activity = activity;
 		this.street = street;
 		this.gems = gems;
 		this.accelerometer = accelerometer;
+		this.progman = progman;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 
 		Timer fpsUpdateTimer = new Timer();
@@ -110,8 +111,6 @@ public class RenderManager implements Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-		//init progressmanager and set progress to 0
-		progman = new ProgressManager();
 		progman.setProgress(0);
 		
 		//Load textures of all available models.
