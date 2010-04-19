@@ -2,9 +2,9 @@
 <resources>
 <string name="l17_nameofthegame_full">Wuahhh! h!!1</string>
 <string name="l17_HelpActivity_Title">Wuahhh! h!!1</string>
-<string name="l17_HelpActivity_Text1">Eine gute Möglichkeit, Besitztümer schnell loszuwerden, sind bekannterweise Extremsportarten.  In &quot;Wuahhh! h!!1&quot; führt der Spieler einen Base Jump aus.</string>
-<string name="l17_HelpActivity_Text2">Während des Sprungs muss der Spieler Strafen sammeln, um möglichst schnell Geld auszugeben. Abgestraft wird man z.B., wenn man Gebäuden zu nahe kommt oder im Flug unschuldige Vögel trifft.</string>
-<string name="l17_HelpActivity_Text3">&quot;Wuahhh! h!!1&quot; wird aus der Vogelperpektive gesteuert, man sieht den Spieler von oben während des Sprunges. Der Spieler springt inmitten von futuristischen Hochhäusern und muss diesen ausweichen. Die Flugrichtung wird über den Touchscreen gesteuert. Entweder gibt man direkt die Position des Spielers an, oder der Druckpunkt gibt die Position an, auf die sich der Spieler zubewegt.  Den genauen Modus müssen wir erst ausprobieren.</string>
-<string name="l17_HelpActivity_Text4">Das Level wird beendet, sobald man dem Boden zu nahe kommt (nach einigen Minuten). Trifft man ein Gebäude, wird der Level sofort beendet, ebenso wenn man sein ganzen Geld für Strafen ausgegeben hat.</string>
+<string name="l17_HelpActivity_Text1">Extreme sports are a good possibility to get rid of wealth and possessions.  In &quot;Wuahhh! h!!1&quot; the player performs a base jump.</string>
+<string name="l17_HelpActivity_Text2">During the jump, the player can collect penalties to spend money. You get fined if you jump too close to a building or hit birds mid-air.</string>
+<string name="l17_HelpActivity_Text3">&quot;Wuahhh! h!!1&quot; is controlled from bird\'s eye view, you look towards the surface while falling. The player jumps between futuristic sky scrapers and has to avoid them. The flight direction is controlled over the touch screen by dragging the level with the finger.</string>
+<string name="l17_HelpActivity_Text4">The level is finished as soon as you a approach the surface (after a few minutes). Hitting a building will cost you a life, if all lives are lost the level ends. If you spent all your money on fines the level ends too.</string>
 <string name="l17_gameover_text">YOU LOST!</string>
 </resources>
