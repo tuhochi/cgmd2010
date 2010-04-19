@@ -52,7 +52,7 @@ public class GameRenderer implements Renderer {
         
         gl.glOrthof(0.0f, _width, 0.0f, _height, -1.0f, 100.0f);
         gl.glViewport(0, 0, (int) _width, (int) _height);
-        gl.glScalef(this._width/this.level.sizeX, this._height/this.level.sizeY, 1.0f);
+        gl.glScalef(this._width/Level.sizeX, this._height/Level.sizeY, 1.0f);
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glEnable(GL10.GL_DEPTH_TEST);
         
