@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level36;
+package at.ac.tuwien.cg.cgmd.bifth2010.level36.linus;
 
 import java.util.Random;
 
