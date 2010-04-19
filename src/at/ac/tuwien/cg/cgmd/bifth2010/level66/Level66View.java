@@ -1,3 +1,9 @@
+/**
+ * Flight66 - a trip to hell
+ * 
+ * @author brm, dwi
+ * 
+ */
 package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
 import android.content.Context;
@@ -14,10 +20,11 @@ public class Level66View extends GLSurfaceView {
 	public Level66View(Context context) {
 		super(context);
 		
+		//load test sound/s
+        Sound.loadSound(context);
+        
 		_renderer = new Level66Renderer(context);
         setRenderer(_renderer);
-        //load test sound/s
-        Sound.loadSound(getContext());
         this.setFocusableInTouchMode(true);
 	}
 	
@@ -26,8 +33,6 @@ public class Level66View extends GLSurfaceView {
             queueEvent(new Runnable() {
                 public void run() {
                     _renderer.moveLeft();
-                    //play sound on klick
-                    //Sound.playSelect();
                 }});
             return true;
         }
