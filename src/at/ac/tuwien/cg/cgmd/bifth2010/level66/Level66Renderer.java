@@ -110,7 +110,15 @@ public class Level66Renderer implements Renderer {
 	public void moveDown()
 	{
 		if( testModel instanceof PlayerAircraft)
-			 ((PlayerAircraft) testModel).moveDown();
+			 //((PlayerAircraft) testModel).moveDown();
+			((PlayerAircraft) testModel).moveDown();
+	}
+	
+	public void moveSpecial()
+	{
+		if( testModel instanceof PlayerAircraft)
+			 //((PlayerAircraft) testModel).moveDown();
+			((PlayerAircraft) testModel).specialMoveRoll();
 	}
 	
 	
