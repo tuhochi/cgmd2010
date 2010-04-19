@@ -148,18 +148,20 @@ public class Level extends Thread {
 						/ (treasure.getValue()+1)) //TODO: determine, how to rate a target
 							< bestRating){
 						if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttracktionRadius()){
-							pedestrian.setTargetTreasure(treasure);
+							pedestrian.setTarget(treasure);
 							bestRating = rating;
 						}
 					}
 				}
-				for (int j=0; j < pedestrianList.size(); j++) {//check if another one is too close
-					Pedestrian otherPedestrian = ((Pedestrian)pedestrianList.get(j));
-					if(otherPedestrian != pedestrian){
-						//System.out.println(otherPedestrian.getPosition().distance(pedestrian.getPosition()));
-						if(otherPedestrian.getPosition().distance(pedestrian.getPosition()) < 20.0f){
-							//System.out.println("Too close");
-							pedestrian.setTargetTreasure(otherPedestrian);
+				if(pedestrian.getTarget() != null){
+					for (int j=0; j < pedestrianList.size(); j++) {//check if another one is too close
+						Pedestrian otherPedestrian = ((Pedestrian)pedestrianList.get(j));
+						if(otherPedestrian != pedestrian){
+							//System.out.println(otherPedestrian.getPosition().distance(pedestrian.getPosition()));
+							if(otherPedestrian.getPosition().distance(pedestrian.getPosition()) < 20.0f){
+								//System.out.println("Too close");
+								pedestrian.setTarget(otherPedestrian);
+							}
 						}
 					}
 				}
