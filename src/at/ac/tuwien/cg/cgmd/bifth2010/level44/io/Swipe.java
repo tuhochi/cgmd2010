@@ -26,15 +26,15 @@ public class Swipe implements InputGesture {
 	/** length of swipe */
 	private float length = 0;
 	/** screenhalf of the swipe */
-	private InputGesture.Position screenHalf;
+	private InputGesture.Position position;
 	
-	public Swipe(float x1, float y1, float x2, float y2, InputGesture.Position screenHalf) {
+	public Swipe(float x1, float y1, float x2, float y2, InputGesture.Position position) {
 		this.startX = x1;
 		this.startY = y1;
 		this.endX = x2;
 		this.endY = y2;
 		
-		this.screenHalf = screenHalf;
+		this.position = position;
 		// compute length of swipe, pythagoras
 		this.length = Math.min(MAX_LENGTH, Math.round(Math.sqrt((endX - startX) * (endX - startX) + (endY - startY) * (endY - startY))));
 	}
@@ -43,20 +43,20 @@ public class Swipe implements InputGesture {
 		return length;
 	}
 	
-	public InputGesture.Position getScreenHalf() {
-		return screenHalf;
+	public InputGesture.Position getPosition() {
+		return position;
 	}
 	
 	public boolean isLeft() {
-		return screenHalf.equals(InputGesture.Position.LEFT);
+		return position.equals(InputGesture.Position.LEFT);
 	}
 	
 	public boolean isMiddle() {
-		return screenHalf.equals(InputGesture.Position.MIDDLE);
+		return position.equals(InputGesture.Position.MIDDLE);
 	}
 	
 	public boolean isRight() {
-		return screenHalf.equals(InputGesture.Position.RIGHT);
+		return position.equals(InputGesture.Position.RIGHT);
 	}
 
 	@Override

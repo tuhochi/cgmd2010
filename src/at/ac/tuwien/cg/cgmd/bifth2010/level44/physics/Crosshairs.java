@@ -1,8 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.physics;
 
-import java.nio.FloatBuffer;
-import java.util.Random;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
@@ -11,7 +8,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.AimBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Util;
 
 public class Crosshairs {
 	/** the squared distance which the crosshairs mustn't exceed to stay green */
@@ -68,11 +64,13 @@ public class Crosshairs {
 	}
 
 	public void draw(GL10 gl) {
+		// if the crosshairs are near the rabbit and the time since the last shot has exceeded a given value
 		if (isNearRabbit() && allowedToShoot())
 			spriteGreen.draw(gl);
 		else
 			spriteRed.draw(gl);
 		
+		// draw the progress of the loading
 		if (this.isLoaded) {
 			aimBar.setProgress(timeStamp > 0 ? Math.min(1.f, (float)(System.currentTimeMillis() - timeStamp) / (float)MILLISECONDS_TO_SHOOT) : 0f);
 			aimBar.draw(gl);
@@ -156,6 +154,7 @@ public class Crosshairs {
 			}
 		}
 
+		// move a little step to the desired position
 		float dx = desiredX - getX();
 		float dy = desiredY - getY();
 
@@ -203,7 +202,7 @@ public class Crosshairs {
 			// loose a coin
 			rabbit.looseCoin();
 			
-			// vibrate and notify UI to update TextView after a short period of time (when shot-sound is finished)
+			// vibrate after a short period of time (when shot-sound is finished)
 			(new Thread() {
 				public void run() {
 					try {

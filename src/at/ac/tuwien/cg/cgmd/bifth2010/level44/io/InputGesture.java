@@ -15,6 +15,6 @@ public interface InputGesture {
 	
 	public float getStrength();
 	
-	/** enum to determine in which half of the screen the gesture happened */
+	/** enum to determine in which part of the screen the gesture happened */
 	public enum Position { LEFT, MIDDLE, RIGHT }
 }
