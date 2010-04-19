@@ -97,6 +97,7 @@ public class Level extends Thread {
     	textures.add(R.drawable.l11_pedestrian_head);
     	textures.add(R.drawable.l11_pedestrian_hair_01);
     	textures.add(R.drawable.l11_treasure);
+    	textures.add(R.drawable.l11_circle);
     	
     	textures.loadTextures();
     	
