@@ -38,6 +38,8 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 
 	private static final String	TAG	= "Audio";
 	
+	private int test_var;
+	
 	// sounds
 	public native void nativeRegisterAudio();
 
@@ -49,6 +51,7 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	public Audio (Context context)
 	{
 		this.context = context;
+		test_var = 0xdeadbeef;
 
 		putMp(BUNNY_BLOCK_THEME);
 		putMp(BLOCK_DROPPED_SOUND);
@@ -59,13 +62,20 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 		putMp(BLOCK_SWAPPED_SOUND);
 	}
 	
-	private static void AudioTest()
+	private static void StaticAudioTest()
 	{
-		Log.d("l77native", "audio callback!!!!");
-		//putMp(BLOCK_DROPPED_SOUND);
+		Log.d("l77native", "static callback!");
 	}
 	
-	public void AudioCaller()
+	public void AudioTest()
+	{
+		Log.d("l77native", "non-static callback!");
+		//putMp(BLOCK_DROPPED_SOUND);
+		//Log.d( "l77native", String.format("solve sound value %d %x", BLOCK_SOLVE_SOUND, test_var) );
+		playSound(Audio.BLOCK_EXPLODE_SOUND_1);
+	}
+	
+	public void registerNativeCall()
 	{
 		nativeRegisterAudio();
 	}
