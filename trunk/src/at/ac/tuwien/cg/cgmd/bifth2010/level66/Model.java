@@ -135,7 +135,7 @@ public class Model {
         _coordColorBuffer.position(0);
 	}
 	
-	/*
+	/**
 	 * methode to load an .obj-file into the renderbuffers
 	 * 
 	 * @param String FileName, Context context
@@ -143,8 +143,6 @@ public class Model {
 	 */
 	public void load(String filename, Context mContext)
 	{
-		// TODO: load from file
-		//OBJRenderable load = new OBJRenderable(OBJModel.load(filename, mContext));
 		List<Float> vertices = new LinkedList<Float>();
         List<Float> texCoords = new LinkedList<Float> ();
         List<Float> normals = new LinkedList<Float> ();
@@ -170,7 +168,6 @@ public class Model {
 	        		vertices.add(x);
 	        		vertices.add(y);
 	        		vertices.add(z);
-	        		//vertices.add(new OBJVector(x, y, z));
 	        	}
 	        	else if(line.startsWith("vt "))
 	        	{
@@ -179,7 +176,6 @@ public class Model {
 	        		float y = Float.parseFloat(values[2]);
 	        		texCoords.add(x);
 	        		texCoords.add(y);
-	        		//texCoords.add(new OBJVector(x, y));
 	        	}
 	        	else if(line.startsWith("vn "))
 	        	{
@@ -190,7 +186,6 @@ public class Model {
 	        		normals.add(x);
 	        		normals.add(y);
 	        		normals.add(z);
-	        		//normals.add(new OBJVector(x, y, z));
 	        	}
 	        	else if(line.startsWith("f"))
 	        	{
@@ -215,7 +210,6 @@ public class Model {
             throw new RuntimeException(e);
         }
 		
-		//vertices.toArray(_coordVertices);
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.toArray().length * 4);
         vbb.order(ByteOrder.nativeOrder());
