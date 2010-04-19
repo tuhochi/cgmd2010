@@ -13,7 +13,7 @@ public class ModelDrain extends Model {
 	 * drain main class
 	 */
 
-	private float width = 0.5f;
+	private float width = 2.0f;
 	
 	private int texture_drain0 = R.drawable.l84_drain_closed; //drain with no holes
 	private int texture_drain1 = R.drawable.l84_drain_round; //drain for gem1
