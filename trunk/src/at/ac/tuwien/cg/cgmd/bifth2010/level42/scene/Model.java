@@ -283,9 +283,9 @@ public class Model implements Movable,Persistable
 	public Matrix44 getBasicOrientation()
 	{
 		basicOrientation.copy(transformation_temp);
-		basicOrientation.addTranslate(	-boundingSphereWorld.center.x,
-										-boundingSphereWorld.center.y,
-										-boundingSphereWorld.center.z);
+		basicOrientation.addTranslate(	-basicOrientation.m[0][0],
+										-basicOrientation.m[1][0],
+										-basicOrientation.m[2][0]);
 		return basicOrientation;
 	}
 
