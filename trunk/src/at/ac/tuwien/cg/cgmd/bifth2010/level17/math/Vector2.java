@@ -81,6 +81,8 @@ public class Vector2
 
 	/**
 	 * Debug output.
+	 *
+	 *
 	 */
 
 	public String toString ()
