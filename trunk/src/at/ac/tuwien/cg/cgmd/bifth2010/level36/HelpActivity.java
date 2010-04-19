@@ -6,7 +6,7 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * @author Alexander Schmid
+ * @author Gruppe 36
  *
  */
 public class HelpActivity extends Activity {
