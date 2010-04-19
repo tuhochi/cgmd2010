@@ -1,3 +1,9 @@
+/**
+ * Flight66 - a trip to hell
+ * 
+ * @author brm, dwi
+ * 
+ */
 package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
 import java.io.BufferedReader;
@@ -50,6 +56,7 @@ public class Model {
 	protected FloatBuffer _coordVertexBuffer;
 	protected FloatBuffer _coordColorBuffer;
 	
+	//for test purpose, the coords of a coordsystem
 	private static float _coordVertices[]= { 0.0f, 0.0f, 0.0f,
 											  1.0f, 0.0f, 0.0f,
 											  0.0f, 0.0f, 0.0f,
@@ -80,7 +87,7 @@ public class Model {
 											0.0f, 0.0f, 1.0f, 0.3f
 										  };
 
-	//@SuppressWarnings("static-access")	
+	
 	public Model(String filename, Context context)
 	{
 		this(context);
@@ -128,6 +135,12 @@ public class Model {
         _coordColorBuffer.position(0);
 	}
 	
+	/*
+	 * methode to load an .obj-file into the renderbuffers
+	 * 
+	 * @param String FileName, Context context
+	 * 
+	 */
 	public void load(String filename, Context mContext)
 	{
 		// TODO: load from file
