@@ -1,57 +1,57 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 
 import android.app.Activity;
-import android.opengl.GLSurfaceView;
+//import android.content.Context;
+//import android.graphics.Color;
+//import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
+//import android.view.Display;
+//import android.view.GestureDetector;
+//import android.view.Gravity;
+//import android.view.KeyEvent;
+//import android.view.MotionEvent;
+import android.util.Log;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+//import android.widget.LinearLayout;
+import android.widget.TextView;
+//import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
+//import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
+//import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
 public class LevelActivity extends Activity {
 	private LevelSurfaceView glv;
-	private LevelRenderer lr;
+	//private LevelRenderer lr;
+//	private int winWidth, winHeight;
+	private TextView txtView;
+	private static final String CLASS_TAG = LevelSurfaceView.class.getName();
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+//        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+//        Display d = wm.getDefaultDisplay();
+//        winWidth = (int)d.getWidth();
+//        winHeight = (int)d.getHeight();
+//        Log.d(CLASS_TAG, "started");
         glv = new LevelSurfaceView(this);
     	//	lr = new LevelRenderer(this);
     	//	glv.setRenderer(lr);
-    		setContentView(glv);
-    		return;
+		setContentView(glv);
+		
+		//LinearLayout lay = new LinearLayout(this);
+		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
+		//addContentView(lay,params);
+		txtView = new TextView(this);
+		this.addContentView(txtView,params);
+		txtView.setText("Hello Bunny!!");
+//    		Log.d(CLASS_TAG, "text written");
+		return;
 	}
-	
-	/**	public boolean onTouchEvent(MotionEvent event) {
-		SessionState s = new SessionState();
-		s.setProgress(1);  //set progress to score!
-		setResult(Activity.RESULT_OK, s.asIntent());
-		finish();
-		return true;
-	}
-	
-	public boolean onKeyDown(int keyCode, KeyEvent event) { 
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_DPAD_LEFT:
-			lr.moveObject(-5, 0);
-			break;
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			lr.moveObject(5, 0);
-			break;
-		case KeyEvent.KEYCODE_DPAD_UP:
-			lr.moveObject(0, 5);
-			break;
-		case KeyEvent.KEYCODE_DPAD_DOWN:
-			lr.moveObject(0, -5);
-			break;
-		}
-		return super.onKeyDown(keyCode, event);
-	}*/
 	
 	SessionState state;
 	
