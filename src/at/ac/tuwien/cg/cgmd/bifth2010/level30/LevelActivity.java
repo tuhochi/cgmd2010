@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level30;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +41,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	private Button[] uiButtonBuy;
 	private int buttonWidth;
 	private int money;
+	private MediaPlayer mp;
 
 	/*
 	 * Handler for callbacks.
@@ -54,6 +56,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
    
+		Log.d("l30","onCreate");
+		
 	    super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -118,6 +122,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 		money = 1000000;
 		
 		gameWorld.start();
+		
+	    mp = MediaPlayer.create(this, R.raw.l00_menu);
+	    mp.setLooping(true);
+	    mp.start();
 	}
 	
 	/* "buy/sell" Button was clicked
@@ -168,6 +176,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 	    super.onResume();
 	    view.onResume();
+	    mp.start();
+	    Log.d("l30","onResume");
 	}
 	
 	/*
@@ -178,6 +188,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onPause() {
 	    super.onPause();
 	    view.onPause();
+	    mp.pause();
+	    Log.d("l30","onPause");
 	}
 	
 	/*
@@ -188,6 +200,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onStart() {
 		super.onStart();
 		view.onStart();
+		mp.start();
+		Log.d("l30","onStart");
 	}
 	
 	/*
@@ -198,6 +212,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onStop() {
 		super.onStop();
 		view.onStop();
+		mp.pause();
+		Log.d("l30","onStop");
 	}
 	
 	/*
@@ -232,6 +248,13 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		Log.d("l30","onSaveInstanceState");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d("l30","onDestroy");
 	}
 	
 	
@@ -254,8 +277,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 	 */
 	public void finish() {	
 		Log.d("L30", "LevelActivity.finish");
-		updateProgressResult();			
+		updateProgressResult();	
+		mp.stop();
 		super.finish();
+		Log.d("l10","finish");
 	}
 	
 	/*

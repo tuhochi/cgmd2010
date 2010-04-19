@@ -84,10 +84,12 @@ public class GameWorld extends Thread {
     	Log.d("L30", "level finished");
     	
     	if (currentMoney<0.0f)
+    	{
     		try {
 				sleep(1500);
 			} catch (InterruptedException e) {				
 			}
+    	}
     	
     	class FinishRunnable implements Runnable{
         	@Override

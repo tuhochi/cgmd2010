@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector2;
 
@@ -39,6 +40,8 @@ public class ViewGL extends GLSurfaceView {
 		if(gameWorld != null)
 			gameWorld.SetPause(true);
 		super.onPause();
+		
+
 	}
 
     /**
@@ -49,6 +52,8 @@ public class ViewGL extends GLSurfaceView {
 		if(gameWorld != null)
 			gameWorld.SetPause(false);
 		super.onResume();
+		
+
 	}
 	
     /**
@@ -56,7 +61,9 @@ public class ViewGL extends GLSurfaceView {
      */
 	public void onStart() {
 		if(gameWorld != null && !gameWorld.isAlive())
-			gameWorld.start();
+			gameWorld.SetPause(false);
+		
+
 	}
 
     /**
@@ -64,7 +71,9 @@ public class ViewGL extends GLSurfaceView {
      */
 	public void onStop() {
 		if(gameWorld != null && gameWorld.isAlive())
-			gameWorld.stop();
+			gameWorld.SetPause(true);
+		
+
 	}
 	
 	
