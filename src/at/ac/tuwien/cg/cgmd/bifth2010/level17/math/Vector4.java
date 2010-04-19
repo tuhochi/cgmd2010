@@ -1,11 +1,18 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
-
+/*** 
+ * Represents a 4D Vector
+ * 
+ * @author Matthias Maschek
+ */
 public class Vector4
 {
 	public float x, y, z, w;
 
 	public static final Vector4 origin = new Vector4 (0, 0, 0);
 
+	/**
+	 * Constructor
+	 */
 	public Vector4 (float _x, float _y, float _z, float _w)
 	{
 		x = _x;
@@ -14,6 +21,9 @@ public class Vector4
 		w = _w;
 	}
 
+	/**
+	 * Constructor
+	 */
 	public Vector4 (float _x, float _y, float _z)
 	{
 		x = _x;
@@ -21,7 +31,9 @@ public class Vector4
 		z = _z;
 		w = 1.0f;
 	}
-
+	/**
+	 * Copy Constructor
+	 */
 	public Vector4 (Vector4 v)
 	{
 		x = v.x;
@@ -29,7 +41,9 @@ public class Vector4
 		z = v.z;
 		w = v.w;
 	}
-
+	/**
+	 * Copy Constructor, takes a 3D vector and sets the homogene coordinate to 1
+	 */
 	public Vector4 (Vector3 v)
 	{
 		x = v.x;
@@ -38,6 +52,9 @@ public class Vector4
 		w = 1.0f;
 	}
 
+	/**
+	 * Empty Constructor
+	 */
 	public Vector4 ()
 	{
 		x = 0;
@@ -81,7 +98,10 @@ public class Vector4
 	{
 		return new Vector4(pointEnd.x-pointStart.x, pointEnd.y-pointStart.y, pointEnd.z-pointStart.z, pointEnd.w-pointStart.w);
 	}
-	
+
+	/**
+	 * Multiplies the vector with a scalar
+	 */
 	public static Vector4 mult (Vector4 v, float s)
 	{
 		return new Vector4(v.x * s, v.y * s, v.z * s, v.w * s);
@@ -103,7 +123,10 @@ public class Vector4
 			w /= thelen;
 		}
 	}
-	
+
+	/**
+	 * Inverts the vector
+	 */
 	public void invert()
 	{
 		x = -x;
@@ -112,6 +135,9 @@ public class Vector4
 		w = -w;
 	}
 
+	/**
+	 * Debug output.
+	 */
 	public String toString ()
 	{
 		return ("(" + x + "," + y + "," + z + "," + w + ")");
@@ -125,7 +151,10 @@ public class Vector4
 	{
 		System.out.println (this.toString());
 	}
-	
+
+	/** 
+	 * Homogenizes the vector
+	 */
 	public void homogenize()
 	{
 		x = x/w;
