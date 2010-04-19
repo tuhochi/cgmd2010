@@ -1,16 +1,29 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
-import static android.opengl.GLES10.*;
+import static android.opengl.GLES10.GL_FLOAT;
+import static android.opengl.GLES10.GL_MODELVIEW;
+import static android.opengl.GLES10.GL_TEXTURE;
+import static android.opengl.GLES10.GL_TEXTURE_2D;
+import static android.opengl.GLES10.glBindTexture;
+import static android.opengl.GLES10.glColor4f;
+import static android.opengl.GLES10.glDisable;
+import static android.opengl.GLES10.glDrawArrays;
+import static android.opengl.GLES10.glEnable;
+import static android.opengl.GLES10.glMatrixMode;
+import static android.opengl.GLES10.glPopMatrix;
+import static android.opengl.GLES10.glPushMatrix;
+import static android.opengl.GLES10.glScalef;
+import static android.opengl.GLES10.glTexCoordPointer;
+import static android.opengl.GLES10.glTranslatef;
+import static android.opengl.GLES10.glVertexPointer;
 
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
-import android.sax.StartElementListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureManager;
 
 /**
  * The Class CutScenes handles cutscene rendering.
@@ -27,9 +40,6 @@ public class CutScenes
 	
 	/** The unique vertex buffer id. */
 	private int vboId;
-	
-	/** The unique texture id for intro scene. */
-	private int textureIdIntro;
 	
 	/** The current time in intro rendering. */
 	private float introTime;
@@ -131,8 +141,8 @@ public class CutScenes
 	}
 	
 	/**
-	 * @param dt
-	 * @return
+	 * @param dt timestep 
+	 * @return true when finished
 	 */
 	public boolean renderFade(float dt)
 	{

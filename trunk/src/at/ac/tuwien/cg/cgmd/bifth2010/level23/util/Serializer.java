@@ -44,9 +44,6 @@ public class Serializer {
 	/** The constant for identifying the serialized background. */
 	public static int SERIALIZED_BACKGROUND = 1; 
 	
-	/** the Android context */
-	private Context context; 
-	
 	/**
 	 * Instantiates a new serializer.
 	 *
@@ -129,8 +126,7 @@ public class Serializer {
 	 *
 	 * @param context the new context
 	 */
-	public void setContext(Context context) {
-		this.context = context; 
+	public void setContext(Context context) { 
 		
 	}
 }
