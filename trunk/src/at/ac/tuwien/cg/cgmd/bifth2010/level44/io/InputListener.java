@@ -14,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
 public class InputListener extends SimpleOnGestureListener {
 	/** maximum horizontal distance to be travelled during swipe to be detected as a Swipe Gesture */
 	private static final int SWIPE_MAX_OFF_PATH = 70;
+	/** minimum velocity */
 	private static final int SWIPE_THRESHOLD_VELOCITY = 100;
 	/** width of the Screen */
 	private int width;
@@ -38,11 +39,11 @@ public class InputListener extends SimpleOnGestureListener {
 		
 		// check if swipe is long enough to be a gesture
 		if (e2.getY() - e1.getY() > Swipe.MIN_LENGTH && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-			// left half of screen
+			// left part of screen
 			if (e1.getX() <= width/3) {
 				position = InputGesture.Position.LEFT;
 			} 
-			// right half of screen
+			// right part of screen
 			else if (e1.getX() >= width*2/3) {
 				position = InputGesture.Position.RIGHT;
 			}

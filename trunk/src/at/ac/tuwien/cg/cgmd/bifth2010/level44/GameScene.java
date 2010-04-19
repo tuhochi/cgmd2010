@@ -40,11 +40,11 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	/** thread for game logic */
 	private GameThread gameThread;
-	
+	/** manages the available game time */
 	private TimeManager timeManager;
 
-	/** queue of all inputGestures to process */
-	private Queue<InputGesture> inputQueue = new LinkedList<InputGesture>();
+	/** the inputgesture to process */
+	private InputGesture input = null;
 	/** soundPlayer */
 	private SoundPlayer player = null;
 	/** the system's vibrator */
@@ -63,6 +63,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
 		System.err.println("GameScene created");
+		
 		rabbit = null;
 		landscape = null;
 		coin = null;
@@ -78,14 +79,17 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
+		// first draw landscape and rabbit
 		if (landscape != null) {
 			landscape.draw(gl);
 		}
 		
+		// then draw the crosshairs
 		if (crosshairs != null) {
 			crosshairs.draw(gl);
 		}
 		
+		// draw the coins that are left to loose
 		if (rabbit != null && coin != null) {
 			int coins = rabbit.getCoinCount();
 			
@@ -95,6 +99,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 			}
 		}
 		
+		// draw the time left
 		if (timeDisplay != null) {
 			timeDisplay.draw(gl);
 		}
@@ -176,19 +181,13 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		super.onResume();
 		restartGameThread();
 	}
-
-	public void clearInputQueue() {
-		inputQueue.clear();
-	}
 	
 	public void addInputGesture(InputGesture gesture) {
-		//if (inputQueue.size() < 1)
-		inputQueue.clear();
-		inputQueue.add(gesture);
+		input = gesture;
 	}
 	
 	public InputGesture getNextInputGesture() {
-		return inputQueue.poll();
+		return input;
 	}
 	
 	public SoundPlayer getSoundPlayer() {

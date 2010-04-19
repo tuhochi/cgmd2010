@@ -14,6 +14,7 @@ public class GameThread extends Thread {
 	private Crosshairs crosshairs;
 	private Landscape landscape;
 	private TimeManager timeManager;
+	/** is the thread stopped? */
 	private boolean quit;
 	private InputGesture gesture = null;
 
@@ -38,6 +39,7 @@ public class GameThread extends Thread {
 	}
 
 	public void run() {
+		// start time for physical movement is resetted
 		rabbit.resetStartTime(0);
 		
 		while (!quit) {
@@ -62,15 +64,12 @@ public class GameThread extends Thread {
 					if (rabbit.hasLanded()) {
 						rabbit.resetStartTime(0);
 						rabbit.setVelocity(0.f);
-						scene.clearInputQueue();
 					}
 					
+					// perform movement of landscape
 					landscape.step();
+					// update game-time
 					timeManager.update();
-
-					/*if (TimeManager.getInstance().getRemainingTimeMillis() == 0) {
-						doQuit();
-					}*/
 
 					 /* old moving, maybe useful as intro
 					  * rabbit.setPosition((float)(scene.getWidth()/2 +
@@ -96,6 +95,10 @@ public class GameThread extends Thread {
 		this.quit = true;
 	}
 	
+	/**
+	 * Plays a SoundEffect when the wings are flapped
+	 * @param gesture
+	 */
 	public void playSoundEffects(InputGesture gesture) {
 		float soundPosition = 0.5f;
 		
@@ -103,6 +106,7 @@ public class GameThread extends Thread {
 			if (gesture instanceof Swipe) {
 				Swipe swipe = (Swipe)gesture;
 				
+				// if only left wing is flapped, play the sound from the left box
 				if (swipe.isLeft()) {
 					soundPosition = 0.2f;
 				} else if (swipe.isRight()) {
@@ -113,6 +117,7 @@ public class GameThread extends Thread {
 			scene.getSoundPlayer().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
 		}
 		
+		// reload after a delay?
 		if (crosshairs.changeLoadingState()) {
 			(new Thread() {
 				public void run() {

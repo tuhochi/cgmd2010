@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.physics;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -22,7 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 
 public class PhysicalRabbit implements PhysicalObject {
 	/** the acceleration of a full wing-flap (vgl. PhysicalObject.GRAVITY) */
-	private static final float MAX_FLAP_ACCELERATION = 22.f;
+	private static final float MAX_FLAP_ACCELERATION = 22.5f;
 	/** factor for slowing down movement */
 	private static final float VELOCITY_FACTOR = 6000.f;
 
@@ -69,7 +68,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		// time since last reset
 		float time = (System.currentTimeMillis() - startTime) / VELOCITY_FACTOR * 2;
 		// time since beginning of last wing-flap
-		float deltaTime = (System.currentTimeMillis() - this.lastWingTime) / VELOCITY_FACTOR;
+		float deltaTimeWingFlap = (System.currentTimeMillis() - this.lastWingTime) / VELOCITY_FACTOR;
 		// currently performed input gesture
 		InputGesture currentGesture = inputQueue.peek();
 		// acceleration of current flap
@@ -78,7 +77,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		float angle = (float)((90.f - sprite.getRotation()) * Math.PI/180.);
 
 		if (currentGesture != null) {
-			// st�rke des Auftriebs proportional zur L�nge des Swipes (Doppeltap = Maximale L�nge)
+			// staerke des Auftriebs proportional zur laenge des Swipes (Doppeltap = Maximale L�nge)
 			float p = currentGesture.getStrength() / Swipe.MAX_LENGTH;
 			flapAcceleration *= p;
 		}
@@ -86,7 +85,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		// if wings moving down, accelerate
 		if (sprite.wingsMovingDown()) {
 			// v = a * delta t
-			this.setVelocity(flapAcceleration * deltaTime);
+			this.setVelocity(flapAcceleration * deltaTimeWingFlap);
 		} // if wings moving up, inhibit speed
 		else if (sprite.wingsMovingUp()) {
 			this.setVelocity(this.getVelocity() - 0.05f);	
@@ -101,12 +100,8 @@ public class PhysicalRabbit implements PhysicalObject {
 		// sx = s * cos
 		float sMovementX = sMovement * (float)Math.cos(angle);
 		// new positions
-		float newY = sprite.getY() + sGravity;
-		float newX = sprite.getX();
-
-		// add movements to position
-		newY -= sMovementY;
-		newX += sMovementX;
+		float newY = sprite.getY() + sGravity - sMovementY;
+		float newX = sprite.getX() + sMovementX;
 
 		// set new position, if the position is on the screen
 		newX = Math.min(screenWidth, Math.max(0,newX));
@@ -132,7 +127,7 @@ public class PhysicalRabbit implements PhysicalObject {
 			float angle = sprite.getRotation() < 0 ? 35 : -35;
 			// compute rad of angle
 			angle = (float)((90.f - angle) * Math.PI/180.);
-			// time since last reset
+			// time since beginning of coindrop
 			float time = (System.currentTimeMillis() - coinStartTime) / VELOCITY_FACTOR * 2;
 			// s = 1/2 * g * t^2
 			float sGravity = (1/2.f * PhysicalObject.GRAVITY * time * time);
@@ -142,12 +137,8 @@ public class PhysicalRabbit implements PhysicalObject {
 			// sx = s * cos
 			float sMovementX = sMovement * (float)Math.cos(angle);
 			// new positions
-			float newY = coinSprite.getY() + sGravity;
-			float newX = coinSprite.getX();
-
-			// add movements to position
-			newY -= sMovementY;
-			newX += sMovementX;
+			float newY = coinSprite.getY() + sGravity - sMovementY;
+			float newX = coinSprite.getX() + sMovementX;
 
 			coinSprite.setX(newX);
 			coinSprite.setY(newY);
@@ -192,7 +183,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		boolean finished = false;
 
 		if (gesture != null) {
-			// append to inputQueue
+			// append to inputQueue, store only 2 input events
 			if (inputQueue.size() < 2)
 				inputQueue.add(gesture);
 		}
@@ -200,10 +191,11 @@ public class PhysicalRabbit implements PhysicalObject {
 		// get newest input to process
 		currentGestureToPerform = inputQueue.peek();
 
-		// is there a input to process, is it a swipe?
+		// is there a input to process?
 		if (currentGestureToPerform != null) {
 			// if we are at the beginning of a wing-flap, reset the time
 			if (sprite.bothWingsOnTop()) {
+				// begin 1 second in the past, to accelerate the movement in the beginning (larger time -> larger speed)
 				this.resetStartTime(1000);
 				this.rememberWingTime();
 			}
@@ -237,6 +229,7 @@ public class PhysicalRabbit implements PhysicalObject {
 						inputQueue.remove();
 					}
 				} else {
+					// both wings are flapped, finished if one of them has finished
 					boolean finishedLeft = sprite.flapLeftWing(Swipe.MAX_LENGTH);
 					boolean finishedRight = sprite.flapRightWing(Swipe.MAX_LENGTH);
 
@@ -249,8 +242,7 @@ public class PhysicalRabbit implements PhysicalObject {
 					}
 				}
 			} else if (currentGestureToPerform instanceof DoubleTap) {
-				//DoubleTap tap = (DoubleTap)currentGestureToPerform;
-
+				// double tap is equal to max-length middle-swipe
 				boolean finishedLeft = sprite.flapLeftWing(Swipe.MAX_LENGTH);
 				boolean finishedRight = sprite.flapRightWing(Swipe.MAX_LENGTH);
 
@@ -267,9 +259,11 @@ public class PhysicalRabbit implements PhysicalObject {
 
 	@Override
 	public void draw(GL10 gl) {
+		// draw the rabbit-sprite
 		if (sprite != null)
 			sprite.draw(gl);
 
+		// if a coin is currently dropping, draw it
 		if (coinDrops)
 			coinSprite.draw(gl);
 	}
@@ -292,15 +286,26 @@ public class PhysicalRabbit implements PhysicalObject {
 		return velocity;
 	}
 
+	/**
+	 * only set positive velocity
+	 */
 	public void setVelocity(float velocity) {
 		if (velocity >= 0.f)
 			this.velocity = velocity;
 	}
 
+	/**
+	 * resets the start time of the movement
+	 * 
+	 * @param delta milliseconds in the past
+	 */
 	public void resetStartTime(long delta) {
 		this.startTime = System.currentTimeMillis() - delta;
 	}
 
+	/**
+	 * stop user-initiated movement of rabbit, remeber time one second in the past
+	 */
 	public void rememberWingTime() {
 		this.lastWingTime = System.currentTimeMillis() - 1000;
 		this.setVelocity(0.f);
@@ -310,6 +315,11 @@ public class PhysicalRabbit implements PhysicalObject {
 		return sprite.getCoinCount();
 	}
 
+	/**
+	 * is called when the rabbit was shot 
+	 * 
+	 * loose a coin, start drawing a dropping coin, jiggle for a short period of time
+	 */
 	public void looseCoin() {
 		sprite.looseCoin();
 
@@ -319,6 +329,9 @@ public class PhysicalRabbit implements PhysicalObject {
 		jiggle();
 	}
 
+	/**
+	 * @return true, if the rabbit has landed at the bottom of the screen
+	 */
 	public boolean hasLanded() {
 		return sprite.isUnder(screenHeight - 5);
 	}
