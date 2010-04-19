@@ -13,16 +13,38 @@ public class Config
 	public static boolean GLES11 = false;
 	public static long FPS_UPDATE_INTERVAL = 1000;
 	public static long GAMETIME_UPDATE_INTERVAL = 1000;
+	
+	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;
 	
+	/**
+	 * PHYSICS / UNIVERSE
+	 */
+	
+	/** center position of the universe / orbits */
 	public static Vector3 UNIVERSE_CENTER = new Vector3(0,0,0);
+	
+	/** entityname for the planet */
 	public static String PLANET_NAME = "GoldPlanet";
+	
+	/** prefix for the satellite entities */
 	public static String SATELLITE_PREFIX = "Satellite_";
+	
+	/** defines the maximum of the orbit main axis */
 	public static float UNIVERSE_CENTERLENGTH_LIMIT = 10;
+	
+	/** defines the maximum of the orbit secondary axis */
 	public static float UNIVERSE_DIRLENGTH_LIMIT = 10;
+	
+	/** defines the maximum relative speed for satellites */
 	public static float UNIVERSE_SPEED_LIMIT = 10;
 	
+	/** ratio between speed and rotation angle */
 	public static float SATELLITE_SPEEDROTA_RATIO = 4f;
+	
+	/** ratio between speed and rotation angle */
 	public static float INTERSATELLITE_SPEEDROTA_RATIO = 6f;
+	
+	/** the required penetration depth on collisions */
 	public static float COLLISION_PENETRATION_DEPTH = 0.2f;
 }
