@@ -5,6 +5,10 @@ import java.util.Random;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+/**
+ * @author Gruppe 36 
+ *
+ */
 public class GewinnFeld {
 	private int[][] gewinne;
 	private float[] posX;
@@ -12,6 +16,9 @@ public class GewinnFeld {
 	private Random random;
 	private final int MAX = 50;
 
+	/**
+	 * 
+	 */
 	public GewinnFeld() {
 		random = new Random();
 		gewinne = new int[3][3];
@@ -25,6 +32,10 @@ public class GewinnFeld {
 		}
 	}
 
+	/**
+	 * @param c
+	 * @return
+	 */
 	public Canvas drawFeld(Canvas c) {
 		posX[0] = 0 + c.getWidth() / 4;
 		posX[1] = posX[0] + c.getWidth() / 4;
