@@ -20,14 +20,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class RenderManager implements Renderer {
 
 	private LevelActivity activity;
-	private List<Model> models;
-	private List<ModelDrain> drainList;
+	private ModelStreet street;
+	private List<Model> gems;
+	
 	private long lastTime = 0;
 	private Accelerometer accelerometer;
 	
 	private TextView tfFps;
 	private int fps = 0;
-	private TextView tPoints;
 	private ProgressManager progman;
 	
 	/** Handler for FPS timer */
@@ -40,13 +40,12 @@ public class RenderManager implements Renderer {
 		}
 	};
 	
-	public RenderManager(LevelActivity activity, List<Model> models, List<ModelDrain> drains, Accelerometer accelerometer) {
+	public RenderManager(LevelActivity activity, ModelStreet street, List<Model> gems, Accelerometer accelerometer) {
 		this.activity = activity;
-		this.models = models;
-		this.drainList = drains;
+		this.street = street;
+		this.gems = gems;
 		this.accelerometer = accelerometer;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
-		this.tPoints = (TextView) activity.findViewById(R.id.l84_Points);
 
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
@@ -73,20 +72,18 @@ public class RenderManager implements Renderer {
 		fps++;
 		
 		gl.glLoadIdentity();
-		//gl.glPushMatrix();
-		//gl.glRotatef(accelerometer.getOrientation(), 0, 0, 1);
-		//Log.i("renderer", "rotating to " + accelerometer.getOrientation() + "¡");
 		
+		//At first: Render street.
+		street.update(gl, deltaTime, accelerometer.getOrientation());
+		street.draw(gl);
 		
-		
-		ListIterator<Model> i = models.listIterator();
+		//Afterwards: Render gems.
+		ListIterator<Model> i = gems.listIterator();
 		while(i.hasNext()) {
-			Model m = i.next();
-			m.update(gl, deltaTime, accelerometer.getOrientation());
+			ModelGem m = (ModelGem)i.next();
+			m.update(gl, deltaTime);
 			m.draw(gl);
 		}
-		
-		//gl.glPopMatrix();
 	}
 
 	/**
@@ -114,7 +111,8 @@ public class RenderManager implements Renderer {
 		progman.setProgress(0);
 		
 		//Load textures of all available models.
-		ListIterator<Model> i = models.listIterator();
+		street.loadGLTexture(gl, (Context)this.activity);
+		ListIterator<Model> i = gems.listIterator();
 		while(i.hasNext())
 			i.next().loadGLTexture(gl, (Context)this.activity);
 		
