@@ -62,10 +62,46 @@ public class LevelActivity extends Activity {
     	super.onStop();
     }
    
-    public boolean onTouchEvent(MotionEvent me) {
-		Log.d("onTouch", me.toString());
-		
-		Log.d("onTouch x",Float.toString(me.getX()));
+    public boolean onTouchEvent(MotionEvent me) {	
+    	float x=MyRenderer.numTilesHorizontal/MyRenderer.resX*me.getX();
+    	float y=MyRenderer.numTilesVertical/MyRenderer.resY*me.getY();
+    	
+		if (myRenderer.player!=null && myRenderer.ui!=null) {
+			if (me.getAction()==MotionEvent.ACTION_DOWN || me.getAction()==MotionEvent.ACTION_MOVE) {
+				myRenderer.player.moveLeft(false);
+				myRenderer.player.moveRight(false);
+				myRenderer.player.jump(false);
+				
+				// Jump
+				if (x>myRenderer.ui.gap && x<myRenderer.ui.gap+myRenderer.ui.fieldSize &&
+						y>myRenderer.ui.screenHeight-myRenderer.ui.gap-myRenderer.ui.fieldSize &&
+						y<myRenderer.ui.screenHeight-myRenderer.ui.gap) {
+					myRenderer.player.jump(true);
+				}
+				
+				// Left
+				if (x>myRenderer.ui.screenWidth-2.0f*myRenderer.ui.gap-2.0f*myRenderer.ui.fieldSize &&
+						x<myRenderer.ui.screenWidth-2.0f*myRenderer.ui.gap-myRenderer.ui.fieldSize &&
+						y>myRenderer.ui.screenHeight-myRenderer.ui.gap-myRenderer.ui.fieldSize &&
+						y<myRenderer.ui.screenHeight-myRenderer.ui.gap) {
+					myRenderer.player.moveLeft(true);
+				}
+				
+				// Right
+				if (x>myRenderer.ui.screenWidth-myRenderer.ui.gap-myRenderer.ui.fieldSize &&
+						x<myRenderer.ui.screenWidth-myRenderer.ui.gap &&
+						y>myRenderer.ui.screenHeight-myRenderer.ui.gap-myRenderer.ui.fieldSize &&
+						y<myRenderer.ui.screenHeight-myRenderer.ui.gap) {
+					myRenderer.player.moveRight(true);
+				}
+			}
+			
+			if (me.getAction()==MotionEvent.ACTION_CANCEL || me.getAction()==MotionEvent.ACTION_UP) {
+				myRenderer.player.moveLeft(false);
+				myRenderer.player.moveRight(false);
+				myRenderer.player.jump(false);
+			}
+		}
     	
     	synchronized(this) {
 	    	try {

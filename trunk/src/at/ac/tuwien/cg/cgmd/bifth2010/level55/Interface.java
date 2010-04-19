@@ -1,6 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class Interface {
@@ -38,7 +40,9 @@ public class Interface {
 	}
 	
 	public void draw(GL10 gl) {
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		
 		gl.glTranslatef(gap, screenHeight-gap-fieldSize, 0.0f);
 		jumpFieldTex.bind(gl);
 		jumpQuad.draw(gl);
@@ -51,9 +55,5 @@ public class Interface {
 		gl.glTranslatef(-gap-fieldSize, 0.0f, 0.0f);
 		leftFieldTex.bind(gl);
 		leftQuad.draw(gl);
-	}
-	
-	public void onTouch(float x, float y) {
-		
 	}
 }
