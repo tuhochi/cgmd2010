@@ -19,14 +19,29 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
+/**
+ * The Class MaterialManager.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class MaterialManager
 {
+	/** The Constant instance. */
 	public static final MaterialManager instance = new MaterialManager();
 	
+	/** The materials. */
 	private final HashMap<String, Material> materials;
+	
+	/** The currently bound material name. */
 	private String boundMaterialName;
+	
+	/** if textures are currently enabled. */
 	private boolean textureEnabled;
 	
+	/**
+	 * Instantiates a new material manager.
+	 */
 	private MaterialManager()
 	{
 		materials = new HashMap<String, Material>();
@@ -34,6 +49,9 @@ public class MaterialManager
 		textureEnabled = true;
 	}
 	
+	/**
+	 * Reset.
+	 */
 	public void reset()
 	{
 		materials.clear();
@@ -41,12 +59,21 @@ public class MaterialManager
 		textureEnabled = true;
 	}
 	
+	/**
+	 * Checks if a material with a given name is present
+	 *
+	 * @param name the name
+	 * @return true, if there is a material with this name
+	 */
 	public boolean hasMaterial(String name)
 	{
 		return materials.containsKey(name);
 	}
 	
-	/*
+	/**
+	 * Gets the material.
+	 *
+	 * @param name the name
 	 * @return the material for the given name or null if it doesn't exist
 	 */
 	public Material getMaterial(String name)
@@ -54,6 +81,11 @@ public class MaterialManager
 		return materials.get(name);	
 	}
 	
+	/**
+	 * Bind material.
+	 *
+	 * @param material the material
+	 */
 	public void bindMaterial(Material material)
 	{
 		if(!material.name.equals(boundMaterialName))
@@ -75,15 +107,28 @@ public class MaterialManager
 		}
 	}
 	
+	/**
+	 * Bind material.
+	 *
+	 * @param name the name
+	 */
 	public void bindMaterial(String name)
 	{
 		if(materials.containsKey(name))
 			bindMaterial(materials.get(name));
 	}
 	
-	/*
-	 * adds a material
-	 * @return the name of the new material
+	/**
+	 * Adds the material.
+	 *
+	 * @param name the name
+	 * @param ambient the ambient
+	 * @param diffuse the diffuse
+	 * @param specular the specular
+	 * @param emissive the emissive
+	 * @param ks the ks
+	 * @param textureFilename the texture filename
+	 * @return the material
 	 */
 	public Material addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, Color4 emissive, float ks, String textureFilename)
 	{
@@ -94,8 +139,17 @@ public class MaterialManager
 		return m;
 	}
 	
-	/*
-	 * @return creates the material if it doesn't exist yet and returns it
+	/**
+	 * creates the material if it doesn't exist yet and returns it
+	 *
+	 * @param name the name
+	 * @param ambient the ambient
+	 * @param diffuse the diffuse
+	 * @param specular the specular
+	 * @param emissive the emissive
+	 * @param ks the ks
+	 * @param textureFilename the texture filename
+	 * @return the material
 	 */
 	public Material getMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, Color4 emissive, float ks, String textureFilename)
 	{
@@ -109,18 +163,53 @@ public class MaterialManager
 		}
 	}
 	
+	/**
+	 * The Class Material.
+	 *
+	 * @author Alex Druml
+	 * @author Lukas Roessler
+	 */
 	public class Material implements Persistable
 	{
+		
+		/** The name. */
 		private final String name;
+		
+		/** The ambient color. */
 		private final Color4 ambient;
+		
+		/** The diffuse color. */
 		private final Color4 diffuse;
+		
+		/** The specular color. */
 		private final Color4 specular;
+		
+		/** The emissive color. */
 		private final Color4 emissive;
+		
+		/** The ks. */
 		private final float ks;
+		
+		/** The tex. */
 		private final Bitmap tex;
+		
+		/** The tex id. */
 		private int texId;
+
+		/** if this is initialized. */
 		private boolean initialized;
 		
+		/**
+		 * Instantiates a new material.
+		 *
+		 * @param name the name
+		 * @param ambient the ambient
+		 * @param diffuse the diffuse
+		 * @param specular the specular
+		 * @param emissive the emissive
+		 * @param ks the ks
+		 * @param textureFilename the texture filename
+		 */
 		private Material(String name, Color4 ambient, Color4 diffuse, Color4 specular, Color4 emissive, float ks, String textureFilename)
 		{
 			this.name = name;
@@ -136,6 +225,9 @@ public class MaterialManager
 				tex = null;
 		}
 		
+		/**
+		 * Inits the Material
+		 */
 		void init()
 		{
 			if(!initialized)
@@ -166,19 +258,34 @@ public class MaterialManager
 			}
 		}
 		
+		/**
+		 * De-inits the Material
+		 */
 		void deInit()
 		{
 			initialized = false;
 		}
 		
+		/* (non-Javadoc)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#persist(java.io.DataOutputStream)
+		 */
 		public void persist(DataOutputStream dos)
 		{
 		}
 		
+		/* (non-Javadoc)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#restore(java.io.DataInputStream)
+		 */
 		public void restore(DataInputStream dis)
 		{
 		}
 		
+		/**
+		 * Loads texture into a Bitmap
+		 *
+		 * @param filename the filename
+		 * @return the bitmap
+		 */
 		private Bitmap loadTexture(String filename)
 		{
 			Context context = LevelActivity.getInstance();
@@ -208,15 +315,14 @@ public class MaterialManager
 			return bitmap;
 		}
 		
-		/*
+		/**
 		 * Our own MipMap generation implementation.
 		 * Scale the original bitmap down, always by factor two,
 		 * and set it as new mipmap level.
 		 * 
 		 * Thanks to Mike Miller (with minor changes by l17)!
-		 * 
-		 * @param gl - The GL Context
-		 * @param bitmap - The bitmap to mipmap
+		 *
+		 * @param bitmap the bitmap
 		 */
 		private void buildMipmap(Bitmap bitmap)
 		{

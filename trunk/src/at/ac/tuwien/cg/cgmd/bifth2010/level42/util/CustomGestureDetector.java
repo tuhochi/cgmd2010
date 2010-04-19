@@ -2,22 +2,52 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import android.view.MotionEvent;
 
+/**
+ * The Class CustomGestureDetector.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class CustomGestureDetector
 {
+	
+	/** The Constant MOVE_THRESHOLD. */
 	private static final int MOVE_THRESHOLD = 30;
+	
+	/** The listener. */
 	private final CustomOnGestureListener listener;
+	
+	/** The current start event. */
 	private MotionEvent currentStartEvent;
+	
+	/** The last action. */
 	private int lastAction;
+	
+	/** The last x/y. */
 	private float lastX,lastY;
+	
+	/** The first x/y. */
 	private float firstX,firstY;
+	
+	/** Whether the current action is a long press. */
 	private boolean isLongPress;
 	
+	/**
+	 * Instantiates a new custom gesture detector.
+	 *
+	 * @param listener the listener
+	 */
 	public CustomGestureDetector(CustomOnGestureListener listener)
 	{
 		this.listener = listener;
 		isLongPress = true;
 	}
 	
+	/**
+	 * On touch event.
+	 *
+	 * @param e the e
+	 */
 	public void onTouchEvent(MotionEvent e)
 	{
 		if(currentStartEvent == null)
@@ -66,28 +96,37 @@ public class CustomGestureDetector
 		lastAction = e.getAction();
 	}
 	
+	/**
+	 * The listener interface for receiving gesture events.
+	 * The class that is interested in processing a gesture
+	 * event implements this interface, and the object created
+	 * with that class is registered with a CustomGestureDetector using the
+	 * CustomGestureDetector's constructor. When
+	 * the gesture event occurs, that object's appropriate
+	 * method is invoked.
+	 *
+	 * @see CustomOnGestureEvent
+	 */
 	public interface CustomOnGestureListener
 	{
+		
 		/**
 		 * Notified when a scroll occurs with the initial on down MotionEvent and the current move MotionEvent. The distance in x and y is also supplied for convenience.
 		 * 
-		 * Parameters
-		 * 		e1  The first down motion event that started the scrolling.
-		 * 		e2  The move motion event that triggered the current onScroll.
-		 * 		distanceX  The distance along the X axis that has been scrolled since the last call to onScroll. This is NOT the distance between e1 and e2.
-		 * 		distanceY  The distance along the Y axis that has been scrolled since the last call to onScroll. This is NOT the distance between e1 and e2.
-		 * 
-		 * Returns
-		 * 		true if the event is consumed, else false
+		 * @param e1 The first down motion event that started the scrolling.
+		 * @param e2 The move motion event that triggered the current onScroll.
+		 * @param distanceX The distance along the X axis that has been scrolled since the last call to onScroll. This is NOT the distance between e1 and e2.
+		 * @param distanceY The distance along the Y axis that has been scrolled since the last call to onScroll. This is NOT the distance between e1 and e2.
+		 * @return true, if the event is consumed, else false
 		 */
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 		
 		/**
 		 * Notified when a long press occurs with the initial on down MotionEvent that trigged it.
 		 * 
-		 * Parameters
-		 * 		e  The initial on down motion event that started the longpress.
-		 * 		duration  How long the press lasted
+		 * @param e The initial on down motion event that started the longpress.
+		 * @param duration How long the press lasted
+		 * @return true, if the event is consumed, else false
 		 */
 		public boolean onTouchUp(MotionEvent e, long duration);
 	}

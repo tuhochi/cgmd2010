@@ -128,10 +128,10 @@ public class MotionManager {
 			//set current transformation (rotation) as basic orientation
 			vecSatTransform.setBasicOrientation(tempBasicOrientation);
 			//set new rotation axis
-			vecSatTransform.axis.copy(satTransformAxis);
+			vecSatTransform.axis.set(satTransformAxis);
 	
-			tempDirectionVec.copy(directionVec).normalize();
-			tempPushVec.copy(pushVec).normalize();
+			tempDirectionVec.set(directionVec).normalize();
+			tempPushVec.set(pushVec).normalize();
 		
 			//set the new rotation angle
 			vecSatTransform.setAngle(Vector3.getAngle(tempDirectionVec, tempPushVec),speedRotationRatio);

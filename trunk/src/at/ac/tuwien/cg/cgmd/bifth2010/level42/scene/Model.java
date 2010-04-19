@@ -17,21 +17,51 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 //static imports
 import static android.opengl.GLES10.*;
 
+/**
+ * The Class Model.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class Model implements Movable,Persistable
 {
-	private final MaterialManager materialManager = MaterialManager.instance;
 	
+	/** The material manager. */
+	private final MaterialManager materialManager = MaterialManager.instance;
+
+	/** The transformation used by opengl. */
 	private Matrix44 transformation;
+
+	/** The transformation the logic thread writes to. is written to transformation in update(). */
 	private Matrix44 transformation_temp;
+
+	/** The basic orientation (needed for orbit). */
 	private final Matrix44 basicOrientation;
-	private final ArrayList<Geometry> geometries;
-	private final ArrayList<Material> materials;
+	
+	/** The bounding box in model space. */
 	private final AxisAlignedBox3 boundingBox;
+	
+	/** The bounding sphere in model space. */
 	protected final Sphere boundingSphere;
+	
+	/** The bounding sphere in world space. */
 	private final Sphere boundingSphereWorld;
+	
+	/** The motion. */
 	private Motion motion;
+
+	/** if this is initialized. */
 	private boolean initialized;
 	
+	/** The geometries. */
+	private final ArrayList<Geometry> geometries;
+	
+	/** The materials (in the same order as the corresponding geometries). */
+	private final ArrayList<Material> materials;
+	
+	/**
+	 * Instantiates a new model.
+	 */
 	public Model()
 	{
 		transformation = new Matrix44();
@@ -44,6 +74,11 @@ public class Model implements Movable,Persistable
 		initialized = false;
 	}
 	
+	/**
+	 * Copy Constructor
+	 *
+	 * @param other the other
+	 */
 	public Model(Model other)
 	{
 		geometries = new ArrayList<Geometry>();
@@ -61,6 +96,9 @@ public class Model implements Movable,Persistable
 		}
 	}
 	
+	/**
+	 * Inits this Model
+	 */
 	void init()
 	{
 		if(!initialized)
@@ -77,6 +115,9 @@ public class Model implements Movable,Persistable
 		}
 	}
 	
+	/**
+	 * De-init this Model
+	 */
 	void deInit()
 	{
 		initialized = false;
@@ -90,6 +131,9 @@ public class Model implements Movable,Persistable
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#persist(java.io.DataOutputStream)
+	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
 		ArrayList<Geometry> geometries = this.geometries;
@@ -112,6 +156,9 @@ public class Model implements Movable,Persistable
 			dos.writeBoolean(false);
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#restore(java.io.DataInputStream)
+	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
 		ArrayList<Geometry> geometries = this.geometries;
@@ -132,6 +179,11 @@ public class Model implements Movable,Persistable
 			motion = null;
 	}
 	
+	/**
+	 * Render.
+	 *
+	 * @param rendermode the rendermode
+	 */
 	public void render(int rendermode)
 	{
 		glPushMatrix();
@@ -145,6 +197,9 @@ public class Model implements Movable,Persistable
 		glPopMatrix();
 	}
 	
+	/**
+	 * Update.
+	 */
 	public void update()
 	{
 		int numGeoms = geometries.size();
@@ -155,26 +210,46 @@ public class Model implements Movable,Persistable
 		transformation.transformSphere(boundingSphere, boundingSphereWorld);
 	}
 	
+	/**
+	 * Gets the bounding box.
+	 *
+	 * @return the bounding box
+	 */
 	public AxisAlignedBox3 getBoundingBox()
 	{
 		return boundingBox;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#getBoundingSphereWorld()
+	 */
 	public Sphere getBoundingSphereWorld()
 	{
 		return boundingSphereWorld;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#getTransformation()
+	 */
 	public Matrix44 getTransformation()
 	{
 		return transformation_temp;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#setTransformation(at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44)
+	 */
 	public void setTransformation(Matrix44 transformation)
 	{
 		this.transformation_temp = transformation;
 	}
 	
+	/**
+	 * Adds a Geometry and its Material to the Model
+	 *
+	 * @param geometry the geometry
+	 * @param material the material
+	 */
 	public void add(Geometry geometry, Material material)
 	{
 		geometries.add(geometry);
@@ -183,18 +258,30 @@ public class Model implements Movable,Persistable
 		boundingSphere.include(geometry.getBoundingSphere());
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#getMotion()
+	 */
 	@Override
-	public Motion getMotion() {
+	public Motion getMotion()
+	{
 		return motion;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#setMotion(at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion)
+	 */
 	@Override
-	public void setMotion(Motion motion) {
+	public void setMotion(Motion motion)
+	{
 		this.motion = motion;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#getBasicOrientation()
+	 */
 	@Override
-	public Matrix44 getBasicOrientation() {
+	public Matrix44 getBasicOrientation()
+	{
 		basicOrientation.copy(transformation_temp);
 		basicOrientation.addTranslate(	-boundingSphereWorld.center.x,
 										-boundingSphereWorld.center.y,
@@ -202,8 +289,12 @@ public class Model implements Movable,Persistable
 		return basicOrientation;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#getName()
+	 */
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		//TODO hack
 		return "";
 	}

@@ -13,16 +13,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 /**
  * This class represents an object motion
+ * Subclasses of Motion *need* a default constructor!
  *
  * @author Alex Druml
  * @author Lukas Roessler
  */
 public abstract class Motion implements Persistable
-{
-	/*
-	 * Subclasses of Motion *need* a default constructor!
-	 */
-	
+{	
 	/**
 	 * Do the next iteration step 
 	 * @param dt delta time between frames for a frame-independent motion

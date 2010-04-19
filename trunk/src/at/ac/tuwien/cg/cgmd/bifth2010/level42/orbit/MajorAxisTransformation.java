@@ -7,7 +7,8 @@ import java.io.IOException;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 
-public class MajorAxisTransformation extends SatelliteTransformation{
+public class MajorAxisTransformation extends SatelliteTransformation
+{
 
 	private float 	qx,qy,qz,
 					qxStep,qyStep,qzStep,

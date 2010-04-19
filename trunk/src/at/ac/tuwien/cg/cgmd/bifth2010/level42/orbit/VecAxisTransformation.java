@@ -8,34 +8,36 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class VecAxisTransformation represents a satellite 
- * transformation around a vector axis
+ * The Class VecAxisTransformation represents a satellite
+ * transformation around a vector axis.
  *
  * @author Alex Druml
  * @author Lukas Roessler
  */
 public class VecAxisTransformation extends SatelliteTransformation{
 
+	/** The qv curr. */
 	private float qvStep,qvCurr;
 	
-	/** The rotation angle */
+	/** The rotation angle. */
 	public float qv;
 	
-	/** The transformation speed */
+	/** The transformation speed. */
 	public float speed;
 
-	/** The transformation matrix */
+	/** The transformation matrix. */
 	private final Matrix44 transform;
 	
-	/** The basic orientation of the object */
+	/** The basic orientation of the object. */
 	private final Matrix44 basicOrientation;
 	
 	/** The axis. */
 	public final Vector3 axis;
 
 	/**
-	 * Instantiates a new vector axis transformation
+	 * Instantiates a new vector axis transformation.
 	 */
 	public VecAxisTransformation() 
 	{
@@ -45,10 +47,10 @@ public class VecAxisTransformation extends SatelliteTransformation{
 	}
 	
 	/**
-	 * Instantiates a new vector axis transformation
+	 * Instantiates a new vector axis transformation.
 	 *
 	 * @param axis the axis used for the transformation
-	 * @param qv the angle 
+	 * @param qv the angle
 	 * @param speed the transformation speed
 	 * @param basicOrientation the basic orientation of the object
 	 */
@@ -60,12 +62,15 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		this.qvCurr = 0;
 		this.speed = speed;
 		
-		this.axis.copy(axis);
+		this.axis.set(axis);
 
 		if(basicOrientation!=null)
 			this.basicOrientation.copy(basicOrientation);
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation#update(float)
+	 */
 	public void update(float dt)
 	{
 		qvCurr += dt*qv*speed;
@@ -81,11 +86,17 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation#getTransform()
+	 */
 	public Matrix44 getTransform() {
 		return transform;
 	}	
 	
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation#persist(java.io.DataOutputStream)
+	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
 		dos.writeFloat(qv);
@@ -96,6 +107,9 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		basicOrientation.persist(dos);
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation#restore(java.io.DataInputStream)
+	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
 		this.qv = dis.readFloat();
@@ -107,11 +121,17 @@ public class VecAxisTransformation extends SatelliteTransformation{
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation#getBasicOrientation()
+	 */
 	@Override
 	public Matrix44 getBasicOrientation() {
 		return basicOrientation;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation#setBasicOrientation(at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44)
+	 */
 	@Override
 	public void setBasicOrientation(Matrix44 basicOrientation) {
 		this.qvCurr = 0;

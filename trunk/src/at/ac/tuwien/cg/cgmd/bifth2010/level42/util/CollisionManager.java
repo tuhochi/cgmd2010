@@ -90,9 +90,9 @@ public class CollisionManager {
 	 */
 	public SceneEntity intersectRay(Vector3 origin,Vector3 direction)
 	{
-		a.copy(direction);
+		a.set(direction);
 		a.normalize();
-		p.copy(origin);
+		p.set(origin);
 		
 		//reset values
 		minDistance = Float.MAX_VALUE;
@@ -103,10 +103,10 @@ public class CollisionManager {
 		{
 			entity = entityList.get(i);
 			//get entity bounding sphere position
-			q.copy(entity.getBoundingSphereWorld().center);
+			q.set(entity.getBoundingSphereWorld().center);
 			
 			//calc vector from q -> p
-			pq.copy(p);
+			pq.set(p);
 			pq.subtract(q);
 			
 			Vector3.crossProduct(pq,a,normalDistance);
@@ -150,7 +150,7 @@ public class CollisionManager {
 			centerDistance = new Vector3();
 		
 		//calc distance between center points
-		centerDistance.copy(objB.getBoundingSphereWorld().center);
+		centerDistance.set(objB.getBoundingSphereWorld().center);
 		centerDistance.subtract(objA.getBoundingSphereWorld().center);
 		
 		if(centerDistance.length()+ penetrationDepth < 
@@ -160,8 +160,6 @@ public class CollisionManager {
 		
 		return false;		
 	}
-	
-	
 	
 	/**
 	 * Do collision detection between all objects in the scene
@@ -217,7 +215,7 @@ public class CollisionManager {
 								{
 									
 									//TODO: sat ebenfalls ablenken? - sattrafo
-									planetPushVec.copy(planetEntity.getBoundingSphereWorld().center);
+									planetPushVec.set(planetEntity.getBoundingSphereWorld().center);
 									planetPushVec.subtract(planet.getBoundingSphereWorld().center);
 									
 									planetEntityMotion = new DirectionalMotion(	planetEntity.getBoundingSphereWorld().center,
@@ -229,7 +227,9 @@ public class CollisionManager {
 								}
 							}
 						}						
-					}else{
+					}
+					else
+					{
 						
 						objAMotion = objA.getMotion();
 						objBMotion = objB.getMotion();
@@ -256,23 +256,23 @@ public class CollisionManager {
 						}
 						
 						
-						objACurrDir.copy(objA.getMotion().getCurrDirectionVec()).normalize();
-						objBCurrDir.copy(objB.getMotion().getCurrDirectionVec()).normalize();
+						objACurrDir.set(objA.getMotion().getCurrDirectionVec()).normalize();
+						objBCurrDir.set(objB.getMotion().getCurrDirectionVec()).normalize();
 											
 						//weight with current speed
 						objACurrDir.multiply(objA.getMotion().getSpeed()*0.2f);
 						objBCurrDir.multiply(objB.getMotion().getSpeed()*0.2f);
 						
-						toCenterVecA.copy(centerDistance);
+						toCenterVecA.set(centerDistance);
 						toCenterVecA.normalize().multiply(-objA.getBoundingSphereWorld().radius);
 						
-						toCenterVecB.copy(centerDistance);
+						toCenterVecB.set(centerDistance);
 						toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
 						
-						objAPushVec.copy(objBCurrDir);
+						objAPushVec.set(objBCurrDir);
 						objAPushVec.add(toCenterVecA);
 
-						objBPushVec.copy(objACurrDir);
+						objBPushVec.set(objACurrDir);
 						objBPushVec.add(toCenterVecB);
 
 						objA.getMotion().morph(objAPushVec);

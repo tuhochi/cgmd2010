@@ -33,40 +33,86 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener;
 
+/**
+ * The Class RenderView.
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class RenderView extends GLSurfaceView implements Renderer
 {
+	
+	/** The Constant LIGHT_AMBIENT. */
 	private static final float LIGHT_AMBIENT[] = {0.6f,0.6f,0.6f,1.0f};
+	
+	/** The Constant LIGHT_DIFFUSE. */
 	private static final float LIGHT_DIFFUSE[] = {1.0f,1.0f,1.0f,1.0f};
+	
+	/** The Constant LIGHT_POSITION. */
 	private static final float LIGHT_POSITION[] = {-100.0f,100.0f,100.0f,1.0f};
 	
+	/** The context. */
 	private final LevelActivity context;
+	
+	/** The scene. */
 	public final Scene scene;
+	
+	/** The cam. */
 	public final Camera cam;
 	
 	// Managers
+	/** The timer. */
 	private final TimeManager timer = TimeManager.instance; 
+	
+	/** The motion manager. */
 	private final MotionManager motionManager = MotionManager.instance;
+	
+	/** The ogl manager. */
 	private final OGLManager oglManager = OGLManager.instance;
+	
+	/** The material manager. */
 	private final MaterialManager materialManager = MaterialManager.instance;
+	
+	/** The coll manager. */
 	private CollisionManager collManager;
 	
 	// thread stuff
+	/** The synchronizer. */
 	public final Synchronizer synchronizer;
 	
 	// main thread stuff
+	/** The gui thread handler. */
 	private final Handler guiThreadHandler;
+	
+	/** The fps update runnable. */
 	private final Runnable fpsUpdateRunnable;
+	
+	/** The score update runnable. */
 	private final Runnable scoreUpdateRunnable;
+	
+	/** The remaining game time runnable. */
 	private final Runnable remainingGameTimeRunnable;
 	
 	// event stuff
+	/** The motion events. */
 	private final LinkedList<MotionEvent> motionEvents;
+	
+	/** The key events. */
 	private final LinkedList<KeyEvent> keyEvents;
+	
+	/** The gesture detector. */
 	private final CustomGestureDetector gestureDetector;
 	
 	// temp vars
+	/** The selection direction. */
 	private final Vector3 selectionDirection;
 	
+	/**
+	 * Instantiates a new render view.
+	 *
+	 * @param context the context
+	 * @param attr the attr
+	 */
 	public RenderView(Context context, AttributeSet attr)
 	{
 		super(context, attr);
@@ -97,6 +143,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		remainingGameTimeRunnable = this.context.remainingGameTimeRunnable;
 	}
 	
+	/**
+	 * Inits the gl settings.
+	 */
 	private void initGLSettings()
 	{
 		glEnable(GL_CULL_FACE);
@@ -116,6 +165,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, LIGHT_DIFFUSE,0);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceCreated(javax.microedition.khronos.opengles.GL10, javax.microedition.khronos.egl.EGLConfig)
+	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
@@ -134,6 +186,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		initGLSettings();
 		
+		/**
+		 * The Logic Thread
+		 */
 		new Thread(new Runnable()
 		{
 			@Override
@@ -145,6 +200,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		}, "Logic Thread").start();
 	}
 	
+	/**
+	 * Update.
+	 */
 	private void update()
 	{
 		synchronizer.waitForPreRender();
@@ -213,12 +271,25 @@ public class RenderView extends GLSurfaceView implements Renderer
 		synchronizer.logicDone(); 
 	}
 	
+	/**
+	 * The listener interface for receiving gesture events.
+	 * The class that is interested in processing a gesture
+	 * event implements this interface. When
+	 * the gesture event occurs, that object's appropriate
+	 * method is invoked.
+	 *
+	 * @see GestureEvent
+	 */
 	private class GestureListener implements CustomOnGestureListener
 	{
+		
+		/* (non-Javadoc)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onTouchUp(android.view.MotionEvent, long)
+		 */
 		@Override
 		public boolean onTouchUp(MotionEvent e, long duration)
 		{
-			Log.v(LevelActivity.TAG, "onLongerPress(" + e + ", " + duration + ")");
+			Log.v(LevelActivity.TAG, "onTouchUp(" + e + ", " + duration + ")");
 
 			Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
 			Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
@@ -228,7 +299,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 			//entity selected
 			if(entity!=null && !entity.getName().equals(Config.PLANET_NAME))
 			{
-				selectionDirection.copy(cam.viewPosition);
+				selectionDirection.set(cam.viewPosition);
 				selectionDirection.subtract(cam.eyePosition);
 
 				//force strength
@@ -260,6 +331,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 			return true;
 		}
 
+		/* (non-Javadoc)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onScroll(android.view.MotionEvent, android.view.MotionEvent, float, float)
+		 */
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
@@ -270,6 +344,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 	}
 
+	/**
+	 * Pre_render. This Method is run in the GL Thread,
+	 * but during the synchronized phase, when the Logic Thread
+	 * is suspended.
+	 * 
+	 */
 	private void pre_render()
 	{
 //		glLoadIdentity(); // not needed, because cam.look() sets the modelview matrix completely new
@@ -279,11 +359,17 @@ public class RenderView extends GLSurfaceView implements Renderer
 		cam.look();
 	}
 	
+	/**
+	 * Render.
+	 */
 	private void render()
 	{
 		scene.render();
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView.Renderer#onDrawFrame(javax.microedition.khronos.opengles.GL10)
+	 */
 	@Override
 	public void onDrawFrame(GL10 gl)
 	{
@@ -297,6 +383,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		render();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView.Renderer#onSurfaceChanged(javax.microedition.khronos.opengles.GL10, int, int)
+	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{
@@ -339,6 +428,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		glMatrixMode(GL_MODELVIEW);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.view.View#onTouchEvent(android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onTouchEvent(final MotionEvent event)
 	{
@@ -349,6 +441,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.view.View#onKeyDown(int, android.view.KeyEvent)
+	 */
 	@Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
