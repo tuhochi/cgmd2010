@@ -11,32 +11,28 @@
  android:id="@+id/l84_TableLayout" 
  android:layout_width="wrap_content" 
  android:layout_height="wrap_content" android:layout_marginTop="3pt" android:layout_marginLeft="3pt">
-<TextView android:layout_above="@+id/l84_openglview" android:text="Points" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_Points"></TextView>
+<TextView android:layout_above="@+id/l84_openglview" android:text="Points" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_Points" android:textStyle="bold" android:shadowColor="@+id/l84_colorWhite" android:shadowDx="4.0" android:shadowDy="4.0" android:shadowRadius="4.0" android:textColor="@color/l84_colorWhite"></TextView>
 <ImageButton
 	android:text="01"
- 	android:id="@+id/l84_GemButton01"
-  	android:layout_width="wrap_content"
+ 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:nextFocusUp="@+id/l84_GemButton04" android:background="@drawable/l84_gem_round" android:layout_marginTop="5pt">
+    android:nextFocusUp="@+id/l84_GemButton04" android:background="@drawable/l84_gem_round" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemRound">
 </ImageButton>
 <ImageButton
 	android:text="02"
- 	android:id="@+id/l84_GemButton02"
-  	android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:background="@drawable/l84_gem_diamond" android:layout_marginTop="5pt">
+ 	android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:background="@drawable/l84_gem_diamond" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemDiamond">
 </ImageButton>
 <ImageButton
 	android:text="03"
- 	android:id="@+id/l84_GemButton03"
-  	android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:background="@drawable/l84_gem_rect" android:layout_marginTop="5pt">
+ 	android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:background="@drawable/l84_gem_rect" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemRect">
 </ImageButton>
 <ImageButton
 	android:text="04"
- 	android:id="@+id/l84_GemButton04"
-  	android:layout_width="wrap_content"
+ 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:nextFocusDown="@+id/l84_GemButton01" android:background="@drawable/l84_gem_oct" android:layout_marginTop="5pt">
+    android:nextFocusDown="@+id/l84_GemButton01" android:background="@drawable/l84_gem_oct" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemOct">
 </ImageButton>
 <TextView android:layout_above="@+id/l84_openglview" android:text="fps" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_TfFps" android:layout_marginTop="3pt"></TextView>
 </TableLayout>
@@ -44,7 +40,7 @@
  android:id="@+id/l84_TableLayoutRight" 
  android:layout_width="wrap_content" 
  android:layout_height="wrap_content" android:layout_marginTop="95pt" android:layout_marginLeft="88pt">
-<SeekBar android:id="@+id/l84_accelbar" android:layout_below="@+id/l84_openglview" android:layout_height="wrap_content" android:layout_width="wrap_content" android:scrollbarAlwaysDrawHorizontalTrack="true" android:minWidth="100pt"></SeekBar>
+<SeekBar android:layout_below="@+id/l84_openglview" android:layout_height="wrap_content" android:layout_width="wrap_content" android:scrollbarAlwaysDrawHorizontalTrack="true" android:minWidth="100pt" android:paddingLeft="10px" android:paddingRight="10px" android:id="@+id/l84_AccelBar" android:max="360" android:progress="180"></SeekBar>
 </TableLayout>
 
 </RelativeLayout>

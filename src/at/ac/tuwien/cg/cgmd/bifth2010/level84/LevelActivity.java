@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -24,6 +25,13 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	private ModelGem gemRect;
 	private ModelGem gemOct;
 	
+	private float[] drainPositionsX;
+	private int numDrains;
+	private float levelWidth;
+	private float levelSpeed;
+	private int moneyToSpend = 0;
+	private int gemWorth = 5000;
+	
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
@@ -35,40 +43,55 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		
 		drains = new LinkedList<ModelDrain>();
 		gems = new LinkedList<Model>();
-		loadModels();
+		
+		initGui();
+		initLevelParams();
+		initLevel();
 		
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
 		progman = new ProgressManager();
-		renderManager = new RenderManager(this, street, gems, accelerometer, progman);
-		
+		renderManager = new RenderManager(this, street, gems, accelerometer, progman);	
 		openglview.setRenderer(renderManager);
-		
-		ImageButton b1 = (ImageButton) findViewById(R.id.l84_GemButton01);
-		b1.setOnClickListener(this);    
-		ImageButton b2 = (ImageButton) findViewById(R.id.l84_GemButton02);
-		b2.setOnClickListener(this);
-		ImageButton b3 = (ImageButton) findViewById(R.id.l84_GemButton03);
-		b3.setOnClickListener(this);
-		ImageButton b4 = (ImageButton) findViewById(R.id.l84_GemButton04);
-		b4.setOnClickListener(this);
-		
-		SeekBar accelBar = (SeekBar) findViewById(R.id.l84_accelbar);
-		accelBar.setOnSeekBarChangeListener(this);
-		accelBar.setMax(360);
 	}
 
-	private void loadModels() {
+	private void initLevelParams() {
+		levelWidth = 240f;
+		levelSpeed = 2f;
+		numDrains = 50;
+	}
+
+	private void initGui() {
+		ImageButton btnGemRound = (ImageButton) findViewById(R.id.l84_ButtonGemRound);
+		btnGemRound.setOnClickListener(this);    
+		ImageButton btnGemDiamond = (ImageButton) findViewById(R.id.l84_ButtonGemDiamond);
+		btnGemDiamond.setOnClickListener(this);
+		ImageButton btnGemRect = (ImageButton) findViewById(R.id.l84_ButtonGemRect);
+		btnGemRect.setOnClickListener(this);
+		ImageButton btnGemOct = (ImageButton) findViewById(R.id.l84_ButtonGemOct);
+		btnGemOct.setOnClickListener(this);
+		
+		SeekBar accelBar = (SeekBar) findViewById(R.id.l84_AccelBar);
+		accelBar.setOnSeekBarChangeListener(this);
+	}
+
+	private void initLevel() {
+		//Create street
+		street = new ModelStreet(levelWidth, 17f, -levelWidth/2f + 8f, levelSpeed, R.drawable.l84_tex_street, drains);
 		
 		//Create drains
-		drains.add(new ModelDrain(0,2.0f));
-		drains.add(new ModelDrain(1,12.0f));
-		drains.add(new ModelDrain(2,22.0f));
-		drains.add(new ModelDrain(3,32.0f));
-		drains.add(new ModelDrain(4,42.0f));
-		
-		//Create street
-		street = new ModelStreet(60.0f, 9.0f, R.drawable.l84_tex_street, drains);
+		drainPositionsX = new float[numDrains];
+		for (int i = 0; i < numDrains; i++) {
+			int drainType = (int)(Math.random() * 4.0);
+			float drainPos = (float)Math.random() * levelWidth - levelWidth/2f - 5f; 
+			drains.add(new ModelDrain(drainType, drainPos));
+			drainPositionsX[i] = drainPos;
+			
+			if (drainType > 0)
+				moneyToSpend += gemWorth;
+		}
+		TextView tfPoints = (TextView) findViewById(R.id.l84_Points);
+		tfPoints.setText("$" + moneyToSpend);
 		
 		//Create gems
 		gemRound = new ModelGem(R.drawable.l84_gem_round);
@@ -101,7 +124,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	@Override
 	public void finish() {
 		
-		//nextl line is for testing only
+		//next line is for testing only
 		progman.addPoints(20);
 		progman.setProgress(Math.min(Math.max(progman.getPoints(), 0), 100));
 		setResult(Activity.RESULT_OK, progman.asIntent());
@@ -111,26 +134,23 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
-		case R.id.l84_GemButton01: gemRound.startFall(); break;
-		case R.id.l84_GemButton02: gemDiamond.startFall(); break;
-		case R.id.l84_GemButton03: gemRect.startFall(); break;
-		case R.id.l84_GemButton04: gemOct.startFall(); break;
+		case R.id.l84_ButtonGemRound: gemRound.startFall(); break;
+		case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(); break;
+		case R.id.l84_ButtonGemRect: gemRect.startFall(); break;
+		case R.id.l84_ButtonGemOct: gemOct.startFall(); break;
 		}
 	}
 
 	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
-		accelerometer.setOrientation(progress - 90);
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		accelerometer.setOrientation(progress);
 	}
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub	
+	public void onStopTrackingTouch(SeekBar seekBar) {	
 	}
 }

@@ -15,19 +15,24 @@ public class ModelStreet extends Model {
 	
 	List<ModelDrain> drains;
 	
-	private float streetPos; //street position at startup
-	private float streetSpeed = 5f; //speed of street translation
-	private float streetLevel = -10f; //z-position of street
+	private float posX; //street position at startup
+	private float speed; //speed of street translation
+	private float posZ = -10f; //z-position of street
 	
 	/**
 	 * Creates a new street.
 	 * @param width The street's length
+	 * @param height The street's height
+	 * @param posX Horizontal position
+	 * @param speed Defines the horizontal speed the street and its drains pass by
 	 * @param textureResource The street's texture
 	 * @param drains List containing all drains
 	 */
-	public ModelStreet(float width, float height, int textureResource, List<ModelDrain> drains) {
+	public ModelStreet(float width, float height, float posX, float speed, int textureResource, List<ModelDrain> drains) {
 		this.width = width;
 		this.height = height;
+		this.posX = posX;
+		this.speed = speed;
 		this.textureResource = textureResource;
 		this.drains = drains;
 		
@@ -42,8 +47,6 @@ public class ModelStreet extends Model {
 		//Adjust the texture coordinates of Model's quad.
 		texture[2] = texture[6] = width / height;
 		
-		streetPos = -width / 2.0f;
-		
 		fillBuffers();
 	}
 	
@@ -51,19 +54,15 @@ public class ModelStreet extends Model {
 	 * Update the model's transformations.
 	 */
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
-		//mTrans = Matrix4x4.mult(Matrix4x4.RotateX((float)(1f * deltaTime)), mTrans);
 		super.update(gl, deltaTime, deviceRotation);
-		float deltaSpeed = (float)((double)streetSpeed * deltaTime);
-		
-		Log.i("delta", "deltaTime: " + deltaTime + " - deltaSpeed: " + deltaSpeed + " - streetSpeed: " + streetSpeed);
-		streetPos += deltaSpeed;
-		Log.i("streetPos", "pos: " + streetPos);
+		float deltaSpeed = (float)((double)speed * deltaTime);
+		posX += deltaSpeed;
 	}
 	
 	public void draw(GL10 gl) {
 		gl.glPushMatrix();
 		gl.glRotatef(deviceRotation, 0, 0, 1);
-		gl.glTranslatef(streetPos, 0, streetLevel);
+		gl.glTranslatef(posX, 0, posZ);
 		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 		
 		super.draw(gl);

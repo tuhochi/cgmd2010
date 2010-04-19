@@ -29,7 +29,6 @@ public class Accelerometer extends OrientationEventListener{
 	}
 	
 	public void onOrientationChanged(int orientation) {
-		//Log.i("orientation", orientation + "¡");
 		this.orientation = orientation - 90;
 	}
 
