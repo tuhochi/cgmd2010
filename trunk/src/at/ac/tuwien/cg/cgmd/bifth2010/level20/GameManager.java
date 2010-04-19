@@ -24,24 +24,46 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * @author Ferdinand Pilz
  * @author Reinhard Sprung
  */
-public class GameManager implements Renderable {
+public class GameManager implements Renderable, EventListener {
 
 	static final int BUNNY_TEXTURE = R.drawable.l20_icon;
 	static final int BUNNY_ENTITY = 0;
 	
-	protected Hashtable<Integer, Integer> textures;
-	protected Hashtable<Integer, ProductEntity> entities;
-
 	public Activity activity;
 	public RenderView renderView;
-	// NOTE: We can't store this, because it surely becomes invalid. 
+	// NOTE: We can't store gl, because it surely becomes invalid. 
 //	public GL10 gl;
 	
+	// The texture collection. (The ids increase themselves)
+	protected Hashtable<Integer, Integer> textures;
+	
+	// The entity collection
+	protected Hashtable<Integer, ProductEntity> entities;
+	
+	// The animator collection
+	protected Hashtable<Integer, Animator> animators;
+
+	// The background Shelf of the game	
 	protected Shelf shelf;
+	
+	// The moving speed of the background and the products 
+	// TODO: Better name
 	public float scrollSpeed;
 	
-//	
-//	protected ProductEntity pe;
+	// The global distance traveled so far
+	// TODO: Better name
+	public float distMovedX; 
+	
+	// The Y position where products move over the screen.
+	// TODO: Better name
+	public float[] productSpawnY;
+	
+	// This value counts the number of columns, where products were spawned.  
+	// TODO: Better name
+	public int productSpawnColumns;
+
+	
+
 	
 	/**
 	 * @param gl
@@ -55,8 +77,19 @@ public class GameManager implements Renderable {
 		
 		textures = new Hashtable<Integer, Integer>();
 		entities = new Hashtable<Integer, ProductEntity>();
+		animators = new Hashtable<Integer, Animator>();
 		
-		scrollSpeed = 500f * 0.001f; // Pixel per second
+		EventManager.getInstance().addListener(this);
+		
+		scrollSpeed = 100f * 0.001f; // Pixel per second
+		distMovedX = 0;
+		
+		
+		float spawnY = renderView.getHeight() / 5f;		
+		productSpawnY = new float[]{spawnY, spawnY * 2, spawnY * 3, spawnY * 4};
+		
+		productSpawnColumns = 0;
+		
 		createEntities(gl);
 	}
 	
@@ -67,17 +100,24 @@ public class GameManager implements Renderable {
 	public void createEntities(GL10 gl) {
 		
 		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
-		shelf.texture = getTexture(gl, R.drawable.l17_crate);
+		shelf.texture = getTexture(R.drawable.l17_crate, gl);
 				
 		int start = R.drawable.l88_stash_blue;
 		int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
 		
-		for (int i = 0; i < 20; i++) {
-			ProductEntity pe = new ProductEntity(	(float)Math.random() * (renderView.getWidth() - 100) + 50, 
-													(float)Math.random() * (renderView.getHeight() - 100) + 50, 1, 100, 100);
-			pe.texture = getTexture(gl, start + (i % range));
-			pe.angle = (float)Math.random() * 360;
-			entities.put(i, pe);
+		// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
+		float productSize = 100 * renderView.getHeight() / 480f;
+		
+		for (int i = 0; i < 10; i++) {
+			
+			int spawnSlot = (int)(Math.random() * 3) + 1;			
+			ProductEntity pe = new ProductEntity(	(float)Math.random() * (renderView.getWidth() - 100) + 50, productSpawnY[spawnSlot], 1, productSize);
+			
+			pe.texture = getTexture(start + (i % range), gl);
+			pe.angle = (float)Math.random() * 360;			
+			
+			// Put it into the HashTable. The id gets assigned internally. 
+			entities.put(pe.id, pe);
 		}
 		
 		
@@ -92,29 +132,75 @@ public class GameManager implements Renderable {
 	 */
 	public void update(float dt) {
 		
-		// Move scrollSpeed pixel every second.
-		float speed = scrollSpeed * dt;
-		float shelfSpeed = (5.0f/3.0f) * speed / renderView.getWidth();
+		// Difference in x since last frame 
+		float dx = scrollSpeed * dt;
+		distMovedX += dx;
 		
-		shelf.scrollBy(shelfSpeed);
+		// Calculation of background movement. (The height is equivalent to 1 in Texture Space)
+		shelf.scrollX = distMovedX / renderView.getHeight();
 		
-		Enumeration<Integer> keys = entities.keys();
+		
+		
+		// Update all Animators
+		Enumeration<Integer> keys = animators.keys();		
+		while(keys.hasMoreElements()) {
+			animators.get(keys.nextElement()).update(dt);
+		}
+		
+		
+		
+		
+		// Now move all products on the shelf in the same speed
+		keys = entities.keys();
 		ProductEntity pe = null;
 		
 		while(keys.hasMoreElements()) {
 			pe = entities.get(keys.nextElement());
 			
-			pe.x -= speed;
-//			float rot = (1 - pe.y / (renderView.getHeight() * 0.5f)) * 15;
-//			pe.angle += rot;
+			if (!pe.clickable)
+				continue;
 			
-			if (pe.x < -100) {
+			pe.x -= dx;
+			
+			// If they are out of the screen remove them
+			if (pe.x < -pe.width) {
 				
-				pe.x = renderView.getWidth() + (float)Math.random() * 300 + 50;
-				pe.y = (float)Math.random() * (renderView.getHeight() - 100) + 50;
-				pe.angle = (float)Math.random() * 360;
+				entities.remove(pe.id);
+				
+//				pe.x = renderView.getWidth() + (float)Math.random() * 300 + 50;
+//				
+//				// Spawn in the upper 3 slots
+//				int spawnSlot = (int)(Math.random() * 3) + 1;
+//				pe.y = productSpawnY[spawnSlot];
 			}
 		}
+		
+		// At last, add some new products every few pixels
+		// Everytime there's a new column, spawn a new set of products. Needs to be an integer division		
+		if ((int)distMovedX / 150 > productSpawnColumns) {
+			productSpawnColumns++;
+			
+			// This varies due to changes in scroll speed
+			float d = distMovedX % 150;
+			
+			// Spawn outside the screen and subtract the amount of d already passed 
+			float x = renderView.getWidth() + 75 - d;
+			float y = productSpawnY[(int)(Math.random() * 3) + 1];
+			
+			// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
+			float productSize = 100 * renderView.getHeight() / 480f;
+			
+			int start = R.drawable.l88_stash_blue;
+			int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
+			
+			pe = new ProductEntity(x, y, 1, productSize);
+			
+			pe.texture = getTexture(start + (int)(Math.random() * range));
+			pe.angle = (float)Math.random() * 360;			
+			
+			entities.put(pe.id, pe);
+		}
+		
 	}
 
 	
@@ -123,14 +209,17 @@ public class GameManager implements Renderable {
 		
 		shelf.render(gl);
 		
-//		pe.render(gl);
-		
 		// Render entities.		
 		Enumeration<Integer> keys = entities.keys();
 		while(keys.hasMoreElements()) {
 			entities.get(keys.nextElement()).render(gl);
 		}
 	}
+	
+	
+	
+	// Interface methods
+	//------------------------------------------------------------------------------------------------------
 
 
 	/**
@@ -146,20 +235,35 @@ public class GameManager implements Renderable {
 			
 			pe = entities.get(keys.nextElement());
 			
-			if (pe.visible && pe.hitTest(x, y)) {
-				pe.x = renderView.getWidth() + (float)Math.random() * 500 + 50;
-				pe.y = (float)Math.random() * (renderView.getHeight() - 100) + 50;
-//				pe.angle = (float)Math.random() * 360;
+			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
 				
-				int start = R.drawable.l88_stash_blue;
-				int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
+				pe.clickable = false;
+				// Move it to the basket
+				Animator a = new Animator(pe, 100, 100, 30);
+				animators.put(a.id, a);
 				
-				int texChoose = (int)(Math.random() * range) + start;
 				
-				// Avoid changing the texture while it is rendered
-//				pe.visible = false;
-				pe.texture = getTexture(null, texChoose); // HACK HACK!! If the texture isn't available yet, the game crashes!!
-//				pe.visible = true;
+//				
+//				pe.x = renderView.getWidth() + (float)Math.random() * 500 + 50;
+////				pe.y = (float)Math.random() * (renderView.getHeight() - 100) + 50;
+//				
+//				// Spawn in the upper 3 slots
+//				int spawnSlot = (int)(Math.random() * 3) + 1;
+//				pe.y = productSpawnY[spawnSlot];
+//				
+//				// Change speed depending on the product color. Not now :P
+////				scrollSpeed -= 0.001; // 20 pixel per second
+//				
+//				// Create a new product
+//				int start = R.drawable.l88_stash_blue;
+//				int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;				
+//				int texChoose = (int)(Math.random() * range) + start;
+//				
+//				pe.texture = getTexture(texChoose); // HACK HACK!! If the texture isn't available yet, the texture id will be 0!!
+//				
+//				
+				
+				
 				break;
 			}
 		}
@@ -170,23 +274,46 @@ public class GameManager implements Renderable {
 	
 
 
+	@Override
+	public void handleEvent(int eventId, Object eventData) {
+		
+		switch (eventId) {
+		case EventManager.ANIMATION_COMPLETE:
+			
+			// Remove the Animator from the HashTable, effectively destroying it.
+			// NOTE: Does this have to happen at a fixed point in time in the update loop?
+			Animator a = (Animator)eventData;			
+			animators.remove(a.id);
+			
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+
+
 	/** 
 	 * This method returns the texture id of the given resource file if already available or creates it on the fly. 
 	 * Note: You have to pass a valid GL everytime you use this method. 
 	 * 
-	 * @param gl Pass a valid GL here, or the texture id will always be 0. 
 	 * @param resource The resource identifier delivered by "at.ac.tuwien.cg.cgmd.bifth2010.R".
+	 * @param gl Pass a valid GL here, or the texture id will always be 0. 
 	 * @returns The texture id of the file.
 	 */
-	public int getTexture(GL10 gl, int resource) {
+	public int getTexture(int resource, GL10 gl) {
 		
 		// Try to find the texture
 		Integer t = textures.get(resource);
 		if (t != null) {
 			return t;
-		}		
-		// Texture not yet created. Do it now
+		}
 		
+		// Texture not yet created. Try it now.		
+		// If using the fast version, abort here and return zero. 
+		if (gl == null)
+			return 0;
 
 		//Get the texture from the Android resource directory
 		InputStream is = activity.getResources().openRawResource(resource);
@@ -227,5 +354,16 @@ public class GameManager implements Renderable {
 		
 		textures.put(resource, texture[0]);
 		return texture[0];	
+	}
+	
+	/** 
+	 * This method returns the texture id of the resource file if already available. Otherwise returns 0.
+	 * Use "int getTexture(int resource, GL10 gl)" to create a save texture handle on the fly. 
+	 * 
+	 * @param resource The resource identifier delivered by "at.ac.tuwien.cg.cgmd.bifth2010.R".
+	 * @returns The texture id of the file.
+	 */
+	public int getTexture(int resource) {
+		return getTexture(resource, null);
 	}
 }

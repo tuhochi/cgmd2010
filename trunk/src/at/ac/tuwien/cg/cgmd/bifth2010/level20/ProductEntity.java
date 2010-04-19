@@ -10,29 +10,30 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
  * @author Reinhard Sprung
  */
 public class ProductEntity extends RenderEntity implements Clickable {
+	
+	protected boolean clickable;
 
 	/**
 	 * @param x The X coordinate. 
 	 * @param y The Y coordinate. 
 	 * @param z The Z coordinate (the depth). 
-	 * @param width The width of the entity.
-	 * @param height The height of the entity.
+	 * @param size The side length of the quadratic product entity.
 	 */
-	public ProductEntity(float x, float y, float z, float width, float height) {
-		super(x, y, z, width, height);
-		
+	public ProductEntity(float x, float y, float z, float size) {
+		super(x, y, z, size, size);
+		clickable = true;
 	}
 
 	@Override
 	public boolean hitTest(float hitX, float hitY) {
+		// Hm, don't ask this here. 
+//		if (!clickable)
+//			return false;
 		
 		float hW = width * 0.5f;
 		float hH = height * 0.5f;
 		
-		if (hitX >= x - hW && hitX < x + hW   &&   hitY >= y - hH && hitY < y + hH)
-			return true;
-		
-		return false;
+		return (hitX >= x - hW && hitX < x + hW   &&   hitY >= y - hH && hitY < y + hH);
 	}
 
 }

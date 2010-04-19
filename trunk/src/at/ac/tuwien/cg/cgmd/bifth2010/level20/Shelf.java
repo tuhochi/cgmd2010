@@ -47,11 +47,11 @@ public class Shelf extends RenderEntity{
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 	}
 
-	/**
-	 * @param f Scroll the texture coordinates by this value in X direction
-	 */
-	public void scrollBy(float f) {
-		
-		scrollX += f;
-	}
+//	/**
+//	 * @param f Scroll the texture coordinates by this value in X direction
+//	 */
+//	public void scrollBy(float f) {
+//		
+//		scrollX += f;
+//	}
 }
