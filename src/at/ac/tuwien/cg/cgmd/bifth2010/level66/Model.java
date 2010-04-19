@@ -30,17 +30,17 @@ public class Model {
 	protected float _boundY;
 	protected float _boundZ;
 	
-	private ShortBuffer _indexBuffer;
-	private FloatBuffer _vertexBuffer;
-	private FloatBuffer _normalBuffer;
-	private FloatBuffer _colorBuffer;
-	private FloatBuffer _texCoordBuffer;
+	protected ShortBuffer _indexBuffer;
+	protected FloatBuffer _vertexBuffer;
+	protected FloatBuffer _normalBuffer;
+	protected FloatBuffer _colorBuffer;
+	protected FloatBuffer _texCoordBuffer;
 	
-	private boolean _renderCoord;
+	protected boolean _renderCoord;
 	
-	private ShortBuffer _coordIndexBuffer;
-	private FloatBuffer _coordVertexBuffer;
-	private FloatBuffer _coordColorBuffer;
+	protected ShortBuffer _coordIndexBuffer;
+	protected FloatBuffer _coordVertexBuffer;
+	protected FloatBuffer _coordColorBuffer;
 	
 	private static float _coordVertices[] = { 0.0f, 0.0f, 0.0f,
 											  1.0f, 0.0f, 0.0f,
