@@ -64,7 +64,6 @@ public class Level {
 		mBird = new Quad(3.0f,3.0f);
         GLManager.getInstance().getTextures().add(R.drawable.l17_crate);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bird);
-        GLManager.getInstance().getTextures().add(R.drawable.l17_bier);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
         
 	}
