@@ -14,8 +14,11 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
 
-
-public class MyHexagonGrid implements Drawable,Animatable{
+/**
+ * This class builds the level, moves the character, adds items to the grid and
+ * animates items which have been added to the grid.
+ */
+public class MyHexagonGrid extends Animatable implements Drawable{
 
 	private int width, height;
 	
@@ -42,18 +45,23 @@ public class MyHexagonGrid implements Drawable,Animatable{
 	private float jumpSpeed=0;
 	private float jumpTimeScale=1;
 	private float jumpGrav=12f;
-	private float jumpTimeDelta=0;
 	private int jumpWidth=1;
-	
 	private ArrayList choices = new ArrayList(12);
 	
+	private ItemAnimated itemBomb;
+	private AnimationManager animatedItemsManager;
+	private ArrayList<ItemAnimated> currentItems;
+	
+	private int cashCount = 0;
+	private int deathCount = 0;
 	
 	/**
 	 * This function loads a bitmap containing map data.
-	 * @param file - filename storing map data
-	 * @param context - context for accessing resources
+	 * 
+	 * @param file		Filename of the map data.
+	 * @param context	Context for accessing resources.
 	 */
-	private void readFile(int id, Context context){
+	private void readFile(int id, Context context) {
 		
 		 //Bitmap bitmap = BitmapFactory.decodeStream(context.getAssets().open(file));
         InputStream is = context.getResources().openRawResource(id);
@@ -78,30 +86,45 @@ public class MyHexagonGrid implements Drawable,Animatable{
         
         for(int x=0; x< mapWidth; x++)
         	for(int y=0; y < mapHeight; y++)
-        		map[x][y] = (byte)bitmap.getPixel(x, mapHeight-1-y);
+        		if((byte)bitmap.getPixel(x, mapHeight-1-y) == -1)
+        			map[x][y] = GRID_NULL;
+        		else
+        			map[x][y] = GRID_WALL;
         
         Log.d("HexagonGrid", "Loaded "+id);
         bitmap.recycle();
 	}
 	
 	/**
-	 * Constructor for the HexagonGrid class. Sets up the hexagonal grid to display the level. 
-	 * @param viewportWidth
-	 * @param viewportHeight
-	 * @param texture - bitmap containing the texture for the hexagonal fields
-	 * @param gl - opengl 
-	 * @param context - context for accessing resources
-	 * @param map - bitmap file containing the map data
+	 * Constructor for the HexagonGrid class. Sets up the hexagonal grid to 
+	 * display the level.
+	 * 
+	 * @param viewportWidth		Width of the viewport.
+	 * @param viewportHeight	Height of the viewport.
+	 * @param texture			Bitmap containing the texture for the hexagonal
+	 * 							fields
+	 * @param gl 
+	 * @param context			Context for accessing resources.
+	 * @param map				Bitmap file containing the map data.
 	 */
-	public MyHexagonGrid(int resourceId,GL10 gl,Context context, int mapResource) {
+	public MyHexagonGrid(int resourceId, GL10 gl, Context context, int mapResource) {
 		//Load texture for hexagonal elements
-		textureHandle = MyTextureManager.singleton.addTexturefromResources(resourceId, gl);
-		textureHandle_blue = MyTextureManager.singleton.addTexturefromResources(TEXTURE_HEXAGON_B, gl);
-		textureHandle_r = MyTextureManager.singleton.addTexturefromResources(TEXTURE_HEXAGON_R, gl);
-		textureHandle_dollar = MyTextureManager.singleton.addTexturefromResources(TEXTURE_DOLLAR, gl);
+		textureHandle = MyTextureManager.singleton.addTextureFromResources(resourceId, gl);
+		textureHandle_blue = MyTextureManager.singleton.addTextureFromResources(TEXTURE_HEXAGON_B, gl);
+		textureHandle_r = MyTextureManager.singleton.addTextureFromResources(TEXTURE_HEXAGON_R, gl);
+		textureHandle_dollar = MyTextureManager.singleton.addTextureFromResources(TEXTURE_DOLLAR, gl);
+		
+		
+		animatedItemsManager = new AnimationManager(10);
+		
+		itemBomb = new ItemAnimated(new int[]{ITEM_BOMB,ITEM_BOMB_BW},gl,GRID_ELEMENT_WIDTH, GRID_ELEMENT_HEIGHT,ItemQueue.BOMB);
+		currentItems = new ArrayList<ItemAnimated>(10);
 		
 		//Read map file
 		readFile(mapResource, context);
+		
+		//Place Money
+		placeDollar(10);
 		
 		//Generic field of view
 		width = 5;
@@ -112,24 +135,28 @@ public class MyHexagonGrid implements Drawable,Animatable{
 	
 	/**
 	 * Calculates the field of view depending on the viewport. 
-	 * @param viewportWidth
+	 * 
+	 * @param viewportWidth	Width of the viewport.
 	 */
-	public void setWidth(float viewportWidth){
+	public void setWidth(float viewportWidth) {
 		//Calculate grid size
 		width = (int)Math.ceil(viewportWidth / (3f*R_HEX/2f))+2;
 		
 		//DEBUG: Resets the Level
-		scroll =0;
-		characterLevel = 3;
+		//scroll =0;
+		//characterLevel = 3;
 		
 		character.x = CHARACTER_POSITION*3f*R_HEX/2f-7.5f;
 		
 		int deltaH = ((xMin+CHARACTER_POSITION)%2 == 0)?2:1;
 		character.y = RI_HEX*deltaH+characterLevel*2f*RI_HEX;
 		
+		LevelActivity.deathsUpdateHandler.sendEmptyMessage(deathCount);
+		LevelActivity.coinsUpdateHandler.sendEmptyMessage(cashCount);
 		//Start animation
 		stop = false;
 	}
+	
 	@Override
 	public void Dispose(GL10 gl) {
 		// TODO Auto-generated method stub
@@ -147,46 +174,82 @@ public class MyHexagonGrid implements Drawable,Animatable{
 		
 		//Log.d("HexagonGrid","Draw "+scroll);
 		//Render grid
+		byte element = 0;
+		boolean std = true;
+		
+		//Draw Grid
 		for(int x=0;x<width;x++){
 
 			for(int y=0;y<height;y++){
-				if(map[x+xMin][y] == GRID_CUSTOM_WALL)
-					MyTextureManager.singleton.textures[textureHandle_blue].Bind(gl);
-				else if(map[x+xMin][y] == GRID_DOLLAR)
-					MyTextureManager.singleton.textures[textureHandle_dollar].Bind(gl);
-				else if(x == CHARACTER_POSITION+3)
-					MyTextureManager.singleton.textures[textureHandle_r].Bind(gl);
+				element = map[x+xMin][y];
 				
+				switch(element){
+				
+				case GRID_CUSTOM_WALL:
+					MyTextureManager.singleton.textures[textureHandle_blue].Bind(gl);
+					std = false;
+					break;
+					
+				case GRID_DOLLAR:
+					MyTextureManager.singleton.textures[textureHandle_dollar].Bind(gl);
+					std = false;
+					break;
+					
+				default:
+					if(x == CHARACTER_POSITION+3){
+						MyTextureManager.singleton.textures[textureHandle_r].Bind(gl);
+						std = false;
+					}
+					break;
+				}
 				
 				if(((map[x+xMin][y] & GRID_NULL) == 0) || (map[x+xMin][y] == GRID_DOLLAR))
 					((GL11Ext) gl).glDrawTexfOES(3f*R_HEX/2*(x-delta)-0.5f*R_HEX,
 													y*2*RI_HEX-DIF_HEX-(RI_HEX*((x+xMin)%2)),
 																0,GRID_ELEMENT_WIDTH, GRID_ELEMENT_HEIGHT);
 				
-				if((map[x+xMin][y] == GRID_CUSTOM_WALL) || (x == CHARACTER_POSITION+3) || (map[x+xMin][y] == GRID_DOLLAR))
+				if(!std)
 					MyTextureManager.singleton.textures[textureHandle].Bind(gl);
 		
 			}	
 		}
+		
+		//Draw animated Items
+		for(int i=0; i< currentItems.size(); i++){
+			ItemAnimated item = currentItems.get(i);
+			int x = item.gridX-xMin;
+			
+			if( (x >= 0) && (x < width)){
+
+				item.x = 3f*R_HEX/2*(x-delta)-0.5f*R_HEX;
+				item.y = item.gridY*2*RI_HEX-DIF_HEX-(RI_HEX*((x+xMin)%2));
+				item.width = GRID_ELEMENT_WIDTH;
+				item.height = GRID_ELEMENT_HEIGHT;
+				
+				item.Draw(gl);
+			}
+		}
 	}
 
 	/**
-	 * Sets the character for animation.
-	 * @param character
+	 * Sets the character for the animation.
+	 * 
+	 * @param character	The game character.
 	 */
-	public void setCharacterControl(MySprite character){
+	public void setCharacterControl(MySprite character) {
 		this.character = character;
 	}
+	
 	@Override
 	public void Init(GL10 gl) {
-		// TODO Aut o-generated method stub
+		// TODO Auto-generated method stub
 
 	}
 	
 	/**
-	 * Calculates a list of accessible waypoints 
+	 * Calculates a list of accessible waypoints.
 	 */
-	public void calculateChoices(){
+	public void calculateChoices() {
 	
 		int x = xMin+CHARACTER_POSITION;
 		int y = characterLevel;
@@ -221,15 +284,69 @@ public class MyHexagonGrid implements Drawable,Animatable{
 		
 	}
 	
+	public boolean checkBombRadius(int x, int y){
+		int s = (x%2 == 0)?1:-1;
+		int[][] check = {{x,y},{x-1,y+s},{x-1,y},{x+1,y},{x+1,y+s}};
+		
+		boolean ok = false;
+		for(int i=0; i<check.length; i++){
+			if(check[i][0] == CHARACTER_POSITION+xMin && check[i][1] == characterLevel+1){
+				ok = true;
+				break;
+			}
+		}
+		
+		return ok;
+	}
 	
+	public void checkDollar(){
+		
+		if(map[CHARACTER_POSITION+xMin][characterLevel+1] == GRID_DOLLAR){
+			
+			map[CHARACTER_POSITION+xMin][characterLevel+1] = GRID_NULL;
+
+			cashCount++;
+			
+			if(cashCount >= 5){
+				deathCount--;
+				
+				if(deathCount < 0)
+					deathCount = 0;
+				
+				cashCount = 0;
+				LevelActivity.deathsUpdateHandler.sendEmptyMessage(deathCount);
+			}
+			LevelActivity.coinsUpdateHandler.sendEmptyMessage(cashCount);	
+		}
+	}
 	/**
-	 * Animates the Grid, the character and the items. Eg. everything.
+	 * Animates the Grid, the character and the items. I.e. everything.
 	 */
 	@Override
 	public void animate(float deltaTime) {
 		//
 		if(stop)
 			return;
+		
+		ItemAnimated itm;
+		///
+		for(int i=0; i<currentItems.size(); i++){
+			itm = currentItems.get(i);
+			if(itm.checkStatus()){
+				
+				//Check if bomb detonated at lenny's position
+				if(itm.itemId == ItemQueue.BOMB)
+					if(checkBombRadius(itm.gridX, itm.gridY)){
+						deathCount++;
+						LevelActivity.deathsUpdateHandler.sendEmptyMessage(deathCount);
+					}
+				animatedItemsManager.removeAnimation(itm);
+				currentItems.remove(i);
+			}
+		}
+		//
+		
+		animatedItemsManager.animate(deltaTime);
 		
 		//Calculated new scroll value
 		scroll += deltaTime*jumpTimeScale*SPEED;
@@ -246,8 +363,11 @@ public class MyHexagonGrid implements Drawable,Animatable{
 		xMin = newxMin;
 		
 		//Reset level to start
-		if(scroll+width >= mapWidth-1)
-			scroll = 0;
+		if(scroll+width >= mapWidth-1) {
+//			scroll = 0;
+			LevelActivity.finishLevel.sendEmptyMessage(Math.min(100, deathCount*20));
+			return;
+		}
 		
 		int deltaH = ((xMin+CHARACTER_POSITION)%2 == 0)?2:1;
 	
@@ -255,10 +375,18 @@ public class MyHexagonGrid implements Drawable,Animatable{
 		
 			//next field
 		if(next > delay){
-				
+			
+			checkDollar();
+			
 			jumpTimeScale = 1f;
 			next = 0;
 			delay = 0;
+			
+			//MONEY
+			
+			//placeDollar(xMin+width);
+			
+			///
 			
 			//Up, down walk
 			//characterLevel += direction;
@@ -339,71 +467,7 @@ public class MyHexagonGrid implements Drawable,Animatable{
 			}
 			break;
 			
-		case 'U':		//Up
-			if(sign == -1){	//Down
-				v = 355f/21f;
-				a = -250f/21f;	
-				jump(5,6,1);
-			}else{			//Up
-				v = 18.875f;	
-				a = -11.875f;
-				jump(7,8,1);
-			}
-			
-			//y = (v*delta+a*delta*delta)*RI_HEX;
-			t = delta/jumpTimeScale;
-			y = (jumpSpeed*t+jumpGrav*t*t)*RI_HEX;
-			character.y = animLevel+y;					
-			break;
-			
-		case '3':		//Jump 3 fields
-			if(sign == -1){	//Down
-				v = 127f/60f;
-				a = -49f/60f;
-				jump(-1,1f,3);
-			}else{			//Up
-				a = -5f/6f;
-				v = 17f/6f;
-				jump(1,2f,3);
-			}
-//			t = delta+next;
-//			y = (v*t+a*t*t)*RI_HEX;
-			t = (delta+next)/jumpTimeScale;
-			y = (jumpSpeed*t+jumpGrav*t*t)*RI_HEX;
-			character.y = animLevel+y;
-			break;
-			
-		case '2':		//Jump 2 fields
-			v = 2;
-			a = -1;
-			
-			jump(0,1,2);
-			
-			t = (delta+next)/jumpTimeScale;
-			y = (jumpSpeed*t+jumpGrav*t*t)*RI_HEX;
-			character.y = animLevel+y;
-			break;
-			
-		case 'D':
-			if( delta >= 0.5){
-				if(sign == -1){	//Down
-					a = -55f;
-					v = 27f/2f;
-					jump(-7,0.5f,0.5f);
-				}else{			//Up
-					a = -125f/3f;
-					v = 65f/6f;
-					jump(-5,0.5f,0.5f);
-				}
-//				t=delta-0.5f;
-//				y = (v*t+a*t*t)*RI_HEX;
-				
-				t = (delta-0.5f)/jumpTimeScale;
-				y = (jumpSpeed*t+jumpGrav*t*t)*RI_HEX;
-				character.y = animLevel+y;
-			}
-			break;
-			
+		
 		case 'J':
 			t = (delta+next)/jumpTimeScale;
 			y = (jumpSpeed*t+jumpGrav*t*t)*RI_HEX;
@@ -417,7 +481,7 @@ public class MyHexagonGrid implements Drawable,Animatable{
 	
 	}
 	
-	public float jump(float h, float s, float width){
+	public float jump(float h, float s, float width) {
 		
 		float v,g,l=0,xEnd,x;
 		
@@ -442,14 +506,15 @@ public class MyHexagonGrid implements Drawable,Animatable{
 		
 		return xEnd;
 	}
+	
 	/**
 	 * This function enables the item at a specified position on the grid.
 	 * 
-	 * @param x - x viewport coordinate
-	 * @param y - y viewport coordinate
-	 * @param item - item id as defined in ItemQueue
-	 * @return True, if the item has been dropped on a valid position. False 
-	 * otherwise.
+	 * @param x		X coordinate of the viewport
+	 * @param y		Y coordinate of the viewport
+	 * @param item	Item-id as defined in ItemQueue
+	 * @return		True, if the item has been dropped on a valid position. 
+	 * 				False otherwise.
 	 */
 	public boolean useItem(float x, float y, int item) {
 		Log.d("HexagonGrid", x+":"+y + " - " + item);
@@ -460,17 +525,63 @@ public class MyHexagonGrid implements Drawable,Animatable{
 		int yGrid = (int)Math.floor((y+RI_HEX*(xGrid%2)) / (2.0*RI_HEX) );
 		
 		if((xGrid<mapWidth) && (yGrid<mapHeight) && (yGrid != 0) && (xGrid > xMin+CHARACTER_POSITION+3)){
-			if(map[xGrid][yGrid] == GRID_WALL)
-				map[xGrid][yGrid] = GRID_NULL;
-			else
-				map[xGrid][yGrid] = GRID_CUSTOM_WALL;
-				//map[xGrid][yGrid] = GRID_DOLLAR;
-			
-			return true;
+			switch(item){
+				case ItemQueue.DELETEWALL:
+					if(map[xGrid][yGrid] == GRID_WALL){
+						map[xGrid][yGrid] = GRID_NULL;
+						return true;
+					}
+					break;
+					
+				case ItemQueue.WALL:
+					if(map[xGrid][yGrid] == GRID_NULL){
+						map[xGrid][yGrid] = GRID_CUSTOM_WALL;
+						return true;
+					}break;
+					
+				case ItemQueue.BOMB:
+					if((map[xGrid][yGrid] == GRID_NULL) && ((map[xGrid][yGrid-1] & GRID_NULL) == 0)){
+						ItemAnimated b = itemBomb.addCloneToGrid(animatedItemsManager, xGrid, yGrid);
+						currentItems.add(b);
+						b.startAnimation(10f);
+						return true;
+					}break;
+				
+//				case ItemQueue.LASER:
+//					return true;
+					
+				default:
+					return true;
+			}
 		}
 		
 		Log.d("HexagonGrid","Item Pos=("+xGrid+","+yGrid+")");
 		return false;
+	}
+	
+	public void placeDollar(int num) {
+		ArrayList<Integer> list = new ArrayList<Integer>(mapHeight);
+		
+		//Statistische abstand zwischen zwei dollar zeichen
+		int delta = (int)Math.floor(mapWidth/(float)num);
+		int current,h;
+		
+		for(int j=1; j<num; j++){
+			current = random.nextInt(delta);
+			
+			for(int i=0; i<mapHeight-1;i++){
+				if((map[current+j*delta][i] == GRID_WALL) &&  (map[current+j*delta][i+1] == GRID_NULL))
+					list.add(i+1);
+			}
+			
+			if(list.size() != 0){
+				h = list.get(random.nextInt(list.size()));
+				map[current+j*delta][h] = GRID_DOLLAR;
+			}
+			
+			list.clear();
+		}
+		
 	}
 
 }

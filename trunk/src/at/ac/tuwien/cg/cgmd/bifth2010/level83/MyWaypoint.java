@@ -1,5 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level83;
 
+/**
+ * A convenience class for defining which path the character can take.
+ */
 public class MyWaypoint {
 
 	public static MyWaypoint[][] waypoints = { 

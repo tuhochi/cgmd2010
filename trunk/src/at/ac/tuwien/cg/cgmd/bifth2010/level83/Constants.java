@@ -2,7 +2,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level83;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * A convenience class that provides several common constants.
+ */
 public class Constants {
+	
 	public static float GRID_ELEMENT_WIDTH = 53f;
 	public static float GRID_ELEMENT_HEIGHT = 53f;
 	
@@ -16,8 +20,6 @@ public class Constants {
 	public static final byte GRID_DOLLAR = 0x11;
 	public static final byte GRID_NULL = 0x01;
 	
-
-	
 	public static final int CHARACTER_POSITION = 2;
 	
 	public static final String GROUP_PREFIX = "l83_";
@@ -26,29 +28,43 @@ public class Constants {
 	public static final int TEXTURE_HEXAGON = R.drawable.l83_hexagon;
 	public static final int TEXTURE_HEXAGON_B = R.drawable.l83_hexagon_blue;
 	public static final int TEXTURE_HEXAGON_R = R.drawable.l83_hexagon_r;
+	public static final int TEXTURE_TOMB = R.drawable.l83_tomb;
+	public static final int TEXTURE_DOLLARSIGN = R.drawable.l83_dollarsign;
 	
-	public static final int TEXTURE_MAP = R.drawable.l83_map3;
+	public static final int TEXTURE_MAP = R.drawable.l83_map4;
+	
+	public static final int ANIM_BOMB_1 = R.drawable.l83_anim_bomb_4;
+	public static final int ANIM_BOMB_2 = R.drawable.l83_anim_bomb_3;
+	public static final int ANIM_BOMB_3 = R.drawable.l83_anim_bomb_2;
+	public static final int ANIM_BOMB_4 = R.drawable.l83_anim_bomb_1;
 	
 	public static final int OVERLAY = R.drawable.l83_overlay70;
 	public static final int ITEM_BOMB = R.drawable.l83_bomb;
 	public static final int ITEM_BOMB_BW = R.drawable.l83_bomb_bw;
 	public static final int ITEM_LASER = R.drawable.l83_laser;
 	public static final int ITEM_LASER_BW = R.drawable.l83_laser_bw;
-	public static final int ITEM_DYNAMITE = 123;
-	public static final int ITEM_DYNAMITE_BW = 123;
-	public static final int ITEM_WALL = 123;
-	public static final int ITEM_WALL_BW = 123;
+	public static final int ITEM_WALL = R.drawable.l83_hexagon_blue;
+	public static final int ITEM_WALL_BW = R.drawable.l83_hexagon_bw;
+	public static final int ITEM_DELETEWALL = R.drawable.l83_item_delete;
+	public static final int ITEM_DELETEWALL_BW = R.drawable.l83_item_delete_bw;
 	
 	public static final int TEXTURE_DOLLAR = R.drawable.l83_dollar;
 	public static final int TEXTURE_LENNY = R.drawable.l83_kenny1;
 	
-	public static final float SPEED = 1.0f;
+	public static final float SPEED = 0.5f;
 	
 	public static final float ASP_HEX = 1;
 	
 	public static float VIEWPORT_HEIGHT=1;
 	
-	public static void setViewPort(float height,int rows){
+	/**
+	 * This method can be used to set constants according to the height of the 
+	 * display and the number of rows of which the level should consist.
+	 * 
+	 * @param height	The height of the display.
+	 * @param rows		Number of rows for the level.
+	 */
+	public static void setViewPort(float height, int rows) {
 		
 		VIEWPORT_HEIGHT = height;
 

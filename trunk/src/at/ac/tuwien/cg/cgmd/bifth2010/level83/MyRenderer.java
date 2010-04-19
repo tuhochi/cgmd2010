@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level83;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
@@ -15,6 +17,10 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
 
+/**
+ * This class implements the {@link Renderer} and the {@link OnTouchListener}.
+ * It draws the whole level and responds to user interaction.
+ */
 public class MyRenderer implements Renderer, OnTouchListener {
 	
 	private static final String CLASS_TAG = MyRenderer.class.getName();
@@ -25,7 +31,8 @@ public class MyRenderer implements Renderer, OnTouchListener {
 	private float deltaTime;
 	private boolean scrolling;
 	private MySprite sprite;
-//	private MySprite s2;
+	private MySprite dollar;
+	private MySprite tomb;
 //	private MyAnimatedSprite animSprite;
 //	private MyAnimatedSprite animSprite2;
 	private AnimationManager aniManager;
@@ -51,6 +58,7 @@ public class MyRenderer implements Renderer, OnTouchListener {
 				float velocityY) {
 			// TODO Auto-generated method stub
 			Log.d(CLASS_TAG, "onFling");
+//			LevelActivity.deathsUpdateHandler.sendEmptyMessage(100);
 			return false;
 		}
 
@@ -58,19 +66,23 @@ public class MyRenderer implements Renderer, OnTouchListener {
 		public void onLongPress(MotionEvent e) {
 			// TODO Auto-generated method stub
 			Log.d(CLASS_TAG, "onLongPress");
+//			LevelActivity.deathsUpdateHandler.sendEmptyMessage(7);
+//			LevelActivity.finishLevel.sendEmptyMessage(15);
 		}
 
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
 //			Log.d(CLASS_TAG, "onScroll");
-			if (e1.getX() < width - items.itemWidth - 10 || e1.getX() > width - 10 || 
-					e1.getY() < 10 || e1.getY() > items.itemHeight + 10) {
+			if (e1.getX() < width - items.itemWidth - 20 || e1.getX() > width || 
+					e1.getY() < 0 || e1.getY() > items.itemHeight + 20) {
 //				Log.d(CLASS_TAG, "X:" + e1.getX() + " - Y:" + e1.getY());
 				return true;
 			}
+//			LevelActivity.deathsUpdateHandler.sendEmptyMessage(72);
 			scrollingHandler.sendEmptyMessage(1);
-			items.moveItem(distanceX, distanceY);
+			items.centerItem(e2.getX(), e2.getY());
+//			items.moveItem(distanceX, distanceY);
 			return true;
 		}
 
@@ -89,6 +101,10 @@ public class MyRenderer implements Renderer, OnTouchListener {
 		}
 	};
 	
+	/**
+	 * Handler for setting the <code>scrolling</code> boolean from different 
+	 * Threads.
+	 */
 	private Handler scrollingHandler = new Handler(){
     	
     	@Override
@@ -102,10 +118,14 @@ public class MyRenderer implements Renderer, OnTouchListener {
     };
 	
 	//Public
+    /**
+     * Current frames per second.
+     */
 	public float fps;
 	
 	/**
 	 * Constructor for the renderer. Context is needed to access the resources.
+	 * 
 	 * @param context Context to access the resources
 	 */
 	public MyRenderer(Context context) {
@@ -136,6 +156,8 @@ public class MyRenderer implements Renderer, OnTouchListener {
 		
 		hexGrid.Draw(gl);
 		sprite.Draw(gl);
+		dollar.Draw(gl);
+		tomb.Draw(gl);
 		items.Draw(gl);
 //		s2.Draw(gl);
 		
@@ -157,6 +179,14 @@ public class MyRenderer implements Renderer, OnTouchListener {
 		sprite.width = width/32;
 		sprite.height = height/12;
 		
+		dollar.height = LevelActivity.coins.getTextSize();
+		dollar.width = dollar.height;
+		dollar.x = width/5.5f;
+		dollar.y = height - dollar.height - 3;
+		
+		tomb.height = dollar.height;
+		tomb.width = tomb.height;
+		tomb.y = dollar.y;
 		
 		Log.d("Renderer","Element width="+GRID_ELEMENT_WIDTH);
 		
@@ -221,16 +251,18 @@ public class MyRenderer implements Renderer, OnTouchListener {
 	/**
 	 * This function is called when the level is started for the first time and
 	 * creates all objects which are necessary for rendering the level.
+	 * 
 	 * @param gl
 	 */
 	private void init(GL10 gl){
 		Log.d("Renderer", "Init");
 		
 		//Initialize TextureManager
-        new MyTextureManager(context, 10);
+        new MyTextureManager(context, 30);
 	        
 		sprite = new MySprite(TEXTURE_LENNY, 20f*R_HEX/2f, 2f*RI_HEX-DIF_HEX-RI_HEX, 15, 21, gl);
-//        s2 = new MySprite(sprite, 200, 100);
+        dollar = new MySprite(TEXTURE_DOLLARSIGN, 84, 0, 14, 14, gl);
+        tomb = new MySprite(TEXTURE_TOMB, 4, 0, 14, 14, gl);
 		hexGrid = new MyHexagonGrid( TEXTURE_HEXAGON, gl, context,TEXTURE_MAP);
 		
 		aniManager = new AnimationManager(5);
@@ -243,10 +275,10 @@ public class MyRenderer implements Renderer, OnTouchListener {
         //aniManager.addAnimatable(animSprite);
 		
 		items = new ItemQueue(4, gl);
-		items.put(ItemQueue.LASER);
+		items.put(ItemQueue.WALL);
 		items.put(ItemQueue.BOMB);
 		items.put(ItemQueue.BOMB);
-		items.put(ItemQueue.LASER);
+		items.put(ItemQueue.DELETEWALL);
         
         //Init time
 		lastTime = System.nanoTime();
@@ -254,14 +286,26 @@ public class MyRenderer implements Renderer, OnTouchListener {
 //      aniManager.addAnimatable(animSprite2);
 	}
 
+	/**
+	 * This method should be called, when the game/application is paused, to 
+	 * stop running threads.
+	 */
 	public void onPause() {
-		aniThread.interrupt();
+		if (aniThread != null)
+			aniThread.interrupt();
 	}
- 
+
+	/**
+	 * This method should be called, when the game/application is stopped, to 
+	 * free resources.
+	 */
 	public void onStop() {
 		
 	}
 	
+	/**
+	 * This method should be called, when the game/application is resumed.
+	 */
 	public void onResume() {
 //		aniThread.start();
 	}
@@ -272,6 +316,8 @@ public class MyRenderer implements Renderer, OnTouchListener {
     	if (!cGestureDetector.onTouchEvent(event) && event.getAction() == MotionEvent.ACTION_UP) {
     		if (scrolling) {
 				Log.d(CLASS_TAG, "! onUp ! - X:" + event.getX() + " / Y:" + event.getY());
+//				LevelActivity.coinsUpdateHandler.sendEmptyMessage(15);
+				//set scrolling to false
 				scrollingHandler.sendEmptyMessage(0);
 				if (!hexGrid.useItem(event.getX(), event.getY(), items.getItemType()))
 					items.resetItem();
@@ -291,9 +337,8 @@ public class MyRenderer implements Renderer, OnTouchListener {
 	}
 	
 	/**
-	 * DaemonThread class or animation thread.
+	 * DaemonThread class for animation thread.
 	 * @author horm
-	 *
 	 */
 	private class DaemonThread extends Thread {
 		public DaemonThread(Runnable r) {

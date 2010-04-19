@@ -2,14 +2,24 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level83;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class MyAnimatedSprite implements Animatable, Drawable {
+/**
+ * A convenience class for animated Sprites. This class is an implementation of
+ * the {@link Animatable} and the {@link Drawable} interface.
+ */
+public class MyAnimatedSprite extends Animatable implements Drawable {
 
 	private MySprite sprite;
 	private float startPosX;
 	private float startPosY;
 	private boolean up;
 	
+	/**
+	 * Creates an animated Sprite from a {@link MySprite}.
+	 * 
+	 * @param sprite	The <code>MySprite</code> for the new animated Sprite.
+	 */
 	public MyAnimatedSprite(MySprite sprite) {
+		super();
 		this.sprite = sprite;
 		startPosX = sprite.x;
 		startPosY = sprite.y;
