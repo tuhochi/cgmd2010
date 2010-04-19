@@ -37,8 +37,10 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	private static final int PLAYING = 1;
 
 	private static final String	TAG	= "Audio";
-
 	
+	// sounds
+	public native void nativeRegisterAudio();
+
 	
 	private static java.util.Map<Integer, MediaPlayer> mps = new HashMap<Integer, MediaPlayer>();
 	private static java.util.Map<MediaPlayer, Boolean> mpBlocked = new HashMap<MediaPlayer, Boolean>();
@@ -57,11 +59,17 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 		putMp(BLOCK_SWAPPED_SOUND);
 	}
 	
-	public static void AudioTest()
+	private static void AudioTest()
 	{
 		Log.d("l77native", "audio callback!!!!");
 		//putMp(BLOCK_DROPPED_SOUND);
 	}
+	
+	public void AudioCaller()
+	{
+		nativeRegisterAudio();
+	}
+	
 	
 	/**
 	 * Adds an Mediaplayer to the map mp identified by the resid
