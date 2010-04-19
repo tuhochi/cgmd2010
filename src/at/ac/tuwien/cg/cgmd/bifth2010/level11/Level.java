@@ -35,8 +35,8 @@ public class Level extends Thread {
 
 	private LinkedList<Treasure> treasureList;
 	private LinkedList<Pedestrian> pedestrianList;
-	public float sizeX;
-	public float sizeY;
+	public static float sizeX;
+	public static float sizeY;
 	private GL10 gl;
 	private Context context;
 	
@@ -47,8 +47,8 @@ public class Level extends Thread {
 	public Level(float sizeX, float sizeY) {
 		//Log.i(LOG_TAG, "Level(float, float)");
 		
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
+		Level.sizeX = sizeX;
+		Level.sizeY = sizeY;
 		treasureList = new LinkedList<Treasure>();
 		pedestrianList = new LinkedList<Pedestrian>();
 		this.grabbedTreasureValueOfDeletedTreasures = 0;
@@ -58,7 +58,7 @@ public class Level extends Thread {
 		this.isPaused = false;
 		
 		timing = new Timing();
-		this.maxPlayTime = 60;
+		this.maxPlayTime = 120;
 
 	}
 	
@@ -177,8 +177,8 @@ public class Level extends Thread {
 		Random rand = new Random();
 		Vector2 pos = new Vector2();
 		while(this.pedestrianList.size() < amount){
-			pos.x = rand.nextFloat() * this.sizeX;
-			pos.y = rand.nextFloat() * this.sizeY;
+			pos.x = rand.nextFloat() * Level.sizeX;
+			pos.y = rand.nextFloat() * Level.sizeY;
 			Iterator<Pedestrian>it = this.pedestrianList.iterator();
 			boolean posAccepted = true;
 			while(it.hasNext()){

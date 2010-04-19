@@ -31,6 +31,9 @@ public class Pedestrian implements Target{
 	private Target target;
 	private float oldTime;
 	private Vector2 temp;
+	private float levelSizeX;
+	private float levelSizeY;
+	private Random rand;
 	
 	public Pedestrian(GL10 gl, Context context) {
 		this( 30.0f,10.0f,0.01f, 2.0f, gl, context);
@@ -47,7 +50,9 @@ public class Pedestrian implements Target{
 		legs = new Legs(gl, context);
 		arms = new Arms(gl, context);
 		
-		this.angle = 0.0f;
+		rand = new Random();
+		
+		this.angle = (float)(rand.nextFloat()*360.0);
 		this.moveSpeed = 4.0f;
 		this.target = null;
 		this.setColors();
@@ -57,7 +62,6 @@ public class Pedestrian implements Target{
 	
 	public void setColors() {
 	
-		Random rand = new Random();
 
 		Color color_skin = new Color();
 		Color color_hair = new Color();
@@ -153,10 +157,20 @@ public class Pedestrian implements Target{
 				}
 			}
 		}else{//no target
-			//this.temp.set((float)Math.sin(angle)*deltaTime*moveSpeed, (float)Math.cos(angle)*deltaTime*moveSpeed);
-			//position.add(this.temp);
-			legs.update(position, angle, 0.0f);
-			arms.update(position, angle, 0.0f);
+			this.temp.set((float)Math.cos(angle/180*Math.PI)*deltaTime*moveSpeed, (float)Math.sin(angle/180*Math.PI)*deltaTime*moveSpeed);
+			position.add(this.temp);
+			if(this.position.x > Level.sizeX)
+				angle = 180;
+			else if(this.position.x < 0)
+				angle = 0;
+			else if(this.position.y > Level.sizeY)
+				angle = 270;
+			else if(this.position.y < 0)
+				angle = 90;
+			else 
+				angle += rand.nextGaussian()*100.0f*deltaTime;
+			legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+			arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
 		}
 		torso.update(position, angle);
 		head.update(position, angle);
