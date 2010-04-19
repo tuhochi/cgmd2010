@@ -20,13 +20,6 @@ public class ProgressManager extends SessionState {
 		gamepoints -= value;
 	}
 	
-	public void updateProgress(long time)
-	{
-		//calc progress up to time ??
-		progress += 10;
-		setProgress(progress);
-	}
-	
 	public int getPoints()
 	{
 		return gamepoints;

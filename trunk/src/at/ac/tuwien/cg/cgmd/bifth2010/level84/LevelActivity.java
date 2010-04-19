@@ -27,6 +27,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
+	private ProgressManager progman;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -38,7 +39,8 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
-		renderManager = new RenderManager(this, street, gems, accelerometer);
+		progman = new ProgressManager();
+		renderManager = new RenderManager(this, street, gems, accelerometer, progman);
 		
 		openglview.setRenderer(renderManager);
 		
@@ -94,6 +96,16 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	protected void onResume() {
 		super.onResume();
 		openglview.onResume();
+	}
+
+	@Override
+	public void finish() {
+		
+		//nextl line is for testing only
+		progman.addPoints(20);
+		progman.setProgress(Math.min(Math.max(progman.getPoints(), 0), 100));
+		setResult(Activity.RESULT_OK, progman.asIntent());
+		super.finish();
 	}
 
 	@Override
