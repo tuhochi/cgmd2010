@@ -93,7 +93,7 @@ public class MainChar implements SceneEntity {
 	public MainChar()
 	{
 		//create Default MainChar
-		this.height = Settings.MAINCHAR_HEIGHT*RenderView.instance.getAspectRatio();
+		this.height = Math.round(Settings.MAINCHAR_HEIGHT*RenderView.instance.getAspectRatio());
 		this.width = Settings.MAINCHAR_WIDTH;
 		
 		gameOverAngle= (float)Math.PI*3f/2f;
