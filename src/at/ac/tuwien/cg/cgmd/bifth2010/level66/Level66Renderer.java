@@ -1,3 +1,9 @@
+/**
+ * Flight66 - a trip to hell
+ * 
+ * @author brm, dwi
+ * 
+ */
 package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -26,7 +32,6 @@ public class Level66Renderer implements Renderer {
     private float[] _matShininess = { 50.0f };
 	
 	public Level66Renderer(Context context){
-		this.mContext = context;
 	}
 	
 	@Override
@@ -84,6 +89,7 @@ public class Level66Renderer implements Renderer {
 		//load and render model
 	    testModel = new PlayerAircraft(mContext);
 	    //testModel = new Model("l66_baum.obj", mContext);
+		Sound.playSound(2.0f);
     }
 	
 	@Override
