@@ -4,6 +4,15 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * An object that represents a rectangle that has a color
+ * gradient with two different color values (one for the top
+ * and one for the bottom color).
+ * 
+ * This object is used in MireRabbit for the sky background.
+ * 
+ * @author thp
+ */
 public class Gradient {
 	float width;
 	float height;
@@ -35,6 +44,14 @@ public class Gradient {
 		colorBuffer = Util.floatArrayToBuffer(colors);
 	}
 	
+	/**
+	 * Create a new gradient from white to black with
+	 * the desired size. The gradient will be positioned
+	 * at (0,0).
+	 * 
+	 * @param width The width of the resulting rectangle
+	 * @param height The height of the resulting rectangle
+	 */
 	public Gradient(float width, float height) {
 		this.width = width;
 		this.height = height;
@@ -48,6 +65,13 @@ public class Gradient {
 		recalculateColors();
 	}
 	
+	/**
+	 * Set the upper (top edge) color of this gradient
+	 * 
+	 * @param r Red value (0..1)
+	 * @param g Green value (0..1)
+	 * @param b Blue value (0..1)
+	 */
 	public void setStartColor(float r, float g, float b) {
 		r1 = r;
 		g1 = g;
@@ -55,6 +79,13 @@ public class Gradient {
 		recalculateColors();
 	}
 	
+	/**
+	 * Set the lower (bottom edge) color of this gradient
+	 * 
+	 * @param r Red value (0..1)
+	 * @param g Green value (0..1)
+	 * @param b Blue value (0..1)
+	 */
 	public void setStopColor(float r, float g, float b) {
 		r2 = r;
 		g2 = g;
