@@ -1,9 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -42,7 +48,9 @@ public class Model {
 	protected FloatBuffer _coordVertexBuffer;
 	protected FloatBuffer _coordColorBuffer;
 	
-	private static float _coordVertices[] = { 0.0f, 0.0f, 0.0f,
+	private static float _coordVertices[];
+	
+	 /*= { 0.0f, 0.0f, 0.0f,
 											  1.0f, 0.0f, 0.0f,
 											  0.0f, 0.0f, 0.0f,
 											  0.0f, 1.0f, 0.0f,
@@ -55,7 +63,7 @@ public class Model {
 											  0.0f, 0.0f, 0.0f,
 											  0.0f, 0.0f, -1.0f
 											};
-	
+	*/
 	private static short _coordIndices[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 	
 	private static float _coordColors[] = { 1.0f, 0.0f, 0.0f, 1.0f,
@@ -154,8 +162,84 @@ public class Model {
 	public static void load(String filename, Context mContext)
 	{
 		// TODO: load from file
-		@SuppressWarnings("unused")
-		OBJRenderable load = new OBJRenderable(OBJModel.load(filename, mContext));
+		//OBJRenderable load = new OBJRenderable(OBJModel.load(filename, mContext));
+		List<Float> vertices = new LinkedList<Float>();
+        List<Float> texCoords = new LinkedList<Float> ();
+        List<Float> normals = new LinkedList<Float> ();
+        List<short[]> indices = new LinkedList<short[]>();
+        
+		try {
+	    	InputStream is = mContext.getResources().openRawResource(R.raw.l66_baum); 			
+	        is.available();
+	        InputStreamReader isr = new InputStreamReader(is);            
+	        BufferedReader textReader = new BufferedReader(isr);
+	        
+	        
+	        String line = textReader.readLine();
+	        
+	        while (line != null)
+	        {
+	        	if(line.startsWith("v "))
+	        	{
+	        		String[] values = line.split(" ");
+	        		float x = Float.parseFloat(values[1]);
+	        		float y = Float.parseFloat(values[2]);
+	        		float z = Float.parseFloat(values[3]);
+	        		vertices.add(x);
+	        		vertices.add(y);
+	        		vertices.add(z);
+	        		//vertices.add(new OBJVector(x, y, z));
+	        	}
+	        	else if(line.startsWith("vt "))
+	        	{
+	        		String[] values = line.split(" ");
+	        		float x = Float.parseFloat(values[1]);
+	        		float y = Float.parseFloat(values[2]);
+	        		texCoords.add(x);
+	        		texCoords.add(y);
+	        		//texCoords.add(new OBJVector(x, y));
+	        	}
+	        	else if(line.startsWith("vn "))
+	        	{
+	        		String[] values = line.split(" ");
+	        		float x = Float.parseFloat(values[1]);
+	        		float y = Float.parseFloat(values[2]);
+	        		float z = Float.parseFloat(values[3]);
+	        		normals.add(x);
+	        		normals.add(y);
+	        		normals.add(z);
+	        		//normals.add(new OBJVector(x, y, z));
+	        	}
+	        	else if(line.startsWith("f"))
+	        	{
+	        		String[] values = line.split(" ");
+	        		for(int i = 1; i < 4; i++)
+	        		{
+	        			String[] indicesStr = values[i].split("/");
+	            		short vertIndex = Short.parseShort(indicesStr[0]);
+	            		short texIndex = Short.parseShort(indicesStr[1]);
+	            		short normalIndex = Short.parseShort(indicesStr[2]);
+	            		short[] index = {vertIndex, texIndex, normalIndex};
+	            		indices.add(index);
+	        		}
+	        	}
+	        	
+	        	line = textReader.readLine();
+	        }
+	        textReader.close();
+	        isr.close();
+	        is.close();
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+		
+		//Float[] _coordVertices = new Float[vertices.size()];
+		//vertices.toArray(_coordVertices);
+		_coordVertices = new float[vertices.size()];
+		for(int i=0; i < vertices.size(); i++){
+			_coordVertices[i]=vertices.get(i).floatValue();
+		}
+		//.toArray(_coordVertices);
 		System.out.print("lol");
 	}
 	
