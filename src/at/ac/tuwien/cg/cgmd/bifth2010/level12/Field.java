@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
+
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -36,9 +38,20 @@ public class Field extends GLObject{
 		mIndicesBuffer = indbuf.asShortBuffer();
 		mIndicesBuffer.put(  points );
 		mIndicesBuffer.position(0);
-		float[] color = { 0.0f, 0.0f, 1.0f, 1.0f };
-		mColor = color;
+		
+		float[] colors = { mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f};
+		//mColor = colors;
+
+		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
+		cbb.order( ByteOrder.nativeOrder() );
+		mColorBuffer = cbb.asFloatBuffer();
+		mColorBuffer.put( colors );
+		mColorBuffer.position( 0 );
 	}
+	
 
 	
 	public float[] getMiddle() { 
@@ -60,6 +73,19 @@ public class Field extends GLObject{
 		mColor[0]=r;
 		mColor[1]=g;
 		mColor[2]=b;
+		
+		float[] colors = { mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f};
+		//mColor = colors;
+
+		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
+		cbb.order( ByteOrder.nativeOrder() );
+		mColorBuffer = cbb.asFloatBuffer();
+		mColorBuffer.put( colors );
+		mColorBuffer.position( 0 );
+		
 	}
 	
 }

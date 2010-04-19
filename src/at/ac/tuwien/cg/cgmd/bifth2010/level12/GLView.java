@@ -1,7 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
-
 import java.util.Random;
+
+
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -10,13 +11,9 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
-
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicProjectile;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Projectile;
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Zombie;
 
 public class GLView extends GLSurfaceView implements Renderer {
 	private Gamefield mGamefield = null;
@@ -40,14 +37,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	private double mLastCollDetDone = 0;
 	
 	
-	//xml werte zwecks frameworkportierung mal als klassenvariablen definiert.
-	private int[] fieldsegments = {8,5};
-	private int radius = 3;
-	private int speed = 3333;
-	private int dmg = 9;
-	private float shootingInterval = 3;
-	
-	private Zombie testzombie = new Zombie();
+	//private Zombie testzombie;
 	
 	public GLView(Context context, float w, float h) {
 		super(context);
@@ -57,6 +47,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 		mStartTime = System.currentTimeMillis();
 		mWidth = w;
 		mHeight = h;
+		//testzombie = new Zombie();
 	}
 	
 	
@@ -70,7 +61,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		//gl.glTranslatef(0.0f, 0.0f, -50.0f);
-		testzombie.draw(gl);
+		//testzombie.draw(gl);
 		mGamefield.draw(gl);	
 		for ( int i = 0; i < mBasicTower.length; i++) if(mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl);	
 		
@@ -125,7 +116,7 @@ public class GLView extends GLSurfaceView implements Renderer {
         
         
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f); 	//Black Background
+		gl.glClearColor(1.0f, 0.0f, 0.0f, 0.5f); 	//Black Background
 		gl.glClearDepthf(1.0f);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glEnable(GL10.GL_LINE_SMOOTH);
@@ -173,7 +164,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	
 	public void initGameField( int width, int height ){
-		//int[] fieldsegments = {8,5};//this.getResources().getIntArray(R.array.Field);
+		int[] fieldsegments = {8, 5};//this.getResources().getIntArray(R.array.Field);
 		int xSegCount = fieldsegments[0];
 		int ySegCount = fieldsegments[1];
 		float segLength = height / ySegCount;
@@ -185,7 +176,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	public void initTower(){
 		//BasicTower init
-		//int radius = (this.getResources().getIntArray(R.array.BasicTowerRadius))[0];
+		int radius = 3;//(this.getResources().getIntArray(R.array.BasicTowerRadius))[0];
 		for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower( radius );
 	}
 	
@@ -193,10 +184,10 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	public void initProjectiles(  ){
 		//Basic Projectile for Basic Tower
-		//int speed = this.getResources().getIntArray(R.array.BasicProjectileSpeed)[0];
+		int speed = 3333;//this.getResources().getIntArray(R.array.BasicProjectileSpeed)[0];
 		float speedf = speed/100;
-		//int dmg = this.getResources().getIntArray(R.array.BasicProjectileDmg)[0];
-		//float shootingInterval = this.getResources().getIntArray(R.array.BasicTowerShootingInterval)[0] / 100;
+		int dmg = 9;//this.getResources().getIntArray(R.array.BasicProjectileDmg)[0];
+		float shootingInterval = 3;//this.getResources().getIntArray(R.array.BasicTowerShootingInterval)[0] / 100;
 		for( int i = 0; i < mBasicTower.length; i++) mBasicTower[i].initProjectiles(speedf, dmg, shootingInterval);
 	}
 	

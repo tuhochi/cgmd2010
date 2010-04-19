@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 
 
+
 public class BasicTower extends Tower {
 	
 	

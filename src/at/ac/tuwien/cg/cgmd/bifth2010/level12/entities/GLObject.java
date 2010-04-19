@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public abstract class GLObject {
 	protected FloatBuffer mVerticesBuffer = null;
+	protected FloatBuffer mColorBuffer = null;
 	protected ShortBuffer mIndicesBuffer = null;
 	protected float[] mColor = {0.3f, 1.0f, 0.5f, 1.0f };
 	protected int mIndicesCounter = -1;
@@ -21,11 +22,17 @@ public abstract class GLObject {
 	public void draw( GL10 gl ){
 		gl.glFrontFace( GL10.GL_CCW );
 		gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );
+		
 		if( mVerticesBuffer != null && mIndicesBuffer != null) {
 			gl.glVertexPointer( 3, GL10.GL_FLOAT, 0, mVerticesBuffer);
-			gl.glColor4f( mColor[0], mColor[1], mColor[2], mColor[3]);
+
+			//gl.glColor4f( mColor[0], mColor[1], mColor[2], mColor[3]);
+			gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
+			gl.glColorPointer( 4, GL10.GL_FLOAT, 0, mColorBuffer );	
+			
 			gl.glDrawElements(GL10.GL_TRIANGLES, mIndicesCounter, GL10.GL_UNSIGNED_SHORT, mIndicesBuffer);
 		}
+		gl.glDisableClientState( GL10.GL_COLOR_ARRAY );
 		gl.glDisableClientState( GL10.GL_VERTEX_ARRAY );
 	}
 	
