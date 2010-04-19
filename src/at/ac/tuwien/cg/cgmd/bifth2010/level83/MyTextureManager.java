@@ -10,8 +10,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-
-
+/**
+ * This class is used to load and manage textures.
+ */
 public class MyTextureManager {
 	
 	public static MyTextureManager singleton = null;
@@ -20,6 +21,13 @@ public class MyTextureManager {
 	int count = 0;
 	public MyTexture[] textures;
 	
+	/**
+	 * Creates a new <code>MyTextureManager</code> with a capacity of 
+	 * <code>size</code>.
+	 * 
+	 * @param context	Context for accessing resources.
+	 * @param size		Capacity of the <code>MyTextureManager</code>.
+	 */
 	public MyTextureManager(Context context, int size) {
 		
 		// TODO Auto-generated constructor stub
@@ -85,7 +93,7 @@ public class MyTextureManager {
 			
 	}
 	
-	public int addTexturefromResources(int id, GL10 gl){
+	public int addTextureFromResources(int id, GL10 gl) {
 		
 		if (count >= size){
 			Log.e("TextureManager","Texture Manager full.");
@@ -120,7 +128,7 @@ public class MyTextureManager {
         return count-1;
 	}
 	
-	public int addTexturefromAssets(String file, GL10 gl){
+	public int addTextureFromAssets(String file, GL10 gl) {
 		
 		if (count >= size){
 			Log.e("TextureManager","Texture Manager full.");
@@ -149,6 +157,7 @@ public class MyTextureManager {
         
         return count-1;
 	}
+	
 	public void dispose(){
 		for(int i=0; i<count; i++){
 			textures[i] = null;

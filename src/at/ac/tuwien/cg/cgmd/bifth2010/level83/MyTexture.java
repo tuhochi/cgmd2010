@@ -7,13 +7,20 @@ import javax.microedition.khronos.opengles.GL11Ext;
 import android.graphics.Bitmap;
 import android.opengl.GLUtils;
 
-
+/**
+ * A texture class.
+ */
 public class MyTexture {
 
 	int handle;
 	int resourceId;
 	String file;
 	
+	/**
+	 * Creates a new Texture from the resource with ID <code>id</code>.
+	 * 
+	 * @param id	The resource ID.
+	 */
 	public MyTexture(int id){
 		this.resourceId = id;
 	}

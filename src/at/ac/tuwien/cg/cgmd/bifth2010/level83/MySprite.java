@@ -5,32 +5,41 @@ import javax.microedition.khronos.opengles.GL11Ext;
 
 import android.util.Log;
 
-public class MySprite implements Drawable{
+/**
+ * A Sprite class. This class is an implementation of the {@link Drawable} 
+ * interface.
+ */
+public class MySprite implements Drawable {
 
-	float x,y,z,width,height;
-	private int textureNum;
+	public float x,y,z,width,height;
+	protected int textureNum;
 	
-	public MySprite(int resourceId,float x,float y,float width,float height,GL10 gl) {
+	public MySprite(int resourceId, float x, float y, float width, float height, GL10 gl) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		
-		textureNum = MyTextureManager.singleton.addTexturefromResources(resourceId, gl);
+		textureNum = MyTextureManager.singleton.addTextureFromResources(resourceId, gl);
 		Log.d("Spirte","texturenum ="+textureNum);	 
 	}
 	
-	public MySprite(String filename,float x,float y,float width,float height,GL10 gl) {
+	public MySprite(String filename, float x, float y, float width, float height, GL10 gl) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		
-		textureNum = MyTextureManager.singleton.addTexturefromAssets(filename, gl);
+		textureNum = MyTextureManager.singleton.addTextureFromAssets(filename, gl);
 		Log.d("Spirte","texturenum ="+textureNum);	 
 	}
 	
-	public MySprite(MySprite sprite){
+	/**
+	 * Creates a copy of the MySprite <code>sprite</code>.
+	 * 
+	 * @param sprite	The sprite to be copied.
+	 */
+	public MySprite(MySprite sprite) {
 		this.x = sprite.x;
 		this.y = sprite.y;
 		this.width = sprite.width;
@@ -39,7 +48,15 @@ public class MySprite implements Drawable{
 		this.textureNum = sprite.textureNum;
 	}
 
-	public MySprite(MySprite sprite,float x, float y){
+	/**
+	 * Creates a copy of the MySprite <code>sprite</code> with the new position
+	 * <code>x, y</code>.
+	 * 
+	 * @param sprite	The sprite to be copied.
+	 * @param x			XPosition.
+	 * @param y			YPosition.
+	 */
+	public MySprite(MySprite sprite, float x, float y) {
 		this(sprite);
 		
 		this.x = x;

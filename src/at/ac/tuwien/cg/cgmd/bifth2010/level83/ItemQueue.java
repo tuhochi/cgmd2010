@@ -11,26 +11,40 @@ import android.util.Log;
 
 import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
 
+/**
+ * A Queue of items which are shown in the toolbox and can be used by the 
+ * player. This class is an implementation of the {@link Drawable} interface.
+ */
 public class ItemQueue implements Drawable {
 
 	private MySprite overlay;
+	
+	/** Prototypes for items */
 	private ItemSprite prototypeBomb, prototypeLaser, prototypeDynamite, prototypeWall;
 	private List<ItemSprite> items;
+	
+	/** Capacity of the Queue and screen dimensions */
 	private int size, width, height;
 	
+	/** Generates a random item */
 	public static final int RANDOM = 0;
+	/** Generates a Bomb item */
 	public static final int BOMB = 1;
-	public static final int LASER = 2;
-	public static final int DYNAMITE = 3;
-	public static final int WALL = 4;
+	/** Generates a Laser item */
+//	public static final int LASER = 2;
+	/** Generates an item to delete walls */
+	public static final int DELETEWALL = 2;
+	/** Generates a wall item */
+	public static final int WALL = 3;
 	
 	/** Number of types which are already implemented */
-	private static final double NUM_OF_ITEMTYPES = 2;
+	private static final double NUM_OF_ITEMTYPES = 3;
 	
+	/** Dimensions of an item */
 	public int itemWidth = 80, itemHeight = 80;
 	
 	/**
-	 * Creates a Queue for Items with a capacity of <code>size</code>.
+	 * Creates a Queue for items with a capacity of <code>size</code>.
 	 * 
 	 * @param size	The capacity of the Queue.
 	 * @param gl
@@ -43,15 +57,16 @@ public class ItemQueue implements Drawable {
 	}
 	
 	/**
-	 * Adds a new ItemSprite with the texture for <code>item</code> to the
-	 * Queue.
+	 * Adds a new {@link ItemSprite} with the texture for <code>item</code> to 
+	 * the Queue.
 	 * 
 	 * <p>
 	 * If the Queue is full, the first element is removed to make space for the
-	 * new ItemSprite.
+	 * new <code>ItemSprite</code>.
 	 * </p>
 	 * 
-	 * @param item	The ID of the texture for the ItemSprite to be added.
+	 * @param item	The ID of the texture for the <code>ItemSprite</code> to be
+	 * 				added.
 	 */
 	public void put(int item) {
 		if (items.size() >= size)
@@ -64,10 +79,10 @@ public class ItemQueue implements Drawable {
 		if (item == BOMB) {
 			if (prototypeBomb != null)
 				items.add(new ItemSprite(prototypeBomb));
-		} else if (item == LASER) {
-			if (prototypeLaser != null)
-				items.add(new ItemSprite(prototypeLaser));
-		} else if (item == DYNAMITE) {
+//		} else if (item == LASER) {
+//			if (prototypeLaser != null)
+//				items.add(new ItemSprite(prototypeLaser));
+		} else if (item == DELETEWALL) {
 			if (prototypeDynamite != null)
 				items.add(new ItemSprite(prototypeDynamite));
 		} else if (item == WALL) {
@@ -98,29 +113,34 @@ public class ItemQueue implements Drawable {
 		setItemPositions();
 	}
 	
+	/**
+	 * Sets the position and dimension of the items in the Queue according to 
+	 * the screen resolution.
+	 */
 	private void setItemPositions() {
-		itemWidth = width*2/30;
-		itemHeight = height/6;
+		itemWidth = itemHeight = width/10;
+//		itemHeight = height/6;
 		float itemX = width - itemWidth - (overlay.width - itemWidth)/2;
+		float itemYStart = itemHeight + (height/4 - itemHeight)/2;
 		
 		synchronized (items) {
 			Iterator<ItemSprite> it = items.iterator();
 			
 			ItemSprite s2;
-			int i = 1;
+			int i = 0;
 			while (it.hasNext()) {
 				s2 = it.next();
 				s2.height = itemHeight;
 				s2.width = itemWidth;
 				s2.x = itemX;
-				s2.y = height - i*(itemHeight + 20);
+				s2.y = height - itemYStart - i*(height/size);
 				i++;
 			}
 		}
 	}
 	
 	/**
-	 * Moves the first item the along the distances <code>dX</code> and 
+	 * Moves the first item along the distances <code>dX</code> and 
 	 * <code>dY</code>.
 	 * 
 	 * @param dX	Distance in X-direction.
@@ -131,6 +151,27 @@ public class ItemQueue implements Drawable {
 			ItemSprite s2 = items.get(0);
 			s2.x -= dX;
 			s2.y += dY;
+		}
+	}
+	
+	/**
+	 * Centers the first item around <code>x</code> and <code>y</code>.
+	 * 
+	 * <p>
+	 * <b>Warning:</b> Seems to be slower than {@link #moveItem(float, float)}.
+	 * </p>
+	 * 
+	 * @param x	XPos for centering.
+	 * @param y	YPos for centering.
+	 */
+	public void centerItem(float x, float y) {
+		x -= itemWidth/2;
+		y = height - y - itemHeight/2;
+		
+		synchronized (items) {
+			ItemSprite s2 = items.get(0);
+			s2.x = x;
+			s2.y = y;
 		}
 	}
 	
@@ -177,9 +218,9 @@ public class ItemQueue implements Drawable {
 	@Override
 	public void Init(GL10 gl) {
 		prototypeBomb = new ItemSprite(BOMB, 0, 0, 80, 80, gl);
-		prototypeLaser = new ItemSprite(LASER, 0, 0, 80, 80, gl);
-//		prototypeDynamite = new ItemSprite(DYNAMITE, 0, 0, 80, 80, gl);
-//		prototypeWall = new ItemSprite(WALL, 0, 0, 80, 80, gl);
+//		prototypeLaser = new ItemSprite(LASER, 0, 0, 80, 80, gl);
+		prototypeDynamite = new ItemSprite(DELETEWALL, 0, 0, 80, 80, gl);
+		prototypeWall = new ItemSprite(WALL, 0, 0, 80, 80, gl);
 	}
 
 }
