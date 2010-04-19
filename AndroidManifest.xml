@@ -445,10 +445,14 @@
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level20.LAUNCH_HELP"/>
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
-		</activity>
+		</activity><activity android:name=".level12.LevelActivity"><intent-filter><action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level12.LAUNCH_LEVEL"></action>
+<category android:name="android.intent.category.DEFAULT"></category>
+</intent-filter>
+</activity>
 	
 		
-	</application>
+	
+</application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<supports-screens
