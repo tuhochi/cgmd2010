@@ -14,7 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
  * Represents a rotational behavior of an object around his own axis
  * 
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public abstract class SatelliteTransformation implements Persistable{
 	

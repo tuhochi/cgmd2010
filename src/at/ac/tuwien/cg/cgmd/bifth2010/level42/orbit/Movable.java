@@ -7,7 +7,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
  * The Interface Movable 
  * 
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public interface Movable { 
 	

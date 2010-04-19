@@ -16,7 +16,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
  * The Class Orbit represents a elliptic motion
  * 
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class Orbit extends Motion
 {

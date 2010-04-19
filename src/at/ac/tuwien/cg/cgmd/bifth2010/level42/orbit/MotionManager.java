@@ -14,7 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
  * The MotionManager handles the linking between objects 
  * (entities) and their motion
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class MotionManager {
 	

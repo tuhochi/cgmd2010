@@ -13,7 +13,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
  * transformation around a vector axis
  *
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class VecAxisTransformation extends SatelliteTransformation{
 

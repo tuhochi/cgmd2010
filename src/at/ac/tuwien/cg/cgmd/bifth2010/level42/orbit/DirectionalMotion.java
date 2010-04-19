@@ -12,7 +12,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
  * The Class DirectionalMotion represents a directed linear motion
  *
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class DirectionalMotion extends Motion
 {

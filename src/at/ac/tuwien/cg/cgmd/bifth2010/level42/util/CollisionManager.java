@@ -19,7 +19,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
  * This Manager handles the selection and collisions between objects
  *
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class CollisionManager {
 

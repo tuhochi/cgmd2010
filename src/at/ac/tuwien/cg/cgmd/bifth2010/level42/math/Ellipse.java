@@ -5,7 +5,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  * Encapsulates the parametric form of the ellipse
  * 
  * @author Alex Druml
- * @author Lukas Rössler
+ * @author Lukas Roessler
  */
 public class Ellipse
 {
