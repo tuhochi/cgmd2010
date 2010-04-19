@@ -203,10 +203,13 @@ public class Pedestrian implements Target{
 	public float getFightingRadius(){
 		return this.fightingRadius;
 	}
-	public void setTargetTreasure(Target target){
+	public void setTarget(Target target){
 		this.target = target;
 		this.angle = (float)Math.atan2(target.getPosition().y - this.position.y, target.getPosition().x - this.position.x) * (180.0f/(float)Math.PI);
 		//this.angle = (float)Math.atan( (treasurePosition.y - this.position.y) / (treasurePosition.x - this.position.x) )
 	
+	}
+	public Target getTarget(){
+		return this.target;
 	}
 }
