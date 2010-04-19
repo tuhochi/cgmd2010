@@ -64,9 +64,9 @@ public class Model {
 											  0.0f, 0.0f, -1.0f
 											};
 	*/
-	private static short _coordIndices[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+	private static short _coordIndices[]; /* ={ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };*/
 	
-	private static float _coordColors[] = { 1.0f, 0.0f, 0.0f, 1.0f,
+	private static float _coordColors[]; /*= { 1.0f, 0.0f, 0.0f, 1.0f,
 											1.0f, 0.0f, 0.0f, 1.0f,
 											0.0f, 1.0f, 0.0f, 1.0f,
 											0.0f, 1.0f, 0.0f, 1.0f,
@@ -78,7 +78,7 @@ public class Model {
 											0.0f, 1.0f, 0.0f, 0.3f,
 											0.0f, 0.0f, 1.0f, 0.3f,
 											0.0f, 0.0f, 1.0f, 0.3f
-	};
+	};*/
 
 	@SuppressWarnings("static-access")	
 	public Model(String filename, Context context)
@@ -166,7 +166,7 @@ public class Model {
 		List<Float> vertices = new LinkedList<Float>();
         List<Float> texCoords = new LinkedList<Float> ();
         List<Float> normals = new LinkedList<Float> ();
-        List<short[]> indices = new LinkedList<short[]>();
+        List<Short> indices = new LinkedList<Short>();
         
 		try {
 	    	InputStream is = mContext.getResources().openRawResource(R.raw.l66_baum); 			
@@ -220,7 +220,7 @@ public class Model {
 	            		short texIndex = Short.parseShort(indicesStr[1]);
 	            		short normalIndex = Short.parseShort(indicesStr[2]);
 	            		short[] index = {vertIndex, texIndex, normalIndex};
-	            		indices.add(index);
+	            		indices.add(vertIndex);
 	        		}
 	        	}
 	        	
@@ -233,11 +233,15 @@ public class Model {
             throw new RuntimeException(e);
         }
 		
-		//Float[] _coordVertices = new Float[vertices.size()];
 		//vertices.toArray(_coordVertices);
 		_coordVertices = new float[vertices.size()];
 		for(int i=0; i < vertices.size(); i++){
 			_coordVertices[i]=vertices.get(i).floatValue();
+		}
+		//_coordIndices
+		_coordIndices = new short[indices.size()];
+		for(int i=0; i < indices.size(); i++){
+			_coordIndices[i]=indices.get(i).shortValue();
 		}
 		//.toArray(_coordVertices);
 		System.out.print("lol");
