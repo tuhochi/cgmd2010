@@ -105,25 +105,25 @@ public class TilesVBO extends Mesh {
 						
 						vertices.put(vertexIndex,i*sizeFactor);
 						vertices.put(vertexIndex+1,j*sizeFactor);
-						vertices.put(vertexIndex+2,1.0f);
+						vertices.put(vertexIndex+2,-1.0f);
 						texCoords.put(texCoordIndex,texX1);
 						texCoords.put(texCoordIndex+1,texY1);
 						
 						vertices.put(vertexIndex+3,(i+1.0f)*sizeFactor);
 						vertices.put(vertexIndex+4,j*sizeFactor);
-						vertices.put(vertexIndex+5,1.0f);
+						vertices.put(vertexIndex+5,-1.0f);
 						texCoords.put(texCoordIndex+2,texX2);
 						texCoords.put(texCoordIndex+3,texY1);
 						
 						vertices.put(vertexIndex+6,(i+1.0f)*sizeFactor);
 						vertices.put(vertexIndex+7,(j+1.0f)*sizeFactor);
-						vertices.put(vertexIndex+8,1.0f);
+						vertices.put(vertexIndex+8,-1.0f);
 						texCoords.put(texCoordIndex+4,texX2);
 						texCoords.put(texCoordIndex+5,texY2);
 						
 						vertices.put(vertexIndex+9,i*sizeFactor);
 						vertices.put(vertexIndex+10,(j+1.0f)*sizeFactor);
-						vertices.put(vertexIndex+11,1.0f);
+						vertices.put(vertexIndex+11,-1.0f);
 						texCoords.put(texCoordIndex+6,texX1);
 						texCoords.put(texCoordIndex+7,texY2);
 						

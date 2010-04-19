@@ -18,6 +18,9 @@ class MyRenderer implements MyOpenGLView.Renderer {
 	static float numTilesHorizontal=15.0f;
 	static float numTilesVertical;
 	
+	static float resX;
+	static float resY;
+	
 	static public void setContext(Context _context) {
 		context=_context;
 	}
@@ -27,12 +30,13 @@ class MyRenderer implements MyOpenGLView.Renderer {
     }*/
 	
 	public MyRenderer() {
+		super();
+		
     }
 
     @Override
 	public void onDrawFrame(GL10 gl) {
     	Timer.update();
-    	
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	
@@ -53,13 +57,15 @@ class MyRenderer implements MyOpenGLView.Renderer {
     	player.draw(gl);
     	
     	//Renders the user interface
-    	ui.draw(gl); 	
-    	  
+    	ui.draw(gl);	  
     }
 
     @Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
     	Log.d("Renderer","onSurfaceChanged");
+    	
+    	Log.d("Renderer width", Integer.toString(width));
+    	Log.d("Renderer height", Integer.toString(height));
     	
          gl.glViewport(0, 0, width, height);
 
@@ -68,24 +74,28 @@ class MyRenderer implements MyOpenGLView.Renderer {
           * each time we draw, but usually a new projection needs to
           * be set when the viewport is resized.
           */
+         
+         resX=width;
+         resY=height;
 
          gl.glMatrixMode(GL10.GL_PROJECTION);
          gl.glLoadIdentity();
          
          float ratio=(float)height/(float)width;
          
-         gl.glOrthof(0.0f, numTilesHorizontal, numTilesHorizontal*ratio, 0.0f, 0.0f, 5.0f);
+         gl.glOrthof(0.0f, numTilesHorizontal, numTilesHorizontal*ratio, 0.0f, 0.5f, 5.0f);
+         //gl.glOrthof(-20f, 20, 20, -20.0f, 00.0f, 5.0f);
          
          numTilesVertical = numTilesHorizontal*ratio;
          
          Quad.screenWidth=numTilesHorizontal;
-         Quad.screenHeight=numTilesHorizontal*ratio;
+         Quad.screenHeight=numTilesVertical;
          
          ui.screenWidth=numTilesHorizontal;
-         ui.screenHeight=numTilesHorizontal*ratio;
+         ui.screenHeight=numTilesVertical;
          
          TileLayer.screenWidth=numTilesHorizontal;
-         TileLayer.screenHeight=numTilesHorizontal*ratio;
+         TileLayer.screenHeight=numTilesVertical;
          
          gl.glMatrixMode(GL10.GL_MODELVIEW);
          gl.glLoadIdentity();
@@ -95,8 +105,6 @@ class MyRenderer implements MyOpenGLView.Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
     	Log.d("Renderer","onSurfaceCreate");
     	
-    	gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
-    	
         /*
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that
@@ -105,6 +113,8 @@ class MyRenderer implements MyOpenGLView.Renderer {
         gl.glDisable(GL10.GL_DITHER);
         gl.glDisable(GL10.GL_LIGHTING);
         gl.glEnable(GL10.GL_TEXTURE_2D);
+        gl.glDisable(GL10.GL_DEPTH_TEST);
+        
 
         /*
          * Some one-time OpenGL initialization can be made here
@@ -113,16 +123,15 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
                  GL10.GL_FASTEST);
 
-         gl.glClearColor(0,0,0,0);
+         gl.glClearColor(0.63f,0.74f,0.96f,0);
+         
          gl.glDisable(GL10.GL_CULL_FACE);
-         gl.glShadeModel(GL10.GL_SMOOTH);
          gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
          gl.glEnable(GL10.GL_BLEND);
          
-         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+         
     	
-         gl.glFrontFace(GL10.GL_CW);
+         //gl.glFrontFace(GL10.GL_CW);
          
          Texture.cleanUp();
          Texture.setGL(gl);
@@ -136,11 +145,15 @@ class MyRenderer implements MyOpenGLView.Renderer {
          
          player=new Player();
          player.init(gl, level, camera);
+
+         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
          
          ui=new Interface();
          ui.init(gl);
          
          Timer.lastTime=0;
+         
     }
 
 }

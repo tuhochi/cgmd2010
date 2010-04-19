@@ -62,10 +62,9 @@ class Mesh
     	mTexCoordBuffer.position(0);
     	mIndexBuffer.position(0);
     	
-    	if (gl instanceof GL11) {
+    	/*if (gl instanceof GL11 && false) {
     		GL11 gl11=(GL11)gl;
-    		if (MyOpenGLView.isExtensionSupported(gl11,"GL_ANDROID_vertex_buffer_object") ||
-    				MyOpenGLView.isExtensionSupported(gl11,"GL_OES_vertex_buffer_object")) {
+    		if (MyOpenGLView.isExtensionSupported(gl11,"vertex_buffer_object")) {
     			
                 int[] buffer = new int[1];
                 
@@ -106,10 +105,12 @@ class Mesh
     			
     			
     			useHardwareBuffers=true;
+    		} else {
+    			useHardwareBuffers=false;
     		}
     	} else {
     		useHardwareBuffers=false;
-    	}
+    	}*/
     }
     
     public void init(GL10 gl, float[] vertices, float[] texCoords, short[] indices)
@@ -121,7 +122,6 @@ class Mesh
         //
         // Buffers with multi-byte datatypes (e.g., short, int, float)
         // must have their byte order set to native order
-    	
     
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);
         vbb.order(ByteOrder.nativeOrder());
@@ -141,14 +141,14 @@ class Mesh
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
         
-        init(gl, mVertexBuffer, mTexCoordBuffer, mIndexBuffer);
+        //init(gl, mVertexBuffer, mTexCoordBuffer, mIndexBuffer);
     }
 
     public void draw(GL10 gl)
     {
     	if (mVertexBuffer!=null || mTexCoordBuffer!=null || mIndexBuffer!=null) {
     		if (useHardwareBuffers) {	// vbo
-    			GL11 gl11 = (GL11)gl;
+    			/*GL11 gl11 = (GL11)gl;
                 gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, mVertBufferIndex);
                 gl11.glVertexPointer(3, GL10.GL_FLOAT, 0, 0);
                 
@@ -160,11 +160,15 @@ class Mesh
                         GL11.GL_UNSIGNED_SHORT, 0);
                 
                 gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+                gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);*/
     		} else {	// fall-back: vertex arrays
+    			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+    	        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+    	        
 		        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
 		        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexCoordBuffer);
 		        gl.glDrawElements(GL10.GL_TRIANGLES, mIndexBuffer.capacity(), GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+		        //gl.glDrawArrays(GL10.GL_TRIANGLES, 0, mIndexBuffer.capacity());
     		}
     	}
     }

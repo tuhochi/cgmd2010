@@ -19,11 +19,11 @@ public class Player {
 	protected float[] playerPos = {2, 0};
 	protected float[] a = {0, 0};
 	protected float[] v = {0, 0};
-	protected float frictionFactor = 0.012f;
+	protected float frictionFactor = 0.0005f;
 	protected float breakForce = 10.0f;
 	
-	protected float moveForce = 350.0f;
-	protected float jumpSpeed = 18.0f;
+	protected float moveForce = 300.0f;
+	protected float jumpSpeed = 7.0f;
 	protected float gForce = 300.0f;
 	protected float bounceFactor = 0.5f;
 	protected float bounceArea = 0.4f;
@@ -77,7 +77,7 @@ public class Player {
 		//Check for coinChange
 		checkCoinChange(dt);
 		
-		Log.d("dT",Float.toString(dt));
+		//Log.d("dT",Float.toString(dt));
 		
 		if (doMoveLeft) {
 			a[0] = -moveForce*dt;
@@ -97,7 +97,7 @@ public class Player {
 		}
 		
 		//Add gravity
-		Log.d("player", "canJump = "+canJump);
+		//Log.d("player", "canJump = "+canJump);
 
 		a[1] += gForce*dt;
 

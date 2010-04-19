@@ -29,25 +29,25 @@ public class Coin {
 		
 		vertices.put(0,x1);
 		vertices.put(1,y1);
-		vertices.put(2,1.0f);
+		vertices.put(2,-1.0f);
 		texCoords.put(0,texX1_A);
 		texCoords.put(1,texY1_A);
 		
 		vertices.put(3,x2);
 		vertices.put(4,y1);
-		vertices.put(5,1.0f);
+		vertices.put(5,-1.0f);
 		texCoords.put(2,texX2_A);
 		texCoords.put(3,texY1_A);
 		
 		vertices.put(6,x2);
 		vertices.put(7,y2);
-		vertices.put(8,1.0f);
+		vertices.put(8,-1.0f);
 		texCoords.put(4,texX2_A);
 		texCoords.put(5,texY2_A);
 		
 		vertices.put(9,x1);
 		vertices.put(10,y2);
-		vertices.put(11,1.0f);
+		vertices.put(11,-1.0f);
 		texCoords.put(6,texX1_A);
 		texCoords.put(7,texY2_A);
 		
@@ -68,25 +68,25 @@ public class Coin {
 		
 		vertices_I.put(0,x1);
 		vertices_I.put(1,y1);
-		vertices_I.put(2,1.0f);
+		vertices_I.put(2,-1.0f);
 		texCoords_I.put(0,texX1_I);
 		texCoords_I.put(1,texY1_I);
 		
 		vertices_I.put(3,x2);
 		vertices_I.put(4,y1);
-		vertices_I.put(5,1.0f);
+		vertices_I.put(5,-1.0f);
 		texCoords_I.put(2,texX2_I);
 		texCoords_I.put(3,texY1_I);
 		
 		vertices_I.put(6,x2);
 		vertices_I.put(7,y2);
-		vertices_I.put(8,1.0f);
+		vertices_I.put(8,-1.0f);
 		texCoords_I.put(4,texX2_I);
 		texCoords_I.put(5,texY2_I);
 		
 		vertices_I.put(9,x1);
 		vertices_I.put(10,y2);
-		vertices_I.put(11,1.0f);
+		vertices_I.put(11,-1.0f);
 		texCoords_I.put(6,texX1_I);
 		texCoords_I.put(7,texY2_I);
 		
