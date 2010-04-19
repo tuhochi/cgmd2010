@@ -1,21 +1,17 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level36;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
-
-import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.View.OnTouchListener;
 
 /**
  * 
@@ -26,6 +22,18 @@ public class LevelActivity extends Activity {
 	//public static Paint paint;
 	private GLSurfaceView mGLSurfaceView;
 	private Context context;
+	private OnTouchListener touchListener = new OnTouchListener() {
+		public boolean onTouch(View v, MotionEvent e) {
+			boolean b = cGestureDetector.onTouchEvent(e);
+			try {
+				Thread.sleep(35);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			return b;
+		}
+	};
+	private GestureDetector cGestureDetector = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
