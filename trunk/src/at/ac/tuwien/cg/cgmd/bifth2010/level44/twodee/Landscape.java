@@ -4,9 +4,17 @@ import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 
+/**
+ * This class encapsulates all assets that are used in 
+ * the landscape of the game (as decorations mostly).
+ * 
+ * This will also draw and read the PhysicalRabbit object
+ * that can be set with setRabbit().
+ * 
+ * @author thp
+ */
 public class Landscape extends SpriteContainer {
 	private Vector<ParallaxSprite> parallaxSprites = new Vector<ParallaxSprite>();
 	private ParallaxSprite mountains = null;
@@ -19,10 +27,25 @@ public class Landscape extends SpriteContainer {
 
 	private PhysicalRabbit rabbit = null;
 
+	/**
+	 * Set the physical rabbit that should be displayed and
+	 * interacted with from this landscape object.
+	 * 
+	 * @param rabbit The rabbit object to be displayed
+	 */
 	public void setRabbit(PhysicalRabbit rabbit) {
 		this.rabbit = rabbit;
 	}
 
+	/**
+	 * Create a new landscape object that will draw all
+	 * elements (meadow, hills, montains, sky, rabbit and
+	 * clouds, etc..) to the screen. 
+	 * 
+	 * @param texture The main texture of MireRabbit containing all landscape assets
+	 * @param width The width of the screen
+	 * @param height The height of the screen
+	 */
 	public Landscape(Texture texture, float width, float height) {
 		super(TextureParts.makeSky(texture), width, height);
 		setCenter(0, 0);
@@ -74,6 +97,11 @@ public class Landscape extends SpriteContainer {
 		super.onAfterDraw(gl);
 	}	
 	
+	/**
+	 * This will move all assets that are contained in the
+	 * landscape and should be called once per loop iteration
+	 * from the main thread to keep the landscape alive.
+	 */
 	public void step() {
 		/* Move the clouds around */
 		for (Cloud c: clouds) {
