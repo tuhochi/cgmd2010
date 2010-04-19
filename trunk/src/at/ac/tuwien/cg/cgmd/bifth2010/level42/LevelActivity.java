@@ -86,8 +86,9 @@ public class LevelActivity extends Activity
 			public void run()
 			{
 				/*
-				 * TODO: set score!
+				 * TODO: set correct score!
 				 */
+				score.setText("");
 			}
 		};
 		
