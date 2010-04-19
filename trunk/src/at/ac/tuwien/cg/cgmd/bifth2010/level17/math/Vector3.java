@@ -1,9 +1,16 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17.math;
-
+/*** 
+ * Represents a 3D Vector
+ * 
+ * @author Matthias Maschek
+ */
 public class Vector3
 {
 	public float x, y, z;
 
+	/**
+	 * Empty Constructor
+	 */
 	public Vector3 ()
 	{
 		x = 0;
@@ -11,6 +18,9 @@ public class Vector3
 		z = 0;
 	}
 
+	/**
+	 * Constructor
+	 */
 	public Vector3 (float _x, float _y, float _z)
 	{
 		x = _x;
@@ -18,13 +28,19 @@ public class Vector3
 		z = _z;
 	}
 
+	/**
+	 * Copy Constructor
+	 */
 	public Vector3 (Vector3 v)
 	{
 		x = v.x;
 		y = v.y;
 		z = v.z;
 	}
-	
+
+	/**
+	 * Copy Constructor that takes a 4D vector and homogenizes it
+	 */
 	public Vector3 (Vector4 v)
 	{
 		x = v.x/v.w;
@@ -68,6 +84,9 @@ public class Vector3
 		return new Vector3(pointEnd.x-pointStart.x, pointEnd.y-pointStart.y, pointEnd.z-pointStart.z);
 	}
 	
+	/**
+	 * Multiplies the vector with a scalar
+	 */
 	public static Vector3 mult (Vector3 v, float s)
 	{
 		return new Vector3(v.x * s, v.y * s, v.z * s);
@@ -89,11 +108,17 @@ public class Vector3
 		}
 	}
 	
+	/**
+	 * Returns the length of the vector
+	 */
 	public float length ()
 	{
 		return (float) Math.sqrt (x*x + y*y + z*z);
 	}
 	
+	/**
+	 * Inverts the vector
+	 */
 	public void invert()
 	{
 		x = -x;
