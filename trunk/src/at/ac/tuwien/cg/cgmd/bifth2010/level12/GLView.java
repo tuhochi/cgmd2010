@@ -68,8 +68,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 		//if(mPassedTime == mCarrierWave[0]) //if abfrage wird so nie true sein = passed time auf int casten!
 		for ( int i = 0; i < mEnemies.length; i++)if(mEnemies[i].getActiveState()) mEnemies[i].draw(gl);
 		
-		//if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT )
-		//calcCollisions();
+		if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT ) calcCollisions();
 	}
 	
 	
@@ -186,7 +185,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 		//Basic Projectile for Basic Tower
 		int speed = 3333;//this.getResources().getIntArray(R.array.BasicProjectileSpeed)[0];
 		float speedf = speed/100;
-		int dmg = 9;//this.getResources().getIntArray(R.array.BasicProjectileDmg)[0];
+		short dmg = 9;//this.getResources().getIntArray(R.array.BasicProjectileDmg)[0];
 		float shootingInterval = 3;//this.getResources().getIntArray(R.array.BasicTowerShootingInterval)[0] / 100;
 		for( int i = 0; i < mBasicTower.length; i++) mBasicTower[i].initProjectiles(speedf, dmg, shootingInterval);
 	}
@@ -208,40 +207,31 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	
 	public void calcCollisions(){
-		//Log.d("draw", "kkkkkkkkkkkkk");
-		//System.out.println("Doing Collision Detection!");
 		mLastCollDetDone = System.currentTimeMillis();
-		if( mBasicTower.length == 0){Log.d("draw", "ohoh!!"); return;}
-		if( mEnemieCount == 0) {Log.d("enemieconter", "ohoh!!"); return;}
+		if( mBasicTower.length == 0){System.out.println("TowerCount = 0 "); return;}
+		if( mEnemieCount == 0) {System.out.println("EnemieCount = 0 "); return;}
 		//simple stupid way
-		//Log.d("draw", "yeeeeeeeah");
 		for( int i = 0; i < mBasicTower.length; i++){
-			if( mBasicTower[i].getActiveState()){
-				
-				Projectile p = mBasicTower[i].getProjectile();
-				//Log.d("draw", "" + p.getX());
+			if( mBasicTower[i].getActiveState()){	
+				Projectile p = mBasicTower[i].getProjectile(); //kann null sein
 				MoneyCarrier m = null;
-				for( int j = 0; j < mEnemies.length; j++){
+				for( int j = 0; j < mEnemies.length ; j++){
 					//System.out.println("enemy: " + mEnemies[j].getY() + "projectile: " + p.getY());
+					if( p == null ) return;
 					if( mEnemies[j].getActiveState() && (int)mEnemies[j].getY() == (int)p.getY() ){
-						//System.out.println("Doing Collision Detection!");
-						if((int)p.getX() == (int)mEnemies[j].getX()){
-							Log.d("draw", "HITTTTT!!!!!" + p.getX() + " --- " + mEnemies[j].getX());
-							mEnemies[j].deactivate(); //TODO: deactivate nur zu debug zwecken. später HP abziehen und bei HP = 0 deactivate()
-							mEnemieCount--;
-						}
-						
-						/*
+						System.out.println("Doing Collision Detection!");
 						if( m == null) m = mEnemies[j];
 						else{
 							if( mEnemies[j].getX() < m.getX() ) m = mEnemies[j]; //only first enemie gets hit
 						}
 						if( m != null ){
 							float colpkt = p.collideX( m );
+							System.out.println("COLLISIONPOINT: "+colpkt);
 							p.setCollisionPointX( colpkt );
 							m.setCollisionPointX( colpkt );
+							m.setDamageAtCollisionPoint( p.getDamage() );
 						}
-						*/
+						
 					}
 				}
 				
