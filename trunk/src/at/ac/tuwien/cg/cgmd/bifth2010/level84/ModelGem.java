@@ -1,18 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import javax.microedition.khronos.opengles.GL10;
-
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 public class ModelGem extends Model {
 
 	float width = 0.3f; //quadsize
 		
 	private final float gemStartpos = -2f; 
-	private float gemRotation = 0.0f;
 	private float gemPos = gemStartpos;
 	private float fallSpeed = 0.0f;
 	private boolean isFalling = false;

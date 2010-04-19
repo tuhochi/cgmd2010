@@ -1,10 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class ModelDrain extends Model {
