@@ -48,6 +48,15 @@ public abstract class Projectile extends GLObject{
 		mIndicesBuffer.put(indices);
 		mIndicesBuffer.position(0);
 		mIndicesCounter = indices.length;
+		
+		float[] colors = { mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f};
+		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
+		cbb.order( ByteOrder.nativeOrder() );
+		mColorBuffer = cbb.asFloatBuffer();
+		mColorBuffer.put( colors );
+		mColorBuffer.position( 0 );
 	}
 	
 	@Override

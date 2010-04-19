@@ -33,31 +33,6 @@ public class Zombie extends GLObject {
 	 */
 	public Zombie(){
 		active = false;
-		//TODO: vertex, texture setup => eher bei init wegen typ
-
-		
-		/*
-		float[] vertices = {
-				-0.5f, -0.5f, 0.0f,  //Vertex 0
-				 0.5f, -0.5f, 0.0f,  //v1
-				-0.5f,  0.5f, 0.0f,  //v2
-				 0.5f,  0.5f, 0.0f,  //v3
-		};
-		ByteBuffer i = ByteBuffer.allocateDirect( vertices.length * 4 );
-		i.order( ByteOrder.nativeOrder() );
-		mVerticesBuffer = i.asFloatBuffer();
-		mVerticesBuffer.put( vertices );
-		mVerticesBuffer.position(0);
-		
-		short[] indices = {
-				0,1,3, 0,3,2
-		};
-		ByteBuffer k = ByteBuffer.allocateDirect( indices.length * 2 );
-		k.order( ByteOrder.nativeOrder() );
-		mIndicesBuffer = k.asShortBuffer();
-		mIndicesBuffer.put( indices );
-		mIndicesBuffer.position(0);
-		*/
 		
 		float vertices[] = {
 				 1.0f,   1.0f, 0.0f, 
