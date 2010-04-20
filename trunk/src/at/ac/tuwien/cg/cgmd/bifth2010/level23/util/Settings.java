@@ -17,7 +17,7 @@ public class Settings
 	public static float BALLOON_SPEED = 0.08f;
 	//units per millisecond
 	/** The Constant MOVE_SPEED. */
-	public static final float MOVE_SPEED = 0.1f;
+	public static final float MOVE_SPEED = 0.125f;
 	
 	/** The boolean if GLES11 is supported. */
 	public static boolean GLES11Supported = false;
