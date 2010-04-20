@@ -19,6 +19,11 @@ public class Legs {
 	
 	Color color;
 	
+	/**
+	 * legs constructor
+	 * @param gl
+	 * @param context
+	 */
 	public Legs(GL10 gl, Context context) {
 		left_leg = new Square();
 		right_leg = new Square();
@@ -28,6 +33,12 @@ public class Legs {
 		color = new Color();
 	}
 	
+	/**
+	 * update legs position and rotation
+	 * @param pos
+	 * @param angle
+	 * @param leg_pos
+	 */
 	public void update(Vector2 pos, float angle, float leg_pos) {
 		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
@@ -36,6 +47,10 @@ public class Legs {
 		
 	}
 	
+	/**
+	 * draws legs
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 
 		gl.glColor4f(color.r, color.g, color.b, 1.0f);
@@ -60,6 +75,10 @@ public class Legs {
 		gl.glPopMatrix();
 	}
 
+	/**
+	 * set color for legs
+	 * @param c
+	 */
 	public void setColor(Color c) {
 		color = c;
 		
