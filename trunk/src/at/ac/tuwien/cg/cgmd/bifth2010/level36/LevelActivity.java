@@ -60,6 +60,7 @@ public class LevelActivity extends Activity {
 		context = this;
 	
 		gameView = new GameView_New(this);
+		gameView.setFocusable(true);
 		setContentView(gameView);
 		
 		//set fullscreen

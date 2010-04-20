@@ -31,6 +31,7 @@ public class GameView_New extends GLSurfaceView {
 	}
 		
 	private void touch_start(float x, float y) {
+		this.setFocusable(true);
 		//this.gameRenderer.getPoint().setXY(x, y);
 //		int randNumber = getRandomNumber();
 //		this.gameRenderer.setRandNumber(randNumber);
@@ -43,6 +44,7 @@ public class GameView_New extends GLSurfaceView {
 	}
 
 	private void touch_move(float x, float y) {
+		this.setFocusable(true);
 		this.gameRenderer.setInactivePlane(true);
 		//this.gameRenderer.getPoint().setXY(x, y);
 		
@@ -62,6 +64,7 @@ public class GameView_New extends GLSurfaceView {
 	}
 
 	private void touch_up() {
+		this.setFocusable(true);
         //float[] coords = getScreenToWorldCoords(x, y, 0);
 		//this.gameRenderer.getPoint().setXY(coords[0], coords[1]);
 		
@@ -93,6 +96,7 @@ public class GameView_New extends GLSurfaceView {
 			invalidate();
 			break;
 		}
+		this.setFocusable(true);
 		return true;
 	}
 	
@@ -144,6 +148,7 @@ public class GameView_New extends GLSurfaceView {
 			int randNumber = getRandomNumber();
 			this.gameRenderer.setRandNumber(randNumber);
 		}
+		this.setFocusable(true);
 		return true;
 	}
 }
