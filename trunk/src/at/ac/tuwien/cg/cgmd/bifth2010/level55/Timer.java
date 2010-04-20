@@ -2,6 +2,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
 import android.util.Log;
 
+/**
+ * The Timer
+ * @author Wolfgang Knecht
+ *
+ */
 public class Timer {
 	static long lastTime=0;
 	static long dT=0;
@@ -10,6 +15,9 @@ public class Timer {
 	static long debug_accdT=0;
 	static long debug_refreshrate=60;	// alle 60 frames fps ausgeben
 	
+	/**
+	 * Calculates the time between the last call of this function and the current call
+	 */
 	static public void update() {
 		long currentTime = System.currentTimeMillis();
 		
@@ -21,6 +29,9 @@ public class Timer {
 		lastTime=currentTime;
 	}
 	
+	/**
+	 * Logs the milliseconds
+	 */
 	static void debug() {
 		debug_count++;
 		debug_accdT+=dT;

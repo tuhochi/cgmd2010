@@ -9,12 +9,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
+/**
+ * The Level Activity
+ * @author Wolfgang Knecht
+ *
+ */
 public class LevelActivity extends Activity {
 	
 	//Player player=new Player();
 	
 	MyRenderer myRenderer;
 
+	/**
+	 * Creates the GLSurfaceView
+	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -62,6 +70,9 @@ public class LevelActivity extends Activity {
     	super.onStop();
     }
    
+    /**
+     * {@inheritDoc}
+     */
     public boolean onTouchEvent(MotionEvent me) {	
     	float x=MyRenderer.numTilesHorizontal/MyRenderer.resX*me.getX();
     	float y=MyRenderer.numTilesVertical/MyRenderer.resY*me.getY();
@@ -113,6 +124,9 @@ public class LevelActivity extends Activity {
     	return true;
 	}
     
+    /**
+     * {@inheritDoc}
+     */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
     	if (myRenderer.player!=null) {
 	    	if (keyCode==KeyEvent.KEYCODE_A) {
@@ -131,6 +145,9 @@ public class LevelActivity extends Activity {
 		return super.onKeyDown(keyCode, event);
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public boolean onKeyUp(int keyCode, KeyEvent event) {
     	if (keyCode==KeyEvent.KEYCODE_A) {
     		myRenderer.player.moveLeft(false);
