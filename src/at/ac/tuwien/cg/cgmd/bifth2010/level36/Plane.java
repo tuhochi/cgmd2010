@@ -12,15 +12,21 @@ import javax.microedition.khronos.opengles.*;
  */
 class Plane
 {
-    public Plane()
+    public Plane(int num)
     {
     	int one = 0x10000;
+    	float z;
+    	if (num == 1)
+    		z = 0.0f;
+    	else 
+    		z = -2.0f;
+    	
         float vertices[] = {
-        		-5.0f, -5.0f, 0.0f, 1.0f,
-        		-5.0f, +5.0f, 0.0f, 1.0f,
-        		+5.0f, -5.0f, 0.0f,	1.0f,
-        		+5.0f, +5.0f, 0.0f, 1.0f
-        };
+        		-5.0f, -5.0f, z, 1.0f,
+        		-5.0f, +5.0f, z, 1.0f,
+        		+5.0f, -5.0f, z, 1.0f,
+        		+5.0f, +5.0f, z, 1.0f
+        }; 
         
         float normals[] =  {
         		0.0f, 0.0f, -1.0f, 
