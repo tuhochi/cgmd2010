@@ -9,8 +9,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView;
 
 /**

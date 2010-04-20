@@ -5,24 +5,19 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.R.layout;
 
 
 /**
@@ -44,18 +39,16 @@ public class GameManager implements Renderable, EventListener {
 										 R.drawable.l20_lollipop,
 										 R.drawable.l20_drink };
 	// Entities.
-	static final int BUNNY_ENTITY = 0;
-	static final int CART_ENTITY = 1;
+	// INFO: Das haut so nicht hin :-/ Kanns da erklären
+//	static final int BUNNY_ENTITY = 0;
+//	static final int CART_ENTITY = 1;
 	
-	protected static Activity activity;
-	public RenderView renderView;
+	public static Activity activity;
+	public static RenderView renderView;
 
 	// The texture collection. (The ids increase themselves)
 	protected static Hashtable<Integer, Integer> textures;
-	
-	// The entity collection
-	protected Hashtable<Integer, ProductEntity> entities;
-	
+		
 	// The animator collection
 	protected Hashtable<Integer, Animator> animators;
 
@@ -79,11 +72,10 @@ public class GameManager implements Renderable, EventListener {
 	 */
 	public GameManager(RenderView renderView, GL10 gl) {
 		
-		this.activity = (Activity)renderView.getContext();
-		this.renderView = renderView;
+		GameManager.activity = (Activity)renderView.getContext();
+		GameManager.renderView = renderView;
 		
 		textures = new Hashtable<Integer, Integer>();
-		entities = new Hashtable<Integer, ProductEntity>();
 		animators = new Hashtable<Integer, Animator>();
 		
 		EventManager.getInstance().addListener(this);
@@ -109,11 +101,12 @@ public class GameManager implements Renderable, EventListener {
 		}	
 		
 		// Create shopping cart.
-		shoppingCart = new ShoppingCart(120.f, 60.f, 100.f, 200.f, 110.f);
-		shoppingCart.texture = getTexture(TEXTURE_CART, gl);		
-		shoppingCart.id = CART_ENTITY;
+		shoppingCart = new ShoppingCart(120, 60, 2, 200, 110);
+		shoppingCart.texture = getTexture(TEXTURE_CART, gl);
+		// INFO: Das gehts so nicht. Andersrum ja. 
+//		shoppingCart.id = CART_ENTITY;
 		
-		Activity activity = (Activity)renderView.getContext();
+//		Activity activity = (Activity)renderView.getContext();
 		// Create text view for display of money count.
 		moneyText = new TextView(activity);
 		
@@ -125,7 +118,7 @@ public class GameManager implements Renderable, EventListener {
 		params.width = LayoutParams.WRAP_CONTENT;
 		moneyText.setLayoutParams(params);
 		moneyText.bringToFront();
-		moneyText.setGravity(Gravity.CENTER);		
+		moneyText.setGravity(Gravity.CENTER);
 				
 	}
 
@@ -196,18 +189,19 @@ public class GameManager implements Renderable, EventListener {
 		
 		case EventManager.PRODUCT_COLLECTED:
 		{
-			if (null != eventData) {
-				ProductEntity pe = (ProductEntity)eventData;
-				totalMoney -= pe.price;
-				moneyText.setText("Money:" + totalMoney + "$");
-				
-				// Move it to the basket.
-				float[] pos = shoppingCart.getNextProductPosition();
-				Animator a = new Animator(pe, pos[0], pos[1], 30);
-				animators.put(a.id, a);				
-				shoppingCart.addProduct(pe);
-				Log.d(TAG, "Product collected: "+ pos[0] + "/" + pos[1] + ".");
-			}			
+			// Hm, ich würd die Null Abfrage rausnehmen, damit es sich wenigstens gscheit aufhängt, wenns nicht passt :P
+//			if (null != eventData) {
+			ProductEntity pe = (ProductEntity)eventData;
+			totalMoney -= pe.price;
+			moneyText.setText("Money:" + totalMoney + "$");
+			
+			// Move it to the basket.
+			float[] pos = shoppingCart.getNextProductPosition();
+			Animator a = new Animator(pe, pos[0], pos[1], 30);
+			animators.put(a.id, a);
+			shoppingCart.addProduct(pe);
+			Log.d(TAG, "Product collected: "+ pos[0] + "/" + pos[1] + ".");
+//			}			
 		}
 		break;
 		
