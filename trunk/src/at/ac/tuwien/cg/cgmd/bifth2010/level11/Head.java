@@ -21,12 +21,22 @@ public class Head {
 	
 	private Color color;
 	
+	/**
+	 * head constructor
+	 * @param gl
+	 * @param context
+	 */
 	public Head(GL10 gl, Context context) {
 		head = new Square();
 		
 		color = new Color();
 	}
 	
+	/**
+	 * updates head position and rotation
+	 * @param pos
+	 * @param angle
+	 */
 	public void update(Vector2 pos, float angle) {
 		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
@@ -34,6 +44,10 @@ public class Head {
 	
 	}
 	
+	/**
+	 * draws head
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		
 		gl.glColor4f(color.r, color.g, color.b, 1.0f);
@@ -48,6 +62,10 @@ public class Head {
 		
 	}
 
+	/**
+	 * sets head color
+	 * @param c
+	 */
 	public void setColor(Color c) {
 		this.color = c;
 		
