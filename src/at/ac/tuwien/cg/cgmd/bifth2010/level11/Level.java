@@ -1,28 +1,16 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
-
-import android.app.Activity;
 import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
-
-import javax.microedition.khronos.opengles.GL10;
-
-import android.content.Context;
 import android.util.Log;
 
 /**
  * holds game, level and gameloop
  * @author felix.fleisz
- *
  */
 public class Level extends Thread {
 
@@ -50,16 +38,17 @@ public class Level extends Thread {
 	private Timing timing;
 	private int grabbedTreasureValueOfDeletedTreasures;
 	private int grabbedTreasureValue;
+	
 	/**
-	 * inits level
+	 * Level constructor
 	 * @param sizeX
 	 * @param sizeY
 	 */
 	public Level(float sizeX, float sizeY) {
 		//Log.i(LOG_TAG, "Level(float, float)");
 		
-		Level.sizeX = sizeX;
-		Level.sizeY = sizeY;
+		Level.sizeX = 480.0f;
+		Level.sizeY = 320.0f;
 		treasureList = new LinkedList<Treasure>();
 		pedestrianList = new LinkedList<Pedestrian>();
 		this.grabbedTreasureValueOfDeletedTreasures = 0;
@@ -70,7 +59,7 @@ public class Level extends Thread {
 		this._isActive = true;
 		
 		timing = new Timing();
-		this.maxPlayTime = 120;
+		this.maxPlayTime = 10;
 
 	}
 	
@@ -95,6 +84,7 @@ public class Level extends Thread {
 		this._isRunning = true;
 		
 	}
+	
 	/**
 	 * inits textures
 	 */
@@ -133,11 +123,11 @@ public class Level extends Thread {
 		while (_isActive) {
 			while (_isRunning) {
 				while (isPaused) {
-					/*try {
+					try {
 						sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
-					}*/
+					}
 				}
 				update();
 				try {
@@ -147,87 +137,101 @@ public class Level extends Thread {
 				}
 			}
 		}
-		
-
-		
 	}
+	
 	/**
 	 * pauses level
 	 * @param pause
 	 */
-	public  void pause(boolean pause){
-		this.isPaused = pause;
+	public void pause_level() {
+		this.isPaused = true;
+		this.timing.pause();
 	}
+	
 	/**
-	 * add a treasure
+	 * resumes level
+	 * @param pause
+	 */
+	public void resume_level() {
+		this.isPaused = false;
+		this.timing.resume();	
+	}
+	
+	/**
+	 * adds treasure to the treasurelist
 	 * @param treasure
 	 */
 	public  void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
-		}
+	}
+	
 	/**
-	 * updates level-objects states
+	 * updates level-objects states, such as timing or pedestrians
 	 */
 	private  void update() {
 		//synchronized(this){
-			timing.update();
-			
-			for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
-				Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
-				pedestrian.update(timing.getCurrTime());
-				float bestRating = Float.MAX_VALUE;
-				float tempDist = 0;
-				float rating = 0;
-				for (int j=0; j < treasureList.size(); j++){//search the cuurent target
-					Treasure treasure = ((Treasure)treasureList.get(j));
-					if(treasure.getValue() == 0.0f){
-						this.grabbedTreasureValueOfDeletedTreasures += treasure.getStartingValue();
-						treasure = null;
-						treasureList.remove(j);
-						j--;
-						
-						continue;
-					}
-					if((rating =
-						(tempDist = pedestrian.getPosition().distance(treasure.getPosition()))
-						/ (treasure.getValue()+1)) //TODO: determine, how to rate a target
-							< bestRating){
-						if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttracktionRadius()){
-							pedestrian.setTarget(treasure);
-							bestRating = rating;
-						}
+		timing.update();
+		
+		for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
+			Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
+			pedestrian.update(timing.getCurrTime());
+			float bestRating = Float.MAX_VALUE;
+			float tempDist = 0;
+			float rating = 0;
+			for (int j=0; j < treasureList.size(); j++){//search the current target
+				Treasure treasure = ((Treasure)treasureList.get(j));
+				if(treasure.getValue() == 0.0f){
+					this.grabbedTreasureValueOfDeletedTreasures += treasure.getStartingValue();
+					treasure = null;
+					treasureList.remove(j);
+					j--;
+					
+					continue;
+				}
+				if((rating =
+					(tempDist = pedestrian.getPosition().distance(treasure.getPosition()))
+					/ (treasure.getValue()+1)) //TODO: determine, how to rate a target
+						< bestRating){
+					if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttracktionRadius()){
+						pedestrian.setTarget(treasure);
+						bestRating = rating;
 					}
 				}
-				if(pedestrian.getTarget() != null){
-					for (int j=0; j < pedestrianList.size(); j++) {//check if another one is too close
-						Pedestrian otherPedestrian = ((Pedestrian)pedestrianList.get(j));
-						if(otherPedestrian != pedestrian){
-							//System.out.println(otherPedestrian.getPosition().distance(pedestrian.getPosition()));
-							if(otherPedestrian.getPosition().distance(pedestrian.getPosition()) < 20.0f){
-								//System.out.println("Too close");
-								pedestrian.setTarget(otherPedestrian);
-							}
+			}
+			if(pedestrian.getTarget() != null){
+				for (int j=0; j < pedestrianList.size(); j++) {//check if another one is too close
+					Pedestrian otherPedestrian = ((Pedestrian)pedestrianList.get(j));
+					if(otherPedestrian != pedestrian){
+						//System.out.println(otherPedestrian.getPosition().distance(pedestrian.getPosition()));
+						if(otherPedestrian.getPosition().distance(pedestrian.getPosition()) < 20.0f){
+							//System.out.println("Too close");
+							pedestrian.setTarget(otherPedestrian);
 						}
 					}
 				}
 			}
-			
+		}
+		
 
-			//((GameActivity)context).setTextTimeLeft(getRemainigTime());
-			
-			//calc already grabbed treasure value
-			this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
-			for (int j=0; j < treasureList.size(); j++){
-				this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
-			}
+		//((GameActivity)context).setTextTimeLeft(getRemainigTime());
+		
+		//calc already grabbed treasure value
+		this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
+		for (int j=0; j < treasureList.size(); j++){
+			this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
+		}
 		//}
 		if(this.timing.getCurrTime() > this.maxPlayTime) {
+			((GameActivity)context).setResult(this.grabbedTreasureValue);
 			this._isRunning = false;
+			this._isActive = false;
+			((GameActivity)context).finish();
 		}
 		
 	}
+	
 	/**
-	 * generates level by distributing pedestrians
+	 * generates specific amount of pedestrians with a minimal distance to each other
 	 * @param amount
 	 * @param minDist
 	 */
@@ -252,8 +256,9 @@ public class Level extends Thread {
 			}
 		}
 	}
+	
 	/**
-	 * draws level
+	 * draws the level
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
@@ -283,16 +288,18 @@ public class Level extends Thread {
 		gl.glDisable(GL10.GL_BLEND);
 		
 	}
+	
 	/**
-	 * returns treasure value that is already grabbed by pedestrians
-	 * @return grabbed treasure
+	 * returns amount of grabbed treasures
+	 * @return
 	 */
 	public float getGrabbedTreasureValue(){
 		return this.grabbedTreasureValue;
 	}
+	
 	/**
-	 * returns remaining time to play
-	 * @return remaining time
+	 * returns level time left in seconds
+	 * @return
 	 */
 	public float getRemainigTime(){
 		return this.maxPlayTime-this.timing.getCurrTime();
