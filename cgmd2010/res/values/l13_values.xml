@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-<dimen name="l13_HelpActivity_TitlePadding">6dip</dimen>
-<dimen name="l13_HelpActivity_TextPadding">6dip</dimen>
-<dimen name="l13_HelpActivity_TitleSize">20dip</dimen>
-<dimen name="l13_HelpActivity_TextSize">15dip</dimen>
-</resources>
