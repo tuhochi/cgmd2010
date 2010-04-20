@@ -5,7 +5,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.GlTexture;
 
 /**
  * RenderTask.
@@ -16,7 +15,6 @@ public class RenderTask implements Renderer {
 	// -- Members ----
 	
 	GameScene scene; //< Game scene
-	GlTexture tex;
 	
 	
 	// ----------------------------------------------------------------------------------
@@ -40,20 +38,17 @@ public class RenderTask implements Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		
+		Log.i("RenderTask", "onSurfaceCreated");
+		
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 		gl.glFrontFace(GL10.GL_CCW);
 		gl.glEnable(GL10.GL_CULL_FACE);
 		gl.glCullFace(GL10.GL_BACK);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-
-		Log.i("RenderTask", "scene create");
+		
 		scene.create();
-		Log.i("RenderTask", "after scene create");
-		synchronized(scene) {
-			scene.notify();
-		}
-		Log.i("RenderTask", "notify");
+		
 	}
 	
 	
@@ -62,6 +57,8 @@ public class RenderTask implements Renderer {
 	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		
+		Log.i("RenderTask", "onSurfaceChanged");
 		
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -80,10 +77,10 @@ public class RenderTask implements Renderer {
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-			
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		synchronized(scene) {
 			try {
+				// Wait for the update task
 				scene.wait();
 			}
 			catch(InterruptedException e) {
@@ -91,7 +88,5 @@ public class RenderTask implements Renderer {
 			}
 			scene.draw(gl);
 		}
-		
-		Log.i("Renderer", "onDrawFrame");
 	}	
 }

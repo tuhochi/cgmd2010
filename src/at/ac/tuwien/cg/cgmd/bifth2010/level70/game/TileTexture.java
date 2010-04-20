@@ -16,8 +16,8 @@ public class TileTexture {
 	// -- Static members ----
 	
 	private static int TILE_SIZE = 32;          //< Size of a tile sprite
-	private static TileTexture instance = null; //< Instance for global access.
-
+	
+	
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
@@ -26,27 +26,12 @@ public class TileTexture {
 	
 	
 	// ----------------------------------------------------------------------------------
-	// -- Static methods ----
-	
-	/**
-	 * Return instance of TileTexture for global access.
-	 * @return Instance of global access.
-	 */
-	public static TileTexture getInstance() {
-		if (instance == null) {
-			instance = new TileTexture();
-		}
-		return instance;
-	}
-	
-	
-	// ----------------------------------------------------------------------------------
 	// -- Ctor ----
 	
 	/**
 	 * Create tile texture.
 	 */
-	private TileTexture() {
+	public TileTexture() {
 		
 		tex = new GlTexture(R.drawable.l70_pipetiles);
 		
@@ -65,8 +50,6 @@ public class TileTexture {
 			texBuf.position(0);
 			texBufs.add(texBuf);
 		}
-		
-		instance = this;
 	}
 	
 	
@@ -78,6 +61,15 @@ public class TileTexture {
 	 */
 	public void bind() {
 		tex.bind();
+	}
+	
+	
+	
+	/**
+	 * Unbind tile texture.
+	 */
+	public void unbind() {
+		tex.unbind();
 	}
 	
 	
@@ -136,6 +128,10 @@ public class TileTexture {
 		}
 		else if (type == TileEnum.TILE_TARGET_SEL) {
 			float texcoords[] = { tw * 5, 1,  tw * 6, 1,  tw * 6, 0,  tw * 5, 0 };
+			return texcoords;
+		}
+		else if (type == TileEnum.TILE_START_GOAL) {
+			float texcoords[] = { tw * 6, 1,  tw * 7, 1,  tw * 7, 0,  tw * 6, 0 };
 			return texcoords;
 		}
 		else {

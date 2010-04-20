@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.os.Bundle;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.game.PipeGame;
 
@@ -12,6 +13,7 @@ public class GameScene {
 
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
+	
 	PipeGame pipe; //< Pipe game
 	int width;     //< Width of the screen
 	int height;    //< Height of the screen
@@ -23,13 +25,18 @@ public class GameScene {
 	/**
 	 * Create game scene.
 	 */
-	public GameScene() {
-		
+	public GameScene(Bundle state, int width, int height) {
+		setDimension(width, height);
+		pipe = new PipeGame(state, width, height);
 	}
 	
 	
 	// ----------------------------------------------------------------------------------
 	// -- Public methods ----
+	
+	public void create() {
+		pipe.create();
+	}
 	
 	/**
 	 * Set screen dimension.
@@ -39,15 +46,6 @@ public class GameScene {
 	public void setDimension(int width, int height) {
 		this.width  = width;
 		this.height = height;
-	}
-	
-	
-	/**
-	 * Create game scene.
-	 * Attention: OpenGL context must exist.
-	 */
-	public void create() {
-		pipe = new PipeGame();
 	}
 	
 	
@@ -77,4 +75,21 @@ public class GameScene {
 		pipe.onClick(event);
 	}
 	
+	
+	/**
+     * Save the actual game state.
+     * @param state Game state
+     */
+    public void onSaveState(Bundle state) {
+    	pipe.onSaveState(state);
+    }
+    
+    
+    /**
+     * Restore the actual game state.
+     * @param state Game state
+     */
+    public void onRestoreState(Bundle state) {
+    	pipe.onRestoreState(state);
+    }
 }

@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -27,25 +29,23 @@ public class RendererView extends GLSurfaceView {
 	/**
 	 * Create renderer view.
 	 * @param context The android context.
+	 * @param state The saved game state.
 	 * @param width The width of the screen.
 	 * @param height The height of the screen.
 	 */
-	public RendererView(Context context, int width, int height) {
+	public RendererView(Context context, Bundle state, int width, int height) {
 		super(context);
         setFocusable(true);
-        
+                
         setEGLConfigChooser(8, 8, 8, 8, 0, 0);
         getHolder().setFormat(PixelFormat.RGBA_8888); 
         
-        scene = new GameScene();
-        scene.setDimension(width, height);
+        scene = new GameScene(state, width, height);
                 
         renderTask = new RenderTask(scene);
         setRenderer(renderTask);
-                   
+
         updateTask = new UpdateTask(scene);
-        Thread updTask = new Thread(updateTask);
-        updTask.start();
     }
 	
 	
@@ -91,4 +91,49 @@ public class RendererView extends GLSurfaceView {
 		}
 		return false;
 	}
+	
+	
+	/**
+	 * On start event.
+	 */
+	public void onStart() {
+        Log.i("RendererView", "onStart");
+        updateTask.start();
+    }
+
+
+	/**
+	 * On stop event.
+	 */
+    public void onStop() {
+    	Log.i("RendererView", "onStop");
+    	updateTask.setRunningFlag(false);
+    }
+    
+   
+    /**
+	 * On destroy event.
+	 */
+    public void onDestroy() {
+		Log.i("RendererView", "onDestroy");
+		updateTask.setRunningFlag(false);
+	}
+    
+    
+    /**
+     * Save the actual game state.
+     * @param outState Game state
+     */
+    public void onSaveState(Bundle outState) {
+    	scene.onSaveState(outState);
+    }
+    
+    
+    /**
+     * Restore the actual game state.
+     * @param outState Game state
+     */
+    public void onRestoreState(Bundle outState) {
+    	scene.onRestoreState(outState);
+    }
 }

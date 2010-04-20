@@ -1,12 +1,18 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level70.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level00.TestLevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
 /**
  * Pipe game.
  * In the pipe game the user has to find a flow from a start cell to a goal cell
@@ -15,8 +21,15 @@ import android.view.MotionEvent;
 public class PipeGame {
 
 	// ----------------------------------------------------------------------------------
-	// -- Members ----
+	// -- Static Members ----
+	private static String STATE_INIT_TILES = "StateInitTiles";
+	private static String STATE_GAME_TILES = "StateGameTiles";
+
 	
+	// ----------------------------------------------------------------------------------
+	// -- Members ----
+	private float orthoWidth;  //< Ortho width
+	private float orthoHeight; //< Ortho height
 	private float orthoScaleX; //< Ortho x scale factor 
 	private float orthoScaleY; //< Ortho y scale factor
 	
@@ -25,12 +38,14 @@ public class PipeGame {
 	private int rowStart;  //< Index of the start-cell row
 	private int rowGoal;   //< Index of the goal-cell row
 	
+	private TileTexture texTile; //< Tile texture
 	private ArrayList<TileEnum> initTiles; //< Initial game tiles
 	private ArrayList<TileEnum> gameTiles; //< Current game tiles
 	private	ArrayList<TileGeometry> geomTiles; //< Geometry representation of the tiles
 	private TileGeometry geomSource; //< Geometry to highlight source tile
 	private TileGeometry geomTarget; //< Geometry to highlight target tile
-	
+	private TileGeometry geomStart;  //< Start of the flow
+	private TileGeometry geomGoal;   //< Goal of the flow
 	
 	// ----------------------------------------------------------------------------------
 	// -- Ctor ----
@@ -38,73 +53,33 @@ public class PipeGame {
 	/**
 	 * Create the pipe game.
 	 */
-	public PipeGame() {
+	public PipeGame(Bundle state, int width, int height) {
 		
-		orthoScaleX =  8.0f / 320.0f;
-		orthoScaleY = 12.0f / 480.0f;
+		setDimension(width, height);
 		
 		indSource = -1;
 		indTarget = -1;
+		
+		rowStart = 1;
+		rowGoal  = 4;
 		
 		initTiles = new ArrayList<TileEnum>(36);
 		gameTiles = new ArrayList<TileEnum>(36);
 		geomTiles = new ArrayList<TileGeometry>(36);
 		
-		geomSource = new TileGeometry(0, 0);
-		geomSource.setType(TileEnum.TILE_SOURCE_SEL);
-		geomTarget = new TileGeometry(0, 0);
-		geomTarget.setType(TileEnum.TILE_TARGET_SEL);
+		// Initialize tiles
+		createNewTiles();
 		
-		ArrayList<Integer> randInds = new ArrayList<Integer>();
-		
-		// Create tile geometry and game tiles
-		for (int iy = 0; iy < 6; iy++) {
-			for (int ix = 0; ix < 6; ix++) {
-				float llx = 1.0f + ix * TileGeometry.TILE_SIZE;
-				float lly = 5.0f + iy * TileGeometry.TILE_SIZE;
-				geomTiles.add(new TileGeometry(llx, lly));
-				gameTiles.add(TileEnum.TILE_EMPTY);
-				initTiles.add(TileEnum.TILE_EMPTY);
-				randInds.add(iy * 6 + ix);
+		// Restore tiles from an saved game state
+		if (state != null) {
+			int[] stateInit = state.getIntArray(STATE_INIT_TILES);
+			int[] stateGame = state.getIntArray(STATE_GAME_TILES);
+			if (stateInit != null && stateGame != null) {
+				for (int i = 0; i < stateInit.length; i++) {
+					initTiles.set(i, TileEnum.valueOf(stateInit[i]));
+					gameTiles.set(i, TileEnum.valueOf(stateGame[i]));
+				}
 			}
-		}
-		
-		// Create initial tiles
-		rowStart = 1;
-		rowGoal  = 4;
-		Collections.shuffle(randInds);
-		int hoCnt = 4;
-		int rdCnt = 3;
-		int luCnt = 3;
-		
-		int veCnt = 8;
-		int ruCnt = 8;
-		int ldCnt = 10;
-		
-		int ind = 0;
-		for (int i = 0; i < hoCnt; i++) {
-			initTiles.set(randInds.get(ind), TileEnum.TILE_HORIZONTAL);
-			++ind;
-		}
-		for (int i = 0; i < rdCnt; i++) {
-			initTiles.set(randInds.get(ind), TileEnum.TILE_RIGHT_DOWN);
-			++ind;
-		}
-		for (int i = 0; i < luCnt; i++) {
-			initTiles.set(randInds.get(ind), TileEnum.TILE_LEFT_UP);
-			++ind;
-		}
-		for (int i = 0; i < veCnt; i++) {
-			initTiles.set(randInds.get(ind), TileEnum.TILE_VERTICAL);
-			++ind;
-		}
-		for (int i = 0; i < ruCnt; i++) {
-			initTiles.set(randInds.get(ind), TileEnum.TILE_RIGHT_UP);
-			++ind;
-		}
-		for (int i = 0; i < ldCnt; i++) {
-			initTiles.set(randInds.get(ind), TileEnum.TILE_LEFT_DOWN);
-			++ind;
 		}
 	}
 	
@@ -112,14 +87,52 @@ public class PipeGame {
 	// ----------------------------------------------------------------------------------
 	// -- Public methods ----
 	
+	public void create() {
+				
+		
+		texTile   = new TileTexture();
+		
+		geomSource = new TileGeometry(0, 0);
+		geomSource.setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_SOURCE_SEL));
+		
+		geomTarget = new TileGeometry(0, 0);
+		geomTarget.setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_TARGET_SEL));
+		
+		geomStart  = new TileGeometry(-4.0f, -3.0f + rowStart * TileGeometry.TILE_SIZE);
+		geomStart.setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_START_GOAL));
+
+		geomGoal  = new TileGeometry(3.0f, -3.0f + rowGoal * TileGeometry.TILE_SIZE);
+		geomGoal.setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_START_GOAL));
+				
+		// Create tile geometry
+		for (int iy = 0; iy < 6; iy++) {
+			for (int ix = 0; ix < 6; ix++) {
+				float llx = -3.0f + ix * TileGeometry.TILE_SIZE;
+				float lly = -3.0f + iy * TileGeometry.TILE_SIZE;
+				TileGeometry geom = new TileGeometry(llx, lly);
+				geom.setTexBuffer(texTile.getTexBuffer(gameTiles.get(iy * 6 + ix)));
+				geomTiles.add(geom);
+			}
+		}
+	}
+	
 	/**
 	 * Set screen dimension.
 	 * @param width The screen width.
 	 * @param height The screen height.
 	 */
 	public void setDimension(int width, int height) {
-		orthoScaleX =  8.0f / (float)width;
-		orthoScaleY = 12.0f / (float)height;
+		float ratio = (float)width / (float) height;
+		if (ratio > 1.0) {
+			orthoWidth  = 4.0f * ratio;
+			orthoHeight = 4.0f;
+		} 
+		else {
+			orthoWidth  = 4.0f;
+			orthoHeight = 4.0f / ratio;
+		}
+		orthoScaleX =  2.0f * orthoWidth  / (float)width;
+		orthoScaleY = -2.0f * orthoHeight / (float)height;
 	}
 	
 	
@@ -128,16 +141,17 @@ public class PipeGame {
 	 * @param gl OpenGL
 	 */
 	public void draw(GL10 gl) {
-		
+
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 			
-		gl.glOrthof(0.0f, 8.0f, 0.0f, 12.0f, -1.0f, 1.0f);
+		gl.glOrthof(-orthoWidth, orthoWidth, -orthoHeight, orthoHeight, -1.0f, 1.0f);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		
+		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glActiveTexture(0);
-		TileTexture.getInstance().bind();
+		texTile.bind();
 		for (TileGeometry it : geomTiles) {
 			it.draw(gl);
 		}
@@ -163,10 +177,17 @@ public class PipeGame {
 			gl.glPopMatrix();
 		}
 		gl.glDisable(GL10.GL_BLEND);
+		
+		// Draw start and goal marker
+		geomStart.draw(gl);
+		geomGoal.draw(gl);
 				
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glPopMatrix();
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
+
+		texTile.unbind();
+		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
 	
@@ -190,7 +211,7 @@ public class PipeGame {
 			if (indTarget == index) {
 				TileEnum type = initTiles.get(index);
 				gameTiles.set(index, type);
-				geomTiles.get(index).setType(type);
+				geomTiles.get(index).setTexBuffer(texTile.getTexBuffer(type));
 				indSource = -1;
 				indTarget = -1;
 			}
@@ -219,10 +240,10 @@ public class PipeGame {
 				TileEnum typeTarget = gameTiles.get(indTarget);
 				
 				gameTiles.set(indSource, typeTarget);
-				geomTiles.get(indSource).setType(typeTarget);
+				geomTiles.get(indSource).setTexBuffer(texTile.getTexBuffer(typeTarget));
 				
 				gameTiles.set(indTarget, typeSource);
-				geomTiles.get(indTarget).setType(typeSource);
+				geomTiles.get(indTarget).setTexBuffer(texTile.getTexBuffer(typeSource));
 				
 				indSource = -1;
 				indTarget = -1;
@@ -235,18 +256,55 @@ public class PipeGame {
 		boolean result = checkTile(0, rowStart, DirectionEnum.DIR_RIGHT);
 		if (result) {
 			Log.i("PipeGame", "Goal reached");
-			for (TileGeometry it : geomTiles) {
-				it.setType(TileEnum.TILE_EMPTY);
-			}
-			geomTiles.get(13).setType(TileEnum.TILE_OBSTACLE);
-			geomTiles.get(8).setType(TileEnum.TILE_OBSTACLE);
-			geomTiles.get(9).setType(TileEnum.TILE_OBSTACLE);
-			geomTiles.get(16).setType(TileEnum.TILE_OBSTACLE);
-			geomTiles.get(26).setType(TileEnum.TILE_OBSTACLE);
-			geomTiles.get(27).setType(TileEnum.TILE_OBSTACLE);
+			
+			// Set the progress the user has made (must be between 0-100)
+			SessionState s = new SessionState();
+			s.setProgress(10);
+			LevelActivity.getInstance().setResult(Activity.RESULT_OK, s.asIntent());
+			LevelActivity.getInstance().finish();
+//			for (TileGeometry it : geomTiles) {
+//				it.setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_EMPTY));
+//			}
+//			geomTiles.get(13).setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_OBSTACLE));
+//			geomTiles.get(8).setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_OBSTACLE));
+//			geomTiles.get(9).setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_OBSTACLE));
+//			geomTiles.get(16).setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_OBSTACLE));
+//			geomTiles.get(26).setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_OBSTACLE));
+//			geomTiles.get(27).setTexBuffer(texTile.getTexBuffer(TileEnum.TILE_OBSTACLE));
 		}
 	}
 	
+	
+	/**
+     * Save actual game state. Store initTiles and gameTiles.
+     * @param outState The game state
+     */
+    public void onSaveState(Bundle state) {
+    	int[] tiles = new int[initTiles.size()];
+    	for (int i = 0; i < tiles.length; i++) {
+    		tiles[i] = initTiles.get(i).ordinal();
+    	}
+    	state.putIntArray(STATE_INIT_TILES, tiles);
+    	
+    	tiles = new int[gameTiles.size()];
+    	for (int i = 0; i < tiles.length; i++) {
+    		tiles[i] = gameTiles.get(i).ordinal();
+    	}
+    	state.putIntArray(STATE_GAME_TILES, tiles);
+    }
+    
+    
+    /**
+     * Restore actual game stat.
+     * @param outState The game state
+     */
+    public void onRestoreState(Bundle state) {
+    	
+    }
+	
+	
+	// ----------------------------------------------------------------------------------
+	// -- Private methods ----
 	
 	/**
 	 * Return the index of the selected tile during the onClick event.
@@ -255,13 +313,13 @@ public class PipeGame {
 	 * @return Tile index or -1 if no tile was hit.
 	 */
 	private int getIndex(float x, float y) {
-		float ox = orthoScaleX * x;
-		float oy = 12.0f - orthoScaleY * y;
+		float ox = orthoScaleX * x - orthoWidth;
+		float oy = orthoScaleY * y + orthoHeight;
 		
-		if (ox > 1.0f && ox <  7.0f && 
-			oy > 5.0f && oy < 11.0f) {
-			int ix = (int)(ox - 1.0f);
-			int iy = (int)(oy - 5.0f);
+		if (ox > -3.0f && ox < 3.0f && 
+			oy > -3.0f && oy < 3.0f) {
+			int ix = (int)(ox + 3.0f);
+			int iy = (int)(oy + 3.0f);
 			return iy * 6 + ix;
 		}
 		else {
@@ -373,5 +431,51 @@ public class PipeGame {
 		}
 		
 		return checkTile(inx, iny, ndir);
+	}
+	
+	
+	private void createNewTiles() {
+		
+		// Create initial tiles
+		ArrayList<Integer> randInds = new ArrayList<Integer>(36);
+		for (int i = 0; i < 36; i++) {
+			randInds.add(i);
+			gameTiles.add(TileEnum.TILE_EMPTY);
+			initTiles.add(TileEnum.TILE_EMPTY);
+		}
+		Collections.shuffle(randInds);
+		int hoCnt = 4;
+		int rdCnt = 3;
+		int luCnt = 3;
+		
+		int veCnt = 8;
+		int ruCnt = 8;
+		int ldCnt = 10;
+		
+		int ind = 0;
+		for (int i = 0; i < hoCnt; i++) {
+			initTiles.set(randInds.get(ind), TileEnum.TILE_HORIZONTAL);
+			++ind;
+		}
+		for (int i = 0; i < rdCnt; i++) {
+			initTiles.set(randInds.get(ind), TileEnum.TILE_RIGHT_DOWN);
+			++ind;
+		}
+		for (int i = 0; i < luCnt; i++) {
+			initTiles.set(randInds.get(ind), TileEnum.TILE_LEFT_UP);
+			++ind;
+		}
+		for (int i = 0; i < veCnt; i++) {
+			initTiles.set(randInds.get(ind), TileEnum.TILE_VERTICAL);
+			++ind;
+		}
+		for (int i = 0; i < ruCnt; i++) {
+			initTiles.set(randInds.get(ind), TileEnum.TILE_RIGHT_UP);
+			++ind;
+		}
+		for (int i = 0; i < ldCnt; i++) {
+			initTiles.set(randInds.get(ind), TileEnum.TILE_LEFT_DOWN);
+			++ind;
+		}
 	}
 }

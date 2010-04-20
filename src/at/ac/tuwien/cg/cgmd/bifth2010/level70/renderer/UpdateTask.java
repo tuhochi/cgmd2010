@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 /**
  * Update task.
  */
-public class UpdateTask implements Runnable {
+public class UpdateTask extends Thread {
 
 	// ----------------------------------------------------------------------------------
 	// -- Static ----
@@ -23,10 +23,8 @@ public class UpdateTask implements Runnable {
 	
 	private LinkedList<KeyEvent>    inputKeys; //< all key input events
 	private LinkedList<MotionEvent> inputMotions; //< all motion input events
-	private boolean isRunning;   //< true if the game is running
+	public boolean isRunning;   //< true if the game is running
 	private GameScene scene;     //< Game scene
-	private boolean isLeft;      //< Left key is pressed
-	private boolean isRight;     //< Right key is pressed
 	
 	
 	// ----------------------------------------------------------------------------------
@@ -47,20 +45,12 @@ public class UpdateTask implements Runnable {
 	// -- Public methods ----
 	
 	/**
-	 * Main update loop.
+	 * Main update loop. Is called FRAME_PER_SECONDS time in one second.
+	 * The RenderTask is synchronized with the UpdateTaks over the GameScene instance.
 	 */
 	@Override
 	public void run() {
-		try {
-			synchronized(scene) {
-				Log.i("UpdateTask", "before wait");
-				scene.wait();
-			}
-		}
-		catch(InterruptedException e) {
-			
-		}
-		Log.i("UpdateTask", "after wait");
+		
 		isRunning = true;
 		
 		float dt = 0.0f;
@@ -82,7 +72,6 @@ public class UpdateTask implements Runnable {
 			dt      = milTime / 1000.0f;
 			try {
 				if (FRAME_DT > milTime) {
-					Log.i("UpdateTask", "wait second");
 					Thread.sleep(FRAME_DT - milTime);
 				}
 			}
@@ -90,6 +79,14 @@ public class UpdateTask implements Runnable {
 				Log.e("UpdateTask", e.getMessage());
 			}
 		}
+	}
+	
+	/**
+	 * Set the running flag of the main update loop.
+	 * @param isRunning true to loop, to abort set to false.
+	 */
+	public void setRunningFlag(boolean isRunning) {
+		this.isRunning = isRunning;
 	}
 	
 	
@@ -123,10 +120,10 @@ public class UpdateTask implements Runnable {
 			int keycode       = key.getKeyCode();
 			boolean isPressed = key.getAction() == KeyEvent.ACTION_DOWN;
 			if (keycode == KeyEvent.KEYCODE_A) {
-				isLeft = isPressed;
+				
 			}
 			else if (keycode == KeyEvent.KEYCODE_D) {
-				isRight = isPressed;
+				
 			}
 		}
 		
@@ -142,7 +139,7 @@ public class UpdateTask implements Runnable {
 	 * @param dt Delta time
 	 */
 	private void update(float dt) {
-		
+		//Log.i("UpdateTask", "update");
 		scene.update(dt);
 	}
 }

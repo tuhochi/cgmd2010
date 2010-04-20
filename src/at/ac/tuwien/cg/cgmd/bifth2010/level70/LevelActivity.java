@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level70;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,7 +53,7 @@ public class LevelActivity extends Activity {
         Display d = wm.getDefaultDisplay();
         
         // Create renderer view
-   		rendererView = new RendererView(this,d.getWidth(), d.getHeight());
+   		rendererView = new RendererView(this, savedInstanceState, d.getWidth(), d.getHeight());
    		setContentView(rendererView);
    		
    		// Set instance for global access
@@ -60,5 +61,63 @@ public class LevelActivity extends Activity {
 	}
 	
 	
+	/**
+	 * Resume the game.
+	 */
+	@Override
+    protected void onResume() {
+        Log.i("LevelActivity70", "onResume");
+        super.onResume();
+        rendererView.onStart();
+    }
+
 	
+	/**
+	 * Pause the game.
+	 */
+    @Override
+    protected void onPause() {
+    	Log.i("LevelActivity70", "onPause");
+        super.onPause();
+    }
+    
+
+    /** 
+     * Stop the game.
+     */
+    @Override
+	protected void onStop() {
+    	Log.i("LevelActivity70", "onStop");
+		super.onStop();
+		rendererView.onStop();
+    }
+
+	
+    /**
+     * Destroy the game.
+     */
+    @Override
+	public void onDestroy() {
+		Log.i("LevelActivity70", "onDestroy");
+		super.onDestroy();
+		rendererView.onDestroy();
+	}
+    
+    
+    /**
+     * Save game states.
+     */
+    @Override
+	protected void onSaveInstanceState(Bundle outState) {
+    	rendererView.onSaveState(outState);
+    }
+    
+    
+    /**
+     * Restore game states.
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    	rendererView.onRestoreState(savedInstanceState);
+    }
 }

@@ -60,8 +60,6 @@ public class TileGeometry {
 		indBuf = ibb.asShortBuffer();
 		indBuf.put(inds);
 		indBuf.position(0);
-		
-		setType(TileEnum.TILE_EMPTY);
 	}
 	
 	
@@ -69,12 +67,11 @@ public class TileGeometry {
 	// -- Public methods ----
 	
 	/**
-	 * Set tile type.
-	 * @type type The tile type.
+	 * Set texture coordinate buffer.
+	 * @param buf The texture coordinate buffer.
 	 */
-	public void setType(TileEnum type) {
-		this.type = type;
-		texBuf = TileTexture.getInstance().getTexBuffer(type);
+	public void setTexBuffer(FloatBuffer buf) {
+		texBuf = buf;
 	}
 	
 	
