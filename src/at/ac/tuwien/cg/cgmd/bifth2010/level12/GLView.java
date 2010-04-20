@@ -115,7 +115,7 @@ public class GLView extends GLSurfaceView implements Renderer {
         
         
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glClearColor(1.0f, 0.0f, 0.0f, 0.5f); 	//Black Background
+		gl.glClearColor(0.0f, 0.49321f, 0.49321f, 1.0f); 
 		gl.glClearDepthf(1.0f);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		gl.glEnable(GL10.GL_LINE_SMOOTH);
@@ -175,7 +175,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	public void initTower(){
 		//BasicTower init
-		int radius = 3;//(this.getResources().getIntArray(R.array.BasicTowerRadius))[0];
+		int radius = 14;//(this.getResources().getIntArray(R.array.BasicTowerRadius))[0];
 		for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower( radius );
 	}
 	
