@@ -10,7 +10,7 @@ public abstract class Projectile extends GLObject{
 	
 	private long mLastFrametime = -1;
 	private short mDmg = 10;
-	private float mXTranslate = -1.0f;
+	private float mXTranslate = 0.0f;
 	private float mRadius = 4;
 	
 	public Projectile( float speed, short dmg ){
@@ -20,14 +20,14 @@ public abstract class Projectile extends GLObject{
 		mColor[1] = 0.0f;
 		mColor[2] = 0.0f;
 		mColor[3] = 0.5f;
-		mXTranslate = 0.1f;
+		mXTranslate = 0.0f;
 	}
 	
 	public void setXY( float x, float y){
 		//System.out.println("SETXY Projectile: X:"+x+" Y:"+y);
 		mX = x;
 		mY = y;
-		mXTranslate = mX;
+		mXTranslate = 0.0f;
 		mLastFrametime = System.currentTimeMillis();
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
@@ -98,7 +98,7 @@ public abstract class Projectile extends GLObject{
 	}
 	
 	public void reset(){
-		mXTranslate = mX;
+		mXTranslate = 0.0f;
 		this.setActiveState(false);
 		mCollisionPointX = -1;
 	}
