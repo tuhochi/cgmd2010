@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-<dimen name="l50_help_TitleSize">25dip</dimen>
-<dimen name="l50_help_TitlePadding">6dip</dimen>
-<dimen name="l50_help_HelpActivitySize">12dip</dimen>
-<dimen name="l50_help_HelpActivityPadding">6dip</dimen>
-</resources>
