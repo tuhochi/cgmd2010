@@ -28,9 +28,10 @@ public class GameRenderer implements Renderer {
 	
 	public Level level;
 	
-	public GameRenderer(Context context) {
+	public GameRenderer(Context context, Vector2 resolution) {
 		//Log.i(LOG_TAG, "GameRenderer()");
-		
+		_width = resolution.x;
+		_height = resolution.y;
 		this.context = context;
 		this.level = ((GameActivity) context).getLevel();
 		
