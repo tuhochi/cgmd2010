@@ -1,35 +1,40 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level36;
 
-import static android.opengl.GLES10.glReadPixels;
-import static android.opengl.GLES11.glGetFloatv;
-import static android.opengl.GLES11.glGetIntegerv;
-import static android.opengl.GLES11Ext.GL_DEPTH_COMPONENT16_OES;
-
-import static android.opengl.GLU.gluUnProject;
-
-import javax.microedition.khronos.opengles.GL;
-import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.view.MotionEvent;
+import android.view.*;
+import static android.view.KeyEvent.*;
+import java.util.Random;
 
 
 public class GameView_New extends GLSurfaceView {
 	
-		private GameRenderer gameRenderer;
-		private Context context;
+	private GameRenderer gameRenderer;
+	private Context context;
+	private Random randomizer;
+	private int shownNumber;
 
-		public GameView_New(Context context) {
-			super(context);
-			this.context = context;
-			gameRenderer = new GameRenderer(true, this.context);
-			setRenderer(gameRenderer);
-		}
+	public GameView_New(Context context) {
+		super(context);
+		this.context = context;
+		this.randomizer = new Random();
+		int initRandNumber = getRandomNumber();
+		gameRenderer = new GameRenderer(true, this.context, initRandNumber);
+		//muss gesetzt werden ansonsten bekommt man keine key events
+		setFocusable(true);
+		setRenderer(gameRenderer);
+	}
+	
+	public int getRandomNumber() {
+		this.shownNumber = this.randomizer.nextInt(10);
+		return this.shownNumber;
+	}
 		
 	private void touch_start(float x, float y) {
-		this.gameRenderer.getPoint().setXY(x, y);
+		//this.gameRenderer.getPoint().setXY(x, y);
+//		int randNumber = getRandomNumber();
+//		this.gameRenderer.setRandNumber(randNumber);
+		
 		//System.out.println("HERE");
 		//mPath.reset();
 		//mPath.moveTo(x, y);
@@ -86,6 +91,57 @@ public class GameView_New extends GLSurfaceView {
 			touch_up();
 			invalidate();
 			break;
+		}
+		return true;
+	}
+	
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		//if (keyCode == event.KEYCODE_0) {
+//				int randNumber = getRandomNumber();
+//				this.gameRenderer.setRandNumber(randNumber);
+//		//}
+//		return true;
+//	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		int number = -1;
+		switch(keyCode) {
+		case KEYCODE_0:
+			number = 0;
+			break;
+		case KEYCODE_1:
+			number = 1;
+			break;
+		case KEYCODE_2:
+			number = 2;
+			break;
+		case KEYCODE_3:
+			number = 3;
+			break;
+		case KEYCODE_4:
+			number = 4;
+			break;
+		case KEYCODE_5:
+			number = 5;
+			break;
+		case KEYCODE_6:
+			number = 6;
+			break;
+		case KEYCODE_7:
+			number = 7;
+			break;
+		case KEYCODE_8:
+			number = 8;
+			break;
+		case KEYCODE_9:
+			number = 9;
+			break;
+		}
+
+		if (this.shownNumber == number) {
+			int randNumber = getRandomNumber();
+			this.gameRenderer.setRandNumber(randNumber);
 		}
 		return true;
 	}

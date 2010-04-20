@@ -6,12 +6,14 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
+import android.view.View.OnKeyListener;
 
 /**
  * 
@@ -23,30 +25,40 @@ public class LevelActivity extends Activity {
 	private GLSurfaceView mGLSurfaceView;
 	private GameView_New gameView; 
 	private Context context;
-	private OnTouchListener touchListener = new OnTouchListener() {
-		public boolean onTouch(View v, MotionEvent e) {
-			boolean b = cGestureDetector.onTouchEvent(e);
-			try {
-				Thread.sleep(35);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-			return b;
-		}
-	};
 	private GestureDetector cGestureDetector = null;
+	private KeyEvent keyevent = null;
+	
+//	private OnTouchListener touchListener = new OnTouchListener() {
+//		public boolean onTouch(View v, MotionEvent e) {
+//			boolean b = cGestureDetector.onTouchEvent(e);
+//			try {
+//				Thread.sleep(35);
+//			} catch (InterruptedException e1) {
+//				e1.printStackTrace();
+//			}
+//			return b;
+//		}
+//	};
+//	private OnKeyListener keyListener = new OnKeyListener() {		
+//		@Override
+//		public boolean onKey(View v, int keyCode, KeyEvent event) {
+//			boolean b = v.onKeyDown(keyCode, event);
+//			try {
+//				Thread.sleep(35);
+//			} catch (InterruptedException e1) {
+//				e1.printStackTrace();
+//			}
+//			return b;
+//		}
+//	};
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d("LevelActivity::onCreate", "Start the program.");
 		super.onCreate(savedInstanceState);
 		context = this;
-		//EDITED 1504
-        //mGLSurfaceView = new GLSurfaceView(this);
-        //mGLSurfaceView.setRenderer(new GameRenderer(true, context));
-        //setContentView(mGLSurfaceView);
-		//EDITED 1504
-		
+	
 		gameView = new GameView_New(this);
 		setContentView(gameView);
 		

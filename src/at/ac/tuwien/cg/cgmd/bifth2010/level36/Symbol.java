@@ -10,17 +10,41 @@ import javax.microedition.khronos.opengles.*;
 /**
  * A vertex shaded cube.
  */
-class Plane
+class Symbol
 {
-    public Plane()
+    private FloatBuffer   mVertexBuffer;
+    private FloatBuffer   mNormalBuffer;
+    private FloatBuffer	  mColorBuffer;
+    private FloatBuffer   mTextureBuffer;
+    private ByteBuffer    mIndexBuffer;
+    private float[] vertices;
+    private float[] textureCoords;
+    private GL10 gl;
+	
+    float rowFactor = 1.0f/16.0f;
+    float colFactor = 1.0f/16.0f;
+	
+    public Symbol()
     {
-    	int one = 0x10000;
-        float vertices[] = {
-        		-5.0f, -5.0f, 0.0f, 1.0f,
-        		-5.0f, +5.0f, 0.0f, 1.0f,
-        		+5.0f, -5.0f, 0.0f,	1.0f,
-        		+5.0f, +5.0f, 0.0f, 1.0f
-        };
+    	this.vertices = new float[16];
+    	this.textureCoords = new float[8];
+    	
+    	this.vertices[0] = -1.0f;
+    	this.vertices[1] = -1.0f;
+    	this.vertices[2] = -0.5f; 
+    	this.vertices[3] = +1.0f;
+    	this.vertices[4] = -1.0f;
+    	this.vertices[5] = +1.0f;
+    	this.vertices[6] = -0.5f;
+    	this.vertices[7] = +1.0f;
+    	this.vertices[8] = +1.0f;
+    	this.vertices[9] = -1.0f;
+    	this.vertices[10] = -0.5f;
+    	this.vertices[11] = +1.0f;
+    	this.vertices[12] = +1.0f;
+    	this.vertices[13] = +1.0f;
+    	this.vertices[14] = -0.5f;
+    	this.vertices[15] = +1.0f;
         
         float normals[] =  {
         		0.0f, 0.0f, -1.0f, 
@@ -29,19 +53,23 @@ class Plane
         		0.0f, 0.0f, -1.0f,
         };
         
-//        float textureCoords[] = {
-//        		0.0f, 0.0f, 1.0f, 1.0f,
-//        		1.0f, 0.0f, 1.0f, 1.0f,
-//        		0.0f, 1.0f, 1.0f, 1.0f,
-//        		1.0f, 1.0f, 1.0f, 1.0f,
-//        };
-        
-        float textureCoords[] = {
-        		0.0f, 0.0f, 
-        		1.0f, 0.0f, 
-        		0.0f, 1.0f, 
-        		1.0f, 1.0f
-        };
+        //  11------10
+        //   |       |
+        //   |       |
+        //  01------00
+  
+        //links oben
+        textureCoords[0] = 0.0625f; //width2 rechts
+        textureCoords[1] = 0.125f; //height1 unten
+        //rechts oben
+        textureCoords[2] = 0.0625f; //width2 rechts
+        textureCoords[3] = 0.061f; //height2 oben
+        //links unten
+        textureCoords[4] = 0.0f; //width1 links
+        textureCoords[5] = 0.125f; //height1 unten
+        //rechts unten
+        textureCoords[6] = 0.0f; //width1 links
+        textureCoords[7] = 0.061f;//height2 oben
 
         float colors[] = {
                 0.0f, 0.0f, 0.0f, 1.0f,
@@ -91,20 +119,27 @@ class Plane
         mIndexBuffer.put(indices);
         mIndexBuffer.position(0);
     }
+     
+    public void getNumber(int number) {
+    	this.textureCoords[0] = 0.0f + (number+1)*colFactor;
+    	this.textureCoords[2] = 0.0f + (number+1)*colFactor;
+    	this.textureCoords[4] = 0.0f + number*colFactor;
+    	this.textureCoords[6] = 0.0f + number*colFactor;
+        ByteBuffer tbb = ByteBuffer.allocateDirect(this.textureCoords.length*4);
+        tbb.order(ByteOrder.nativeOrder());
+        mTextureBuffer = tbb.asFloatBuffer();
+        mTextureBuffer.put(this.textureCoords);
+        mTextureBuffer.position(0);
+    }
 
     public void draw(GL10 gl)
     {
         gl.glFrontFace(gl.GL_CW);
         gl.glVertexPointer(4,GL10.GL_FLOAT, 0, mVertexBuffer);
         //gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
-        gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
-        gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuffer);
-    }
-
-    private FloatBuffer   mVertexBuffer;
-    private FloatBuffer   mNormalBuffer;
-    private FloatBuffer	  mColorBuffer;
-    private FloatBuffer   mTextureBuffer;
-    private ByteBuffer    mIndexBuffer;
+	        gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
+	        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
+	        gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuffer);
+	}
 }
+
