@@ -6,7 +6,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.util.Log;
-
+/**
+ * class pedestrians, who walk around, move towards a target, fight and grab treasure
+ * @author askari
+ *
+ */
 public class Pedestrian implements Target{
 
     private static final String LOG_TAG = Pedestrian.class.getSimpleName();
@@ -34,11 +38,23 @@ public class Pedestrian implements Target{
 	private float levelSizeX;
 	private float levelSizeY;
 	private Random rand;
-	
+	/**
+	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
+	 * @param gl
+	 * @param context
+	 */
 	public Pedestrian(GL10 gl, Context context) {
 		this( 30.0f,10.0f,0.01f, 2.0f, gl, context);
 	}
-	
+	/**
+	 * contructor with additional parameters
+	 * @param attractionRadius distance at which the pedestrians react to treasure attraction radius
+	 * @param fightingRadius distance at which the pedestrians start fighting each other
+	 * @param moveSpeed walk speed
+	 * @param grabSpeed treasure value grab speed
+	 * @param gl
+	 * @param context
+	 */
 	public Pedestrian(float attractionRadius, float fightingRadius, float moveSpeed, float grabSpeed, GL10 gl, Context context) {
 		this.attractionRadius = attractionRadius;
 		this.grabSpeed = grabSpeed;
@@ -59,7 +75,9 @@ public class Pedestrian implements Target{
 		this.oldTime = 0;
 		this.temp = new Vector2();
 	}
-	
+	/**
+	 * generates the color of the pedestrian randomly
+	 */
 	public void setColors() {
 	
 
@@ -128,7 +146,10 @@ public class Pedestrian implements Target{
 		legs.setColor(color_pants);
 		arms.setColor(color_shirt, color_skin);
 	}
-	
+	/**
+	 * performs walking, moving towards target, fighting, grabbing treasure and updates position of the body parts
+	 * @param time
+	 */
 	public void update(float time) {
 		if(oldTime == 0)
 			oldTime = time;
@@ -176,15 +197,23 @@ public class Pedestrian implements Target{
 		head.update(position, angle);
 		hair.update(position, angle);
 	}
-	
+	/**
+	 * sets position to pos in level
+	 * @param pos
+	 */
 	public void setPosition(Vector2 pos) {
 		this.position = pos;
 	}
-	
+	/**
+	 * returns position in level
+	 */
 	public Vector2 getPosition(){
 		return this.position;
 	}
-	
+	/**
+	 * draws pedestrians by drawing body parts
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 
 		
@@ -194,21 +223,41 @@ public class Pedestrian implements Target{
 			head.draw(gl);
 			hair.draw(gl);
 	}
+	/**
+	 * returns attraction radius (istance at which the pedestrians react to treasure attraction radius)
+	 * @return attractionRadius
+	 */
 	public float getAttractionRadius(){
 		return this.attractionRadius;
 	}
+	/**
+	 * returns the speed at which the pedestrians grab treasure
+	 * @return grabSpeed
+	 */
 	public float getGrabSpeed(){
 		return this.grabSpeed;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public float getFightingRadius(){
 		return this.fightingRadius;
 	}
+	/**
+	 * sets the current target to target
+	 * @param target
+	 */
 	public void setTarget(Target target){
 		this.target = target;
 		this.angle = (float)Math.atan2(target.getPosition().y - this.position.y, target.getPosition().x - this.position.x) * (180.0f/(float)Math.PI);
 		//this.angle = (float)Math.atan( (treasurePosition.y - this.position.y) / (treasurePosition.x - this.position.x) )
 	
 	}
+	/**
+	 * returns the current targe. null if no target is set
+	 * @return target
+	 */
 	public Target getTarget(){
 		return this.target;
 	}
