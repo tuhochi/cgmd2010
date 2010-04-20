@@ -181,14 +181,14 @@ public class LevelActivity extends Activity{
 		outState.putInt("game.bunny.currentPosX", game.bunny.currentPosX);
 		outState.putInt("game.bunny.currentPosY", game.bunny.currentPosY);
 		outState.putInt("game.bunny.moveStatus", game.bunny.moveStatus);
-		outState.putFloat("game.bunny.waitingTime", game.bunny.waitingTime);
+		outState.putFloat("game.bunny.transition", game.bunny.transition);
 		
 		// Save Police
 		for(int i=0; i<game.police.size(); i++) {
 			outState.putInt("game.police.get("+i+").currentPosX", game.police.get(i).currentPosX);
 			outState.putInt("game.police.get("+i+").currentPosY", game.police.get(i).currentPosY);
 			outState.putInt("game.police.get("+i+").moveStatus", game.police.get(i).moveStatus);
-			outState.putFloat("game.police.get("+i+").waitingTime", game.police.get(i).waitingTime);	
+			outState.putFloat("game.police.get("+i+").transition", game.police.get(i).transition);	
 		}
 
 		// Save Stashes
@@ -212,7 +212,7 @@ public class LevelActivity extends Activity{
 				savedInstanceState.getInt("game.bunny.currentPosY")
 			);
 		game.bunny.moveStatus = savedInstanceState.getInt("game.bunny.moveStatus");
-		game.bunny.waitingTime = savedInstanceState.getFloat("game.bunny.waitingTime");
+		game.bunny.transition = savedInstanceState.getFloat("game.bunny.transition");
 		
 		// Restore Police
 		for(int i=0; i<game.police.size(); i++) {
@@ -221,7 +221,7 @@ public class LevelActivity extends Activity{
 					savedInstanceState.getInt("game.police.get("+i+").currentPosY")
 				);
 			game.police.get(i).moveStatus = savedInstanceState.getInt("game.police.get("+i+").moveStatus");
-			game.police.get(i).waitingTime = savedInstanceState.getFloat("game.police.get("+i+").waitingTime");
+			game.police.get(i).transition = savedInstanceState.getFloat("game.police.get("+i+").transition");
 		}
 
 		// Restore Stashes
