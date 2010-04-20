@@ -1,17 +1,20 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level22.gamelogic.GameLogic;
 
 public class GameActivity extends Activity {
 
@@ -21,7 +24,10 @@ public class GameActivity extends Activity {
 	private TextView _textTimeLeft;
 	private TextView _textTreasureLeft;
 	private int _result = 0;
+	
+	private Vector2 _displayResolution;
     
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +38,15 @@ public class GameActivity extends Activity {
         WindowManager.LayoutParams.FLAG_FULLSCREEN);
     	this.setRequestedOrientation(0); 
     	
+       	WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        _displayResolution = new Vector2((float)display.getWidth(), (float)display.getHeight());
+        
     	
     	// create level
-    	_level = new Level(480, 320);
+    	_level = new Level(_displayResolution.x, _displayResolution.y);
     	
-        _gameView = new GameView(this);
+        _gameView = new GameView(this, _displayResolution);
         setContentView(_gameView);
     	
     	LinearLayout llayout = new LinearLayout(this);
@@ -67,26 +77,19 @@ public class GameActivity extends Activity {
         layoutParams2.setMargins(10, 10, 10, 10);
         llayout.addView(_textTreasureLeft, layoutParams2); 
 
-
-    	
         _level.start();
     }
     
-    public Level getLevel() {
-    	return _level;
-    }
-    
-    
     @Override
     protected void onResume() {
-		_level.pause(false);
+		_level.resume_level();
         _gameView.onResume();
 		super.onResume();
     }
 
     @Override
     protected void onPause() {
-    	_level.pause(true);
+    	_level.pause_level();
         _gameView.onPause();
 		super.onPause();
     }
@@ -114,6 +117,28 @@ public class GameActivity extends Activity {
 		super.finish();
 	}
 	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) 
+	{
+		
+		GameLogic.makePersistentState( outState );
+		outState.putBoolean( "isLoadable", true );
+		
+		super.onSaveInstanceState(outState);
+	}
+	
+    /**
+     * returns Level Object
+     * @return
+     */
+    public Level getLevel() {
+    	return _level;
+    }
+	
+    /**
+     * updates text to show how much time in the level is left
+     * @param f
+     */
 	public void setTextTimeLeft(float f) {
 		
 		float minutes = f % 60;
@@ -126,7 +151,12 @@ public class GameActivity extends Activity {
 		} 
 	}
 	
-	public void setTextTreasureSpent(float f) {
+	
+	/**
+	 * updates treasure grabbed text
+	 * @param f
+	 */
+	public void setTextTreasureGrabbed(float f) {
 		_result = (int)f;
 		_textTreasureLeft.setText(Integer.toString(_result));
 		
@@ -136,4 +166,11 @@ public class GameActivity extends Activity {
 		}
 	}
 
+	/**
+	 * sets result (grabbed treasure) 
+	 * @param f
+	 */
+	public void setResult(float f) {
+		_result = (int)f;
+	}
 }
