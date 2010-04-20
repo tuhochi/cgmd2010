@@ -38,7 +38,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 
 	
 	/** The Activity Context */
-//	private Activity activity;
+	//protected Activity activity;
 //	private SessionState sessionState;		
 	private GameManager gameManager;
 	public TimeUtil timer;
@@ -57,7 +57,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		super(activity);
 		
 		//Set this as Renderer
-		this.setRenderer(this);
+		this.setRenderer(this);	
 		//Request focus, otherwise buttons won't react
 		this.requestFocus();
 		this.setFocusableInTouchMode(true);
@@ -89,8 +89,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping		
 		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
 		
-		gl.glEnable(GL10.GL_DEPTH_TEST);				
-		gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
+		//gl.glEnable(GL10.GL_DEPTH_TEST);				
+		//gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
 		
 		gl.glEnable(GL10.GL_CULL_FACE);
 		gl.glFrontFace(GL10.GL_CCW);
@@ -127,6 +127,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		gl.glLoadIdentity();		
 		
 		// And then draw it
+		
 		gameManager.render(gl);
 
 	}
@@ -146,7 +147,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		gl.glLoadIdentity();
 		
 		// Use an Ortho projection
-		gl.glOrthof(0, width, 0, height, -10, 1);
+		gl.glOrthof(0, width, 0, height, -10, 100);
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();

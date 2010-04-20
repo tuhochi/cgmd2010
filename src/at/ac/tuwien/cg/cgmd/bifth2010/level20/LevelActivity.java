@@ -9,6 +9,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView;
 
 /**
  * The top level class of the game. 
@@ -30,9 +33,7 @@ public class LevelActivity extends Activity {
 		//Initiate our Lesson with this Activity Context handed over
 		renderView = new RenderView(this);
 		//Set the lesson as View to the Activity
-		setContentView(renderView);
-		//Create an Instance with this Activity
-		
+		setContentView(renderView);				
 	}
 	
 

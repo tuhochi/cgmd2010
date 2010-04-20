@@ -11,7 +11,15 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
  */
 public class ProductEntity extends RenderEntity implements Clickable {
 	
+	/**
+	 * Flag whether the entity is clickable or not.
+	 */
 	protected boolean clickable;
+	
+	/**
+	 * The price of the product.
+	 */
+	protected int price;
 
 	/**
 	 * @param x The X coordinate. 
@@ -22,13 +30,11 @@ public class ProductEntity extends RenderEntity implements Clickable {
 	public ProductEntity(float x, float y, float z, float size) {
 		super(x, y, z, size, size);
 		clickable = true;
+		price = (int)(Math.random() * 10.f);
 	}
 
 	@Override
 	public boolean hitTest(float hitX, float hitY) {
-		// Hm, don't ask this here. 
-//		if (!clickable)
-//			return false;
 		
 		float hW = width * 0.5f;
 		float hH = height * 0.5f;
