@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class LevelActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
 
 	private ModelStreet street;
-	private List<ModelDrain> drains;
+	//private List<ModelDrain> drains;
 	private List<Model> gems;
 	
 	private ModelGem gemRound;
@@ -25,7 +26,8 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	private ModelGem gemRect;
 	private ModelGem gemOct;
 	
-	private float[] drainPositionsX;
+	private HashMap<Integer, ModelDrain> drains;
+	
 	private int numDrains;
 	private float levelWidth;
 	private float levelSpeed;
@@ -41,7 +43,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l84_level);
 		
-		drains = new LinkedList<ModelDrain>();
+		drains = new HashMap<Integer, ModelDrain>();//new LinkedList<ModelDrain>();
 		gems = new LinkedList<Model>();
 		
 		initGui();
@@ -80,15 +82,18 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		street = new ModelStreet(levelWidth, 17f, -levelWidth/2f + 8f, levelSpeed, R.drawable.l84_tex_street, drains);
 		
 		//Create drains
-		drainPositionsX = new float[numDrains];
-		for (int i = 0; i < numDrains; i++) {
+		for (int i = 0; i < numDrains;) {
+			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f - 5f) / 3f) * 3;
 			int drainType = (int)(Math.random() * 4.0);
-			float drainPos = (float)Math.random() * levelWidth - levelWidth/2f - 5f; 
-			drains.add(new ModelDrain(drainType, drainPos));
-			drainPositionsX[i] = drainPos;
+			float drainOrientation = (float)Math.random() * 360f;
 			
-			if (drainType > 0)
-				moneyToSpend += gemWorth;
+			if (!drains.containsKey(drainPos)) {
+				drains.put(drainPos, new ModelDrain(drainType, drainPos, drainOrientation));
+				i++;
+				
+				if (drainType > 0)
+					moneyToSpend += gemWorth;
+			}
 		}
 		TextView tfPoints = (TextView) findViewById(R.id.l84_Points);
 		tfPoints.setText("$" + moneyToSpend);
