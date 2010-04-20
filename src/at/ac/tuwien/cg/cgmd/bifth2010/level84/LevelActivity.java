@@ -18,15 +18,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class LevelActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
 
 	private ModelStreet street;
-	//private List<ModelDrain> drains;
 	private List<Model> gems;
+	private HashMap<Integer, ModelDrain> drains;
 	
 	private ModelGem gemRound;
 	private ModelGem gemDiamond;
 	private ModelGem gemRect;
 	private ModelGem gemOct;
-	
-	private HashMap<Integer, ModelDrain> drains;
 	
 	private int numDrains;
 	private float levelWidth;
