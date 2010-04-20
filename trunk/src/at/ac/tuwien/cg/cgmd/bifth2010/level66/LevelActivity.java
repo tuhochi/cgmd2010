@@ -8,6 +8,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level66;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 
@@ -25,56 +27,70 @@ public class LevelActivity extends Activity {
 		
 		_level66View = new Level66View(this);
         setContentView(_level66View);
+        
+        SessionState state = new SessionState();
+        
+        state.setProgress(34);
+        
+        setResult(Activity.RESULT_OK, state.asIntent());
 	}
 	
 	/*
 	 * After onPause
 	 * @see android.app.Activity#onResume()
 	 */
+	
     @Override
     protected void onResume() {
         super.onResume();
         _level66View.onResume();
         Sound.resumeSound();
     }
+    
 
     /*
      * After onResume or onStop
      * @see android.app.Activity#onPause()
      */
+	
     @Override
     protected void onPause() {
         super.onPause();
         _level66View.onPause();
         Sound.pauseSound();
     }
-    /*
+    
     /*
      * Called after onResume or onStop
      * @see android.app.Activity#onStart()
      */
+	
     @Override
 	protected void onStart() {
 		super.onStart();
+		
 	}
     
     /*
      * After Destroy or onRestart
      * @see android.app.Activity#onStop()
      */
+	
     @Override
 	protected void onStop() {
 		super.onStop();
+		Sound.pauseSound();
     }
     
     /*
      * Before Activity will be destroyed
      * @see android.app.Activity#onDestroy()
      */
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();	
 		Sound.destroySound();
 	}
-  
+  	
 }

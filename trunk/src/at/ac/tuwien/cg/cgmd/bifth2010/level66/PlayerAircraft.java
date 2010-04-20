@@ -36,7 +36,7 @@ public class PlayerAircraft extends Model {
 		this.load("l66_baum.obj", context);
 		
 		// only render coordination system - testing purpose only
-		_renderCoord = true;
+		_renderCoord = false;
 		
 		_accX = 0;
 		_accY = 0;
@@ -45,7 +45,7 @@ public class PlayerAircraft extends Model {
 		
 		_posZ = -5.0f;
 		
-		_scale = 0.05f;
+		_scale = 0.1f;
 		
 		_cnt_frames_x = 0;
 		_cnt_frames_y = 0;
@@ -248,7 +248,7 @@ public class PlayerAircraft extends Model {
 		{
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, _vertexBuffer);
 	        gl.glColorPointer(4, GL10.GL_FLOAT, 0, _colorBuffer);
-	        //gl.glNormalPointer(GL10.GL_FLOAT, 0, _normalBuffer);
+	        gl.glNormalPointer(GL10.GL_FLOAT, 0, _normalBuffer);
 	        //gl.glTexCoordPointer(3, GL10.GL_FLOAT, 0, _texCoordBuffer);
 	    
 		    gl.glLoadIdentity();
@@ -258,7 +258,7 @@ public class PlayerAircraft extends Model {
 		    // set scale
 		    gl.glScalef(_scale, _scale, _scale);
 		    // set rotation
-		    gl.glRotatef( -90, 1.0f, 0.0f, 0.0f);
+		    //gl.glRotatef( -90, 1.0f, 0.0f, 0.0f);
 		    gl.glRotatef( _pitch, 1.0f, 0.0f, 0.0f);
 		    gl.glRotatef( _yaw, 0.0f, 1.0f, 0.0f);
 		    
@@ -266,6 +266,8 @@ public class PlayerAircraft extends Model {
 		    	gl.glRotatef(-_roll + _special_roll_dir * _special_roll, 0.0f, 0.0f, 1.0f);
 		    else
 		    	gl.glRotatef(-_roll, 0.0f, 0.0f, 1.0f);
+		    
+		    gl.glRotatef( -90, 1.0f, 0.0f, 0.0f);
 		    
 		    //gl.glDrawElements(GL10.GL_TRIANGLES, _indexBuffer.array().length / 4, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
 		    gl.glDrawElements(GL10.GL_TRIANGLES, _cntVertices, GL10.GL_UNSIGNED_SHORT, _indexBuffer);
