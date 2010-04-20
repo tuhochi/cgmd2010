@@ -12,8 +12,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class LevelActivity extends Activity {
-	int score;
-	float x, y;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,9 +26,6 @@ public class LevelActivity extends Activity {
 
         mGLView = new LevelSurfaceView(this); 
    		setContentView(mGLView);
-   		
-   		mGLView.setScore(score);
-   		mGLView.setPosition(x, y);
     }
 	
 /*	@Override
@@ -52,15 +47,14 @@ public class LevelActivity extends Activity {
     public void onPause() {
         super.onPause();
         mGLView.onPause();
+        int score = mGLView.getScore();
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = mPrefs.edit();
-        ed.putInt("L50_SCORE", mGLView.getScore());
-        ed.putFloat("L50_POSITIONX", mGLView.getPositionX());
-        ed.putFloat("L50_POSITIONY", mGLView.getPositionY());
+        ed.putInt("L50_SCORE", score);
         ed.commit();
         
         SessionState s = new SessionState();
-		s.setProgress(mGLView.getScore());
+		s.setProgress(score);
 		setResult(Activity.RESULT_OK, s.asIntent());
     }
 
@@ -69,9 +63,10 @@ public class LevelActivity extends Activity {
         super.onResume();
         mGLView.onResume();
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
-        score = mPrefs.getInt("L50_SCORE", 0);
-        x = mPrefs.getFloat("L50_POSITIONX", 0.0f);
-        y = mPrefs.getFloat("L50_POSITIONY", 0.0f);
+        int score = mPrefs.getInt("L50_SCORE", 0);
+        mGLView.setScore(score);
+//        x = mPrefs.getFloat("L50_POSITIONX", 0.0f);
+//        y = mPrefs.getFloat("L50_POSITIONY", 0.0f);
     }
     
     @Override
