@@ -8,7 +8,7 @@ import java.nio.ByteOrder;
 
 public abstract class Projectile extends GLObject{
 	
-	private double mLastFrametime = -1;
+	private long mLastFrametime = -1;
 	private short mDmg = 10;
 	private float mXTranslate = -1.0f;
 	private float mRadius = 4;
@@ -20,11 +20,11 @@ public abstract class Projectile extends GLObject{
 		mColor[1] = 0.0f;
 		mColor[2] = 0.0f;
 		mColor[3] = 0.5f;
-		mXTranslate = 0.0f;
+		mXTranslate = 0.1f;
 	}
 	
-	
 	public void setXY( float x, float y){
+		//System.out.println("SETXY Projectile: X:"+x+" Y:"+y);
 		mX = x;
 		mY = y;
 		mXTranslate = mX;
@@ -45,7 +45,7 @@ public abstract class Projectile extends GLObject{
 				0,	1,	2,
 				0,	2,	3
 		};
-		System.out.println("Vertices.length: "+vertices.length+" Indices.length: "+indices.length);
+
 		ByteBuffer i = ByteBuffer.allocateDirect( indices.length * 2 );
 		i.order( ByteOrder.nativeOrder() );
 		mIndicesBuffer = i.asShortBuffer();
@@ -57,30 +57,39 @@ public abstract class Projectile extends GLObject{
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f};
+		
 		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
 		cbb.order( ByteOrder.nativeOrder() );
 		mColorBuffer = cbb.asFloatBuffer();
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
+		System.out.println("SETXY Projectile: mLastFrameTime: "+mLastFrametime+" SystemTime: "+System.currentTimeMillis());
 	}
 	
 	@Override
 	public void draw( GL10 gl ){
-		double ms = System.currentTimeMillis();
-		float dt = (float)((ms - mLastFrametime) * 0.001);
-		mLastFrametime = ms;
-		float distance = mSpeed * dt;
-		mXTranslate += distance;
+		getX();
 		gl.glPushMatrix();
+		gl.glLoadIdentity();
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
 		super.draw(gl);
 		gl.glPopMatrix();
-		if( mCollisionPointX <= mXTranslate && mCollisionPointX > -1 ) this.reset();
+		if( mCollisionPointX <= mXTranslate && mCollisionPointX > -1 ){
+			System.out.println("mCollPointX: "+mCollisionPointX+ " mXTranslate: "+mXTranslate);
+			this.reset();
+		}
 	}
 	
 	@Override
 	public float getX(){
-		return mXTranslate; //returns the bullet real position because it gets translatet und not moved
+		long ms = System.currentTimeMillis();
+		double dt = (ms - mLastFrametime) * 0.001;
+		mLastFrametime = ms;
+		double distance = this.getSpeed() * dt;
+		//System.out.print("getX: mLastFrameTime: "+mLastFrametime+" SystemTime: "+System.currentTimeMillis()+" mXTranslateOld: "+mXTranslateOld+" mXTranslateNew: "+mXTranslateNew+" distance: "+distance);
+		mXTranslate += (float)distance;
+		//System.out.println(" mXTranslateNew: "+mXTranslateNew);
+		return mXTranslate; //returns the bullet real position because it gets translated and not moved
 	}
 
 
@@ -88,8 +97,8 @@ public abstract class Projectile extends GLObject{
 		return mDmg;
 	}
 	
-	private void reset(){
-		mXTranslate = 0.0f;
+	public void reset(){
+		mXTranslate = mX;
 		this.setActiveState(false);
 		mCollisionPointX = -1;
 	}

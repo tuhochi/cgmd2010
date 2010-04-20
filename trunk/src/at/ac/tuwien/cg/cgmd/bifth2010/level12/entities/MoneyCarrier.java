@@ -12,9 +12,8 @@ import java.nio.ByteOrder;
 public class MoneyCarrier extends GLObject {
 	private float mRadius = -1;
 	private float mMovePos = 0.0f;
-	private double mLastFrametime, ms = -1;
-	private float mStartPos, dt, distance = -1;
-
+	private long mLastFrametime, ms = -1;
+	private float mStartPos;
 	private short mHp = 1;
 	private short mStrength = 1; //how much damage it can do
 	private int mType = 0; //zombie type
@@ -111,22 +110,17 @@ public class MoneyCarrier extends GLObject {
 	
 	@Override
 	public void draw(GL10 gl){
-		ms = System.currentTimeMillis();
-		dt = (float)((ms - mLastFrametime) * 0.001);
-		mLastFrametime = ms;
-		distance = (float) mSpeed * dt;
-		mMovePos -= distance;
+		getX();
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
 		super.draw(gl);
 		gl.glPopMatrix();
 		
-		//calculate actual position
-		mX = mStartPos + mMovePos;
+		
 		//do collision damage!
-		if( mMovePos <= mCollisionPointX && mCollisionPointX != -1 ){
+		if( this.getX() <= mCollisionPointX && mCollisionPointX != -1 ){
 			mHp -= mDamageAtCollisionPoint;
-			System.out.println("Damage done at Carrier!");
+			System.out.println("Damage done at Carrier! CollPointX: "+mCollisionPointX);
 			mCollisionPointX = -1;
 		}
 		if( mHp <= 0 ){
@@ -140,4 +134,14 @@ public class MoneyCarrier extends GLObject {
 		mDamageAtCollisionPoint = dmg;
 	}
 	
+	public float getX(){
+		ms = System.currentTimeMillis();
+		double dt = (ms - mLastFrametime) * 0.001;
+		mLastFrametime = ms;
+		double distance = mSpeed * dt;
+		mMovePos -= distance;
+		//calculate actual position
+		mX = mStartPos + mMovePos;
+		return mX;
+	}	
 }

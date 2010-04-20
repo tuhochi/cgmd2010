@@ -214,18 +214,20 @@ public class GLView extends GLSurfaceView implements Renderer {
 		for( int i = 0; i < mBasicTower.length; i++){
 			if( mBasicTower[i].getActiveState()){	
 				Projectile p = mBasicTower[i].getProjectile(); //kann null sein
+				if( p == null ) return;
 				MoneyCarrier m = null;
+				boolean nearerEnemie = true;
 				for( int j = 0; j < mEnemies.length ; j++){
-					//System.out.println("enemy: " + mEnemies[j].getY() + "projectile: " + p.getY());
-					if( p == null ) return;
 					if( mEnemies[j].getActiveState() && (int)mEnemies[j].getY() == (int)p.getY() ){
 						System.out.println("Doing Collision Detection!");
-						if( m == null) m = mEnemies[j];
-						else{
-							if( mEnemies[j].getX() < m.getX() ) m = mEnemies[j]; //only first enemie gets hit
+						if( m == null) m =  mEnemies[j];
+						if( mEnemies[j].getX() < m.getX() ){
+							m = mEnemies[j]; //only first enemie gets hit
+							nearerEnemie = true;
 						}
-						if( m != null ){
-							float colpkt = p.collideX( m );
+						if( nearerEnemie ){
+							nearerEnemie = false;
+							float colpkt = m.collideX( p );
 							System.out.println("COLLISIONPOINT: "+colpkt);
 							p.setCollisionPointX( colpkt );
 							m.setCollisionPointX( colpkt );

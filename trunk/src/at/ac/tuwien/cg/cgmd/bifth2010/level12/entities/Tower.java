@@ -38,6 +38,7 @@ public abstract class Tower extends GLObject {
 	public void setXY( float xCentr, float yCentr ){
 		mX = xCentr;
 		mY = yCentr;
+		System.out.println("TOWER SETXY: mX: "+mX+" my: "+mY);
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
 				(mX + mRadius),	(mY - mRadius), 1.0f,
@@ -82,7 +83,7 @@ public abstract class Tower extends GLObject {
 	@Override
 	public void draw( GL10 gl ){
 		//new projectile
-		float dt =(float)((System.currentTimeMillis() - mTimeLastProjectileShot ) * 0.001);//secs
+		double dt =(System.currentTimeMillis() - mTimeLastProjectileShot ) * 0.001;//secs
 		if( dt >= mShootingInterval ){
 			if( mProjectiles != null ){
 				boolean found = false;
@@ -90,7 +91,8 @@ public abstract class Tower extends GLObject {
 					if( mProjectiles[i].getActiveState() == false ){
 						found = true;
 						mProjectiles[i].setActiveState( true );
-						mProjectiles[i].setXY(mX, mY);
+						mProjectiles[i].setXY( this.getX(), mY);
+						System.out.println("Tower: "+mX+" my: "+mY);
 						mTimeLastProjectileShot = System.currentTimeMillis();
 						mFlyingProjectiles.add( mProjectiles[i] );
 						break;
@@ -99,7 +101,7 @@ public abstract class Tower extends GLObject {
 			}
 			if( mFlyingProjectiles.peek().getX() > mScreenWidth || mFlyingProjectiles.peek().getCollisionPointX() >= mFlyingProjectiles.peek().getX() ){
 				Projectile p = mFlyingProjectiles.poll();
-				p.setActiveState(false);
+				p.reset();
 			}
 		}
 		
