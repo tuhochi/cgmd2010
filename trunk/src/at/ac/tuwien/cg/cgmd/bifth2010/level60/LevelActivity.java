@@ -48,7 +48,7 @@ public class LevelActivity extends Activity {
 		//addContentView(lay,params);
 		txtView = new TextView(this);
 		this.addContentView(txtView,params);
-		txtView.setText("Hello Bunny!!");
+		txtView.setText("jemand mag dich.");
 //    		Log.d(CLASS_TAG, "text written");
 		return;
 	}
