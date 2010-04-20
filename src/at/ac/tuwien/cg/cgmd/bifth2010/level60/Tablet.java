@@ -37,18 +37,22 @@ public class Tablet {
 	
 	private int width;
 	private int height;
-	private int x;
-	private int y;
+	private float x;
+	private float y;
 	private int texture;
 	private int rotation_angle;
 	private float scale_x;
 	private float scale_y;
+	private static float mapOffset_x;
+	private static float mapOffset_y;
 	
 //	Bitmap bmp;
 //	ByteBuffer bb;
 	
 	public Tablet(Context context, int width, int height, int x, int y, int texture, GL10 gl) {
 		this.context = context;
+		
+		mapOffset_x = mapOffset_y = 0;
 		
 		vertices[1] = height;
 		vertices[6] = width;
@@ -87,20 +91,25 @@ public class Tablet {
 //		bb = extract(bmp);
 	}
 	
-	public int getX() {
+	public static void addMapOffset(float x, float y) {
+		mapOffset_x -= x;
+		mapOffset_y -= y;
+	}
+	
+	public float getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 	
-	public void move(int xwise, int ywise) {
+	public void move(float xwise, float ywise) {
 		x += xwise;
 		y += ywise;
 	}
 	
-	public void setXY(int newX, int newY) {
+	public void setXY(float newX, float newY) {
 		x = newX;
 		y = newY;
 	}
@@ -131,7 +140,7 @@ public class Tablet {
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		
 		gl.glPushMatrix();
-		gl.glTranslatef(x, y, 0);
+		gl.glTranslatef(x+mapOffset_x, y+mapOffset_y, 0);
 		gl.glScalef(scale_x, scale_y, 0);
 		gl.glRotatex(rotation_angle, 0, 0, 1);
 		

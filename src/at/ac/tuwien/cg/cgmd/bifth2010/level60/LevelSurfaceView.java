@@ -35,19 +35,21 @@ public class LevelSurfaceView extends GLSurfaceView {
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) { 
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_DPAD_LEFT:
-			lr.moveObject(-5, 0);
-			break;
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			lr.moveObject(5, 0);
-			break;
-		case KeyEvent.KEYCODE_DPAD_UP:
-			lr.moveObject(0, 5);
-			break;
-		case KeyEvent.KEYCODE_DPAD_DOWN:
-			lr.moveObject(0, -5);
-			break;
+		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_DPAD_LEFT:
+				lr.moveObject(-5, 0);
+				break;
+			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				lr.moveObject(5, 0);
+				break;
+			case KeyEvent.KEYCODE_DPAD_UP:
+				lr.moveObject(0, 5);
+				break;
+			case KeyEvent.KEYCODE_DPAD_DOWN:
+				lr.moveObject(0, -5);
+				break;
+			}
 		}
 		return super.onKeyDown(keyCode, event);
 	}

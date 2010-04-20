@@ -10,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,14 +25,21 @@ public class LevelRenderer implements Renderer {
 	private Context context;
 	public int screenWidth;
 	public int screenHeight;
-	private textureManager manager; 
+	private textureManager manager; 	
+	private float mapOffset_x;
+	private float mapOffset_y;
 	
+	private final static int BUNNY_WIDTH = 60;
+	private final static int BUNNY_HEIGHT = 60;
+	private final static int LEVEL_WIDTH = 4;
+	private final static int LEVEL_HEIGHT = 4;
+	private final static int TILESIZE = 100;
 	
 	public static int levelMap[][] = {  
-		{ 1, 1, 0, 0 },
-		{ 0, 0, 0, 0 },
-		{ 0, 0, 0, 0 },
-		{ 0, 0, 0, 0 }
+		{ 5, 1, 1, 5 },
+		{ 2, 0, 0, 2 },
+		{ 2, 0, 0, 2 },
+		{ 4, 1, 1, 4 }
 	};
 	
 //	public static int actionMap[][] = {
@@ -40,23 +48,45 @@ public class LevelRenderer implements Renderer {
 	
 	public LevelRenderer(Context context) {
 		this.context = context;
+		mapOffset_x = mapOffset_y = 0;
 	}
 	
-	public void moveObject(int x, int y) {
-		int xPos = manager.getGameObject("bunny").getX();
-		int yPos = manager.getGameObject("bunny").getY();
+	public void moveObject(float x, float y) {
+		float xPos = manager.getGameObject("bunny").getX();
+		float yPos = manager.getGameObject("bunny").getY();
 		
-		if (x + xPos >= 0 && x + xPos <= screenWidth-60 &&
-			y + yPos >= 0 && y + yPos <= screenHeight-60
-			&& !checkCollision(xPos,yPos,x,y))
-		{
-			manager.getGameObject("bunny").move(x, y);
+		if (!checkCollision(xPos,yPos,x,y) && 
+			xPos+x >= 0 && yPos+y >= 0 && 
+			xPos+x <= LEVEL_WIDTH*TILESIZE && 
+			yPos+y <= LEVEL_HEIGHT*TILESIZE)	{
+				manager.getGameObject("bunny").move(x, y);
+				if (x + xPos + mapOffset_x < 0 || 
+					x + xPos + mapOffset_x + BUNNY_WIDTH > screenWidth) 
+						moveMap(x, 0);
+				if (y + yPos + mapOffset_y < 0 || 
+					y + yPos + mapOffset_y + BUNNY_HEIGHT > screenHeight) 
+						moveMap(0, y);
 		}
-		
-		//txtView.setText("Position: " + x + " " + y);
 	}
 	
-	public boolean checkCollision(int xPos, int yPos, int xwise, int ywise) {
+	public void moveMap(float x, float y) {
+		Tablet.addMapOffset(x, y);
+		mapOffset_x -= x;
+		mapOffset_y -= y;
+	}
+	
+	public boolean checkCollision(float xPos, float yPos, float xwise, float ywise) {
+		//find out which tile we want to go to
+		if (xwise > 0) xPos += BUNNY_WIDTH;
+		if (ywise > 0) yPos += BUNNY_HEIGHT;
+		
+		int tile_x = (int)((xPos+xwise) / 100.0f);
+		int tile_y = (int)((yPos+ywise) / 100.0f);
+		
+		if (tile_x < 0 || tile_x >= LEVEL_WIDTH ||
+			tile_y < 0 || tile_y >= LEVEL_HEIGHT ||
+			levelMap[tile_x][tile_y] >= 8 || 
+			levelMap[tile_x][tile_y] == 0) return true;
 		return false;
 	}
 	
@@ -76,59 +106,64 @@ public class LevelRenderer implements Renderer {
 		for (int i = 0; i < levelMap.length; i++) {
 			for (int j = 0; j < levelMap[i].length; j++) {
 				switch (levelMap[i][j]) {
-					case 1: 
+				case 1: 
 					block = manager.getGameObject("streetHor");
 					break;
-					case 2: 
+				case 2: 
 					block = manager.getGameObject("streetVer");
 					break;
-					case 3:
+				case 3:
 					block = manager.getGameObject("intersection");
 					break;
-					case 4: 
+				case 4: 
 					block = manager.getGameObject("TintersectionTop");
 					break;
-					case 5: 
+				case 5: 
 					block = manager.getGameObject("TintersectionBottom");
 					break;
-					case 6: 
+				case 6: 
 					block = manager.getGameObject("TintersectionLeft");
 					break;
-					case 7: 
+				case 7: 
 					block = manager.getGameObject("TintersectionRight");
 					break;
-					case 8: 
+				case 8: 
 					block = manager.getGameObject("smallHousefl");
 					break;
-					case 9:
+				case 9:
 					block = manager.getGameObject("smallHousefr");
 					break;
-					case 10: 
+				case 10: 
 					block = manager.getGameObject("smallHousebl");
 					break;
-					case 11: 
+				case 11: 
 					block = manager.getGameObject("smallHousebr");
 					break;
-					case 12: 
+				case 12: 
 					block = manager.getGameObject("housefl");
 					break;
-					case 13:
+				case 13:
 					block = manager.getGameObject("housefr");
 					break;
-					case 14:
+				case 14:
 					block = manager.getGameObject("housebl");
 					break;
-					case 15:
+				case 15:
 					block = manager.getGameObject("housebr");
 					break;
-					case 16:
+				case 16:
 					block = manager.getGameObject("housecl");
 					break;
-					case 17:
+				case 17:
 					block = manager.getGameObject("housecr");
+					break;
+				default:
+					block = null;
 				}
-				block.setXY(j*100, i*100);
-				block.draw(gl);
+				if (block != null) {
+					block.setXY(j*100, i*100);
+					block.draw(gl);
+				}
 			}
 		}
 		
