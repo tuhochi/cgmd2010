@@ -1,6 +1,4 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
-import static android.opengl.GLES10.*;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
@@ -8,7 +6,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
 import android.opengl.GLES10;
 import android.opengl.GLSurfaceView;
@@ -18,6 +15,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
@@ -223,19 +221,18 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			accTime = 0;
 		}
 		
-		if(!useSensor)
-		{
-			if (!released)
-				handleOnTouchMovement(lastMotionEvent);
-			else
+		if (!released)
+			handleOnTouchMovement(lastMotionEvent);
+		else
+		{	
+			if(!useSensor)
 				mainCharMoveDir = MainChar.NO_MOVEMENT;
 		}
 		
 		fetchKeyMoveData();
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-				
-		System.out.println(gameState);
+
 		switch(gameState)
 		{
 			case INTRO:
@@ -378,7 +375,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				float x = evt.getRawX()*100.0f/screenWidth;
 				float y = topBounds-evt.getRawY()*100.0f/screenHeight;
 				
-				if(hud.testPressed(x,y))
+				if(hud.testPressed(x,y) || useSensor)
 					return;
 				
 				float charX = mainChar.getPosition().x;
