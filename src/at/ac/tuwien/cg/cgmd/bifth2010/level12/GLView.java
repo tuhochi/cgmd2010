@@ -232,6 +232,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 							p.setCollisionPointX( colpkt );
 							m.setCollisionPointX( colpkt );
 							m.setDamageAtCollisionPoint( p.getDamage() );
+							System.out.println("Setting Collision Point to "+colpkt);
 						}
 						
 					}
