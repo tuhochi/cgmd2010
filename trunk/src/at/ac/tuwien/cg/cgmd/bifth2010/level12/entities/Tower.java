@@ -95,11 +95,13 @@ public abstract class Tower extends GLObject {
 						System.out.println("Tower: "+mX+" my: "+mY);
 						mTimeLastProjectileShot = System.currentTimeMillis();
 						mFlyingProjectiles.add( mProjectiles[i] );
+						System.out.println("adding projectile #: "+i);
 						break;
 					}
 				}
 			}
 			if( mFlyingProjectiles.peek().getX() > mScreenWidth || mFlyingProjectiles.peek().getCollisionPointX() >= mFlyingProjectiles.peek().getX() ){
+				System.out.println("Removing Projectile over screen edge!!!!");
 				Projectile p = mFlyingProjectiles.poll();
 				p.reset();
 			}
