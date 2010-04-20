@@ -14,8 +14,8 @@
     <string name="l06_hello">Level06 Hello World </string>
     <string name="l07_hello">Level07 Hello World </string>
     
-	<string name="l55_HelpTitle">Heldenhelfer</string>
-	<string name="l55_HelpText">Jeder kennt die Situation: Man spielt ein Jump \'n\' Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist du gefragt! Bestücke das leergeräumte Level wieder mit Münzen, und zwar so schnell, wie möglich. Denn etwas haben Helden nicht - und das ist Geduld.</string>
+	<string name="l55_HelpTitle">Herohelper</string>
+	<string name="l55_HelpText">(English)Jeder kennt die Situation: Man spielt ein Jump \'n\' Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist du gefragt! Bestücke das leergeräumte Level wieder mit Münzen, und zwar so schnell, wie möglich. Denn etwas haben Helden nicht - und das ist Geduld.</string>
 
 
 </resources>
