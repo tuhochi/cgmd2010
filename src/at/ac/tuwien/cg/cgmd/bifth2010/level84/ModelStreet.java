@@ -7,16 +7,28 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 
+/**
+ * Model representing a "Street". Gets a HashMap full of drains that are then rendered onto the street.
+ * Since the street is the main part of the level, it can be thought of the level itself.
+ * @author Gerald, Georg
+ */
 public class ModelStreet extends Model {
 	
+	/** The street's width */
 	float width;
+	/** The street's height */
 	float height;
 	
+	/** Contains all generated drains. Key is the drain's horizontal position. */
 	HashMap<Integer, ModelDrain> drains;
 	
-	private float posX; //street position at startup
-	private float speed; //speed of street translation
-	private float posZ = -10f; //z-position of street
+	/** Horizontal position at startup */
+	private float posX;
+	/** Position along the depth-axis */
+	private float posZ = -10f;
+
+	/** Horizontal translation speed */
+	private float speed;
 	
 	/**
 	 * Creates a new street.
@@ -51,6 +63,9 @@ public class ModelStreet extends Model {
 	
 	/**
 	 * Update the model's transformations.
+	 * @param gl OpenGL ES context
+	 * @param deltaTime Time that passed between the current and the last frame
+	 * @param deviceRotation Current device's rotation in degrees.
 	 */
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
 		super.update(gl, deltaTime, deviceRotation);
@@ -58,6 +73,10 @@ public class ModelStreet extends Model {
 		posX += deltaSpeed;
 	}
 	
+	/**
+	 * Draws the street and all drains.
+	 * @param gl OpenGL ES context
+	 */
 	public void draw(GL10 gl) {
 		gl.glPushMatrix();
 		gl.glRotatef(deviceRotation, 0, 0, 1);
@@ -75,13 +94,16 @@ public class ModelStreet extends Model {
 				
 			//Draw drain.
 			drain.draw(gl);
-			
 			gl.glPopMatrix();
 		}
-		
 		gl.glPopMatrix();
 	}
 	
+	/** 
+	 * Loads the street's and the drains' textures.
+	 * @param gl OpenGL ES context
+	 * @param context Android activity context
+	 */
 	public void loadGLTexture(GL10 gl, Context context) {
 		super.loadGLTexture(gl, context);
 		

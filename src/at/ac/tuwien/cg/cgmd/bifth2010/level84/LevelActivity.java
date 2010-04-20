@@ -15,10 +15,19 @@ import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * Main part of our level. Contains all relevant objects and (level)parameters. Based on the android 
+ * Activity baseclass, it instances the OpenGL ES rendering view, the necessary RenderManager and
+ * also establishes the connection to the accelerometers. 
+ * @author Georg, Gerald
+ */
 public class LevelActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
 
+	/** The main part of the level */
 	private ModelStreet street;
+	/** Contains the different types of Gems */
 	private List<Model> gems;
+	
 	private HashMap<Integer, ModelDrain> drains;
 	
 	private ModelGem gemRound;
