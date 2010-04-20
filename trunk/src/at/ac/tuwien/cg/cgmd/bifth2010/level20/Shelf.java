@@ -52,8 +52,8 @@ public class Shelf extends RenderEntity{
 	public void update(float scroll) {
 		distMovedX += scroll;
 		
-		// Calculation of background movement. (The height is equivalent to 1 in Texture Space)
-		scrollX = distMovedX / height;
+		// Calculation of background movement (in texture coordinate system).
+		scrollX = distMovedX / width;
 						
 		Iterator<ProductEntity> itr = products.iterator();
 		while(itr.hasNext()) {		
