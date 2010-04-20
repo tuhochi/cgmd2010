@@ -2,20 +2,28 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * Model representing a "Gem". Gets texture dependent on gem type.
+ * @author Gerald, Georg
+ */
+
 public class ModelGem extends Model {
 
-	float width = 0.3f; //quadsize
-		
+	/** width of the gem **/
+	float width = 0.3f;
+	/** starting position where gem begings to fall **/
 	private final float gemStartpos = -2f; 
 	private float gemPos = gemStartpos;
+	/** fall speed of the gem **/
 	private float fallSpeed = 0.0f;
+	/** flag if gem is falling or not **/
 	private boolean isFalling = false;
 	
-	//TODO: ev. Ÿbergabe des wertes ??
-	private float streetLevel = -10f;
+	/** position of the streetlevel **/
+	private float streetLevel = -10f; 	//TODO: ev. Übergabe des wertes ??
 	
 	/**
-	 * Creates a new quad.
+	 * Creates a new gem model.
 	 */
 	public ModelGem() {
 
@@ -31,7 +39,7 @@ public class ModelGem extends Model {
 	}
 	
 	/**
-	 * Creates a new quad with an initial texture resource.
+	 * Creates a new gem model with an initial texture resource.
 	 * @param textureResource
 	 */
 	public ModelGem(int textureResource) {
@@ -40,20 +48,33 @@ public class ModelGem extends Model {
 		this.isFalling = false;
 	}
 
+	/**
+	 * reset gem position
+	 */
 	public void resetPosition() {
 		gemPos = gemStartpos;
 		fallSpeed = 0;
 	}
 	
+	/**
+	 * start fall animation
+	 */
 	public void startFall()	{
 		this.isFalling = true;
 	}
 	
+	/**
+	 * end fall animation
+	 */
 	public void endFall() {
 		this.isFalling = false;
 		resetPosition();
 	}
 	
+	/**
+	 * check collision of gem and drain
+	 * @return collision: true/false
+	 */
 	public boolean checkCollision()	{
 		if (gemPos <= streetLevel) {
 			return true;
@@ -79,6 +100,9 @@ public class ModelGem extends Model {
 		}
 	}
 	
+	/**
+	 * Draw the gem if it was chosen and is falling
+	 */
 	public void draw(GL10 gl) {
 
 		//mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);

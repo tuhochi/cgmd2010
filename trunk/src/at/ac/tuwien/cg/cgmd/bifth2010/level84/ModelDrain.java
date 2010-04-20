@@ -2,24 +2,39 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * Model representing a "Drain".
+ * @author Gerald, Georg
+  */
+
 public class ModelDrain extends Model {
 
-	/**
-	 * drain main class
-	 */
-
+	/** width of the drain **/
 	private float width = 2.0f;
+	/** texture for closed drain **/
+	private int texture_drain0 = R.drawable.l84_drain_closed;
+	/** texture for drain with round hole **/
+	private int texture_drain1 = R.drawable.l84_drain_round;
+	/** texture for drain with diamond hole **/
+	private int texture_drain2 = R.drawable.l84_drain_diamond;
+	/** texture for drain with rectangle hole **/
+	private int texture_drain3 = R.drawable.l84_drain_rect;
+	/** texture for drain with octagon hole **/
+	private int texture_drain4 = R.drawable.l84_drain_oct;
 	
-	private int texture_drain0 = R.drawable.l84_drain_closed; //drain with no holes
-	private int texture_drain1 = R.drawable.l84_drain_round; //drain for gem1
-	private int texture_drain2 = R.drawable.l84_drain_diamond; //drain for gem2
-	private int texture_drain3 = R.drawable.l84_drain_rect; //drain for gem3
-	private int texture_drain4 = R.drawable.l84_drain_oct; //drain for gem4
-	
+	/** orientation (angle) of the drain **/
 	private float orientation = 0;
 	
+	/** (horizontal) position of the drain**/
 	private float pos;
 	
+	
+	/**
+	 * creates a new drain 
+	 * @param drainstyle style of the drain (closed, hole type, ...)
+	 * @param pos (horizontal) position 
+	 * @param orientation 
+	 */
 	public ModelDrain(int drainstyle, float pos, float orientation)
 	{
 		this.setTexture(drainstyle);
@@ -38,7 +53,8 @@ public class ModelDrain extends Model {
 	}
 	
 	/**
-	 * @param drainstyle set the texture for the different drain shapes
+	 * set the drain texture
+	 * @param drainstyle texture is set dependent on the drain shape
 	 */
 	public void setTexture(int drainstyle)
 	{
@@ -53,23 +69,30 @@ public class ModelDrain extends Model {
 	}
 	
 	/**
-	 * @param angle set the angle of the drain (hole)
+	 * set the orientation of the drain
+	 * @param angle drain orientation
 	 */
 	public void setOrientationAngle(float angle) {
 		this.orientation = angle;
 	}
 	
+	/**
+	 * @return orientation of the drain
+	 */
 	public float getOrientationAngle() {
 		return this.orientation;
 	}	
 	
-	/**
-	 * @param xOffset position of the drain on the street
+	/** set position of the drain
+	 * @param pos (horizontal) position
 	 */
 	public void setPosition(float pos) {
 		this.pos = pos;
 	}
 	
+	/**
+	 * @return (horizontal) position
+	 */
 	public float getPosition() {
 		return this.pos;
 	}
