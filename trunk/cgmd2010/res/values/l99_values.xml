@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-<string name="l99_title">Challenge the time</string>
-<string name="l99_goal">Goal: try to keep the gold powder as long as you can!</string>
-<string name="l99_version">v 0.1</string>
-<color name="l99_black">#000</color>
-
-
-</resources>
