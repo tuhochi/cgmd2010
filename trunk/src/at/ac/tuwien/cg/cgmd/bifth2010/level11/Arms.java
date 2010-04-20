@@ -20,6 +20,11 @@ public class Arms {
 	float angle;
 	float arm_position;
 	
+	/**
+	 * arm constructor
+	 * @param gl
+	 * @param context
+	 */
 	public Arms(GL10 gl, Context context) {
 		//Log.i(LOG_TAG, "Arms()");
 		
@@ -35,12 +40,23 @@ public class Arms {
 		
 	}
 	
+	/**
+	 * sets color of arms
+	 * @param c
+	 * @param sc
+	 */
 	public void setColor(Color c, Color sc) {
 		color_arm = c;
 		color_skin = sc;
 		
 	}
 	
+	/**
+	 * update arm position and rotation
+	 * @param pos
+	 * @param angle
+	 * @param arm_pos
+	 */
 	public void update(Vector2 pos, float angle, float arm_pos) {
 		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
@@ -49,11 +65,15 @@ public class Arms {
 	
 	}
 	
+	/**
+	 * draws arms
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		//Log.i(LOG_TAG, "draw()");
 		
 
-gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
+			gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
 		
 		
 		Textures.tex.setTexture(arm_texture_id);
