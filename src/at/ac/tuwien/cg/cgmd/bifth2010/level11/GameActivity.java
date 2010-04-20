@@ -158,9 +158,10 @@ public class GameActivity extends Activity {
 	public void setTextTreasureGrabbed(float f) {
 		_textTreasureLeft.setText(Float.toString(f));
 		
+		_result+=f;
 		if (_result >= 100)
 		{
-			finish();
+			_result = 100;
 		}
 	}
 
@@ -169,6 +170,6 @@ public class GameActivity extends Activity {
 	 * @param f
 	 */
 	public void setResult(float f) {
-		_result = (int)f;
+		//_result = (int)f;
 	}
 }
