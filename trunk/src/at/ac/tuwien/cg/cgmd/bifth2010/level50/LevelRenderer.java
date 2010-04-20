@@ -18,8 +18,6 @@ public class LevelRenderer implements Renderer {
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		
-		
-		
 		b.draw(gl);
 		bunny.draw(gl);
 		
@@ -49,18 +47,17 @@ public class LevelRenderer implements Renderer {
 		
 		level = new LevelCollision(context, R.drawable.l50_level01_coll);
 		
-		bunny = new LevelObject(gl, context, level, 0, 0, 50, 50, R.drawable.l50_rabbit_small);
-		b = new LevelObject(gl, context, level, 0, 0, 200, 200, R.drawable.l50_level01_coll);
+		bunny = new LevelObject(gl, context, level, 0, 0, 20, 20, R.drawable.l50_rabbit_small);
+		b = new LevelObject(gl, context, level, 0, 0, 41*20, 18*20, R.drawable.l50_level01_coll);
 
 	}
 	
-	void movePlayer(float x, float y) {
-		bunny.move(x,y);
-	}
+	public void movePlayer(float x, float y) {bunny.move(x,y);}
+	public void movePlayer(int direction, float amount) {bunny.move(direction,amount);}
+	public void setPosition(float x, float y) {bunny.setPosition(x, y);}
+	public float getPositionX() {return bunny.getPositionX();}
+	public float getPositionY() {return bunny.getPositionY();}
 	
-	void movePlayer(int direction, float amount) {
-		bunny.move(direction,amount);
-	}
 	
 	LevelCollision level;
 	LevelObject bunny, a, b;
