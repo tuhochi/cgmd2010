@@ -59,6 +59,14 @@ public class GlTexture {
 	
 	
 	/**
+	 * Unbind texture.
+	 */
+	public void unbind() {
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+	
+	
+	/**
 	 * Return texture width.
 	 * @return width of the texture
 	 */
@@ -89,7 +97,7 @@ public class GlTexture {
 			InputStream is    = ctx.getResources().openRawResource(resid);
 			Bitmap      bmp   = BitmapFactory.decodeStream(is);
 			is.close();
-			
+
 			texId = new int[1];
 			glGenTextures(1, texId, 0);
 			glBindTexture(GL_TEXTURE_2D, texId[0]);
