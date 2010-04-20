@@ -1,19 +1,18 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import java.util.List;
-import java.util.ListIterator;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.util.Log;
 
 public class ModelStreet extends Model {
 	
 	float width;
 	float height;
 	
-	List<ModelDrain> drains;
+	HashMap<Integer, ModelDrain> drains;
 	
 	private float posX; //street position at startup
 	private float speed; //speed of street translation
@@ -28,7 +27,7 @@ public class ModelStreet extends Model {
 	 * @param textureResource The street's texture
 	 * @param drains List containing all drains
 	 */
-	public ModelStreet(float width, float height, float posX, float speed, int textureResource, List<ModelDrain> drains) {
+	public ModelStreet(float width, float height, float posX, float speed, int textureResource, HashMap<Integer, ModelDrain> drains) {
 		this.width = width;
 		this.height = height;
 		this.posX = posX;
@@ -63,17 +62,20 @@ public class ModelStreet extends Model {
 		gl.glPushMatrix();
 		gl.glRotatef(deviceRotation, 0, 0, 1);
 		gl.glTranslatef(posX, 0, posZ);
-		gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 		
+		//Draw street.
 		super.draw(gl);
-		
-		ListIterator<ModelDrain> i = drains.listIterator();
+
+		Iterator<ModelDrain> i = drains.values().iterator();
 		while(i.hasNext()) {
 			ModelDrain drain = i.next();
 		
 			gl.glPushMatrix();
 			gl.glTranslatef(drain.getPosition(), 0, 0);
+				
+			//Draw drain.
 			drain.draw(gl);
+			
 			gl.glPopMatrix();
 		}
 		
@@ -83,7 +85,7 @@ public class ModelStreet extends Model {
 	public void loadGLTexture(GL10 gl, Context context) {
 		super.loadGLTexture(gl, context);
 		
-		ListIterator<ModelDrain> i = drains.listIterator();
+		Iterator<ModelDrain> i = drains.values().iterator();
 		while(i.hasNext())
 			i.next().loadGLTexture(gl, context);
 	}

@@ -20,10 +20,11 @@ public class ModelDrain extends Model {
 	
 	private float pos;
 	
-	public ModelDrain(int drainstyle, float pos)
+	public ModelDrain(int drainstyle, float pos, float orientation)
 	{
 		this.setTexture(drainstyle);
 		this.setPosition(pos);
+		this.orientation = orientation;
 		
 		//Adjust the width of Model's quad.
 		vertices[0] = vertices[6] = -width/2.0f;
@@ -54,26 +55,22 @@ public class ModelDrain extends Model {
 	/**
 	 * @param angle set the angle of the drain (hole)
 	 */
-	public void setOrientationAngle(float angle)
-	{
+	public void setOrientationAngle(float angle) {
 		this.orientation = angle;
 	}
 	
-	public float getOrientationAngle()
-	{
+	public float getOrientationAngle() {
 		return this.orientation;
 	}	
 	
 	/**
 	 * @param xOffset position of the drain on the street
 	 */
-	public void setPosition(float pos)
-	{
+	public void setPosition(float pos) {
 		this.pos = pos;
 	}
 	
-	public float getPosition()
-	{
+	public float getPosition() {
 		return this.pos;
 	}
 }
