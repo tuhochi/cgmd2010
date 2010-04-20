@@ -16,6 +16,10 @@ public class BurnTimer extends TimingTask
 	public float remainingTime = Settings.BURN_BOOST_TIME;
 	private int audioPlayerId;
 	
+	/**
+	 * Default Constructor
+	 * @param audioPlayerId the id of the MediaPlayer which will be stopped by the timer
+	 */
 	public BurnTimer(int audioPlayerId)
 	{
 		this.audioPlayerId = audioPlayerId;
@@ -33,6 +37,9 @@ public class BurnTimer extends TimingTask
 		SoundManager.instance.pausePlayer(audioPlayerId);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimingTask#update(float)
+	 */
 	@Override
 	public void update(float dt) {
 		remainingTime -= dt;

@@ -14,9 +14,12 @@ public class TimeUtil {
 	/** The instance of TimeUtil to pass around. */
 	public static TimeUtil instance = new TimeUtil();;
 	
+	/**
+	 * Indicates if the TimeUtil was restored from Bundle
+	 */
 	private boolean wasRestored=false;
 	
-	/** The dt. */
+	/** The Time between to frames */
 	private float dt;
 	
 	/** The accumulated frame time. */
@@ -52,11 +55,19 @@ public class TimeUtil {
 		return instance;
 	}
 	
+	/**
+	 * Writing to Bundle 
+	 * @param bundle Bundle to write to
+	 */
 	public void writeToBundle(Bundle bundle) 
 	{
 		bundle.putSerializable("timers", scheduledTimers);
 	}
 	
+	/**
+	 * Reading from Bundle 
+	 * @param bundle Bundle to read from
+	 */
 	@SuppressWarnings("unchecked")
 	public void readFromBundle(Bundle bundle) 
 	{
@@ -187,11 +198,17 @@ public class TimeUtil {
 		}
 	}
 	
+	/**
+	 * Resets the TimeUtil
+	 */
 	public void reset()
 	{
 		lastFrameTime = 0;
 	}
 	
+	/**
+	 * Resets the Timers holden by the TimeUtil
+	 */
 	public void resetTimers()
 	{
 		if(!wasRestored)

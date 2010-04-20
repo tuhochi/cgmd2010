@@ -112,8 +112,7 @@ public class TextureManager {
 			texId = -1;
 		
 		textureMap.put(resId, texId);
-	
-}
+	}
 	
 	/**
 	 * Gets the texture id.
@@ -127,6 +126,5 @@ public class TextureManager {
 			loadTexture(res, resId);
 		
 		return textureMap.get(resId);
-	
 	}
 }

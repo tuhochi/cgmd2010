@@ -48,6 +48,9 @@ public class Hud
 		instance=this;
 	}
 	
+	/**
+	 * Initializes the HUD
+	 */
 	private void init()
 	{
 		float topBounds = RenderView.instance.getTopBounds();
@@ -59,11 +62,19 @@ public class Hud
 		timeUtil = TimeUtil.instance;
 	}
 	
+	/**
+	 * Reading from stream
+	 * @param dis Stream to read from
+	 */
 	public void readFromStream(DataInputStream dis) throws IOException
 	{
 		moneyButton.setActive(dis.readBoolean());
 	}
 	
+	/**
+	 * Writing to stream 
+	 * @param dos Stream to write to
+	 */
 	public void writeFromStream(DataOutputStream dos) throws IOException
 	{
 		dos.writeBoolean(moneyButton.isActive());
@@ -121,12 +132,19 @@ public class Hud
 		moneyButton.render();
 	}
 	
+	
+	/**
+	 * Loads the vertex buffers for buttons
+	 */
 	public void preprocess()
 	{
 		moneyButton.preprocess();
 		goldButton.preprocess();
 	}
 	
+	/**
+	 * Resets the HUD
+	 */
 	public void reset()
 	{
 		if(!wasRestored)
