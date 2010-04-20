@@ -24,23 +24,32 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     private Cube mCube;
     private Plane mPlane;
     private Point mPoint;
+    private Symbol mSymbol;
     private float mAngle;
     private TextureManager tm;
     private InputStream is;
 	private Context context;
 	private int texId;
+	private int texId2;
 	private GL10 gl;
 	private Camera cam;
+	private int randNumber;
 	
-    public GameRenderer(boolean useTranslucentBackground, Context context) {
+    public GameRenderer(boolean useTranslucentBackground, Context context, int initRandNumber) {
         this.mTranslucentBackground = useTranslucentBackground;
         this.context = context;
+        this.randNumber = initRandNumber;
         //this.cam = new Camera();
        	//this.cam.lookAt(0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
         //is = this.context.getResources().openRawResource(R.drawable.l36_los);
     }
-
+    
+    public void setRandNumber(int randNumber) {
+    	this.randNumber = randNumber;
+    	mSymbol.getNumber(randNumber);
+    }
+    
     public void onDrawFrame(GL10 gl) {
         /*
          * Usually, the first thing one might want to do is to clear
@@ -48,9 +57,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
          * glClear().
          */
     	//System.out.println(gl.getClass());
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glBindTexture(GL_TEXTURE_2D, this.texId);  
-       
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);       
         /*
          * Now we're ready to draw some 3D objects
          */
@@ -71,7 +78,12 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
            
+        glBindTexture(GL_TEXTURE_2D, this.texId);
         mPlane.draw(gl);
+        mPoint.draw(gl);
+        glBindTexture(GL_TEXTURE_2D, this.texId2);
+        mSymbol.getNumber(randNumber);
+        mSymbol.draw(gl);
         
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -79,7 +91,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         
         glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
         
-        mPoint.draw(gl);
+        
+        
+        
         //mCube.draw(gl);
 
 //        gl.glRotatef(mAngle*2.0f, 0, 1, 1);
@@ -127,6 +141,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         this.mCube = new Cube();
         this.mPlane = new Plane();
+        this.mSymbol = new Symbol();
         this.mPoint = new Point(gl);
         /*
          * By default, OpenGL enables features that improve quality
@@ -199,6 +214,55 @@ public class GameRenderer implements GLSurfaceView.Renderer {
          //GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
    	
          bitmap.recycle();
+    
+         
+         //2nd texture
+        is = this.context.getResources().openRawResource(R.drawable.l36_font);
+  		bitmap = null;
+  		try
+  		{
+  			bitmap = BitmapFactory.decodeStream(is);
+  		}
+  		catch(Throwable t)
+  		{
+  			//Log.e("TextureLoader::loadTexture", "Could not load Texture.");
+  			bitmap = null;
+  		}
+  		finally
+  		{
+  			//Always clear and close
+  			try
+  			{
+  				is.close();
+  				is = null;
+  			}
+  			catch (IOException e)
+  			{
+  			}
+  		}
+  		
+  		//bitmap = Bitmap.createScaledBitmap(bitmap, 1024, 1024, true);
+  		bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false);
+  		
+  		width = bitmap.getWidth();
+  		height = bitmap.getHeight();
+  		System.err.println("Loaded texture: " + width + "x" + height);
+
+  		int[] textures2 = new int[1];
+ 		glGenTextures(1, textures2, 0);
+ 		this.texId2 = textures2[0];
+ 		glBindTexture(GL_TEXTURE_2D, this.texId2);
+ 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+ 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+ 		glTexParameterf(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+ 		texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
+
+          //gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
+          //GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+    	
+          bitmap.recycle();
+          
+         
     }
     
     public Point getPoint() {
