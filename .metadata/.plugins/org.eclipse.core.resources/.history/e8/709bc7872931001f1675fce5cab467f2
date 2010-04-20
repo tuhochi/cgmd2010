@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+<string name="l50_GameName">Von hinten nach vorne</string>
+
+
+<string name="l50_HelpActivity1">Sei aufmerksam und schau dir das Introvideo genau an. Du wirst merken, dass das Geld nur so auf der Straße liegt.</string>
+
+
+
+
+
+
+<string name="l50_HelpActivity2">Nachdem du nun deine Umgebung sorgfältig beobachtet hast, dürfte es kein Problem sein die Münzen an ihren ursprünglichen Platz zu schaffen. Aber sei achtsam - nicht alles funktioniert von VORNherein.</string>
+<string name="l50_HelpActivity3">Wenn du an deine Grenzen stösst, versuche durch Umwege ans Ziel zu kommen. Manchmal ist rückwärts halt nicht einfach nur vorwärts rückwärts.</string>
+</resources>

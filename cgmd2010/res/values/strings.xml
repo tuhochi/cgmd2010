@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="l00_help_part03">The placement of the levels is randomly chosen when you start a game. Here is a list of all possible levels. To see the help for a individual level click on its icon!</string>
+    <string name="l00_help_part02">To loose part of your treasure play the level of your choice by pressing its icon. Levels that are marked with a questionmark cannot be played yet. </string>
+    <string name="l00_help_part01">Choose one of the menu items to continoue the last game, to start a new game, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to loose your treasure.</string>
+    
+    <string name="l00_nameofthegame_full">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
+    
+    <string name="l00_nameofthegame_middle">The Big Incredible and Funny Treasure Hunt</string><string name="l00_nameofthegame_short">BIFTH</string><string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string><string name="l01_hello">Level01 Hello World </string>
+    <string name="l02_hello">Level02 Hello World </string>
+    <string name="l03_hello">Level03 Hello World </string>
+    <string name="l04_hello">Level04 Hello World </string>
+    <string name="l05_hello">Level05 Hello World </string>
+    <string name="l06_hello">Level06 Hello World </string>
+    <string name="l07_hello">Level07 Hello World </string>
+    
+	<string name="l55_HelpTitle">Heldenhelfer</string>
+	<string name="l55_HelpText">Jeder kennt die Situation: Man spielt ein Jump \'n\' Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist du gefragt! Bestücke das leergeräumte Level wieder mit Münzen, und zwar so schnell, wie möglich. Denn etwas haben Helden nicht - und das ist Geduld.</string>
+
+
+</resources>

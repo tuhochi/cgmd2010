@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" android:background="@drawable/l22_helpbg">
+
+
+
+
+
+
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content"><TableLayout android:id="@+id/TableLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="left" android:layout_marginLeft="5px"><TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/L22HelpTitle" android:layout_gravity="center" android:textSize="10pt" android:textColor="@color/l22_help_textcolor"></TextView>
+</TableRow>
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10px"><TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/L22HelpPart1" android:textColor="@color/l22_help_textcolor"></TextView>
+</TableRow>
+
+<TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10px"><TextView android:id="@+id/TextView03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/L22HelpPart2" android:textColor="@color/l22_help_textcolor"></TextView></TableRow>
+<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10px"><TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/L22HelpPart3" android:textColor="@color/l22_help_textcolor"></TextView>
+
+
+</TableRow><TableRow android:id="@+id/TableRow05" android:layout_width="wrap_content" android:layout_height="wrap_content"><TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="10px" android:text="@string/L22HelpPart4" android:textColor="@color/l22_help_textcolor"></TextView>
+</TableRow>
+
+
+</TableLayout></ScrollView>
+</LinearLayout>

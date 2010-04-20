@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<dimen name="l30_HelpActivity_TitleSize">30dip</dimen>
+<dimen name="l30_HelpActivity_TitlePaddingLeft">6dip</dimen>
+<dimen name="l30_HelpActivity_TitlePaddingTop">6dip</dimen>
+<dimen name="l30_HelpActivity_TitlePaddingRight">6dip</dimen>
+<dimen name="l30_HelpActivity_TitlePaddingBottom">0dip</dimen>
+<dimen name="l30_HelpActivity_TextSize">15dip</dimen>
+<dimen name="l30_HelpActivity_TextPaddingLeft">6dip</dimen>
+<dimen name="l30_HelpActivity_TextPaddingTop">6dip</dimen>
+<dimen name="l30_HelpActivity_TextPaddingRight">6dip</dimen>
+<dimen name="l30_HelpActivity_TextPaddingBottom">0dip</dimen>
+<dimen name="l30_HelpActivity_BottomPadding">6dip</dimen>
+<color name="l30_HelpActivityTextColor">#000000</color>
+<string name="l30_nameofthegame_full">Stockmarket Loser</string>
+<string name="l30_HelpActivity_Title">Stockmarket Loser</string>
+<string name="l30_HelpActivity_Text1">What's the quickest way to lose money? Right, invest it in the stock market! Your goal is to lose a lot of money by buying and selling company shares.</string>
+<string name="l30_HelpActivity_Text2">Multiple graphs of stock prices fly towards you in glorious 3D. In contrast to reality you can see a little bit in the future how the market price develops. Buy and sell shares by hitting the buttons. Try to buy when the market price is high, and sell when the price is low.</string>
+
+</resources>
