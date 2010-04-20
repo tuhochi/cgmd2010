@@ -55,9 +55,9 @@ public class RenderEntity extends GameEntity implements Renderable {
 		
 		float ratio = width / height;		
 		float texCoords[] = {0.0f,  1.0f,
-							 ratio, 1.0f,
+							 1.0f, 1.0f,
 							 0.0f,  0.0f,
-							 ratio, 0.0f};
+							 1.0f, 0.0f};
 		
 		byteBuf = ByteBuffer.allocateDirect(texCoords.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());

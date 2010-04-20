@@ -10,12 +10,19 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.R.layout;
 
 
 /**
@@ -26,16 +33,25 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class GameManager implements Renderable, EventListener {
 
-	static final int BUNNY_TEXTURE = R.drawable.l20_icon;
+	/** Log Identifier*/
+	private static final String TAG = "BunnyShop";
+	
+	// Textures.
+	static final int TEXTURE_BUNNY = R.drawable.l20_icon;
+	static final int TEXTURE_SHELF = R.drawable.l20_backg;
+	static final int TEXTURE_CART = R.drawable.l20_shopping_cart;
+	static final int[] TEXTURE_PRODUCTS = new int[]{R.drawable.l20_broccoli,
+										 R.drawable.l20_lollipop,
+										 R.drawable.l20_drink };
+	// Entities.
 	static final int BUNNY_ENTITY = 0;
+	static final int CART_ENTITY = 1;
 	
-	public Activity activity;
+	protected static Activity activity;
 	public RenderView renderView;
-	// NOTE: We can't store gl, because it surely becomes invalid. 
-//	public GL10 gl;
-	
+
 	// The texture collection. (The ids increase themselves)
-	protected Hashtable<Integer, Integer> textures;
+	protected static Hashtable<Integer, Integer> textures;
 	
 	// The entity collection
 	protected Hashtable<Integer, ProductEntity> entities;
@@ -50,19 +66,11 @@ public class GameManager implements Renderable, EventListener {
 	// TODO: Better name
 	public float scrollSpeed;
 	
-	// The global distance traveled so far
-	// TODO: Better name
-	public float distMovedX; 
+	protected int totalMoney;
+	protected ShoppingCart shoppingCart;
 	
-	// The Y position where products move over the screen.
-	// TODO: Better name
-	public float[] productSpawnY;
-	
-	// This value counts the number of columns, where products were spawned.  
-	// TODO: Better name
-	public int productSpawnColumns;
-
-	
+	/** The TextView to show the money count */
+	private TextView moneyText;
 
 	
 	/**
@@ -73,7 +81,6 @@ public class GameManager implements Renderable, EventListener {
 		
 		this.activity = (Activity)renderView.getContext();
 		this.renderView = renderView;
-//		this.gl = gl;
 		
 		textures = new Hashtable<Integer, Integer>();
 		entities = new Hashtable<Integer, ProductEntity>();
@@ -82,14 +89,7 @@ public class GameManager implements Renderable, EventListener {
 		EventManager.getInstance().addListener(this);
 		
 		scrollSpeed = 100f * 0.001f; // Pixel per second
-		distMovedX = 0;
-		
-		
-		float spawnY = renderView.getHeight() / 5f;		
-		productSpawnY = new float[]{spawnY, spawnY * 2, spawnY * 3, spawnY * 4};
-		
-		productSpawnColumns = 0;
-		
+		totalMoney = 100;
 		createEntities(gl);
 	}
 	
@@ -97,32 +97,36 @@ public class GameManager implements Renderable, EventListener {
 	/**
 	 * 
 	 */
-	public void createEntities(GL10 gl) {
-		
+	public void createEntities(GL10 gl) {		
+		// Create background shelf.
 		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
-		shelf.texture = getTexture(R.drawable.l17_crate, gl);
+		shelf.texture = getTexture(TEXTURE_SHELF, gl);			
+
+		getTexture(TEXTURE_BUNNY, gl);		
+
+		for (int i = 0; i < TEXTURE_PRODUCTS.length; i++) {
+			getTexture(TEXTURE_PRODUCTS[i], gl);
+		}	
+		
+		// Create shopping cart.
+		shoppingCart = new ShoppingCart(120.f, 60.f, 100.f, 200.f, 110.f);
+		shoppingCart.texture = getTexture(TEXTURE_CART, gl);		
+		shoppingCart.id = CART_ENTITY;
+		
+		Activity activity = (Activity)renderView.getContext();
+		// Create text view for display of money count.
+		moneyText = new TextView(activity);
+		
+		moneyText.setBackgroundColor(0);
+		moneyText.setTextColor(255);
+		moneyText.setText("Money: 100$");
+		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.height = LayoutParams.WRAP_CONTENT;
+		params.width = LayoutParams.WRAP_CONTENT;
+		moneyText.setLayoutParams(params);
+		moneyText.bringToFront();
+		moneyText.setGravity(Gravity.CENTER);		
 				
-		int start = R.drawable.l88_stash_blue;
-		int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
-		
-		// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
-		float productSize = 100 * renderView.getHeight() / 480f;
-		
-		for (int i = 0; i < 10; i++) {
-			
-			int spawnSlot = (int)(Math.random() * 3) + 1;			
-			ProductEntity pe = new ProductEntity(	(float)Math.random() * (renderView.getWidth() - 100) + 50, productSpawnY[spawnSlot], 1, productSize);
-			
-			pe.texture = getTexture(start + (i % range), gl);
-			pe.angle = (float)Math.random() * 360;			
-			
-			// Put it into the HashTable. The id gets assigned internally. 
-			entities.put(pe.id, pe);
-		}
-		
-		
-//		bunny.setId(BUNNY_ENTITY);
-//		bunny.setTextureId(textures.get(BUNNY_TEXTURE));
 	}
 
 
@@ -133,73 +137,15 @@ public class GameManager implements Renderable, EventListener {
 	public void update(float dt) {
 		
 		// Difference in x since last frame 
-		float dx = scrollSpeed * dt;
-		distMovedX += dx;
-		
-		// Calculation of background movement. (The height is equivalent to 1 in Texture Space)
-		shelf.scrollX = distMovedX / renderView.getHeight();
-		
-		
+		shelf.update(scrollSpeed * dt);
+
 		
 		// Update all Animators
 		Enumeration<Integer> keys = animators.keys();		
 		while(keys.hasMoreElements()) {
 			animators.get(keys.nextElement()).update(dt);
-		}
-		
-		
-		
-		
-		// Now move all products on the shelf in the same speed
-		keys = entities.keys();
-		ProductEntity pe = null;
-		
-		while(keys.hasMoreElements()) {
-			pe = entities.get(keys.nextElement());
-			
-			if (!pe.clickable)
-				continue;
-			
-			pe.x -= dx;
-			
-			// If they are out of the screen remove them
-			if (pe.x < -pe.width) {
-				
-				entities.remove(pe.id);
-				
-//				pe.x = renderView.getWidth() + (float)Math.random() * 300 + 50;
-//				
-//				// Spawn in the upper 3 slots
-//				int spawnSlot = (int)(Math.random() * 3) + 1;
-//				pe.y = productSpawnY[spawnSlot];
-			}
-		}
-		
-		// At last, add some new products every few pixels
-		// Everytime there's a new column, spawn a new set of products. Needs to be an integer division		
-		if ((int)distMovedX / 150 > productSpawnColumns) {
-			productSpawnColumns++;
-			
-			// This varies due to changes in scroll speed
-			float d = distMovedX % 150;
-			
-			// Spawn outside the screen and subtract the amount of d already passed 
-			float x = renderView.getWidth() + 75 - d;
-			float y = productSpawnY[(int)(Math.random() * 3) + 1];
-			
-			// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
-			float productSize = 100 * renderView.getHeight() / 480f;
-			
-			int start = R.drawable.l88_stash_blue;
-			int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;
-			
-			pe = new ProductEntity(x, y, 1, productSize);
-			
-			pe.texture = getTexture(start + (int)(Math.random() * range));
-			pe.angle = (float)Math.random() * 360;			
-			
-			entities.put(pe.id, pe);
-		}
+		}				
+
 		
 	}
 
@@ -208,12 +154,13 @@ public class GameManager implements Renderable, EventListener {
 	public void render(GL10 gl) {
 		
 		shelf.render(gl);
+		shoppingCart.render(gl);
 		
-		// Render entities.		
-		Enumeration<Integer> keys = entities.keys();
-		while(keys.hasMoreElements()) {
-			entities.get(keys.nextElement()).render(gl);
-		}
+//		// Render entities.		
+//		Enumeration<Integer> keys = entities.keys();
+//		while(keys.hasMoreElements()) {
+//			entities.get(keys.nextElement()).render(gl);
+//		}
 	}
 	
 	
@@ -227,50 +174,9 @@ public class GameManager implements Renderable, EventListener {
 	 */
 	public void onTouch(float x, float y) {
 		
-		
-		Enumeration<Integer> keys = entities.keys();
-		ProductEntity pe = null;
-		
-		while(keys.hasMoreElements()) {
-			
-			pe = entities.get(keys.nextElement());
-			
-			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
-				
-				pe.clickable = false;
-				// Move it to the basket
-				Animator a = new Animator(pe, 100, 100, 30);
-				animators.put(a.id, a);
-				
-				
-//				
-//				pe.x = renderView.getWidth() + (float)Math.random() * 500 + 50;
-////				pe.y = (float)Math.random() * (renderView.getHeight() - 100) + 50;
-//				
-//				// Spawn in the upper 3 slots
-//				int spawnSlot = (int)(Math.random() * 3) + 1;
-//				pe.y = productSpawnY[spawnSlot];
-//				
-//				// Change speed depending on the product color. Not now :P
-////				scrollSpeed -= 0.001; // 20 pixel per second
-//				
-//				// Create a new product
-//				int start = R.drawable.l88_stash_blue;
-//				int range = R.drawable.l88_stash_yellow - R.drawable.l88_stash_blue + 1;				
-//				int texChoose = (int)(Math.random() * range) + start;
-//				
-//				pe.texture = getTexture(texChoose); // HACK HACK!! If the texture isn't available yet, the texture id will be 0!!
-//				
-//				
-				
-				
-				break;
-			}
-		}
+		shelf.hitTest(x, y);
 		
 	}
-	
-	
 	
 
 
@@ -279,14 +185,32 @@ public class GameManager implements Renderable, EventListener {
 		
 		switch (eventId) {
 		case EventManager.ANIMATION_COMPLETE:
-			
+		{
 			// Remove the Animator from the HashTable, effectively destroying it.
 			// NOTE: Does this have to happen at a fixed point in time in the update loop?
 			Animator a = (Animator)eventData;			
 			animators.remove(a.id);
-			
-			break;
-
+			Log.d(TAG, "Animator removed: "+ a.id +".");
+		}	
+		break;
+		
+		case EventManager.PRODUCT_COLLECTED:
+		{
+			if (null != eventData) {
+				ProductEntity pe = (ProductEntity)eventData;
+				totalMoney -= pe.price;
+				moneyText.setText("Money:" + totalMoney + "$");
+				
+				// Move it to the basket.
+				float[] pos = shoppingCart.getNextProductPosition();
+				Animator a = new Animator(pe, pos[0], pos[1], 30);
+				animators.put(a.id, a);				
+				shoppingCart.addProduct(pe);
+				Log.d(TAG, "Product collected: "+ pos[0] + "/" + pos[1] + ".");
+			}			
+		}
+		break;
+		
 		default:
 			break;
 		}
@@ -302,7 +226,7 @@ public class GameManager implements Renderable, EventListener {
 	 * @param gl Pass a valid GL here, or the texture id will always be 0. 
 	 * @returns The texture id of the file.
 	 */
-	public int getTexture(int resource, GL10 gl) {
+	public static int getTexture(int resource, GL10 gl) {
 		
 		// Try to find the texture
 		Integer t = textures.get(resource);
@@ -363,7 +287,8 @@ public class GameManager implements Renderable, EventListener {
 	 * @param resource The resource identifier delivered by "at.ac.tuwien.cg.cgmd.bifth2010.R".
 	 * @returns The texture id of the file.
 	 */
-	public int getTexture(int resource) {
+	public static int getTexture(int resource) {
 		return getTexture(resource, null);
 	}
+
 }
