@@ -1,3 +1,0 @@
-INDEX VERSION 1.126+C:\Users\Alexander\Dokumente\UNI\SS 2010\CGMD\CGMD-sharedFolder\.metadata\.plugins\org.eclipse.jdt.core
-604986450.index
-3728031751.index
