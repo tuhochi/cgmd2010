@@ -15,13 +15,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  */
 public class Police {
 	private Game game;
-	public int currentPosX;
-	public int currentPosY;
+	public int currentPosX, currentPosY, prevPosX, prevPosY;
+	public float transition, transitionTime;
+	public boolean stopTransition;
 	public float translateX, translateY;
 	private Quad policeQuad;
 	private boolean wasStuckLastFrame;
-
-	public float waitingTime, maxWaitingTime;
 
 	/**
 	 * Moving possibilities of the police
@@ -42,12 +41,19 @@ public class Police {
 	 */
 	public Police(Game _game, int x, int y) {
 		game = _game;
-		setPosition(x, y);
 
+		prevPosX = x;
+		prevPosY = y;
+		currentPosX = x;
+		currentPosY = y;
+		
 		moveStatus = MOVE_LEFT;
-		maxWaitingTime = 0.75f;
-		waitingTime = 0;
+		transitionTime = 0.75f;
+		transition = 0;
+		stopTransition=false;
 		wasStuckLastFrame=false;
+
+		updateTranslation();
 		
 		float norm;
         Vector2 groundYDir = new Vector2(-229, -169);
@@ -117,7 +123,8 @@ public class Police {
 		if( bx < currentPosX ) return MOVE_LEFT;
 		else if( bx > currentPosX ) return MOVE_RIGHT;
 		else if( by < currentPosY ) return MOVE_DOWN;
-		else /*if( by > currentPosY )*/ return MOVE_UP;
+		else if( by > currentPosY ) return MOVE_UP;
+		return STANDING;
 	}
 	
 	/**
@@ -125,114 +132,133 @@ public class Police {
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
-		waitingTime += elapsedSeconds;
-		if( waitingTime < maxWaitingTime ) return;
-		waitingTime -= maxWaitingTime;
-		
-		/*
-		 * If the bunny and the police are at the same place: bunny cought!
-		 */
-		if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
-			game.policeCatchesBunny();
-			return;
-		}
-
-		int mx=0, my=0;
-		/*
-		 * Search if bunny is visible
-		 */
-		int newMoveDir = getBunnyDir();
-		
-		/*
-		 * If bunny is not visible
-		 */
-		if( newMoveDir==STANDING ) {
-			ArrayList<Integer> dirs = new ArrayList<Integer>();
-			/*
-			 * If the current position the police is standing at is a blind end (or the police was stuck
-			 * couldn't move in the last frame), find all possible ways the police could move to 
-			 */
-			if( game.map.cells[currentPosX][currentPosY].numStreetNeighboursPolice==1 || wasStuckLastFrame )
-			{
-				if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice )
-					dirs.add(MOVE_RIGHT);
-				if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice )
-					dirs.add(MOVE_LEFT);
-				if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice )
-					dirs.add(MOVE_UP);
-				if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice )
-					dirs.add(MOVE_DOWN);
-			}
-			/*
-			 * If the police isn't at a blind end, search for all possible move directions, except the one
-			 * the police came from
-			 */
-			else {
-				if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice && moveStatus!=MOVE_LEFT )
-					dirs.add(MOVE_RIGHT);
-				if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice && moveStatus!=MOVE_RIGHT )
-					dirs.add(MOVE_LEFT);
-				if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice && moveStatus!=MOVE_DOWN )
-					dirs.add(MOVE_UP);
-				if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice && moveStatus!=MOVE_UP )
-					dirs.add(MOVE_DOWN);
-			}
-
-			/*
-			 * Select a random direction from the collected directions.
-			 * All of this directions are valid (so the next field is a street for the police).
-			 */
-			if( dirs.size()==1 ) {
-				newMoveDir = dirs.get(0);
-			}
-			else {
-				Random r = new Random();
-				newMoveDir = dirs.get(r.nextInt(dirs.size()));
-			}
-		}
-		moveStatus = newMoveDir;
-
-		/*
-		 * If the police isn't standing
-		 */
-		if( newMoveDir!=STANDING ) {
-			/*
-			 * Calculate shift relativ to the current position
-			 */
-			if( newMoveDir==MOVE_LEFT ) mx=-1;
-			else if( newMoveDir==MOVE_RIGHT ) mx=1;
-			else if( newMoveDir==MOVE_DOWN ) my=-1;
-			else if( newMoveDir==MOVE_UP ) my=1;
+		transition += elapsedSeconds;
+		if( transition >= transitionTime )
+		{
+			transition -= transitionTime;
+			stopTransition=true;
 			
+			/*
+			 * If the bunny and the police are at the same place: bunny caught!
+			 */
+			if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
+				//game.policeCatchesBunny();
+				//return;
+			}
 
+			int mx=0, my=0;
 			/*
-			 * If the police can move forward (so if there is no other police standing at
-			 * the target position), move the police forward.
+			 * Search if bunny is visible
 			 */
-			if( !game.map.cells[currentPosX+mx][currentPosY+my].isPolicePresent ) {
-				game.map.movePolice(currentPosX, currentPosY, currentPosX+mx, currentPosY+my);
-				setPosition(currentPosX+mx, currentPosY+my);
-				wasStuckLastFrame=false;
+			int newMoveDir = getBunnyDir();
+			
+			/*
+			 * If bunny is not visible
+			 */
+			if( newMoveDir==STANDING ) {
+				ArrayList<Integer> dirs = new ArrayList<Integer>();
+				/*
+				 * If the current position the police is standing at is a blind end (or the police was stuck
+				 * couldn't move in the last frame), find all possible ways the police could move to 
+				 */
+				if( game.map.cells[currentPosX][currentPosY].numStreetNeighboursPolice==1 || wasStuckLastFrame )
+				{
+					if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice )
+						dirs.add(MOVE_RIGHT);
+					if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice )
+						dirs.add(MOVE_LEFT);
+					if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice )
+						dirs.add(MOVE_UP);
+					if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice )
+						dirs.add(MOVE_DOWN);
+				}
+				/*
+				 * If the police isn't at a blind end, search for all possible move directions, except the one
+				 * the police came from
+				 */
+				else {
+					if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice && moveStatus!=MOVE_LEFT )
+						dirs.add(MOVE_RIGHT);
+					if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice && moveStatus!=MOVE_RIGHT )
+						dirs.add(MOVE_LEFT);
+					if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice && moveStatus!=MOVE_DOWN )
+						dirs.add(MOVE_UP);
+					if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice && moveStatus!=MOVE_UP )
+						dirs.add(MOVE_DOWN);
+				}
+	
+				/*
+				 * Select a random direction from the collected directions.
+				 * All of this directions are valid (so the next field is a street for the police).
+				 */
+				if( dirs.size()==1 ) {
+					newMoveDir = dirs.get(0);
+				}
+				else {
+					Random r = new Random();
+					newMoveDir = dirs.get(r.nextInt(dirs.size()));
+				}
 			}
+			moveStatus = newMoveDir;
+	
 			/*
-			 * If a police is standing at the target position: don't move this police but
-			 * mark it as stuck
+			 * If the police isn't standing
 			 */
-			else {
-				wasStuckLastFrame=true;
+			if( newMoveDir!=STANDING ) {
+				/*
+				 * Calculate shift relative to the current position
+				 */
+				if( newMoveDir==MOVE_LEFT ) mx=-1;
+				else if( newMoveDir==MOVE_RIGHT ) mx=1;
+				else if( newMoveDir==MOVE_DOWN ) my=-1;
+				else if( newMoveDir==MOVE_UP ) my=1;
+				
+	
+				/*
+				 * If the police can move forward (so if there is no other police standing at
+				 * the target position), move the police forward.
+				 */
+				if( !game.map.cells[currentPosX+mx][currentPosY+my].isPolicePresent ) {
+					game.map.movePolice(currentPosX, currentPosY, currentPosX+mx, currentPosY+my);
+					setPosition(currentPosX+mx, currentPosY+my);
+					stopTransition=false;
+					wasStuckLastFrame=false;
+				}
+				/*
+				 * If a police is standing at the target position: don't move this police but
+				 * mark it as stuck
+				 */
+				else {
+					wasStuckLastFrame=true;
+				}
+			}
+			
+			/*
+			 * If the bunny and the police are at the same place: bunny caught!
+			 * This has to be tested again. The first test checks for the case that the bunny moved onto
+			 * the position of the police, while this case checks for the case the police moved onto
+			 * the position of the bunny.
+			 */
+			if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
+				//game.policeCatchesBunny();
+				//return;
 			}
 		}
-		
-		/*
-		 * If the bunny and the police are at the same place: bunny cought!
-		 * This has to be tested again. The first test checks for the case that the bunny moved onto
-		 * the position of the police, while this case checks for the case the police moved onto
-		 * the position of the bunny.
-		 */
-		if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
-			game.policeCatchesBunny();
-			return;
-		}
+		updateTranslation();
+	}
+	
+	/**
+	 * Update translation vector
+	 */
+	private void updateTranslation() {
+		float t=1;
+		if( !stopTransition ) t = transition/transitionTime;
+		translateX =
+			t * (currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x) + 
+			(1-t) * (prevPosX*game.map.groundXDir.x + prevPosY*game.map.groundYDir.x);
+		translateY =
+			t * (currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y) + 
+			(1-t) * (prevPosX*game.map.groundXDir.y + prevPosY*game.map.groundYDir.y);		
 	}
 
 	/**
@@ -251,18 +277,16 @@ public class Police {
 		gl.glPopMatrix();
 	}
 	
-	
 	/**
-	 * Set the position of the police and calculate translation Vector
+	 * Set the position of the police
 	 * @param x x-coordinate
 	 * @param y y-coordinate
 	 */
 	public void setPosition(int x, int y) {
+		prevPosX = currentPosX;
+		prevPosY = currentPosY;
 		currentPosX = x;
 		currentPosY = y;
-		
-		translateX = currentPosX*game.map.groundXDir.x + currentPosY*game.map.groundYDir.x;
-		translateY = currentPosX*game.map.groundXDir.y + currentPosY*game.map.groundYDir.y;
 	}
 }
 

@@ -71,7 +71,7 @@ public class Stash {
 		}
 
 		if( currentPosX==game.bunny.currentPosX && currentPosY==game.bunny.currentPosY ) {
-			game.looseGold(10*size);
+			game.looseGold(5*size);
 			hideTime = maxHideTime;
 		}
 	}

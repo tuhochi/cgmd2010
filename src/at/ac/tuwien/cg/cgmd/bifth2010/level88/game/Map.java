@@ -120,7 +120,7 @@ public class Map {
 			}
 		}
 
-		houseQuad.vbos.set(gl);
+		/*houseQuad.vbos.set(gl);
 		for(int x=cells.length-1; x>=0; x--) {
 			for(int y=cells[0].length-1; y>=0; y--) {
 				if( cells[x][y].houseTexture != -1 ) {
@@ -133,7 +133,7 @@ public class Map {
 					gl.glPopMatrix();
 				}
 			}
-		}
+		}*/
 	}
 
 	
@@ -248,7 +248,7 @@ public class Map {
 				case 'b':
 					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
-					game.bunny.setPosition(x+1, values.size()-y);
+					game.bunny.initPosition(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
