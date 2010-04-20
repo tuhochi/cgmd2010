@@ -25,7 +25,31 @@ public class Level66View extends GLSurfaceView {
         
 		_renderer = new Level66Renderer(context);
         setRenderer(_renderer);
-        this.setFocusableInTouchMode(true);
+        this.setFocusableInTouchMode(true);   
+	}
+	
+	public boolean onTouchEvent(final MotionEvent event) {
+	    queueEvent(new Runnable() {
+	        public void run() {
+	            if(event.getY() < event.getX() * getHeight() / getWidth() &&  event.getY() < getHeight() - event.getX() * getHeight() / getWidth())
+	            {
+	            	_renderer.moveUp();
+	            }
+	            else if(event.getY() > event.getX() * getHeight() / getWidth() &&  event.getY() > getHeight() - event.getX() * getHeight() / getWidth())
+	            {
+	            	_renderer.moveDown();
+	            }
+	            else if(event.getY() < event.getX() * getHeight() / getWidth() &&  event.getY() > getHeight() - event.getX() * getHeight() / getWidth())
+	            {
+	            	_renderer.moveRight();
+	            }
+	            else if(event.getY() > event.getX() * getHeight() / getWidth() &&  event.getY() < getHeight() - event.getX() * getHeight() / getWidth())
+	            {
+	            	_renderer.moveLeft();
+	            }
+	        }
+	    });
+	    return true;
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
