@@ -23,6 +23,11 @@ public class Hair {
 	
 	private int hair_type;
 	
+	/**
+	 * hair constructor
+	 * @param gl
+	 * @param context
+	 */
 	public Hair(GL10 gl, Context context) {
 		hair = new Square();
 		
@@ -30,6 +35,11 @@ public class Hair {
 		color = new Color();
 	}
 	
+	/**
+	 * updates hair position and rotation
+	 * @param pos
+	 * @param angle
+	 */
 	public void update(Vector2 pos, float angle) {
 		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
@@ -37,10 +47,18 @@ public class Hair {
 	
 	}
 	
+	/**
+	 * sets hair color
+	 * @param c
+	 */
 	public void setColor(Color c) {
 		this.color = c;
 	}
 	
+	/**
+	 * draws hair
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		
 
