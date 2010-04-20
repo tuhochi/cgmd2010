@@ -12,9 +12,9 @@ public class GameView extends GLSurfaceView {
     private float _x = 0;
     private float _y = 0;
     private float _value = 0.0f;
-    public GameView(Context context) {
+    public GameView(Context context, Vector2 resolution) {
         super(context);
-        _renderer = new GameRenderer(context);
+        _renderer = new GameRenderer(context, resolution);
         setRenderer(_renderer);
         this.touchedTime = 0;
        
@@ -52,8 +52,8 @@ public class GameView extends GLSurfaceView {
         			new Vector2(_x/_renderer._width*Level.sizeX,
         			Level.sizeY-(_y/_renderer._height*Level.sizeY))));
 
-        	((GameActivity)_renderer.context).setTextTreasureSpent(_value);
-			
+
+        	((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
         	
         }
         return true;
