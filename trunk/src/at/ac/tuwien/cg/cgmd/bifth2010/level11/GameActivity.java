@@ -96,13 +96,11 @@ public class GameActivity extends Activity {
     
     @Override
 	protected void onStart() {
-    	_gameView.onStart();
 		super.onStart();
 	}
 
 	@Override
 	protected void onStop() {
-		_gameView.onStop();
 		super.onStop();
 	}
 	
