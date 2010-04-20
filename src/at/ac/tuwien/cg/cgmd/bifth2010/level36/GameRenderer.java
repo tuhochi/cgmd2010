@@ -58,6 +58,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
     
     public void onDrawFrame(GL10 gl) {
+		
         /*
          * Usually, the first thing one might want to do is to clear
          * the screen. The most efficient way of doing this is to use
@@ -90,15 +91,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
         
-        glStencilFunc(GL_NEVER, 0x0, 0x0);
-        glStencilOp(GL_INCR, GL_INCR, GL_INCR);
+//        glStencilFunc(GL_NEVER, 0x0, 0x0);
+//        glStencilOp(GL_INCR, GL_INCR, GL_INCR);
           
         glBindTexture(GL_TEXTURE_2D, this.texId);
         mPlane.draw(gl);
-        if (!this.inActivePlane) {
-        	glBindTexture(GL_TEXTURE_2D, this.texId3);
-        	mPlane2.draw(gl);
-        }
+//        if (!this.inActivePlane) {
+//        	glBindTexture(GL_TEXTURE_2D, this.texId);
+//        	mPlane2.draw(gl);
+//        }
         glBindTexture(GL_TEXTURE_2D, this.texId2);
         mSymbol.getNumber(randNumber);
         mSymbol.draw(gl);
@@ -112,9 +113,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
         
-        glStencilFunc(GL_NOTEQUAL, 0x1, 0x1);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-        mPoint.draw(gl);
+//        glStencilFunc(GL_NOTEQUAL, 0x1, 0x1);
+//        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+//        mPoint.draw(gl);
         
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
