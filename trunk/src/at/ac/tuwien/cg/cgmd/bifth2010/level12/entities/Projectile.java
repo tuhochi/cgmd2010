@@ -72,11 +72,6 @@ public abstract class Projectile extends GLObject{
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
 		super.draw(gl);
 		gl.glPopMatrix();
-		System.out.println("mCollPointX: "+mCollisionPointX+ " mXTranslate+mX: "+mXTranslate+mX);
-		if( mCollisionPointX <= this.getX() && mCollisionPointX > -1 ){
-			System.out.println("COL POINT REACHED");
-			this.reset();
-		}
 	}
 	
 	@Override
@@ -98,6 +93,7 @@ public abstract class Projectile extends GLObject{
 		mXTranslate = 0.0f;
 		this.setActiveState(false);
 		mCollisionPointX = -1;
+		System.out.println("RESET!!!");
 	}
 	
 }

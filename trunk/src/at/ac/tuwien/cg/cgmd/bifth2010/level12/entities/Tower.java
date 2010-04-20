@@ -100,9 +100,16 @@ public abstract class Tower extends GLObject {
 					}
 				}
 			}
-			if( mFlyingProjectiles.peek().getX() > mScreenWidth || mFlyingProjectiles.peek().getCollisionPointX() >= mFlyingProjectiles.peek().getX() ){
-				System.out.println("Removing Projectile over screen edge!!!!");
-				Projectile p = mFlyingProjectiles.poll();
+			Projectile p = mFlyingProjectiles.peek();
+			if( p.getX() > mScreenWidth ){
+				System.out.println("Removing Projectile over screen edge!!!! ScreenEdge: "+mScreenWidth+" Projectile: "+ p.getX());
+				p = mFlyingProjectiles.poll();
+				p.reset();
+			}
+			
+			else if( (p.getX() >= p.getCollisionPointX()) && (p.getCollisionPointX() > 0.0f ) ){
+				System.out.println("Removing Projectile over collision point!!! CollPoint: "+p.getCollisionPointX()+" Projectile: "+ p.getX());
+				p = mFlyingProjectiles.poll();
 				p.reset();
 			}
 		}
