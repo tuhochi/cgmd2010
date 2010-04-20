@@ -82,6 +82,7 @@ public class GameActivity extends Activity {
     
     @Override
     protected void onResume() {
+    	_level.pause_level();
 		_level.resume_level();
         _gameView.onResume();
 		super.onResume();
@@ -142,7 +143,7 @@ public class GameActivity extends Activity {
 		float minutes = f % 60;
 		
 		String s = Float.toString(minutes)+":"+Float.toString(Math.round(f-(minutes*60.f)));
-		_textTimeLeft.setText("afwf");
+		_textTimeLeft.setText("test");
 		
 		if (f <= 0.0f) {
 			finish();
