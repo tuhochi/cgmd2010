@@ -11,6 +11,7 @@ public abstract class Projectile extends GLObject{
 	private double mLastFrametime = -1;
 	private short mDmg = 10;
 	private float mXTranslate = -1.0f;
+	private float mRadius = 4;
 	
 	public Projectile( float speed, short dmg ){
 		mSpeed = speed;
@@ -29,27 +30,31 @@ public abstract class Projectile extends GLObject{
 		mXTranslate = mX;
 		mLastFrametime = System.currentTimeMillis();
 		float[] vertices = {
-				mX,		mY,		1.0f,
-				mX+10.0f,		mY+5.0f,	1.0f,
-				mX,		mY+10.0f,	1.0f
+				(mX - mRadius),	(mY - mRadius), 1.0f,
+				(mX + mRadius),	(mY - mRadius), 1.0f,
+				(mX + mRadius),	(mY + mRadius), 1.0f,
+				(mX - mRadius),	(mY + mRadius), 1.0f
 		};
-		ByteBuffer v = ByteBuffer.allocateDirect(vertices.length * 4 );
-		v.order(ByteOrder.nativeOrder());
+		ByteBuffer v = ByteBuffer.allocateDirect( vertices.length * 4 );
+		v.order( ByteOrder.nativeOrder() );
 		mVerticesBuffer = v.asFloatBuffer();
-		mVerticesBuffer.put(vertices);
+		mVerticesBuffer.put( vertices );
 		mVerticesBuffer.position(0);
 		
 		short[] indices = {
-			0, 1, 2	
+				0,	1,	2,
+				0,	2,	3
 		};
-		ByteBuffer i = ByteBuffer.allocateDirect(indices.length * 2 );
-		i.order(ByteOrder.nativeOrder());
-		mIndicesBuffer = v.asShortBuffer();
-		mIndicesBuffer.put(indices);
-		mIndicesBuffer.position(0);
+		System.out.println("Vertices.length: "+vertices.length+" Indices.length: "+indices.length);
+		ByteBuffer i = ByteBuffer.allocateDirect( indices.length * 2 );
+		i.order( ByteOrder.nativeOrder() );
+		mIndicesBuffer = i.asShortBuffer();
+		mIndicesBuffer.put( indices );
+		mIndicesBuffer.position(0);	
 		mIndicesCounter = indices.length;
 		
 		float[] colors = { mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f};
 		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
