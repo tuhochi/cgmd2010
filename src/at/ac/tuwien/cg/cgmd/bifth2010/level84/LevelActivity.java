@@ -41,7 +41,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l84_level);
 		
-		drains = new HashMap<Integer, ModelDrain>();//new LinkedList<ModelDrain>();
+		drains = new HashMap<Integer, ModelDrain>();
 		gems = new LinkedList<Model>();
 		
 		initGui();
