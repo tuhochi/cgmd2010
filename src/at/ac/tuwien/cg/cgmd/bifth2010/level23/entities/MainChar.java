@@ -27,6 +27,9 @@ public class MainChar implements SceneEntity {
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -8661277209785862751L;
 	
+	/**
+	 * Indicates if the MainChar was restored from Bundle
+	 */
 	private boolean wasRestored=false;
 	
 	/** The width. */
@@ -423,6 +426,9 @@ public class MainChar implements SceneEntity {
 		}
 	}
 	
+	/**
+	 * Resets the MainChar
+	 */
 	public void reset()
 	{
 		if(!wasRestored)

@@ -19,16 +19,16 @@ public class SoundManager
 	 */
 	public static SoundManager instance;
 	
+	/**
+	 * The CONTEXT
+	 */
 	private Context context;
 			
 	/**
 	 * players currently initialized
 	 */
 	private ArrayList<MediaPlayer> players;
-	
-	
-	
-	
+
 	/**
 	 * Default Constructor
 	 * @param context

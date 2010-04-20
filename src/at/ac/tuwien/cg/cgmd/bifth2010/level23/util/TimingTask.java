@@ -8,6 +8,15 @@ public abstract class TimingTask implements Serializable
 	public float time;
 	public float remainingTime;
 	public boolean isDead=false;
+	
+	/**
+	 * Update the timer (is called every Frame)
+	 * @param dt time between to last 2 frames
+	 */
 	public abstract void update(float dt);
+	
+	/**
+	 * Run method
+	 */
 	public abstract void run();
 }
