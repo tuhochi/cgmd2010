@@ -1,9 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Hashtable;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,12 +11,15 @@ import javax.microedition.khronos.opengles.GL10;
  * @author Ferdinand Pilz
  * @author Reinhard Sprung
  */
-public class Shelf extends RenderEntity{
+public class Shelf extends RenderEntity {
 	
-	/**
-	 * The currently active products in the shelf.
-	 */
-	protected List<ProductEntity> products;
+	
+	// The currently active products in the shelf.	
+//	protected List<ProductEntity> products;
+
+	// The product collection
+	protected Hashtable<Integer, ProductEntity> entities;
+	
 	protected float scrollX;
 	protected float distMovedX;
 	protected int productSpawnColumns;
@@ -33,14 +34,21 @@ public class Shelf extends RenderEntity{
 	 */
 	public Shelf(float width, float height) {
 		
-		super(width * 0.5f, height *0.5f, 0, width, height);
+		super(width * 0.5f, height * 0.5f, 0, width, height);
 		//products = new List<ProductEntity>();
-		distMovedX = 0.f;
+		// The overall distance moved so far
+		distMovedX = 0;
+		// The num of product collumns already spawned
 		productSpawnColumns = 0;
-		float spawnY = 145.f;
-		float spawnInc = 70.f;		
+		
+		// The y position of spawned products
+		float spawnY = 145;
+		float spawnInc = 70;		
 		productSpawnY = new float[]{spawnY, spawnY + spawnInc, spawnY + spawnInc*2};
-		products = new LinkedList<ProductEntity>();
+		
+		// The product collection
+		entities = new Hashtable<Integer, ProductEntity>();
+//		products = new LinkedList<ProductEntity>();
 		productsActive = false;
 		NUMBER_PRODUCTS = 3;
 	}
@@ -54,16 +62,18 @@ public class Shelf extends RenderEntity{
 		
 		// Calculation of background movement (in texture coordinate system).
 		scrollX = distMovedX / width;
-						
-		Iterator<ProductEntity> itr = products.iterator();
-		while(itr.hasNext()) {		
-			ProductEntity pe = itr.next();			
+		
+		// Update all Animators
+		Enumeration<Integer> keys = entities.keys();		
+		while(keys.hasMoreElements()) {
+			
+			ProductEntity pe = entities.get(keys.nextElement());
 			
 			pe.x -= scroll;
-						
+			
 			// If they are out of the screen remove them
 			if (pe.x < -pe.width) {				
-				itr.remove();	
+				entities.remove(pe.id);	
 				pe = null;
 			}
 		}
@@ -71,9 +81,9 @@ public class Shelf extends RenderEntity{
 		// At last, add some new products every few pixels
 		// Everytime there's a new column, spawn a new set of products. Needs to be an integer division		
 		
-		if (products.isEmpty()) {
+//		if (products.isEmpty()) {
 			createProducts();
-		}									
+//		}
 	}
 	
 	/**
@@ -90,7 +100,7 @@ public class Shelf extends RenderEntity{
 			float x = width - d + offsetX + jitterX;			
 			float y = productSpawnY[i];			
 			// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
-			float productSize = 70 * height / width;			
+			float productSize = 70 * height / width;
 
 			ProductEntity pe = new ProductEntity(x, y, 1, productSize);	
 			int texIdx = (int)(Math.random() * 10) % GameManager.TEXTURE_PRODUCTS.length;
@@ -99,7 +109,7 @@ public class Shelf extends RenderEntity{
 			pe.visible = true;
 			pe.clickable = true;
 			pe.texture = GameManager.getTexture(GameManager.TEXTURE_PRODUCTS[texIdx]);		
-			products.add(pe);
+			entities.put(pe.id, pe);
 		}
 
 		productsActive = true;
@@ -129,23 +139,29 @@ public class Shelf extends RenderEntity{
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		
-		// Render products.
-		Iterator<ProductEntity> itr = products.iterator();
-		while(itr.hasNext()) {
-			itr.next().render(gl);
-		}		
+		// Render products.	
+		Enumeration<Integer> keys = entities.keys();
+		while(keys.hasMoreElements()) {
+			entities.get(keys.nextElement()).render(gl);
+		}	
 	}
 	
+	/**
+	 * @param x
+	 * @param y
+	 */
 	public void hitTest(float x, float y) {
-		if (!productsActive) return;
-		Iterator<ProductEntity> itr = products.iterator();
-		while(itr.hasNext()) {
-			ProductEntity pe = itr.next();			
+		if (!productsActive) 
+			return;
+		
+		Enumeration<Integer> keys = entities.keys();		
+		while(keys.hasMoreElements()) {
 			
-			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {			
+			ProductEntity pe = entities.get(keys.nextElement());
+			
+			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
 				pe.clickable = false;
 				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
-				itr.remove();
 				productsActive = false;
 				break;
 			}

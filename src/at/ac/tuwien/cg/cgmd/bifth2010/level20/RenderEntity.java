@@ -53,7 +53,7 @@ public class RenderEntity extends GameEntity implements Renderable {
 		vertexBuffer.position(0);
 		
 		
-		float ratio = width / height;		
+//		float ratio = width / height;		
 		float texCoords[] = {0.0f,  1.0f,
 							 1.0f, 1.0f,
 							 0.0f,  0.0f,

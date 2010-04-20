@@ -25,31 +25,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
  */
 public class RenderView extends GLSurfaceView implements Renderer {
 
-		
-	/*
-	 * These variables store the previous X and Y
-	 * values as well as a fix touch scale factor.
-	 * These are necessary for the rotation transformation
-	 * added to this lesson, based on the screen touches. ( NEW )
-	 */
-	private float oldX;
-    private float oldY;
-	private final float TOUCH_SCALE = 0.2f;		//Proved to be good for normal rotation ( NEW )
 
-	
-	/** The Activity Context */
-	//protected Activity activity;
-//	private SessionState sessionState;		
 	private GameManager gameManager;
 	public TimeUtil timer;
 	
-	
-//	private Cube cube;
-
-
-	/**
-	 * @param context
-	 */
 	/**
 	 * @param activity
 	 */
@@ -205,10 +184,10 @@ public class RenderView extends GLSurfaceView implements Renderer {
         
         gameManager.onTouch(x, y);
         
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        	
-        	gameManager.onTouch(x, y);
-        }
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//        	
+//        	gameManager.onTouch(x, y);
+//        }
         
 
 //        Toast.makeText(getContext(), "Touch Event", 2);
@@ -224,10 +203,7 @@ public class RenderView extends GLSurfaceView implements Renderer {
 //        } else if(event.getAction() == MotionEvent.ACTION_UP) {
 //
 //        }
-        
-        //Remember the values
-        oldX = x;
-        oldY = y;
+       
         
         //We handled the event
 		return true;
