@@ -43,6 +43,7 @@ public class GameView_New extends GLSurfaceView {
 	}
 
 	private void touch_move(float x, float y) {
+		this.gameRenderer.setInactivePlane(true);
 		//this.gameRenderer.getPoint().setXY(x, y);
 		
 		

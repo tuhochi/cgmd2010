@@ -59,6 +59,10 @@ class Point
 //                1.0f, 1.0f, 0.0f, 1.0f,
 //                0.0f, 1.0f, 0.0f, 1.0f
 //        };
+    	
+    	float colors[] = {
+    		  1.0f, 0.0f, 0.0f, 1.0f,
+    	};
         
         byte indices[] = {
         		0
@@ -78,11 +82,11 @@ class Point
         mVertexBuffer.put(vertices);
         mVertexBuffer.position(0);
         
-//        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length*4);
-//        cbb.order(ByteOrder.nativeOrder());
-//        mColorBuffer = cbb.asFloatBuffer();
-//        mColorBuffer.put(colors);
-//        mColorBuffer.position(0);
+        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length*4);
+        cbb.order(ByteOrder.nativeOrder());
+        mColorBuffer = cbb.asFloatBuffer();
+        mColorBuffer.put(colors);
+        mColorBuffer.position(0);
 //        
 //        ByteBuffer nbb = ByteBuffer.allocateDirect(normals.length*4);
 //        nbb.order(ByteOrder.nativeOrder());
@@ -137,9 +141,9 @@ class Point
     
     public void draw(GL10 gl)
     {
-        gl.glFrontFace(gl.GL_CW);
+        gl.glFrontFace(GL10.GL_CW);
         gl.glVertexPointer(4,GL10.GL_FLOAT, 0, mVertexBuffer);
-        //gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
+        gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuffer);
         //gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
         //gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
         gl.glDrawElements(gl.GL_POINTS, 1, gl.GL_UNSIGNED_BYTE, mIndexBuffer);
