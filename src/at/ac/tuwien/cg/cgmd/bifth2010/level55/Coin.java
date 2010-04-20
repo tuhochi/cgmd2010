@@ -7,6 +7,11 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * Represents a coin in the level
+ * @author Wolfgang Knecht
+ *
+ */
 public class Coin {
 	
 	boolean active;
@@ -16,6 +21,25 @@ public class Coin {
 	Mesh activeCoin=new Mesh();
 	Mesh inactiveCoin=new Mesh();
 	
+	/**
+	 * Constructor
+	 * @param gl The OpenGL context
+	 * @param _x The x-position in the level grid
+	 * @param _y The y-position in the level grid
+	 * @param _active The initial active state of the coin
+	 * @param x1 The first x coordinate of the coin quad
+	 * @param y1 The first y coordinate of the coin quad
+	 * @param x2 The second x coordinate of the coin quad
+	 * @param y2 The second y coordiante of the coin quad
+	 * @param texX1_A The first x texture-coordinate of the active coin 
+	 * @param texY1_A The first y texture-coordinate of the active coin
+	 * @param texX2_A The second x texture-coordinate of the active coin
+	 * @param texY2_A The second y texture-coordinate of the active coin
+	 * @param texX1_I The first x texture-coordinate of the inactive coin
+	 * @param texY1_I The first y texture-coordinate of the inactive coin
+	 * @param texX2_I The second x texture-coordinate of the inactive coin
+	 * @param texY2_I The second y texture-coordinate of the inactive coin
+	 */
 	public Coin(GL10 gl, int _x, int _y, boolean _active, float x1, float y1, float x2, float y2,
 			float texX1_A, float texY1_A, float texX2_A, float texY2_A,
 			float texX1_I, float texY1_I, float texX2_I, float texY2_I) {
@@ -102,6 +126,10 @@ public class Coin {
 		inactiveCoin.init(gl, vertices_I, texCoords_I, indices_I);
 	}
 	
+	/**
+	 * Renders the coin
+	 * @param gl The OpenGL context
+	 */
 	public void draw(GL10 gl) {
 		if (active) {
 			activeCoin.draw(gl);
@@ -110,6 +138,10 @@ public class Coin {
 		}
 	}
 	
+	/**
+	 * Changes the active state of the coin
+	 * @return The contribution of the coin to the current game-points
+	 */
 	public int changeActiveState() {
 		active=!active;
 		

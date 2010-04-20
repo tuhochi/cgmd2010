@@ -13,7 +13,9 @@ import android.util.Log;
 
 
 /**
- * A vertex shaded cube.
+ * Represents a mesh (vertex buffer object or vertex array)
+ * @author Wolfgang Knecht
+ *
  */
 class Mesh
 {
@@ -28,10 +30,20 @@ class Mesh
     private FloatBuffer	mTexCoordBuffer;
     private ShortBuffer  mIndexBuffer;
 	
+    /**
+     * Constructor
+     */
     public Mesh()
     {
     }
     
+    /**
+     * Initializes the mesh
+     * @param gl The OpenGL context
+     * @param vertices The vertex vector
+     * @param texCoords The texture-coordinate vector
+     * @param indices The index vector
+     */
     public void init(GL10 gl, Vector<Float> vertices, Vector<Float> texCoords, Vector<Short> indices)
     {	
     	float[] primVertices=new float[vertices.size()];
@@ -53,6 +65,13 @@ class Mesh
     	init(gl, primVertices, primTexCoords, primIndices);    
     }
     
+    /**
+     * Initializes the mesh
+     * @param gl The OpenGL context
+     * @param _mVertexBuffer The vertex buffer
+     * @param _mTexCoordBuffer The texture-coordinate buffer
+     * @param _mIndexBuffer The index buffer
+     */
     public void init(GL10 gl, FloatBuffer _mVertexBuffer, FloatBuffer _mTexCoordBuffer, ShortBuffer  _mIndexBuffer) {
     	mVertexBuffer=_mVertexBuffer;
     	mTexCoordBuffer=_mTexCoordBuffer;
@@ -113,6 +132,13 @@ class Mesh
     	}*/
     }
     
+    /**
+     * Initializes the mesh
+     * @param gl The OpenGL context
+     * @param vertices The vertex array
+     * @param texCoords The texture-coordinate array
+     * @param indices The index array
+     */
     public void init(GL10 gl, float[] vertices, float[] texCoords, short[] indices)
     {
         // Buffers to be passed to gl*Pointer() functions
@@ -144,6 +170,10 @@ class Mesh
         //init(gl, mVertexBuffer, mTexCoordBuffer, mIndexBuffer);
     }
 
+    /**
+     * Renders the mesh
+     * @param gl The OpenGL context
+     */
     public void draw(GL10 gl)
     {
     	if (mVertexBuffer!=null || mTexCoordBuffer!=null || mIndexBuffer!=null) {

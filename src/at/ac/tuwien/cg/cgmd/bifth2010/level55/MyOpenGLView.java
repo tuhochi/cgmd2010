@@ -8,7 +8,11 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
 
-
+/**
+ * Our GLSurfaceView
+ * @author Wolfgang Knecht
+ *
+ */
 public class MyOpenGLView extends GLSurfaceView {
 	
     public MyOpenGLView(Context context) {

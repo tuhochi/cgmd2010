@@ -9,11 +9,29 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
 
+/**
+ * Represents a cluster of tiles in a level layer as a mesh
+ * @author Wolfgang Knecht
+ *
+ */
 public class TilesVBO extends Mesh {
 	
 	int coinCount;
 	Coin coins[];
 	
+	/**
+	 * Constructor
+	 * @param gl The OpenGL context
+	 * @param sizeFactor The scale factor
+	 * @param x The x-position in the vbo-grid
+	 * @param y The y-position in the vbo-grid
+	 * @param width The number of tile-columns
+	 * @param height The number of tile-rows
+	 * @param tiles_vector The tile-vector of the layer
+	 * @param texture The texture of the layer
+	 * @param texRows Number of tile-rows in the texture
+	 * @param texCols Number of tile-columns in the texture
+	 */
 	public TilesVBO(GL10 gl, float sizeFactor, int x, int y, int width, int height, int[][] tiles_vector, Texture texture, int texRows, int texCols) {
 		/*
 		+-+-+-+-+
@@ -148,6 +166,10 @@ public class TilesVBO extends Mesh {
 		}
 	}
 	
+	/**
+	 * Renders the tiles mesh
+	 * @param gl The OpenGL context 
+	 */
 	public void draw(GL10 gl) {
 		for (int i=0; i<coinCount; i++) {
 			coins[i].draw(gl);

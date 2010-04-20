@@ -11,6 +11,11 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+/**
+ * Represents a texture
+ * @author Wolfgang Knecht
+ *
+ */
 public class Texture {
 	int texture;
 	float texelWidth;
@@ -24,9 +29,15 @@ public class Texture {
 	
 	static Vector<Integer> loadedTex=new Vector<Integer>();
 	
+	/**
+	 * Constructor
+	 */
 	public Texture () {
 	}
 	
+	/**
+	 * Removes the loaded textures
+	 */
 	static void cleanUp() {
 		Log.d("Texture", "cleanUp");
 		loadedTex.clear();
@@ -42,14 +53,27 @@ public class Texture {
 		loadedTex.remove(texture);
 	}*/
 	
+	/**
+	 * Sets the activity context
+	 * @param _context The Activity context
+	 */
 	static public void setContext(Context _context) {
 		context=_context;
 	}
 	
+	/**
+	 * Sets the OpenGL context
+	 * @param _gl The OpenGL context
+	 */
 	static public void setGL(GL10 _gl) {
 		gl=_gl;
 	}
 	
+	/**
+	 * Creates a texture from a resource
+	 * @param resourceID The ID of the texture resource
+	 * @return Returns true if creation was successfully. False otherwise
+	 */
 	boolean create(int resourceID) {
 		texture=loadedTex.indexOf(new Integer(resourceID));
 		if (texture==-1) {
@@ -93,6 +117,10 @@ public class Texture {
 		return true;
 	}
 	
+	/**
+	 * Binds the texture
+	 * @param gl The OpenGL context
+	 */
 	void bind(GL10 gl) {
 		if (activeTexture!=texture) {
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);

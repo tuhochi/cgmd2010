@@ -11,9 +11,12 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * Represents a tile layer of the level 
+ * @author Wolfgang Knecht
+ *
+ */
 public class TileLayer {	
-	float duration = 0;
-	
 	float posX;
 	float posY;
 	
@@ -40,6 +43,17 @@ public class TileLayer {
 	public int[][] tiles_vector;
 	private TilesVBO[][] vbo_vector;
 
+	/**
+	 * Initializes the layer
+	 * @param gl The OpenGL context
+	 * @param _scrollFactor The scroll-speed-factor for the parallax effect
+	 * @param _sizeFactor The scale factor
+	 * @param levelResource The level resource
+	 * @param textureResource The texture resource
+	 * @param texRows Number of tile-rows in the texture
+	 * @param texCols Number of tile-columns in the texture
+	 * @param context The Activity context
+	 */
 	public void init(GL10 gl, float _scrollFactor, float _sizeFactor, int levelResource, int textureResource, int texRows, int texCols, Context context) {
 		scrollFactor=_scrollFactor;
 		sizeFactor=_sizeFactor;
@@ -52,6 +66,12 @@ public class TileLayer {
 		createVBOs(gl, texRows, texCols);
 	}
 	
+	/**
+	 * Changes the active state of a coin.
+	 * @param x The x-position of the coin to change in the level grid.
+	 * @param y The y-position of the coin to change in the level grid.
+	 * @return The contribution of the coin to the current game-points
+	 */
 	public int changeCoinState(int x, int y) {
 		int result=0;
 		if (tiles_vector[x][y]==activeCoin_typeId || tiles_vector[x][y]==inactiveCoin_typeId) {
@@ -70,6 +90,12 @@ public class TileLayer {
 		return result;
 	}
 	
+	/**
+	 * Returns the type of a tile at a given position.
+	 * @param x The x-position of the tile in the level grid.
+	 * @param y The y-position of the tile in the level grid.
+	 * @return The type of tile. -1 if there is no tile a the given position.
+	 */
 	public int getTypeAt(int x, int y) {
 		//Log.d("TileLayer", "x,y = "+x+", "+y);
 		if (x<numTilesX && x>=0 && y<numTilesY && y>=0) {
@@ -79,6 +105,11 @@ public class TileLayer {
 		}
 	}
 	
+	/**
+	 * Loads the level from a resource
+	 * @param levelResource The level resource
+	 * @param context The Activity context
+	 */
 	private void loadLevel(int levelResource, Context context) {
 		Log.d("TileLayer", "loadLevel");
 		
@@ -119,6 +150,12 @@ public class TileLayer {
 		}
 	}
 	
+	/**
+	 * Creates Vertex Buffer Objects/Vertex Arrays for the layer
+	 * @param gl The OpenGL context
+	 * @param texRows Number of tile-rows in the texture
+	 * @param texCols Number of tile-columns in the texture
+	 */
 	private void createVBOs(GL10 gl, int texRows, int texCols) {
 		maxVBOPosX=(int) Math.ceil((double)numTilesX/VBO_WIDTH);
 		maxVBOPosY=(int) Math.ceil((double)numTilesY/VBO_HEIGHT);
@@ -135,10 +172,10 @@ public class TileLayer {
 		}
 	}
 	
-	public void update(float dT) {
-		duration+=dT*0.001;
-	}
-	
+	/**
+	 * Renders the layer
+	 * @param gl The OpenGL context
+	 */
 	public void draw(GL10 gl)
     {
 		texture.bind(gl);

@@ -7,6 +7,11 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.util.Log;
 
+/**
+ * The Renderer
+ * @author Wolfgang Knecht
+ *
+ */
 class MyRenderer implements MyOpenGLView.Renderer {
 	
 	Level level;
@@ -21,6 +26,10 @@ class MyRenderer implements MyOpenGLView.Renderer {
 	static float resX;
 	static float resY;
 	
+	/**
+	 * Sets the Activity context
+	 * @param _context The Activity context
+	 */
 	static public void setContext(Context _context) {
 		context=_context;
 	}
@@ -29,6 +38,9 @@ class MyRenderer implements MyOpenGLView.Renderer {
     	player=_player;
     }*/
 	
+	/**
+	 * Constructor
+	 */
 	public MyRenderer() {
 		super();
 		
@@ -45,7 +57,6 @@ class MyRenderer implements MyOpenGLView.Renderer {
     	float dt = Timer.dT*0.001f;
     	player.update(dt);
     	camera.update(dt);
-    	level.update(dt);
     	
     	//Performs view transformation
     	camera.draw(gl);
