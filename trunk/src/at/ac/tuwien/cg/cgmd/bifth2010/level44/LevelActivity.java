@@ -26,8 +26,11 @@ public class LevelActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		scene = new GameScene(this);
+		if (savedInstanceState != null) {
+			scene.restoreInstanceState(savedInstanceState);
+		}
 		setContentView(scene);
-
+		
 		Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		gestureDetector = new GestureDetector(new InputListener(scene, display.getWidth(), display.getHeight()));
 		new View.OnTouchListener() {
@@ -84,4 +87,22 @@ public class LevelActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
 	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		if (scene != null) {
+			scene.saveInstanceState(outState);
+		}
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		if (scene != null) {
+			scene.restoreInstanceState(savedInstanceState);
+		}
+	}
+
 }

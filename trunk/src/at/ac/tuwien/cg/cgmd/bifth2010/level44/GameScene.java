@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -9,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Bundle;
 import android.os.Vibrator;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
@@ -49,6 +51,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private SoundPlayer player = null;
 	/** the system's vibrator */
 	private Vibrator vibrator = null;
+	
+	/* restored game state */
+	private GameState gameState = null;
 
 	
 	public GameScene(LevelActivity context) {
@@ -147,6 +152,14 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		timeDisplay = new TimeDisplay(mainTexture, timeManager);
 		timeDisplay.setPosition(getWidth()-timeDisplay.getWidth()-10, 10);
 		
+		if (gameState != null) {
+			/* consume restored values and remove gameState */
+			gameState.restoreTimeManger(timeManager);
+			gameState.restoreCrosshairs(crosshairs);
+			gameState.restoreRabbit(rabbit);
+			gameState = null;
+		}
+		
 		restartGameThread();
 	}
 	
@@ -212,5 +225,23 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	
 	public void finishLevel() {
 		activity.finishLevel(getScore());
+	}
+
+	public void saveInstanceState(Bundle outState) {
+		System.err.println("Saving instance state");
+		gameState = new GameState();
+		gameState.saveTimeManger(timeManager);
+		gameState.saveCrosshairs(crosshairs);
+		gameState.saveRabbit(rabbit);
+		outState.putSerializable(GameState.KEY, gameState);
+	}
+
+	public void restoreInstanceState(Bundle savedInstanceState) {
+		System.err.println("Restoring instance state");
+		Serializable restoredState = savedInstanceState.getSerializable(GameState.KEY);
+		
+		if (restoredState != null && restoredState instanceof GameState) {
+			gameState = (GameState)restoredState;
+		}		
 	}
 }

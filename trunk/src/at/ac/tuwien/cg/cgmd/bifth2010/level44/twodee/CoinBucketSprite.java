@@ -11,19 +11,22 @@ public class CoinBucketSprite extends SpriteContainer {
 	public static final int FULL_COIN_COUNT = 10;
 	
 	private Sprite bucketFront = null;
+	private Texture texture = null;
 	private Vector<Sprite> coins = new Vector<Sprite>();
+	
+	private Sprite makeCoin() {
+		Random random = new Random();
+		Sprite coin = new Sprite(TextureParts.makeCoin(texture));
+		coin.setPosition(coin.getWidth()+random.nextInt((int)getWidth()-(int)coin.getWidth()*2)-getWidth()/2, 35+random.nextInt(10));
+		return coin;
+	}
 	
 	public CoinBucketSprite(Texture texture) {
 		super(TextureParts.makeBucketBack(texture));
 		setCenter(30.5f, 0);
 		
-		Random random = new Random();
-		
-		for (int i=0; i<FULL_COIN_COUNT; i++) {
-			Sprite coin = new Sprite(TextureParts.makeCoin(texture));
-			coin.setPosition(coin.getWidth()+random.nextInt((int)getWidth()-(int)coin.getWidth()*2)-getWidth()/2, 35+random.nextInt(10));
-			coins.add(coin);
-		}
+		this.texture = texture;
+		setCoinCount(FULL_COIN_COUNT);
 		
 		bucketFront = new Sprite(TextureParts.makeBucket(texture));
 		bucketFront.setCenter(30.5f, 0);
@@ -63,5 +66,14 @@ public class CoinBucketSprite extends SpriteContainer {
 
 	public int getCoinCount() {
 		return coins.size();
+	}
+	
+	public void setCoinCount(int count) {
+		while (coins.size() > count) {
+			coins.remove(0);
+		}
+		while (coins.size() < count) {
+			coins.add(makeCoin());
+		}
 	}
 }
