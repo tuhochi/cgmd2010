@@ -6,7 +6,9 @@ public class Timing {
 
     private static final String LOG_TAG = Timing.class.getSimpleName();
 	private float startTime, currTime, currFPS, lastFrameTime, deltaFrameTime, pauseTimeStamp, pausedTime;
-	
+	/**
+	 * class for gametime
+	 */
 	public Timing() {
 		startTime = System.nanoTime()/1000000000.0f;
 		currTime = 0.0f;
@@ -16,7 +18,9 @@ public class Timing {
 		pauseTimeStamp = 0.0f;
 		pausedTime = 0.0f;
 	}
-	
+	/**
+	 * refreshes time
+	 */
 	public void update() {
 		lastFrameTime = currTime;
 		currTime = (System.nanoTime()/1000000000.0f) - startTime - pausedTime;
@@ -27,20 +31,31 @@ public class Timing {
 
 		
 	}
-	
+	/**
+	 * returns the current time. call first update() to refresh time
+	 * @return time in seconds
+	 */
 	public float getCurrTime() {
 		
 		return currTime;
 	}
-	
+	/**
+	 * fps
+	 * @return fps
+	 */
 	public float getFPS() {
 		
 		return currFPS;
 	}
-	
+	/**
+	 * pauses timer
+	 */
 	public void pause(){
 		pauseTimeStamp = (System.nanoTime()/1000000000.0f);
 	}
+	/**
+	 * resumes timer. pause() must be called previously
+	 */
 	public void resume(){
 		pausedTime += (System.nanoTime()/1000000000.0f)-pauseTimeStamp;
 	}
