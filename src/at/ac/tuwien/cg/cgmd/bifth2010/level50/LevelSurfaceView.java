@@ -9,10 +9,13 @@ public class LevelSurfaceView extends GLSurfaceView {
 	
 	LevelRenderer mRenderer;
 	boolean keydown[] = {false, false, false, false};
+	int score = 0;
+	float x = 0, y = 0;
 
 	public LevelSurfaceView(Context context) {
 		super(context);
 		mRenderer = new LevelRenderer(context);
+		mRenderer.setPosition(x, y);
         setRenderer(mRenderer);
         setFocusableInTouchMode(true);
 	}
@@ -63,5 +66,12 @@ public class LevelSurfaceView extends GLSurfaceView {
 		}
 		return super.onKeyUp(keyCode, event);
 	}
+	
+	public int getScore() {return score;}
+	public void setScore(int score) {this.score = score+10;}
+	public float getPositionX() {return mRenderer.getPositionX();}
+	public float getPositionY() {return mRenderer.getPositionY();}
+	public void setPosition(float x, float y) {this.x = x; this.y = y;}
+	
 
 }

@@ -26,6 +26,7 @@ public class LevelObject {
 	int width, height;
 	int id;
 	float movement[] = new float[4];
+	int direction = 1;
 	
 	
 	// Our vertices.
@@ -60,6 +61,11 @@ public class LevelObject {
 		this.width = width;
 		this.height = height;
 		this.id = id;
+		
+		movement[0]=0.0f;
+		movement[1]=5.0f;
+		movement[2]=0.0f;
+		movement[3]=0.0f;
 		
 		// a float is 4 bytes, therefore we multiply the number if
 		// vertices with 4.
@@ -115,11 +121,20 @@ public class LevelObject {
 		gl.glLoadIdentity();
 		float xn = x-movement[2]+movement[3];
 		float yn = y-movement[0]+movement[1];
-		if (!testCollision(x, y)){
+		if (!testCollision(xn, yn)){
 			x = xn; y = yn;
+		} else if (!testCollision(xn, y)){
+			x = xn;
+		} else if (!testCollision(x, yn)){
+			y = yn;
 		}
-		gl.glTranslatef(x, y, 0);
-		gl.glScalef((float)width, (float)height, 1.0f);
+		if (movement[0]>0.0f) movement[0]-=1.0f;
+		
+		if (movement[3]-movement[2] < 0) direction = -1;
+		else if (movement[3]-movement[2] > 0) direction = 1;
+		
+		gl.glTranslatef(x + (1-direction)/2*width, y, 0);
+		gl.glScalef((float)width*direction, (float)height, 1.0f);
 
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 		
@@ -132,22 +147,33 @@ public class LevelObject {
 		gl.glDisable(GL10.GL_CULL_FACE);
 	}
 	
-	void move(float x, float y) {
-		if (testCollision(x,y)) {
+	public void move(float x, float y) {
+		if (!testCollision(this.x+x,this.y+y)) {
 			this.x += x;
 			this.y += y;
 		}
 	}
 	
-	void move(int direction, float amount) {
+	public void move(int direction, float amount) {
+		if (direction == 0) amount*=3;
 		movement[direction] = amount;
 	}
 	
+	public void setPosition(float x, float y) {
+		if (!testCollision(x,y)) {
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public float getPositionX() {return x;}
+	public float getPositionY() {return y;}
+	
 	boolean testCollision(float x, float y) {
-		if ((level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 /*&&
-				(level.TestCollision((int) Math.floor((this.x+x+width)/20), (int) Math.floor((this.y+y)*20))&0x00ffffff) != 0 &&
-				(level.TestCollision((int) Math.floor((this.x+x+width)/20), (int) Math.floor((this.y+y+height)*20))&0x00ffffff) != 0 &&
-				(level.TestCollision((int) Math.floor((this.x+x)/20), (int) Math.floor((this.y+y+height)*20))&0x00ffffff) != 0*/) {
+		if ((level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 &&
+				(level.TestCollision((int) Math.floor((x+width)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 &&
+				(level.TestCollision((int) Math.floor((x+width)/20), (int) Math.floor((y+height)/20))&0x00ffffff) != 0 &&
+				(level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y+height)/20))&0x00ffffff) != 0) {
 			return false;
 		} else return true;
 	}
@@ -182,8 +208,8 @@ public class LevelObject {
 		IntBuffer tbuf=IntBuffer.wrap(pix1);
 //		ib.position(0);		
 		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, w, h, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, tbuf);		
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );											
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);//LINEAR );
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);//LINEAR );											
 	}
 
 }
