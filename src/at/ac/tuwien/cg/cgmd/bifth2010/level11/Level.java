@@ -5,8 +5,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
 import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,9 +23,10 @@ import android.util.Log;
 public class Level extends Thread {
 
     private static final String LOG_TAG = Level.class.getSimpleName();
-	private boolean isRunning;
+	public boolean _isRunning;
 	private boolean isPaused; 
-	
+    public boolean _isActive;
+    
 	private Textures textures;
 	
 	private Pedestrian pedestrian;
@@ -41,8 +44,8 @@ public class Level extends Thread {
 	private Context context;
 	
 	private Timing timing;
-	private float grabbedTreasureValueOfDeletedTreasures;
-	private float grabbedTreasureValue;
+	private int grabbedTreasureValueOfDeletedTreasures;
+	private int grabbedTreasureValue;
 	
 	public Level(float sizeX, float sizeY) {
 		//Log.i(LOG_TAG, "Level(float, float)");
@@ -54,8 +57,9 @@ public class Level extends Thread {
 		this.grabbedTreasureValueOfDeletedTreasures = 0;
 		this.grabbedTreasureValue = 0;
 		
-		this.isRunning = true;
+		this._isRunning = false;
 		this.isPaused = false;
+		this._isActive = true;
 		
 		timing = new Timing();
 		this.maxPlayTime = 120;
@@ -75,6 +79,8 @@ public class Level extends Thread {
 		//this.addTreasure(new Treasure(10.0f, 200.0f, new Vector2(200.0f, 200.0f)));
 		
 		background = new Square();
+		
+		this._isRunning = true;
 		
 	}
 	
@@ -108,26 +114,37 @@ public class Level extends Thread {
 	
 	public void run() {
 		
-		while (isRunning) {
-			while (isPaused && isRunning) {
-				/*try {
-					sleep(100);
+		while (_isActive) {
+			while (_isRunning) {
+				while (isPaused) {
+					/*try {
+						sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}*/
+				}
+				update();
+				try {
+					sleep(0);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}*/
+				}
 			}
-			update();
 		}
+		
+
+		
 	}
 	public  void pause(boolean pause){
 		this.isPaused = pause;
 	}
 	public  void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
-	}
+		}
 	private  void update() {
 		//synchronized(this){
 			timing.update();
+			
 			for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
 				Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
 				pedestrian.update(timing.getCurrTime());
@@ -141,6 +158,7 @@ public class Level extends Thread {
 						treasure = null;
 						treasureList.remove(j);
 						j--;
+						
 						continue;
 					}
 					if((rating =
@@ -166,15 +184,22 @@ public class Level extends Thread {
 					}
 				}
 			}
+			
+
+			//((GameActivity)context).setTextTimeLeft(getRemainigTime());
+			
 			//calc already grabbed treasure value
 			this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
 			for (int j=0; j < treasureList.size(); j++){
 				this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
 			}
 		//}
-		if(this.timing.getCurrTime() > this.maxPlayTime)
-			this.isRunning = false;
+		if(this.timing.getCurrTime() > this.maxPlayTime) {
+			this._isRunning = false;
+		}
+		
 	}
+	
 	private void generatePedestrians(int amount, float minDist){
 		Random rand = new Random();
 		Vector2 pos = new Vector2();
@@ -196,6 +221,7 @@ public class Level extends Thread {
 			}
 		}
 	}
+	
 	public void draw(GL10 gl) {
 		// draw floor background image
 		textures.setTexture(R.drawable.l11_street_bg);
@@ -221,6 +247,7 @@ public class Level extends Thread {
 			((Pedestrian)pedestrianList.get(i)).draw(gl);
 		}
 		gl.glDisable(GL10.GL_BLEND);
+		
 	}
 	public float getGrabbedTreasureValue(){
 		return this.grabbedTreasureValue;
