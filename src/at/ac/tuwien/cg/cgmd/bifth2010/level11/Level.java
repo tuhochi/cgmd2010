@@ -19,7 +19,11 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.util.Log;
 
-
+/**
+ * holds game, level and gameloop
+ * @author felix.fleisz
+ *
+ */
 public class Level extends Thread {
 
     private static final String LOG_TAG = Level.class.getSimpleName();
@@ -46,7 +50,11 @@ public class Level extends Thread {
 	private Timing timing;
 	private int grabbedTreasureValueOfDeletedTreasures;
 	private int grabbedTreasureValue;
-	
+	/**
+	 * inits level
+	 * @param sizeX
+	 * @param sizeY
+	 */
 	public Level(float sizeX, float sizeY) {
 		//Log.i(LOG_TAG, "Level(float, float)");
 		
@@ -66,7 +74,11 @@ public class Level extends Thread {
 
 	}
 	
-	
+	/**
+	 * inits level, generates level, set opengl contex, init textures
+	 * @param gl
+	 * @param context
+	 */
 	public void init(GL10 gl, Context context) {
 		//Log.i(LOG_TAG, "init()");
 		 
@@ -83,7 +95,9 @@ public class Level extends Thread {
 		this._isRunning = true;
 		
 	}
-	
+	/**
+	 * inits textures
+	 */
 	public void initTextures() {
 		//Log.i(LOG_TAG, "initTextures()");
 
@@ -111,7 +125,9 @@ public class Level extends Thread {
     	//textures.add(pedestrian.hair.hair_03_texture_id);
 	}
 	
-	
+	/**
+	 * runs level main loop
+	 */
 	public void run() {
 		
 		while (_isActive) {
@@ -135,12 +151,23 @@ public class Level extends Thread {
 
 		
 	}
+	/**
+	 * pauses level
+	 * @param pause
+	 */
 	public  void pause(boolean pause){
 		this.isPaused = pause;
 	}
+	/**
+	 * add a treasure
+	 * @param treasure
+	 */
 	public  void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
 		}
+	/**
+	 * updates level-objects states
+	 */
 	private  void update() {
 		//synchronized(this){
 			timing.update();
@@ -199,7 +226,11 @@ public class Level extends Thread {
 		}
 		
 	}
-	
+	/**
+	 * generates level by distributing pedestrians
+	 * @param amount
+	 * @param minDist
+	 */
 	private void generatePedestrians(int amount, float minDist){
 		Random rand = new Random();
 		Vector2 pos = new Vector2();
@@ -221,7 +252,10 @@ public class Level extends Thread {
 			}
 		}
 	}
-	
+	/**
+	 * draws level
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		// draw floor background image
 		textures.setTexture(R.drawable.l11_street_bg);
@@ -249,9 +283,17 @@ public class Level extends Thread {
 		gl.glDisable(GL10.GL_BLEND);
 		
 	}
+	/**
+	 * returns treasure value that is already grabbed by pedestrians
+	 * @return grabbed treasure
+	 */
 	public float getGrabbedTreasureValue(){
 		return this.grabbedTreasureValue;
 	}
+	/**
+	 * returns remaining time to play
+	 * @return remaining time
+	 */
 	public float getRemainigTime(){
 		return this.maxPlayTime-this.timing.getCurrTime();
 	}
