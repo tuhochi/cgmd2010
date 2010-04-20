@@ -21,8 +21,6 @@ public class GameRenderer implements Renderer {
     public float _width = 480.0f;
     public float _height = 320.0f;
     
-    float zrot;
-
     GL10 _gl;
    
     Textures texture;
@@ -42,11 +40,11 @@ public class GameRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //Log.i(LOG_TAG, "onSurfaceCreated()");
-        
+    	
         this._gl = gl;
         
         this.level.init(gl, this.context);
-        
+
         // setup OpenGL
         gl.glMatrixMode(GL10.GL_PROJECTION);
         
@@ -82,11 +80,9 @@ public class GameRenderer implements Renderer {
     public void onSurfaceChanged(GL10 gl, int w, int h) {
 		//Log.i(LOG_TAG, "onSurfaceChanged()");
 		
-        _width = w;
-        _height = h;
         
-        gl.glOrthof(0.0f, _width, 0.0f, _height, -1.0f, 100.0f);
-        gl.glViewport(0, 0, w, h);
+        //gl.glOrthof(0.0f, _width, 0.0f, _height, -1.0f, 100.0f);
+        //gl.glViewport(0, 0, w, h);
     }
 
     @Override
@@ -98,7 +94,11 @@ public class GameRenderer implements Renderer {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
 		gl.glLoadIdentity();					//Reset The Current Modelview Matrix
 		
-		this.level.draw(gl);
+		if (this.level._isRunning) {
+
+			//((GameActivity)this.context).setTextTimeLeft(this.level.getRemainigTime());
+			this.level.draw(gl);
 		
+		}
     }
 }

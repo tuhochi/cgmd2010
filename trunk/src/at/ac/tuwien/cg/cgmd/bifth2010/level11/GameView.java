@@ -11,11 +11,15 @@ public class GameView extends GLSurfaceView {
     private long touchedTime;
     private float _x = 0;
     private float _y = 0;
+    private float _value = 0.0f;
     public GameView(Context context) {
         super(context);
         _renderer = new GameRenderer(context);
         setRenderer(_renderer);
         this.touchedTime = 0;
+       
+
+        
     }
     
     public boolean onTouchEvent(final MotionEvent event) {
@@ -23,6 +27,7 @@ public class GameView extends GLSurfaceView {
             _x = event.getX();
             _y = event.getY();
             this.touchedTime = System.currentTimeMillis();
+
         }
         
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
@@ -37,12 +42,15 @@ public class GameView extends GLSurfaceView {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             _x = event.getX();
             _y = event.getY();
+            _value = (System.currentTimeMillis()-this.touchedTime)/100.0f;
         	((GameActivity)_renderer.context)._level.
-        	addTreasure(new Treasure((System.currentTimeMillis()-this.touchedTime)/100.0f,
+        	addTreasure(new Treasure(_value,
         			200.0f,
         			new Vector2(_x/_renderer._width*Level.sizeX,
         			Level.sizeY-(_y/_renderer._height*Level.sizeY))));
-            
+
+        	((GameActivity)_renderer.context).setTextTreasureSpent(_value);
+			
         	
         }
         return true;
@@ -50,8 +58,8 @@ public class GameView extends GLSurfaceView {
     
     @Override
 	public void onPause() {
-		if(((GameActivity)_renderer.context)._level != null)
-			((GameActivity)_renderer.context)._level.pause(true);
+		//if(((GameActivity)_renderer.context)._level != null)
+			//((GameActivity)_renderer.context)._level.pause(true);
 		
 
 		//((GameActivity)_renderer.context)._level.suspend();

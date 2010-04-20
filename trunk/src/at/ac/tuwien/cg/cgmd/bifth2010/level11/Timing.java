@@ -11,6 +11,8 @@ public class Timing {
 		startTime = System.nanoTime()/1000000000.0f;
 		currTime = 0.0f;
 		lastFrameTime = 0.0f;
+		deltaFrameTime = 0.0f;
+		currFPS = 0.0f;
 		
 	}
 	
