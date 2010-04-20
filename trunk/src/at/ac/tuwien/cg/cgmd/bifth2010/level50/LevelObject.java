@@ -159,15 +159,15 @@ public class LevelObject {
 		movement[direction] = amount;
 	}
 	
-	public void setPosition(float x, float y) {
-		if (!testCollision(x,y)) {
-			this.x = x;
-			this.y = y;
-		}
-	}
-	
-	public float getPositionX() {return x;}
-	public float getPositionY() {return y;}
+//	public void setPosition(float x, float y) {
+//		if (!testCollision(x,y)) {
+//			this.x = x;
+//			this.y = y;
+//		}
+//	}
+//	
+//	public float getPositionX() {return x;}
+//	public float getPositionY() {return y;}
 	
 	boolean testCollision(float x, float y) {
 		if ((level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 &&

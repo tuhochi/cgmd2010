@@ -15,7 +15,7 @@ public class LevelSurfaceView extends GLSurfaceView {
 	public LevelSurfaceView(Context context) {
 		super(context);
 		mRenderer = new LevelRenderer(context);
-		mRenderer.setPosition(x, y);
+//		mRenderer.setPosition(x, y);
         setRenderer(mRenderer);
         setFocusableInTouchMode(true);
 	}
@@ -69,9 +69,9 @@ public class LevelSurfaceView extends GLSurfaceView {
 	
 	public int getScore() {return score;}
 	public void setScore(int score) {this.score = score+10;}
-	public float getPositionX() {return mRenderer.getPositionX();}
-	public float getPositionY() {return mRenderer.getPositionY();}
-	public void setPosition(float x, float y) {this.x = x; this.y = y;}
+//	public float getPositionX() {return mRenderer.getPositionX();}
+//	public float getPositionY() {return mRenderer.getPositionY();}
+//	public void setPosition(float x, float y) {this.x = x; this.y = y;}
 	
 
 }

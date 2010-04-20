@@ -54,15 +54,15 @@ public class LevelRenderer implements Renderer {
 	
 	public void movePlayer(float x, float y) {bunny.move(x,y);}
 	public void movePlayer(int direction, float amount) {bunny.move(direction,amount);}
-	public void setPosition(float x, float y) {bunny.setPosition(x, y);}
-	public float getPositionX() {return bunny.getPositionX();}
-	public float getPositionY() {return bunny.getPositionY();}
+//	public void setPosition(float x, float y) {bunny.setPosition(x, y);}
+//	public float getPositionX() {return bunny.getPositionX();}
+//	public float getPositionY() {return bunny.getPositionY();}
 	
 	
 	LevelCollision level;
 	LevelObject bunny, a, b;
 	Context context;
-	float positionX = 0;
-	float positionY = 0;
+//	float positionX = 0;
+//	float positionY = 0;
 
 }
