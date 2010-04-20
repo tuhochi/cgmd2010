@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="l88_help_title">Bank Heist Bunny</string>
+<string name="l88_help_part2">Als vermeintlicher Bankräuber muss sich der Hase darum kümmern, soviel Gold wie möglich zu verstecken. Ziel des Games ist es, soviele verschiedene Verstecke wie möglich aufzusuchen, um dort Gold zu verstecken, ohne von der Polizei erwischt zu werden. Die Verstecke gibt es in unterschiedlichen Größenordnungen: klein, mittel, groß. Wichtig ist diese Unterscheidung für die Menge von Gold, die dort deponiert werden kann. Doch auch für die Erreichbarkeit gilt – je größer ein Versteck, umso schwieriger ist es zu erreichen. </string>
+<string name="l88_help_part1">„Vorsicht! Die Bullen sind hinter uns her – Schnell weg mit der Beute!“ </string>
+<string name="l88_help_part3">Das Spiel endet, sobald man alles Gold versteckt hat oder von der Polizei erwischt wurde. </string>
+<string name="l88_help_part4">Zusätzlich gibt es mehrere Spielereignisse wie eine Garage, wo man sich vor der Polizei verstecken kann, Gold ausgibt jedoch keine Punkte für den Score bekommt; Straßensperren, wo man die Polizei schmieren muss jedoch wieder keine Punkte für den Score bekommt; Waschanlagen, Abkürzungen die die Polizei nicht nehmen kann; Parkhäuser, wo man sich andere Autos klauen kann und somit von der Polizei für einen kurzen Augenblick nicht behelligt wird. </string>
+<string name="l88_help_part5">Die Steuerung der Spielfigur wird mithilfe der Cursortasten oben, unten, links, rechts erreicht.</string>
+</resources>

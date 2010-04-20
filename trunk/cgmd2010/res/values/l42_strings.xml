@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="l42_nameofthegame_full">Signanzorbit</string>
+<string name="l42_HelpActivity_Title">Signanzorbit</string>
+<string name="l42_HelpActivity_Text1">Die hohe Masse des Schatzes führte durch den Signanzeffekt zu einer Transformation des Raumes in ein schwereloses Gebilde in dem all deine Besitztümer eine kompakte zentrale Masse darstellen. Diese Masse ist so groß, dass sich bereits verschiedene kleinere Objekte in Umlaufbahnen um den Schatz befinden.</string>
+<string name="l42_HelpActivity_Text2">Diesen zentralen &quot;Goldplaneten&quot; gilt es nun so weit wie möglich zu zerstören um den Schatz zu verkleinern. Um dieses Ziel zu erreichen müssen die Objekte (im weiteren Satelliten genannt) aus ihren Umlaufbahnen hinaus auf den Schatz geschleudert werden. Der Spieler besitzt die Fähigkeit gerichtete Kraftimpulse im Raum auszulösen um die Satellitenbahnen zu beeinflussen.</string>
+<string name="l42_HelpActivity_Text3">Ein Impuls kann durch Berühren des Bildschirms erzeugt werden, dabei lädt sich die Kraft des Impulses über die Zeit auf. Ein Satellit muss mit der richtigen Kraft an der richtigen Stelle getroffen werden um beim Absturz maximalen Schaden anzurichten.</string>
+<string name="l42_HelpActivity_Text4">Die Kameraperspektive kann kugelförmig rund um den Schatz beliebig verändert werden, die Steuerung der Kamera erfolgt über sog. &quot;Sweeps&quot;, also schnelle, gerichtete Bewegungen über den Bildschirm.</string>
+</resources>

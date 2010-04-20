@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:background="@drawable/l00_menuebackground">
+  
+	<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<TableLayout android:id="@+id/TableLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TableRow>
+				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_title" android:textSize="10pt" android:layout_marginBottom="10pt" android:typeface="serif" android:textColor="@color/l84_colorBlack"></TextView>
+			</TableRow>
+			<TableRow>
+			 <ImageView android:layout_width="205px" android:layout_height="135px" android:background="@drawable/l84_helpjewels" android:layout_gravity="center_horizontal" android:fadingEdge="horizontal" android:fadingEdgeLength="5pt"></ImageView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_subtitle" android:textStyle="bold" android:layout_marginBottom="10pt" android:typeface="serif" android:textColor="@color/l84_colorBlack" android:layout_marginTop="10pt"></TextView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l84_help_content" android:textColor="@color/l84_colorBlack" android:typeface="serif"></TextView>
+			</TableRow>
+		</TableLayout>	
+	</ScrollView>
+</LinearLayout>
