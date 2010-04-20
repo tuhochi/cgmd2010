@@ -16,8 +16,8 @@ public abstract class Projectile extends GLObject{
 	public Projectile( float speed, short dmg ){
 		mSpeed = speed;
 		mDmg = dmg;
-		mColor[0] = 1.0f;
-		mColor[1] = 1.0f;
+		mColor[0] = 0.0f;
+		mColor[1] = 0.0f;
 		mColor[2] = 0.0f;
 		mColor[3] = 0.5f;
 		mXTranslate = 0.0f;
