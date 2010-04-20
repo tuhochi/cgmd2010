@@ -20,6 +20,11 @@ public class Torso {
 	private Square torso;
 	private Square shadow;
 	
+	/**
+	 * torso constructor
+	 * @param gl
+	 * @param context
+	 */
 	public Torso(GL10 gl, Context context) {
 		torso = new Square();
 		shadow = new Square();
@@ -27,6 +32,11 @@ public class Torso {
 		color = new Color();
 	}
 	
+	/**
+	 * updates torso position and rotation
+	 * @param pos
+	 * @param angle
+	 */
 	public void update(Vector2 pos, float angle) {
 		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
@@ -34,6 +44,10 @@ public class Torso {
 	
 	}
 	
+	/**
+	 * draws torso
+	 * @param gl
+	 */
 	public void draw(GL10 gl) {
 		
 		gl.glColor4f(color.r, color.g, color.b, 1.0f);
@@ -50,6 +64,10 @@ public class Torso {
 		gl.glPopMatrix();
 	}
 
+	/**
+	 * sets torso color
+	 * @param c
+	 */
 	public void setColor(Color c) {
 		this.color = c;
 		
