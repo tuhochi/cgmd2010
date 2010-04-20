@@ -24,7 +24,6 @@ public abstract class Projectile extends GLObject{
 	}
 	
 	public void setXY( float x, float y){
-		//System.out.println("SETXY Projectile: X:"+x+" Y:"+y);
 		mX = x;
 		mY = y;
 		mXTranslate = 0.0f;
@@ -63,7 +62,6 @@ public abstract class Projectile extends GLObject{
 		mColorBuffer = cbb.asFloatBuffer();
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
-		System.out.println("SETXY Projectile: mLastFrameTime: "+mLastFrametime+" SystemTime: "+System.currentTimeMillis());
 	}
 	
 	@Override
@@ -74,8 +72,9 @@ public abstract class Projectile extends GLObject{
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
 		super.draw(gl);
 		gl.glPopMatrix();
-		if( mCollisionPointX <= mXTranslate && mCollisionPointX > -1 ){
-			System.out.println("mCollPointX: "+mCollisionPointX+ " mXTranslate: "+mXTranslate);
+		System.out.println("mCollPointX: "+mCollisionPointX+ " mXTranslate+mX: "+mXTranslate+mX);
+		if( mCollisionPointX <= this.getX() && mCollisionPointX > -1 ){
+			System.out.println("COL POINT REACHED");
 			this.reset();
 		}
 	}
@@ -86,10 +85,8 @@ public abstract class Projectile extends GLObject{
 		double dt = (ms - mLastFrametime) * 0.001;
 		mLastFrametime = ms;
 		double distance = this.getSpeed() * dt;
-		//System.out.print("getX: mLastFrameTime: "+mLastFrametime+" SystemTime: "+System.currentTimeMillis()+" mXTranslateOld: "+mXTranslateOld+" mXTranslateNew: "+mXTranslateNew+" distance: "+distance);
 		mXTranslate += (float)distance;
-		//System.out.println(" mXTranslateNew: "+mXTranslateNew);
-		return mXTranslate; //returns the bullet real position because it gets translated and not moved
+		return mXTranslate + mX; //returns the bullet real position because it gets translated and not moved
 	}
 
 
