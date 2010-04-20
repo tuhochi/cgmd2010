@@ -21,7 +21,10 @@ public class GameView extends GLSurfaceView {
 
         
     }
-    
+    /**
+     * places a treasure by touch and hold and release display at the release positions.
+     * the value of the treasure is proportional to the time the display is touched.
+     */
     public boolean onTouchEvent(final MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             _x = event.getX();
@@ -55,30 +58,4 @@ public class GameView extends GLSurfaceView {
         }
         return true;
     }
-    
-    @Override
-	public void onPause() {
-		//if(((GameActivity)_renderer.context)._level != null)
-			//((GameActivity)_renderer.context)._level.pause(true);
-		
-
-		//((GameActivity)_renderer.context)._level.suspend();
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-	
-	public void onStart() {
-		//if(((GameActivity)_renderer.context)._level != null)
-			//((GameActivity)_renderer.context)._level.start();
-	}
-
-
-	public void onStop() {
-		//if(((GameActivity)_renderer.context)._level != null)
-			//((GameActivity)_renderer.context)._level.stop();
-	}
 }

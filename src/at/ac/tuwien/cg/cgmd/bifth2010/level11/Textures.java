@@ -109,7 +109,10 @@ public class Textures {
 		}
 		
 	}
-	
+	/**
+	 * activates the openGL texture with the given id
+	 * @param id
+	 */
 	public void setTexture(int id) {
 		//Log.i(LOG_TAG, "setTexture()");
 		

@@ -35,14 +35,23 @@ public class Treasure implements Target{
 			return false;
 		}
 	}
-
+	/**
+	 * sets position in level
+	 * @param pos
+	 */
 	public void setPosition(Vector2 pos) {
 		this.position = pos;
 	}
-	
+	/**
+	 * gets position in level
+	 */
 	public Vector2 getPosition(){
 		return this.position;
 	}
+	/**
+	 * draws treasure
+	 * @param gl gl-context
+	 */
 	public void draw(GL10 gl) {
 
 		Textures.tex.setTexture(treasure_texture_id);
@@ -53,12 +62,24 @@ public class Treasure implements Target{
 			sprite.draw(gl);
 		gl.glPopMatrix();
 	}
+	/**
+	 * returns the current value of the treasure
+	 * @return
+	 */
 	public float getValue(){
 		return this.value;
 	}
+	/**
+	 * returns the value that was already grabbed
+	 * @return grabbed value
+	 */
 	public float getGrabbedValue(){
 		return this.startingValue - this.value;
 	}
+	/**
+	 * returns the value with which the treasure was placed
+	 * @return
+	 */
 	public float getStartingValue(){
 		return this.startingValue;
 	}

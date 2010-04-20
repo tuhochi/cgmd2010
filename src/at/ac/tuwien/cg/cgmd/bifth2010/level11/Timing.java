@@ -2,12 +2,15 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import android.util.Log;
 
+/**
+ * class for gametime
+ */
 public class Timing {
 
     private static final String LOG_TAG = Timing.class.getSimpleName();
 	private float startTime, currTime, currFPS, lastFrameTime, deltaFrameTime, pauseTimeStamp, pausedTime;
 	/**
-	 * class for gametime
+	 * time is set to 0 and already starts timer
 	 */
 	public Timing() {
 		startTime = System.nanoTime()/1000000000.0f;
