@@ -59,7 +59,7 @@ public class Level extends Thread {
 		this._isActive = true;
 		
 		timing = new Timing();
-		this.maxPlayTime = 10;
+		this.maxPlayTime = 60;
 
 	}
 	
