@@ -7,6 +7,8 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level00.TestLevelActivity;
 
 public class LevelActivity extends Activity {
 	private Display d;
@@ -36,5 +38,22 @@ public class LevelActivity extends Activity {
         }
     	return super.onTouchEvent(event);
     }
+    
+    @Override
+	protected void onStop() {		
+		//we finish this activity
+		this.finish();
+		super.onStop();
+    }
+    
+	@Override
+	public void finish() {
+    	SessionState s = new SessionState();
+    	//we set the progress the user has made (must be between 0-100)
+    	s.setProgress(10);
+		//we call the activity's setResult method 
+		setResult(Activity.RESULT_OK, s.asIntent());
+		super.finish();
+	}
     
 }
