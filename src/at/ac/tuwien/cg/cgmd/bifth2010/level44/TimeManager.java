@@ -9,6 +9,7 @@ public class TimeManager {
 	
 	private long duration;
 	private long elapsed;
+
 	private long lastUpdate;
 	
 	public TimeManager() {
@@ -56,4 +57,12 @@ public class TimeManager {
 		return getRemainingTimeMillis() == 0;
 	}
 
+	public long getElapsed() {
+		return elapsed;
+	}
+
+	public void setElapsed(long elapsed) {
+		this.elapsed = elapsed;
+	}
+	
 }

@@ -53,6 +53,10 @@ public class RabbitSprite extends SpriteContainer {
 		addChild(rightWing);
 		addChild(coinBucket);
 	}
+	
+	public CoinBucketSprite getCoinBucket() {
+		return coinBucket;
+	}
 
 	/**
 	 * resets wings to initial (non-flying) state: both wings on top
