@@ -21,6 +21,7 @@ public abstract class Projectile extends GLObject{
 		mColor[2] = 0.0f;
 		mColor[3] = 0.5f;
 		mXTranslate = 0.0f;
+		mActive = false;
 	}
 	
 	public void setXY( float x, float y){
@@ -66,12 +67,11 @@ public abstract class Projectile extends GLObject{
 	
 	@Override
 	public void draw( GL10 gl ){
-		getX();
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
 		super.draw(gl);
-		gl.glPopMatrix();
+		gl.glPopMatrix();	
 	}
 	
 	@Override
@@ -92,8 +92,6 @@ public abstract class Projectile extends GLObject{
 	public void reset(){
 		mXTranslate = 0.0f;
 		this.setActiveState(false);
-		mCollisionPointX = -1;
-		System.out.println("RESET!!!");
 	}
 	
 }

@@ -21,7 +21,6 @@ public class BasicTower extends Tower {
 		mShootingInterval = interval;
 		for( int i = 0; i < mProjectiles.length; i++){
 			mProjectiles[i] = new BasicProjectile( speed, dmg );
-			mProjectiles[i].setActiveState(false);
 		}
 	}
 }

@@ -35,7 +35,6 @@ public class MoneyCarrier extends GLObject {
 
 	public void deactivate(){
 		super.setActiveState(false);
-		mCollisionPointX = -1;
 	}
 	
 	public void init(float xCentr, float yCentr, int type){
@@ -115,23 +114,12 @@ public class MoneyCarrier extends GLObject {
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
 		super.draw(gl);
 		gl.glPopMatrix();
-		
-		
-		//do collision damage!
-		if( this.getX() <= mCollisionPointX && mCollisionPointX != -1 ){
-			mHp -= mDamageAtCollisionPoint;
-			System.out.println("Damage done at Carrier! CollPointX: "+mCollisionPointX);
-			mCollisionPointX = -1;
-		}
-		if( mHp <= 0 ){
-			this.deactivate();
-			System.out.println("Carrier Destroyed!");
-		}
 	}
 	
 	
-	public void setDamageAtCollisionPoint( short dmg ){
-		mDamageAtCollisionPoint = dmg;
+	public void hit( short dmg ){
+		mHp -= dmg;
+		if( mHp <= 0 ) this.deactivate();
 	}
 	
 	public float getX(){
