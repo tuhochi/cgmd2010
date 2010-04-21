@@ -139,7 +139,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 					boolean last = false;
 					for( int i = mBasicTowerCounter; i < Definitions.BASIC_TOWER_POOL && !last; i++){
 						if( mBasicTower[i].getActiveState() == false){
-							mBasicTower[i].setActiveState(true);
 							mBasicTower[i].setXY(mXPos, mYPos);
 							mBasicTowerCounter++;
 							System.out.println("Setting tower at x/y: "+mXPos+"/"+mYPos);

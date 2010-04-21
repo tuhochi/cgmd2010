@@ -23,6 +23,8 @@ public final class Definitions {
 
 	//Game Mechanics:
 	public static final int STARTING_MONEY = 100;
+
+	public static final int GAME_ROUND_WAIT_TIME = 20;
 	
 	
 }

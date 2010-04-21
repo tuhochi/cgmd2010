@@ -112,7 +112,10 @@ public class MoneyCarrier extends GLObject {
 	
 	@Override
 	public void draw(GL10 gl){
-		getX();
+		if( getX() <= 1.0f) {
+			this.deactivate();
+			GameMechanics.getGameMecanics().addMoney( mMoney );
+		}
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
 		super.draw(gl);
@@ -123,7 +126,7 @@ public class MoneyCarrier extends GLObject {
 	public void hit( short dmg ){
 		mHp -= dmg;
 		if( mHp <= 0 ) this.deactivate();
-		GameMechanics.getGameMecanics().addMoney( mMoney );
+		System.out.println("Carrier got hit, damage done: "+dmg+" raminint hp: "+mHp);
 	}
 	
 	public float getX(){

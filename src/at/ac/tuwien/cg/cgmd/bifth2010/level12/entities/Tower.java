@@ -72,6 +72,7 @@ public abstract class Tower extends GLObject {
 		mColorBuffer = cbb.asFloatBuffer();
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
+		this.setActiveState(true);
 	}
 	
 	public void setViewPortLength(int width) {
@@ -83,6 +84,7 @@ public abstract class Tower extends GLObject {
 	@Override
 	public void draw( GL10 gl ){
 		//new projectile
+		if( this.getActiveState() == false ) return;
 		double dt =(System.currentTimeMillis() - mTimeLastProjectileShot ) * 0.001;//secs
 		if( dt >= mShootingInterval ){
 			if( mProjectiles != null ){
@@ -93,7 +95,6 @@ public abstract class Tower extends GLObject {
 						mProjectiles[i].setActiveState( true );
 						mProjectiles[i].setXY( this.getX(), mY);
 						mTimeLastProjectileShot = System.currentTimeMillis();
-						System.out.println("Assing projectile!");
 						break;
 					}
 				}
@@ -109,7 +110,6 @@ public abstract class Tower extends GLObject {
 		for( int  i = 0; i < mProjectiles.length; i++){
 			if(mProjectiles[i].getActiveState()) {
 				mProjectiles[i].draw(gl);
-				System.out.println("Drawing Projectile "+i);
 			}
 		}
 		super.draw(gl);
@@ -122,6 +122,15 @@ public abstract class Tower extends GLObject {
 				mProjectiles[i].reset();
 			}
 		}
+		if( carrier.getX() <= this.getX() ){
+			this.reset();
+		}
+	}
+	
+	
+	public void reset(){
+		this.setActiveState(false);
+		
 	}
 }
 
