@@ -38,6 +38,7 @@ public class PipeGame {
 	private int rowStart;  //< Index of the start-cell row
 	private int rowGoal;   //< Index of the goal-cell row
 	
+	private boolean isOpenGlValid; //< True if OpenGL members are already initialized
 	private TileTexture texTile; //< Tile texture
 	private ArrayList<TileEnum> initTiles; //< Initial game tiles
 	private ArrayList<TileEnum> gameTiles; //< Current game tiles
@@ -47,6 +48,7 @@ public class PipeGame {
 	private TileGeometry geomStart;  //< Start of the flow
 	private TileGeometry geomGoal;   //< Goal of the flow
 	
+	
 	// ----------------------------------------------------------------------------------
 	// -- Ctor ----
 	
@@ -54,6 +56,8 @@ public class PipeGame {
 	 * Create the pipe game.
 	 */
 	public PipeGame(Bundle state, int width, int height) {
+		
+		isOpenGlValid = false;
 		
 		setDimension(width, height);
 		
@@ -87,8 +91,16 @@ public class PipeGame {
 	// ----------------------------------------------------------------------------------
 	// -- Public methods ----
 	
-	public void create() {
+	/**
+	 * Create all OpenGL specific members.
+	 */
+	public void createGl() {
 				
+		// OpenGL members already initialized
+		if (isOpenGlValid) {
+			return;
+		}
+		isOpenGlValid = true;
 		
 		texTile   = new TileTexture();
 		

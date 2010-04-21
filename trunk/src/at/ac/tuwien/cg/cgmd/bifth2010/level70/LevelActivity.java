@@ -62,13 +62,23 @@ public class LevelActivity extends Activity {
 	
 	
 	/**
+	 * Start the game.
+	 */
+	@Override
+    protected void onStart() {
+        Log.i("LevelActivity70", "onStart");
+        super.onStart();
+        rendererView.onStart();
+    }
+	
+	/**
 	 * Resume the game.
 	 */
 	@Override
     protected void onResume() {
         Log.i("LevelActivity70", "onResume");
         super.onResume();
-        rendererView.onStart();
+        rendererView.onResume();
     }
 
 	
@@ -79,6 +89,7 @@ public class LevelActivity extends Activity {
     protected void onPause() {
     	Log.i("LevelActivity70", "onPause");
         super.onPause();
+        rendererView.onPause();
     }
     
 

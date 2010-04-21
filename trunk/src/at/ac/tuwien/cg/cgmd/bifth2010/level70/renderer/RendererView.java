@@ -98,16 +98,37 @@ public class RendererView extends GLSurfaceView {
 	 */
 	public void onStart() {
         Log.i("RendererView", "onStart");
-        updateTask.start();
+        if (!updateTask.isAlive()) {
+        	updateTask.start();
+        }
     }
 
+	
+	/**
+	 * On start event.
+	 */
+	public void onPause() {
+        Log.i("RendererView", "onPause");
+        super.onPause();
+        updateTask.setPauseFlag(true);
+    }
+	
+	
+	/**
+	 * On resume event.
+	 */
+	public void onResume() {
+        Log.i("RendererView", "onResume");
+        super.onResume();
+        updateTask.setPauseFlag(false);
+    }
+	
 
 	/**
 	 * On stop event.
 	 */
     public void onStop() {
     	Log.i("RendererView", "onStop");
-    	updateTask.setRunningFlag(false);
     }
     
    
