@@ -35,7 +35,7 @@ public class GameScene {
 	// -- Public methods ----
 	
 	public void create() {
-		pipe.create();
+		pipe.createGl();
 	}
 	
 	/**

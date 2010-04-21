@@ -23,8 +23,9 @@ public class UpdateTask extends Thread {
 	
 	private LinkedList<KeyEvent>    inputKeys; //< all key input events
 	private LinkedList<MotionEvent> inputMotions; //< all motion input events
-	public boolean isRunning;   //< true if the game is running
-	private GameScene scene;     //< Game scene
+	public boolean isRunning; //< True if the main loop is running
+	public boolean isPause;   //< True if the game is paused
+	private GameScene scene;  //< Game scene
 	
 	
 	// ----------------------------------------------------------------------------------
@@ -52,7 +53,6 @@ public class UpdateTask extends Thread {
 	public void run() {
 		
 		isRunning = true;
-		
 		float dt = 0.0f;
 		long  milTime = 0;
 		long  endTime = 0;
@@ -60,9 +60,11 @@ public class UpdateTask extends Thread {
 		while (isRunning) {
 			
 			synchronized(scene) {
-				doInput();
-				update(dt);
-				scene.notify();
+				if (!isPause) {
+					doInput();
+					update(dt);
+					scene.notify();
+				}
 			}
 			
 			endTime = System.nanoTime();
@@ -83,10 +85,19 @@ public class UpdateTask extends Thread {
 	
 	/**
 	 * Set the running flag of the main update loop.
-	 * @param isRunning true to loop, to abort set to false.
+	 * @param flag true to run the main loop, false to quit the main loop.
 	 */
-	public void setRunningFlag(boolean isRunning) {
-		this.isRunning = isRunning;
+	public void setRunningFlag(boolean flag) {
+		this.isRunning = flag;
+	}
+	
+	
+	/**
+	 * Set the pause flag of the main update loop. No game scene update will happen.
+	 * @param flag true to pause the game, otherwise false.
+	 */
+	public void setPauseFlag(boolean flag) {
+		this.isPause = flag;
 	}
 	
 	
