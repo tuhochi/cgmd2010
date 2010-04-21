@@ -16,7 +16,6 @@ public abstract class GLObject {
 	protected float mX = 0;
 	protected float mSpeed = 0;  //pixel/sec
 	protected boolean mActive = false;
-	protected float mCollisionPointX = -1;
 	
 	
 	public void draw( GL10 gl ){
@@ -57,22 +56,6 @@ public abstract class GLObject {
 		return x - this.getX(); //bei -? achtung!
 	}
 	
-	
-	// obj = carrier
-	public float collideX( GLObject obj ){
-		float distance = this.distanceX( obj.getX() );
-		if( this.getSpeed() == 0 ) return this.getX();
-		float time = distance / (this.getSpeed() + obj.getSpeed());
-		return (this.getX() + time * this.getSpeed());
-	}
-	
-	public void setCollisionPointX( float x ){
-		mCollisionPointX = x;
-	}
-	
-	public float getCollisionPointX(){
-		return mCollisionPointX;
-	}
 	
 	public float getSpeed(){
 		return mSpeed;

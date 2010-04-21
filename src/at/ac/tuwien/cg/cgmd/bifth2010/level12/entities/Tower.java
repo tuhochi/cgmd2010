@@ -16,9 +16,9 @@ public abstract class Tower extends GLObject {
 	private float mRadius = -1.0f;
 	protected float mShootingInterval = 1.0f; //secs
 	protected double mTimeLastProjectileShot = System.currentTimeMillis();
-	protected Queue<Projectile> mFlyingProjectiles = new LinkedList<Projectile>();   //any better options regarding performance?
 	protected Projectile[] mProjectiles = null;
 	protected int mScreenWidth = 800;
+	protected short mDmg = 10;
 	
 	
 	protected Tower(float xCentr, float yCentr, float radius ){
@@ -94,23 +94,14 @@ public abstract class Tower extends GLObject {
 						mProjectiles[i].setXY( this.getX(), mY);
 						System.out.println("Tower: "+mX+" my: "+mY);
 						mTimeLastProjectileShot = System.currentTimeMillis();
-						mFlyingProjectiles.add( mProjectiles[i] );
-						System.out.println("adding projectile #: "+i);
 						break;
 					}
 				}
-			}
-			Projectile p = mFlyingProjectiles.peek();
-			if( p.getX() > mScreenWidth ){
-				System.out.println("Removing Projectile over screen edge!!!! ScreenEdge: "+mScreenWidth+" Projectile: "+ p.getX());
-				p = mFlyingProjectiles.poll();
-				p.reset();
-			}
-			
-			else if( (p.getX() >= p.getCollisionPointX()) && (p.getCollisionPointX() > 0.0f ) ){
-				System.out.println("Removing Projectile over collision point!!! CollPoint: "+p.getCollisionPointX()+" Projectile: "+ p.getX());
-				p = mFlyingProjectiles.poll();
-				p.reset();
+			} 
+			for( int i = 0; i < mProjectiles.length; i++){
+				if( mProjectiles[i].getActiveState() && ( mProjectiles[i].getX() >= mScreenWidth )){
+					mProjectiles[i].reset();
+				}
 			}
 		}
 		
@@ -121,15 +112,14 @@ public abstract class Tower extends GLObject {
 		super.draw(gl);
 	}
 	
-	
-	public Projectile getProjectile(){
-		if (mFlyingProjectiles.isEmpty()) return null;
-		else return mFlyingProjectiles.element(); //achtung, kann null zurückgeben
+	public void collideX( MoneyCarrier carrier ){
+		for( int i = 0; i < mProjectiles.length; i++){
+			if( mProjectiles[i].getActiveState() && (mProjectiles[i].getX() >= carrier.getX()) ){
+				carrier.hit( mDmg );
+				mProjectiles[i].reset();
+			}
+		}
 	}
-	
-
-	
-	
 }
 
 

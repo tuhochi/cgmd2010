@@ -1,7 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public final class Definitions {
-	public static final int COLLISION_DETECTION_TIMEOUT = 500;
+	public static final int COLLISION_DETECTION_TIMEOUT = 10;
 	
 	//Number of lanes:
 	public static final int LANE_COUNT = 5;
