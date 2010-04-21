@@ -200,7 +200,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 			lane = rand.nextInt((int)mHeight);
 			correctXYpos = mGamefield.correctXYpos( 10, lane);
 			mEnemies[i].init(mWidth, correctXYpos[1], 2);
-			
+		
 			mCarrierWave[i] = rand.nextInt(30); //
 		}
 	}

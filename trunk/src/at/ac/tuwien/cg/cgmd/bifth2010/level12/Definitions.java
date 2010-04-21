@@ -20,6 +20,9 @@ public final class Definitions {
 	//Enemies:	
 	public static final int CARRIER_POOL = 5;
 	//public static final int CARRIER_SPAWN_INTERVALL_01 = 3; //wave 1 spawn intervall
+
+	//Game Mechanics:
+	public static final int STARTING_MONEY = 100;
 	
 	
 }
