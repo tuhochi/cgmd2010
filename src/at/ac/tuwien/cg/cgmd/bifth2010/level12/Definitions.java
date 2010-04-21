@@ -25,6 +25,8 @@ public final class Definitions {
 	public static final int STARTING_MONEY = 100;
 
 	public static final int GAME_ROUND_WAIT_TIME = 20;
+
+	public static final short MAX_ROUND_NUMBER = 3;
 	
 	
 }

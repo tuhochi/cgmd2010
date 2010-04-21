@@ -15,12 +15,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Projectile;
 
-public class GLView extends GLSurfaceView implements Renderer {
+public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	private Gamefield mGamefield = null;
+	
+	private Thread mGameThread = null;
 	
 	//private static final int CARRIER_SPAWN_INTERVALL_01 = 3; //wave 1 spawn intervall
 	private static final int[] mCarrierWave = new int[Definitions.CARRIER_POOL];
-	private MoneyCarrier[] mEnemies = new MoneyCarrier[ Definitions.CARRIER_POOL ];
+	private MoneyCarrier[] mEnemies = null;
 	private int mEnemieCount = 0;
 	
 	private int mBasicTowerCounter = 0;
@@ -47,7 +49,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 		mStartTime = System.currentTimeMillis();
 		mWidth = w;
 		mHeight = h;
-		//testzombie = new Zombie();
 	}
 	
 	
@@ -66,9 +67,10 @@ public class GLView extends GLSurfaceView implements Renderer {
 		for ( int i = 0; i < mBasicTower.length; i++) if(mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl);	
 		
 		//if(mPassedTime == mCarrierWave[0]) //if abfrage wird so nie true sein = passed time auf int casten!
-		for ( int i = 0; i < mEnemies.length; i++)if(mEnemies[i].getActiveState()) mEnemies[i].draw(gl);
-		
-		if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT ) calcCollisions();
+		if( mEnemies != null) {
+			for ( int i = 0; i < mEnemies.length; i++)if(mEnemies[i].getActiveState()) mEnemies[i].draw(gl);
+			if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT ) calcCollisions();
+		}
 	}
 	
 	
@@ -89,8 +91,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 		mWidth = width;
 		mHeight = height;
 		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( width );
-		initEnemies();	
-		for ( int i = 0; i < mEnemies.length; i++){mEnemies[i].activate();	mEnemieCount++;} 
 	}
 
 	@Override
@@ -124,9 +124,9 @@ public class GLView extends GLSurfaceView implements Renderer {
 		gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);	
 		
 		initGameField( (int)mWidth, (int)mHeight );
-		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( (int)mWidth );
-		initEnemies();	
-		for ( int i = 0; i < mEnemies.length; i++){mEnemies[i].activate();	mEnemieCount++;} 
+		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( (int)mWidth );	
+		mGameThread = new Thread(this);
+		mGameThread.start();
 	}
 	
 	public void setXYpos(float xpos, float ypos) {
@@ -169,8 +169,62 @@ public class GLView extends GLSurfaceView implements Renderer {
 		mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
 	}
 	
+	public void prepareRound(){
+		System.out.println("PREPARE");
+		try{
+			System.out.println("WAIT_TIME:"+ GameMechanics.getGameMecanics().getRemainingWaitTime() );
+			while( GameMechanics.getGameMecanics().getRemainingWaitTime() > 0){
+					System.out.println("BEFORE-SLEEP");
+					setCountdown( GameMechanics.getGameMecanics().getRemainingWaitTime() );
+					Thread.sleep( 1000 );
+			}
+		} catch (InterruptedException e) {
+			System.out.println("Interrup Exception Caught!");
+			GameMechanics.getGameMecanics().resetRound();
+			prepareRound();
+		}
+		System.out.println("AFTER SLEEP");
+		GameMechanics.getGameMecanics().nextRound();
+		System.out.println("NEXT ROUND, ROUNDNR: "+GameMechanics.getGameMecanics().getRemainingWaitTime());
+		System.out.println("INIT ENEMIES");
+		initEnemies( GameMechanics.getGameMecanics().getRoundNumber() );
+		System.out.println("STARTING ROUND");
+		startRound( GameMechanics.getGameMecanics().getRoundNumber() );
+	}
 	
 	
+	
+	private void setCountdown(int remainingWaitTime) {
+		System.out.println("SETTING COUNTDOWN TO: "+remainingWaitTime);
+		// TODO Overlay
+	}
+
+
+
+	public void initEnemies( short roundnr ){
+		mEnemies = new MoneyCarrier[ Definitions.CARRIER_POOL ];
+		System.out.println("IN INIT ENEMIES FOR ROUND: "+roundnr);
+		Random rand = new Random();
+		float lane;
+		float[] correctXYpos;
+		for(int i=0; i < mEnemies.length; i++){
+			mEnemies[i] = new MoneyCarrier();
+			lane = rand.nextInt((int)mHeight);
+			correctXYpos = mGamefield.correctXYpos( 10, lane);
+			mEnemies[i].init(mWidth, correctXYpos[1], 2);
+		
+			mCarrierWave[i] = rand.nextInt(30); //
+		}
+	}
+	
+	
+	
+	public void startRound( short roundnr ){
+		System.out.println("IN START ROUND FOR ROUND:"+roundnr);
+		for ( int i = 0; i < mEnemies.length; i++){mEnemies[i].activate();	mEnemieCount++;}
+		GameMechanics.getGameMecanics().setRoundStartedTime();
+		prepareRound();
+	}
 	
 	public void initTower(){
 		//BasicTower init
@@ -190,21 +244,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 	}
 	
 	
-	public void initEnemies(){
-		Random rand = new Random();
-		float lane;
-		float[] correctXYpos;
-		for(int i=0; i < mEnemies.length; i++){
-			mEnemies[i] = new MoneyCarrier();
-			lane = rand.nextInt((int)mHeight);
-			correctXYpos = mGamefield.correctXYpos( 10, lane);
-			mEnemies[i].init(mWidth, correctXYpos[1], 2);
-		
-			mCarrierWave[i] = rand.nextInt(30); //
-		}
-	}
-	
-	
 	public void calcCollisions(){
 		mLastCollDetDone = System.currentTimeMillis();
 		if( mBasicTower.length == 0){System.out.println("TowerCount = 0 "); return;}
@@ -219,6 +258,16 @@ public class GLView extends GLSurfaceView implements Renderer {
 				}
 			}
 		}	
+	}
+
+
+
+
+
+	@Override
+	public void run() {
+		prepareRound();
+		
 	}
 	
 }
