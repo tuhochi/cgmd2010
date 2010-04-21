@@ -17,7 +17,7 @@ import java.util.ListIterator;
  */
 public class EventManager {
 	
-	// TODO: @Ferdi: Hast du dir das so gedacht? Oder Enum? Ich überlass das Design vom Eventmanager dir :P
+	// FERDI: Hast du dir das so gedacht? Oder Enum? Ich überlass das Design vom Eventmanager dir :P
 	public static final int ANIMATION_COMPLETE = 1;
 	public static final int PRODUCT_COLLECTED = 2;
 	

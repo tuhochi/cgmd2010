@@ -15,7 +15,6 @@ import javax.microedition.khronos.opengles.GL10;
 public class RenderEntity extends GameEntity implements Renderable {
 
 	protected int texture;
-//	protected float scale;	// We change width and height directly
 	protected boolean visible;	
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
@@ -30,13 +29,13 @@ public class RenderEntity extends GameEntity implements Renderable {
 	 */
 	public RenderEntity(float x, float y, float z, float width, float height) {
 		
-		// INFO: Changed this initial value to 1 to get a white quad on screen everytime
+		super();
+		// INFO: Changed this initial value to 0 to get a white quad on screen everytime
 		texture = 0;
 		visible = true;
 		setPos(x, y);
 		this.z = z;
 		setDim(width, height);
-//		scale = 1;
 		
 		float hWidth = width * 0.5f;
 		float hHeight = height * 0.5f;
@@ -52,7 +51,7 @@ public class RenderEntity extends GameEntity implements Renderable {
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
 		
-		
+		// TODO: Does not handle independent Quad and Texture sizes
 //		float ratio = width / height;		
 		float texCoords[] = {0.0f,  1.0f,
 							 1.0f, 1.0f,
@@ -69,7 +68,6 @@ public class RenderEntity extends GameEntity implements Renderable {
 	@Override
 	public void render(GL10 gl) {
 		
-		// Remove texture, because it is always valid, even if 0
 		if (!visible)
 			return;
 		
@@ -101,19 +99,20 @@ public class RenderEntity extends GameEntity implements Renderable {
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}	
 	
-	public int texture() {
-		return texture;
-	}
-
-	public void setTexture(int texture) {
-		this.texture = texture;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
+	// FERDI: Das brauch ma doch nicht :P Und verwenden tuts im Moment auch keine Komponente
+//	public int texture() {
+//		return texture;
+//	}
+//
+//	public void setTexture(int texture) {
+//		this.texture = texture;
+//	}
+//
+//	public boolean isVisible() {
+//		return visible;
+//	}
+//
+//	public void setVisible(boolean visible) {
+//		this.visible = visible;
+//	}
 }

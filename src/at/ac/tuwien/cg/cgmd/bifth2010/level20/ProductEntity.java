@@ -20,17 +20,26 @@ public class ProductEntity extends RenderEntity implements Clickable {
 	 * The price of the product.
 	 */
 	protected int price;
+		
+	/**
+	 * The neighbors of the product in the same row. We need to know this because they get deactivated once this product has been clicked
+	 */
+	protected int[] neighbors;
+	
 
 	/**
 	 * @param x The X coordinate. 
 	 * @param y The Y coordinate. 
 	 * @param z The Z coordinate (the depth). 
 	 * @param size The side length of the quadratic product entity.
+	 * FERDI: Alle products sind im Moment quadratisch? Soll ma das so lassen oder auch rechtwinkelige zulassen?
 	 */
 	public ProductEntity(float x, float y, float z, float size) {
 		super(x, y, z, size, size);
 		clickable = true;
-		price = (int)(Math.random() * 10.f);
+		price = (int)(Math.random() * 10) + 1;
+		
+		neighbors = new int[Shelf.NUMBER_PRODUCTS - 1];
 	}
 
 	@Override

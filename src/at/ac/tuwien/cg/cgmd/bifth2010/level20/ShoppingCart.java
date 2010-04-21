@@ -12,14 +12,23 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class ShoppingCart extends RenderEntity {
 
-	// Holds all products in the ShoppingCart
+	/**
+	 * Holds all products in the ShoppingCart
+	 */
 	protected Hashtable<Integer, ProductEntity> entities;
-//	protected List<ProductEntity> products;
 	
+	/**
+	 * Creates the shopping cart in the given place. It holds all clicked products and handles their prices
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param width
+	 * @param height
+	 */
 	public ShoppingCart(float x, float y, float z, float width, float height) {
 		super(x, y, z, width, height);
  
-//		products = new LinkedList<ProductEntity>();
 		entities = new Hashtable<Integer, ProductEntity>();
 	}
 	
@@ -31,6 +40,9 @@ public class ShoppingCart extends RenderEntity {
 		while(keys.hasMoreElements()) {
 			entities.get(keys.nextElement()).render(gl);
 		}
+		
+		// And render the shopping cart itself
+		super.render(gl);
 	}
 	
 	/**
@@ -57,7 +69,7 @@ public class ShoppingCart extends RenderEntity {
 	public float[] getNextProductPosition() {
 		float[] pos = new float[2];
 		int nrProducts = getNumberProducts();		
-		int row = (int) Math.floor(nrProducts / 4);
+		int row = nrProducts / 8; // Integer division is fun :D
 		float width = this.width*.5f - 50;
 		pos[0] = (float) (x - width + Math.random()* width*2);
 		pos[1] = y + row*15;
