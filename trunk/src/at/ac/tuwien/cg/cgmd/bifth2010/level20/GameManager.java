@@ -35,28 +35,38 @@ public class GameManager implements Renderable, EventListener {
 	static final int TEXTURE_BUNNY = R.drawable.l20_icon;
 	static final int TEXTURE_SHELF = R.drawable.l20_backg;
 	static final int TEXTURE_CART = R.drawable.l20_shopping_cart;
+	
 	static final int[] TEXTURE_PRODUCTS = new int[]{R.drawable.l20_broccoli,
 										 R.drawable.l20_lollipop,
 										 R.drawable.l20_drink };
 	// Entities.
-	// INFO: Das haut so nicht hin :-/ Kanns da erklären
+	// FERDI: Das haut so nicht hin :-/ Aber andersrum würds gehn. Also, dass wir da nachher die id einspeichern. 
+	// Aber ich glaub das ist eh unnötig, weil wir Bunny und Cart ohnehin nicht in einer Liste einspeichern. 
 //	static final int BUNNY_ENTITY = 0;
 //	static final int CART_ENTITY = 1;
 	
 	public static Activity activity;
 	public static RenderView renderView;
 
-	// The texture collection. (The ids increase themselves)
+	/**
+	 * The texture collection. (The ids increase themselves)
+	 */
 	protected static Hashtable<Integer, Integer> textures;
 		
-	// The animator collection
+	/** 
+	 * The animator collection
+	 */
 	protected Hashtable<Integer, Animator> animators;
 
-	// The background Shelf of the game	
+	/**
+	 * The background Shelf of the game	
+	 */
 	protected Shelf shelf;
 	
-	// The moving speed of the background and the products 
-	// TODO: Better name
+	/**
+	 * The moving speed of the background and the products 
+	 * TODO: Better name
+	 */
 	public float scrollSpeed;
 	
 	protected int totalMoney;
