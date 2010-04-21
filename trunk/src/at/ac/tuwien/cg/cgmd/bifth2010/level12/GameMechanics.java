@@ -5,6 +5,8 @@ public class GameMechanics {
 	private boolean mGameRunning = true;
 	private int mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME * 1000; //für ms
 	private long mRoundStartedTime = -1;
+	private short mRound = 0;
+	private int mRemainingCountdownTime = -1;
 	
 	private static GameMechanics mSingleton = null;
 	
@@ -48,8 +50,23 @@ public class GameMechanics {
 	}
 	
 	public int  getRemainingWaitTime(){
-		long dt =  System.currentTimeMillis() - this.mRoundStartedTime;
-		return (int)( (mSecondsToNextRound - dt)*0.001 );
+		long dt = System.currentTimeMillis() - this.mRoundStartedTime;
+		mRemainingCountdownTime =  (int)Math.ceil( (mSecondsToNextRound - dt)*0.001 );
+		return mRemainingCountdownTime;
+	}
+
+
+	public short getRoundNumber() {
+		return mRound;
 	}
 	
+	public short nextRound(){
+		mRound++;
+		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound--;
+		return mRound;
+	}
+	
+	public void resetRound(){
+		
+	}
 }
