@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -17,6 +18,8 @@ public class MoneyCarrier extends GLObject {
 	private short mHp = 1;
 	private short mStrength = 1; //how much damage it can do
 	private int mType = 0; //zombie type
+	
+	private int mMoney = 10;
 	
 	private short mDamageAtCollisionPoint = -1;
 	
@@ -120,6 +123,7 @@ public class MoneyCarrier extends GLObject {
 	public void hit( short dmg ){
 		mHp -= dmg;
 		if( mHp <= 0 ) this.deactivate();
+		GameMechanics.getGameMecanics().addMoney( mMoney );
 	}
 	
 	public float getX(){

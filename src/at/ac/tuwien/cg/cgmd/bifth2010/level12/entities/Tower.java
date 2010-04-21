@@ -92,22 +92,25 @@ public abstract class Tower extends GLObject {
 						found = true;
 						mProjectiles[i].setActiveState( true );
 						mProjectiles[i].setXY( this.getX(), mY);
-						System.out.println("Tower: "+mX+" my: "+mY);
 						mTimeLastProjectileShot = System.currentTimeMillis();
+						System.out.println("Assing projectile!");
 						break;
 					}
 				}
-			} 
-			for( int i = 0; i < mProjectiles.length; i++){
-				if( mProjectiles[i].getActiveState() && ( mProjectiles[i].getX() >= mScreenWidth )){
+			}
+		}
+		for( int i = 0; i < mProjectiles.length; i++){
+			if( mProjectiles[i].getActiveState() && ( mProjectiles[i].getX() >= mScreenWidth )){
 					mProjectiles[i].reset();
-				}
 			}
 		}
 		
 		//all active sollen gezeichnet werden
 		for( int  i = 0; i < mProjectiles.length; i++){
-			if(mProjectiles[i].getActiveState()) mProjectiles[i].draw(gl);
+			if(mProjectiles[i].getActiveState()) {
+				mProjectiles[i].draw(gl);
+				System.out.println("Drawing Projectile "+i);
+			}
 		}
 		super.draw(gl);
 	}
