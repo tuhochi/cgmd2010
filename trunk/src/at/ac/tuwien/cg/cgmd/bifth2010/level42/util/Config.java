@@ -17,12 +17,8 @@ public class Config
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;
 	
-	/**
-	 * PHYSICS / UNIVERSE
-	 */
-	
-	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 1f;
-	
+	/** PHYSICS / UNIVERSE. */
+
 	/** center position of the universe / orbits */
 	public static Vector3 UNIVERSE_CENTER = new Vector3(0,0,0);
 	
@@ -52,4 +48,15 @@ public class Config
 	
 	/** the milliseconds of a long press are divided by this to get the force strength */
 	public static int PRESS_TIME_TO_FORCE_DIVISOR = 5;
+	
+	
+	/** minimal force to change the motion into a directional motion */
+	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 1f;
+	
+	/** minimal force to change the motion into a directional motion */
+	public static float MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL = 3f;
+	
+	/** the selection vector gets divided by this factor */
+	public static float SELECTION_FORCE_DIVISOR = 20f;
+	
 }

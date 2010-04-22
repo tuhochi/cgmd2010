@@ -50,6 +50,9 @@ public class CollisionManager {
 	private boolean objAIsMoveable,objBIsMoveable;
 	
 	
+	public static CollisionManager instance;
+	
+	
 	/**
 	 * Instantiates a new collision manager.
 	 * @param scene the scene
@@ -78,6 +81,8 @@ public class CollisionManager {
 		this.toCenterVecB = new Vector3();
 		
 		this.minDistance = 0;
+		
+		instance = this;
 	}
 	
 	/**
@@ -223,7 +228,9 @@ public class CollisionManager {
 																				1f,
 																				planetEntity.getBasicOrientation());
 									MotionManager.instance.addMotion(planetEntityMotion,planetEntity);
-									satellite.getMotion().morph(planetPushVec);
+									
+									if(satellite.getMotion().getSpeed()<Config.MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL)
+										satellite.getMotion().morph(planetPushVec);
 								}
 							}
 						}						
