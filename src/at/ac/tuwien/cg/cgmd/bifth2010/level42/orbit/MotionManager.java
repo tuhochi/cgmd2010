@@ -24,7 +24,7 @@ public class MotionManager {
 	public static final MotionManager instance = new MotionManager();
 	
 	//temp vars
-	private final Vector3 satTransformAxis,tempDirectionVec,tempPushVec;
+	private final Vector3 satTransformAxis,tempDirectionVec,tempPushVec,tempForceDirectionVec;
 	private final Matrix44 tempBasicOrientation;
 	private Movable tempEntity;
 	
@@ -36,6 +36,7 @@ public class MotionManager {
 		list =  new ArrayList<Movable>();
 		satTransformAxis = new Vector3();
 		tempDirectionVec = new Vector3();
+		tempForceDirectionVec = new Vector3();
 		tempPushVec = new Vector3();
 		tempBasicOrientation = new Matrix44();
 	}
@@ -69,6 +70,34 @@ public class MotionManager {
 			entity.setMotion(motion);	
 			motion.setSatTrans(oldMotion.getSatTrans());
 			motion.setTransform(entity.getTransformation());
+		}
+	}
+	
+	
+	public void applySelectionForce(Movable entity, Vector3 pushVec)
+	{
+		Motion motion = entity.getMotion();
+		
+		//check for a change to directional motion
+		if(pushVec.length()>= Config.MIN_STRENGTH_FOR_DIRECTIONAL){
+	
+			if(motion instanceof DirectionalMotion){
+				//change only params
+			}else{
+				//TODO: auto aim ziel hier definieren
+				tempForceDirectionVec.set(Config.UNIVERSE_CENTER);
+				tempForceDirectionVec.subtract(entity.getBoundingSphereWorld().center);		
+				
+				DirectionalMotion dirMotion =  
+					new DirectionalMotion(	entity.getBoundingSphereWorld().center,
+											tempForceDirectionVec,
+											pushVec.length()/Config.SELECTION_FORCE_DIVISOR,
+											null);
+				//exchange motion
+				setMotion(dirMotion, entity);
+			}
+		}else{
+			motion.morph(pushVec);
 		}
 	}
 	

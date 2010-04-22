@@ -318,33 +318,13 @@ public class RenderView extends GLSurfaceView implements Renderer
 				// vibrate according to the strength
 				context.vibrate(power);
 
-				if(entity.getMotion()==null)
-				{
-					motionManager.addMotion(
-							new Orbit(entity.getBoundingSphereWorld().center,
-									new Vector3(),
-									selectionDirection,
-									5,
-									entity.getBasicOrientation()),
-							entity);
-				}
-				else
-				{
-					
+				motionManager.applySelectionForce(entity, selectionDirection);				
+				motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
+				Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
 				
-						motionManager.setMotion( new DirectionalMotion(	entity.getBoundingSphereWorld().center,
-																		Vector3.subtract(Config.UNIVERSE_CENTER,entity.getBoundingSphereWorld().center),
-																		1,
-																		null),
-												 entity);
-//					Orbit orbit = (Orbit)entity.getMotion();
-//					orbit.morph(selectionDirection);
-					motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
-//					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
-				}
 			}
 			
-//			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
+			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
 
 			return true;
 		}

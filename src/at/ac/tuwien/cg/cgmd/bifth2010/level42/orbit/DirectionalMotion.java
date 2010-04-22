@@ -177,7 +177,8 @@ public class DirectionalMotion extends Motion
 	 */
 	@Override
 	public void morph(Vector3 pushVec) {
-		// TODO: ablenkung
-		
+		this.directionVec.add(pushVec).normalize();
+		//TODO: speed
+		this.speed = 1f;
 	}
 }
