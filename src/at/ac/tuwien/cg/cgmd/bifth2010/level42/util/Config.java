@@ -21,6 +21,8 @@ public class Config
 	 * PHYSICS / UNIVERSE
 	 */
 	
+	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 1f;
+	
 	/** center position of the universe / orbits */
 	public static Vector3 UNIVERSE_CENTER = new Vector3(0,0,0);
 	

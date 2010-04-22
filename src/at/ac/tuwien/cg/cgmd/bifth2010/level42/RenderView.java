@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
@@ -321,9 +322,16 @@ public class RenderView extends GLSurfaceView implements Renderer
 				}
 				else
 				{
-					Orbit orbit = (Orbit)entity.getMotion();
-					orbit.morph(selectionDirection);
-					motionManager.changeSatelliteTransformation(entity, orbit.getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
+					
+				
+						motionManager.setMotion( new DirectionalMotion(	entity.getBoundingSphereWorld().center,
+																		Vector3.subtract(Config.UNIVERSE_CENTER,entity.getBoundingSphereWorld().center),
+																		1,
+																		null),
+												 entity);
+//					Orbit orbit = (Orbit)entity.getMotion();
+//					orbit.morph(selectionDirection);
+					motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
 					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
 				}
 			}

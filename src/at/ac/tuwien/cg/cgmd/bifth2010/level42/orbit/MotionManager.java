@@ -58,6 +58,20 @@ public class MotionManager {
 		}
 	}
 	
+	
+	public void setMotion(Motion motion,Movable entity)
+	{
+		int index = list.indexOf(entity);
+		if(index==-1){
+			addMotion(motion,entity);
+		}else{
+			Motion oldMotion = entity.getMotion();
+			entity.setMotion(motion);	
+			motion.setSatTrans(oldMotion.getSatTrans());
+			motion.setTransform(entity.getTransformation());
+		}
+	}
+	
 	/**
 	 * Gets the motion of an entity
 	 *
