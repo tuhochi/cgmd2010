@@ -129,7 +129,7 @@ public class SceneLoader
 	private static final int CURRENT_VERSION = 5;
 	
 	/** The Constant instance. */
-	private static final SceneLoader instance = new SceneLoader();
+	public static final SceneLoader instance = new SceneLoader();
 	
 	/**
 	 * Instantiates a new scene loader.
@@ -137,16 +137,6 @@ public class SceneLoader
 	private SceneLoader()
 	{
 		
-	}
-	
-	/**
-	 * Gets the single instance of SceneLoader.
-	 *
-	 * @return single instance of SceneLoader
-	 */
-	public static SceneLoader getInstance()
-	{
-		return instance;
 	}
 	
 	/**
@@ -349,7 +339,7 @@ public class SceneLoader
 	 * @param data the array to read from
 	 * @return the float buffer
 	 */
-	private FloatBuffer arrayToBuffer(float[] data)
+	public FloatBuffer arrayToBuffer(float[] data)
 	{
 		if(data == null)
 			return null;

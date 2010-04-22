@@ -22,6 +22,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.HUD;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
@@ -104,6 +105,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 	/** The gesture detector. */
 	private final CustomGestureDetector gestureDetector;
 	
+	/** The HUD */
+	private final HUD hud;
+	
 	// temp vars
 	/** The selection direction. */
 	private final Vector3 selectionDirection;
@@ -131,10 +135,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		gestureDetector = new CustomGestureDetector(new GestureListener());
 		
+		hud = new HUD();
+		
 		//init temp vars
 		selectionDirection = new Vector3();
 		
-		scene = SceneLoader.getInstance().readScene("l42_orbit");
+		scene = SceneLoader.instance.readScene("l42_orbit");
 		motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
 		collManager = new CollisionManager(scene);
 		
@@ -375,6 +381,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private void render()
 	{
 		scene.render();
+		
+//		hud.render();
 	}
 	
 	/* (non-Javadoc)
