@@ -141,6 +141,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		selectionDirection = new Vector3();
 		
 		scene = SceneLoader.instance.readScene("l42_orbit");
+		scene.setHud(hud);
 		motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
 		collManager = new CollisionManager(scene);
 		
@@ -296,8 +297,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onTouchUp(MotionEvent e, long duration)
 		{
-			Log.v(LevelActivity.TAG, "onTouchUp(" + e + ", " + duration + ")");
 
+			hud.setCircleActive(false);
+			
 			Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
 			Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
 
@@ -338,11 +340,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 //					Orbit orbit = (Orbit)entity.getMotion();
 //					orbit.morph(selectionDirection);
 					motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
-					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
+//					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection);
 				}
 			}
 			
-			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
+//			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
 
 			return true;
 		}
@@ -353,8 +355,14 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
-			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
 			cam.setMouseDiff(distanceX, distanceY);
+			return true;
+		}
+
+		@Override
+		public boolean onLongTouch(MotionEvent e, long duration)
+		{
+			hud.setCircle(e.getRawX(), e.getRawY(), ((float)duration)/1000.0f);
 			return true;
 		}
 		
@@ -381,8 +389,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private void render()
 	{
 		scene.render();
-		
-//		hud.render();
 	}
 	
 	/* (non-Javadoc)
