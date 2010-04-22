@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Scene.
  *
@@ -24,6 +25,9 @@ public class Scene implements Persistable
 	/** The scene entities. */
 	public final ArrayList<SceneEntity> sceneEntities;
 	
+	/** The hud. */
+	private HUD hud;
+	
 	/** The rendermode. */
 	private int rendermode;
 
@@ -40,7 +44,7 @@ public class Scene implements Persistable
 	}
 	
 	/**
-	 * Inits the scene
+	 * Inits the scene.
 	 */
 	public void init()
 	{
@@ -52,13 +56,15 @@ public class Scene implements Persistable
 			int size = sceneEntities.size();
 			for(int i=0; i<size; i++)
 				sceneEntities.get(i).init();
+			
+			hud.init();
 
 			initialized = true;
 		}
 	}
 	
 	/**
-	 * De-inits the scene
+	 * De-inits the scene.
 	 */
 	public void deInit()
 	{
@@ -68,6 +74,8 @@ public class Scene implements Persistable
 		int size = sceneEntities.size();
 		for(int i=0; i<size; i++)
 			sceneEntities.get(i).deInit();
+		
+		hud.deInit();
 	}
 	
 	/* (non-Javadoc)
@@ -106,6 +114,8 @@ public class Scene implements Persistable
 			m = sceneEntities.get(i);
 			m.render(rendermode);
 		}
+		
+		hud.render();
 	}
 	
 	/**
@@ -116,10 +126,12 @@ public class Scene implements Persistable
 		int size = sceneEntities.size();
 		for(int i=0;i<size;i++)
 			sceneEntities.get(i).update();
+		
+		hud.update();
 	}
 	
 	/**
-	 * Adds a SceneEntity to the Scene
+	 * Adds a SceneEntity to the Scene.
 	 *
 	 * @param sceneEntity the scene entity
 	 */
@@ -137,5 +149,15 @@ public class Scene implements Persistable
 	public SceneEntity getSceneEntity(int index)
 	{
 		return sceneEntities.get(index);
+	}
+
+	/**
+	 * Sets the hud.
+	 *
+	 * @param hud the new hud
+	 */
+	public void setHud(HUD hud)
+	{
+		this.hud = hud;
 	}
 }

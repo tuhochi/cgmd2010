@@ -96,11 +96,17 @@ public class MaterialManager
 	        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, material.emissive.asArray, 0);
 	        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.ks);
 	        if(textureEnabled && material.texId == -1)
+	        {
 	        	glDisable(GL_TEXTURE_2D);
+	        	textureEnabled = false;
+	        }
 	        if(material.texId != -1)
 	        {
 	        	if(!textureEnabled)
+	        	{
 	        		glEnable(GL_TEXTURE_2D);
+	        		textureEnabled = true;
+	        	}
 	        	glBindTexture(GL_TEXTURE_2D, material.texId);
 	        }
 	        boundMaterialName = material.name;
@@ -219,7 +225,7 @@ public class MaterialManager
 			this.emissive = emissive;
 			this.ks = ks;
 			
-			if(!textureFilename.equals(""))
+			if(textureFilename != null && !textureFilename.equals(""))
 				tex = loadTexture(textureFilename);
 			else
 				tex = null;

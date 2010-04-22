@@ -191,8 +191,6 @@ public class Geometry implements Persistable
 				if(texcoords != null)
 					GLES11.glTexCoordPointer(TEXCOORD_LENGTH, GL_FLOAT, 0, texcoordOffset);
 				
-				glDrawArrays(GL_TRIANGLES, 0, numVertices);
-				
 				break; // breaking inside the if, so it defaults to vertex array rendering if vbo's are not available
 			}
 		case Scene.RENDERMODE_VERTEXARRAY:
@@ -202,10 +200,10 @@ public class Geometry implements Persistable
 				glNormalPointer(GL_FLOAT, 0, normals);
 			if(texcoords != null)
 				glTexCoordPointer(TEXCOORD_LENGTH, GL_FLOAT, 0, texcoords);
-			
-			glDrawArrays(GL_TRIANGLES, 0, numVertices);
 			break;
 		}
+		
+		glDrawArrays(GL_TRIANGLES, 0, numVertices);
 	}
 	
 	/**
