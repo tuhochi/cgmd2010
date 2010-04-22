@@ -6,8 +6,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class LevelActivity.
  *
@@ -62,6 +65,9 @@ public class LevelActivity extends Activity
 	
 	/** The time manager. */
 	private final TimeManager timeManager = TimeManager.instance;
+	
+	/** The vibrator. */
+	private Vibrator vibrator;
 	
 	/**
 	 * Instantiates a new level activity.
@@ -123,6 +129,16 @@ public class LevelActivity extends Activity
 		};
 	}
 	
+	/**
+	 * triggers the Vibrator
+	 *
+	 * @param millis The Milliseconds the Vibrator will be turned on for
+	 */
+	public void vibrate(long millis)
+	{
+		vibrator.vibrate(millis);
+	}
+	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -144,6 +160,8 @@ public class LevelActivity extends Activity
 		score = (TextView)findViewById(R.id.l42_scoreTextField);
 		time = (TextView)findViewById(R.id.l42_timeTextField);
 		fps = (TextView)findViewById(R.id.l42_fpsTextField);
+
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		
 		// set result in case the user cancels the activity
 		SessionState s = new SessionState();

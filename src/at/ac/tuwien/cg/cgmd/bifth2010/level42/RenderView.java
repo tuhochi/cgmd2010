@@ -303,9 +303,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 				selectionDirection.subtract(cam.eyePosition);
 
 				//force strength
-				int difference = ((int)duration)/10;
-				Log.d(LevelActivity.TAG,"" + difference);
-				selectionDirection.normalize().multiply(difference);
+				int power = ((int)duration)/Config.PRESS_TIME_TO_FORCE_DIVISOR;
+				selectionDirection.normalize().multiply(power);
+				
+				// vibrate according to the strength
+				context.vibrate(power);
 
 				if(entity.getMotion()==null)
 				{
