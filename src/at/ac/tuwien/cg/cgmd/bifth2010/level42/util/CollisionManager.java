@@ -1,6 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
 
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
@@ -49,6 +52,7 @@ public class CollisionManager {
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
 	
+	private final Vector<Movable> fromCenterDistEntities;
 	
 	public static CollisionManager instance;
 	
@@ -81,6 +85,17 @@ public class CollisionManager {
 		this.toCenterVecB = new Vector3();
 		
 		this.minDistance = 0;
+		
+		fromCenterDistEntities = new Vector<Movable>(Config.COUNT_NEAREST_ENTITIES);
+		
+		for(int i=0;i<entityList.size();i++)
+		{
+			if(entityList.get(i).getName().equals(Config.PLANET_NAME)){
+				fromCenterDistEntities.addAll(entityList.get(i).models);
+			}
+		}
+		
+		Collections.sort(fromCenterDistEntities, new NearestEntityComperator());
 		
 		instance = this;
 	}
@@ -195,6 +210,8 @@ public class CollisionManager {
 						SceneEntity planet = null;
 						SceneEntity satellite = null;
 						
+						fromCenterDistEntities.clear();
+						
 						if(!objAIsMoveable){
 							planet = (SceneEntity) objA;
 							satellite = (SceneEntity) objB;
@@ -232,8 +249,16 @@ public class CollisionManager {
 									if(satellite.getMotion().getSpeed()<Config.MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL)
 										satellite.getMotion().morph(planetPushVec);
 								}
+							}else{
+								fromCenterDistEntities.add(planetEntity);
 							}
-						}						
+						}
+					
+						//sort list for autoaim
+						if(fromCenterDistEntities.size()>1){
+							Collections.sort(fromCenterDistEntities, new NearestEntityComperator());
+						}
+						
 					}
 					else
 					{
@@ -292,5 +317,31 @@ public class CollisionManager {
 				
 			}
 		}
+	}
+	
+	
+	public Movable getNearestToCenterEntity()
+	{
+		for(int i=0;i<fromCenterDistEntities.size();i++)
+			Log.d(LevelActivity.TAG,i+ " length = "+fromCenterDistEntities.get(i).getBoundingSphereWorld().center.length());
+		return fromCenterDistEntities.get(0);
+	}
+	
+	
+	protected class NearestEntityComperator implements Comparator<Movable>{
+
+		@Override
+		public int compare(Movable objA, Movable objB) {
+			if(objA.getBoundingSphereWorld().center.length() <
+					objB.getBoundingSphereWorld().center.length())
+				return -1;
+			
+			if(objA.getBoundingSphereWorld().center.length() ==
+					objB.getBoundingSphereWorld().center.length())
+				return 0;
+			
+			return 1;
+		}
+		
 	}
 }
