@@ -8,6 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 /**
@@ -85,7 +86,7 @@ public class MotionManager {
 				//change only params
 			}else{
 				//TODO: auto aim ziel hier definieren
-				tempForceDirectionVec.set(Config.UNIVERSE_CENTER);
+				tempForceDirectionVec.set(CollisionManager.instance.getNearestToCenterEntity().getBoundingSphereWorld().center);
 				tempForceDirectionVec.subtract(entity.getBoundingSphereWorld().center);		
 				
 				DirectionalMotion dirMotion =  

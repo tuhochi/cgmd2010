@@ -56,6 +56,8 @@ public class Config
 	/** minimal force to change the motion into a directional motion */
 	public static float MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL = 3f;
 	
+	public static int COUNT_NEAREST_ENTITIES = 5;
+	
 	/** the selection vector gets divided by this factor */
 	public static float SELECTION_FORCE_DIVISOR = 20f;
 	
