@@ -27,7 +27,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
  * # AndroidModel format (*.aom) layout. The whole thing is usually GZIPed.
  * # Entities:
  * #	- Material
- * #		A Material is a set of ambient, diffuse and specular colors, a ks and an
+ * #		A Material is a set of ambient, diffuse, specular and emissive colors, a ks and an
  * #		optional textureFilename; identified by a name
  * #	- Geometry
  * #		A Geometry is a set of Vertices (forming Triangles), along with their normals
@@ -42,7 +42,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
  * # Header
  * #----------
  * 4ndr01dM0d3l				String			Magic Bytes
- * version						int				The current Version of this Format
+ * version					int				The current Version of this Format
  * 
  * #----------
  * # Materials
@@ -62,7 +62,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
  * #----------
  * # Geometries
  * #----------
- * numGeometries				int				Number of Geometries in this file
+ * numGeometries			int				Number of Geometries in this file
  * for(numGeometries)
  * {
  * 	geometryName			String			Name of this Geometry (must be unique)
@@ -92,7 +92,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
  * #----------
  * # Models
  * #----------
- * numModels					int				Number of Models in this file
+ * numModels				int				Number of Models in this file
  * for(numModels)
  * {
  * 	modelName				String			Name of this Model (must be unique)
