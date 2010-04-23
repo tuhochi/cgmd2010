@@ -107,12 +107,12 @@ public class HUD
 			 0.5f,-0.5f		// upper right
 		};
 		float[] texcoords = new float[] {
-			0.0f, 1.0f,		// upper left
-			0.0f, 0.0f,		// lower left
-			1.0f, 1.0f,		// upper right
-			0.0f, 0.0f,		// lower left
-			1.0f, 0.0f,		// lower right
-			1.0f, 1.0f		// upper right
+			0.0f, 0.0f,		// upper left
+			0.0f, 1.0f,		// lower left
+			1.0f, 0.0f,		// upper right
+			0.0f, 1.0f,		// lower left
+			1.0f, 1.0f,		// lower right
+			1.0f, 0.0f		// upper right
 		};
 		circleNumVertices = 6;
 		circleRenderMode = GL_TRIANGLES;
@@ -129,7 +129,13 @@ public class HUD
 		initialized = false;
 		circleActive = false;
 		circleRender = false;
-		material = materialManager.getMaterial("HUDMaterial", new Color4(0.5f,0.5f,0.5f,0.5f), new Color4(0.5f,0.5f,0.5f,0.5f), new Color4(0.5f,0.5f,0.5f,0.5f), new Color4(0.5f,0.5f,0.5f,0.5f), 0.5f, "l42_stripebox");
+		material = materialManager.getMaterial("HUDMaterial", 
+				new Color4(0.5f,0.5f,0.5f,0.1f), 
+				new Color4(0.5f,0.5f,0.5f,0.1f), 
+				new Color4(0.5f,0.5f,0.5f,0.1f), 
+				new Color4(0.5f,0.5f,0.5f,0.1f), 
+				0.5f, 
+				"l42_circle");
 	}
 	
 	/**
