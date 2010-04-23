@@ -9,6 +9,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView;
 
 /**
@@ -27,11 +30,13 @@ public class LevelActivity extends Activity {
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        setContentView(R.layout.l20_level);
+        renderView = (RenderView)findViewById(R.id.l20_RenderView);        
 		
-		//Initiate our Lesson with this Activity Context handed over
-		renderView = new RenderView(this);
-		//Set the lesson as View to the Activity
-		setContentView(renderView);				
+		SessionState s = new SessionState();
+		s.setProgress(0); 
+		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 	
 

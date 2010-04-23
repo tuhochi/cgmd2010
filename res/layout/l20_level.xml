@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l20_FrameLayout" 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
+    
+    <at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView
+		android:id="@+id/l20_RenderView"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"/>
     
     <TextView
    		android:id="@+id/l20_MoneyText" 
@@ -10,12 +16,20 @@
         android:layout_height="wrap_content" 
         android:layout_marginBottom="2dip"
         android:layout_gravity="right|top"
-
-        android:padding="2dip"
-        
+        android:padding="2dip"        
         android:background="#AA000000"
-        android:textColor="#ffffffff"
-        
+        android:textColor="#ffffffff"        
         android:text="Money: 100$" />
 
+   <TextView
+   		android:id="@+id/l20_TimeText" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_marginBottom="2dip"
+        android:layout_gravity="left|top"
+        android:padding="2dip"        
+        android:background="#AA000000"
+        android:textColor="#ffffffff"        
+        android:text="Time: 1:00" />
+        
 </FrameLayout>

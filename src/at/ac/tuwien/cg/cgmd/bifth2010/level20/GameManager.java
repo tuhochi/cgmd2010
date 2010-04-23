@@ -18,6 +18,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 
 
 /**
@@ -27,53 +29,42 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * @author Reinhard Sprung
  */
 public class GameManager implements Renderable, EventListener {
-
-	/** Log Identifier*/
-	private static final String TAG = "BunnyShop";
 	
 	// Textures.
-	static final int TEXTURE_BUNNY = R.drawable.l20_icon;
+	static final int[] TEXTURE_BUNNY = {R.drawable.l20_bunny1, R.drawable.l20_bunny2,
+		R.drawable.l20_bunny3, R.drawable.l20_bunny4};	
 	static final int TEXTURE_SHELF = R.drawable.l20_backg;
 	static final int TEXTURE_CART = R.drawable.l20_shopping_cart;
 	
 	static final int[] TEXTURE_PRODUCTS = new int[]{R.drawable.l20_broccoli,
 										 R.drawable.l20_lollipop,
 										 R.drawable.l20_drink };
-	// Entities.
-	// FERDI: Das haut so nicht hin :-/ Aber andersrum würds gehn. Also, dass wir da nachher die id einspeichern. 
-	// Aber ich glaub das ist eh unnötig, weil wir Bunny und Cart ohnehin nicht in einer Liste einspeichern. 
-//	static final int BUNNY_ENTITY = 0;
-//	static final int CART_ENTITY = 1;
 	
 	public static Activity activity;
 	public static RenderView renderView;
 
-	/**
-	 * The texture collection. (The ids increase themselves)
-	 */
+	/** The texture collection. (The ids increase themselves) */	 
 	protected static Hashtable<Integer, Integer> textures;
 		
-	/** 
-	 * The animator collection
-	 */
+	/** The animator collection */
 	protected Hashtable<Integer, Animator> animators;
 
-	/**
-	 * The background Shelf of the game	
-	 */
+	/** The background Shelf of the game */		 
 	protected Shelf shelf;
 	
-	/**
-	 * The moving speed of the background and the products 
-	 * TODO: Better name
-	 */
+	/** The moving speed of the background and the products */ 
 	public float scrollSpeed;
 	
 	protected int totalMoney;
 	protected ShoppingCart shoppingCart;
+	protected SpriteAnimationEntity bunny;
 	
-	/** The TextView to show the money count */
+	/** The TextView to show the money count. */
 	private TextView moneyText;
+	/** The run time of the game in seconds. */
+	private float gameTime;
+	/** The TextView to show the time left. */
+	private TextView timeText;
 
 	
 	/**
@@ -92,6 +83,7 @@ public class GameManager implements Renderable, EventListener {
 		
 		scrollSpeed = 100f * 0.001f; // Pixel per second
 		totalMoney = 100;
+		gameTime = 60.f;
 		createEntities(gl);
 	}
 	
@@ -104,36 +96,33 @@ public class GameManager implements Renderable, EventListener {
 		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
 		shelf.texture = getTexture(TEXTURE_SHELF, gl);			
 
-		getTexture(TEXTURE_BUNNY, gl);		
-
 		for (int i = 0; i < TEXTURE_PRODUCTS.length; i++) {
 			getTexture(TEXTURE_PRODUCTS[i], gl);
 		}	
 		
 		// Create shopping cart.
-		shoppingCart = new ShoppingCart(120, 60, 2, 200, 110);
+		shoppingCart = new ShoppingCart(125, 60, 2, 200, 110);
 		shoppingCart.texture = getTexture(TEXTURE_CART, gl);
-		// INFO: Das gehts so nicht. Andersrum ja. 
-//		shoppingCart.id = CART_ENTITY;
 		
-//		Activity activity = (Activity)renderView.getContext();
-		// Create text view for display of money count.
-		moneyText = new TextView(activity);
-		
-		moneyText.setBackgroundColor(0);
-		moneyText.setTextColor(255);
-		moneyText.setText("Money: 100$");
-		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		params.height = LayoutParams.WRAP_CONTENT;
-		params.width = LayoutParams.WRAP_CONTENT;
-		moneyText.setLayoutParams(params);
-		moneyText.bringToFront();
-		moneyText.setGravity(Gravity.CENTER);
+		// Create bunny.
+		int[] bunnySequence = new int[TEXTURE_BUNNY.length];
+		for (int i = 0; i < TEXTURE_BUNNY.length; i++)
+		{
+			bunnySequence[i] = getTexture(TEXTURE_BUNNY[i], gl);
+		}
 				
+		bunny = new SpriteAnimationEntity(45, 40, 2, 64, 64);
+		bunny.setFps(10);
+		bunny.setAnimationSequence(bunnySequence);
+				
+		// Create text view for display of money count.
+		moneyText = (TextView)activity.findViewById(R.id.l20_MoneyText);
+		// Create text view for display of time left.		
+		timeText = (TextView)activity.findViewById(R.id.l20_TimeText);
+		
 	}
 
 
-	
 	/**
 	 * @param dt The delta time since the last frame.
 	 */
@@ -141,29 +130,43 @@ public class GameManager implements Renderable, EventListener {
 		
 		// Difference in x since last frame 
 		shelf.update(scrollSpeed * dt);
-
+		bunny.update(dt);
+		
+		gameTime -= (dt/1000.f);
+		// TODO Somehow this doesn't work here (and at many more places :( )
+		//timeText.setText("Time:"+(int)gameTime);
+		if(gameTime <= 0.f)
+		{
+			gameOver();
+		}
+		
 		
 		// Update all Animators
 		Enumeration<Integer> keys = animators.keys();		
 		while(keys.hasMoreElements()) {
 			animators.get(keys.nextElement()).update(dt);
 		}				
-
-		
 	}
 
 	
+	private void gameOver() {
+		SessionState s = new SessionState();
+		s.setProgress(100-totalMoney); 
+		activity.setResult(Activity.RESULT_OK, s.asIntent());
+		activity.finish();
+	}
+
+
 	@Override
 	public void render(GL10 gl) {
 		
 		shelf.render(gl);
 		shoppingCart.render(gl);
+		bunny.render(gl);
+
+		int seconds = (int) (gameTime);		
 		
-//		// Render entities.		
-//		Enumeration<Integer> keys = entities.keys();
-//		while(keys.hasMoreElements()) {
-//			entities.get(keys.nextElement()).render(gl);
-//		}
+
 	}
 	
 	
@@ -192,26 +195,27 @@ public class GameManager implements Renderable, EventListener {
 			// Remove the Animator from the HashTable, effectively destroying it.
 			// NOTE: Does this have to happen at a fixed point in time in the update loop?
 			Animator a = (Animator)eventData;			
-			animators.remove(a.id);
-			Log.d(TAG, "Animator removed: "+ a.id +".");
+			animators.remove(a.id);			
 		}	
 		break;
 		
 		case EventManager.PRODUCT_COLLECTED:
 		{
-			// Hm, ich würd die Null Abfrage rausnehmen, damit es sich wenigstens gscheit aufhängt, wenns nicht passt :P
-//			if (null != eventData) {
 			ProductEntity pe = (ProductEntity)eventData;
-			totalMoney -= pe.price;
+			totalMoney -= pe.price;			
+			// This prevents displaying a negative money count.
+			if(totalMoney < 0) totalMoney = 0;
 			moneyText.setText("Money:" + totalMoney + "$");
+			if (totalMoney == 0) {				
+				gameOver();
+			}
+			
 			
 			// Move it to the basket.
 			float[] pos = shoppingCart.getNextProductPosition();
 			Animator a = new Animator(pe, pos[0], pos[1], 30);
 			animators.put(a.id, a);
-			shoppingCart.addProduct(pe);
-			Log.d(TAG, "Product collected: "+ pos[0] + "/" + pos[1] + ".");
-//			}			
+			shoppingCart.addProduct(pe);					
 		}
 		break;
 		
@@ -295,4 +299,6 @@ public class GameManager implements Renderable, EventListener {
 		return getTexture(resource, null);
 	}
 
+
+	
 }
