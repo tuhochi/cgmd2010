@@ -5,6 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -16,17 +17,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class LevelObject {
 	
 
-	int tex[]=new int[6];
+	int tex[]=new int[1];
 	private IntBuffer texBuf=IntBuffer.wrap(tex);
-	private static final int TEX_SIZE=100;
+	private static HashMap<Integer,Integer> textures = new HashMap<Integer, Integer>();
 	Context context;
 	private LevelCollision level;
+	boolean collision, gravity;
 	
 	float x, y;
 	int width, height;
 	int id;
 	float movement[] = new float[4];
 	int direction = 1;
+	int textureID = -1;
+	GL10 gl;
 	
 	
 	// Our vertices.
@@ -61,9 +65,10 @@ public class LevelObject {
 		this.width = width;
 		this.height = height;
 		this.id = id;
+		this.gl = gl;
 		
 		movement[0]=0.0f;
-		movement[1]=5.0f;
+		movement[1]=0.0f;
 		movement[2]=0.0f;
 		movement[3]=0.0f;
 		
@@ -89,8 +94,13 @@ public class LevelObject {
 		texcoordBuffer.put(texcoord);
 		texcoordBuffer.position(0);
 		
-		gl.glGenTextures(1, texBuf);
-		LoadTexture(0,id,gl,context);
+		if (textures.containsKey(id)) {
+			texBuf.put(textures.get(id));
+		} else {
+			gl.glGenTextures(1, texBuf);
+			textures.put(id, texBuf.get(0));
+			LoadTexture(0,id,gl,context);
+		}
 	}
 
 	/**
@@ -98,21 +108,10 @@ public class LevelObject {
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
-		// Counter-clockwise winding.
-		//gl.glFrontFace(GL10.GL_CCW);
-		// Enable face culling.
-		//gl.glEnable(GL10.GL_CULL_FACE);
-		// What faces to remove with the face culling.
-		//gl.glCullFace(GL10.GL_BACK);
-
-		// Enabled the vertices buffer for writing and to be used during
-		// rendering.
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glEnable(GL10.GL_TEXTURE_2D);
 
-		// Specifies the location and data format of an array of vertex
-		// coordinates to use when rendering.
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texBuf.get(0));      
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
         gl.glTexCoordPointer(2, GL10.GL_FLOAT,0, texcoordBuffer);
@@ -121,14 +120,16 @@ public class LevelObject {
 		gl.glLoadIdentity();
 		float xn = x-movement[2]+movement[3];
 		float yn = y-movement[0]+movement[1];
-		if (!testCollision(xn, yn)){
-			x = xn; y = yn;
-		} else if (!testCollision(xn, y)){
-			x = xn;
-		} else if (!testCollision(x, yn)){
-			y = yn;
-		}
-		if (movement[0]>0.0f) movement[0]-=1.0f;
+		if (collision)
+			if (!testCollision(xn, yn)){
+				x = xn; y = yn;
+			} else if (!testCollision(xn, y)){
+				x = xn;
+			} else if (!testCollision(x, yn)){
+				y = yn;
+			}
+		
+		if (gravity && movement[0]>0.0f) movement[0]-=1.0f;
 		
 		if (movement[3]-movement[2] < 0) direction = -1;
 		else if (movement[3]-movement[2] > 0) direction = 1;
@@ -159,15 +160,13 @@ public class LevelObject {
 		movement[direction] = amount;
 	}
 	
-//	public void setPosition(float x, float y) {
-//		if (!testCollision(x,y)) {
-//			this.x = x;
-//			this.y = y;
-//		}
-//	}
-//	
-//	public float getPositionX() {return x;}
-//	public float getPositionY() {return y;}
+	public void setPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public float getPositionX() {return x;}
+	public float getPositionY() {return y;}
 	
 	boolean testCollision(float x, float y) {
 		if ((level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 &&
@@ -176,6 +175,26 @@ public class LevelObject {
 				(level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y+height)/20))&0x00ffffff) != 0) {
 			return false;
 		} else return true;
+	}
+	
+	public void changeTexture(int id) {
+		texBuf.clear();
+		if (textures.containsKey(id)) {
+			texBuf.put(textures.get(id));
+		} else {
+			gl.glGenTextures(1, texBuf);
+			textures.put(id, texBuf.get(0));
+			LoadTexture(0,id,gl,context);
+		}		
+	}
+	
+	public static void clearTextures(GL10 gl) {
+		IntBuffer texInts = IntBuffer.allocate(0);
+		for (Integer tex : textures.values()) {
+			texInts.put(tex);
+		}
+		texInts.position(0);
+		gl.glDeleteTextures(texInts.capacity(),texInts);
 	}
 	
 	private void LoadTexture(int num, int id, GL10 gl, Context context)
@@ -211,5 +230,14 @@ public class LevelObject {
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);//LINEAR );
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);//LINEAR );											
 	}
-
+	
+	public void enableGravity(boolean b) {
+		gravity = b;
+		if (b) movement[1] = 5.0f;
+		else movement[1] = 0.0f;
+	}
+	
+	public void enableCollision(boolean b) {
+		collision = b;
+	}
 }
