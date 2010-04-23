@@ -1,30 +1,23 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 
-//import android.app.Activity;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class LevelSurfaceView extends GLSurfaceView {
-	public LevelSurfaceView(Context context) {
-		super(context);
-		lr = new LevelRenderer(context);
-		//String strExtensions = gl.glGetString(GL10.GL_EXTENSIONS);
-//		Log.d(CLASS_TAG, "made level renderer");
-        setRenderer(lr);
-//        Log.d(CLASS_TAG, "set level renderer");
-        setFocusableInTouchMode(true);
-	}
-	
 	LevelRenderer lr;
 	private int score = 10;
 	private SessionState s;
-	private static final String CLASS_TAG = LevelSurfaceView.class.getName();
+	
+	public LevelSurfaceView(Context context) {
+		super(context);
+		lr = new LevelRenderer(context);
+        setRenderer(lr);
+        setFocusableInTouchMode(true);
+	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		s = getState();
@@ -54,17 +47,23 @@ public class LevelSurfaceView extends GLSurfaceView {
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	public SessionState pause () {
+	public SessionState saveData (SharedPreferences prefs) {
+		//save bunny pos & action map
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.putInt("l60_score", score);
+		lr.saveLevel(prefEditor);
+		prefEditor.commit();
 		return getState();
 	}
 	
-	public void resume () {
-		
+	public void updateData (SharedPreferences prefs) {
+		lr.loadLevel(prefs);
+		score = prefs.getInt("l60_score", 100);
 	}
 	
 	public SessionState getState() {
 		s = new SessionState();
-		s.setProgress(score);
+		s.setProgress(100-score);
 		return s;
 	}
 }

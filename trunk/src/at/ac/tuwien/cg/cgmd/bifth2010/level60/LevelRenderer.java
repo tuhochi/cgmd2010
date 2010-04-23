@@ -1,54 +1,79 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import java.util.HashMap;
 
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
-import android.util.Log;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import android.content.SharedPreferences;
 
 
 public class LevelRenderer implements Renderer {
-//	private Tablet tablet;
-//	private Tablet cop;
-//	private Tablet background;
 	private Context context;
 	public int screenWidth;
 	public int screenHeight;
-	private textureManager manager; 	
-	private float mapOffset_x;
-	private float mapOffset_y;
+	private textureManager manager; 
+	private float posX;
+	private float posY;
+	private float mapOffset_x;//, savedMapOffset_x;
+	private float mapOffset_y;//, savedMapOffset_y;
 	
-	private final static int BUNNY_WIDTH = 60;
+	private final static int BUNNY_WIDTH = 55;
 	private final static int BUNNY_HEIGHT = 60;
-	private final static int LEVEL_WIDTH = 4;
-	private final static int LEVEL_HEIGHT = 4;
-	private final static int TILESIZE = 100;
+	private final static int LEVEL_WIDTH = 5;
+	private final static int LEVEL_HEIGHT = 6;
+	private final static int LEVEL_TILESIZE = 100;
+	private final static int ACTION_WIDTH = 5;
+	private final static int ACTION_HEIGHT = 6;
+	
+	private final static HashMap<Integer, String> keks = new HashMap<Integer, String>(){
+        {
+        	put(0, "blank");
+            put(1, "streetHor");
+            put(2, "streetVer");
+            put(3, "intersection");
+            put(4, "TintersectionTop");
+            put(5, "TintersectionBottom");
+            put(6, "TintersectionLeft");
+            put(7, "TintersectionRight");
+            put(8, "smallHousefl");
+            put(9, "smallHousefr");
+            put(10, "smallHousebl");
+            put(11, "smallHousebr");
+            put(12, "housefl");
+            put(13, "housefr");
+            put(14, "housebl");
+            put(15, "housebr");
+            put(16, "housecl");
+            put(17, "housecr");
+        }
+	};
+
 	
 	public static int levelMap[][] = {  
-		{ 5, 1, 1, 5 },
-		{ 2, 0, 0, 2 },
-		{ 2, 0, 0, 2 },
-		{ 4, 1, 1, 4 }
+		{ 1, 1, 1, 5, 1 },
+		{ 0, 0, 0, 2, 0 },
+		{ 5, 1, 1, 3, 1 },
+		{ 2, 0, 0, 2, 0 },
+		{ 2, 0, 0, 2, 0 },
+		{ 4, 1, 1, 4, 1 }
 	};
 	
-//	public static int actionMap[][] = {
-//		
-//	};
+	public static int actionMap[][] = {
+		{ 1, 1, 1, 2, 1 },
+		{ 0, 0, 0, 2, 0 },
+		{ 1, 1, 1, 3, 1 },
+		{ 2, 0, 0, 2, 0 },
+		{ 2, 0, 0, 2, 0 },
+		{ 4, 1, 1, 4, 1 }
+	};
 	
 	public LevelRenderer(Context context) {
 		this.context = context;
-		mapOffset_x = mapOffset_y = 0;
+		mapOffset_x = mapOffset_y = 0 ;// = savedMapOffset_x = savedMapOffset_y = 0;
+		posX = posY = 0;
 	}
 	
 	public void moveObject(float x, float y) {
@@ -57,11 +82,12 @@ public class LevelRenderer implements Renderer {
 		
 		if (!checkCollision(xPos,yPos,x,y) && 
 			xPos+x >= 0 && yPos+y >= 0 && 
-			xPos+x <= LEVEL_WIDTH*TILESIZE && 
-			yPos+y <= LEVEL_HEIGHT*TILESIZE)	{
+			xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
+			yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
 				manager.getGameObject("bunny").move(x, y);
+				posX = x; posY = y;
 				if (x + xPos + mapOffset_x < 0 || 
-					x + xPos + mapOffset_x + BUNNY_WIDTH > screenWidth) 
+					x + xPos + mapOffset_x + BUNNY_WIDTH > screenWidth)
 						moveMap(x, 0);
 				if (y + yPos + mapOffset_y < 0 || 
 					y + yPos + mapOffset_y + BUNNY_HEIGHT > screenHeight) 
@@ -77,16 +103,39 @@ public class LevelRenderer implements Renderer {
 	
 	public boolean checkCollision(float xPos, float yPos, float xwise, float ywise) {
 		//find out which tile we want to go to
-		if (xwise > 0) xPos += BUNNY_WIDTH;
-		if (ywise > 0) yPos += BUNNY_HEIGHT;
+		int tile1_x, tile1_y, tile2_x, tile2_y;
 		
-		int tile_x = (int)((xPos+xwise) / 100.0f);
-		int tile_y = (int)((yPos+ywise) / 100.0f);
+		if (xwise > 0 && ywise == 0) {
+			tile1_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
+			tile1_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
+			tile2_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
+			tile2_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
+		} else if (xwise < 0 && ywise == 0) {
+			tile1_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
+			tile1_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
+			tile2_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
+			tile2_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
+		} else if (xwise == 0 && ywise > 0) {
+			tile1_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
+			tile1_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
+			tile2_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
+			tile2_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
+		} else {
+			tile1_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
+			tile1_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
+			tile2_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
+			tile2_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
+		}
 		
-		if (tile_x < 0 || tile_x >= LEVEL_WIDTH ||
-			tile_y < 0 || tile_y >= LEVEL_HEIGHT ||
-			levelMap[tile_x][tile_y] >= 8 || 
-			levelMap[tile_x][tile_y] == 0) return true;
+		if (tile1_x < 0 || tile1_x >= LEVEL_WIDTH ||
+			tile1_y < 0 || tile1_y >= LEVEL_HEIGHT ||
+			tile2_x < 0 || tile2_x >= LEVEL_WIDTH ||
+			tile2_y < 0 || tile2_y >= LEVEL_HEIGHT ||
+			levelMap[tile1_y][tile1_x] >= 8 || 
+			levelMap[tile1_y][tile1_x] == 0 ||
+			levelMap[tile2_y][tile2_x] >= 8 || 
+			levelMap[tile2_y][tile2_x] == 0)
+			return true;
 		return false;
 	}
 	
@@ -98,75 +147,18 @@ public class LevelRenderer implements Renderer {
 		
 		Tablet block = null;
 		
-//		background.draw(gl);
-//		tablet.draw(gl);
-//		cop.draw(gl);
-		
 		//Step through level map and draw all background blocks
 		for (int i = 0; i < levelMap.length; i++) {
 			for (int j = 0; j < levelMap[i].length; j++) {
-				switch (levelMap[i][j]) {
-				case 1: 
-					block = manager.getGameObject("streetHor");
-					break;
-				case 2: 
-					block = manager.getGameObject("streetVer");
-					break;
-				case 3:
-					block = manager.getGameObject("intersection");
-					break;
-				case 4: 
-					block = manager.getGameObject("TintersectionTop");
-					break;
-				case 5: 
-					block = manager.getGameObject("TintersectionBottom");
-					break;
-				case 6: 
-					block = manager.getGameObject("TintersectionLeft");
-					break;
-				case 7: 
-					block = manager.getGameObject("TintersectionRight");
-					break;
-				case 8: 
-					block = manager.getGameObject("smallHousefl");
-					break;
-				case 9:
-					block = manager.getGameObject("smallHousefr");
-					break;
-				case 10: 
-					block = manager.getGameObject("smallHousebl");
-					break;
-				case 11: 
-					block = manager.getGameObject("smallHousebr");
-					break;
-				case 12: 
-					block = manager.getGameObject("housefl");
-					break;
-				case 13:
-					block = manager.getGameObject("housefr");
-					break;
-				case 14:
-					block = manager.getGameObject("housebl");
-					break;
-				case 15:
-					block = manager.getGameObject("housebr");
-					break;
-				case 16:
-					block = manager.getGameObject("housecl");
-					break;
-				case 17:
-					block = manager.getGameObject("housecr");
-					break;
-				default:
-					block = null;
-				}
+				block = manager.getGameObject(keks.get(levelMap[i][j]));
+				
 				if (block != null) {
 					block.setXY(j*100, i*100);
 					block.draw(gl);
 				}
+				
 			}
 		}
-		
 		//Step through background map and draw all background blocks
 //		for (int i = 0; i < actionMap.length; i++) {
 //			for (int j = 0; j < actionMap[i].length; j++) {
@@ -186,10 +178,10 @@ public class LevelRenderer implements Renderer {
 //				}
 //			}
 //		}
-		
-		
+
 		manager.getGameObject("cop").setXY(20, 60);
 		manager.getGameObject("cop").draw(gl);
+		//manager.getGameObject("cop").setXY(posX, posY);
 		manager.getGameObject("bunny").draw(gl);
 	}
 
@@ -204,6 +196,8 @@ public class LevelRenderer implements Renderer {
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();		
+		
+		//manager.getGameObject("bunny").setXY(posX, posY);
 	}
 
 	@Override
@@ -224,12 +218,36 @@ public class LevelRenderer implements Renderer {
 		//create all needed textures
 		this.manager = new textureManager(context, gl);
 		
-//		//manager.loadTexture("Bunny", R.drawable.l60_bunny_front);
+		//update in case of resume
+//		manager.getGameObject("bunny").setXY(posX, posY);
+	}
+	
+	public void saveLevel(SharedPreferences.Editor prefEditor) {
+//		Tablet bunny = manager.getGameObject("bunny");
+//		prefEditor.putFloat("l60_posX", 0);
+//		prefEditor.putFloat("l60_posY", 0);
+//		prefEditor.putFloat("l60_mapOffset_x", 0);
+//		prefEditor.putFloat("l60_mapOffset_y", 0);
+//		prefEditor.putFloat("l60_posX", bunny.getX());
+//		prefEditor.putFloat("l60_posY", bunny.getY());
+////		
+//		prefEditor.putFloat("l60_mapOffset_x", mapOffset_x);
+//		prefEditor.putFloat("l60_mapOffset_y", mapOffset_y);
 //		
-//		//background = new Tablet(context, 480, 320, 0, 0, R.drawable.l60_town_small, gl);
-////		cop = new Tablet(context, 50, 50, 20, 100, R.drawable.l60_cop_front_l, gl);
-////		tablet = new Tablet(context, 70, 70, 0, 0, R.drawable.l60_bunny_front, gl);
-//		//all map elements...texture manager?
+		//save action map too!
+	}
+	
+	public void loadLevel(SharedPreferences prefs) {
 		
+//		posX = prefs.getFloat("l60_posX",0);
+//		posY = prefs.getFloat("l60_posY",0);
+		//moveMap(prefs.getFloat("l60_mapOffset_x", 0), prefs.getFloat("l60_mapOffset_y", 0));
+		
+//		Tablet bunny = manager.getGameObject("bunny");
+//		
+//		bunny.setXY(prefs.getFloat("l60_posX",0), prefs.getFloat("l60_posY",0));
+//		moveMap(prefs.getFloat("l60_mapOffset_x", 0), prefs.getFloat("l60_mapOffset_y", 0));
+		
+		//load action map too!
 	}
 }

@@ -114,6 +114,8 @@ public class Tablet {
 		y = newY;
 	}
 	
+	
+	
 	public void scale(int scale_x, int scale_y) {
 		this.scale_x = scale_x;
 		this.scale_y = scale_y;
