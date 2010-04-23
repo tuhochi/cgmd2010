@@ -49,7 +49,7 @@ public class Constants {
 	public static final int ITEM_DELETEWALL_BW = R.drawable.l83_item_delete_bw;
 	
 	public static final int TEXTURE_DOLLAR = R.drawable.l83_dollar;
-	public static final int TEXTURE_LENNY = R.drawable.l83_kenny1;
+	public static final int TEXTURE_LENNY = R.drawable.l83_lenny;
 	
 	public static final float SPEED = 0.5f;
 	
