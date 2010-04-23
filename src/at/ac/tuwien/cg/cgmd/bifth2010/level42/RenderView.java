@@ -334,6 +334,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
+			hud.setCircleActive(false);
 			cam.setMouseDiff(distanceX, distanceY);
 			return true;
 		}
