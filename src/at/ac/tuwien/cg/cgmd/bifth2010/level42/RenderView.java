@@ -19,7 +19,6 @@ import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.HUD;
