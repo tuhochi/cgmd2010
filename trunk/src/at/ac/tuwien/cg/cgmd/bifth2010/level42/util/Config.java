@@ -47,7 +47,7 @@ public class Config
 	public static float COLLISION_PENETRATION_DEPTH = 0.2f;
 	
 	/** the milliseconds of a long press are divided by this to get the force strength */
-	public static int PRESS_TIME_TO_FORCE_DIVISOR = 20;
+	public static int PRESS_TIME_TO_FORCE_DIVISOR = 15;
 	
 	
 	/** minimal force to change the motion into a directional motion */
