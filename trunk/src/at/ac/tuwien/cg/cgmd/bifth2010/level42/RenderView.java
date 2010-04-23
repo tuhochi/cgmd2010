@@ -34,6 +34,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class RenderView.
  *
@@ -104,7 +105,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	/** The gesture detector. */
 	private final CustomGestureDetector gestureDetector;
 	
-	/** The HUD */
+	/** The HUD. */
 	private final HUD hud;
 	
 	// temp vars
@@ -158,6 +159,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		glEnable(GL_CULL_FACE);
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_LIGHTING);
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	
 		glClearColor(0.0f, 0.0f, 0.0f, 0.5f); 
 		glEnable(GL_DEPTH_TEST);
@@ -339,12 +343,27 @@ public class RenderView extends GLSurfaceView implements Renderer
 			cam.setMouseDiff(distanceX, distanceY);
 			return true;
 		}
-
+		
+		/* (non-Javadoc)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onDown(android.view.MotionEvent)
+		 */
 		@Override
-		public boolean onLongTouch(MotionEvent e, long duration)
+		public boolean onDown(MotionEvent e)
 		{
-			duration = Math.min(duration, Config.MAX_LONG_PRESS_TIME);
-			hud.setCircle(e.getRawX(), e.getRawY(), ((float)duration)/1000.0f);
+			Log.v(LevelActivity.TAG, "onDown(" + e + ")");
+			hud.setCircle(e.getRawX(), e.getRawY());
+			return true;
+		}
+
+		
+		/* (non-Javadoc)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onUp(android.view.MotionEvent)
+		 */
+		@Override
+		public boolean onUp(MotionEvent e)
+		{
+			Log.v(LevelActivity.TAG, "onUp(" + e + ")");
+			hud.setCircleActive(false);
 			return true;
 		}
 		

@@ -56,11 +56,13 @@ public class CustomGestureDetector
 			firstX = e.getX();
 			firstY = e.getY();
 			isLongPress = true;
+			listener.onDown(currentStartEvent);
 		}
 		
 		switch(e.getAction())
 		{
 		case MotionEvent.ACTION_DOWN:
+			listener.onDown(e);
 		case MotionEvent.ACTION_MOVE:
 			if(currentStartEvent == null)
 				break;
@@ -73,13 +75,10 @@ public class CustomGestureDetector
 				isLongPress = false;
 				listener.onScroll(currentStartEvent, e, distanceX, distanceY);
 			}
-			else
-			{
-				listener.onLongTouch(currentStartEvent, e.getEventTime()-e.getDownTime());
-			}
 			break;
 			
 		case MotionEvent.ACTION_UP:
+			listener.onUp(e);
 			if(currentStartEvent == null)
 				break;
 			
@@ -126,13 +125,20 @@ public class CustomGestureDetector
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 		
 		/**
-		 * Notified during a long press occurs
+		 * Notified on a down touch
 		 * 
-		 * @param e The initial on down motion event that started the longpress.
-		 * @param duration How long the press lasted so far
+		 * @param e the event that startet the touch
 		 * @return true, if the event is consumed, else false
 		 */
-		public boolean onLongTouch(MotionEvent e, long duration);
+		public boolean onDown(MotionEvent e);
+		
+		/**
+		 * Notified on an up touch
+		 * 
+		 * @param e the event that startet the touch
+		 * @return true, if the event is consumed, else false
+		 */
+		public boolean onUp(MotionEvent e);
 		
 		/**
 		 * Notified when a long press ends
