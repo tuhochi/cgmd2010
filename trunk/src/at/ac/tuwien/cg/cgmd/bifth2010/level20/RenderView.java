@@ -8,13 +8,17 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 /**
@@ -28,28 +32,24 @@ public class RenderView extends GLSurfaceView implements Renderer {
 
 	private GameManager gameManager;
 	public TimeUtil timer;
+
+	private float gameTime;
 	
 	/**
 	 * @param activity
 	 */
-	public RenderView(Activity activity) {
-		super(activity);
+	public RenderView(Context context, AttributeSet attr)
+	{
+		super(context, attr);
 		
-		//Set this as Renderer
-		this.setRenderer(this);	
-		//Request focus, otherwise buttons won't react
-		this.requestFocus();
-		this.setFocusableInTouchMode(true);
+		setRenderer(this); 
+        setFocusable(true);
+        requestFocus();
+		setFocusableInTouchMode(true);
 		
-		// Store Activity (= Context)
-//		this.activity = activity;
-		// The SessionState is a convenience class to set a result
-//		sessionState = new SessionState();
-//		setProgress(0);
-
 		timer = TimeUtil.getInstance();
-		
-		
+		gameTime = 60.f;
+	
 	}
 	
 	
@@ -95,8 +95,8 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		// Advance in time
 		timer.update();		
-		float dt = timer.getDt();
-		
+		float dt = timer.getDt();	
+
 		// Update the GameManager first
 		gameManager.update(dt);
 		

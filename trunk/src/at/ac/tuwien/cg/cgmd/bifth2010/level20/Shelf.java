@@ -26,10 +26,9 @@ public class Shelf extends RenderEntity {
 	protected float PRODUCT_DISTANCE_X;
 	
 	/** 
-	 * The product collection.
-	 * TODO: Rename to products
+	 * The product collection. 
 	 */
-	protected Hashtable<Integer, ProductEntity> entities;
+	protected Hashtable<Integer, ProductEntity> products;
 	
 	/**
 	 * The distance in pixels, the shelf has moved since the start of the game
@@ -47,12 +46,6 @@ public class Shelf extends RenderEntity {
 	protected float[] productSpawnY;
 	
 	/**
-	 * Products can only be clicked while this is true	 *
-	 * FERDI: Was ist wenn mehr Produktreihen gleichzeitig am Bildschirm sind?
-	 */ 
-//	protected boolean productsActive;
-	
-	/**
 	 * @param width The screen width.
 	 * @param height The screen height.
 	 */
@@ -64,17 +57,14 @@ public class Shelf extends RenderEntity {
 		PRODUCT_DISTANCE_X = 150;
 		
 		
-		entities = new Hashtable<Integer, ProductEntity>();
+		products = new Hashtable<Integer, ProductEntity>();
 		
 		pixelsX = 0;
 		distToLastProduct = 0;
 		
-//		float spawnY = 145;
-//		float spawnInc = 70;
 		// TODO: Calc better values
 		productSpawnY = new float[]{height * 285 / 320f, height * 220 / 320f, height * 155 / 320f};
 				
-//		productsActive = false;
 	}
 
 	/**
@@ -87,22 +77,21 @@ public class Shelf extends RenderEntity {
 		pixelsX += scroll;
 		
 		// Update all Animators
-		Enumeration<Integer> keys = entities.keys();		
+		Enumeration<Integer> keys = products.keys();		
 		while(keys.hasMoreElements()) {
 			
-			ProductEntity pe = entities.get(keys.nextElement());
+			ProductEntity pe = products.get(keys.nextElement());
 			
 			pe.x -= scroll;
 			
 			// If they are out of the screen remove them
 			if (pe.x < -pe.width) {				
-				entities.remove(pe.id);	
+				products.remove(pe.id);	
 				pe = null;
 			}
 		}
 		
 		// At last, add some new products every few pixels
-		// FERDI: Ich würd das Spawnen von den Products nicht nur auf 1 Bildschirm beschränken. 
 		distToLastProduct += scroll;
 		
 		if (distToLastProduct >= PRODUCT_DISTANCE_X) {			
@@ -116,12 +105,6 @@ public class Shelf extends RenderEntity {
 	 * Creates a product for the shelf.
 	 */
 	public void createProducts() {
-		
-		// This is the amount of x, the shelf has already passed since the product-creation point
-		// FERDI: Eigentlich muss es ja gar nicht Punkt-genau spawnen. Wenn wir den Jitter haben... 
-//		float dx = pixelsX % 150;
-		
-		// FERDI: jitterX vielleicht für alle 3 products gleich?
 		float jitterX = (int)(Math.random() * 25);
 		
 		for (int i = 0; i < NUMBER_PRODUCTS; i++) {
@@ -154,10 +137,8 @@ public class Shelf extends RenderEntity {
 			}
 			
 			
-			entities.put(pe.id, pe);
-		}
-
-//		productsActive = true;
+			products.put(pe.id, pe);
+		}	
 	}
 	
 	
@@ -191,9 +172,9 @@ public class Shelf extends RenderEntity {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		
 		// Render products.	
-		Enumeration<Integer> keys = entities.keys();
+		Enumeration<Integer> keys = products.keys();
 		while(keys.hasMoreElements()) {
-			entities.get(keys.nextElement()).render(gl);
+			products.get(keys.nextElement()).render(gl);
 		}	
 	}
 	
@@ -202,27 +183,24 @@ public class Shelf extends RenderEntity {
 	 * @param y
 	 */
 	public void hitTest(float x, float y) {
-//		if (!productsActive) 
-//			return;
 		
-		Enumeration<Integer> keys = entities.keys();		
+		Enumeration<Integer> keys = products.keys();		
 		while(keys.hasMoreElements()) {
 			
-			ProductEntity pe = entities.get(keys.nextElement());
+			ProductEntity pe = products.get(keys.nextElement());
 			
 			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
-				pe.clickable = false;
-//				productsActive = false;
+				pe.clickable = false;				
 				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
-				entities.remove(pe.id);
+				products.remove(pe.id);
 				
 				//Mark neighbors as not clickable too
 				for (int i = 0; i < pe.neighbors.length; i++) {
-					entities.get(pe.neighbors[i]).clickable = false;
+					products.get(pe.neighbors[i]).clickable = false;
+					
 					// TODO: Small hack, do something better:
-					entities.get(pe.neighbors[i]).angle = 90;
-				}
-				
+					products.get(pe.neighbors[i]).angle = 90;
+				}				
 				break;
 			}
 		}
