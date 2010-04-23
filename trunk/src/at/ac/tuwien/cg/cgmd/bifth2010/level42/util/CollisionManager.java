@@ -52,7 +52,7 @@ public class CollisionManager {
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
 	
-	private final Vector<Movable> fromCenterDistEntities;
+	private final Vector<Movable> aimingList;
 	
 	public static CollisionManager instance;
 	
@@ -86,16 +86,16 @@ public class CollisionManager {
 		
 		this.minDistance = 0;
 		
-		fromCenterDistEntities = new Vector<Movable>(Config.COUNT_NEAREST_ENTITIES);
+		aimingList = new Vector<Movable>(Config.COUNT_NEAREST_ENTITIES);
 		
 		for(int i=0;i<entityList.size();i++)
 		{
 			if(entityList.get(i).getName().equals(Config.PLANET_NAME)){
-				fromCenterDistEntities.addAll(entityList.get(i).models);
+				aimingList.addAll(entityList.get(i).models);
 			}
 		}
 		
-		Collections.sort(fromCenterDistEntities, new NearestEntityComperator());
+		Collections.sort(aimingList, new NearestEntityComperator());
 		
 		instance = this;
 	}
@@ -186,6 +186,7 @@ public class CollisionManager {
 	 */
 	public void doCollisionDetection()
 	{
+		
 		//for each entity
 		for(int i=0; i<entityList.size(); i++) 
 		{
@@ -209,8 +210,7 @@ public class CollisionManager {
 						//distinguish entities
 						SceneEntity planet = null;
 						SceneEntity satellite = null;
-						
-						fromCenterDistEntities.clear();
+
 						
 						if(!objAIsMoveable){
 							planet = (SceneEntity) objA;
@@ -249,14 +249,15 @@ public class CollisionManager {
 									if(satellite.getMotion().getSpeed()<Config.MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL)
 										satellite.getMotion().morph(planetPushVec);
 								}
-							}else{
-								fromCenterDistEntities.add(planetEntity);
+								
+								//delete from aiming list
+								aimingList.remove(planetEntity);
 							}
 						}
 					
 						//sort list for autoaim
-						if(fromCenterDistEntities.size()>1){
-							Collections.sort(fromCenterDistEntities, new NearestEntityComperator());
+						if(aimingList.size()>1){
+							Collections.sort(aimingList, new NearestEntityComperator());
 						}
 						
 					}
@@ -322,9 +323,9 @@ public class CollisionManager {
 	
 	public Movable getNearestToCenterEntity()
 	{
-		for(int i=0;i<fromCenterDistEntities.size();i++)
-			Log.d(LevelActivity.TAG,i+ " length = "+fromCenterDistEntities.get(i).getBoundingSphereWorld().center.length());
-		return fromCenterDistEntities.get(0);
+		for(int i=0;i<aimingList.size();i++)
+			Log.d(LevelActivity.TAG,i+ " length = "+aimingList.get(i).getBoundingSphereWorld().center.length());
+		return aimingList.get(0);
 	}
 	
 	
