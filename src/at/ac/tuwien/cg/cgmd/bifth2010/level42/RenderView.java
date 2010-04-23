@@ -296,7 +296,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onTouchUp(MotionEvent e, long duration)
 		{
-
+			duration = Math.min(duration, Config.MAX_LONG_PRESS_TIME);
+			
 			hud.setCircleActive(false);
 			
 			Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
@@ -342,6 +343,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onLongTouch(MotionEvent e, long duration)
 		{
+			duration = Math.min(duration, Config.MAX_LONG_PRESS_TIME);
 			hud.setCircle(e.getRawX(), e.getRawY(), ((float)duration)/1000.0f);
 			return true;
 		}

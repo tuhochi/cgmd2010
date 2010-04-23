@@ -17,6 +17,14 @@ public class Config
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;
 	
+	/** GAMEPLAY */
+
+	/** the milliseconds of a long press are divided by this to get the force strength */
+	public static int PRESS_TIME_TO_FORCE_DIVISOR = 15;
+	
+	/** the maximum milliseconds for a long press */
+	public static long MAX_LONG_PRESS_TIME = 400;
+	
 	/** PHYSICS / UNIVERSE. */
 
 	/** center position of the universe / orbits */
@@ -45,10 +53,6 @@ public class Config
 	
 	/** the required penetration depth on collisions */
 	public static float COLLISION_PENETRATION_DEPTH = 0.2f;
-	
-	/** the milliseconds of a long press are divided by this to get the force strength */
-	public static int PRESS_TIME_TO_FORCE_DIVISOR = 15;
-	
 	
 	/** minimal force to change the motion into a directional motion */
 	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 1f;
