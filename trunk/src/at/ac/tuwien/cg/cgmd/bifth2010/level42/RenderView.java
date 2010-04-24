@@ -246,11 +246,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 					break;
 				case KeyEvent.KEYCODE_DPAD_LEFT:
 					Orbit test = (Orbit) motionManager.getMotion(1).getMotion();
-					test.morphAxisScale(0.4f, 0.5f,100);
+					test.morphAxisScale(0.4f, 0.5f,100,100);
 					break;	
 				case KeyEvent.KEYCODE_DPAD_RIGHT:
 					Orbit test1 = (Orbit) motionManager.getMotion(1).getMotion();
-					test1.morphAxisScale(1.6f,1.5f,100);
+					test1.morphAxisScale(1.6f,1.5f,100,100);
 				break;
 				}
 			}

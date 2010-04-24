@@ -20,6 +20,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
  */
 public abstract class Motion implements Persistable
 {	
+	boolean isInsidePlanet = false;
+	
 	/**
 	 * Do the next iteration step 
 	 * @param dt delta time between frames for a frame-independent motion
@@ -67,6 +69,14 @@ public abstract class Motion implements Persistable
 	 * @param pushVec the change of the motion
 	 */
 	public abstract void morph(Vector3 pushVec);
+	
+	public boolean isInsidePlanet(){
+		return isInsidePlanet;		
+	}
+	
+	public void setInsidePlanet(boolean isInsidePlanet){
+		this.isInsidePlanet = isInsidePlanet;
+	}
 	
 	public abstract void persist(DataOutputStream dos) throws IOException;
 	public abstract void restore(DataInputStream dis) throws IOException;

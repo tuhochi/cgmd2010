@@ -28,8 +28,11 @@ public class Orbit extends Motion
 	/** The dynamic morph speed. */
 	private float  	u,step,
 
+					//directionVec rotation
+					dirVecRotationDiff,dirVecRotationDiffStep,dirVecRotationDiffIteration,
+					
 					//scale morphing
-					scalingMorphSpeed,
+					aScalingMorphSpeed,bScalingMorphSpeed,
 					centerDiffFactor,centerDiffStep,centerDiff,centerDiffIteration,
 					directionDiffFactor,directionDiffStep,directionDiff,directionDiffIteration,
 					centerVecCap,directionVecCap,
@@ -55,6 +58,8 @@ public class Orbit extends Motion
 
 	/** The direction vector encodes the iteration direction (cw,ccw) and the b axis. */
 	private final Vector3 directionVec;
+
+	private final Vector3 normalVec;
 	
 	/** The ref center vec. */
 	private final Vector3 currtDirApproximation,tempDirectionVec,
@@ -62,6 +67,9 @@ public class Orbit extends Motion
 
 	/** The generated transformation matrix. */
 	private Matrix44 transform;
+	
+
+	private Matrix44 dirRotationMatrix;
 	
 	/** The basic orientation of the object. */
 	private final Matrix44  basicOrientation;
@@ -81,6 +89,7 @@ public class Orbit extends Motion
 		position = new Vector3();
 		entityPos = new Vector3();
 		centerPos = new Vector3();
+		normalVec = new Vector3();
 		
 		centerVec = new Vector3();
 		directionVec = new Vector3();
@@ -91,8 +100,12 @@ public class Orbit extends Motion
 		
 		transform = new Matrix44();
 		basicOrientation = new Matrix44();
+		dirRotationMatrix = new Matrix44();
 
 		u = 0;
+		
+		dirVecRotationDiff = 0;
+		dirVecRotationDiffStep = 0;
 	}
 
 	/**
@@ -131,6 +144,9 @@ public class Orbit extends Motion
 
 		if(basicOrientation!=null)
 			this.basicOrientation.copy(basicOrientation);
+
+		Vector3.crossProduct(this.centerVec, this.directionVec, this.normalVec);
+		this.normalVec.normalize();
 		
 		/**
 		 * INFO: the given vectors are used per reference!
@@ -161,19 +177,39 @@ public class Orbit extends Motion
 		//update sat transformation
 		if(satTrans!=null)
 			satTrans.update(dt);
-			
+		
+		updateDirVecRotation(dt);
+	
 		//update the morphing for the direction vec length
 		updateSpeedMorphing(dt);
 		
 		//update the morphing for the axis scaling
 		updateAxisScaling(dt);
-			
+		
 		//calc position on ellipse - build transformation matrix
 		evaluatePos();
 		
 		//check the limitations
 //		if(this.centerVec.length()>10 || this.directionVec.length()>10)
 //			Log.d(LevelActivity.TAG,"OUT centerVec="+centerVec.length()+" directionVec="+directionVec.length()+" speed="+speed);
+	}
+	
+	private void updateDirVecRotation(float dt)
+	{
+		if(dirVecRotationDiff > 0)
+		{
+			dirVecRotationDiffIteration = dirVecRotationDiffStep*dt;
+			
+			if(dirVecRotationDiff-Math.abs(dirVecRotationDiffIteration)<0)
+				dirVecRotationDiffIteration = Math.signum(dirVecRotationDiffStep)*dirVecRotationDiff;
+			
+			dirRotationMatrix.setIdentity();
+			dirRotationMatrix.addRotate(normalVec, dirVecRotationDiffIteration);
+			dirRotationMatrix.transformPoint(directionVec);
+			//for axis scaling..
+			dirRotationMatrix.transformPoint(refDirectionVec);
+			dirVecRotationDiff -= (float)Math.abs(dirVecRotationDiffIteration);
+		}
 	}
 	
 	/**
@@ -225,7 +261,7 @@ public class Orbit extends Motion
 		if(Math.signum(centerDiffStep)<0){
 			if(centerDiffFactor<centerDiff){
 				doCenterVecScaling = true;
-				centerDiffIteration = centerDiffStep * dt * scalingMorphSpeed;
+				centerDiffIteration = centerDiffStep * dt * aScalingMorphSpeed;
 				
 				if(centerDiff+centerDiffIteration<centerDiffFactor)
 					centerDiffIteration = centerDiffFactor-centerDiff;
@@ -234,7 +270,7 @@ public class Orbit extends Motion
 		}else{
 			if(centerDiffFactor>centerDiff){
 				doCenterVecScaling = true;
-				centerDiffIteration = centerDiffStep * dt * scalingMorphSpeed;
+				centerDiffIteration = centerDiffStep * dt * aScalingMorphSpeed;
 			
 				if(centerDiff+centerDiffIteration>centerDiffFactor)
 					centerDiffIteration = centerDiffFactor-centerDiff;
@@ -246,7 +282,7 @@ public class Orbit extends Motion
 		if(Math.signum(directionDiffStep)<0){
 			if(directionDiffFactor<directionDiff){
 				doDirectionVecScaling = true;
-				directionDiffIteration = directionDiffStep * dt * scalingMorphSpeed;
+				directionDiffIteration = directionDiffStep * dt * bScalingMorphSpeed;
 				
 				if(directionDiff+directionDiffIteration<directionDiffFactor)
 					directionDiffIteration = directionDiffFactor-directionDiff;
@@ -256,7 +292,7 @@ public class Orbit extends Motion
 		}else{
 			if(directionDiffFactor>directionDiff){
 				doDirectionVecScaling = true;
-				directionDiffIteration = directionDiffStep * dt * scalingMorphSpeed;
+				directionDiffIteration = directionDiffStep * dt * bScalingMorphSpeed;
 				
 				if(directionDiff+directionDiffIteration>directionDiffFactor)
 					directionDiffIteration = directionDiffFactor-directionDiff;
@@ -284,6 +320,18 @@ public class Orbit extends Motion
 			updateStepSize();
 		}
 
+	}
+	
+	public void rotateDirectionVec(float angle,float stepSize){
+		
+		this.dirVecRotationDiff = (float)Math.toRadians(angle);
+		this.dirVecRotationDiffStep = dirVecRotationDiff/stepSize;
+		if(angle<0)
+			this.dirVecRotationDiffStep*=-1;
+		
+		this.dirRotationMatrix.setIdentity();
+		this.dirRotationMatrix.addRotate(normalVec, dirVecRotationDiffStep);
+		Log.d(LevelActivity.TAG," NORMALVEC="+normalVec);
 	}
 	
 	/**
@@ -315,14 +363,14 @@ public class Orbit extends Motion
 	 *
 	 * @param aAxisFactor the scaling factor for the a axis - center vector (1 = no change)
 	 * @param bAxisFactor the scaling factor for the b axis - direction vector (1 = no change)
-	 * @param morphSpeed the transition speed
+	 * @param aAxisMorphSpeed the transition speed
 	 */
-	public void morphAxisScale(float aAxisFactor,float bAxisFactor,float morphSpeed)
+	public void morphAxisScale(float aAxisFactor,float bAxisFactor,float aAxisMorphSpeed,float bAxisMorphSpeed)
 	{
-		scalingMorphSpeed = morphSpeed;
+		aScalingMorphSpeed = aAxisMorphSpeed;
+		bScalingMorphSpeed = bAxisMorphSpeed;
 		refCenterVec.set(centerVec);
 		refDirectionVec.set(directionVec);
-		
 		centerDiffFactor = aAxisFactor;
 		centerDiffStep = (centerDiffFactor-1)/100;
 		centerDiff = 1;
@@ -349,7 +397,7 @@ public class Orbit extends Motion
 		Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
 		
 		if((this.centerVecCap!=1 || this.directionVecCap != 1)){
-			morphAxisScale(centerVecCap, directionVecCap, 20);
+			morphAxisScale(centerVecCap, directionVecCap, 20,20);
 		}
 		
 		if(this.newSpeed > Config.UNIVERSE_SPEED_LIMIT){
@@ -439,7 +487,7 @@ public class Orbit extends Motion
 		dos.writeFloat(step);
 
 		//scale morphing
-		dos.writeFloat(scalingMorphSpeed);
+		dos.writeFloat(aScalingMorphSpeed);
 		dos.writeFloat(centerDiffFactor);
 		dos.writeFloat(centerDiffStep);
 		dos.writeFloat(centerDiff);
@@ -481,7 +529,7 @@ public class Orbit extends Motion
 		step = dis.readFloat();
 
 		//scale morphing
-		scalingMorphSpeed = dis.readFloat();
+		aScalingMorphSpeed = dis.readFloat();
 		centerDiffFactor = dis.readFloat();
 		centerDiffStep = dis.readFloat();
 		centerDiff = dis.readFloat();
