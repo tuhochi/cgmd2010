@@ -67,6 +67,12 @@ public abstract class Projectile extends GLObject{
 	
 	@Override
 	public void draw( GL10 gl ){
+		long ms = System.currentTimeMillis();
+		double dt = (ms - mLastFrametime) * 0.001;
+		mLastFrametime = ms;
+		double distance = this.getSpeed() * dt;
+		mXTranslate += (float)distance;
+		
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
@@ -76,11 +82,11 @@ public abstract class Projectile extends GLObject{
 	
 	@Override
 	public float getX(){
-		long ms = System.currentTimeMillis();
+		/*long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		mLastFrametime = ms;
 		double distance = this.getSpeed() * dt;
-		mXTranslate += (float)distance;
+		mXTranslate += (float)distance;*/
 		return mXTranslate + mX; //returns the bullet real position because it gets translated and not moved
 	}
 
