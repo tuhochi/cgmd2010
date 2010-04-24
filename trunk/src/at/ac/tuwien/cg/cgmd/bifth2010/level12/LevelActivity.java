@@ -38,10 +38,23 @@ public class LevelActivity extends Activity {
         }
     	return super.onTouchEvent(event);
     }
+    /*
+    @Override
+    protected void onResume() {
+    	glview.resumeLevel();
+        super.onResume();
+    }
+*/
+    @Override
+    protected void onPause() {
+    	glview.pauseLevel();
+        super.onPause();
+    }
     
     @Override
 	protected void onStop() {		
 		//we finish this activity
+    	glview.stopLevel();
 		this.finish();
 		super.onStop();
     }

@@ -112,7 +112,16 @@ public class MoneyCarrier extends GLObject {
 	
 	@Override
 	public void draw(GL10 gl){
-		if( getX() <= 1.0f) {
+		
+		ms = System.currentTimeMillis();
+		double dt = (ms - mLastFrametime) * 0.001;
+		mLastFrametime = ms;
+		double distance = mSpeed * dt;
+		mMovePos -= distance;
+		//calculate actual position
+		mX = mStartPos + mMovePos;
+		
+		if( mX <= 1.0f) {
 			this.deactivate();
 			GameMechanics.getGameMecanics().addMoney( mMoney );
 		}
@@ -130,13 +139,14 @@ public class MoneyCarrier extends GLObject {
 	}
 	
 	public float getX(){
-		ms = System.currentTimeMillis();
+		/*ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		mLastFrametime = ms;
 		double distance = mSpeed * dt;
 		mMovePos -= distance;
 		//calculate actual position
 		mX = mStartPos + mMovePos;
+		*/
 		return mX;
 	}	
 }

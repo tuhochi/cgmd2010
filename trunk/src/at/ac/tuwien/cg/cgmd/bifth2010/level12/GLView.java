@@ -18,7 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Projectile;
 public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	private Gamefield mGamefield = null;
 	
-	private Thread mGameThread = null;
+	public Thread mGameThread = null;
 	
 	//private static final int CARRIER_SPAWN_INTERVALL_01 = 3; //wave 1 spawn intervall
 	private static final int[] mCarrierWave = new int[Definitions.CARRIER_POOL];
@@ -127,6 +127,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( (int)mWidth );	
 		mGameThread = new Thread(this);
 		mGameThread.start();
+		
 	}
 	
 	public void setXYpos(float xpos, float ypos) {
@@ -257,12 +258,45 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 					}
 				}
 			}
-		}	
+		}	/*
+		for( int i = 0; i < mBasicTower.length; i++){
+			if( mBasicTower[i].getActiveState()){	
+				Projectile p = mBasicTower[i].getProjectile(); //kann null sein
+				if( p == null ) return;
+				MoneyCarrier m = null;
+				boolean nearerEnemie = true;
+				for( int j = 0; j < mEnemies.length ; j++){
+					if( mEnemies[j].getActiveState() && (int)mEnemies[j].getY() == (int)p.getY() ){
+						System.out.println("Doing Collision Detection!");
+						
+						if((int)p.getX() == (int)mEnemies[j].getX()){
+							Log.d("draw", "HITTTTT!!!!!" + p.getX() + " --- " + mEnemies[j].getX());
+							mEnemies[j].deactivate(); //TODO: deactivate nur zu debug zwecken. später HP abziehen und bei HP = 0 deactivate()
+							mEnemieCount--;
+						}
+						
+					}
+				}
+				
+			}
+		}	*/
+	}
+	
+	//***************************
+	//TODO: Life-Cycle Implementierung: speichern von spieldaten, wiederherstellen der spieldaten
+	//
+	
+	public void stopLevel(){
+		mGameThread.stop();
+	}
+	
+	public void pauseLevel(){
+		mGameThread.suspend();
 	}
 
-
-
-
+	public void resumeLevel(){
+		mGameThread.resume();
+	}
 
 	@Override
 	public void run() {
