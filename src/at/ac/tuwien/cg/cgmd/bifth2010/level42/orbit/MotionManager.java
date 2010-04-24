@@ -85,8 +85,15 @@ public class MotionManager {
 			if(motion instanceof DirectionalMotion){
 				//change only params
 			}else{
-				//TODO: auto aim ziel hier definieren
-				tempForceDirectionVec.set(CollisionManager.instance.getNearestToCenterEntity().getBoundingSphereWorld().center);
+				//determine aiming center
+				Movable aimEntity = CollisionManager.instance.getNearestToCenterEntity();
+				Vector3 aimCenter = null;
+				if(aimEntity!=null)
+					aimCenter = CollisionManager.instance.getNearestToCenterEntity().getBoundingSphereWorld().center;
+				else
+					aimCenter = Config.UNIVERSE_CENTER;
+				
+				tempForceDirectionVec.set(aimCenter);
 				tempForceDirectionVec.subtract(entity.getBoundingSphereWorld().center);		
 				
 				DirectionalMotion dirMotion =  

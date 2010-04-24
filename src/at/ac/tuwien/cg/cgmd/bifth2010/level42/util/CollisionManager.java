@@ -210,7 +210,6 @@ public class CollisionManager {
 						//distinguish entities
 						SceneEntity planet = null;
 						SceneEntity satellite = null;
-
 						
 						if(!objAIsMoveable){
 							planet = (SceneEntity) objA;
@@ -220,6 +219,8 @@ public class CollisionManager {
 							satellite = (SceneEntity) objA;
 						}
 						
+						//set planet entrance flag
+						satellite.getMotion().setInsidePlanet(true);
 						
 						Model planetEntity = null;
 						
@@ -263,56 +264,88 @@ public class CollisionManager {
 					}
 					else
 					{
-						
-						objAMotion = objA.getMotion();
-						objBMotion = objB.getMotion();
-						
-						if(objAMotion==null)
+//						objAMotion = objA.getMotion();
+//						objBMotion = objB.getMotion();
+//						
+//						if(objAMotion==null)
+//						{
+//							
+//							objAMotion = new Orbit(	objA.getBoundingSphereWorld().center,
+//													Config.UNIVERSE_CENTER,
+//													Constants.DUMMY_INIT_VEC,
+//													0.1f,
+//													null);
+//							MotionManager.instance.addMotion(objAMotion,objA);
+//						}
+//						
+//	
+//						if(objBMotion==null)
+//						{
+//							objBMotion = new Orbit(	objB.getBoundingSphereWorld().center,
+//													Config.UNIVERSE_CENTER,
+//													Constants.DUMMY_INIT_VEC,
+//													0.1f,
+//													null);
+//							MotionManager.instance.addMotion(objBMotion,objB);
+//						}
+//						
+//						
+//						objACurrDir.set(objA.getMotion().getCurrDirectionVec()).normalize();
+//						objBCurrDir.set(objB.getMotion().getCurrDirectionVec()).normalize();
+//											
+//						//weight with current speed
+//						objACurrDir.multiply(objA.getMotion().getSpeed()*0.2f);
+//						objBCurrDir.multiply(objB.getMotion().getSpeed()*0.2f);
+//						
+//						toCenterVecA.set(centerDistance);
+//						toCenterVecA.normalize().multiply(-objA.getBoundingSphereWorld().radius);
+//						
+//						toCenterVecB.set(centerDistance);
+//						toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
+//						
+//						objAPushVec.set(objBCurrDir);
+//						objAPushVec.add(toCenterVecA);
+//
+//						objBPushVec.set(objACurrDir);
+//						objBPushVec.add(toCenterVecB);
+//
+//						objA.getMotion().morph(objAPushVec);
+//						objB.getMotion().morph(objBPushVec);
+//						
+//						MotionManager.instance.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
+//						MotionManager.instance.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
+					}
+					
+				//END of contact detection
+				}else{
+					//special case: sat is not longer "inside the planet"
+					if(objA.getMotion()!=null && objA.getMotion().isInsidePlanet())
+					{
+						if(objA.getMotion() instanceof DirectionalMotion)
 						{
-							objAMotion = new Orbit(	objA.getBoundingSphereWorld().center,
-													Config.UNIVERSE_CENTER,
-													Constants.DUMMY_INIT_VEC,
-													0.1f,
-													null);
-							MotionManager.instance.addMotion(objAMotion,objA);
+							Orbit newOrbit = new Orbit(	objA.getBoundingSphereWorld().center,
+														Config.UNIVERSE_CENTER,
+														Vector3.add(Vector3.multiply(objA.getBoundingSphereWorld().center,3f),new Vector3(0.01f,0.01f,0f)),
+														5,
+														null);
+							
+							float centerRatio = Config.UNIVERSE_CENTERLENGTH_LIMIT/objA.getBoundingSphereWorld().center.length();
+							float dirRatio = Config.UNIVERSE_DIRLENGTH_LIMIT/Vector3.add(Vector3.multiply(objA.getBoundingSphereWorld().center,2f),new Vector3(0.01f,0.01f,0f)).length();
+						
+							newOrbit.morphAxisScale(
+										centerRatio,
+										dirRatio,
+										30f,
+										30f);
+							newOrbit.rotateDirectionVec(90,10);
+							
+							Log.d(LevelActivity.TAG," MORPH center="+centerRatio + " dir="+dirRatio + " centerLength="+newOrbit.entityPos.length()+" dirLeng="+newOrbit.getCurrDirectionVec().length());
+							
+							MotionManager.instance.setMotion(newOrbit,objA);
+							
+						}else{
+							objA.getMotion().setInsidePlanet(false);
 						}
-						
-	
-						if(objBMotion==null)
-						{
-							objBMotion = new Orbit(	objB.getBoundingSphereWorld().center,
-													Config.UNIVERSE_CENTER,
-													Constants.DUMMY_INIT_VEC,
-													0.1f,
-													null);
-							MotionManager.instance.addMotion(objBMotion,objB);
-						}
-						
-						
-						objACurrDir.set(objA.getMotion().getCurrDirectionVec()).normalize();
-						objBCurrDir.set(objB.getMotion().getCurrDirectionVec()).normalize();
-											
-						//weight with current speed
-						objACurrDir.multiply(objA.getMotion().getSpeed()*0.2f);
-						objBCurrDir.multiply(objB.getMotion().getSpeed()*0.2f);
-						
-						toCenterVecA.set(centerDistance);
-						toCenterVecA.normalize().multiply(-objA.getBoundingSphereWorld().radius);
-						
-						toCenterVecB.set(centerDistance);
-						toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
-						
-						objAPushVec.set(objBCurrDir);
-						objAPushVec.add(toCenterVecA);
-
-						objBPushVec.set(objACurrDir);
-						objBPushVec.add(toCenterVecB);
-
-						objA.getMotion().morph(objAPushVec);
-						objB.getMotion().morph(objBPushVec);
-						
-						MotionManager.instance.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
-						MotionManager.instance.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
 					}
 				}
 				
@@ -325,7 +358,11 @@ public class CollisionManager {
 	{
 		for(int i=0;i<aimingList.size();i++)
 			Log.d(LevelActivity.TAG,i+ " length = "+aimingList.get(i).getBoundingSphereWorld().center.length());
-		return aimingList.get(0);
+		
+		if(aimingList.size()>0)		
+			return aimingList.get(0);
+		else 
+			return null;
 	}
 	
 	
