@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="l33_help_headline">Das geheimnisvolle Labyrinth</string>
+<string name="l33_help_main">Mit einem großen Schatz im Gepäck ist man auf der Flucht und landet in einem geheimnisvollen Labyrinth. Beweg dich mit den Cursor-Tasten durch das Labyrinth und versuche innerhalb von zwei Minuten soviel von deinem Gold wie möglich an geeigneten Stellen zu hinterlassen. Aber fürchte dich nicht, wenn dir auf deinem Weg sonderbare Dinge begegnen.</string>
+<string name="l33_GameName">Das geheimnissvolle Labyrinth</string>
+<string name="l33_help_entry1">Versuche den Schatz zu vermeiden, denn sonst wirst du mit Reichtum bestraft.</string>
+<string name="l33_help_entry2">Diese alte Karte wird dir helfen, dich zurecht zu finden, bevor sie endgültig zerfällt.</string>
+<string name="l33_help_entry3">Unter einem Stein ist ein kleiner Teil deines Goldes sicher angelegt.</string>
+<string name="l33_help_entry4">Du bist bereits erschöpft vom schweren Tragen deines Goldes? In diesem Fass kannst du eine großer Menge deiner Last verstecken.</string>
+<string name="l33_help_entry5">Dieser Brunnen ist ein magischer Wunschbrunnen. Für einen kleinen Anteil von deinem Gold wird etwas unvorhersehbares geschehen. Aber sei gewarnt, es muss nicht zu deinem Gunsten enden!</string>
+<string name="l33_help_entry1_head">Schatz</string>
+<string name="l33_help_entry2_head">Schatzkarte</string>
+<string name="l33_help_entry3_head">Stein</string>
+<string name="l33_help_entry4_head">Fass</string>
+<string name="l33_help_entry5_head">Brunnen</string>
+</resources>
