@@ -54,6 +54,32 @@ public class SceneGraph {
 	public final static byte GEOMETRY_SPRING = 15;
 	public final static byte GEOMETRY_CHARACTER = 16;
 	
+	public final static int NONE_SPECIAL_WALL_EDGE = 0;
+	public final static int ONE_SPECIAL_WALL_EDGE = -1;
+	public final static int TWO_SPECIAL_WALL_EDGE = -2;
+	public final static int THREE_SPECIAL_WALL_EDGE = -3;
+	public final static int FOUR_SPECIAL_WALL_EDGE = -4;
+	public final static int COUNTERPART_SPECIAL_WALL_EDGE = -5;
+	
+	public final static int NONE_SPECIAL_CORNER = -6;
+	public final static int ONE_SPECIAL_CORNER = -7;
+	public final static int TWO_SPECIAL_CORNER = -8;
+	public final static int THREE_SPECIAL_CORNER = -9;
+	public final static int FOUR_SPECIAL_CORNER = -10;
+	public final static int COUNTERPART_SPECIAL_CORNER = -11;
+	
+	public final static int ONE_EDGE_ONE_RIGHT_SPECIAL_CORNER_WALL = -12;
+	public final static int ONE_EDGE_ONE_LEFT_SPECIAL_CORNER_WALL = -13;
+	public final static int ONE_EDGE_TWO_SPECIAL_CORNER_WALL = -14;
+	public final static int TWO_EDGE_ONE_SPECIAL_CORNER_WALL = -15;
+	
+	public final static int NONE_CONNECTION_WALL = 0;
+	public final static int ONE_CONNECTION_WALL = 1;
+	public final static int TWO_CONNECTION_WALL = 2;
+	public final static int THREE_CONNECTION_WALL = 3;
+	public final static int FOUR_CONNECTION_WALL = 4;
+	public final static int COUNTERPART_CONNECTION_WALL = 5;
+	
 	static Context context;
 	public  static Vector2f touchDim = new Vector2f(0, 0);
 	public  static Vector2i frustumDim = new Vector2i(3, 5);

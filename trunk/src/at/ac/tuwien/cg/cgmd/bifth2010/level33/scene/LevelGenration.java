@@ -1,7 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 
+
+
 import java.util.ArrayList;
 import java.util.Random;
+
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
@@ -13,10 +16,18 @@ public class LevelGenration {
 	int[] createdWays;
 	int columns=0;
 	int rows=0;
+		
+	//shortestPath
+	int[][] mapInfo[];
+	int[] goodiesIndex;
+	int[] mapWayIndex;
+	int numberOfGoodies=0;
+	int mapCount=0;
 	
-	//WallInfomation
-	int numberOfWallTextures=4;
-	ArrayList<int[]> wallField = new ArrayList<int[]>(4);
+	//WallInformation
+	WallInformation wallInfo = null;
+	static ArrayList<int[]> walls = new ArrayList<int[]>();
+	
 	
 	int wayOffset=0;
 	double percentOfWay=0.0;
@@ -44,8 +55,9 @@ public class LevelGenration {
 		this.numberOfBarrel = numberOfBarrel; //4
 		this.numberOfTrashes = numberOfTrashes; //3
 		this.numberOfSpring = numberOfSpring; //3
-		
+				
 		checkLevelSettings();
+		
 	}
 	
 	public LevelGenration(int columnRowSize){
@@ -110,7 +122,7 @@ public class LevelGenration {
 		
 		int levelSize=rows*columns;
 		levelField = new int[levelSize];
-		
+				
 		if(percentOfWay >0.50)
 			percentOfWay=0.50;
 		int numberOfWays =new Double(levelSize*percentOfWay).intValue();
@@ -122,6 +134,11 @@ public class LevelGenration {
 		int startField = rg.nextInt(levelSize);
 		levelField[startField]=1;
 		createdWays[0]=startField;
+				
+		numberOfGoodies = numberOfBarrel+numberOfSpring+numberOfStone;
+		goodiesIndex = new int[numberOfGoodies];
+		mapWayIndex = new int[numberOfMaps];
+		int goodieCount=0;
 		
 		//only Way
 		for(int i=1; i<numberOfWays;i++)
@@ -129,34 +146,49 @@ public class LevelGenration {
 			creatWay(i);
 		}
 		
+		//Find the right wall-models
+		wallInfo = new WallInformation(levelField,columns);
+		wallInfo.calculatesWallInformation();
+		walls = wallInfo.getNewWorldArray();
+		
+		
 		//goodies
 		for(int i=0; i<numberOfMaps;i++)
 		{
-			creatGoodiesWayPoints("Map");
+			creatGoodiesWayPoints("Map",goodieCount);
+			mapCount++;
 		}
 		
 		for(int i=0; i<numberOfStone;i++)
 		{
-			creatGoodiesWayPoints("Stone");
+			creatGoodiesWayPoints("Stone",goodieCount);
+			goodieCount++;
 		}
 		
 		for(int i=0; i<numberOfTrashes;i++)
 		{
-			creatGoodiesWayPoints("Trash");
+			creatGoodiesWayPoints("Trash",goodieCount);
 		}
 		
 		for(int i=0; i<numberOfSpring;i++)
 		{
-			creatGoodiesWayPoints("Spring");
+			creatGoodiesWayPoints("Spring",goodieCount);
+			goodieCount++;
 		}
 		
 		for(int i=0; i<numberOfBarrel;i++)
 		{
-			creatGoodiesWayPoints("Barrel");
+			creatGoodiesWayPoints("Barrel",goodieCount);
+			goodieCount++;
 		}
 		
+		mapInfo = new int[mapCount][goodieCount][];
+		
+		//find the shortest way
+		solveLabyrinth();
+		
 		//calculates wall-information
-		wallGeneration();
+		//wallGeneration();
 		
 		return levelField;
 	
@@ -164,7 +196,6 @@ public class LevelGenration {
 	
 	/**
 	 * Creates random ways 
-	 * 
 	 */
 	private void creatWay(int wayPointCount)
 	{
@@ -287,7 +318,7 @@ public class LevelGenration {
 	/**
 	 * Random waypoints will be transformed into some special waypoints/goodies
 	 */
-	private void creatGoodiesWayPoints(String goodieMode)
+	private void creatGoodiesWayPoints(String goodieMode, int goodieCount)
 	{
 		//0 Wall
 		//1 Way
@@ -309,204 +340,35 @@ public class LevelGenration {
 		if(goodieMode.equals("Stone"))
 		{
 			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_STONE;
+			walls.get(levelFieldIndex)[0]=SceneGraph.GEOMETRY_STONE;
+			goodiesIndex[goodieCount]=levelFieldIndex;
 		}else
 		if(goodieMode.equals("Map"))
 		{
 			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_MAP;
+			walls.get(levelFieldIndex)[0]=SceneGraph.GEOMETRY_MAP;
+			mapWayIndex[mapCount]=levelFieldIndex;
 		}else
 		if(goodieMode.equals("Trash"))
 		{
 			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_TRASH;
+			walls.get(levelFieldIndex)[0]=SceneGraph.GEOMETRY_TRASH;
 		}else
 		if(goodieMode.equals("Spring"))
 		{
 			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_SPRING;
+			walls.get(levelFieldIndex)[0]=SceneGraph.GEOMETRY_SPRING;
+			goodiesIndex[goodieCount]=levelFieldIndex;
 		}else
 		if(goodieMode.equals("Barrel")){
 			levelField[levelFieldIndex]=SceneGraph.GEOMETRY_BARREL;
+			walls.get(levelFieldIndex)[0]=SceneGraph.GEOMETRY_BARREL;
+			goodiesIndex[goodieCount]=levelFieldIndex;
 		}
 		createdWays[wayPointIndex]=-1;
-	}
-	
-	/**
-	 * The wall-ArrayList will be calculated, which defines how many corners a 
-	 * wall-element has and it`s rotation
-	 */
-	public void wallGeneration(){
-		
-		//Init Walls
-		int[] allNeighbourIndex;
-		for(int i=0; i<levelField.length; i++)
-		{
-			int[] wallProperties = new int[4];
-			
-			if(levelField[i]==0)
-			{
-				//Wall
-				wallProperties[0]=0;
-				
-				allNeighbourIndex = checkAllNeighbours(i);
-				int[] specialCornerAndRotation=wallModelCalculation(i,allNeighbourIndex);
-				wallProperties[1]=specialCornerAndRotation[0];
-				wallProperties[2]=specialCornerAndRotation[1];
-				
-				wallProperties[3]=rg.nextInt(numberOfWallTextures);
-				
-				wallField.add(i, wallProperties);
-			}
-			else
-			{
-				//something else
-				wallProperties[0]=-1;
-				wallProperties[1]=-1;
-				wallProperties[2]=-1;
-				wallProperties[3]=-1;
-				wallField.add(i, wallProperties);
-			}
-		}
 		
 	}
 	
-	/**
-	 * Calculates the number of special-corners of a particular wall-element
-	 */
-	public int[] wallModelCalculation(int seedPoint, int[] allNeighbourIndex){
-		
-		/*
-		 * wallProperties: [wall/noWall wallModel wallModelRatation wallModelTexture]
-		 * wallModels:
-		 * 				0	-	no special corner
-		 * 				1	-	1 special corner
-		 * 				2	- 	2 special corner
-		 * 			   (5) 	-	2 special corner (diagonal special corner)
-		 * 				3	-	3 special corner
-		 * 				4	-	4 special corner
-		 */
-		
-		int specialCorner =0;
-		
-		//Load all Neighbour-Values
-		int[] tempLevelField = new int[8];
-		for(int i=0; i<tempLevelField.length; i++)
-		{
-			tempLevelField[i]=levelField[allNeighbourIndex[i]];
-		}
-		
-		//no special corner
-		if(tempLevelField[1]==0 && tempLevelField[3]==0 && tempLevelField[5]==0 &&
-		   tempLevelField[7]==0)
-			specialCorner=0;
-		else
-		{
-			int next=0;
-			//some special corners
-			for(int i=1; i<tempLevelField.length; i=i+2)
-			{
-				if(tempLevelField[i]!=0 )
-				{
-					if(i==7)
-						next=0;
-					else
-						next=i+1;
-					
-					if(tempLevelField[i-1]!=0 && tempLevelField[next]!=0)
-					{
-						//Found special Corner
-						specialCorner++;
-						tempLevelField[i]=-1;
-					}
-				}
-			}
-			
-			//Sonderfall bei 2 special corner abfragen
-			if(specialCorner==2 && 
-			((tempLevelField[1]==-1 && tempLevelField[5]==-1) || (tempLevelField[3]==-1 && tempLevelField[7]==-1)))
-			{
-				specialCorner=5;
-			}
-		}
-		
-		
-		int rotation = wallModelRotation(tempLevelField,specialCorner);
-		int[]specialCornerAndRotation = new int[2];
-		specialCornerAndRotation[0]=specialCorner;
-		specialCornerAndRotation[1]=rotation;
-		return specialCornerAndRotation;
-	}
-	
-	/**
-	 * Calculates the rotation of a particular wall-model
-	 */
-	public int wallModelRotation(int[] tempLevelField, int specialCorner){
-		
-		/*
-		 * 	180	x	270
-		 * 	x	SP	x
-		 * 	90	x	0
-		 */
-		
-		int rotation=0;
-		
-		//no corners
-		if(specialCorner==0)
-			return rotation;
-		
-		//1 corner
-		else if(specialCorner==1)
-		{
-			if(tempLevelField[1]==-1)
-				return 270;
-			else if(tempLevelField[3]==-1)
-				return 0;
-			else if(tempLevelField[5]==-1)
-				return 90;
-			else if(tempLevelField[7]==-1)
-				return 180;
-		}
-		
-		//2 corners
-		else if(specialCorner==2)
-		{
-			if(tempLevelField[1]==-1 && tempLevelField[3]==-1)
-				return 270;
-			else if(tempLevelField[3]==-1 && tempLevelField[5]==-1)
-				return 0;
-			else if(tempLevelField[5]==-1 && tempLevelField[7]==-1)
-				return 90;
-			else if(tempLevelField[7]==-1 && tempLevelField[1]==-1)
-				return 180;
-		}
-		
-		//2 diagonal corners
-		else if(specialCorner==5)
-		{
-			if(tempLevelField[3]==-1 && tempLevelField[7]==-1)
-				return 0;
-			else
-				return 90;
-		}
-		
-		//3 corners
-		else if(specialCorner==3)
-		{
-			if(tempLevelField[1]==-1 && tempLevelField[3]==-1 && tempLevelField[5]==-1)
-				return 270;
-			else if(tempLevelField[3]==-1 && tempLevelField[5]==-1 && tempLevelField[7]==-1)
-				return 0;
-			else if(tempLevelField[5]==-1 && tempLevelField[7]==-1 && tempLevelField[1]==-1)
-				return 90;
-			else if(tempLevelField[7]==-1 && tempLevelField[1]==-1 && tempLevelField[3]==-1)
-				return 180;
-		}
-		
-		//4 corners
-		else if(specialCorner==4)
-		{
-			return 0;
-		}
-		
-		return rotation;
-	}
 	
 	/**
 	 * Calculates all neighbours-index of a point
@@ -571,6 +433,198 @@ public class LevelGenration {
 	}
 	
 	/**
+	 * Solves the labyrinth and find a correct way
+	 */
+	public void solveLabyrinth() {
+
+		// Für alle Mpas im Laby
+		for (int i = 0; i < mapCount; i++) {
+			// mapInformation = new HashMap<Integer, int[]>(numberOfGoodies);
+			for (int j = 0; j < numberOfGoodies; j++) {
+				// Node lastNode = null;
+				int[] waySequence = calculateShortestPath(mapWayIndex[i], goodiesIndex[j]);
+				mapInfo[i][j] = waySequence;
+			}
+		}
+	}
+	
+	/**
+	 * Calculates the way-sequence of a shortest way
+	 */
+	public int[] calculateShortestPath(int startPoint,int targetPoint) {
+
+		ArrayList<int[]> possibleList = new ArrayList<int[]>();
+		ArrayList<int[]> closedList = new ArrayList<int[]>();
+
+		// add startPoint to list
+		possibleList.add(new int[] { startPoint, walls.get(startPoint)[2], 0 });
+
+		while (!possibleList.isEmpty()) {
+			// Finde besten Wegpunkt
+			int bestNodeIndex = findBestNode(possibleList, targetPoint);
+
+			// alle Richtungen
+			int[] mainNeighbours = checkWayPossibility(possibleList.get(bestNodeIndex)[0]);
+			for (int i = 1; i < mainNeighbours.length; i++) {
+				if (walls.get(mainNeighbours[i])[0] > 0) {
+					// Node steht generell zur Verfügung
+
+					int newWayCost = possibleList.get(bestNodeIndex)[2] + 1;
+
+					if (mainNeighbours[i] == targetPoint) {
+						int[] newWayPoint = new int[] { mainNeighbours[i],possibleList.get(bestNodeIndex)[0], newWayCost };
+						// Pfad-Berechnung
+
+						int[] shortestWaySequenze = calculateShortesWayIndex(newWayPoint);
+						return shortestWaySequenze;
+					}
+
+					boolean addToList = true;
+					for (int j = 0; j < possibleList.size(); j++) {
+						if (possibleList.get(j)[0] == mainNeighbours[i] && possibleList.get(j)[2] <= walls.get(mainNeighbours[i])[3])
+							addToList = false;
+					}
+					for (int j = 0; j < closedList.size(); j++) {
+						if (closedList.get(j)[0] == mainNeighbours[i] && closedList.get(j)[2] <= walls.get(mainNeighbours[i])[3])
+							addToList = false;
+					}
+
+					if (addToList) {
+						walls.get(mainNeighbours[i])[2] = possibleList.get(bestNodeIndex)[0];
+						walls.get(mainNeighbours[i])[3] = newWayCost;
+						possibleList.add(new int[] { mainNeighbours[i],possibleList.get(bestNodeIndex)[0],newWayCost });
+					}
+				}
+			}
+			// Aus der Liste der verfügbaren Wegpunkte entfernen
+			closedList.add(possibleList.get(bestNodeIndex));
+			possibleList.remove(bestNodeIndex);
+		}
+
+		int[] shortestWaySequenze = null;
+		return shortestWaySequenze;
+	}
+	
+	/**
+	 * Finds the best Node to find the shortest path
+	 */
+	public int findBestNode(ArrayList<int[]> possibleList,
+			int targetPoint) {
+
+		int bestNodeIndex = -1;
+
+		for (int i = 0; i < possibleList.size(); i++) {
+
+			if (bestNodeIndex == -1) {
+				bestNodeIndex = i;
+			} else {
+				if (getWayCost(possibleList.get(i), targetPoint) < getWayCost(possibleList.get(bestNodeIndex), targetPoint))
+					bestNodeIndex = i;
+			}
+		}
+
+		return bestNodeIndex;
+	}
+	
+	public float getWayCost(int[] wayPoint, int targetFieldNumber) {
+
+		int distX = Math.abs(wayPoint[0] % columns - targetFieldNumber
+				% columns);
+		int distY = Math.abs(wayPoint[0] / columns - targetFieldNumber
+				/ columns);
+		float costNode = (float) Math.sqrt(distX * distX + distY * distY);
+		costNode = wayPoint[2] + costNode;
+		return costNode;
+	}
+	
+	
+	public int[] calculateShortesWayIndex(int[] lastWayPoint) {
+
+		int wayIndex = 0;
+		int wayIndexCount = lastWayPoint[2];
+		int[] wayIndexSequence = new int[wayIndexCount];
+
+		for (int i = wayIndexCount - 1; i >= 0; i--) {
+			if (i == wayIndexCount - 1) {
+				wayIndexSequence[i] = lastWayPoint[0];
+				wayIndex = lastWayPoint[1];
+			} else {
+				wayIndexSequence[i] = wayIndex;
+				wayIndex = walls.get(wayIndex)[2];
+			}
+		}
+
+		return wayIndexSequence;
+	}
+	
+	public int getMapIndex(int mapField) {
+
+		for (int i = 0; i < mapCount; i++) {
+			if (mapField == mapWayIndex[i])
+				return i;
+		}
+
+		// Error
+		return -1;
+	}
+
+	public int getGoodiesIndex(int goodyField) {
+
+		for (int i = 0; i < numberOfGoodies; i++) {
+			if (goodyField == goodiesIndex[i])
+				return i;
+		}
+
+		// Error
+		return -1;
+	}
+	
+	/**
+	 * Get the shortest way to a target
+	 */
+	public int[] getWayToTarget(int startField, int targetField){
+		int[] wayToTarget = mapInfo[getMapIndex(startField)][getGoodiesIndex(targetField)];
+		return wayToTarget;
+	}
+
+	/**
+	 * Get the shortest way to the nearest target
+	 */
+	public int[] getWayToNearestTarget(int startField) {
+
+		int[] wayToTarget = null;
+		int mapIndex = getMapIndex(startField);
+		int sizeG = mapInfo[mapIndex].length;
+
+		for (int i=0; i<sizeG; i++)
+		{	
+			if(wayToTarget==null || mapInfo[mapIndex][i].length<wayToTarget.length)
+				wayToTarget = mapInfo[mapIndex][i];
+		}
+
+		return wayToTarget;
+	}
+
+	/**
+	 * Get the shortest way to a target
+	 */
+	public int[] getWayToFarthestTarget(int startField) {
+
+		int[] wayToTarget = null;
+		int mapIndex = getMapIndex(startField);
+		int sizeG = mapInfo[mapIndex].length;
+
+		for (int i=0; i<sizeG; i++)
+		{	
+			if(wayToTarget==null || mapInfo[mapIndex][i].length>wayToTarget.length)
+				wayToTarget = mapInfo[mapIndex][i];
+		}
+
+		return wayToTarget;
+
+	}
+		
+	/**
 	 *Get the start position of the whole labyrinth
 	 */
 	public Vector2i getStartPosition(){
@@ -579,34 +633,6 @@ public class LevelGenration {
 		return new Vector2i(createdWays[0]%columns,createdWays[0]/columns);
 	}
 	
-	/**
-	 * Get the wall-information about the whole level
-	 */
-	public ArrayList<int[]> getWallField(){
-		
-		/*
-		 * wallProperties: [wall/noWall wallModel wallModelRatation wallModelTexture]
-		 * 
-		 * wall/noWall: 
-		 * 				0	-	wall
-		 * 			   -1	-	noWall (all other parameters are -1 too)
-		 * 
-		 * wallModels:
-		 * 				0	-	no special corner
-		 * 				1	-	1 special corner
-		 * 				2	- 	2 special corner
-		 * 			   (5) 	-	2 special corner (diagonal special corner)
-		 * 				3	-	3 special corner
-		 * 				4	-	4 special corner
-		 * 
-		 * rotation:
-		 * 				0,90,180,270 degree
-		 * 
-		 * texture:
-		 * 				0,1,2,3,4 (amount of textures can be changed, see constructor)
-		 */
-		return wallField;
-	}
 	
 	/**
 	 * Print the created labyrinth
@@ -624,21 +650,51 @@ public class LevelGenration {
 			}
 			System.out.print("\n");
 		}
+	}
+	
+	/**
+	 * Print the shortest way to all goodies for each map
+	 */
+	/*
+	public void testSolvedLabyrinth(){
 		
-		if(!all)
-			return;
-		System.out.println("------------------------");
-		int[] test = new int[4];
-		for(int i=0;i<rows;i++)
+		for(int i=0; i<mapCount;i++)
 		{
-			for(int j=0;j<columns;j++)
+			System.out.println("Map: " +i+" on field: "+mapWayIndex[i]);
+			System.out.println("************");
+			Node n = allNodesHandler.get(mapWayIndex[i]);
+			for(int j=0; j<numberOfGoodies; j++)
 			{
-				test = wallField.get(10*i+j);
-				System.out.print(" "+test[0]);
-				//System.out.print(" "+(10*i+j));
+				
+				int hashMapIndex = calculateHashMapIndex(goodiesIndex[j]);
+				int[] testWay = n.getWayToTarget(hashMapIndex);
+				for(int l=0; l<testWay.length; l++)
+				{
+					System.out.print(testWay[l]+" ");
+				}
+				System.out.print("\n");
+			}
+			System.out.println("------------");
+			System.out.println("Kürzester Weg:");
+			int[] testShortWay = n.getWayToNearestTarget();
+			for(int l=0; l<testShortWay.length; l++)
+			{
+				System.out.print(testShortWay[l]+" ");
 			}
 			System.out.print("\n");
+			
+			System.out.println("------------");
+			System.out.println("Längster Weg:");
+			int[] testFarWay = n.getWayToFarthestTarget();
+			for(int l=0; l<testFarWay.length; l++)
+			{
+				System.out.print(testFarWay[l]+" ");
+			}
+			System.out.print("\n");
+			
+			System.out.println("************");
 		}
-	}
+		
+	}*/
 
 }
