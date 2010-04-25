@@ -3,7 +3,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -18,6 +20,7 @@ public class MoneyCarrier extends GLObject {
 	private short mHp = 1;
 	private short mStrength = 1; //how much damage it can do
 	private int mType = 0; //zombie type
+	int tex;
 	
 	private int mMoney = 10;
 	
@@ -47,30 +50,36 @@ public class MoneyCarrier extends GLObject {
 		
 		if(type == 0){
 			mRadius = 5;  //TODO: only placeholder values
-			mHp = 100;
+			mHp = 10;
 			mSpeed = 5;
 			mStrength = 5;
 			mColor[0] = 0.0f;
 			mColor[1] = 0.0f;
 			mColor[2] = 0.0f;
+			
+			tex = R.drawable.l12_icon;
 		}
 		else if(type == 1){
 			mRadius = 5; 
-			mHp = 100;
+			mHp = 10;
 			mSpeed = 5;
 			mStrength = 5;
 			mColor[0] = 1.0f;
 			mColor[1] = 0.0f;
 			mColor[2] = 0.0f;
+			
+			tex = R.drawable.l12_icon;
 		}
 		else if(type == 2){
 			mRadius = 5;
-			mHp = 100;
+			mHp = 10;
 			mSpeed = 10;
 			mStrength = 5;
 			mColor[0] = 1.0f;
 			mColor[1] = 1.0f;
 			mColor[2] = 0.0f;
+			
+			tex = R.drawable.l12_icon;
 		}
 		
 		mX = xCentr;
@@ -78,8 +87,8 @@ public class MoneyCarrier extends GLObject {
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
 				(mX + mRadius),	(mY - mRadius), 1.0f,
-				(mX + mRadius),	(mY + mRadius), 1.0f,
-				(mX - mRadius),	(mY + mRadius), 1.0f
+				(mX - mRadius),	(mY + mRadius), 1.0f,
+				(mX + mRadius),	(mY + mRadius), 1.0f
 		};
 		ByteBuffer v = ByteBuffer.allocateDirect( vertices.length * 4 );
 		v.order( ByteOrder.nativeOrder() );
@@ -88,8 +97,8 @@ public class MoneyCarrier extends GLObject {
 		mVerticesBuffer.position(0);
 		
 		short[] indices = {
-				0,	1,	2,
-				0,	2,	3
+				0,1,3,
+				0,3,2,
 		};
 		System.out.println("Vertices.length: "+vertices.length+" Indices.length: "+indices.length);
 		ByteBuffer i = ByteBuffer.allocateDirect( indices.length * 2 );
@@ -108,11 +117,18 @@ public class MoneyCarrier extends GLObject {
 		mColorBuffer = cbb.asFloatBuffer();
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
+		
+		ByteBuffer tbb = ByteBuffer.allocateDirect(texture.length * 4);
+		tbb.order(ByteOrder.nativeOrder());
+		mTextureBuffer = tbb.asFloatBuffer();
+		mTextureBuffer.put(texture);
+		mTextureBuffer.position(0);
 	}
 	
 	@Override
 	public void draw(GL10 gl){
 		
+		TextureManager.getSingletonObject().add(R.drawable.l12_icon);
 		ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		mLastFrametime = ms;
@@ -127,6 +143,8 @@ public class MoneyCarrier extends GLObject {
 		}
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
+		
+		TextureManager.getSingletonObject().setTexture(tex);
 		super.draw(gl);
 		gl.glPopMatrix();
 	}

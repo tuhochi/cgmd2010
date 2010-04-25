@@ -8,6 +8,9 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
+
 import java.lang.System;
 
 
@@ -32,6 +35,12 @@ public abstract class Tower extends GLObject {
 		mColor[1] = 0.5f;
 		mColor[2] = 0.0f;
 		mColor[3] = 1.0f;
+		
+		ByteBuffer tbb = ByteBuffer.allocateDirect(texture.length * 4);
+		tbb.order(ByteOrder.nativeOrder());
+		mTextureBuffer = tbb.asFloatBuffer();
+		mTextureBuffer.put(texture);
+		mTextureBuffer.position(0);
 	}
 	
 	
@@ -42,8 +51,8 @@ public abstract class Tower extends GLObject {
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
 				(mX + mRadius),	(mY - mRadius), 1.0f,
-				(mX + mRadius),	(mY + mRadius), 1.0f,
-				(mX - mRadius),	(mY + mRadius), 1.0f
+				(mX - mRadius),	(mY + mRadius), 1.0f,
+				(mX + mRadius),	(mY + mRadius), 1.0f
 		};
 		ByteBuffer v = ByteBuffer.allocateDirect( vertices.length * 4 );
 		v.order( ByteOrder.nativeOrder() );
@@ -52,8 +61,8 @@ public abstract class Tower extends GLObject {
 		mVerticesBuffer.position(0);
 		
 		short[] indices = {
-				0,	1,	2,
-				0,	2,	3
+				0,1,3,
+				0,3,2,
 		};
 		System.out.println("Vertices.length: "+vertices.length+" Indices.length: "+indices.length);
 		ByteBuffer i = ByteBuffer.allocateDirect( indices.length * 2 );
@@ -112,6 +121,7 @@ public abstract class Tower extends GLObject {
 				mProjectiles[i].draw(gl);
 			}
 		}
+		TextureManager.getSingletonObject().add(R.drawable.l12_icon);
 		super.draw(gl);
 	}
 	
