@@ -2,8 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 import java.util.Random;
 
-
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -14,21 +12,22 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Projectile;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class GLView extends GLSurfaceView implements Renderer, Runnable {
-	private Gamefield mGamefield = null;
 	
 	public Thread mGameThread = null;
+	public TextureManager texMan;
+	private Context mContext;
 	
 	//private static final int CARRIER_SPAWN_INTERVALL_01 = 3; //wave 1 spawn intervall
 	private static final int[] mCarrierWave = new int[Definitions.CARRIER_POOL];
 	private MoneyCarrier[] mEnemies = null;
 	private int mEnemieCount = 0;
-	
+	private Gamefield mGamefield = null;
 	private int mBasicTowerCounter = 0;
 	private BasicTower[] mBasicTower = new BasicTower[ Definitions.BASIC_TOWER_POOL ]; //tower types, wo gezeichnet in der towerklasse
 	private int mAdvancedTowerCount = 0;
-	
 
 	//private boolean mNewTower = false;
 	private int mTowerTypeSelectedByPlayer = Definitions.BASIC_TOWER;
@@ -38,22 +37,16 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	private float mPassedTime;
 	private double mLastCollDetDone = 0;
 	
-	
-	//private Zombie testzombie;
-	
 	public GLView(Context context, float w, float h) {
 		super(context);
 		this.setRenderer( this );
+		mContext = context;
 		initTower();
 		initProjectiles();
 		mStartTime = System.currentTimeMillis();
 		mWidth = w;
 		mHeight = h;
 	}
-	
-	
-	
-	
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
@@ -61,9 +54,11 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		//gl.glTranslatef(0.0f, 0.0f, -50.0f);
-		//testzombie.draw(gl);
-		mGamefield.draw(gl);	
+		
+		texMan.setTexture(R.drawable.l12_grass);
+		mGamefield.draw(gl, mWidth, mHeight);	
+
+		//texMan.setTexture(R.drawable.l12_icon);
 		for ( int i = 0; i < mBasicTower.length; i++) if(mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl);	
 		
 		//if(mPassedTime == mCarrierWave[0]) //if abfrage wird so nie true sein = passed time auf int casten!
@@ -71,9 +66,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 			for ( int i = 0; i < mEnemies.length; i++)if(mEnemies[i].getActiveState()) mEnemies[i].draw(gl);
 			if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT ) calcCollisions();
 		}
-	}
-	
-	
+	}	
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -125,6 +118,13 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		
 		initGameField( (int)mWidth, (int)mHeight );
 		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( (int)mWidth );	
+		
+		texMan = TextureManager.getSingletonObject();
+		texMan.initialize(gl, mContext);
+		texMan.add(R.drawable.l12_grass);
+		texMan.add(R.drawable.l12_icon);
+		texMan.loadTextures();
+		
 		mGameThread = new Thread(this);
 		mGameThread.start();
 		
