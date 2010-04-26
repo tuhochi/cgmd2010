@@ -1,6 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.model;
 
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -8,21 +12,24 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level66.OBJModel;
 
-public class Geometry {
+public class Geometry implements Serializable{
 	public enum Type {
 		Points, Lines, Triangles, LineStrip, TriangleStrip, TriangleFan
 	}
 
 	private GL10 gl;
-	private Type type;
 
 	private float vertices[];
 	private int vertexHandle = -1;
@@ -55,17 +62,24 @@ public class Geometry {
 
 	public static int geometryCount = 0;
 	
+	
+	// if multible Geometry Objects are in one Geometry then the Offset Array is used
+	// eg.: Obj1 & Obj2 =>  geometryOffset={16,32}  --> 0-16 & 16-32
+	// if only one Object eg: Obj1 then it is null;
+	public int geometryOffset[] = null;
+	
+	private Type type[];
+
 	private int textureId= -1;
-	Bitmap bitmap = null;
-	public Geometry() {
+	int textur = -1;
 
-	}
 
-	public Geometry(GL10 gl, Type type, int numVertices, boolean hasColors,
-			boolean hasTextureCoordinates, boolean hasNormals,InputStream image) {
+	public Geometry(GL10 gl, Type[] type, int numVertices, boolean hasColors,
+			boolean hasTextureCoordinates, boolean hasNormals,int textur,int[] geometryOffset) {
 		
 		this.gl = gl;
 		this.type = type;
+		this.geometryOffset=geometryOffset;
 		
 		vertices = new float[numVertices * 3];
 		if(hasColors)
@@ -75,13 +89,7 @@ public class Geometry {
 		if(hasNormals)
 			normals = new float[numVertices * 3];
 		
-		if(image!=null){
-			try {
-				bitmap = BitmapFactory.decodeStream(image);
-			} catch (Exception ex) {
-				Log.d("Texture Sample", "Couldn't load bitmap");
-			}
-		}
+		this.textur=textur;
 
 
 	}
@@ -137,32 +145,37 @@ public class Geometry {
 			}
 		}
 		// init Texture
-		if(bitmap!=null){
-		int[] textureIds = new int[1];
-		gl.glGenTextures(1, textureIds, 0);
-		textureId = textureIds[0];
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
-		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-				GL10.GL_LINEAR);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-				GL10.GL_LINEAR);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-				GL10.GL_CLAMP_TO_EDGE);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-				GL10.GL_CLAMP_TO_EDGE);
-		bitmap.recycle();
+		if(textur!=-1){
+			
+			InputStream isImage = SceneGraph.context.getResources().openRawResource(textur);
+			
+			if(isImage!=null){
+				try {
+					Bitmap bitmap = BitmapFactory.decodeStream(isImage);
+					
+					int[] textureIds = new int[1];
+					gl.glGenTextures(1, textureIds, 0);
+					textureId = textureIds[0];
+					gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+					GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+							GL10.GL_LINEAR);
+					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
+							GL10.GL_LINEAR);
+					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+							GL10.GL_CLAMP_TO_EDGE);
+					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+							GL10.GL_CLAMP_TO_EDGE);
+					bitmap.recycle();
+					
+						} catch (Exception ex) {
+					Log.d("Texture Sample", "Couldn't load bitmap");
+				}
+			}
 		}
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		
 		Log.d("init","Geometry");
@@ -235,11 +248,45 @@ public class Geometry {
             
     }
 
+	public void render() {
+		if(this.type==null)
+			render(Type.Triangles, 0, numVertices);
+		else
+			render(this.type[0], 0, numVertices);
+	}
+
+	/*
+	 * This method render a specific Geometry, with a specific Type
+	 * if there are multiple Objects in this Geometry
+	 */
+	public void render(int id){
+		if(geometryOffset!=null)
+		{
+			if(id==0)
+				render(0,geometryOffset[id]);
+			else
+				render(geometryOffset[id-1],geometryOffset[id]-geometryOffset[id-1]);
+		}
+		else
+			render(this.type[0]);
+	}
+
+	public void render(Type type) {
+		render(type, 0, numVertices);
+	}
+	
+	public void render(int offset, int numVertices) {
+		
+		render(this.type[0],offset,numVertices);
+	}
+
 	public void render(Type type, int offset, int numVertices) {
+			
 		boolean wasInit = init;
 		if (!init)
 			init();
 
+		// minimize Gl Stat changing
 		if (this == Geometry.lastGeometry && wasInit) {
 			gl.glDrawArrays(getPrimitiveType(type), offset, numVertices);
 			return;
@@ -293,14 +340,6 @@ public class Geometry {
 		gl.glDrawArrays(getPrimitiveType(type), offset, numVertices);
 		
 		Geometry.lastGeometry = this;
-	}
-
-	public void render() {
-		render(this.type, 0, numVertices);
-	}
-
-	public void render(Type type) {
-		render(type, 0, numVertices);
 	}
 
 	public void vertex(Vector3f v) {
@@ -471,4 +510,35 @@ public class Geometry {
 		
 	}
 
+	
+	public void write(String file)
+	{
+		try {
+			
+			
+			FileOutputStream fos = new FileOutputStream(file,true);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(this);
+			oos.close();
+			fos.close();
+			Log.d("write to:", file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static Geometry read(String fileName, Context context)
+	{
+		Geometry model = null;
+    	try {
+    		InputStream fis = context.getAssets().open(fileName);
+			ObjectInputStream stream = new ObjectInputStream(fis);
+			model = (Geometry)stream.readObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return model;
+	}
+	
 }
