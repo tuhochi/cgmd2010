@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
+
 public class GeometryLoader {
 
-	public static Geometry loadObj(GL10 gl, InputStream is,InputStream isImage) {
+	public static Geometry loadObj(GL10 gl, InputStream is,int l33Textur) {
 		String line = "";
 
 		try {
@@ -27,20 +30,22 @@ public class GeometryLoader {
 			throw new RuntimeException(
 					"couldn't load obj from input stream");
 		}
-		return loadObjFromString(gl, line, isImage);
+		return loadObjFromString(gl, line, l33Textur);
 
 	}
 
-	public static Geometry loadObjFromString(GL10 gl, String obj, InputStream isImage) {
+	public static Geometry loadObjFromString(GL10 gl, String obj, int l33Textur) {
 		String[] lines = obj.split("\n");
 		float[] vertices = new float[lines.length * 3];
 		float[] normals = new float[lines.length * 3];
 		float[] uv = new float[lines.length * 3];
+		int[] groups = new int[lines.length];
 
 		int numVertices = 0;
 		int numNormals = 0;
 		int numUV = 0;
 		int numFaces = 0;
+		int numGroup = -1;
 
 		int[] facesVerts = new int[lines.length * 3];
 		int[] facesNormals = new int[lines.length * 3];
@@ -52,6 +57,8 @@ public class GeometryLoader {
 
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
+			
+			// Vertices
 			if (line.startsWith("v ")) {
 				String[] tokens = line.split(" ");
 				vertices[vertexIndex] = Float.parseFloat(tokens[1]);
@@ -61,7 +68,7 @@ public class GeometryLoader {
 				numVertices++;
 				continue;
 			}
-
+			// Vertifces-Normals
 			if (line.startsWith("vn ")) {
 				String[] tokens = line.split(" ");
 				normals[normalIndex] = Float.parseFloat(tokens[1]);
@@ -71,7 +78,7 @@ public class GeometryLoader {
 				numNormals++;
 				continue;
 			}
-
+			// Vertifces-Textur-Coordinates
 			if (line.startsWith("vt")) {
 				String[] tokens = line.split(" ");
 				uv[uvIndex] = Float.parseFloat(tokens[1]);
@@ -80,7 +87,7 @@ public class GeometryLoader {
 				numUV++;
 				continue;
 			}
-
+			// Faces
 			if (line.startsWith("f ")) {
 				String[] tokens = line.split(" ");
 
@@ -102,12 +109,51 @@ public class GeometryLoader {
 				facesUV[faceIndex] = getIndex(parts[1], numUV);
 				faceIndex++;
 				numFaces++;
+				
+				if(numGroup!=-1)
+						groups[numGroup]=faceIndex;	
+				
+				continue;
+			}
+			// Groups
+			if (line.startsWith("g ")){
+				if(!line.startsWith("g default"))
+					numGroup++;
 				continue;
 			}
 		}
+		
+		Type type[] = null;
+		int id[] = null;
+		
+		Log.d("number",""+numGroup);
+		
+		// if only one Group
+		if(numGroup==-1){
+//			type = new Type[1];
+//			type[0]= Geometry.Type.Triangles;
+//			
+//			
+		}
+		else
+		// if multiple Groups
+		{
+			
+		type = new Type[numGroup+1];
+		id = new int[type.length];
+		
+		for(int i=0;i<type.length;i++){
+			type[i]=Geometry.Type.Triangles;
+			id[i]=groups[i];
+			
+		}
+		
 
-		Geometry geometry = new Geometry(gl, Geometry.Type.Triangles, numFaces * 3,
-				false, numUV > 0, numNormals > 0,isImage);
+		}
+		
+
+		Geometry geometry = new Geometry(gl, type, numFaces * 3,
+				false, numUV > 0, numNormals > 0,l33Textur,id);
 
 		for (int i = 0; i < numFaces * 3; i++) {
 			if (numNormals > 0) {

@@ -1,7 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 
 import static android.opengl.GLES10.GL_MODELVIEW;
-import static android.opengl.GLES10.glLoadIdentity;
 import static android.opengl.GLES10.glMatrixMode;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
@@ -11,31 +10,19 @@ import java.io.InputStream;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.os.Vibrator;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GameCharacter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryBarrel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryLoader;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryMap;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometrySpring;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryStone;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryTrash;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWall;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryWay;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
 public class SceneGraph {
 
 	public static LevelHandler level;
 
-	static Geometry[] geometry ;
+	static Geometry geometry ;
 	public static Camera camera;
 	
 	static float deltaTime;
@@ -80,12 +67,13 @@ public class SceneGraph {
 	public final static int FOUR_CONNECTION_WALL = 4;
 	public final static int COUNTERPART_CONNECTION_WALL = 5;
 	
-	static Context context;
+	public static Context context;
 	public  static Vector2f touchDim = new Vector2f(0, 0);
 	public  static Vector2i frustumDim = new Vector2i(3, 5);
 	private Vector2i frustumMin = new Vector2i(0, 0);
 	private Vector2i frustumMax = new Vector2i(0, 0);
 	private static boolean init = false;
+	private long secoundCount;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	
@@ -110,60 +98,16 @@ public class SceneGraph {
 		StopTimer t = new StopTimer();
 		
 		SceneGraph.camera = new Camera();
-		geometry = new Geometry[17];
 
-		
-		
 		// load Objects
-		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_mauer_turm);
-		InputStream isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_mauer_turm);
-		geometry[GEOMETRY_WALL]= GeometryLoader.loadObj(gl, is,isImage);
+		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_models);
+		//InputStream isImage = SceneGraph.context.getResources().openRawResource();
+		geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
 		
-		
-		
-		
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_way);
-		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_way);
-		geometry[GEOMETRY_WAY]= GeometryLoader.loadObj(gl, is,isImage);
-		
-		
+		//geometry.write("/sdcard/test.out");
 
-		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_character);
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_character);
-		geometry[GEOMETRY_CHARACTER]=  GeometryLoader.loadObj(gl, is,isImage);
-		
-		
-		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_stone);
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_stone);
-		geometry[GEOMETRY_STONE]=  GeometryLoader.loadObj(gl, is,isImage);
-		
-		
-		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_fass);
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_fass);
-		geometry[GEOMETRY_BARREL]=  GeometryLoader.loadObj(gl, is,isImage);
-		
-		
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_schatz);
-		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_schatz);
-		geometry[GEOMETRY_TRASH]= GeometryLoader.loadObj(gl, is,isImage);
+				geometry.render();
 
-		
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_map);
-		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_map);
-		geometry[GEOMETRY_MAP]= GeometryLoader.loadObj(gl, is,isImage);
-				
-
-		isImage = SceneGraph.context.getResources().openRawResource(R.drawable.l33_brunnen);
-		is = SceneGraph.context.getResources().openRawResource(R.raw.l33_brunnen);
-		geometry[GEOMETRY_SPRING]= GeometryLoader.loadObj(gl, is,isImage);
-		
-		// init geometry
-		for (int i=0;i<geometry.length;i++){
-			
-			if(geometry[i]!=null)
-				geometry[i].render();
-		}
-//		
 		t.logTime("Geometry laden und init dauerte:");
 		
 	}
@@ -174,8 +118,6 @@ public class SceneGraph {
 	 * @param gl
 	 */
 	public void render(GL10 gl) {
-	//	Log.d("Frame", "--");
-
 		
 		// start time measurement
 		framesSinceLastSecound++;
@@ -187,6 +129,7 @@ public class SceneGraph {
 			Log.d("fps", String.valueOf(framesSinceLastSecound));
 			framesSinceLastSecound = 0;
 			deltaTimeCount = 0f;
+			secoundCount++;
 		}
 
 		
@@ -201,8 +144,6 @@ public class SceneGraph {
 		// Enables depth testing.
 		gl.glEnable(GL10.GL_CULL_FACE);
 		gl.glCullFace(GL10.GL_BACK);
-		
-		
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
 
@@ -227,8 +168,6 @@ public class SceneGraph {
 		// upadate Camera
 		camera.lookAt(gl);
 		
-		
-
 		// now start
 
 		// now render the Scene
@@ -256,51 +195,57 @@ public class SceneGraph {
 		
 		// easy culling
 		if(Camera.zoom==Camera.standardZoom){
-		//if(true){
+		
 			frustumMin.set(Math.round(level.gameCharacterPosition.x-frustumDim.x),Math.round(level.gameCharacterPosition.y-frustumDim.y));
 			frustumMax.set(frustumMin.x+frustumDim.x*2+1, frustumMin.y+frustumDim.y*2+1);
 
-			// whole world
-//			for(int y=0;y<level.worldDim.y;y++){
-//			for(int x=0;x<level.worldDim.x;x++){
-			
-			// way (surface)
-			for(int y=frustumMin.y;y<frustumMax.y;y++){
-				for(int x=frustumMin.x;x<frustumMax.x;x++){
 
-					if(level.getWorldEntry(x, y)!=GEOMETRY_WALL)
-					{	
-						glPushMatrix();
-						gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
-						geometry[GEOMETRY_WAY].render();
-						glPopMatrix();
-					}
-				}
-			}
-			
-//			// wall 
-//			for(int y=frustumMin.y;y<frustumMax.y;y++){
-//				for(int x=frustumMin.x;x<frustumMax.x;x++){
-//
-//					if(level.getWorldEntry(x, y)==GEOMETRY_WALL)
-//					{	
-//						glPushMatrix();
-//						gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
-//						geometry[GEOMETRY_WALL].render();
-//						glPopMatrix();
-//					}
-//				}
-//			}
 			// rest
 			for(int y=frustumMin.y;y<frustumMax.y;y++){
 				for(int x=frustumMin.x;x<frustumMax.x;x++){
 					
 					int type = level.getWorldEntry(x, y);
-					if(type!=GEOMETRY_WAY)
+					if(type!=GEOMETRY_CHARACTER)
 					{
 					glPushMatrix();
 					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
-					geometry[type].render();
+					
+					
+					if(type==GEOMETRY_WALL)
+						geometry.render(0);
+					else{
+
+						if(type==GEOMETRY_STONE)
+						{
+							geometry.render(1);
+							geometry.render(8);
+						}
+						else if(type==GEOMETRY_BARREL)
+						{
+							geometry.render(2);
+							geometry.render(8);
+						}
+						else if(type==GEOMETRY_TRASH)
+						{
+							geometry.render(3);
+							geometry.render(10);
+						}
+						else if(type==GEOMETRY_MAP)
+						{ 	geometry.render(8);
+							glPushMatrix();
+							gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
+							geometry.render(4);
+							glPopMatrix();
+						}
+						else if(type==GEOMETRY_SPRING)
+						{
+							geometry.render(5);
+							geometry.render(9);
+						}	
+						else 
+							geometry.render(7);
+						
+						}
 					glPopMatrix();
 					}
 				}
@@ -310,40 +255,41 @@ public class SceneGraph {
 			
 		}
 		
-		// render the whole world
-		else
-		{
-		//	glPushMatrix();
-		//	gl.glTranslatef(level.worldDim.x/2,0,level.worldDim.y/2);
-			
-			
-			for(int y=0;y<level.worldDim.y;y++){
-				for(int x=0;x<level.worldDim.x;x++){
-					//if wall
-					int type = level.getWorldEntry(x, y);
-					
-					glPushMatrix();
-					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
-						
-							geometry[type].render();	
-							// render way if no wall
-							if(type!=GEOMETRY_WALL)
-								geometry[GEOMETRY_WAY].render();	
-							
-					glPopMatrix();
-					}
-			}
-			
-			geometry[GEOMETRY_CHARACTER].render();
-			
-			//glPopMatrix();
-			return;
-		}
-		
-		// render GameCaracter
+//		// render the whole world
+//		else
+//		{
+//		//	glPushMatrix();
+//		//	gl.glTranslatef(level.worldDim.x/2,0,level.worldDim.y/2);
+//			
+//			
+//			for(int y=0;y<level.worldDim.y;y++){
+//				for(int x=0;x<level.worldDim.x;x++){
+//					//if wall
+//					int type = level.getWorldEntry(x, y);
+//					
+//					glPushMatrix();
+//					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
+//						
+//							geometry[type].render();	
+//							// render way if no wall
+//							if(type!=GEOMETRY_WALL)
+//								geometry[GEOMETRY_WAY].render();	
+//							
+//					glPopMatrix();
+//					}
+//			}
+//			
+//			geometry[GEOMETRY_CHARACTER].render();
+//			
+//			//glPopMatrix();
+//			return;
+//		}
+
 		glPushMatrix();
-		//gl.glTranslatef(level.gameCharacterPosition.x-(level.worldDim.x/2),(level.worldDim.y/2)-level.gameCharacterPosition.y, 0);
-		geometry[GEOMETRY_CHARACTER].render();			
+		
+		geometry.render(6);
+
+		
 		glPopMatrix();
 		
 	}
