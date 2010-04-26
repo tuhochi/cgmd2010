@@ -229,11 +229,14 @@ public class CollisionManager {
 						{
 							planetEntity = planet.models.get(u);
 							
+							
+								
 							//check for contact
 							if(collisionDetected(planetEntity,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
 								Motion planetEntityMotion = planetEntity.getMotion();
 		
+								Log.d(LevelActivity.TAG,"MUH center="+planetEntity.toString());
 								if(planetEntity.getMotion()==null)
 								{
 									
@@ -325,12 +328,12 @@ public class CollisionManager {
 						{
 							Orbit newOrbit = new Orbit(	objA.getBoundingSphereWorld().center,
 														Config.UNIVERSE_CENTER,
-														Vector3.add(Vector3.multiply(objA.getBoundingSphereWorld().center,3f),new Vector3(0.01f,0.01f,0f)),
-														5,
+														Vector3.add(Vector3.multiply(Vector3.normalize(objA.getMotion().getCurrDirectionVec()),objA.getBoundingSphereWorld().center.length()*2),new Vector3(0.01f,0.01f,0f)),
+														10 ,
 														null);
 							
-							float centerRatio = Config.UNIVERSE_CENTERLENGTH_LIMIT/objA.getBoundingSphereWorld().center.length();
-							float dirRatio = Config.UNIVERSE_DIRLENGTH_LIMIT/Vector3.add(Vector3.multiply(objA.getBoundingSphereWorld().center,2f),new Vector3(0.01f,0.01f,0f)).length();
+							float centerRatio = Config.UNIVERSE_CENTERLENGTH_LIMIT/	objA.getBoundingSphereWorld().center.length();
+							float dirRatio = Config.UNIVERSE_DIRLENGTH_LIMIT/Vector3.add(Vector3.multiply(Vector3.normalize(objA.getMotion().getCurrDirectionVec()),objA.getBoundingSphereWorld().center.length()*2),new Vector3(0.01f,0.01f,0f)).length();
 						
 							newOrbit.morphAxisScale(
 										centerRatio,
@@ -338,7 +341,7 @@ public class CollisionManager {
 										30f,
 										30f);
 							newOrbit.rotateDirectionVec(90,10);
-							
+							newOrbit.setInsidePlanet(false);
 							Log.d(LevelActivity.TAG," MORPH center="+centerRatio + " dir="+dirRatio + " centerLength="+newOrbit.entityPos.length()+" dirLeng="+newOrbit.getCurrDirectionVec().length());
 							
 							MotionManager.instance.setMotion(newOrbit,objA);
