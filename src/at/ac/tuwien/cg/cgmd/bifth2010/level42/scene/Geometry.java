@@ -51,17 +51,14 @@ public class Geometry implements Persistable
 	/** The nr of texcoord bytes. */
 	private final int nrOfTexcoordBytes;
 	
-	/** The vbo id. */
-	private int vboID;
-	
 	/** The vertex offset. */
-	private final int vertexOffset;
+	private int vertexOffset;
 	
 	/** The normal offset. */
-	private final int normalOffset;
+	private int normalOffset;
 	
 	/** The texcoord offset. */
-	private final int texcoordOffset;
+	private int texcoordOffset;
 
 	/** if this is initialized. */
 	private boolean initialized;
@@ -86,35 +83,18 @@ public class Geometry implements Persistable
 		this.numVertices = numVertices;
 		initialized = false;
 		
-		nrOfVertexBytes = numVertices*VERTEX_LENGTH*4;
-		nrOfNormalBytes = numVertices*VERTEX_LENGTH*4;
-		nrOfTexcoordBytes = numVertices*TEXCOORD_LENGTH*4;
-		
-		// calculate vbo offsets
-		int currentoffset = 0;
 		if(vertices != null)
-		{
-			vertexOffset = currentoffset;
-			currentoffset += nrOfVertexBytes;
-		}
+			nrOfVertexBytes = numVertices*VERTEX_LENGTH*4;
 		else
-			vertexOffset = 0;
-		
+			nrOfVertexBytes = 0;
 		if(normals != null)
-		{
-			normalOffset = currentoffset;
-			currentoffset += nrOfNormalBytes;
-		}
+			nrOfNormalBytes = numVertices*VERTEX_LENGTH*4;
 		else
-			normalOffset = 0;
-		
+			nrOfNormalBytes = 0;
 		if(texcoords != null)
-		{
-			texcoordOffset = currentoffset;
-			currentoffset += nrOfTexcoordBytes;
-		}
+			nrOfTexcoordBytes = numVertices*TEXCOORD_LENGTH*4;
 		else
-			texcoordOffset = 0;
+			nrOfTexcoordBytes = 0;
 	}
 	
 	/**
@@ -126,21 +106,12 @@ public class Geometry implements Persistable
 		{
 			if(Config.GLES11)
 			{
-				int[] buffers = new int[1];
-				GLES11.glGenBuffers(1, buffers, 0);
-				vboID = buffers[0];
-				oglManager.bindVBO(vboID);
-				int datasize = ((vertices != null ? numVertices*VERTEX_LENGTH : 0) + (normals != null ? numVertices*VERTEX_LENGTH : 0) + (texcoords != null ? numVertices*TEXCOORD_LENGTH : 0))*4;
-				GLES11.glBufferData(GLES11.GL_ARRAY_BUFFER, datasize, null, GLES11.GL_STATIC_DRAW);
-				
 				if(vertices != null)
-					GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, vertexOffset, nrOfVertexBytes, vertices);
-				
+					vertexOffset = oglManager.addBufferToVBO(vertices, nrOfVertexBytes);
 				if(normals != null)
-					GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, normalOffset, nrOfNormalBytes, normals);
-				
+					normalOffset = oglManager.addBufferToVBO(normals, nrOfNormalBytes);
 				if(texcoords != null)
-					GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, texcoordOffset, nrOfTexcoordBytes, texcoords);
+					texcoordOffset = oglManager.addBufferToVBO(texcoords, nrOfTexcoordBytes);
 			}
 			
 			initialized = true;
@@ -181,18 +152,13 @@ public class Geometry implements Persistable
 		switch(rendermode)
 		{
 		case Scene.RENDERMODE_VBO:
-			if(vboID > 0)
-			{
-				oglManager.bindVBO(vboID);
-				if(vertices != null)
-					GLES11.glVertexPointer(VERTEX_LENGTH, GL_FLOAT, 0, vertexOffset);
-				if(normals != null)
-					GLES11.glNormalPointer(GL_FLOAT, 0, normalOffset);
-				if(texcoords != null)
-					GLES11.glTexCoordPointer(TEXCOORD_LENGTH, GL_FLOAT, 0, texcoordOffset);
-				
-				break; // breaking inside the if, so it defaults to vertex array rendering if vbo's are not available
-			}
+			if(vertices != null)
+				GLES11.glVertexPointer(VERTEX_LENGTH, GL_FLOAT, 0, vertexOffset);
+			if(normals != null)
+				GLES11.glNormalPointer(GL_FLOAT, 0, normalOffset);
+			if(texcoords != null)
+				GLES11.glTexCoordPointer(TEXCOORD_LENGTH, GL_FLOAT, 0, texcoordOffset);
+			break;
 		case Scene.RENDERMODE_VERTEXARRAY:
 			if(vertices != null)
 				glVertexPointer(VERTEX_LENGTH, GL_FLOAT, 0, vertices);

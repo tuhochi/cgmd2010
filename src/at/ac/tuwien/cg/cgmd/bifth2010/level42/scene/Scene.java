@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 // TODO: Auto-generated Javadoc
@@ -21,6 +22,9 @@ public class Scene implements Persistable
 	
 	/** The Constant RENDERMODE_VBO. */
 	public static final int RENDERMODE_VBO = 1;
+	
+	/** The OpenGL Manager. */
+	private final OGLManager oglManager = OGLManager.instance;
 	
 	/** The scene entities. */
 	public final ArrayList<SceneEntity> sceneEntities;
@@ -59,6 +63,8 @@ public class Scene implements Persistable
 			
 			hud.init();
 
+			oglManager.compileVBO();
+			
 			initialized = true;
 		}
 	}
@@ -115,7 +121,7 @@ public class Scene implements Persistable
 			m.render(rendermode);
 		}
 		
-		hud.render();
+		hud.render(rendermode);
 	}
 	
 	/**

@@ -2,9 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import static android.opengl.GLES10.*;
 
-import java.nio.FloatBuffer;
-
-import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector2;
@@ -37,27 +34,13 @@ public class HUD
 	/** The aspect. */
 	private float aspect;
 	
-	/** The circle. */
-	private final FloatBuffer circleVertices;
-	private final FloatBuffer circleTexcoords;
-	
-	/** The circle num vertices. */
-	private final int circleNumVertices;
-	
-	/** The circle num bytes. */
-	private final int circleVerticesNumBytes;
-	private final int circleTexcoordsNumBytes;
-	
-	/** The OpenGL rendermode for the circle (GL_TRIANGLES etc) */
-	private final int circleRenderMode;
-	
-	/** The circle vb oid. */
-	private int circleVBOid;
-	
 	/** The circle transformation (used for rendering) */
 	private final Matrix44 circleTransformation;
 	
+	/** The center  of the current circle */
 	private final Vector2 circleCenter;
+	
+	/** The timestamp of the current circles start */
 	private long circleStartMillis;
 	
 	/** whether a circle should be drawn after the next update */
@@ -65,6 +48,9 @@ public class HUD
 	
 	/** whether a circle should drawn now */
 	private boolean circleRender;
+	
+	/** The circle. */
+	private final Geometry circle;
 	
 	/** The material. */
 	private Material material;
@@ -77,34 +63,13 @@ public class HUD
 	 */
 	public HUD()
 	{
-		/* circle (triangle fan) start */
-//		int stepsize = 10;
-//		float centerX = 0.0f;
-//		float centerY = 0.0f;
-//		float radius = 0.5f;
-//		
-//		circleNumVertices = (360/stepsize)+2;
-//		
-//		float[] vertices = new float[circleNumVertices*2];
-//		int index = 0;
-//		vertices[index++] = centerX;
-//		vertices[index++] = centerY;
-//		for(int i=0; i<(360+stepsize); i+=stepsize)
-//		{
-//			vertices[index++] = centerX + (float)Math.sin(Math.toRadians(i)) * radius;
-//			vertices[index++] = centerY + (float)Math.cos(Math.toRadians(i)) * radius;
-//		}
-//		circleRenderMode = GL_TRIANGLE_FAN;
-		/* circle (triangle fan) end */
-		
-		/* quad (triangles) start */
 		float[] vertices = new float[] {
-			-0.5f,-0.5f,	// upper left
-			-0.5f, 0.5f,	// lower left
-			 0.5f,-0.5f,	// upper right
-			-0.5f, 0.5f,	// lower left
-			 0.5f, 0.5f,	// lower right
-			 0.5f,-0.5f		// upper right
+			-0.5f,-0.5f, 0.0f,	// upper left
+			-0.5f, 0.5f, 0.0f,	// lower left
+			 0.5f,-0.5f, 0.0f,	// upper right
+			-0.5f, 0.5f, 0.0f,	// lower left
+			 0.5f, 0.5f, 0.0f,	// lower right
+			 0.5f,-0.5f, 0.0f	// upper right
 		};
 		float[] texcoords = new float[] {
 			0.0f, 0.0f,		// upper left
@@ -114,14 +79,15 @@ public class HUD
 			1.0f, 1.0f,		// lower right
 			1.0f, 0.0f		// upper right
 		};
-		circleNumVertices = 6;
-		circleRenderMode = GL_TRIANGLES;
-		/* quad (triangles) end */
+		int numVertices = 6;
 		
-		circleVerticesNumBytes = circleNumVertices*8;
-		circleTexcoordsNumBytes = circleNumVertices*8;
-		circleVertices = SceneLoader.instance.arrayToBuffer(vertices);
-		circleTexcoords = SceneLoader.instance.arrayToBuffer(texcoords);
+		circle = new Geometry(
+				SceneLoader.instance.arrayToBuffer(vertices),
+				null,
+				SceneLoader.instance.arrayToBuffer(texcoords),
+				null,
+				null,
+				numVertices);
 		
 		circleTransformation = new Matrix44();
 		circleCenter = new Vector2();
@@ -165,7 +131,7 @@ public class HUD
 	/**
 	 * Render.
 	 */
-	public void render()
+	public void render(int rendermode)
 	{
 		if(!initialized)
 			init();
@@ -175,24 +141,11 @@ public class HUD
 		
 		pre_render();
 		
-		oglManager.clientState(true, false, true);
-		
 		materialManager.bindMaterial(material);
 		
 		glMultMatrixf(circleTransformation.getArray16(), 0);
 		
-		if(Config.GLES11)
-		{
-			oglManager.bindVBO(circleVBOid);
-			GLES11.glVertexPointer(2, GL_FLOAT, 0, 0);
-			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, circleVerticesNumBytes);
-		}
-		else
-		{
-			glVertexPointer(2, GL_FLOAT, 0, circleVertices);
-			glTexCoordPointer(2, GL_FLOAT, 0, circleTexcoords);
-		}
-		glDrawArrays(circleRenderMode, 0, circleNumVertices);
+		circle.render(rendermode);
 		
 		post_render();
 	}
@@ -258,16 +211,8 @@ public class HUD
 	{
 		if(!initialized)
 		{
-			int[] buffers = new int[1];
-			GLES11.glGenBuffers(1, buffers, 0);
-			circleVBOid = buffers[0];
-			oglManager.bindVBO(circleVBOid);
-			GLES11.glBufferData(GLES11.GL_ARRAY_BUFFER, circleVerticesNumBytes + circleTexcoordsNumBytes, null, GLES11.GL_STATIC_DRAW);
-			GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, 0, circleVerticesNumBytes, circleVertices);
-			GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, circleVerticesNumBytes, circleTexcoordsNumBytes, circleTexcoords);
-			
 			material.init();
-			
+			circle.init();
 			initialized = true;
 		}
 	}
@@ -279,5 +224,6 @@ public class HUD
 	{
 		initialized = false;
 		material.deInit();
+		circle.deInit();
 	}
 }

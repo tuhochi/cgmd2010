@@ -1,6 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import static android.opengl.GLES10.*;
+
+import java.nio.Buffer;
+import java.util.ArrayList;
+
 import android.opengl.GLES11;
 import android.opengl.GLU;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
@@ -14,7 +18,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
  */
 public class OGLManager
 {
-	
 	/** The Constant instance. */
 	public static final OGLManager instance = new OGLManager();
 
@@ -26,9 +29,18 @@ public class OGLManager
 	
 	/** whether the texcoord client state is set */
 	private boolean clientStateTexcoords;
-
-	/** The currently bound vbo */
-	private int currentlyBoundVBO;
+	
+	/** 
+	 * Pointers to the Buffers, along with their offsets (Second part of the Triple)
+	 * and their sizes in Bytes (Third part of the Triple)
+	 */
+	private ArrayList<Triple<Integer, Integer, Buffer>> vboBuffers;
+	
+	/** holds the current vbo offset, needed during assembling of the vbo */
+	private int currentVBOoffset;
+	
+	/** The VBO's id */
+	private int vbo;
 
 	/** The modelview matrix */
 	private Matrix44 modelview;
@@ -64,12 +76,6 @@ public class OGLManager
 	 */
 	private OGLManager()
 	{
-		clientStateVertices = false;
-		clientStateNormals = false;
-		clientStateTexcoords = false;
-		
-		currentlyBoundVBO = 0;
-
 		modelview = new Matrix44();
 		projection = new Matrix44();
 		viewport = new int[4];
@@ -77,6 +83,10 @@ public class OGLManager
 		window = new float[3];
 		unprojectedPos = new float[4];
 		unprojectedPosVec = new Vector3();
+		
+		vboBuffers = new ArrayList<Triple<Integer,Integer,Buffer>>();
+		
+		reset();
 	}
 
 	/**
@@ -87,7 +97,44 @@ public class OGLManager
 		clientStateVertices = false;
 		clientStateNormals = false;
 		clientStateTexcoords = false;
-		currentlyBoundVBO = 0;
+		currentVBOoffset = 0;
+		vboBuffers.clear();
+	}
+	
+	/**
+	 * adds a buffer to the vbo, the buffer will be compiled
+	 * into the vbo as soon as compileVBO is called.
+	 */
+	public int addBufferToVBO(Buffer buffer, int bytes)
+	{
+		int thisOffset = currentVBOoffset;
+		vboBuffers.add(new Triple<Integer, Integer, Buffer>(thisOffset, bytes, buffer));
+		currentVBOoffset += bytes;
+		return thisOffset;
+	}
+	
+	/**
+	 * Compiles all added Buffers into a single VBO
+	 */
+	public void compileVBO()
+	{
+		int[] bufferIDs = new int[1];
+		GLES11.glGenBuffers(1, bufferIDs, 0);
+		vbo = bufferIDs[0];
+		GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vbo);
+		GLES11.glBufferData(GLES11.GL_ARRAY_BUFFER, currentVBOoffset, null, GLES11.GL_STATIC_DRAW);
+		
+		ArrayList<Triple<Integer, Integer, Buffer>> buffers = vboBuffers;
+		int size = buffers.size();
+		
+		for(int i=0; i<size; i++)
+		{
+			Triple<Integer, Integer, Buffer> triple = buffers.get(i);
+			GLES11.glBufferSubData(GLES11.GL_ARRAY_BUFFER, 
+					triple.getFirst(),		// offset
+					triple.getSecond(),		// size
+					triple.getThird());		// data
+		}
 	}
 	
 	/**
@@ -113,20 +160,6 @@ public class OGLManager
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		if(!texcoords && clientStateTexcoords)
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	}
-
-	/**
-	 * Binds vbo, if it is not already bound
-	 *
-	 * @param id the id
-	 */
-	public void bindVBO(int id)
-	{
-		if(id != currentlyBoundVBO)
-		{
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, id);
-			currentlyBoundVBO = id;
-		}
 	}
 
 	/**
