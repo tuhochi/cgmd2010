@@ -9,6 +9,19 @@ import java.util.Random;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 
+/**
+ * 
+ * A random labyrinth-field will be generated. How the labyrinth looks like is
+ * depending of the labyrinth's size. There are some types of labyrinths possible, so there could
+ * be only normal ways (with a way-width of 1) or there could be some places. The result of the
+ * algorithm will always be a valid labyrinth.
+ * After the labyrinth is created the additional items will be randomly set. The numbers of all items
+ * can be set, too.
+ * Last the walls of the whole labyrinth will be considered to determine the right wall-models.
+ *
+ *The result is an array. For each point in the labyrinth a specify value will be stored
+ *in the array.
+ */
 public class LevelGenration {
 	
 	Random rg = new Random();
@@ -41,7 +54,20 @@ public class LevelGenration {
 	int numberOfTrashes=3;
 	int numberOfSpring=3;
 	
-	
+	/**
+	 * 
+	 * The properties of the chosen labyrinth will be set. If the properties 
+	 * are not possible the random-settings will be used.
+	 * 
+	 * @param columnRowSize				Size of the whole labyrinth's side.
+	 * @param wayOffset					How should the labyrinth looks like.
+	 * @param percentOfWay				Ratio how many way-elments should be in the labyrinth.
+	 * @param numberOfMaps				Ratio of maps in the labyrinth depended of the number of way-elements.
+	 * @param numberOfStone				Ratio of stones in the labyrinth depended of the number of way-elements.
+	 * @param numberOfBarrel			Ratio of barrels in the labyrinth depended of the number of way-elements.
+	 * @param numberOfTrashes			Ratio of trashes in the labyrinth depended of the number of way-elements.
+	 * @param numberOfSpring			Ratio of springs in the labyrinth depended of the number of way-elements.
+	 */
 	public LevelGenration(int columnRowSize, int wayOffset, double percentOfWay,
 			int numberOfMaps, int numberOfStone, int numberOfBarrel, int numberOfTrashes,
 			int numberOfSpring){
@@ -60,6 +86,12 @@ public class LevelGenration {
 		
 	}
 	
+	/**
+	 * 
+	 * The default-properties of the labyrinth will be set.
+	 * 
+	 * @param columnRowSize				Size of the labyrinth's side.
+	 */
 	public LevelGenration(int columnRowSize){
 		
 		this.columns= columnRowSize;
@@ -71,7 +103,10 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Default Level-Parameter
+	 * 
+	 * The default properties will be set and the real numbers of items will be calculated.
+	 * 
+	 * @param levelSize					Size of the whole labyrinth.
 	 */
 	private void setDefaultLevelParameters(int levelSize){
 		
@@ -96,7 +131,8 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Checks if all Parameters are correct.
+	 * The chosen properties of a labyrinth will be checked. If the properties are not possible, the
+	 * default-settings will be used.
 	 */
 	private void checkLevelSettings(){
 		
@@ -115,8 +151,12 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Creates a random Level-Matrix
 	 * 
+	 * The labyrinth will be initialized and the creation will be started.
+	 * After the ways are calculated the wall-models will be calculated. Then all items
+	 * will be randomly set.
+	 * 
+	 * @return levelField[]				The labyrinth-array will be returned.
 	 */
 	public int[] startCreation() {
 		
@@ -185,17 +225,20 @@ public class LevelGenration {
 		mapInfo = new int[mapCount][goodieCount][];
 		
 		//find the shortest way
-		solveLabyrinth();
-		
-		//calculates wall-information
-		//wallGeneration();
-		
+		//solveLabyrinth();
+				
 		return levelField;
 	
 	}
 	
 	/**
-	 * Creates random ways 
+	 * 
+	 * The ways will be generated. A way-element which was set before will be randomly chosen.
+	 * This element is the connection to the new way-element. All neighbours of this element will
+	 * be considered to get the possible new directions.
+	 * The new directions will also be randomly chosen.
+	 * 
+	 * @param wayPointCount				Number of ways which are already set.
 	 */
 	private void creatWay(int wayPointCount)
 	{
@@ -232,7 +275,12 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * All waypoint`s neighbours will be checked and calculated
+	 * 
+	 * The neighbours of a point in the labyrinth will be calculated and also the
+	 * availability will be considered.
+	 * 
+	 * @param seedPoint				The center of the neighbours.
+	 * @return neighbours[]			The neighbours and the availability will be returned.
 	 */
 	private int[] checkWayPossibility(int seedPoint){
 		
@@ -285,7 +333,14 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Calculates the best ways based on a waypoint so that the labyrinth wont be too easy
+	 * 
+	 * Calculates the best ways based on a waypoint so that the labyrinth wont be too easy. For each
+	 * possible new direction the neighbours will be calculated. There should be as least as possible way-neighbours, 
+	 * so the labyrinth will be more difficult. The possible new directions will be stored and one will
+	 * be randomly chosen.
+	 * 
+	 * @param allWayNeighbours			All neighbours of the center-point.
+	 * @return goodWayIndex				Returns the index of the new direction.
 	 */
 	private int findGoodWay(int[] allWayNeighbours)
 	{
@@ -316,7 +371,12 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Random waypoints will be transformed into some special waypoints/goodies
+	 * 
+	 * The items will be randomly set on the way-elements. Additional the way-element's index of some
+	 * goodies will be stored. This is important for the map to find on specify item.
+	 * 
+	 * @param goodieMode			Specifies which item should be inserted.
+	 * @param goodieCount			The counts of items which are already set.
 	 */
 	private void creatGoodiesWayPoints(String goodieMode, int goodieCount)
 	{
@@ -369,71 +429,10 @@ public class LevelGenration {
 		
 	}
 	
-	
 	/**
-	 * Calculates all neighbours-index of a point
-	 */
-	public  int[] checkAllNeighbours(int seedPoint){
-		
-		/*
-		 * 	7	0	1
-		 * 	6	SP	2
-		 * 	5	4	3
-		 */
-		
-		int[] allNeighbours = new int[8];
-		int[] mainNeighbours = checkWayPossibility(seedPoint);
-		
-		allNeighbours[0]=mainNeighbours[1];
-		allNeighbours[2]=mainNeighbours[2];
-		allNeighbours[4]=mainNeighbours[3];
-		allNeighbours[6]=mainNeighbours[4];
-		
-		//1
-		if(mainNeighbours[2]-columns<0)
-		{
-			allNeighbours[1]=mainNeighbours[2]+(rows-1)*columns;
-		}
-		else
-		{
-			allNeighbours[1]=mainNeighbours[2]-columns;
-		}
-		
-		//3
-		if(mainNeighbours[2]+columns>columns*rows-1)
-		{
-			allNeighbours[3]=mainNeighbours[2]-(rows-1)*columns;
-		}
-		else
-		{
-			allNeighbours[3]=mainNeighbours[2]+columns;
-		}
-		
-		//5
-		if(mainNeighbours[4]+columns>columns*rows-1)
-		{
-			allNeighbours[5]=mainNeighbours[4]-(rows-1)*columns;
-		}
-		else
-		{
-			allNeighbours[5]=mainNeighbours[4]+columns;
-		}
-		
-		//7
-		if(mainNeighbours[4]-columns<0)
-		{
-			allNeighbours[7]=mainNeighbours[4]+(rows-1)*columns;
-		}
-		else
-		{
-			allNeighbours[7]=mainNeighbours[4]-columns;
-		}				
-		
-		return allNeighbours;
-	}
-	
-	/**
-	 * Solves the labyrinth and find a correct way
+	 * Solves the labyrinth and find a correct way. For each map the ways to all other items
+	 * will be caclulated, but only the shortest way. Therefore all neighbours will be considered to
+	 * find a correct possible way.
 	 */
 	public void solveLabyrinth() {
 
@@ -449,7 +448,14 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Calculates the way-sequence of a shortest way
+	 * 
+	 * Calculates the shortest path from start to the target. For each possible way all neighbours will be considered.
+	 * Also the number of steps will be considered and every way point is allowed to be visited only one time.
+	 * The path, which has the lowest amount of steps, is the correct one.
+	 * 
+	 * @param startPoint				The start point.
+	 * @param targetPoint				The target point which should be reached.
+	 * @return waySequenze[]			The order of way-elements will be returned.
 	 */
 	public int[] calculateShortestPath(int startPoint,int targetPoint) {
 
@@ -506,7 +512,13 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Finds the best Node to find the shortest path
+	 * 
+	 * For each possible new direction the distance to the target-point will be calculated. The direction
+	 * with the lowest distance will be chosen first to test if this one heads to the target.
+	 * 
+	 * @param possibleList			Contains all possible directions.
+	 * @param targetPoint			The point which should be reached.
+	 * @return bestNodeIndex		Returns the index of the best new direction.
 	 */
 	public int findBestNode(ArrayList<int[]> possibleList,
 			int targetPoint) {
@@ -526,6 +538,15 @@ public class LevelGenration {
 		return bestNodeIndex;
 	}
 	
+	/**
+	 * 
+	 * Calculates the distance from a point to the target and additional the amount of steps which has been
+	 * gone before will be considered to determine the probably costs.
+	 * 
+	 * @param wayPoint					The acutely point.
+	 * @param targetFieldNumber			The target which should be reached.
+	 * @return cost						The probably amount of steps to reach the target.
+	 */
 	public float getWayCost(int[] wayPoint, int targetFieldNumber) {
 
 		int distX = Math.abs(wayPoint[0] % columns - targetFieldNumber
@@ -537,7 +558,15 @@ public class LevelGenration {
 		return costNode;
 	}
 	
-	
+	/**
+	 * 
+	 * By the last way-element, which is the target itself, the whole path will be calculated.
+	 * Therefore the parent of each way-point will be considered and the order of way-elements will
+	 * be determined to reach the start-point.
+	 * 
+	 * @param lastWayPoint
+	 * @return
+	 */
 	public int[] calculateShortesWayIndex(int[] lastWayPoint) {
 
 		int wayIndex = 0;
@@ -557,6 +586,14 @@ public class LevelGenration {
 		return wayIndexSequence;
 	}
 	
+	/**
+	 * 
+	 * The Index of the specify map will be calculated. This is only needed if all ways will
+	 * be pre-calculated.
+	 * 
+	 * @param mapField			The actually point which is a map-element.
+	 * @return index			Returns the index of the specify map.
+	 */
 	public int getMapIndex(int mapField) {
 
 		for (int i = 0; i < mapCount; i++) {
@@ -567,7 +604,15 @@ public class LevelGenration {
 		// Error
 		return -1;
 	}
-
+	
+	/**
+	 * 
+	 * The Index of the specify item will be calculated. This is only needed if all ways will
+	 * be pre-calculated.
+	 * 
+	 * @param goodyField			The actually point which is a goody-element.
+	 * @return index				Returns the index of the specify item.
+	 */
 	public int getGoodiesIndex(int goodyField) {
 
 		for (int i = 0; i < numberOfGoodies; i++) {
@@ -580,7 +625,13 @@ public class LevelGenration {
 	}
 	
 	/**
-	 * Get the shortest way to a target
+	 * 
+	 * This function is only available if all ways are pre-calculated. The way from a start-point to
+	 * a target will be returned.
+	 * 
+	 * @param startField			
+	 * @param targetField
+	 * @return waySequenze
 	 */
 	public int[] getWayToTarget(int startField, int targetField){
 		int[] wayToTarget = mapInfo[getMapIndex(startField)][getGoodiesIndex(targetField)];
@@ -588,7 +639,12 @@ public class LevelGenration {
 	}
 
 	/**
-	 * Get the shortest way to the nearest target
+	 * 
+	 * This function is only available if all ways are pre-calculated. The way from a start-point with least 
+	 * amount of steps will be returned.
+	 * 
+	 * @param startField			
+	 * @return waySequenze
 	 */
 	public int[] getWayToNearestTarget(int startField) {
 
@@ -606,7 +662,12 @@ public class LevelGenration {
 	}
 
 	/**
-	 * Get the shortest way to a target
+	 * 
+	 * This function is only available if all ways are pre-calculated. The way from a start-point with most 
+	 * amount of steps will be returned.
+	 * 
+	 * @param startField			
+	 * @return waySequenze
 	 */
 	public int[] getWayToFarthestTarget(int startField) {
 
@@ -623,9 +684,22 @@ public class LevelGenration {
 		return wayToTarget;
 
 	}
+	
+	/**
+	 * 
+	 * Get the wall-models-information of the whole labyrinth.
+	 * 
+	 * @return walls				Returns all information about wall-model, rotation etc.
+	 */
+	public ArrayList<int[]> getwallInfo(){
+		return walls;
+	}
 		
 	/**
-	 *Get the start position of the whole labyrinth
+	 * 
+	 *Get the start position of the whole labyrinth.
+	 *
+	 *@return startPosition 		The coordinates of the starting-point in the labyrinth.
 	 */
 	public Vector2i getStartPosition(){
 		
