@@ -5,7 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class StatusBar extends GameObject{
 	
-	float scaleFactor = 0.5f;
+	float scaleFactor = 0.0f;
 	
 	public StatusBar(float objectWidth,float objectHeight){
 		super(objectWidth, objectHeight);
