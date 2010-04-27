@@ -34,7 +34,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RenderView.
  *
