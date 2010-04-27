@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
 
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
@@ -30,6 +31,7 @@ public class GameControl {
 	static int bustTime = 50;
 	static int currentBustTime = 0;
 	static boolean inJail = false;
+	static SoundManager sound;
 	//movement vector
 	public static Vector2 movement = new Vector2(0, 0);
 	
@@ -38,6 +40,7 @@ public class GameControl {
 	 */
 	public static void update(){
 		//update offset
+		
 		GameObject.updateOffset(movement);
 		handleDrunkState();
 		handleJailState();
@@ -142,7 +145,7 @@ public class GameControl {
 			consumedBeer = 0;
 			// Set player to drunk state
 			currentDrunkTime = drunkTime;
-				
+			SoundManager.playSound(SoundFX.DRUNK);
 			
 			
 			
@@ -200,7 +203,7 @@ public class GameControl {
 	//	cop.isActive = false;
 		//TODO: CREATE VARIABLE FOR ESCAPING COP LIKE ADRENALINE SHOTS TO PIC UP WITH A TIMER.
 		if (drunkState & !inJail){
-			
+				SoundManager.playSound(SoundFX.POLICE);
 				currentBustTime = bustTime;
 				inJail = true;
 		

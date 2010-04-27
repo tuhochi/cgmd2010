@@ -77,6 +77,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	private float accTime = 0;
 	public DrunkBar drunkStatusBar;
 	public JailBar jailStatusBar;
+	SoundManager sound;
 	//public PlayerObject player;
 	/**
 	 * constructor
@@ -85,6 +86,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	public MyRenderer(Context context) {
 		super(context);
 		//init members
+		SoundManager.initSoundManager(context);
 		this.context = context;
 		this.gameObjects = new ArrayList<GameObject>();
 		this.counter = FPSCounter.getInstance();
