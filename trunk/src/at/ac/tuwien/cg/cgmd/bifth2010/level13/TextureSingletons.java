@@ -5,6 +5,18 @@ import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundTexture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerTexture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopTexture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressTexture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerTexture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBarTexture;
 
 /**
  * 

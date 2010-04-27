@@ -22,8 +22,8 @@ public class LevelActivity extends Activity {
 	//custom renderer
 	private MyRenderer myRenderer;
 	
-	private TextView fpsTextView;
-	private String fpsString;
+	private TextView fpsTextView,guiTextView;
+	private String fpsString,guiString;
 	
 	
     /**
@@ -47,18 +47,31 @@ public class LevelActivity extends Activity {
 	 	myRenderer = new MyRenderer(this);
 	 	frameLayout.addView(myRenderer);
 	 	frameLayout.addView(fpsTextView);
+	   // guiTextView = (TextView)findViewById(R.id.l13_JailText);
+	  
+	 	//frameLayout.removeView(guiTextView);
+	 //	frameLayout.addView(guiTextView);
 	 	
+
+	 	
+
 	 	//timer for fps display
 	 	Timer fpsUpdateTimer = new Timer();
 	 	fpsUpdateTimer.schedule(new TimerTask() {
-	 		
+	 	
 	 		@Override
 	 		public void run() {
 	 			FPSCounter counter = FPSCounter.getInstance();
 	 			fpsString = "fps: " + counter.getFPS();
+	 			/*
+	 			if(GameControl.inJail)
+	 				guiString = "YOU ARE IN ARREST ";
+	 			else
+	 				guiString = "";*/
+	 			//guiString = "YOU ARE IN ARREST ";
 	 			handleUIChanges.sendEmptyMessage(0);
 	 		}
-	 	}, 1000, 3000);
+	 	}, 0, 1000);
     }
     
    private Handler handleUIChanges = new Handler() {
@@ -66,6 +79,7 @@ public class LevelActivity extends Activity {
 	 public void handleMessage(Message msg) {
 		 super.handleMessage(msg);
 		 fpsTextView.setText(fpsString);
+	//	 guiTextView.setText(guiString);
 	 }
    };
    

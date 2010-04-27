@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level13;
+package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 
 import javax.microedition.khronos.opengles.GL10;

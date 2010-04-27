@@ -1,6 +1,10 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level13;
+package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHandler;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 
 /**
  * 

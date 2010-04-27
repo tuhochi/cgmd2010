@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level13;
+package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -7,6 +7,10 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.TextureSingletons;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
+
 /**
  * 
  * @author arthur/sebastian (group 13)
@@ -14,13 +18,13 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public abstract class GameObject {
 	//smallest size of an object (= player size, = tile size)
-	protected static final int BLOCKSIZE = 34;
+	public static final int BLOCKSIZE = 34;
 	
 	//offset of background and beer due to movement
-	protected static final Vector2 offset = new Vector2(0, 0);
+	public static final Vector2 offset = new Vector2(0, 0);
 	
 	//position of object ((0,0) is bottom left)
-	protected Vector2 position;
+	public Vector2 position;
 	
 	//vertex coordinates
 	protected FloatBuffer vertexBuffer;
@@ -32,7 +36,7 @@ public abstract class GameObject {
 	protected Texture texture;
 	
 	
-	protected boolean isActive = true;
+	public boolean isActive = true;
 	
 	/**
 	 * constructor sets up object (used by subtypes)
