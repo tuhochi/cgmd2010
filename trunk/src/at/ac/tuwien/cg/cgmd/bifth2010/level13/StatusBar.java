@@ -22,7 +22,7 @@ public class StatusBar extends GameObject{
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
-		scaleFactor+=0.0001;
+		
 		//enable client state
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
