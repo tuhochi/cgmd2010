@@ -10,17 +10,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * @author arthur (group 13)
  *
  */
-public class PlayerTexture extends Texture {
-
+public class StatusBarTexture extends Texture {
+	
 	/**
-	 * constructor loads rabbit texture
+	 * constructor loads beer texture
 	 * @param gl
 	 * @param context
 	 */
-	public PlayerTexture(GL10 gl, Context context) {
+	public StatusBarTexture(GL10 gl, Context context) {
 		super();
 		this.textureId = new int[1];
-		this.textureId[0] = R.drawable.angora_rabbit;
+		this.textureId[0] = R.drawable.l00_coin;
 		this.textures = new int[1];
 		this.loadGLTextures(gl, context);
 	}

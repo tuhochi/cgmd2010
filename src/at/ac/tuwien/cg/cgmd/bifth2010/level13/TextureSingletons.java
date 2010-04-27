@@ -32,6 +32,7 @@ public class TextureSingletons {
 		textures.put(BeerObject.class.getSimpleName(), new BeerTexture(gl, context));
 		textures.put(CopObject.class.getSimpleName(), new CopTexture(gl, context));
 		textures.put(MistressObject.class.getSimpleName(), new MistressTexture(gl, context));
+		textures.put(StatusBar.class.getSimpleName(), new StatusBarTexture(gl, context));
 	}
 	
 	/**
