@@ -36,9 +36,12 @@ public class GameManager implements Renderable, EventListener {
 	static final int TEXTURE_SHELF = R.drawable.l20_backg;
 	static final int TEXTURE_CART = R.drawable.l20_shopping_cart;
 	
-	static final int[] TEXTURE_PRODUCTS = new int[]{R.drawable.l20_broccoli,
-										 R.drawable.l20_lollipop,
-										 R.drawable.l20_drink };
+	static final int[] TEXTURE_PRODUCTS = new int[]{
+										R.drawable.l20_broccoli,
+										R.drawable.l20_lollipop,
+										R.drawable.l20_drink,
+										R.drawable.l20_beer
+										};
 	
 	public static Activity activity;
 	public static RenderView renderView;
