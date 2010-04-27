@@ -33,8 +33,8 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	private int mTowerTypeSelectedByPlayer = Definitions.BASIC_TOWER;
 	private float mXPos, mYPos; //picking
 	private float mWidth, mHeight; //viewport
-	private float mStartTime;
-	private float mPassedTime;
+	private float mStartTime = 0;
+	private float mPassedTime = 0;
 	private double mLastCollDetDone = 0;
 	
 	public GLView(Context context, float w, float h) {
@@ -50,8 +50,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		mPassedTime = mStartTime - System.currentTimeMillis();
-		
+		mPassedTime = mStartTime - System.currentTimeMillis();	
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
 		
@@ -88,25 +87,19 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {	
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-        
+        gl.glMatrixMode(GL10.GL_PROJECTION);    
         gl.glOrthof(0.0f, mWidth, 0.0f, mHeight, -1.0f, 100.0f);
-        gl.glViewport(0, 0, (int) mWidth, (int) mHeight);
-        
+        gl.glViewport(0, 0, (int) mWidth, (int) mHeight);   
         gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glEnable(GL10.GL_DEPTH_TEST);
-        
+        gl.glEnable(GL10.GL_DEPTH_TEST);   
         // enable the differentiation of which side may be visible 
         gl.glEnable(GL10.GL_CULL_FACE);
         // which is the front? the one which is drawn counter clockwise
         gl.glFrontFace(GL10.GL_CCW);
         // which one should NOT be drawn
-        gl.glCullFace(GL10.GL_BACK);
-        
+        gl.glCullFace(GL10.GL_BACK);   
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-        
-        
+        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);   
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glClearColor(0.0f, 0.49321f, 0.49321f, 1.0f); 
 		gl.glClearDepthf(1.0f);
@@ -117,7 +110,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);	
 		
 		initGameField( (int)mWidth, (int)mHeight );
-		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( (int)mWidth );	
+		//for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( mWidth );	
 		
 		texMan = TextureManager.getSingletonObject();
 		texMan.initialize(gl, mContext);
@@ -126,8 +119,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		texMan.loadTextures();
 		
 		mGameThread = new Thread(this);
-		mGameThread.start();
-		
+		mGameThread.start();	
 	}
 	
 	public void setXYpos(float xpos, float ypos) {
@@ -170,12 +162,11 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
 	}
 	
+	
+	//GameThread
 	public void prepareRound(){
-		System.out.println("PREPARE");
 		try{
-			System.out.println("WAIT_TIME:"+ GameMechanics.getGameMecanics().getRemainingWaitTime() );
 			while( GameMechanics.getGameMecanics().getRemainingWaitTime() > 0){
-					System.out.println("BEFORE-SLEEP");
 					setCountdown( GameMechanics.getGameMecanics().getRemainingWaitTime() );
 					Thread.sleep( 1000 );
 			}
@@ -184,12 +175,8 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 			GameMechanics.getGameMecanics().resetRound();
 			prepareRound();
 		}
-		System.out.println("AFTER SLEEP");
 		GameMechanics.getGameMecanics().nextRound();
-		System.out.println("NEXT ROUND, ROUNDNR: "+GameMechanics.getGameMecanics().getRemainingWaitTime());
-		System.out.println("INIT ENEMIES");
 		initEnemies( GameMechanics.getGameMecanics().getRoundNumber() );
-		System.out.println("STARTING ROUND");
 		startRound( GameMechanics.getGameMecanics().getRoundNumber() );
 	}
 	
@@ -204,7 +191,6 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 
 	public void initEnemies( short roundnr ){
 		mEnemies = new MoneyCarrier[ Definitions.CARRIER_POOL ];
-		System.out.println("IN INIT ENEMIES FOR ROUND: "+roundnr);
 		Random rand = new Random();
 		float lane;
 		float[] correctXYpos;
@@ -213,7 +199,6 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 			lane = rand.nextInt((int)mHeight);
 			correctXYpos = mGamefield.correctXYpos( 10, lane);
 			mEnemies[i].init(mWidth, correctXYpos[1], 2);
-		
 			mCarrierWave[i] = rand.nextInt(30); //
 		}
 	}
@@ -221,9 +206,9 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	
 	
 	public void startRound( short roundnr ){
-		System.out.println("IN START ROUND FOR ROUND:"+roundnr);
 		for ( int i = 0; i < mEnemies.length; i++){mEnemies[i].activate();	mEnemieCount++;}
 		GameMechanics.getGameMecanics().setRoundStartedTime();
+		//GameMechanics.getGameMecanics().pause();
 		prepareRound();
 	}
 	
@@ -258,28 +243,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 					}
 				}
 			}
-		}	/*
-		for( int i = 0; i < mBasicTower.length; i++){
-			if( mBasicTower[i].getActiveState()){	
-				Projectile p = mBasicTower[i].getProjectile(); //kann null sein
-				if( p == null ) return;
-				MoneyCarrier m = null;
-				boolean nearerEnemie = true;
-				for( int j = 0; j < mEnemies.length ; j++){
-					if( mEnemies[j].getActiveState() && (int)mEnemies[j].getY() == (int)p.getY() ){
-						System.out.println("Doing Collision Detection!");
-						
-						if((int)p.getX() == (int)mEnemies[j].getX()){
-							Log.d("draw", "HITTTTT!!!!!" + p.getX() + " --- " + mEnemies[j].getX());
-							mEnemies[j].deactivate(); //TODO: deactivate nur zu debug zwecken. später HP abziehen und bei HP = 0 deactivate()
-							mEnemieCount--;
-						}
-						
-					}
-				}
-				
-			}
-		}	*/
+		}
 	}
 	
 	//***************************
@@ -287,15 +251,21 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	//
 	
 	public void stopLevel(){
+		System.out.println("GLView stopLevel");
 		mGameThread.stop();
+		GameMechanics.getGameMecanics().pause();
 	}
 	
 	public void pauseLevel(){
+		System.out.println("GLView pauseLevel");
 		mGameThread.suspend();
+		GameMechanics.getGameMecanics().pause();
 	}
 
 	public void resumeLevel(){
+		System.out.println("GLView resumeLevel");
 		mGameThread.resume();
+		GameMechanics.getGameMecanics().unpause();
 	}
 
 	@Override

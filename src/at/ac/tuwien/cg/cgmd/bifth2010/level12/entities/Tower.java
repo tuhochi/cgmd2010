@@ -9,6 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 import java.lang.System;
@@ -92,7 +93,9 @@ public abstract class Tower extends GLObject {
 	
 	@Override
 	public void draw( GL10 gl ){
-		//new projectile
+		//pause
+		if( GameMechanics.getGameMecanics().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
+		
 		if( this.getActiveState() == false ) return;
 		double dt =(System.currentTimeMillis() - mTimeLastProjectileShot ) * 0.001;//secs
 		if( dt >= mShootingInterval ){
@@ -140,7 +143,6 @@ public abstract class Tower extends GLObject {
 	
 	public void reset(){
 		this.setActiveState(false);
-		
 	}
 }
 

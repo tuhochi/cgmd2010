@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
+
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -75,6 +77,9 @@ public abstract class Projectile extends GLObject{
 	public void draw( GL10 gl ){
 		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
+		//pause
+		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;
+		
 		mLastFrametime = ms;
 		double distance = this.getSpeed() * dt;
 		mXTranslate += (float)distance;
@@ -88,11 +93,6 @@ public abstract class Projectile extends GLObject{
 	
 	@Override
 	public float getX(){
-		/*long ms = System.currentTimeMillis();
-		double dt = (ms - mLastFrametime) * 0.001;
-		mLastFrametime = ms;
-		double distance = this.getSpeed() * dt;
-		mXTranslate += (float)distance;*/
 		return mXTranslate + mX; //returns the bullet real position because it gets translated and not moved
 	}
 

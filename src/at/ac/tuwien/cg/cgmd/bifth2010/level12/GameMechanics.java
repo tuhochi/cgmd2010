@@ -3,10 +3,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 public class GameMechanics {
 	private int mMoney = 0;
 	private boolean mGameRunning = true;
-	private int mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME * 1000; //für ms
-	private long mRoundStartedTime = -1;
+	private int mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME; //für ms
+	private long mLastCountdownCheck = -1;
 	private short mRound = 0;
 	private int mRemainingCountdownTime = -1;
+	private long mTimeGamePaused = -1;
 	
 	private static GameMechanics mSingleton = null;
 	
@@ -38,21 +39,26 @@ public class GameMechanics {
 	}
 	
 	public void pause(){
+		System.out.println("GameMechanics: Game Paused!");
 		mGameRunning = false;
+		mTimeGamePaused = System.currentTimeMillis();
+		mLastCountdownCheck = System.currentTimeMillis();
 	}
 	
 	public void unpause(){
 		mGameRunning = true;
+		mTimeGamePaused = -1;
+		mLastCountdownCheck = System.currentTimeMillis();
 	}
 	
 	public void setRoundStartedTime(){
-		mRoundStartedTime = System.currentTimeMillis();
+		mLastCountdownCheck = System.currentTimeMillis();
+		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME;
 	}
 	
 	public int  getRemainingWaitTime(){
-		long dt = System.currentTimeMillis() - this.mRoundStartedTime;
-		mRemainingCountdownTime =  (int)Math.ceil( (mSecondsToNextRound - dt)*0.001 );
-		return mRemainingCountdownTime;
+		if( (System.currentTimeMillis() - mLastCountdownCheck >= 1000 ) && mGameRunning  ) mSecondsToNextRound--;
+		return mSecondsToNextRound;
 	}
 
 
@@ -63,10 +69,13 @@ public class GameMechanics {
 	public short nextRound(){
 		mRound++;
 		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound--;
+		mLastCountdownCheck = System.currentTimeMillis();
+		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME;
 		return mRound;
 	}
 	
 	public void resetRound(){
 		
 	}
+
 }
