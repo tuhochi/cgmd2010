@@ -17,7 +17,7 @@ public class GameControl {
 	static int consumedBeer = 0;
 	static int mistressCounter = 0;
 	static boolean drunkState = false;
-	static int drunkTime = 200;
+	static int drunkTime = 500;
 	static int currentDrunkTime = 0;
 	static boolean inJail = false;
 	//movement vector
@@ -92,7 +92,7 @@ public class GameControl {
 	 */
 	
 	private static void handleDrunkState(){
-		if (consumedBeer > 5){
+		if (consumedBeer >= 2){
 			// Set player to drunk state
 			currentDrunkTime = drunkTime;
 			drunkState = true;
@@ -126,9 +126,11 @@ public class GameControl {
 	 */
 	
 	public static void encounterCop(CopObject cop){
-		cop.isActive = false;
+	//	cop.isActive = false;
 		if (drunkState){
 			if (!inJail){
+				
+				//TODO: GENERATE "JAIL-FAIL" message
 				inJail = true;
 			}
 		}
