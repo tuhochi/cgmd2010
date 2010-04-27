@@ -181,24 +181,29 @@ public class LevelHandler {
 			{
 				if(world[worldIndex]==SceneGraph.GEOMETRY_STONE)
 				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
+					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
+					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.STONE);
 				}
 				else if(world[worldIndex]==SceneGraph.GEOMETRY_BARREL)
 				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
+					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
+					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.BARREL);
 				}
 				else if(world[worldIndex]==SceneGraph.GEOMETRY_TRASH)
 				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
-					LevelActivity.vibrator.vibrate(120L);  
+					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
+					//LevelActivity.vibrator.vibrate(120L);
+					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.TRASH);
 				}
 				else if(world[worldIndex]==SceneGraph.GEOMETRY_SPRING)
 				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
+					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
+					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.SPRING);
 				}
 				else if(world[worldIndex]==SceneGraph.GEOMETRY_MAP)
 				{
-					LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
+					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
+					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
 				}
 			}
 			world[worldIndex]=1;
@@ -208,7 +213,7 @@ public class LevelHandler {
 			//AlphaBLENDING
 			//TODO
 		}
-		LevelActivity.soundHandler.releaseActivityAudioPlayer();
+		//LevelActivity.soundHandler.releaseActivityAudioPlayer();
 	}
 
 	/**
