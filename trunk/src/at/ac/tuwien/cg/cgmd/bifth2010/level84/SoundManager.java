@@ -11,8 +11,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class SoundManager {
 
 	/** enumeration of existing sounds **/
-	public enum SoundFX {DROP, HIT, MISS};
-	private int soundamount = 3;
+	public enum SoundFX {DROP, HIT, MISS, BREAK};
+	private int soundsamount = 4;
 	/** soundpool for playing sounds **/
 	private SoundPool soundPool;
 	/** hashmap with all available sounds **/
@@ -28,7 +28,7 @@ public class SoundManager {
 	 */
 	public SoundManager(Context context)
 	{
-		soundPool = new SoundPool(soundamount, AudioManager.STREAM_MUSIC, 100);
+		soundPool = new SoundPool(soundsamount, AudioManager.STREAM_MUSIC, 100);
 		initSoundMap(context);
 		
 		SharedPreferences audiosettings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
@@ -43,8 +43,9 @@ public class SoundManager {
 	{
 		soundMap = new HashMap<SoundFX, Integer>();
 	
-		soundMap.put(SoundFX.DROP, soundPool.load(context,R.raw.l44_shot,1));
-		soundMap.put(SoundFX.HIT, soundPool.load(context,R.raw.l44_shot,1));
+		//TODO: sound for drop, hit (watersplash), ev. streetnoise, ...
+		soundMap.put(SoundFX.MISS, soundPool.load(context,R.raw.l84_miss,1));
+		soundMap.put(SoundFX.BREAK, soundPool.load(context,R.raw.l84_break,1));
 	}
 	
 	/**	SoundPool.play  (int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
