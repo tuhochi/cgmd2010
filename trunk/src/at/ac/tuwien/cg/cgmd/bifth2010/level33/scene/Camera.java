@@ -11,7 +11,10 @@ import android.opengl.GLU;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
-
+/**
+ * The Class Camera
+ * @author roman hochstoger & christoph fuchs
+ */
 public class Camera {
 	
 	public final static float standardZoom= 10.f;// standart Game zoom
@@ -23,8 +26,6 @@ public class Camera {
 	Vector3f view = new Vector3f(0, 0, 0);
 	Vector3f up = new Vector3f(0, 1, 0);
 	
-	
-    
 
     public void init(GL10 gl, int width, int height){
     	
@@ -33,6 +34,10 @@ public class Camera {
     	
     }
     
+    /**
+     * look at specific point
+     * @param gl
+     */
 	public void lookAt(GL10 gl) {
 		
 		// if nothing has changed -> do nothing
@@ -61,6 +66,9 @@ public class Camera {
       	somethingChanged=false;
 	}
 
+	/**
+	 * switch between play zoom and overview zoom
+	 */
 	public void switchZoom() {
 		somethingChanged=true;
 	
