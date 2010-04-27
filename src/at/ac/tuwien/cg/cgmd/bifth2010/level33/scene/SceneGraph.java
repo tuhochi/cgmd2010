@@ -17,7 +17,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
-
+/**
+ * The Class SceneGraph
+ * @author roman hochstoger & christoph fuchs
+ */
 public class SceneGraph {
 
 	public static LevelHandler level;
@@ -80,16 +83,19 @@ public class SceneGraph {
 	StopTimer frameTimer = new StopTimer();
 	
 	
-	 
+	/**
+	 * constructor
+	 * @param level is the level to play
+	 * @param context is the GameView 
+	 */
+	
 	public SceneGraph(LevelHandler level, Context context) {
 		this.level = level;
-		this.context = context;
-		 
-
+		this.context = context; 
 	}
 
 	/**
-	 * This Method will init the Geometry VBO´s
+	 * This Method will initialize the Geometry VBO´s
 	 * 
 	 * @param gl  OpenGlHandler
 	 */
@@ -154,11 +160,6 @@ public class SceneGraph {
 		// Really nice perspective calculations.
 //		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 
-
-		
-	
-		
-		
 		
 		// updateLogic
 		level.updateLogic();
@@ -177,12 +178,13 @@ public class SceneGraph {
 		// ?? sleep rest of time?
 	}
 
-
+	/**
+	 * this method will render the scene elements
+	 * @param gl GL10
+	 */
 	private void renderScene(GL10 gl) {
 				
 		glMatrixMode(GL_MODELVIEW);
-		
-		
 		
 		// render world
 		
@@ -191,9 +193,7 @@ public class SceneGraph {
 			Log.d("pos",lastPos.x+" "+lastPos.y);
 		}
 		
-		//int tempytpe=-100;
-		
-		// easy culling
+		// view culling
 		if(Camera.zoom==Camera.standardZoom){
 		
 			frustumMin.set(Math.round(level.gameCharacterPosition.x-frustumDim.x),Math.round(level.gameCharacterPosition.y-frustumDim.y));
@@ -285,11 +285,9 @@ public class SceneGraph {
 //			return;
 //		}
 
+		// render the character
 		glPushMatrix();
-		
 		geometry.render(6);
-
-		
 		glPopMatrix();
 		
 	}
