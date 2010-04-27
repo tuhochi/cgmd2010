@@ -25,7 +25,7 @@ public class GameControl {
 	static int consumedBeer = 0;
 	static int mistressCounter = 0;
 	public static boolean drunkState = false;
-	static int drunkTime = 175;
+	static int drunkTime = 150;
 	static int currentDrunkTime = 0;
 	static int bustTime = 50;
 	static int currentBustTime = 0;
@@ -138,10 +138,14 @@ public class GameControl {
 	 */
 	
 	private static void handleDrunkState(){
-		if (consumedBeer >= 2){
+		if (consumedBeer >= 5){
 			consumedBeer = 0;
 			// Set player to drunk state
 			currentDrunkTime = drunkTime;
+				
+			
+			
+			
 			drunkState = true;
 			
 		}
