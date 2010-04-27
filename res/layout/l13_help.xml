@@ -64,6 +64,8 @@
 						android:text="@string/l13_HelpActivity_Text3"
 						android:textColor="@color/l13_HelpActivity_TextColor"/>
 				
-			</LinearLayout>
+			
+
+</LinearLayout>
 	</ScrollView>
 </LinearLayout>
