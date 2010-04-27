@@ -37,6 +37,11 @@ public class SceneGraph {
 	public final static byte GEOMETRY_WAY = 1;
 	public final static byte GEOMETRY_WORLD = 2;
 	
+	public final static byte LEFT_ARROW = 5;
+	public final static byte DOWN_ARROW = 6;
+	public final static byte RIGHT_ARROW = 7;
+	public final static byte UP_ARROW = 8;
+	
 	public final static byte GEOMETRY_STONE = 11;
 	public final static byte GEOMETRY_BARREL = 12;
 	public final static byte GEOMETRY_TRASH = 13;
