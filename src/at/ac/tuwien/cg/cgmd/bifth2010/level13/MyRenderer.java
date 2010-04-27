@@ -8,6 +8,13 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
 
 /**
  * 
@@ -24,25 +31,25 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	
 	public static int map[][] = {
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 1, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 },
+		{ 1, 1, 2, 2, 0, 2, 0, 2, 0, 2, 0, 2, 2, 1, 0, 0, 0, 0, 0, 0, 1 },
 		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1 },
-		{ 1, 1, 0, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1, 1, 1, 1, 2, 1 },
-		{ 1, 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1 },
-		{ 1, 1, 0, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 1, 1, 0, 0, 0, 0, 2, 0, 2, 0, 1, 2, 1, 1, 1, 1, 2, 1 },
+		{ 1, 1, 2, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 2, 1, 1, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 0, 1 },
 		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1 },
+		{ 1, 1, 2, 1, 1, 1, 1, 2, 0, 2, 0, 2, 0, 2, 0, 0, 2, 0, 0, 2, 1 },
 		{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 1, 1 },
-		{ 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 2, 0, 2, 0, 2, 0, 2, 0, 4, 0, 0, 0, 1, 1 },
+		{ 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 1 },
 		{ 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1 },
 		{ 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 2, 0, 1, 1, 1, 1, 1, 0, 1 },
 		{ 1, 1, 3, 2, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1 },
-		{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 0, 0, 1 },
-		{ 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 1, 0, 0, 0, 0, 2, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 1 },
+		{ 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 0, 0, 1 },
+		{ 1, 1, 0, 1, 1, 1, 1, 0, 2, 0, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1 },
+		{ 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+		{ 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+		{ 1, 1, 0, 2, 2, 0, 2, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 1 },
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 };
 	
@@ -66,7 +73,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	private FPSCounter counter;
 	private float accTime = 0;
 	public StatusBar drunkStatusBar;
-
+	//public PlayerObject player;
 	/**
 	 * constructor
 	 * @param context
@@ -111,10 +118,10 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			
 			}
 		}
-		if(drunkStatusBar != null){
+		
 			drunkStatusBar.draw(gl);
 			GameControl.updateDrunkStatus(drunkStatusBar);
-		}
+		
 	}
 
 	/**
@@ -153,6 +160,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			}
 		}
 		drunkStatusBar = new StatusBar(100, 100);
+		//player = new PlayerObject();
 		gameObjects.add(new PlayerObject());
 	}
 

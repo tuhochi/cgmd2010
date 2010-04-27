@@ -1,5 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
+
 /**
  * 
  * 
@@ -16,8 +23,8 @@ public class GameControl {
 
 	static int consumedBeer = 0;
 	static int mistressCounter = 0;
-	static boolean drunkState = false;
-	static int drunkTime = 500;
+	public static boolean drunkState = false;
+	static int drunkTime = 175;
 	static int currentDrunkTime = 0;
 	static boolean inJail = false;
 	//movement vector
@@ -33,13 +40,14 @@ public class GameControl {
 		
 	}
 	
+
 	public static void updateDrunkStatus(StatusBar drunkBar){
 		drunkBar.updateScale( 1.0f/(float)drunkTime * (float)currentDrunkTime);
 	}
 	
 	public static void movePlayer(float x,float y){
 		
-		if (!inJail){
+		if (!inJail && !drunkState){
 		float deltaX = Math.abs( x - MyRenderer.screenWidth / 2.0f);
 		float deltaY = Math.abs( y - MyRenderer.screenHeight / 2.0f);
 		
@@ -68,17 +76,45 @@ public class GameControl {
 				movement.x = 0.0f;
 				movement.y = -MyRenderer.SPEED;
 			}
-		}
-		}
+		}} else if(!inJail && drunkState){
+			float deltaX = Math.abs( x - MyRenderer.screenWidth / 2.0f);
+			float deltaY = Math.abs( y - MyRenderer.screenHeight / 2.0f);
+			
+			if(deltaX >= deltaY) {
+				if(x < MyRenderer.screenWidth / 2.0f) {
+					//move left
+				
+					movement.x = MyRenderer.SPEED;
+					movement.y = 0.0f;
+				}
+				else if(x > MyRenderer.screenWidth / 2.0f) {
+					//move right
+					movement.x =  -MyRenderer.SPEED;
+					movement.y = 0.0f;
+				}
+			}
+			else {
+				//event starts at top left
+				if(y < MyRenderer.screenHeight / 2.0f) {
+					//move up
+					movement.x = 0.0f;
+					movement.y = -MyRenderer.SPEED;
+				}
+				else if(y > MyRenderer.screenHeight / 2.0f) {
+					//move up
+					movement.x = 0.0f;
+					movement.y = MyRenderer.SPEED;
+				}
+			}}
+			
 		
 		
 		
 		
-		
-		
-		
+	
 		
 	}
+	
 	
 	
 	
@@ -93,20 +129,29 @@ public class GameControl {
 	
 	private static void handleDrunkState(){
 		if (consumedBeer >= 2){
+			consumedBeer = 0;
 			// Set player to drunk state
 			currentDrunkTime = drunkTime;
 			drunkState = true;
-			consumedBeer = 0;
+			
 		}
 		if(drunkState){
-		
-	
-			//TODO: Enable delayed controls
+
 			if(currentDrunkTime > 0){
 				currentDrunkTime--;
+				
+				/*
+				if(player.rotation > 360)
+				player.rotation = 0;
+				else
+				player.rotation+=3;
+				*/
+				
 			}
 			else{
+				
 				drunkState = false;
+
 				if(inJail){
 					//checkJailState when getting clean again dry again
 					inJail = false;
@@ -127,6 +172,7 @@ public class GameControl {
 	
 	public static void encounterCop(CopObject cop){
 	//	cop.isActive = false;
+		//TODO: CREATE VARIABLE FOR ESCAPING COP LIKE ADRENALINE SHOTS TO PIC UP WITH A TIMER.
 		if (drunkState){
 			if (!inJail){
 				

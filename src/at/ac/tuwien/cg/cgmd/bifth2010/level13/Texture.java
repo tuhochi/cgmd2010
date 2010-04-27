@@ -20,9 +20,9 @@ import android.opengl.GLUtils;
  */
 public abstract class Texture {
 	//texture buffers
-	protected FloatBuffer textureBuffer;
+	public FloatBuffer textureBuffer;
 	protected float[] texture;
-	protected int[] textures;
+	public int[] textures;
 	protected int[] textureId;
 	
 	/**
