@@ -21,7 +21,7 @@ public class DrunkBarTexture extends Texture {
 	public DrunkBarTexture(GL10 gl, Context context) {
 		super();
 		this.textureId = new int[1];
-		this.textureId[0] = R.drawable.l13_puke;
+		this.textureId[0] = R.drawable.l13_wasted;
 		this.textures = new int[1];
 		this.loadGLTextures(gl, context);
 	}

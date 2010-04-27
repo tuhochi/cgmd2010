@@ -164,7 +164,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 				}
 			}
 		}
-		drunkStatusBar = new DrunkBar(100, 50);
+		drunkStatusBar = new DrunkBar(200, 50);
 		jailStatusBar = new JailBar(200, 50);
 	    jailStatusBar.position.y = 50;
 
