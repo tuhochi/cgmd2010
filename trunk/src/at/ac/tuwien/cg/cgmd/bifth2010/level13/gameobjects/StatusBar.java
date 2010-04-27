@@ -3,6 +3,15 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * 
+ * @author Sebastian
+ *
+ * Its a status bar !
+ * use set scaleFactor to set the scale ;-).
+ *
+ */
+
 public class StatusBar extends GameObject{
 	
 	float scaleFactor = 0.0f;

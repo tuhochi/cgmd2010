@@ -1,22 +1,11 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level13;
+package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundTexture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerTexture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopTexture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressTexture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerTexture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBarTexture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
 
 /**
  * 
@@ -44,7 +33,8 @@ public class TextureSingletons {
 		textures.put(BeerObject.class.getSimpleName(), new BeerTexture(gl, context));
 		textures.put(CopObject.class.getSimpleName(), new CopTexture(gl, context));
 		textures.put(MistressObject.class.getSimpleName(), new MistressTexture(gl, context));
-		textures.put(StatusBar.class.getSimpleName(), new StatusBarTexture(gl, context));
+		textures.put(DrunkBar.class.getSimpleName(), new DrunkBarTexture(gl, context));
+		textures.put(JailBar.class.getSimpleName(), new JailBarTexture(gl, context));
 	}
 	
 	/**

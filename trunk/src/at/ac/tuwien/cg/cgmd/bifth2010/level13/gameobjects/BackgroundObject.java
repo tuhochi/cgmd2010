@@ -2,7 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHandler;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHelper;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 
@@ -33,7 +33,7 @@ public class BackgroundObject extends GameObject {
 		gl.glLoadIdentity();
 		
 		//test for collision with solid tiles
-		if(CollisionHandler.checkBackgroundCollision(MyRenderer.map)) {
+		if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
 			//reset offset
 			GameObject.offset.sub(GameControl.movement);
 			//stop movement

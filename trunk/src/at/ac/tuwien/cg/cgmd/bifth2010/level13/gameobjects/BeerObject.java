@@ -2,7 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHandler;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHelper;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 
 /**
@@ -33,7 +33,7 @@ public class BeerObject extends GameObject {
 	@Override
 	public void draw(GL10 gl) {
 		//check for player-collision
-		if(CollisionHandler.checkPlayerObjectCollision((int)this.position.x, (int)this.position.y)) {
+		if(CollisionHelper.checkPlayerObjectCollision((int)this.position.x, (int)this.position.y)) {
 			this.isActive = false;
 			GameControl.consumeBeer();
 		}

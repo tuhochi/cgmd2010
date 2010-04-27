@@ -8,7 +8,6 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.TextureSingletons;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
 /**

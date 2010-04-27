@@ -14,7 +14,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
  *
  * Handles game logic related stuff.
  * 
- * The functions of this class are either callback Functions
+ * The functions of this class are called from within the renderer.
+ * 
  *
  *
  */
@@ -26,6 +27,8 @@ public class GameControl {
 	public static boolean drunkState = false;
 	static int drunkTime = 175;
 	static int currentDrunkTime = 0;
+	static int bustTime = 50;
+	static int currentBustTime = 0;
 	static boolean inJail = false;
 	//movement vector
 	public static Vector2 movement = new Vector2(0, 0);
@@ -37,12 +40,19 @@ public class GameControl {
 		//update offset
 		GameObject.updateOffset(movement);
 		handleDrunkState();
-		
+		handleJailState();
 	}
 	
 
 	public static void updateDrunkStatus(StatusBar drunkBar){
 		drunkBar.updateScale( 1.0f/(float)drunkTime * (float)currentDrunkTime);
+	}
+	
+	public static void updateJailStatus(StatusBar jailBar){
+		if(inJail)
+			jailBar.updateScale(1.0f/(float)bustTime * (float)currentBustTime);
+		else
+			jailBar.updateScale(0.0f);
 	}
 	
 	public static void movePlayer(float x,float y){
@@ -123,7 +133,7 @@ public class GameControl {
 	}
 	
 	/**
-	 * Callback function that handles the drunk state of the Player.
+	 * Function that handles the drunk state of the Player.
 	 * Called every frame within the update loop.
 	 */
 	
@@ -139,6 +149,7 @@ public class GameControl {
 
 			if(currentDrunkTime > 0){
 				currentDrunkTime--;
+			
 				
 				/*
 				if(player.rotation > 360)
@@ -152,17 +163,28 @@ public class GameControl {
 				
 				drunkState = false;
 
-				if(inJail){
-					//checkJailState when getting clean again dry again
-					inJail = false;
-					
-				}
+			
 			}
 		}
 		
 			
 		
 	}
+	
+	private static void handleJailState(){
+		if(inJail){
+			if(currentBustTime > 0){
+				currentBustTime--;
+			}else{
+
+			//checkJailState when getting clean again dry again
+			inJail = false;
+			
+		}
+		}
+		
+	}
+	
 	
 	/**
 	 * Function that is called by the Collision detection routine when the player encounters a cop.
@@ -173,12 +195,11 @@ public class GameControl {
 	public static void encounterCop(CopObject cop){
 	//	cop.isActive = false;
 		//TODO: CREATE VARIABLE FOR ESCAPING COP LIKE ADRENALINE SHOTS TO PIC UP WITH A TIMER.
-		if (drunkState){
-			if (!inJail){
-				
-				//TODO: GENERATE "JAIL-FAIL" message
+		if (drunkState & !inJail){
+			
+				currentBustTime = bustTime;
 				inJail = true;
-			}
+		
 		}
 			
 	}
