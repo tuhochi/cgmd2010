@@ -7,8 +7,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
  * 
  * @author arthur/sebastian (group 13)
  *
+ * Static class that contains methods for collision detection and handling.
+ * These methods are invoked from the respective classes.
+ *
  */
-public class CollisionHandler {
+public class CollisionHelper {
 	
 	
 	/**
@@ -21,7 +24,9 @@ public class CollisionHandler {
 	}
 	
 	/**
-	 * checks if a collision between an object and a wall would occur
+	 * checks if a collision between an object and a wall would occur.
+	 * called within draw function of the object that needs to be checked against the Background
+	 *
 	 * @return
 	 */
 	

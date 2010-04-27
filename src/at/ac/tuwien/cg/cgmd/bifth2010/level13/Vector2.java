@@ -4,9 +4,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
  * 
  * @author sebastian (group 13)
  *
+ * Garbage collector efficient 2D Vector class.
+ * 
+ * Memory will only be allocated in the clone method.
+ *
  */
 
-	//Garbage collector efficient 2D Vector class
+	
 
 	public class Vector2
 	{

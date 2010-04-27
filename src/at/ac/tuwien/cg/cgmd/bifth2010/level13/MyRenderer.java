@@ -11,10 +11,13 @@ import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.DrunkBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.JailBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.TextureSingletons;
 
 /**
  * 
@@ -72,7 +75,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	//counter for fps
 	private FPSCounter counter;
 	private float accTime = 0;
-	public StatusBar drunkStatusBar;
+	public DrunkBar drunkStatusBar;
+	public JailBar jailStatusBar;
 	//public PlayerObject player;
 	/**
 	 * constructor
@@ -121,7 +125,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 			drunkStatusBar.draw(gl);
 			GameControl.updateDrunkStatus(drunkStatusBar);
-		
+			GameControl.updateJailStatus(jailStatusBar);
+			jailStatusBar.draw(gl);
 	}
 
 	/**
@@ -159,7 +164,11 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 				}
 			}
 		}
-		drunkStatusBar = new StatusBar(100, 100);
+		drunkStatusBar = new DrunkBar(100, 50);
+		jailStatusBar = new JailBar(200, 50);
+	    jailStatusBar.position.y = 50;
+
+		
 		//player = new PlayerObject();
 		gameObjects.add(new PlayerObject());
 	}
