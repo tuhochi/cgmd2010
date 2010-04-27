@@ -11,11 +11,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-//TODO: wenn getroffen setActivestate false, und werte für hp dmg usw resetten
 public class MoneyCarrier extends GLObject {
 	private float mRadius = -1;
 	private float mMovePos = 0.0f;
-	private long mLastFrametime, ms = -1;
+	private long mLastFrametime = -1;
 	private float mStartPos;
 	private short mHp = 1;
 	private short mStrength = 1; //how much damage it can do
@@ -32,7 +31,6 @@ public class MoneyCarrier extends GLObject {
 		mColor[1] = 1.0f;
 		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
-		//mActive = false;
 	}
 	
 	public void activate(){
@@ -41,6 +39,8 @@ public class MoneyCarrier extends GLObject {
 
 	public void deactivate(){
 		super.setActiveState(false);
+		mMovePos = 0.0f;
+		mLastFrametime = -1;
 	}
 	
 	public void init(float xCentr, float yCentr, int type){
@@ -126,11 +126,11 @@ public class MoneyCarrier extends GLObject {
 	}
 	
 	@Override
-	public void draw(GL10 gl){
-		
+	public void draw(GL10 gl){	
 		TextureManager.getSingletonObject().add(R.drawable.l12_icon);
-		ms = System.currentTimeMillis();
+		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
+		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;
 		mLastFrametime = ms;
 		double distance = mSpeed * dt;
 		mMovePos -= distance;
@@ -157,14 +157,6 @@ public class MoneyCarrier extends GLObject {
 	}
 	
 	public float getX(){
-		/*ms = System.currentTimeMillis();
-		double dt = (ms - mLastFrametime) * 0.001;
-		mLastFrametime = ms;
-		double distance = mSpeed * dt;
-		mMovePos -= distance;
-		//calculate actual position
-		mX = mStartPos + mMovePos;
-		*/
 		return mX;
 	}	
 }
