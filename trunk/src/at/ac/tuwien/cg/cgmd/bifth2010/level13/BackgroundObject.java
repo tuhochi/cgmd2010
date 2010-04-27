@@ -31,10 +31,10 @@ public class BackgroundObject extends GameObject {
 		//test for collision with solid tiles
 		if(CollisionHandler.checkBackgroundCollision(MyRenderer.map)) {
 			//reset offset
-			GameObject.offset.sub(MyRenderer.movement);
+			GameObject.offset.sub(GameControl.movement);
 			//stop movement
-			MyRenderer.movement.x = 0;
-			MyRenderer.movement.y = 0;
+			GameControl.movement.x = 0;
+			GameControl.movement.y = 0;
 		}
 		//enable client state
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);

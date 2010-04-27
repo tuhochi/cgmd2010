@@ -19,6 +19,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	
 	//the current map in form of an array
 	
+	//Control delay timer
+	public static int controlDelay = 0;
+	
 	public static int map[][] = {
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		{ 1, 1, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 },
@@ -51,8 +54,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
 	public static final float SPEED = 17f;
 	
-	//movement vector
-	public static Vector2 movement = new Vector2(0, 0);
+	
 
 	//attached context
 	private Context context;
@@ -63,7 +65,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	//counter for fps
 	private FPSCounter counter;
 	private float accTime = 0;
-	
+	public StatusBar drunkStatusBar;
 
 	/**
 	 * constructor
@@ -86,6 +88,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
+
 		//calculate and update fps
 		counter.update();
 		float dt = counter.getDt();
@@ -98,15 +101,19 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		//clear color
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		//update offset
-		GameObject.updateOffset(movement);
+		GameControl.update();
 		
 		//draw all game objects
 		for(GameObject gameObject : gameObjects) {
 			if (gameObject.isActive){
 			gameObject.update();
 			gameObject.draw(gl);
+			
 			}
+		}
+		if(drunkStatusBar != null){
+			drunkStatusBar.draw(gl);
+			GameControl.updateDrunkStatus(drunkStatusBar);
 		}
 	}
 
@@ -122,7 +129,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		//set parallel projection
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		gl.glOrthof(0.0f, width, 0.0f, height, -1.0f, 1.0f);
+		
+		gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
+		
 		gl.glViewport(0, 0, width, height);
 		
 		//init all textures
@@ -143,6 +152,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 				}
 			}
 		}
+		drunkStatusBar = new StatusBar(100, 100);
 		gameObjects.add(new PlayerObject());
 	}
 
@@ -167,41 +177,22 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glClearColor(1.0f, 0.0f, 0.0f, 0.5f);
 	}
 	
+
+	
+	
 	/**
 	 * @see GLSurfaceView#onTouchEvent(MotionEvent)
 	 */
+
 	public boolean onTouchEvent(MotionEvent event) {
 		//only process event if touch is finished
 		if(event.getAction() == MotionEvent.ACTION_UP) {
 			//calculate difference of touch-position and screen-center
-			float deltaX = Math.abs(event.getX() - MyRenderer.screenWidth / 2.0f);
-			float deltaY = Math.abs(event.getY() - MyRenderer.screenHeight / 2.0f);
+			GameControl.movePlayer(event.getX(), event.getY());
 			
-			if(deltaX >= deltaY) {
-				if(event.getX() < MyRenderer.screenWidth / 2.0f) {
-					//move left
-					movement.x = -MyRenderer.SPEED;
-					movement.y = 0.0f;
-				}
-				else if(event.getX() > MyRenderer.screenWidth / 2.0f) {
-					//move right
-					movement.x = MyRenderer.SPEED;
-					movement.y = 0.0f;
-				}
-			}
-			else {
-				//event starts at top left
-				if(event.getY() < MyRenderer.screenHeight / 2.0f) {
-					//move up
-					movement.x = 0.0f;
-					movement.y = MyRenderer.SPEED;
-				}
-				else if(event.getY() > MyRenderer.screenHeight / 2.0f) {
-					//move up
-					movement.x = 0.0f;
-					movement.y = -MyRenderer.SPEED;
-				}
-			}
+			
+			
+			
 		}
 		return true;
 	}

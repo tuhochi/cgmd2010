@@ -30,9 +30,10 @@ public class BeerObject extends GameObject {
 	@Override
 	public void draw(GL10 gl) {
 		//check for player-collision
-		if(CollisionHandler.checkPlayerObjectCollision((int)this.position.x, (int)this.position.y)) 
+		if(CollisionHandler.checkPlayerObjectCollision((int)this.position.x, (int)this.position.y)) {
 			this.isActive = false;
-
+			GameControl.consumeBeer();
+		}
 		
 		//update position with offset
 		this.position.sub(GameObject.offset);
