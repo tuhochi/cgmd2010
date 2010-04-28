@@ -24,7 +24,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level66.OBJModel;
 
-public class Geometry implements Serializable{
+public class Geometry {
 	public enum Type {
 		Points, Lines, Triangles, LineStrip, TriangleStrip, TriangleFan
 	}
@@ -91,7 +91,32 @@ public class Geometry implements Serializable{
 		
 		this.textur=textur;
 
+	}
+	
+	/**
+	 * this constructor accept the ObjModel
+	 * @param gl
+	 * @param type Primitive Type eg.: Triangel
+	 * @param objModel Object Geometry
+	 * @param textur Texture ID
+	 */
+	public Geometry(GL10 gl, Type[] type, ObjModel objModel, int textur) {
+		
+		this.gl = gl;
+		this.type = objModel.type;
+		this.geometryOffset=objModel.geometryOffset;
+		
+		vertices = objModel.vertices;
+		colors = objModel.colors;
+		texCoords = objModel.texCoords;
+		normals = objModel.normals;
+		
+		this.textur=textur;
 
+	}
+	
+	public ObjModel GetObjModel(){
+		return new ObjModel(type,geometryOffset,vertices,colors,texCoords,normals);
 	}
 
 	private FloatBuffer allocateBuffer(int size) {
@@ -510,35 +535,6 @@ public class Geometry implements Serializable{
 		
 	}
 
-	
-	public void write(String file)
-	{
-		try {
-			
-			
-			FileOutputStream fos = new FileOutputStream(file,true);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(this);
-			oos.close();
-			fos.close();
-			Log.d("write to:", file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static Geometry read(String fileName, Context context)
-	{
-		Geometry model = null;
-    	try {
-    		InputStream fis = context.getAssets().open(fileName);
-			ObjectInputStream stream = new ObjectInputStream(fis);
-			model = (Geometry)stream.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return model;
-	}
+
 	
 }

@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
@@ -19,7 +20,7 @@ public class LevelHandler {
 	Vector2f gameCharacterTargetPosition; // target Position
 	boolean characterMoves = false; // if Character is moving in this moment
 	float gameCharacterSpeed = 30;
-	
+	ArrayList<int[]> worldEntry; 
 
 
 	byte way;
@@ -57,6 +58,7 @@ public class LevelHandler {
 		
 		
 	world = levelGenration.startCreation();
+	worldEntry=levelGenration.getwallInfo();
 	gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
 		
 
@@ -67,11 +69,7 @@ public class LevelHandler {
 		way = SceneGraph.GEOMETRY_WAY;
 
 		// setup wall
-		wall = SceneGraph.GEOMETRY_WALL;
-		
-		
-		 
-			
+		wall = SceneGraph.NONE_SPECIAL_WALL_EDGE;	
 		
 	}
 
@@ -221,14 +219,13 @@ public class LevelHandler {
 	 * @param pos of the desired Entry
 	 * @return the Entry
 	 */
-	public int getWorldEntry(Vector2i pos){		
-		
-		return world[getWorldId(pos)];
+	public int[] getWorldEntry(Vector2i pos){		
+		return worldEntry.get(getWorldId(pos));
 	}
 	/**
 	 * look to getWorldEntry(Vector2i pos)
 	 */
-	public int getWorldEntry(int x, int y){
+	public int[] getWorldEntry(int x, int y){
 		return getWorldEntry(new Vector2i(x,y));
 	}
 	
@@ -304,7 +301,7 @@ public class LevelHandler {
 				if(diff.x>0)
 					step=1;
 				for(int i= x; i!=to.x;i=i+step)
-					if(getWorldEntry(i,y)==wall)
+					if(getWorldEntry(i,y)[0]<=wall)
 						return false;
 				return true;
 					
@@ -317,7 +314,7 @@ public class LevelHandler {
 				if(diff.y>0)
 					step=1;
 				for(int i= y; i!=to.y;i=i+step)
-					if(getWorldEntry(x,i)==wall)
+					if(getWorldEntry(x,i)[0]<=wall)
 						return false;
 				return true;
 			}
