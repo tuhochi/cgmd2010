@@ -68,18 +68,20 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		//if(mPassedTime == mCarrierWave[0]) //if abfrage wird so nie true sein = passed time auf int casten!
 		if( mEnemies != null) {
 			for ( int i = 0; i < mEnemies.size(); i++){
-				boolean remove = false;
+				//boolean remove = false;
 				if(mEnemies.get(i).getActiveState()) mEnemies.get(i).draw(gl);
 				if( mEnemies.get(i).getX() <= 1.0f) {
 					GameMechanics.getGameMecanics().addMoney( mEnemies.get(i).getMoney() );
 					mEnemies.get(i).deactivate();
-					remove = true;
+					//remove = true;
+					mEnemies.remove(i);
 				}
 				if( mEnemies.get(i).getHP() <= 0 ){
 					mEnemies.get(i).deactivate();
-					remove = true;
+					//remove = true;
+					mEnemies.remove(i);
 				}
-				if( remove ) mEnemies.remove(i);
+				//if( remove ) mEnemies.remove(i);
 			}
 			if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT ) calcCollisions();
 		}
