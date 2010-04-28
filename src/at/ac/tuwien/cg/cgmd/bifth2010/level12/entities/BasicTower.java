@@ -11,7 +11,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 
 public class BasicTower extends Tower {
 	
-	
 	public BasicTower( ){
 		mRadius = Definitions.BASIC_TOWER_RADIUS;
 		mColor[0] = 0.5f;
@@ -24,12 +23,13 @@ public class BasicTower extends Tower {
 		mTextureBuffer = tbb.asFloatBuffer();
 		mTextureBuffer.put(texture);
 		mTextureBuffer.position(0);
+		mShootingInterval = Definitions.BASIC_TOWER_SHOOTING_INTERVALL;
+		initProjectiles();
 	}
 	
 	
-	public void initProjectiles( float speed, short dmg, float interval ){
+	public void initProjectiles(){
 		mProjectiles = new BasicProjectile[ Definitions.BASIC_PROJECTILE_POOL ];
-		mShootingInterval = interval;
 		for( int i = 0; i < mProjectiles.length; i++){
 			mProjectiles[i] = new BasicProjectile();
 		}

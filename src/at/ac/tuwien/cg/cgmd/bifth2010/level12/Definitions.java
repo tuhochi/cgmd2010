@@ -16,6 +16,7 @@ public final class Definitions {
 	
 		//Basic Tower:
 		public static final float BASIC_TOWER_RADIUS = 10;
+		public static final float BASIC_TOWER_SHOOTING_INTERVALL = 5000;
 	
 		//Basic Tower Projectiles:
 		public static final int BASIC_PROJECTILE_POOL = 4;
@@ -26,7 +27,6 @@ public final class Definitions {
 	
 	//Enemies:	
 	public static final int CARRIER_POOL = 5;
-	//public static final int CARRIER_SPAWN_INTERVALL_01 = 3; //wave 1 spawn intervall
 
 	//Game Mechanics:
 	public static final int STARTING_MONEY = 100;
@@ -69,11 +69,6 @@ public final class Definitions {
 		public static final float FOURTH_ROUND_ENEMIE_RADIUS = 10;
 		public static final int FOURTH_ROUND_ENEMIE_MONEY = 20;
 		public static final float FOURTH_ROUND_ENEMIE_SPEED = 20;
-		
 
 		
-		
-
-	
-	
 }
