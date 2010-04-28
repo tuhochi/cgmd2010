@@ -65,8 +65,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
 	public static final float SPEED = 17f;
 	
-	
-
+	private float zoomFactor = 1.0f;
+	private float zoom = 0.0f;
 	//attached context
 	private Context context;
 	
@@ -104,7 +104,32 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
-
+		
+		int width = MyRenderer.screenWidth;
+		int height = MyRenderer.screenHeight;
+		
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
+		
+		
+		if(GameControl.drunkState){
+		
+		if (zoomFactor > 1.1f){
+			zoom = -0.01f;
+		}
+		
+		if (zoomFactor <= 1.0f){
+			zoom = 0.01f;
+		}
+		
+		zoomFactor+=zoom;
+		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
+		}else{
+			gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
+			
+		}
+		gl.glViewport(0, 0, width, height);
+		
 		//calculate and update fps
 		counter.update();
 		float dt = counter.getDt();
@@ -147,7 +172,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		
-		gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
+		
+		
+		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
 		
 		gl.glViewport(0, 0, width, height);
 		
@@ -183,6 +210,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		
+		
 		//enable texture mapping
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
