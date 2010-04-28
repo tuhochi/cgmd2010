@@ -11,30 +11,22 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 
-public class MoneyCarrier extends GLObject {
-	private float mRadius = -1;
+public abstract class MoneyCarrier extends GLObject {
+	protected float mRadius = -1;
 	private float mMovePos = 0.0f;
 	private long mLastFrametime = -1;
 	private float mStartPos;
-	private short mHp = 1;
-	private short mStrength = 1; //how much damage it can do
-	private int mType = 0; //zombie type
-	int tex;
+	protected short mHp = 10;
+	protected short mStrength = 1; //how much damage it can do
+	protected int mType = 0; //zombie type
+	protected int mTexture = R.drawable.l12_icon;
+	protected int mMoney = 10;
+	protected float mSpeed = 5;
 	
-	private int mMoney = 10;
-	
-	private short mDamageAtCollisionPoint = -1;
-	
-	
-	public MoneyCarrier(){
-		mColor[0] = 1.0f;
-		mColor[1] = 1.0f;
-		mColor[2] = 1.0f;
-		mColor[3] = 1.0f;
-	}
 	
 	public void activate(){
 		super.setActiveState(true);
+		mLastFrametime = System.currentTimeMillis();
 	}
 
 	public void deactivate(){
@@ -43,45 +35,8 @@ public class MoneyCarrier extends GLObject {
 		mLastFrametime = -1;
 	}
 	
-	public void init(float xCentr, float yCentr, int type){
-		//super.setActiveState(true);
-		mLastFrametime = System.currentTimeMillis();//TODO: später in activate() methode verschieben
-		mStartPos = xCentr;
-		
-		if(type == 0){
-			mRadius = 5;  //TODO: only placeholder values
-			mHp = 10;
-			mSpeed = 5;
-			mStrength = 5;
-			mColor[0] = 0.0f;
-			mColor[1] = 0.0f;
-			mColor[2] = 0.0f;
-			
-			tex = R.drawable.l12_icon;
-		}
-		else if(type == 1){
-			mRadius = 5; 
-			mHp = 10;
-			mSpeed = 5;
-			mStrength = 5;
-			mColor[0] = 1.0f;
-			mColor[1] = 0.0f;
-			mColor[2] = 0.0f;
-			
-			tex = R.drawable.l12_icon;
-		}
-		else if(type == 2){
-			mRadius = 5;
-			mHp = 10;
-			mSpeed = 10;
-			mStrength = 5;
-			mColor[0] = 1.0f;
-			mColor[1] = 1.0f;
-			mColor[2] = 0.0f;
-			
-			tex = R.drawable.l12_icon;
-		}
-		
+	public void setXY(float xCentr, float yCentr ){
+		mStartPos = xCentr;	
 		mX = xCentr;
 		mY = yCentr;
 		float[] vertices = {
@@ -100,7 +55,7 @@ public class MoneyCarrier extends GLObject {
 				0,1,3,
 				0,3,2,
 		};
-		System.out.println("Vertices.length: "+vertices.length+" Indices.length: "+indices.length);
+
 		ByteBuffer i = ByteBuffer.allocateDirect( indices.length * 2 );
 		i.order( ByteOrder.nativeOrder() );
 		mIndicesBuffer = i.asShortBuffer();
@@ -127,7 +82,7 @@ public class MoneyCarrier extends GLObject {
 	
 	@Override
 	public void draw(GL10 gl){	
-		TextureManager.getSingletonObject().add(R.drawable.l12_icon);
+		TextureManager.getSingletonObject().add( mTexture );
 		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;
@@ -136,15 +91,9 @@ public class MoneyCarrier extends GLObject {
 		mMovePos -= distance;
 		//calculate actual position
 		mX = mStartPos + mMovePos;
-		
-		if( mX <= 1.0f) {
-			this.deactivate();
-			GameMechanics.getGameMecanics().addMoney( mMoney );
-		}
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
-		
-		TextureManager.getSingletonObject().setTexture(tex);
+		TextureManager.getSingletonObject().setTexture( mTexture);
 		super.draw(gl);
 		gl.glPopMatrix();
 	}
@@ -152,11 +101,13 @@ public class MoneyCarrier extends GLObject {
 	
 	public void hit( short dmg ){
 		mHp -= dmg;
-		if( mHp <= 0 ) this.deactivate();
-		System.out.println("Carrier got hit, damage done: "+dmg+" raminint hp: "+mHp);
 	}
-	
-	public float getX(){
-		return mX;
+
+	public int getMoney() {
+		return mMoney;
+	}
+
+	public int getHP() {
+		return mHp;
 	}	
 }

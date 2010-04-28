@@ -19,6 +19,7 @@ public abstract class GLObject {
 	protected float mX = 0;
 	protected float mSpeed = 0;  //pixel/sec
 	protected boolean mActive = false;
+	protected int mTexture = 0;
 	
     /** The initial texture coordinates (u, v) */	
     protected float texture[] = {    		
@@ -28,10 +29,9 @@ public abstract class GLObject {
 			1.0f, 0.0f
 	};
 	
-	public void draw( GL10 gl ){
-		
-		gl.glFrontFace( GL10.GL_CCW );
-		
+    
+	public void draw( GL10 gl ){		
+		gl.glFrontFace( GL10.GL_CCW );	
 		if( mVerticesBuffer != null && mIndicesBuffer != null && mTextureBuffer != null) {
 			gl.glEnableClientState( GL10.GL_COLOR_ARRAY );
 			gl.glEnableClientState( GL10.GL_VERTEX_ARRAY );
@@ -63,21 +63,26 @@ public abstract class GLObject {
 		}
 	}
 	
+	
 	public boolean getActiveState(){
 		return mActive;
 	}
+	
 	
 	public void setActiveState( boolean state ){
 		mActive = state;
 	}
 	
+	
 	public float getY(){
 		return mY;
 	}
 	
+	
 	public float getX(){
 		return mX;
 	}
+	
 	
 	public float distanceX( float x ){
 		System.out.println( "this.getX: "+this.getX()+" this.mX: "+this.mX+" obj.X: "+x+" Distance: "+ (x - this.getX()) );
@@ -85,7 +90,9 @@ public abstract class GLObject {
 	}
 	
 	
-	public float getSpeed(){
-		return mSpeed;
+	public int getTexture(){
+		return mTexture;
 	}
+	
+	
 }

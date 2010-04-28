@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 
 import java.nio.ByteBuffer;
@@ -11,19 +12,14 @@ import java.nio.ByteOrder;
 public abstract class Projectile extends GLObject{
 	
 	private long mLastFrametime = -1;
-	private short mDmg = 10;
 	private float mXTranslate = 0.0f;
-	private float mRadius = 4;
+	protected float mRadius = 4;
+	protected float mSpeed = 5;
+	protected short mDmg = 10;
 	
-	public Projectile( float speed, short dmg ){
-		mSpeed = speed;
-		mDmg = dmg;
-		mColor[0] = 1.0f;
-		mColor[1] = 1.0f;
-		mColor[2] = 1.0f;
-		mColor[3] = 1.5f;
-		mXTranslate = 0.0f;
-		mActive = false;
+	
+	public float getSpeed(){
+		return mSpeed;
 	}
 	
 	public void setXY( float x, float y){
@@ -75,6 +71,7 @@ public abstract class Projectile extends GLObject{
 	
 	@Override
 	public void draw( GL10 gl ){
+		TextureManager.getSingletonObject().setTexture( mTexture );
 		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		//pause

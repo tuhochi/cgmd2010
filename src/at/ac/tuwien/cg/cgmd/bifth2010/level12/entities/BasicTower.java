@@ -1,22 +1,29 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
-import javax.microedition.khronos.opengles.GL10;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 
 
 public class BasicTower extends Tower {
 	
 	
-	public BasicTower(float xc, float yc, float rad ) {
-		super( xc, yc, rad );
-	}
-	
-	public BasicTower( float radius ){
-		super( radius );
+	public BasicTower( ){
+		mRadius = Definitions.BASIC_TOWER_RADIUS;
+		mColor[0] = 0.5f;
+		mColor[1] = 0.5f;
+		mColor[2] = 0.0f;
+		mColor[3] = 1.0f;
+		mTexture =  R.drawable.l12_icon;
+		ByteBuffer tbb = ByteBuffer.allocateDirect(texture.length * 4);
+		tbb.order(ByteOrder.nativeOrder());
+		mTextureBuffer = tbb.asFloatBuffer();
+		mTextureBuffer.put(texture);
+		mTextureBuffer.position(0);
 	}
 	
 	
@@ -24,12 +31,8 @@ public class BasicTower extends Tower {
 		mProjectiles = new BasicProjectile[ Definitions.BASIC_PROJECTILE_POOL ];
 		mShootingInterval = interval;
 		for( int i = 0; i < mProjectiles.length; i++){
-			mProjectiles[i] = new BasicProjectile( speed, dmg );
+			mProjectiles[i] = new BasicProjectile();
 		}
 	}
 	
-	public void draw(GL10 gl){
-		TextureManager.getSingletonObject().setTexture(R.drawable.l12_icon);
-		super.draw(gl);
-	}
 }
