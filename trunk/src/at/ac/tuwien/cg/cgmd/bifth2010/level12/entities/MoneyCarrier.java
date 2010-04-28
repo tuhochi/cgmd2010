@@ -82,7 +82,6 @@ public abstract class MoneyCarrier extends GLObject {
 	
 	@Override
 	public void draw(GL10 gl){	
-		TextureManager.getSingletonObject().add( mTexture );
 		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;

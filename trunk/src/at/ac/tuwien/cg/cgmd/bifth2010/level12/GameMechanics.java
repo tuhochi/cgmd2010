@@ -66,16 +66,20 @@ public class GameMechanics {
 		return mRound;
 	}
 	
-	public short nextRound(){
+	public void nextRound(){
 		mRound++;
-		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound--;
+		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound = -1;
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME;
-		return mRound;
 	}
 	
 	public void resetRound(){
 		
+	}
+
+
+	public int getMoney() {	
+		return mMoney;
 	}
 
 }

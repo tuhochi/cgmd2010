@@ -48,7 +48,6 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		this.setRenderer( this );
 		mContext = context;
 		initTower();
-		initProjectiles();
 		mStartTime = System.currentTimeMillis();
 		mWidth = w;
 		mHeight = h;
@@ -194,8 +193,23 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 			prepareRound();
 		}
 		GameMechanics.getGameMecanics().nextRound();
+		if( GameMechanics.getGameMecanics().getRoundNumber() == -1 ) waitTillFinished();
 		initEnemies();
 		startRound();
+	}
+	
+	public void waitTillFinished(){
+		while( mEnemies.size() > 0 ){
+			try {
+				Thread.sleep( 1000 );
+			} catch (InterruptedException e) {
+				System.out.println(" Exception in waitTillFinished caught ");
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("Game Finished! return money: "+GameMechanics.getGameMecanics().getMoney() );
+		//Return Money to Framework!
 	}
 	
 	
@@ -264,24 +278,12 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 			}
 		}
 		GameMechanics.getGameMecanics().setRoundStartedTime();
-		//GameMechanics.getGameMecanics().pause();
 		prepareRound();
 	}
 	
 	public void initTower(){
 		//BasicTower init
 		for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower();
-	}
-	
-	
-	
-	public void initProjectiles(  ){
-		//Basic Projectile for Basic Tower
-		int speed = 3333;//this.getResources().getIntArray(R.array.BasicProjectileSpeed)[0];
-		float speedf = speed/100;
-		short dmg = 9;//this.getResources().getIntArray(R.array.BasicProjectileDmg)[0];
-		float shootingInterval = 3;//this.getResources().getIntArray(R.array.BasicTowerShootingInterval)[0] / 100;
-		for( int i = 0; i < mBasicTower.length; i++) mBasicTower[i].initProjectiles(speedf, dmg, shootingInterval);
 	}
 	
 	

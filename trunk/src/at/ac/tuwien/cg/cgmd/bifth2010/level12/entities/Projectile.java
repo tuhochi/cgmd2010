@@ -75,12 +75,10 @@ public abstract class Projectile extends GLObject{
 		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		//pause
-		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;
-		
+		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;		
 		mLastFrametime = ms;
 		double distance = this.getSpeed() * dt;
-		mXTranslate += (float)distance;
-		
+		mXTranslate += (float)distance;		
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
