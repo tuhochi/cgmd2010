@@ -209,40 +209,40 @@ public class SceneGraph {
 			for(int y=frustumMin.y;y<frustumMax.y;y++){
 				for(int x=frustumMin.x;x<frustumMax.x;x++){
 					
-					int type = level.getWorldEntry(x, y);
-					if(type!=GEOMETRY_CHARACTER)
+					int type[] = level.getWorldEntry(x, y);
+					if(type[0]!=GEOMETRY_CHARACTER)
 					{
 					glPushMatrix();
 					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
 					
 					
-					if(type==GEOMETRY_WALL)
+					if(type[0]<=GEOMETRY_WALL)
 						geometry.render(0);
 					else{
 
-						if(type==GEOMETRY_STONE)
+						if(type[0]==GEOMETRY_STONE)
 						{
 							geometry.render(1);
 							geometry.render(8);
 						}
-						else if(type==GEOMETRY_BARREL)
+						else if(type[0]==GEOMETRY_BARREL)
 						{
 							geometry.render(2);
 							geometry.render(8);
 						}
-						else if(type==GEOMETRY_TRASH)
+						else if(type[0]==GEOMETRY_TRASH)
 						{
 							geometry.render(3);
 							geometry.render(10);
 						}
-						else if(type==GEOMETRY_MAP)
+						else if(type[0]==GEOMETRY_MAP)
 						{ 	geometry.render(8);
 							glPushMatrix();
 							gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
 							geometry.render(4);
 							glPopMatrix();
 						}
-						else if(type==GEOMETRY_SPRING)
+						else if(type[0]==GEOMETRY_SPRING)
 						{
 							geometry.render(5);
 							geometry.render(9);
