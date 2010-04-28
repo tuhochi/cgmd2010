@@ -6,6 +6,7 @@ public class GameMechanics {
 	private int mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME; //für ms
 	private long mLastCountdownCheck = -1;
 	private short mRound = 0;
+	private long mRoundStartedTime = System.currentTimeMillis();
 	private int mRemainingCountdownTime = -1;
 	private long mTimeGamePaused = -1;
 	
@@ -54,6 +55,7 @@ public class GameMechanics {
 	public void setRoundStartedTime(){
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME;
+		mRoundStartedTime = System.currentTimeMillis();
 	}
 	
 	public int  getRemainingWaitTime(){
@@ -80,6 +82,10 @@ public class GameMechanics {
 
 	public int getMoney() {	
 		return mMoney;
+	}
+	
+	public long getRoundStartedTime(){
+		return mRoundStartedTime;
 	}
 
 }

@@ -2,6 +2,12 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public final class Definitions {
 	public static final int COLLISION_DETECTION_TIMEOUT = 10;
+	//Game Mechanics:
+	public static final int STARTING_MONEY = 100;
+
+	public static final int GAME_ROUND_WAIT_TIME = 20000;
+
+	public static final short MAX_ROUND_NUMBER = 3;
 	
 	//Number of lanes:
 	public static final int LANE_COUNT = 5;
@@ -27,13 +33,6 @@ public final class Definitions {
 	
 	//Enemies:	
 	public static final int CARRIER_POOL = 5;
-
-	//Game Mechanics:
-	public static final int STARTING_MONEY = 100;
-
-	public static final int GAME_ROUND_WAIT_TIME = 20;
-
-	public static final short MAX_ROUND_NUMBER = 3;
 
 	
 	//Enemies:
