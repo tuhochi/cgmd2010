@@ -8,6 +8,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
@@ -78,6 +79,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	public DrunkBar drunkStatusBar;
 	public JailBar jailStatusBar;
 	SoundManager sound;
+	
 	//public PlayerObject player;
 	/**
 	 * constructor
@@ -94,6 +96,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		this.setRenderer(this);
 		//make it focusable (for touch events)
 		this.setFocusable(true);
+		
 	}
 
 	/**
