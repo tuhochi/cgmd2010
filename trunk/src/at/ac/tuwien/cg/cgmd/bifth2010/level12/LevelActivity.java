@@ -47,14 +47,12 @@ public class LevelActivity extends Activity{
 */
     @Override
     protected void onPause() {
-    	mGLView.pauseLevel();
         super.onPause();
     }
     
     @Override
 	protected void onStop() {		
-		//we finish this activity
-    	mGLView.stopLevel();
+		//we finish this activity;
 		this.finish();
 		super.onStop();
     }

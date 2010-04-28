@@ -6,6 +6,7 @@ import java.util.Vector;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
@@ -22,10 +23,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	public Thread mGameThread = null;
 	public TextureManager texMan;
-	private Context mContext;
-	
-	//private static final int CARRIER_SPAWN_INTERVALL_01 = 3; //wave 1 spawn intervall
-	//private static final int[] mCarrierWave = new int[Definitions.CARRIER_POOL];
+	private Activity mContext;
 	private Vector< MoneyCarrier > mEnemies = new Vector< MoneyCarrier >();
 	
 	private int mEnemieCount = 0;
@@ -34,7 +32,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 	private BasicTower[] mBasicTower = new BasicTower[ Definitions.BASIC_TOWER_POOL ]; //tower types, wo gezeichnet in der towerklasse
 	private int mAdvancedTowerCount = 0;
 
-	//private boolean mNewTower = false;
 	private int mTowerTypeSelectedByPlayer = Definitions.BASIC_TOWER;
 	private float mXPos, mYPos; //picking
 	private float mWidth, mHeight; //viewport
@@ -42,7 +39,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	private float mPassedTime = 0;
 	private long mLastCollDetDone = 0;
 	
-	public GLView(Context context, float w, float h) {
+	public GLView(Activity context, float w, float h) {
 		super(context);
 		this.setRenderer( this );
 		mContext = context;
@@ -66,31 +63,31 @@ public class GLView extends GLSurfaceView implements Renderer {
 		
 		//if(mPassedTime == mCarrierWave[0]) //if abfrage wird so nie true sein = passed time auf int casten!
 		for ( int i = 0; i < mEnemies.size(); i++){
-				//boolean remove = false;
+				boolean remove = false;
 				if(mEnemies.get(i).getActiveState()) mEnemies.get(i).draw(gl);
 				if( mEnemies.get(i).getX() <= 1.0f) {
 					GameMechanics.getGameMecanics().addMoney( mEnemies.get(i).getMoney() );
 					mEnemies.get(i).deactivate();
-					//remove = true;
-					mEnemies.remove(i);
+					remove = true;
 				}
 				if( mEnemies.get(i).getHP() <= 0 ){
 					mEnemies.get(i).deactivate();
-					//remove = true;
-					mEnemies.remove(i);
+					remove = true;
 				}
-				//if( remove ) mEnemies.remove(i);
+				if( remove ) mEnemies.remove(i);
 			}
 		if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT ) calcCollisions();
-		if( GameMechanics.getGameMecanics().getRoundNumber() < 0) waitTillFinished();
-		else{ 
+		if( GameMechanics.getGameMecanics().getRoundNumber() >= 0) {
 			if( System.currentTimeMillis() - GameMechanics.getGameMecanics().getRoundStartedTime() > Definitions.GAME_ROUND_WAIT_TIME ){
 				initEnemies();
 				GameMechanics.getGameMecanics().setRoundStartedTime();
 				GameMechanics.getGameMecanics().nextRound();
 			}
 		}
-	}	
+		if( (GameMechanics.getGameMecanics().getRoundNumber() < 0) && (mEnemies.size() == 0) ){
+			mContext.finish();
+		}
+	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -242,20 +239,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	
 	
-	public void waitTillFinished(){
-		while( mEnemies.size() > 0 ){
-			try {
-				Thread.sleep( 1000 );
-			} catch (InterruptedException e) {
-				System.out.println(" Exception in waitTillFinished caught ");
-				e.printStackTrace();
-			}
-		}
-		
-		System.out.println("Game Finished! return money: "+GameMechanics.getGameMecanics().getMoney() );
-	}
-	
-	
 	
 	
 	
@@ -285,23 +268,5 @@ public class GLView extends GLSurfaceView implements Renderer {
 	//***************************
 	//TODO: Life-Cycle Implementierung: speichern von spieldaten, wiederherstellen der spieldaten
 	//
-	
-	public void stopLevel(){
-		System.out.println("GLView stopLevel");
-		mGameThread.stop();
-		GameMechanics.getGameMecanics().pause();
-	}
-	
-	public void pauseLevel(){
-		System.out.println("GLView pauseLevel");
-		mGameThread.suspend();
-		GameMechanics.getGameMecanics().pause();
-	}
-
-	public void resumeLevel(){
-		System.out.println("GLView resumeLevel");
-		mGameThread.resume();
-		GameMechanics.getGameMecanics().unpause();
-	}
 	
 }
