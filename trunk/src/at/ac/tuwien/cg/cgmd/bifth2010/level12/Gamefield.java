@@ -61,9 +61,7 @@ public class Gamefield {
 				1.0f, 1.0f, 1.0f,
 			};
 	
-	public Gamefield( int xSegCount, int ySegCount, float segLength){
-		
-		
+	public Gamefield( int xSegCount, int ySegCount, float segLength){		
 		mXSegCount = xSegCount;
 		mYSegCount = ySegCount;
 		mFields = new Field[ xSegCount * ySegCount ];	

@@ -57,7 +57,7 @@ public class GameMechanics {
 	}
 	
 	public int  getRemainingWaitTime(){
-		if( (System.currentTimeMillis() - mLastCountdownCheck >= 1000 ) && mGameRunning  ) mSecondsToNextRound--;
+		if( (System.currentTimeMillis() - mLastCountdownCheck > 1000 ) && mGameRunning  ) mSecondsToNextRound--;
 		return mSecondsToNextRound;
 	}
 

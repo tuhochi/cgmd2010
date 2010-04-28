@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 import java.util.Random;
+import java.util.Vector;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -10,6 +11,10 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicTower;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundFour;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundOne;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundThree;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundTwo;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Projectile;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -21,8 +26,9 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	private Context mContext;
 	
 	//private static final int CARRIER_SPAWN_INTERVALL_01 = 3; //wave 1 spawn intervall
-	private static final int[] mCarrierWave = new int[Definitions.CARRIER_POOL];
-	private MoneyCarrier[] mEnemies = null;
+	//private static final int[] mCarrierWave = new int[Definitions.CARRIER_POOL];
+	private Vector< MoneyCarrier > mEnemies = new Vector< MoneyCarrier >();
+	
 	private int mEnemieCount = 0;
 	private Gamefield mGamefield = null;
 	private int mBasicTowerCounter = 0;
@@ -62,7 +68,20 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		
 		//if(mPassedTime == mCarrierWave[0]) //if abfrage wird so nie true sein = passed time auf int casten!
 		if( mEnemies != null) {
-			for ( int i = 0; i < mEnemies.length; i++)if(mEnemies[i].getActiveState()) mEnemies[i].draw(gl);
+			for ( int i = 0; i < mEnemies.size(); i++){
+				boolean remove = false;
+				if(mEnemies.get(i).getActiveState()) mEnemies.get(i).draw(gl);
+				if( mEnemies.get(i).getX() <= 1.0f) {
+					GameMechanics.getGameMecanics().addMoney( mEnemies.get(i).getMoney() );
+					mEnemies.get(i).deactivate();
+					remove = true;
+				}
+				if( mEnemies.get(i).getHP() <= 0 ){
+					mEnemies.get(i).deactivate();
+					remove = true;
+				}
+				if( remove ) mEnemies.remove(i);
+			}
 			if( System.currentTimeMillis() - mLastCollDetDone > Definitions.COLLISION_DETECTION_TIMEOUT ) calcCollisions();
 		}
 	}	
@@ -79,10 +98,18 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		
 		//TODO: eventuell spiellogik initialisierung von surface changed methode unabhängig machen
 		//GameField:
-		initGameField( width, height );
+		initGameField( width, height);
 		mWidth = width;
 		mHeight = height;
 		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( width );
+	}
+	
+	public void initGameField( int width, int height ){
+		int[] fieldsegments = {8, 5};//this.getResources().getIntArray(R.array.Field);
+		int xSegCount = fieldsegments[0];
+		int ySegCount = fieldsegments[1];
+		float segLength = height / ySegCount;
+		mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
 	}
 
 	@Override
@@ -109,7 +136,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
 		gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);	
 		
-		initGameField( (int)mWidth, (int)mHeight );
+		//initGameField( (int)mWidth, (int)mHeight );
 		//for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( mWidth );	
 		
 		texMan = TextureManager.getSingletonObject();
@@ -121,6 +148,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		mGameThread = new Thread(this);
 		mGameThread.start();	
 	}
+	
 	
 	public void setXYpos(float xpos, float ypos) {
 		if( mGamefield.getOccupied( xpos, ypos )) return;
@@ -153,16 +181,6 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	}
 	
 	
-	
-	public void initGameField( int width, int height ){
-		int[] fieldsegments = {8, 5};//this.getResources().getIntArray(R.array.Field);
-		int xSegCount = fieldsegments[0];
-		int ySegCount = fieldsegments[1];
-		float segLength = height / ySegCount;
-		mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
-	}
-	
-	
 	//GameThread
 	public void prepareRound(){
 		try{
@@ -176,8 +194,8 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 			prepareRound();
 		}
 		GameMechanics.getGameMecanics().nextRound();
-		initEnemies( GameMechanics.getGameMecanics().getRoundNumber() );
-		startRound( GameMechanics.getGameMecanics().getRoundNumber() );
+		initEnemies();
+		startRound();
 	}
 	
 	
@@ -189,24 +207,62 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 
 
 
-	public void initEnemies( short roundnr ){
-		mEnemies = new MoneyCarrier[ Definitions.CARRIER_POOL ];
+	public void initEnemies(){
+		short roundnr = GameMechanics.getGameMecanics().getRoundNumber();
 		Random rand = new Random();
-		float lane;
-		float[] correctXYpos;
-		for(int i=0; i < mEnemies.length; i++){
-			mEnemies[i] = new MoneyCarrier();
-			lane = rand.nextInt((int)mHeight);
-			correctXYpos = mGamefield.correctXYpos( 10, lane);
-			mEnemies[i].init(mWidth, correctXYpos[1], 2);
-			mCarrierWave[i] = rand.nextInt(30); //
-		}
+		switch (roundnr) {
+			case (0):
+				for( int i = 0; i < Definitions.FIRST_ROUND_ENEMIE_NUMBER; i++){
+					MoneyCarrier carrier = new CarrierRoundOne();
+					float lane = rand.nextInt((int)mHeight);
+					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					mEnemies.add( carrier );
+				}
+				break;
+			case(1):
+				for( int i = 0; i < Definitions.SECOND_ROUND_ENEMIE_NUMBER; i++){
+					MoneyCarrier carrier = new CarrierRoundTwo();
+					float lane = rand.nextInt((int)mHeight);
+					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					mEnemies.add( carrier );
+				}
+				break;
+			case(2):
+				for( int i = 0; i < Definitions.THIRD_ROUND_ENEMIE_NUMBER; i++){
+					MoneyCarrier carrier = new CarrierRoundThree();
+					float lane = rand.nextInt((int)mHeight);
+					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					mEnemies.add( carrier );
+				}
+				break;
+			case(3):
+				for( int i = 0; i < Definitions.FOURTH_ROUND_ENEMIE_NUMBER; i++){
+					MoneyCarrier carrier = new CarrierRoundFour();
+					float lane = rand.nextInt((int)mHeight);
+					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					mEnemies.add( carrier );
+				}
+				break;
+			default:
+				System.out.println("Default selected in roundnummer case, should not get here! roundnummer: "+roundnr);
+				break;
+		}	
+		
 	}
 	
 	
 	
-	public void startRound( short roundnr ){
-		for ( int i = 0; i < mEnemies.length; i++){mEnemies[i].activate();	mEnemieCount++;}
+	public void startRound(){
+		for ( int i = 0; i < mEnemies.size(); i++){
+			if( mEnemies.get(i).getActiveState() == false){
+				mEnemies.get(i).activate();
+				mEnemieCount++;
+			}
+		}
 		GameMechanics.getGameMecanics().setRoundStartedTime();
 		//GameMechanics.getGameMecanics().pause();
 		prepareRound();
@@ -214,8 +270,7 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 	
 	public void initTower(){
 		//BasicTower init
-		int radius = 14;//(this.getResources().getIntArray(R.array.BasicTowerRadius))[0];
-		for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower( radius );
+		for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower();
 	}
 	
 	
@@ -237,9 +292,9 @@ public class GLView extends GLSurfaceView implements Renderer, Runnable {
 		//simple stupid way
 		for( int i = 0; i < mBasicTower.length; i++){
 			if( mBasicTower[i].getActiveState()){	
-				for( int j = 0; j < mEnemies.length ; j++){
-					if( mEnemies[j].getActiveState() && mEnemies[j].getY() == mBasicTower[i].getY() ){
-						mBasicTower[i].collideX( mEnemies[j] );
+				for( int j = 0; j < mEnemies.size() ; j++){
+					if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mBasicTower[i].getY() ){
+						mBasicTower[i].collideX( mEnemies.get(j) );
 					}
 				}
 			}
