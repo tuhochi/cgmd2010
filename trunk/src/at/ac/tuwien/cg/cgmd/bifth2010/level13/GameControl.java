@@ -32,6 +32,7 @@ public class GameControl {
 	static int currentBustTime = 0;
 	static boolean inJail = false;
 	static SoundManager sound;
+	static boolean musicRunning = false;
 	//movement vector
 	public static Vector2 movement = new Vector2(0, 0);
 	
@@ -40,7 +41,7 @@ public class GameControl {
 	 */
 	public static void update(){
 		//update offset
-		
+	
 		GameObject.updateOffset(movement);
 		handleDrunkState();
 		handleJailState();
@@ -146,17 +147,22 @@ public class GameControl {
 			// Set player to drunk state
 			currentDrunkTime = drunkTime;
 			SoundManager.playSound(SoundFX.DRUNK);
-			
+			if (musicRunning == false){
+				SoundManager.playSound(SoundFX.MUSIC);
+				
+				musicRunning = true;
+			}
 			
 			
 			drunkState = true;
 			
 		}
 		if(drunkState){
-
+			
 			if(currentDrunkTime > 0){
 				currentDrunkTime--;
-			
+				
+			//	GameObject.drunkenRotation += 10;
 				
 				/*
 				if(player.rotation > 360)
@@ -167,7 +173,9 @@ public class GameControl {
 				
 			}
 			else{
-				
+				SoundManager.pauseMusic();
+				musicRunning = false;
+				GameObject.drunkenRotation =0;
 				drunkState = false;
 
 			

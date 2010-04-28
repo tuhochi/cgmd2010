@@ -52,7 +52,7 @@ public class BackgroundObject extends GameObject {
 		
 		//bind texture
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, this.texture.textures[0]);
-
+	//	gl.glRotatef(40, 0, 0, 1);
 		//translate whole background (instead of moving player)
 		gl.glTranslatef(-GameObject.offset.x, -GameObject.offset.y, 0f);
 		

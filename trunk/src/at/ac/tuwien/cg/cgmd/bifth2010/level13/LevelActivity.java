@@ -100,13 +100,14 @@ public class LevelActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 		myRenderer.onPause();
-
+		SoundManager.stopMusic();
 	}
 	
 	 @Override
 	    protected void onDestroy() {
 	    	// TODO Auto-generated method stub
 	    	super.onDestroy();
+	    	SoundManager.stopMusic();
 	    	
 	    }
 	

@@ -24,7 +24,7 @@ public abstract class GameObject {
 	
 	//position of object ((0,0) is bottom left)
 	public Vector2 position;
-	
+	public static float drunkenRotation = 0;
 	//vertex coordinates
 	protected FloatBuffer vertexBuffer;
 	protected float[] vertices;
@@ -49,19 +49,19 @@ public abstract class GameObject {
 		//define vertices coordinates
 		vertices = new float[12];
 		//bottem left
-		vertices[0] = 0f;
-		vertices[1] = 0f;
+		vertices[0] = 0.0f;
+		vertices[1] = 0.0f;
 		vertices[2] = 0f;
 		//bottom right
 		vertices[3] = objectWidth;
-		vertices[4] = 0f;
+		vertices[4] = 0.0f;
 		vertices[5] = 0f;
 		//top right
 		vertices[6] = objectWidth;
 		vertices[7] = objectHeight;
 		vertices[8] = 0f;
 		//top left
-		vertices[9] = 0f;
+		vertices[9] = 0.0f;
 		vertices[10] = objectHeight;
 		vertices[11] = 0f;
 		
@@ -108,8 +108,10 @@ public abstract class GameObject {
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		
 		//translate to correct position
+		
 		gl.glTranslatef(this.position.x, this.position.y, 0.0f);
 		
+		gl.glRotatef(drunkenRotation, 0, 0, 1);
 		//draw
 		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 		
@@ -130,8 +132,8 @@ public abstract class GameObject {
 	 * Execute whatever the sub class should do here
 	 */
 	
-	public void update(){
 	
+	public void update(){
 	}
 	
 	

@@ -12,16 +12,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class SoundManager {
 
 	/** enumeration of existing sounds **/
-	public enum SoundFX {POLICE,DRUNK};
-	private static int soundamount = 2;
+	public enum SoundFX {POLICE,DRUNK,MUSIC};
+	//to handle multiple sounds at onece
+	private static int soundamount = 8;
 	/** soundpool for playing sounds **/
 	private static SoundPool soundPool;
 	/** hashmap with all available sounds **/
 	private static HashMap<SoundFX, Integer> soundMap;
-	
+	private static int musicID;
 	/** flag if sound is enabled/disabled **/
 	private static boolean soundOn = true;
-	
+	private static boolean musicInit = false;
 	
 	/**
 	 * create a new SoundManager
@@ -42,10 +43,13 @@ public class SoundManager {
 	 */
 	private static void initSoundMap(Context context)
 	{
+		
 		soundMap = new HashMap<SoundFX, Integer>();
 	
 		soundMap.put(SoundFX.POLICE, soundPool.load(context,R.raw.l13_police,1));
-		soundMap.put(SoundFX.DRUNK, soundPool.load(context,R.raw.l13_drunk,2));
+		soundMap.put(SoundFX.DRUNK, soundPool.load(context,R.raw.l13_drunk,1));
+		soundMap.put(SoundFX.MUSIC, soundPool.load(context,R.raw.l13_music,2 ));
+		
 	}
 	
 	/**	SoundPool.play  (int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
@@ -65,9 +69,29 @@ public class SoundManager {
 	{
 		if (soundOn)
 		{
-			soundPool.play(soundMap.get(sound),1.0f, 1.0f, 1, 0, 1.0f);
+		//	soundPool
+			if(sound == SoundFX.MUSIC && !musicInit ){
+				musicInit = true;
+				musicID = soundPool.play(soundMap.get(sound),1.0f, 1.0f, 1, -1, 1.0f);
+			}else if(sound == SoundFX.MUSIC){
+				soundPool.resume(musicID);
+			}else{
+				soundPool.play(soundMap.get(sound),1.0f, 1.0f, 1, 0, 1.0f);
+				
+			}
 		}
 	}
+	
+	public static void stopMusic(){
+		soundPool.stop(musicID);
+		
+}
+	
+	
+	public static void pauseMusic(){
+		soundPool.pause(musicID);
+		
+}
 	
 	
 }
