@@ -62,6 +62,7 @@ public abstract class Tower extends GLObject {
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
 		this.setActiveState(true);
+		mTimeLastProjectileShot = System.currentTimeMillis();
 	}
 	
 	public void setViewPortLength(int width) {

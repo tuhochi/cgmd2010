@@ -11,19 +11,24 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level00.TestLevelActivity;
 
 public class LevelActivity extends Activity{
-	private Display mDisplay;
-	private GLView mGLView;
+	private Display mDisplay = null;
+	private GLView mGLView = null;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	System.out.println("ON CREATE ACTIVITY");
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);      
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        mDisplay = wm.getDefaultDisplay();    
-	    mGLView = new GLView( this, mDisplay.getWidth(), mDisplay.getHeight() );
-        setContentView( mGLView );
+        if( mDisplay == null) mDisplay = wm.getDefaultDisplay(); 
+    }
+    
+    @Override
+    public void onStart(){   
+       	System.out.println("ON START ACTIVITY");
+        super.onStart();
     }
     
     @Override
@@ -38,34 +43,48 @@ public class LevelActivity extends Activity{
     }
     
     
-    /*
     @Override
     protected void onResume() {
-    	glview.resumeLevel();
+		System.out.println("ON RESUME ACTIVITY!");
+ 	    if( mGLView == null) mGLView = new GLView( this, mDisplay.getWidth(), mDisplay.getHeight() );
+	    setContentView( mGLView );
+    	GameMechanics.getGameMecanics().unpause();
         super.onResume();
     }
-*/
+    
+    
     @Override
     protected void onPause() {
+		System.out.println("ON PAUSE ACTIVITY!");
+    	GameMechanics.getGameMecanics().pause();
         super.onPause();
     }
     
     @Override
-	protected void onStop() {		
+	protected void onStop() {
+		System.out.println("ON STOP ACTIVITY!");
 		//we finish this activity;
-		this.finish();
 		super.onStop();
     }
     
 	@Override
 	public void finish() {
-    	SessionState s = new SessionState();
+		System.out.println("ON FINISHED ACTIVITY!");	
+		super.finish();
+	}
+	
+	@Override
+	public void onDestroy(){
+	   	System.out.println("ON DESTROY ACTIVITY");
+	   	SessionState s = new SessionState();
     	//we set the progress the user has made (must be between 0-100)
     	s.setProgress( GameMechanics.getGameMecanics().getMoney() );
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
-		super.finish();
+	   	super.onDestroy();
 	}
+	
+	
 
     
 }

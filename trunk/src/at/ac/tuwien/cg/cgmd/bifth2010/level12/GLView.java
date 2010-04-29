@@ -7,7 +7,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
-import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 
@@ -21,15 +20,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class GLView extends GLSurfaceView implements Renderer {
 	
-	public Thread mGameThread = null;
 	public TextureManager texMan;
 	private Activity mContext;
-	private Vector< MoneyCarrier > mEnemies = new Vector< MoneyCarrier >();
+	private Vector< MoneyCarrier > mEnemies = null;
 	
 	private int mEnemieCount = 0;
 	private Gamefield mGamefield = null;
 	private int mBasicTowerCounter = 0;
-	private BasicTower[] mBasicTower = new BasicTower[ Definitions.BASIC_TOWER_POOL ]; //tower types, wo gezeichnet in der towerklasse
+	private BasicTower[] mBasicTower = null; //tower types, wo gezeichnet in der towerklasse
 	private int mAdvancedTowerCount = 0;
 
 	private int mTowerTypeSelectedByPlayer = Definitions.BASIC_TOWER;
@@ -49,8 +47,10 @@ public class GLView extends GLSurfaceView implements Renderer {
 		mHeight = h;
 	}
 
+
 	@Override
 	public void onDrawFrame(GL10 gl) {
+		System.out.println("ON DRAW FRAME");
 		mPassedTime = mStartTime - System.currentTimeMillis();	
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
@@ -91,6 +91,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		System.out.println("ON SURFACE CHANGED!");
 		gl.glLoadIdentity();
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -102,21 +103,22 @@ public class GLView extends GLSurfaceView implements Renderer {
 		//TODO: eventuell spiellogik initialisierung von surface changed methode unabhängig machen
 		//GameField:
 		initGameField( width, height);
+		if( mEnemies == null ) mEnemies = new Vector< MoneyCarrier >();
 		mWidth = width;
 		mHeight = height;
 		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( width );
 	}
 	
 	public void initGameField( int width, int height ){
-		int[] fieldsegments = {8, 5};//this.getResources().getIntArray(R.array.Field);
-		int xSegCount = fieldsegments[0];
-		int ySegCount = fieldsegments[1];
+		int xSegCount = Definitions.FIELD_WIDTH_SEGMENTS;
+		int ySegCount = Definitions.FIELD_HEIGHT_SEGMENTS;
 		float segLength = height / ySegCount;
-		mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
+		if( mGamefield == null) mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
 	}
 
 	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {	
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		System.out.println("ON SURFACE CREATED!");
         gl.glMatrixMode(GL10.GL_PROJECTION);    
         gl.glOrthof(0.0f, mWidth, 0.0f, mHeight, -1.0f, 100.0f);
         gl.glViewport(0, 0, (int) mWidth, (int) mHeight);   
@@ -241,11 +243,12 @@ public class GLView extends GLSurfaceView implements Renderer {
 	
 	
 	
-	
-	
 	public void initTower(){
 		//BasicTower init
-		for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower();
+		if( mBasicTower == null){
+			mBasicTower = new BasicTower[ Definitions.BASIC_TOWER_POOL ];
+			for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower();
+		}
 	}
 	
 	
