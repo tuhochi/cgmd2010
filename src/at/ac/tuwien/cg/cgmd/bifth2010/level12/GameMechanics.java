@@ -47,6 +47,7 @@ public class GameMechanics {
 	}
 	
 	public void unpause(){
+		System.out.println("Game Unpaused at "+System.currentTimeMillis()+" Game Paused at: "+mTimeGamePaused);
 		mGameRunning = true;
 		mTimeGamePaused = -1;
 		mLastCountdownCheck = System.currentTimeMillis();
@@ -59,7 +60,10 @@ public class GameMechanics {
 	}
 	
 	public int  getRemainingWaitTime(){
-		if( (System.currentTimeMillis() - mLastCountdownCheck > 1000 ) && mGameRunning  ) mSecondsToNextRound--;
+		if( (System.currentTimeMillis() - mLastCountdownCheck > 1000 ) && mGameRunning  ){
+			mSecondsToNextRound--;
+			mLastCountdownCheck = System.currentTimeMillis();
+		}
 		return mSecondsToNextRound;
 	}
 
@@ -73,10 +77,6 @@ public class GameMechanics {
 		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound = -1;
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME;
-	}
-	
-	public void resetRound(){
-		
 	}
 
 

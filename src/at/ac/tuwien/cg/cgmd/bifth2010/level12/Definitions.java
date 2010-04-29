@@ -1,6 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public final class Definitions {
+	public static final int FIELD_WIDTH_SEGMENTS = 8;
+	public static final int FIELD_HEIGHT_SEGMENTS = 5;
+	
 	public static final int COLLISION_DETECTION_TIMEOUT = 10;
 	//Game Mechanics:
 	public static final int STARTING_MONEY = 100;
@@ -68,6 +71,7 @@ public final class Definitions {
 		public static final float FOURTH_ROUND_ENEMIE_RADIUS = 10;
 		public static final int FOURTH_ROUND_ENEMIE_MONEY = 20;
 		public static final float FOURTH_ROUND_ENEMIE_SPEED = 20;
+
 
 		
 }

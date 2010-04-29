@@ -29,9 +29,11 @@ public class BasicTower extends Tower {
 	
 	
 	public void initProjectiles(){
-		mProjectiles = new BasicProjectile[ Definitions.BASIC_PROJECTILE_POOL ];
-		for( int i = 0; i < mProjectiles.length; i++){
-			mProjectiles[i] = new BasicProjectile();
+		if( mProjectiles == null){
+			mProjectiles = new BasicProjectile[ Definitions.BASIC_PROJECTILE_POOL ];
+			for( int i = 0; i < mProjectiles.length; i++){
+				mProjectiles[i] = new BasicProjectile();	
+			}
 		}
 	}
 	
