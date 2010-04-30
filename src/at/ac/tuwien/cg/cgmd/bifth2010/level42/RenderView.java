@@ -141,7 +141,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		scene = SceneLoader.instance.readScene("l42_orbit");
 		scene.setHud(hud);
-		motionManager.generateRandomOrbit(scene,1,15,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
+		motionManager.generateRandomOrbit(scene,Config.UNIVERSE_SPEED_LIMIT/2,Config.UNIVERSE_SPEED_LIMIT,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
 		collManager = new CollisionManager(scene);
 		
 		guiThreadHandler = this.context.handler;
@@ -320,10 +320,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 				
 				// vibrate according to the strength
 				context.vibrate(power);
-
+				Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length()+ " currSpeed="+entity.getMotion().getSpeed());
+				
 				motionManager.applySelectionForce(entity, selectionDirection);				
 				motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
-				Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
 				
 			}
 			

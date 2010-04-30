@@ -20,7 +20,7 @@ public class DirectionalMotion extends Motion
 	private final Vector3 directionVec;
 	
 	/** The current position of the object */
-	private final Vector3 currentPos;
+	public final Vector3 currentPos;
 	
 	private final Vector3 tempDirectionVec;
 	
@@ -74,8 +74,8 @@ public class DirectionalMotion extends Motion
 	 */
 	public void update(float dt)
 	{
-		tempDirectionVec.set(directionVec);
-		tempDirectionVec.multiply(speed);
+		tempDirectionVec.set(directionVec).normalize();
+		tempDirectionVec.multiply(dt*speed);
 		
 		currentPos.add(tempDirectionVec);
 	

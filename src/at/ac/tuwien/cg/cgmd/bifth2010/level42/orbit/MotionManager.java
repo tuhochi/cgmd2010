@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -25,7 +27,8 @@ public class MotionManager {
 	public static final MotionManager instance = new MotionManager();
 	
 	//temp vars
-	private final Vector3 satTransformAxis,tempDirectionVec,tempPushVec,tempForceDirectionVec;
+	private final Vector3 	satTransformAxis,tempDirectionVec,tempPushVec,
+							tempForceDirectionVec, deflactionCenterVec,deflactionDirVec;
 	private final Matrix44 tempBasicOrientation;
 	private Movable tempEntity;
 	
@@ -34,12 +37,14 @@ public class MotionManager {
 	 */
 	private MotionManager()
 	{
-		list =  new ArrayList<Movable>();
-		satTransformAxis = new Vector3();
-		tempDirectionVec = new Vector3();
-		tempForceDirectionVec = new Vector3();
-		tempPushVec = new Vector3();
-		tempBasicOrientation = new Matrix44();
+		this.list =  new ArrayList<Movable>();
+		this.satTransformAxis = new Vector3();
+		this.tempDirectionVec = new Vector3();
+		this.tempForceDirectionVec = new Vector3();
+		this.tempPushVec = new Vector3();
+		this.tempBasicOrientation = new Matrix44();
+		this.deflactionCenterVec = new Vector3();
+		this.deflactionDirVec = new Vector3();
 	}
 	
 	/**
@@ -96,10 +101,12 @@ public class MotionManager {
 				tempForceDirectionVec.set(aimCenter);
 				tempForceDirectionVec.subtract(entity.getBoundingSphereWorld().center);		
 				
+				Log.d(LevelActivity.TAG," push force="+pushVec.length());
+				
 				DirectionalMotion dirMotion =  
 					new DirectionalMotion(	entity.getBoundingSphereWorld().center,
 											tempForceDirectionVec,
-											pushVec.length()/Config.SELECTION_FORCE_DIVISOR,
+											pushVec.length()*Config.SELECTION_FORCE_FACTOR,
 											null);
 				//exchange motion
 				setMotion(dirMotion, entity);
@@ -141,7 +148,73 @@ public class MotionManager {
 		for(int i=0; i<list.size();i++)
 		{
 			tempEntity = list.get(i);
+			//check the outer limits
+			checkUniverseLimits(tempEntity);
+			
 			tempEntity.getMotion().update(dt);
+
+		}
+	}
+	
+	public void checkInnerForceField(Movable entity)
+	{
+		Motion motion = entity.getMotion();
+		float centerRatio = 1;
+		float dirRatio = 1;
+	
+		
+		if(motion instanceof Orbit){
+			Orbit orbit = (Orbit) motion;
+			
+			if(orbit.directionVec.length()<Config.FORCEFIELD_DIRLENGTH_LIMIT){
+				dirRatio = Config.FORCEFIELD_NEW_DIRLENGTH/(orbit.directionVec.length());
+			}
+			if(orbit.centerVec.length()<Config.FORCEFIELD_CENTERLENGTH_LIMIT){
+				centerRatio = Config.FORCEFIELD_NEW_CENTERLENGTH/(orbit.centerVec.length());
+			}
+			
+			if(dirRatio!=1f || centerRatio!=1f)
+				orbit.morphAxisScale(	centerRatio, 
+										dirRatio, 
+										Config.FORCEFIELD_CENTERLENGTH_SCALESPEED,
+										Config.FORCEFIELD_DIRLENGTH_SCALESPEED );
+			
+		}
+	}
+	
+	private void checkUniverseLimits(Movable entity)
+	{
+		Motion motion = entity.getMotion();
+		
+		if(motion instanceof DirectionalMotion){
+			if(entity.getBoundingSphereWorld().center.length()>Config.UNIVERSE_CENTERLENGTH_LIMIT){
+				//change to orbit motion
+				transformDirMotionInOrbit(entity);
+			}
+		}
+	}
+	
+	public void transformDirMotionInOrbit(Movable obj){
+		
+		if(obj.getMotion() instanceof DirectionalMotion){
+			DirectionalMotion oldDirMotion = (DirectionalMotion)obj.getMotion();
+			
+			//set to the actual direction and normalize
+			deflactionDirVec.set(obj.getMotion().getCurrDirectionVec()).normalize();
+			// * centerVec * 4
+			deflactionDirVec.multiply(obj.getBoundingSphereWorld().center.length()*4f);
+			// + small deflaction for cross prod
+			deflactionDirVec.add(Constants.DUMMY_VARIATION_VEC);
+									
+			Orbit newOrbit = new Orbit(	obj.getBoundingSphereWorld().center,
+										Config.UNIVERSE_CENTER,
+										deflactionDirVec,
+										oldDirMotion.getSpeed(),
+										null);
+		
+			newOrbit.rotateDirectionVec(90,8);			
+			setMotion(newOrbit,obj);
+			checkInnerForceField(obj);
 		}
 	}
 	

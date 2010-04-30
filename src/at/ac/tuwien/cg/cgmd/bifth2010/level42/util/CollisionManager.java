@@ -83,7 +83,7 @@ public class CollisionManager {
 		
 		this.toCenterVecA = new Vector3();
 		this.toCenterVecB = new Vector3();
-		
+			
 		this.minDistance = 0;
 		
 		aimingList = new Vector<Movable>(Config.COUNT_NEAREST_ENTITIES);
@@ -236,22 +236,23 @@ public class CollisionManager {
 							{
 								Motion planetEntityMotion = planetEntity.getMotion();
 		
-								Log.d(LevelActivity.TAG,"MUH center="+planetEntity.toString());
+								
 								if(planetEntity.getMotion()==null)
 								{
 									
-									//TODO: sat ebenfalls ablenken? - sattrafo
 									planetPushVec.set(planetEntity.getBoundingSphereWorld().center);
 									planetPushVec.subtract(planet.getBoundingSphereWorld().center);
 									
 									planetEntityMotion = new DirectionalMotion(	planetEntity.getBoundingSphereWorld().center,
 																				planetPushVec,
-																				1f,
+																				satellite.getMotion().getSpeed()/4,
 																				planetEntity.getBasicOrientation());
 									MotionManager.instance.addMotion(planetEntityMotion,planetEntity);
 									
 									if(satellite.getMotion().getSpeed()<Config.MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL)
 										satellite.getMotion().morph(planetPushVec);
+									
+									Log.d(LevelActivity.TAG,"sat speed="+satellite.getMotion().getSpeed()+" planet speed="+planetEntity.getMotion().getSpeed());
 								}
 								
 								//delete from aiming list
@@ -319,33 +320,16 @@ public class CollisionManager {
 //						MotionManager.instance.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
 					}
 					
+
+					//check the inner force field
+					MotionManager.instance.checkInnerForceField(objA);
+					
 				//END of contact detection
 				}else{
 					//special case: sat is not longer "inside the planet"
-					if(objA.getMotion()!=null && objA.getMotion().isInsidePlanet())
-					{
-						if(objA.getMotion() instanceof DirectionalMotion)
-						{
-							Orbit newOrbit = new Orbit(	objA.getBoundingSphereWorld().center,
-														Config.UNIVERSE_CENTER,
-														Vector3.add(Vector3.multiply(Vector3.normalize(objA.getMotion().getCurrDirectionVec()),objA.getBoundingSphereWorld().center.length()*2),new Vector3(0.01f,0.01f,0f)),
-														10 ,
-														null);
-							
-							float centerRatio = Config.UNIVERSE_CENTERLENGTH_LIMIT/	objA.getBoundingSphereWorld().center.length();
-							float dirRatio = Config.UNIVERSE_DIRLENGTH_LIMIT/Vector3.add(Vector3.multiply(Vector3.normalize(objA.getMotion().getCurrDirectionVec()),objA.getBoundingSphereWorld().center.length()*2),new Vector3(0.01f,0.01f,0f)).length();
-						
-							newOrbit.morphAxisScale(
-										centerRatio,
-										dirRatio,
-										30f,
-										30f);
-							newOrbit.rotateDirectionVec(90,10);
-							newOrbit.setInsidePlanet(false);
-							Log.d(LevelActivity.TAG," MORPH center="+centerRatio + " dir="+dirRatio + " centerLength="+newOrbit.entityPos.length()+" dirLeng="+newOrbit.getCurrDirectionVec().length());
-							
-							MotionManager.instance.setMotion(newOrbit,objA);
-							
+					if(objA.getMotion()!=null && objA.getMotion().isInsidePlanet()){
+						if(objA.getMotion() instanceof DirectionalMotion){
+							MotionManager.instance.transformDirMotionInOrbit(objA);
 						}else{
 							objA.getMotion().setInsidePlanet(false);
 						}
