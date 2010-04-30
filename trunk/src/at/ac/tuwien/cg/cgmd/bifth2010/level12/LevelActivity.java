@@ -46,10 +46,13 @@ public class LevelActivity extends Activity{
     @Override
     protected void onResume() {
 		System.out.println("ON RESUME ACTIVITY!");
- 	    if( mGLView == null) mGLView = new GLView( this, mDisplay.getWidth(), mDisplay.getHeight() );
-	    setContentView( mGLView );
+ 	    //if( mGLView == null) 
+		mGLView = new GLView( this, mDisplay.getWidth(), mDisplay.getHeight() );
+ 	    //else System.out.println("mGLView != null");
     	GameMechanics.getGameMecanics().unpause();
         super.onResume();
+        mGLView.onResume();
+	    setContentView( mGLView );
     }
     
     
@@ -58,6 +61,7 @@ public class LevelActivity extends Activity{
 		System.out.println("ON PAUSE ACTIVITY!");
     	GameMechanics.getGameMecanics().pause();
         super.onPause();
+        mGLView.onPause();
     }
     
     @Override
@@ -71,6 +75,8 @@ public class LevelActivity extends Activity{
 	public void finish() {
 		System.out.println("ON FINISHED ACTIVITY!");	
 		super.finish();
+		mGLView = null;
+		mDisplay = null;
 	}
 	
 	@Override
@@ -82,6 +88,8 @@ public class LevelActivity extends Activity{
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
 	   	super.onDestroy();
+	   	mGLView = null;
+	   	mDisplay = null;
 	}
 	
 	

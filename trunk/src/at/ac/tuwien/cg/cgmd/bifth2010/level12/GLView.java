@@ -32,36 +32,33 @@ public class GLView extends GLSurfaceView implements Renderer {
 
 	private int mTowerTypeSelectedByPlayer = Definitions.BASIC_TOWER;
 	private float mXPos, mYPos; //picking
-	private float mWidth, mHeight; //viewport
+	private int mWidth, mHeight; //viewport
 	private float mStartTime = 0;
 	private float mPassedTime = 0;
 	private long mLastCollDetDone = 0;
 	
-	public GLView(Activity context, float w, float h) {
+	public GLView(Activity context, int w, int h) {
 		super(context);
+		System.out.println("GLVIEW CONSTRUCTOR");
 		this.setRenderer( this );
 		mContext = context;
-		initTower();
 		mStartTime = System.currentTimeMillis();
 		mWidth = w;
 		mHeight = h;
 	}
 
-
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		System.out.println("ON DRAW FRAME");
 		mPassedTime = mStartTime - System.currentTimeMillis();	
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		
 		texMan.setTexture(R.drawable.l12_grass);
 		mGamefield.draw(gl, mWidth, mHeight);	
-
-		//texMan.setTexture(R.drawable.l12_icon);
-		for ( int i = 0; i < mBasicTower.length; i++) if(mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl);	
-		
-		//if(mPassedTime == mCarrierWave[0]) //if abfrage wird so nie true sein = passed time auf int casten!
+		System.out.println("mBasicTowerLength: "+mBasicTower.length+" mEnemies: "+mEnemies.size());
+		for ( int i = 0; i < mBasicTower.length; i++){
+			if(mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl); 
+			System.out.println("mBasicTower "+i+" is active at: "+mBasicTower[i].getX()+" "+mBasicTower[i].getY());
+		}
 		for ( int i = 0; i < mEnemies.size(); i++){
 				boolean remove = false;
 				if(mEnemies.get(i).getActiveState()) mEnemies.get(i).draw(gl);
@@ -92,21 +89,41 @@ public class GLView extends GLSurfaceView implements Renderer {
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		System.out.println("ON SURFACE CHANGED!");
-		gl.glLoadIdentity();
-		gl.glViewport(0, 0, width, height);
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
-		gl.glOrthof(0.0f, width, 0.0f, height, -1.0f, 10.0f);
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
-		
-		//TODO: eventuell spiellogik initialisierung von surface changed methode unabhängig machen
-		//GameField:
-		initGameField( width, height);
+		 gl.glMatrixMode(GL10.GL_PROJECTION);    
+	     gl.glOrthof(0.0f, width, 0.0f, height, -1.0f, 10.0f);
+	     gl.glViewport(0, 0, width, height);   
+	     gl.glMatrixMode(GL10.GL_MODELVIEW);  
+	     // enable the differentiation of which side may be visible 
+	     //gl.glEnable(GL10.GL_CULL_FACE);
+	     // which is the front? the one which is drawn counter clockwise
+	     gl.glFrontFace(GL10.GL_CCW);
+	     // which one should NOT be drawn
+	    // gl.glCullFace(GL10.GL_BACK);   
+	     gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+	     gl.glEnableClientState(GL10.GL_COLOR_ARRAY);   
+	     gl.glShadeModel(GL10.GL_SMOOTH);
+	     gl.glClearColor(0.0f, 0.49321f, 0.49321f, 1.0f); 
+	     gl.glClearDepthf(1.0f);
+	     gl.glEnable(GL10.GL_DEPTH_TEST);
+	     gl.glEnable(GL10.GL_LINE_SMOOTH);
+	     gl.glDepthFunc(GL10.GL_LEQUAL);
+	     gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
+	     gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);	
+	}
+	
+
+	@Override
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		System.out.println("ON SURFACE CREATED!");		
+		texMan = TextureManager.getSingletonObject();
+		texMan.initialize(gl, mContext);
+		texMan.add(R.drawable.l12_grass);
+		texMan.add(R.drawable.l12_icon);
+		texMan.loadTextures();			
+		initGameField( mWidth, mHeight);
+		initTower();
+		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( mWidth );
 		if( mEnemies == null ) mEnemies = new Vector< MoneyCarrier >();
-		mWidth = width;
-		mHeight = height;
-		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( width );
 	}
 	
 	public void initGameField( int width, int height ){
@@ -114,41 +131,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 		int ySegCount = Definitions.FIELD_HEIGHT_SEGMENTS;
 		float segLength = height / ySegCount;
 		if( mGamefield == null) mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
-	}
-
-	@Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		System.out.println("ON SURFACE CREATED!");
-        gl.glMatrixMode(GL10.GL_PROJECTION);    
-        gl.glOrthof(0.0f, mWidth, 0.0f, mHeight, -1.0f, 100.0f);
-        gl.glViewport(0, 0, (int) mWidth, (int) mHeight);   
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glEnable(GL10.GL_DEPTH_TEST);   
-        // enable the differentiation of which side may be visible 
-        gl.glEnable(GL10.GL_CULL_FACE);
-        // which is the front? the one which is drawn counter clockwise
-        gl.glFrontFace(GL10.GL_CCW);
-        // which one should NOT be drawn
-        gl.glCullFace(GL10.GL_BACK);   
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_COLOR_ARRAY);   
-		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glClearColor(0.0f, 0.49321f, 0.49321f, 1.0f); 
-		gl.glClearDepthf(1.0f);
-		gl.glEnable(GL10.GL_DEPTH_TEST);
-		gl.glEnable(GL10.GL_LINE_SMOOTH);
-		gl.glDepthFunc(GL10.GL_LEQUAL);
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
-		gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);	
-		
-		//initGameField( (int)mWidth, (int)mHeight );
-		//for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( mWidth );	
-		
-		texMan = TextureManager.getSingletonObject();
-		texMan.initialize(gl, mContext);
-		texMan.add(R.drawable.l12_grass);
-		texMan.add(R.drawable.l12_icon);
-		texMan.loadTextures();	
 	}
 	
 	
@@ -246,6 +228,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	public void initTower(){
 		//BasicTower init
 		if( mBasicTower == null){
+			System.out.println("mBASICTOWER == NULL");
 			mBasicTower = new BasicTower[ Definitions.BASIC_TOWER_POOL ];
 			for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower();
 		}
