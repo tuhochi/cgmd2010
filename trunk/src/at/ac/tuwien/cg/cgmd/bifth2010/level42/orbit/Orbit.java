@@ -54,10 +54,10 @@ public class Orbit extends Motion
 	public final Vector3 centerPos;
 					
 	/** Represents the vector from the initial position (u=0) to the center of the orbit (a - axis). */
-	private final Vector3 centerVec;
+	public final Vector3 centerVec;
 
 	/** The direction vector encodes the iteration direction (cw,ccw) and the b axis. */
-	private final Vector3 directionVec;
+	public final Vector3 directionVec;
 
 	private final Vector3 normalVec;
 	
@@ -154,7 +154,7 @@ public class Orbit extends Motion
 		this.ellipse = new Ellipse(this.centerPos,this.centerVec,this.directionVec);
 		
 		//stepsize relative so perimeter
-		this.step = Constants.TWOPI/ellipse.perimeter;
+		this.step = Constants.TWOPI / ellipse.perimeter;
 		
 		//check the size and speed of the orbit
 		limitUniverse();
@@ -331,7 +331,6 @@ public class Orbit extends Motion
 		
 		this.dirRotationMatrix.setIdentity();
 		this.dirRotationMatrix.addRotate(normalVec, dirVecRotationDiffStep);
-		Log.d(LevelActivity.TAG," NORMALVEC="+normalVec);
 	}
 	
 	/**
@@ -383,7 +382,7 @@ public class Orbit extends Motion
 	/**
 	 * Limit universe according to the limits set in the @see Config.
 	 */
-	private void limitUniverse()
+	public void limitUniverse()
 	{
 		this.centerVecCap = 1;
 		this.directionVecCap = 1;
@@ -458,7 +457,7 @@ public class Orbit extends Motion
 		limitUniverse();
 		
 		//change the stepsize relative to the new orbitsize
-		updateStepSize();
+		//updateStepSize();
 		
 		//restart ellipse
 		this.u = 0;

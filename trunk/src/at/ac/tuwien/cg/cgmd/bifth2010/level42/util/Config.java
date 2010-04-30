@@ -37,10 +37,22 @@ public class Config
 	public static String SATELLITE_PREFIX = "Satellite_";
 	
 	/** defines the maximum of the orbit main axis */
-	public static float UNIVERSE_CENTERLENGTH_LIMIT = 10;
+	public static float UNIVERSE_CENTERLENGTH_LIMIT = 20;
 	
 	/** defines the maximum of the orbit secondary axis */
-	public static float UNIVERSE_DIRLENGTH_LIMIT = 10;
+	public static float UNIVERSE_DIRLENGTH_LIMIT = 20;
+	
+	/** defines the maximum of the orbit main axis */
+	public static float FORCEFIELD_CENTERLENGTH_LIMIT = 10;
+	
+	/** defines the maximum of the orbit secondary axis */
+	public static float FORCEFIELD_DIRLENGTH_LIMIT = 10;
+	
+	public static float FORCEFIELD_NEW_CENTERLENGTH = 15;
+	public static float FORCEFIELD_NEW_DIRLENGTH = 15;
+	
+	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 40;
+	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 30;
 	
 	/** defines the maximum relative speed for satellites */
 	public static float UNIVERSE_SPEED_LIMIT = 10;
@@ -55,7 +67,7 @@ public class Config
 	public static float COLLISION_PENETRATION_DEPTH = 0.2f;
 	
 	/** minimal force to change the motion into a directional motion */
-	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 1f;
+	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 15f;
 	
 	/** minimal force to change the motion into a directional motion */
 	public static float MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL = 3f;
@@ -63,6 +75,6 @@ public class Config
 	public static int COUNT_NEAREST_ENTITIES = 5;
 	
 	/** the selection vector gets divided by this factor */
-	public static float SELECTION_FORCE_DIVISOR = 20f;
+	public static float SELECTION_FORCE_FACTOR = 0.8f;
 	
 }
