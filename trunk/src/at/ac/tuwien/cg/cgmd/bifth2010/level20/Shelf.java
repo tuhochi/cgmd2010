@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -23,12 +24,17 @@ public class Shelf extends RenderEntity {
 	/**
 	 * The distance between 2 product rows in pixels
 	 */
-	protected float PRODUCT_DISTANCE_X;
+	protected float MAX_PRODUCT_DISTANCE;
 	
 	/** 
 	 * The product collection. 
 	 */
 	protected Hashtable<Integer, ProductEntity> products;
+	
+	/** 
+	 *  ProductEntities are enqueud in this List and are removed each frame from the products Hashtable
+	 */
+	protected LinkedList<ProductEntity> removeFromProducts;
 	
 	/**
 	 * The distance in pixels, the shelf has moved since the start of the game
@@ -38,7 +44,7 @@ public class Shelf extends RenderEntity {
 	/**
 	 * This value increases every frame until PRODUCT_DISTANCE_X is reached and is set to 0 again.
 	 */
-	protected float distToLastProduct;
+	protected float productDistance;
 	
 	/**
 	 * The Y positions of the shelves. (At this height, the products are spawning)
@@ -54,13 +60,14 @@ public class Shelf extends RenderEntity {
 		super(width * 0.5f, height * 0.5f, 0, width, height);
 				
 		NUMBER_PRODUCTS = 3;
-		PRODUCT_DISTANCE_X = 150;
+		MAX_PRODUCT_DISTANCE = 150;
 		
 		
 		products = new Hashtable<Integer, ProductEntity>();
+		removeFromProducts = new LinkedList<ProductEntity>();
 		
 		pixelsX = 0;
-		distToLastProduct = 0;
+		productDistance = 0;
 		
 		// TODO: Calc better values
 		productSpawnY = new float[]{height * 285 / 320f, height * 220 / 320f, height * 155 / 320f};
@@ -76,26 +83,59 @@ public class Shelf extends RenderEntity {
 		// Move screen pixels
 		pixelsX += scroll;
 		
-		// Update all Animators
+		// Update all Products
 		Enumeration<Integer> keys = products.keys();		
 		while(keys.hasMoreElements()) {
 			
 			ProductEntity pe = products.get(keys.nextElement());
 			
-			pe.x -= scroll;
-			
-			// If they are out of the screen remove them
-			if (pe.x < -pe.width) {				
-				products.remove(pe.id);	
-				pe = null;
+			// They are updated elsewhere
+			if (pe.animated) {
+				continue;
 			}
+			
+			pe.x -= scroll;			
+		
+			// If they are out of the screen
+			if (pe.x < -pe.width) {
+				// If added to this list, they are removed from the rendered products Hashtable later
+				removeFromProducts.add(pe);
+				continue;
+			}
+			
+			// TODO: Whats wrong here?
+			// Else check if there was a touch
+//			else if (GameManager.touchDown && pe.clickable && pe.visible && pe.hitTest(GameManager.touchX, GameManager.touchY)) {
+//				
+//				pe.clickable = false;
+//				
+//				// Tell the game to attach an Animator to move it into a shopping cart
+//				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
+//				
+//				// Mark neighbors as not clickable too
+//				for (int i = 0; i < pe.neighbors.length; i++) {
+//					products.get(pe.neighbors[i]).clickable = false;
+//					
+//					// TODO: Small hack, do something better:
+//					products.get(pe.neighbors[i]).visible = false;
+//				}
+//			}
 		}
 		
-		// At last, add some new products every few pixels
-		distToLastProduct += scroll;
+		// Now remove all marked products and empty the list again
+		for (ProductEntity pe : removeFromProducts) {			
+			products.remove(pe.id);
+		}
+		removeFromProducts.clear();
 		
-		if (distToLastProduct >= PRODUCT_DISTANCE_X) {			
-			distToLastProduct -= PRODUCT_DISTANCE_X;	
+		
+		
+		
+		// At last, add some new products every few pixels
+		productDistance += scroll;
+		
+		if (productDistance >= MAX_PRODUCT_DISTANCE) {			
+			productDistance -= MAX_PRODUCT_DISTANCE;	
 			
 			createProducts();
 		}
@@ -182,7 +222,7 @@ public class Shelf extends RenderEntity {
 	 * @param x
 	 * @param y
 	 */
-	public void hitTest(float x, float y) {
+	public void touchEvent(float x, float y) {
 		
 		Enumeration<Integer> keys = products.keys();		
 		while(keys.hasMoreElements()) {
@@ -190,16 +230,16 @@ public class Shelf extends RenderEntity {
 			ProductEntity pe = products.get(keys.nextElement());
 			
 			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
+				
 				pe.clickable = false;				
 				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
-				products.remove(pe.id);
 				
 				//Mark neighbors as not clickable too
 				for (int i = 0; i < pe.neighbors.length; i++) {
 					products.get(pe.neighbors[i]).clickable = false;
 					
 					// TODO: Small hack, do something better:
-					products.get(pe.neighbors[i]).angle = 90;
+					products.get(pe.neighbors[i]).visible = false;
 				}				
 				break;
 			}

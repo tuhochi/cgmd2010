@@ -35,11 +35,12 @@ public class ShoppingCart extends RenderEntity {
 	@Override
 	public void render(GL10 gl) {		
 		
-		// Render products.	
-		Enumeration<Integer> keys = entities.keys();
-		while(keys.hasMoreElements()) {
-			entities.get(keys.nextElement()).render(gl);
-		}
+		// FERDI: Hab das mal rausgenommen. Ich render jetzt nur mehr im Shelf. Vielleicht sind dann die Crashes weg.
+//		// Render products.	
+//		Enumeration<Integer> keys = entities.keys();
+//		while(keys.hasMoreElements()) {
+//			entities.get(keys.nextElement()).render(gl);
+//		}
 		
 		// And render the shopping cart itself
 		super.render(gl);

@@ -168,42 +168,25 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		//We handled the event
 		return true;
 	}
-
+	
 	
 	/**
 	 * Override the touch screen listener.
 	 * 
-	 * React to moves and presses on the touchscreen.
+	 * Reacts to moves and presses on the touchscreen.
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
-		// Be aware that the Y axis is opposite to the render Y axis. 
+		// Be aware that the event Y axis is mirrored to the render Y axis. 
 		float x = event.getX();
-        float y = getHeight() - event.getY();
+        float y = getHeight() - event.getY();        
+        int action = event.getAction();
         
-        gameManager.onTouch(x, y);
-        
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//        	
-//        	gameManager.onTouch(x, y);
-//        }
-        
-
-//        Toast.makeText(getContext(), "Touch Event", 2);
-        
-        
-//        //If a touch is moved on the screen
-//        if(event.getAction() == MotionEvent.ACTION_MOVE) {
-//        	//Calculate the change
-//        	float dx = x - oldX;
-//	        float dy = y - oldY;
-//                	                
-//        //A press on the screen
-//        } else if(event.getAction() == MotionEvent.ACTION_UP) {
-//
-//        }
-       
+        // Handle only these 3 events
+        if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_UP) {
+        	gameManager.touchEvent(x, y, action);
+        }
         
         //We handled the event
 		return true;
