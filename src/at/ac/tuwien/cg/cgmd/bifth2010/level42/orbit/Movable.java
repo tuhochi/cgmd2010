@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
 /**
  * The Interface Movable 
@@ -31,6 +32,8 @@ public interface Movable {
 	 * @return the basic orientation of the object
 	 */
 	public Matrix44 getBasicOrientation();
+	
+	public Vector3 getCurrentPosition();
 	
 	/**
 	 * Sets the transformation.

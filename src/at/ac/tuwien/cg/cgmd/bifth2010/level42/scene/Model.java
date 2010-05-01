@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
@@ -59,6 +60,9 @@ public class Model implements Movable,Persistable
 	/** The materials (in the same order as the corresponding geometries). */
 	private final ArrayList<Material> materials;
 	
+	/** The current position */
+	private final Vector3 currentPos;
+	
 	/**
 	 * Instantiates a new model.
 	 */
@@ -72,6 +76,7 @@ public class Model implements Movable,Persistable
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
 		initialized = false;
+		currentPos = new Vector3();
 	}
 	
 	/**
@@ -88,7 +93,10 @@ public class Model implements Movable,Persistable
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
 		boundingSphere = new Sphere(other.boundingSphere);
 		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
+		currentPos = new Vector3();
+		
 		int numGeoms = other.geometries.size();
+		
 		for(int i=0; i<numGeoms; i++)
 		{
 			geometries.add(other.geometries.get(i));
@@ -283,9 +291,9 @@ public class Model implements Movable,Persistable
 	public Matrix44 getBasicOrientation()
 	{
 		basicOrientation.copy(transformation_temp);
-		basicOrientation.addTranslate(	-basicOrientation.m[0][0],
-										-basicOrientation.m[1][0],
-										-basicOrientation.m[2][0]);
+		basicOrientation.addTranslate(	-basicOrientation.m[0][3],
+										-basicOrientation.m[1][3],
+										-basicOrientation.m[2][3]);
 		return basicOrientation;
 	}
 
@@ -297,5 +305,14 @@ public class Model implements Movable,Persistable
 	{
 		//TODO hack
 		return "";
+	}
+	
+	@Override
+	public Vector3 getCurrentPosition() {
+		currentPos.set( transformation.m[0][3],
+						transformation.m[1][3],
+						transformation.m[2][3]);
+		
+		return currentPos;
 	}
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
 /**
  * The Class DirectionalMotion represents a directed linear motion.
@@ -20,7 +21,7 @@ public class DirectionalMotion extends Motion
 	private final Vector3 directionVec;
 	
 	/** The current position of the object */
-	public final Vector3 currentPos;
+	public final Vector3 position;
 	
 	private final Vector3 tempDirectionVec;
 	
@@ -49,7 +50,7 @@ public class DirectionalMotion extends Motion
 		//init
 		this();
 		this.directionVec.set(directionVec.normalize());
-		this.currentPos.set(startPos);
+		this.position.set(startPos);
 		this.speed = speed;
 		
 		if(basicOrientation!=null)
@@ -65,7 +66,7 @@ public class DirectionalMotion extends Motion
 		this.transform = new Matrix44();
 		this.basicOrientation = new Matrix44();
 		this.directionVec = new Vector3();
-		this.currentPos = new Vector3();
+		this.position = new Vector3();
 		this.tempDirectionVec = new Vector3();
 	}
 	
@@ -77,7 +78,7 @@ public class DirectionalMotion extends Motion
 		tempDirectionVec.set(directionVec).normalize();
 		tempDirectionVec.multiply(dt*speed);
 		
-		currentPos.add(tempDirectionVec);
+		position.add(tempDirectionVec);
 	
 		transform.setIdentity();
 		transform.mult(basicOrientation);
@@ -87,7 +88,7 @@ public class DirectionalMotion extends Motion
 			transform.mult(satTrans.getTransform());
 		}
 		
-		transform.addTranslate(currentPos.x, currentPos.y, currentPos.z);
+		transform.addTranslate(position.x, position.y, position.z);
 	}
 
 	
@@ -113,7 +114,7 @@ public class DirectionalMotion extends Motion
 	public void persist(DataOutputStream dos) throws IOException
 	{
 		this.directionVec.persist(dos);
-		this.currentPos.persist(dos);
+		this.position.persist(dos);
 		dos.writeFloat(this.speed);
 		
 		if(satTrans != null){
@@ -131,7 +132,7 @@ public class DirectionalMotion extends Motion
 	public void restore(DataInputStream dis) throws IOException
 	{
 		this.directionVec.restore(dis);
-		this.currentPos.restore(dis);
+		this.position.restore(dis);
 		this.speed = dis.readFloat();
 		
 		if(dis.readBoolean()){
@@ -177,8 +178,18 @@ public class DirectionalMotion extends Motion
 	 */
 	@Override
 	public void morph(Vector3 pushVec) {
-		this.directionVec.add(pushVec).normalize();
+		this.directionVec.multiply(speed).add(pushVec);
+		
 		//TODO: speed
-		this.speed = 1f;
+		this.speed = this.directionVec.length();
+		if(this.speed>Config.UNIVERSE_SPEED_LIMIT)
+			this.speed = Config.UNIVERSE_SPEED_LIMIT;
+		
+		this.directionVec.normalize();
+	}
+	
+	@Override
+	public Matrix44 getBasicOrientation() {
+		return basicOrientation;
 	}
 }

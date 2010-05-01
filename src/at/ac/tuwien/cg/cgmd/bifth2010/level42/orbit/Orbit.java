@@ -73,7 +73,7 @@ public class Orbit extends Motion
 	
 	/** The basic orientation of the object. */
 	private final Matrix44  basicOrientation;
-	
+
 	/** The satellite transformation of the object. */
 	private SatelliteTransformation satTrans;
 	
@@ -326,8 +326,8 @@ public class Orbit extends Motion
 		
 		this.dirVecRotationDiff = (float)Math.toRadians(angle);
 		this.dirVecRotationDiffStep = dirVecRotationDiff/stepSize;
-		if(angle<0)
-			this.dirVecRotationDiffStep*=-1;
+		
+		this.dirVecRotationDiff = (float)Math.abs(this.dirVecRotationDiff);
 		
 		this.dirRotationMatrix.setIdentity();
 		this.dirRotationMatrix.addRotate(normalVec, dirVecRotationDiffStep);
@@ -341,12 +341,9 @@ public class Orbit extends Motion
 		//evaluate ellipse
 		position.set(ellipse.getPoint(u));
 				
-		//reset transformation
-		transform.setIdentity();
-		
-		//set basic orientation
-		transform.mult(basicOrientation);
-				
+		//reset transformation to basic orientation
+		transform.set(basicOrientation.m);
+						
 		//object transformation
 		if(satTrans!=null)
 			transform.mult(satTrans.getTransform());
@@ -388,10 +385,10 @@ public class Orbit extends Motion
 		this.directionVecCap = 1;
 		
 		if(this.centerVec.length()>Config.UNIVERSE_CENTERLENGTH_LIMIT)
-			this.centerVecCap = Config.UNIVERSE_CENTERLENGTH_LIMIT/this.centerVec.length();
+			this.centerVecCap = Config.FORCEFIELD_NEW_CENTERLENGTH/this.centerVec.length();
 		
 		if(this.directionVec.length()>Config.UNIVERSE_DIRLENGTH_LIMIT)
-			this.directionVecCap = Config.UNIVERSE_DIRLENGTH_LIMIT/this.directionVec.length();
+			this.directionVecCap = Config.FORCEFIELD_NEW_DIRLENGTH/this.directionVec.length();
 		
 		Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
 		
@@ -610,5 +607,10 @@ public class Orbit extends Motion
 	 */
 	public Matrix44 getTransform() {
 		return transform;
+	}
+
+	@Override
+	public Matrix44 getBasicOrientation() {
+		return basicOrientation;
 	}
 }

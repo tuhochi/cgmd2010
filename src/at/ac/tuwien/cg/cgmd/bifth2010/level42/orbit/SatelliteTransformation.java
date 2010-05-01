@@ -46,6 +46,8 @@ public abstract class SatelliteTransformation implements Persistable{
 	 * @param orientation the new orientation
 	 */
 	public abstract void setBasicOrientation(Matrix44 orientation);
+	
+	public abstract void reset();
 
 	/**
 	 * Restore a satellite transformation

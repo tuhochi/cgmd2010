@@ -141,4 +141,11 @@ public class MajorAxisTransformation extends SatelliteTransformation
 	public void setBasicOrientation(Matrix44 basicOrientation) {
 		this.basicOrientation.copy(basicOrientation);
 	}
+
+	@Override
+	public void reset() {
+		this.qxCurr = 0;
+		this.qyCurr = 0;
+		this.qzCurr = 0;
+	}
 }
