@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,10 @@ public class GameManager implements Renderable, EventListener {
 	/** The TextView to show the time left. */
 	private TextView timeText;
 
+	/** If there's a touch on the screen */
+	static protected boolean touchDown;
+	static protected float touchX;
+	static protected float touchY;
 	
 	/**
 	 * @param gl
@@ -83,6 +88,10 @@ public class GameManager implements Renderable, EventListener {
 		animators = new Hashtable<Integer, Animator>();
 		
 		EventManager.getInstance().addListener(this);
+		
+		touchDown = false;
+		touchX = 0;
+		touchY = 0;
 		
 		scrollSpeed = 100f * 0.001f; // Pixel per second
 		totalMoney = 100;
@@ -135,20 +144,21 @@ public class GameManager implements Renderable, EventListener {
 		shelf.update(scrollSpeed * dt);
 		bunny.update(dt);
 		
+		// Update all Animators
+		Enumeration<Integer> keys = animators.keys();		
+		while(keys.hasMoreElements()) {
+			animators.get(keys.nextElement()).update(dt);
+		}
+		
+		// TODO: Move gameTime to TimeUtil
 		gameTime -= (dt/1000.f);
 		// TODO Somehow this doesn't work here (and at many more places :( )
 		//timeText.setText("Time:"+(int)gameTime);
 		if(gameTime <= 0.f)
 		{
-			gameOver();
-		}
-		
-		
-		// Update all Animators
-		Enumeration<Integer> keys = animators.keys();		
-		while(keys.hasMoreElements()) {
-			animators.get(keys.nextElement()).update(dt);
-		}				
+			// TODO: Enable this again
+//			gameOver();
+		}						
 	}
 
 	
@@ -180,11 +190,19 @@ public class GameManager implements Renderable, EventListener {
 
 	/**
 	 *  Reacts to moves and presses on the touchscreen.
+	 *
+	 * @param x The x coord in render space.
+	 * @param y The y coord in render space.
+	 * @param action The type of touch event. @see MotionEvent
 	 */
-	public void onTouch(float x, float y) {
+	public void touchEvent(float x, float y, int action) {
 		
-		shelf.hitTest(x, y);
+		touchDown = (action != MotionEvent.ACTION_UP);
+		touchX = x;
+		touchY = y;
 		
+		// TODO: Do it the classic way
+		shelf.touchEvent(x, y);
 	}
 	
 
@@ -209,16 +227,18 @@ public class GameManager implements Renderable, EventListener {
 			// This prevents displaying a negative money count.
 			if(totalMoney < 0) totalMoney = 0;
 			moneyText.setText("Money:" + totalMoney + "$");
-			if (totalMoney == 0) {				
-				gameOver();
+			if (totalMoney == 0) {
+				// TODO Enable this again
+//				gameOver();
 			}
 			
 			
 			// Move it to the basket.
+			pe.animated = true;
 			float[] pos = shoppingCart.getNextProductPosition();
 			Animator a = new Animator(pe, pos[0], pos[1], 30);
 			animators.put(a.id, a);
-			shoppingCart.addProduct(pe);					
+			shoppingCart.addProduct(pe);
 		}
 		break;
 		

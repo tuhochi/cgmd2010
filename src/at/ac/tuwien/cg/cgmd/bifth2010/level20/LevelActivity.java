@@ -23,6 +23,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView;
 public class LevelActivity extends Activity {
 
 	private RenderView renderView;
+	private TouchListener touchListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +33,16 @@ public class LevelActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.l20_level);
-        renderView = (RenderView)findViewById(R.id.l20_RenderView);        
+        renderView = (RenderView)findViewById(R.id.l20_RenderView);
+		
+        // Register our own TouchListener
+		touchListener = new TouchListener();		
+		renderView.setOnTouchListener(touchListener);      
 		
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());
+		
 	}
 	
 

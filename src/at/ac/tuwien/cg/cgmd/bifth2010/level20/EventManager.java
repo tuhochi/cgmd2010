@@ -81,10 +81,10 @@ public class EventManager {
 	 * @param eventId 	The unique identifier of the event.
 	 * @param eventData	Data necessary for the listeners to handle the event properly.
 	 */
-	public void dispatchEvent(int eventID, Object eventData) {
+	public void dispatchEvent(int eventId, Object eventData) {
 		ListIterator<EventListener> itr = listeners.listIterator();
 		while(itr.hasNext()) {
-			itr.next().handleEvent(eventID, eventData);
+			itr.next().handleEvent(eventId, eventData);
 		}
 	}
 	

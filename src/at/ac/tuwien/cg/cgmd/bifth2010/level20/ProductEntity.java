@@ -17,6 +17,11 @@ public class ProductEntity extends RenderEntity implements Clickable {
 	protected boolean clickable;
 	
 	/**
+	 * Flag whether the entity is currently animated or not. (If an animator is attached to it)
+	 */
+	protected boolean animated;
+	
+	/**
 	 * The price of the product.
 	 */
 	protected int price;
