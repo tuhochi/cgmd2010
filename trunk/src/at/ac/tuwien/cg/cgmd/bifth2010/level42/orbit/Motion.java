@@ -77,6 +77,7 @@ public abstract class Motion implements Persistable
 	public void setInsidePlanet(boolean isInsidePlanet){
 		this.isInsidePlanet = isInsidePlanet;
 	}
+	public abstract Matrix44 getBasicOrientation();
 	
 	public abstract void persist(DataOutputStream dos) throws IOException;
 	public abstract void restore(DataInputStream dis) throws IOException;

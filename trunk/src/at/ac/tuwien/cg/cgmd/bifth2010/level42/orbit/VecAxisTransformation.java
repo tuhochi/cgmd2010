@@ -153,4 +153,9 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		
 		//Log.d(LevelActivity.TAG,"ratio="+(speed/qv) + " speed="+speed+" qv="+qv);
 	}
+
+	@Override
+	public void reset() {
+		this.qvCurr = 0;
+	}
 }

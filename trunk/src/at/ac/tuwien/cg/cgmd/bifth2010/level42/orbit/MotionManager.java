@@ -74,8 +74,8 @@ public class MotionManager {
 		}else{
 			Motion oldMotion = entity.getMotion();
 			entity.setMotion(motion);	
-			motion.setSatTrans(oldMotion.getSatTrans());
 			motion.setTransform(entity.getTransformation());
+			motion.setSatTrans(oldMotion.getSatTrans());
 		}
 	}
 	
@@ -94,20 +94,20 @@ public class MotionManager {
 				Movable aimEntity = CollisionManager.instance.getNearestToCenterEntity();
 				Vector3 aimCenter = null;
 				if(aimEntity!=null)
-					aimCenter = CollisionManager.instance.getNearestToCenterEntity().getBoundingSphereWorld().center;
+					aimCenter = aimEntity.getBoundingSphereWorld().center;
 				else
 					aimCenter = Config.UNIVERSE_CENTER;
 				
 				tempForceDirectionVec.set(aimCenter);
-				tempForceDirectionVec.subtract(entity.getBoundingSphereWorld().center);		
+				tempForceDirectionVec.subtract(entity.getCurrentPosition());		
 				
 				Log.d(LevelActivity.TAG," push force="+pushVec.length());
 				
 				DirectionalMotion dirMotion =  
-					new DirectionalMotion(	entity.getBoundingSphereWorld().center,
+					new DirectionalMotion(	entity.getCurrentPosition(),
 											tempForceDirectionVec,
 											pushVec.length()*Config.SELECTION_FORCE_FACTOR,
-											null);
+											motion.getBasicOrientation());
 				//exchange motion
 				setMotion(dirMotion, entity);
 			}
@@ -148,11 +148,10 @@ public class MotionManager {
 		for(int i=0; i<list.size();i++)
 		{
 			tempEntity = list.get(i);
+			tempEntity.getMotion().update(dt);
+			
 			//check the outer limits
 			checkUniverseLimits(tempEntity);
-			
-			tempEntity.getMotion().update(dt);
-
 		}
 	}
 	
@@ -164,6 +163,7 @@ public class MotionManager {
 	
 		
 		if(motion instanceof Orbit){
+			
 			Orbit orbit = (Orbit) motion;
 			
 			if(orbit.directionVec.length()<Config.FORCEFIELD_DIRLENGTH_LIMIT){
@@ -172,12 +172,13 @@ public class MotionManager {
 			if(orbit.centerVec.length()<Config.FORCEFIELD_CENTERLENGTH_LIMIT){
 				centerRatio = Config.FORCEFIELD_NEW_CENTERLENGTH/(orbit.centerVec.length());
 			}
-			
-			if(dirRatio!=1f || centerRatio!=1f)
+		
+			if(dirRatio!=1f || centerRatio!=1f){
 				orbit.morphAxisScale(	centerRatio, 
 										dirRatio, 
 										Config.FORCEFIELD_CENTERLENGTH_SCALESPEED,
 										Config.FORCEFIELD_DIRLENGTH_SCALESPEED );
+			}
 			
 		}
 	}
@@ -187,8 +188,9 @@ public class MotionManager {
 		Motion motion = entity.getMotion();
 		
 		if(motion instanceof DirectionalMotion){
-			if(entity.getBoundingSphereWorld().center.length()>Config.UNIVERSE_CENTERLENGTH_LIMIT){
+			if(entity.getCurrentPosition().length()>Config.UNIVERSE_CENTERLENGTH_LIMIT){
 				//change to orbit motion
+				Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());
 				transformDirMotionInOrbit(entity);
 			}
 		}
@@ -197,22 +199,29 @@ public class MotionManager {
 	public void transformDirMotionInOrbit(Movable obj){
 		
 		if(obj.getMotion() instanceof DirectionalMotion){
+			
+			Log.d(LevelActivity.TAG,"TRANSFORM");
 			DirectionalMotion oldDirMotion = (DirectionalMotion)obj.getMotion();
 			
 			//set to the actual direction and normalize
 			deflactionDirVec.set(obj.getMotion().getCurrDirectionVec()).normalize();
 			// * centerVec * 4
-			deflactionDirVec.multiply(obj.getBoundingSphereWorld().center.length()*4f);
+			deflactionDirVec.multiply(obj.getCurrentPosition().length()*4f);
 			// + small deflaction for cross prod
 			deflactionDirVec.add(Constants.DUMMY_VARIATION_VEC);
 									
-			Orbit newOrbit = new Orbit(	obj.getBoundingSphereWorld().center,
+			Orbit newOrbit = new Orbit(	obj.getCurrentPosition(),
 										Config.UNIVERSE_CENTER,
 										deflactionDirVec,
 										oldDirMotion.getSpeed(),
-										null);
-		
-			newOrbit.rotateDirectionVec(90,8);			
+										oldDirMotion.getBasicOrientation());
+
+			
+//			Vector3 tempCenter = new Vector3(newOrbit.centerVec).normalize();
+//			Vector3 tempDir  = new Vector3(newOrbit.directionVec).normalize();
+//
+//			Log.d(LevelActivity.TAG," angle....="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
+			newOrbit.rotateDirectionVec(-90,8);			
 			setMotion(newOrbit,obj);
 			checkInnerForceField(obj);
 		}
@@ -284,7 +293,7 @@ public class MotionManager {
 										float minSpeed,float maxSpeed,
 										float minQx,float maxQx,
 										float minQz,float maxQz,
-										int minDistance,int maxDistance,
+										float minDistance,float maxDistance,
 										float minDistanceRatio, float maxDistanceRatio)
 	{
 		Matrix44 rotation = new Matrix44();
@@ -326,6 +335,7 @@ public class MotionManager {
 										(float)rand.nextDouble()*maxSpeed + minSpeed,
 										entity.getBasicOrientation());
 				
+				
 				//generate random satellite transformation
 				rotationAxis.x = (float)rand.nextDouble();
 				rotationAxis.y = (float)rand.nextDouble();
@@ -341,6 +351,10 @@ public class MotionManager {
 				
 				generatedOrbit.setSatTrans(satTransform);
 				addMotion(generatedOrbit,entity);
+				
+				generatedOrbit.limitUniverse();
+				checkInnerForceField(entity);
+				
 			}
 		}
 	}

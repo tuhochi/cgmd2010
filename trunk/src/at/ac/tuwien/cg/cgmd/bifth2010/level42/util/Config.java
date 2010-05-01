@@ -55,7 +55,7 @@ public class Config
 	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 30;
 	
 	/** defines the maximum relative speed for satellites */
-	public static float UNIVERSE_SPEED_LIMIT = 10;
+	public static float UNIVERSE_SPEED_LIMIT = 8;
 	
 	/** ratio between speed and rotation angle */
 	public static float SATELLITE_SPEEDROTA_RATIO = 4f;
@@ -67,10 +67,10 @@ public class Config
 	public static float COLLISION_PENETRATION_DEPTH = 0.2f;
 	
 	/** minimal force to change the motion into a directional motion */
-	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 15f;
+	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 10f;
 	
 	/** minimal force to change the motion into a directional motion */
-	public static float MIN_STRENGTH_FOR_UNDAMPED_DIRECTIONAL = 3f;
+	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 20f;
 	
 	public static int COUNT_NEAREST_ENTITIES = 5;
 	
