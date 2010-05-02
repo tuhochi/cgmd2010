@@ -17,7 +17,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
  */
 public abstract class GameObject {
 	//smallest size of an object (= player size, = tile size)
-	public static final int BLOCKSIZE = 34;
+	public static final int BLOCKSIZE = 32;
 	
 	//offset of background and beer due to movement
 	public static final Vector2 offset = new Vector2(0, 0);
