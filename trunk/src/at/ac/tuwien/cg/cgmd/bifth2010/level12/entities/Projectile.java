@@ -25,6 +25,11 @@ public abstract class Projectile extends GLObject{
 	public void setXY( float x, float y){
 		mX = x;
 		mY = y;
+		initVBOs();
+	}
+	
+	
+	public void initVBOs(){	
 		mXTranslate = 0.0f;
 		mLastFrametime = System.currentTimeMillis();
 		float[] vertices = {
@@ -62,10 +67,10 @@ public abstract class Projectile extends GLObject{
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
 		
-		ByteBuffer tbb = ByteBuffer.allocateDirect(texture.length * 4);
+		ByteBuffer tbb = ByteBuffer.allocateDirect(mTexturePoints.length * 4);
 		tbb.order(ByteOrder.nativeOrder());
 		mTextureBuffer = tbb.asFloatBuffer();
-		mTextureBuffer.put(texture);
+		mTextureBuffer.put(mTexturePoints);
 		mTextureBuffer.position(0);
 	}
 	

@@ -18,13 +18,14 @@ public class BasicTower extends Tower {
 		mColor[2] = 0.0f;
 		mColor[3] = 1.0f;
 		mTexture =  R.drawable.l12_icon;
-		ByteBuffer tbb = ByteBuffer.allocateDirect(texture.length * 4);
+		ByteBuffer tbb = ByteBuffer.allocateDirect(mTexturePoints.length * 4);
 		tbb.order(ByteOrder.nativeOrder());
 		mTextureBuffer = tbb.asFloatBuffer();
-		mTextureBuffer.put(texture);
+		mTextureBuffer.put(mTexturePoints);
 		mTextureBuffer.position(0);
 		mShootingInterval = Definitions.BASIC_TOWER_SHOOTING_INTERVALL;
 		initProjectiles();
+		mTexture = R.drawable.l12_basic_tower;
 	}
 	
 	
