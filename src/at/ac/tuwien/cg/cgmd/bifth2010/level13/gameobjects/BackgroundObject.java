@@ -36,9 +36,19 @@ public class BackgroundObject extends GameObject {
 		if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
 			//reset offset
 			GameObject.offset.sub(GameControl.movement);
-			//stop movement
-			GameControl.movement.x = 0;
-			GameControl.movement.y = 0;
+			//check if old movement is possible (only at corners)
+			if((GameControl.movement.x == 0 && GameControl.oldMovement.x != 0)|| (GameControl.movement.y == 0 && GameControl.oldMovement.y != 0)) {
+				GameObject.offset.add(GameControl.oldMovement);
+				if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
+					GameObject.offset.sub(GameControl.oldMovement);
+					//stop movement
+					GameControl.oldMovement.x = 0;
+					GameControl.oldMovement.y = 0;
+				}
+			}
+		}
+		else {
+			GameControl.oldMovement = GameControl.movement.clone();
 		}
 		//enable client state
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);

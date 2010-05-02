@@ -35,6 +35,8 @@ public class GameControl {
 	static boolean musicRunning = false;
 	//movement vector
 	public static Vector2 movement = new Vector2(0, 0);
+	//old movement vector
+	public static Vector2 oldMovement = new Vector2(0, 0);
 	
 	/**
 	 * needs to be called every frame to update game logic
@@ -60,6 +62,8 @@ public class GameControl {
 	}
 	
 	public static void movePlayer(float x,float y){
+		//remember old movement
+		oldMovement = movement.clone();
 		
 		if (!inJail && !drunkState){
 		float deltaX = Math.abs( x - MyRenderer.screenWidth / 2.0f);
