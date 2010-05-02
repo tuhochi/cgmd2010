@@ -9,6 +9,7 @@ import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.HouseModel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
@@ -31,6 +32,8 @@ public class Level {
 	private float mNextBird = 0;
 	private Player mPlayer;
 	private Quad mBird;
+	private ForceField mForceField1;
+	private ForceField mForceField2;
 	//private NormalModeWorld mWorld;
 	
 	public static final String PLAYER_LIFES = "feelGood";
@@ -65,6 +68,10 @@ public class Level {
         GLManager.getInstance().getTextures().add(R.drawable.l17_crate);
         GLManager.getInstance().getTextures().add(R.drawable.l17_vogel);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_forcefield);
+        
+        mForceField1 = new ForceField(50f, new Vector3(0,0,0), 200f, new Vector2(0.2f,-0.2f));
+        mForceField2 = new ForceField(50f, new Vector3(0,0,0), 200f, new Vector2(-0.2f,0f));
         
 	}
 	
@@ -78,12 +85,16 @@ public class Level {
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
     	gl.glFrontFace(GL10.GL_CCW);
 		
-    	
-    	
-		gl.glPushMatrix();
     	gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
     	gl.glEnable(GL10.GL_BLEND);
     	gl.glDepthMask(false);
+    	
+    	gl.glDisable(GL10.GL_FOG);
+    	mForceField1.draw();
+    	mForceField2.draw();
+    	gl.glEnable(GL10.GL_FOG);
+		gl.glPushMatrix();
+
 		for (House house : mFadeHouses) {
 			float dist = (float)Math.abs(mPlayer.getPosition().y - house.getPosition().y) - (house.getSize().y / 2.0f);
 			float alpha = (dist - 100.0f) / 30.0f;
@@ -123,11 +134,16 @@ public class Level {
 		//mPosition = Vector3.add(mPosition, Vector3.mult(mSpeed, elapsedSeconds));	
 		//mPosition = Vector3.add(mPosition, moveDelta);
 
+		
 		Vector3 playerPos = mPlayer.getPosition();
 		mSpeed.y -= elapsedSeconds * 2.0f;
 		mSpeed.y = (mSpeed.y < -60f) ? -60f : mSpeed.y;
 		moveDelta.y = Vector3.mult(mSpeed, elapsedSeconds).y;
 		updatePlayerPosition(moveDelta);
+		mForceField1.setPosition(new Vector3(0,mPlayer.getPosition().y - mForceField1.getHeight() / 2.0f, 0));
+		mForceField1.update(elapsedSeconds);
+		mForceField2.setPosition(new Vector3(0,mPlayer.getPosition().y - mForceField2.getHeight() / 2.0f, 0));
+		mForceField2.update(elapsedSeconds);
 		mNextHouse -= elapsedSeconds;
 		mNextBird -= elapsedSeconds;
 		if(mHouses.size() < 40 && mNextHouse <= 0)
@@ -197,7 +213,13 @@ public class Level {
 	{
 		Vector3 newPos = Vector3.add(mPlayer.getPosition(), moveDelta);
 			
-		
+		if(Math.sqrt(newPos.x * newPos.x + newPos.z * newPos.z) + mPlayer.getRadius() * 10.0f > mForceField1.getForceFieldRadius())
+		{
+			newPos.x = mPlayer.getPosition().x;
+			newPos.z = mPlayer.getPosition().z;
+			moveDelta.x = 0;
+			moveDelta.z = 0;
+		}
 		List<House> remove = new ArrayList<House>();
 		for(House house:mHouses){
 			if(house.intersect(newPos, mPlayer.getRadius())) {
