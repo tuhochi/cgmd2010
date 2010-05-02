@@ -237,6 +237,7 @@ public class GameControl {
 		mistress.isActive = false;
 		mistressCounter++;
 		money = money - 10;
+		SoundManager.playSound(SoundFX.ORGASM);
 		
 	}
 	
