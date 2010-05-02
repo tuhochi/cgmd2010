@@ -25,6 +25,9 @@ public class Config
 	/** the maximum milliseconds for a long press */
 	public static long MAX_LONG_PRESS_TIME = 400;
 	
+	/** The Constant TOUCH_DEADZONE. */
+	public static final int TOUCH_DEADZONE = 30;
+	
 	/** PHYSICS / UNIVERSE. */
 
 	/** center position of the universe / orbits */

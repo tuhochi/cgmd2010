@@ -4,6 +4,7 @@
 	android:versionCode="1" android:versionName="1.0"
 	package="at.ac.tuwien.cg.cgmd.bifth2010">
 	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<application
 		android:icon="@drawable/l00_icon"
 		android:label="@string/l00_nameofthegame_full" android:debuggable="true">
@@ -269,6 +270,7 @@
     			<category android:name="android.intent.category.DEFAULT"/>
    			</intent-filter>
   		</activity>
+  		
   		<activity
    			android:name=".level70.LevelActivity">
    			<intent-filter>
@@ -277,8 +279,7 @@
    			</intent-filter>
   		</activity>
   		
-  		
-  		<activity 
+		<activity 
   			android:name=".level33.HelpActivity"
   			android:label="@string/l33_GameName">
 			<intent-filter>
@@ -446,18 +447,21 @@
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level20.LAUNCH_HELP"/>
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
-		</activity><activity android:name=".level12.LevelActivity"><intent-filter><action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level12.LAUNCH_LEVEL"></action>
-<category android:name="android.intent.category.DEFAULT"></category>
-</intent-filter>
-</activity>
-	
+		</activity>
 		
+		<activity
+			android:name=".level12.LevelActivity">
+			<intent-filter>
+				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level12.LAUNCH_LEVEL"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+			</intent-filter>
+		</activity>
 	
-</application>
+	</application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<supports-screens
 		android:largeScreens="true"
 		android:normalScreens="true" android:smallScreens="false"
 		android:anyDensity="true" />
-</manifest> 
+</manifest>
