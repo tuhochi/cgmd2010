@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
@@ -95,8 +96,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	 * constructor
 	 * @param context
 	 */
-	public MyRenderer(Context context) {
-		super(context);
+	public MyRenderer(Context context, AttributeSet attr) {
+		super(context, attr);
 		//init members
 		SoundManager.initSoundManager(context);
 		this.context = context;
@@ -148,6 +149,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		{
 			accTime = 0;
 		}
+		
+		//update game time
+		GameTimer.getInstance().update();
 		
 		//clear color
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -236,6 +240,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		//set background color
 		gl.glClearColor(1.0f, 0.0f, 0.0f, 0.5f);
+	
 	}
 	
 
