@@ -12,7 +12,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class SoundManager {
 
 	/** enumeration of existing sounds **/
-	public enum SoundFX {POLICE,DRUNK,MUSIC};
+	public enum SoundFX {POLICE,DRUNK,MUSIC,BURP};
 	//to handle multiple sounds at onece
 	private static int soundamount = 8;
 	/** soundpool for playing sounds **/
@@ -49,6 +49,7 @@ public class SoundManager {
 		soundMap.put(SoundFX.POLICE, soundPool.load(context,R.raw.l13_police,1));
 		soundMap.put(SoundFX.DRUNK, soundPool.load(context,R.raw.l13_drunk,1));
 		soundMap.put(SoundFX.MUSIC, soundPool.load(context,R.raw.l13_music,2 ));
+		soundMap.put(SoundFX.BURP, soundPool.load(context, R.raw.l13_burp, 1));
 		
 	}
 	
