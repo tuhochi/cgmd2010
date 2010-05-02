@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Window;
@@ -68,6 +69,9 @@ public class LevelActivity extends Activity
 	
 	/** The vibrator. */
 	private Vibrator vibrator;
+	
+	/** The PowerManagers Wake Lock */
+	private PowerManager.WakeLock wakeLock;
 	
 	/**
 	 * Instantiates a new level activity.
@@ -162,6 +166,8 @@ public class LevelActivity extends Activity
 		fps = (TextView)findViewById(R.id.l42_fpsTextField);
 
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, TAG); 
 		
 		// set result in case the user cancels the activity
 		SessionState s = new SessionState();
@@ -198,6 +204,7 @@ public class LevelActivity extends Activity
 		super.onResume();
 		Log.v(TAG,"onResume()");
 		
+		wakeLock.acquire();
 		renderView.synchronizer.setActive(true);
 		renderView.onResume();
 	}
@@ -212,6 +219,7 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onPause()");
 		renderView.synchronizer.setActive(false);
 		renderView.onPause();
+		wakeLock.release();
 	}
 	
 	/* (non-Javadoc)

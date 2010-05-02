@@ -10,10 +10,6 @@ import android.view.MotionEvent;
  */
 public class CustomGestureDetector
 {
-	
-	/** The Constant MOVE_THRESHOLD. */
-	private static final int MOVE_THRESHOLD = 30;
-	
 	/** The listener. */
 	private final CustomOnGestureListener listener;
 	
@@ -70,7 +66,7 @@ public class CustomGestureDetector
 			float distanceX = lastX-e.getX();
 			float distanceY = lastY-e.getY();
 			
-			if(!isLongPress || Math.abs(e.getX()-firstX) > MOVE_THRESHOLD || Math.abs(e.getY()-firstY) > MOVE_THRESHOLD)
+			if(!isLongPress || Math.abs(e.getX()-firstX) > Config.TOUCH_DEADZONE || Math.abs(e.getY()-firstY) > Config.TOUCH_DEADZONE)
 			{
 				isLongPress = false;
 				listener.onScroll(currentStartEvent, e, distanceX, distanceY);
