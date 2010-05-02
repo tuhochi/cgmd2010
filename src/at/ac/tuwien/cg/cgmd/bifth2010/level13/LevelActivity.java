@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
  * 
@@ -22,8 +23,12 @@ public class LevelActivity extends Activity {
 	//custom renderer
 	private MyRenderer myRenderer;
 	
-	private TextView fpsTextView,guiTextView;
-	private String fpsString,guiString;
+	private TextView fpsTextView;
+	private String fpsString;
+	private TextView moneyTextView;
+	private String moneyString;
+	private TextView timeTextView;
+	private String timeString;
 	
 	
     /**
@@ -41,17 +46,15 @@ public class LevelActivity extends Activity {
 	 
 	 	//setup layout with fps-overlay
 	 	setContentView(R.layout.l13_level);
-	 	FrameLayout frameLayout = (FrameLayout)findViewById(R.id.l13_levelLayout);
+	 	//FrameLayout frameLayout = (FrameLayout)findViewById(R.id.l13_levelLayout);
+	 	myRenderer = (MyRenderer)findViewById(R.id.l13_MyRenderer);
 	 	fpsTextView = (TextView)findViewById(R.id.l13_fpsTextView);
-	 	frameLayout.removeView(fpsTextView);
-	 	myRenderer = new MyRenderer(this);
-	 	frameLayout.addView(myRenderer);
-	 	frameLayout.addView(fpsTextView);
-	   // guiTextView = (TextView)findViewById(R.id.l13_JailText);
-	  
-	 	//frameLayout.removeView(guiTextView);
-	 //	frameLayout.addView(guiTextView);
-	 	
+	 	timeTextView = (TextView)findViewById(R.id.l13_timeText);
+	 	moneyTextView = (TextView)findViewById(R.id.l13_moneyText);
+	 	//frameLayout.removeView(fpsTextView);
+	 	//frameLayout.addView(myRenderer);
+	 	//frameLayout.addView(fpsTextView);
+	
 
 	 	
 
@@ -63,15 +66,43 @@ public class LevelActivity extends Activity {
 	 		public void run() {
 	 			FPSCounter counter = FPSCounter.getInstance();
 	 			fpsString = "fps: " + counter.getFPS();
-	 			/*
-	 			if(GameControl.inJail)
-	 				guiString = "YOU ARE IN ARREST ";
-	 			else
-	 				guiString = "";*/
-	 			//guiString = "YOU ARE IN ARREST ";
+	 		
 	 			handleUIChanges.sendEmptyMessage(0);
 	 		}
 	 	}, 0, 1000);
+	 	
+	 	//timer for game time
+		Timer gameTimeUpdateTimer = new Timer();
+	 	gameTimeUpdateTimer.schedule(new TimerTask() {
+	 	
+	 		@Override
+	 		public void run() {
+	 			GameTimer gameTimer = GameTimer.getInstance();
+	 			timeString = "Time: " + gameTimer.getRemainingTimeString();
+	 			handleUIChanges.sendEmptyMessage(0);
+	 			if(gameTimer.isOver()) {
+	 				SessionState s = new SessionState();
+	 				s.setProgress(-GameControl.money); 
+	 				setResult(Activity.RESULT_OK, s.asIntent());
+	 				finish();
+	 			}
+	 		}
+	 	}, 0, 500);
+	 	
+	 	//timer for money
+		Timer moneyUpdateTimer = new Timer();
+	 	moneyUpdateTimer.schedule(new TimerTask() {
+	 	
+	 		@Override
+	 		public void run() {
+	 			moneyString = "Money: " + GameControl.money + "$";
+	 			handleUIChanges.sendEmptyMessage(0);
+	 		}
+	 	}, 0, 500);
+	 	
+	 	SessionState s = new SessionState();
+		s.setProgress(0); 
+		setResult(Activity.RESULT_OK, s.asIntent());
     }
     
    private Handler handleUIChanges = new Handler() {
@@ -79,7 +110,8 @@ public class LevelActivity extends Activity {
 	 public void handleMessage(Message msg) {
 		 super.handleMessage(msg);
 		 fpsTextView.setText(fpsString);
-	//	 guiTextView.setText(guiString);
+		 timeTextView.setText(timeString);
+		 moneyTextView.setText(moneyString);
 	 }
    };
    

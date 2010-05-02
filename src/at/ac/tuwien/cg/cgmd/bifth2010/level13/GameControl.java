@@ -33,6 +33,7 @@ public class GameControl {
 	static boolean inJail = false;
 	static SoundManager sound;
 	static boolean musicRunning = false;
+	static int money = 0;
 	//movement vector
 	public static Vector2 movement = new Vector2(0, 0);
 	//old movement vector
@@ -139,6 +140,7 @@ public class GameControl {
 	public static void consumeBeer(){
 		SoundManager.playSound(SoundFX.BURP);
 		consumedBeer++;
+		money--;
 	}
 	
 	/**
@@ -234,6 +236,7 @@ public class GameControl {
 	public static void encounterMistress(MistressObject mistress){
 		mistress.isActive = false;
 		mistressCounter++;
+		money = money - 10;
 		
 	}
 	
