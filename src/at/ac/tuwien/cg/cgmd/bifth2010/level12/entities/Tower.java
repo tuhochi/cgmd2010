@@ -29,6 +29,11 @@ public abstract class Tower extends GLObject {
 	public void setXY( float xCentr, float yCentr ){
 		mX = xCentr;
 		mY = yCentr;
+		this.setActiveState(true);
+		initVBOs();
+	}
+	
+	public void initVBOs(){
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
 				(mX + mRadius),	(mY - mRadius), 1.0f,
@@ -61,9 +66,18 @@ public abstract class Tower extends GLObject {
 		mColorBuffer = cbb.asFloatBuffer();
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
-		this.setActiveState(true);
 		mTimeLastProjectileShot = System.currentTimeMillis();
+		for( int c = 0; c < mProjectiles.length; c++){
+			mProjectiles[c].initVBOs();
+		}
+		
+		ByteBuffer tbb = ByteBuffer.allocateDirect(mTexturePoints.length * 4);
+		tbb.order(ByteOrder.nativeOrder());
+		mTextureBuffer = tbb.asFloatBuffer();
+		mTextureBuffer.put(mTexturePoints);
+		mTextureBuffer.position(0);
 	}
+	
 	
 	public void setViewPortLength(int width) {
 		mScreenWidth = width;

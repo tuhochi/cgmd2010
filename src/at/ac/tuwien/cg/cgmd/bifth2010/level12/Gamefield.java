@@ -16,50 +16,9 @@ public class Gamefield {
 	private int mYSegCount = -1;
 	private float mSegLength = 1;
 	private float mLastFieldLength = 5.0f;
-	private float[] mSegCol1  = {0.8f, 1.0f, 0.2f };
-	private float[] mSegCol2  = {0.0f, 0.8f, 0.0f };
-	private float[] mBorderCol = { 0.5f, 0.5f, 0.0f };
+	private float[] mSegCol1  = {1.0f, 0.0f, 0.0f };
+	private float[] mSegCol2  = {1.0f, 0.0f, 0.0f };
 	
-	/** Buffer holding the vertices */
-	private FloatBuffer vertexBuffer;
-	/** Buffer holding the texture coordinates */
-	private FloatBuffer textureBuffer;
-	/** Buffer holding the indices */
-	private ByteBuffer indexBuffer;
-	/** Buffer holding the colors */
-	private FloatBuffer colorBuffer;
-	
-	 private float vertices[] = {
-				// vertices according to faces
-				-0.5f, -0.5f, 0.5f,  //Vertex 0
-				 0.5f, -0.5f, 0.5f,  //v1
-				-0.5f,  0.5f, 0.5f,  //v2
-				 0.5f,  0.5f, 0.5f,  //v3
-			};
-		    
-		    /** The initial texture coordinates (u, v) */	
-		    private float texture[] = {    		
-				// mapping coordinates for the vertices
-		    	 	0.0f, 1.0f,
-					1.0f, 1.0f, 	
-					0.0f, 0.0f,
-					1.0f, 0.0f
-			};
-		        
-		    /** The initial indices definition */	
-		    private byte indices[] = {
-				// faces definition
-				0,1,3, 0,3,2,
-			};
-
-		    /** The initial color definition */	
-		    private float colors[] = {
-				// faces definition
-				1.0f, 1.0f, 1.0f, 
-				1.0f, 1.0f, 1.0f,
-				1.0f, 1.0f, 1.0f,
-				1.0f, 1.0f, 1.0f,
-			};
 	
 	public Gamefield( int xSegCount, int ySegCount, float segLength){		
 		mXSegCount = xSegCount;
@@ -75,12 +34,14 @@ public class Gamefield {
 				Field f;
 				if( fieldone) {
 					f = new Field( x*mSegLength, y*mSegLength, (x+1)*mSegLength, (y+1)*mSegLength );
-					f.setColor(mSegCol1[0], mSegCol1[1], mSegCol1[2]);
+					f.setColor(mSegCol1[0], mSegCol1[1], mSegCol1[2], 0);
+					f.initVBOs();
 					fieldone = false;
 				}
 				else{
 					f = new Field( x*mSegLength, y*mSegLength, (x+1)*mSegLength, (y+1)*mSegLength );
-					f.setColor(mSegCol2[0], mSegCol2[1], mSegCol2[2]);
+					f.setColor(mSegCol2[0], mSegCol2[1], mSegCol2[2], 1);
+					f.initVBOs();
 					fieldone = true;
 				}
 				mFields[fieldcounter] = f;
@@ -92,10 +53,11 @@ public class Gamefield {
 		mLastFields = new Field[ mXSegCount ];
 		for( int i = 0; i < mLastFields.length; i++){
 			mLastFields[i] = new Field( mXSegCount * mSegLength, i * mSegLength, (mXSegCount * mSegLength + mLastFieldLength), (i+1)*mSegLength );
-			mLastFields[i].setColor( 1.0f, 1.0f, 0.0f);
+			mLastFields[i].setColor( 1.0f, 1.0f, 0.0f, 3);
+			mLastFields[i].setOccupied(true);
 		}
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+		/*ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(vertices);
@@ -115,12 +77,16 @@ public class Gamefield {
 		byteBuf.order(ByteOrder.nativeOrder());
 	    colorBuffer = byteBuf.asFloatBuffer();
 	    colorBuffer.put(colors);
-	    colorBuffer.position(0);
-	    
+	    colorBuffer.position(0); */
+	}
+	
+	public void onResume(){
+		for( int i = 0; i < mFields.length; i++) mFields[i].initVBOs();
+		for( int i = 0; i < mLastFields.length; i++) mLastFields[i].initVBOs();
 	}
 	
 	
-	public void draw( GL10 gl, float mWidth, float mHeight){
+	public void draw( GL10 gl){
 		for( int i = 0; i < mFields.length; i++){
 			mFields[i].draw(gl);
 		}
@@ -128,7 +94,7 @@ public class Gamefield {
 			mLastFields[i].draw(gl);
 		}
 		
-		gl.glTranslatef(mWidth*0.5f, mHeight*0.5f, 0.0f);
+		/*gl.glTranslatef(mWidth*0.5f, mHeight*0.5f, 0.0f);
 		gl.glScalef(mWidth, mHeight, 1.0f);
 		//tex.setTexture(R.drawable.icon);
 		//TextureManager.getSingletonObject().setTexture(R.drawable.l12_icon);
@@ -153,7 +119,7 @@ public class Gamefield {
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisable(GL10.GL_TEXTURE_2D);
-		gl.glLoadIdentity();
+		gl.glLoadIdentity();*/
 	}
 
 

@@ -24,7 +24,7 @@ public class GLView extends GLSurfaceView implements Renderer {
 	private Activity mContext;
 	private Vector< MoneyCarrier > mEnemies = null;
 	
-	private int mEnemieCount = 0;
+	//private int mEnemieCount = 0;
 	private Gamefield mGamefield = null;
 	private int mBasicTowerCounter = 0;
 	private BasicTower[] mBasicTower = null; //tower types, wo gezeichnet in der towerklasse
@@ -33,27 +33,41 @@ public class GLView extends GLSurfaceView implements Renderer {
 	private int mTowerTypeSelectedByPlayer = Definitions.BASIC_TOWER;
 	private float mXPos, mYPos; //picking
 	private int mWidth, mHeight; //viewport
-	private float mStartTime = 0;
-	private float mPassedTime = 0;
+	//private float mPassedTime = 0;
 	private long mLastCollDetDone = 0;
+	
 	
 	public GLView(Activity context, int w, int h) {
 		super(context);
 		System.out.println("GLVIEW CONSTRUCTOR");
 		this.setRenderer( this );
 		mContext = context;
-		mStartTime = System.currentTimeMillis();
 		mWidth = w;
 		mHeight = h;
 	}
+	
+	@Override
+	public void onResume(){
+		if( mEnemies != null )System.out.println("On Resume - Enemies count: "+mEnemies.size());
+		if( mEnemies != null ) for( int i = 0; i < mEnemies.size(); i++) mEnemies.get(i).initVBOs();
+		if( mBasicTower != null) for( int i = 0; i < mBasicTower.length; i++) mBasicTower[i].initVBOs();
+		if( mGamefield != null) mGamefield.onResume();
+		super.onResume();
+	}
 
 	@Override
+	public void onPause(){
+		if( mEnemies != null )System.out.println("On Pause - Enemies count: "+mEnemies.size());
+		super.onPause();
+	}
+	
+	
+	@Override
 	public void onDrawFrame(GL10 gl) {
-		mPassedTime = mStartTime - System.currentTimeMillis();	
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
-		texMan.setTexture(R.drawable.l12_grass);
-		mGamefield.draw(gl, mWidth, mHeight);	
+		//texMan.setTexture(R.drawable.l12_grass);
+		mGamefield.draw(gl);	
 		System.out.println("mBasicTowerLength: "+mBasicTower.length+" mEnemies: "+mEnemies.size());
 		for ( int i = 0; i < mBasicTower.length; i++){
 			if(mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl); 
@@ -109,17 +123,28 @@ public class GLView extends GLSurfaceView implements Renderer {
 	     gl.glDepthFunc(GL10.GL_LEQUAL);
 	     gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
 	     gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);	
+	     gl.glDisable(GL10.GL_DITHER);
 	}
 	
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		System.out.println("ON SURFACE CREATED!");		
+		System.out.println("ON SURFACE CREATED!");	
 		texMan = TextureManager.getSingletonObject();
 		texMan.initialize(gl, mContext);
-		texMan.add(R.drawable.l12_grass);
-		texMan.add(R.drawable.l12_icon);
-		texMan.loadTextures();			
+		texMan.add(R.drawable.l12_grass1);
+		texMan.add(R.drawable.l12_grass2);
+		texMan.add(R.drawable.l12_basic_tower);
+		texMan.add(R.drawable.l12_advanced_tower);
+		texMan.add(R.drawable.l12_hyper_tower);
+		texMan.add(R.drawable.l12_advanced_tower);
+		texMan.add(R.drawable.l12_basic_projectile);
+		texMan.add(R.drawable.l12_enemie_lvl0);
+		texMan.add(R.drawable.l12_enemie_lvl1);
+		texMan.add(R.drawable.l12_enemie_lvl2);
+		texMan.add(R.drawable.l12_enemie_lvl3);
+		texMan.add(R.drawable.l12_icon);	
+		texMan.loadTextures();	
 		initGameField( mWidth, mHeight);
 		initTower();
 		for( int i = 0; i < mBasicTower.length; i++ ) mBasicTower[i].setViewPortLength( mWidth );
@@ -177,7 +202,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemieCount++;
 					mEnemies.add( carrier );
 				}
 				break;
@@ -188,7 +212,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemieCount++;
 					mEnemies.add( carrier );
 				}
 				break;
@@ -199,7 +222,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemieCount++;
 					mEnemies.add( carrier );
 				}
 				break;
@@ -210,7 +232,6 @@ public class GLView extends GLSurfaceView implements Renderer {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemieCount++;
 					mEnemies.add( carrier );
 				}
 				break;

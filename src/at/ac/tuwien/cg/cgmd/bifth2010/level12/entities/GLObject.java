@@ -22,7 +22,7 @@ public abstract class GLObject {
 	protected int mTexture = 0;
 	
     /** The initial texture coordinates (u, v) */	
-    protected float texture[] = {    		
+    protected float mTexturePoints[] = {    		
     	 	0.0f, 1.0f,
 			1.0f, 1.0f, 	
 			0.0f, 0.0f,
@@ -81,12 +81,6 @@ public abstract class GLObject {
 	
 	public float getX(){
 		return mX;
-	}
-	
-	
-	public float distanceX( float x ){
-		System.out.println( "this.getX: "+this.getX()+" this.mX: "+this.mX+" obj.X: "+x+" Distance: "+ (x - this.getX()) );
-		return x - this.getX(); //bei -? achtung!
 	}
 	
 	

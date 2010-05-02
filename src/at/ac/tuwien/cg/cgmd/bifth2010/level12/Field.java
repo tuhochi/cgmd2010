@@ -5,20 +5,31 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.GLObject;
 
 
 public class Field extends GLObject{
 	private boolean mOccupied = false;
 	
+	private float mXStart, mYStart, mXEnd, mYEnd;
+	
+	
 	public Field( float xstart, float ystart, float xend, float yend ){
+		mXStart = xstart;
+		mYStart = ystart;
+		mXEnd = xend;
+		mYEnd = yend;
 		mX = ( xend - xstart ) / 2 + xstart;
 		mY = ( yend - ystart ) / 2 + ystart;
+	}
+	
+	public void initVBOs(){
 		float[] vertices = {
-				xstart,	ystart,	0.0f,
-				xend,	ystart,	0.0f,
-				xend,	yend,	0.0f,
-				xstart,	yend,	0.0f,
+				mXStart,	mYStart,	0.0f,
+				mXEnd,		mYStart,	0.0f,
+				mXEnd,		mYEnd,		0.0f,
+				mXStart,	mYEnd,		0.0f,
 		};
 		
 		ByteBuffer vertbuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -43,13 +54,18 @@ public class Field extends GLObject{
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f};
-		//mColor = colors;
 
 		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
 		cbb.order( ByteOrder.nativeOrder() );
 		mColorBuffer = cbb.asFloatBuffer();
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
+		
+		ByteBuffer tbb = ByteBuffer.allocateDirect(mTexturePoints.length * 4);
+		tbb.order(ByteOrder.nativeOrder());
+		mTextureBuffer = tbb.asFloatBuffer();
+		mTextureBuffer.put( mTexturePoints );
+		mTextureBuffer.position(0);
 	}
 	
 
@@ -69,7 +85,7 @@ public class Field extends GLObject{
 		return mOccupied;
 	}
 	
-	public void setColor( float r, float g, float b){
+	public void setColor( float r, float g, float b, int texture){
 		mColor[0]=r;
 		mColor[1]=g;
 		mColor[2]=b;
@@ -78,14 +94,9 @@ public class Field extends GLObject{
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f};
-		//mColor = colors;
-
-		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
-		cbb.order( ByteOrder.nativeOrder() );
-		mColorBuffer = cbb.asFloatBuffer();
-		mColorBuffer.put( colors );
-		mColorBuffer.position( 0 );
-		
+		mColor = colors;
+		if( texture == 0 ) mTexture = R.drawable.l12_grass1;
+		if( texture == 1 ) mTexture = R.drawable.l12_grass2;
 	}
 	
 }

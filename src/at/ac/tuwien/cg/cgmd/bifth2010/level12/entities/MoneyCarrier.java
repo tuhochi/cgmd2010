@@ -39,6 +39,11 @@ public abstract class MoneyCarrier extends GLObject {
 		mStartPos = xCentr;	
 		mX = xCentr;
 		mY = yCentr;
+		initVBOs();
+	}
+	
+	
+	public void initVBOs(){
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
 				(mX + mRadius),	(mY - mRadius), 1.0f,
@@ -73,10 +78,10 @@ public abstract class MoneyCarrier extends GLObject {
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
 		
-		ByteBuffer tbb = ByteBuffer.allocateDirect(texture.length * 4);
+		ByteBuffer tbb = ByteBuffer.allocateDirect(mTexturePoints.length * 4);
 		tbb.order(ByteOrder.nativeOrder());
 		mTextureBuffer = tbb.asFloatBuffer();
-		mTextureBuffer.put(texture);
+		mTextureBuffer.put(mTexturePoints);
 		mTextureBuffer.position(0);
 	}
 	
