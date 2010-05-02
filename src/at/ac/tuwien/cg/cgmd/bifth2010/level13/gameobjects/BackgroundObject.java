@@ -18,8 +18,8 @@ public class BackgroundObject extends GameObject {
 	 * constructor calls super() with object's dimensions
 	 */
 	public BackgroundObject() {
-		//object is 714*714 pixels
-		super(714, 714);
+		//object is 1024*1024 pixels
+		super(1024, 1024);
 	}
 	
 	/**
