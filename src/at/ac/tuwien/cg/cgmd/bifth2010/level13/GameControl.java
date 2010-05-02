@@ -137,6 +137,7 @@ public class GameControl {
 	
 	
 	public static void consumeBeer(){
+		SoundManager.playSound(SoundFX.BURP);
 		consumedBeer++;
 	}
 	
