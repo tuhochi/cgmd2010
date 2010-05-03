@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -106,18 +107,19 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		tfPoints.setText("$" + moneyToSpend);
 		
 		//Create gems
-		gemRound = new ModelGem(R.drawable.l84_gem_round);
+		gemRound = new ModelGem(R.drawable.l84_tex_gem_round);
 		gems.add(gemRound);
-		gemDiamond = new ModelGem(R.drawable.l84_gem_diamond);
+		gemDiamond = new ModelGem(R.drawable.l84_tex_gem_diamond);
 		gems.add(gemDiamond);
-		gemRect = new ModelGem(R.drawable.l84_gem_rect);
+		gemRect = new ModelGem(R.drawable.l84_tex_gem_rect);
 		gems.add(gemRect);
-		gemOct = new ModelGem(R.drawable.l84_gem_oct);
+		gemOct = new ModelGem(R.drawable.l84_tex_gem_oct);
 		gems.add(gemOct);
 		
 		//TODO: loading obj-files
-		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l33_stone);
-		//models.add(new ModelObj(modelFile1, R.drawable.l00_coin));
+		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l84_quad);
+		//gemOct = new ModelObj(modelFile1, R.drawable.l84_gem_oct);
+		//gems.add(gemOct);
 	}
 
 	

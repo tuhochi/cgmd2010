@@ -16,23 +16,23 @@
 	android:text="01"
  	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:nextFocusUp="@+id/l84_GemButton04" android:background="@drawable/l84_gem_round" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemRound">
+    android:nextFocusUp="@+id/l84_GemButton04" android:background="@drawable/l84_button_gem_round" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemRound">
 </ImageButton>
 <ImageButton
 	android:text="02"
  	android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:background="@drawable/l84_gem_diamond" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemDiamond">
+    android:layout_height="wrap_content" android:background="@drawable/l84_button_gem_diamond" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemDiamond">
 </ImageButton>
 <ImageButton
 	android:text="03"
  	android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:background="@drawable/l84_gem_rect" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemRect">
+    android:layout_height="wrap_content" android:background="@drawable/l84_button_gem_rect" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemRect">
 </ImageButton>
 <ImageButton
 	android:text="04"
  	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:nextFocusDown="@+id/l84_GemButton01" android:background="@drawable/l84_gem_oct" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemOct">
+    android:nextFocusDown="@+id/l84_GemButton01" android:background="@drawable/l84_button_gem_oct" android:layout_marginTop="5pt" android:id="@+id/l84_ButtonGemOct">
 </ImageButton>
 <TextView android:layout_above="@+id/l84_openglview" android:text="fps" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l84_TfFps" android:layout_marginTop="3pt"></TextView>
 </TableLayout>
