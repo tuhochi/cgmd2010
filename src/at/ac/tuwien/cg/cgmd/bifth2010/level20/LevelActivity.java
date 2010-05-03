@@ -52,16 +52,42 @@ public class LevelActivity extends Activity {
 		super.onConfigurationChanged(newConfig);
 	}
 
+	/**
+	 * Called when the activity is paused. Should be slim, because it can be called often
+	 * Followed by onResume() or onStop()
+	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
 		renderView.onPause();
 	}
 
+	/**
+	 * Called when the activity is resumed 
+	 * Followed by onPause()
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
 		renderView.onResume();
+	}
+
+
+	/**
+	 * called when the activity is stopped. 
+	 * Followed by onRestart() or onDestroy() 
+	 */
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+	
+	/**
+	 * Called before the activity is going to be destroyed
+	 */
+	@Override
+	public void onDestroy() {
+		super.onDestroy();	
 	}
 	
 	

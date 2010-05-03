@@ -18,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 
 /**
  * The standard RenderView enabling OpenGLES 10.
@@ -30,13 +28,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 public class RenderView extends GLSurfaceView implements Renderer {
 
 
-	private GameManager gameManager;
+	protected GameManager gameManager;
 	public TimeUtil timer;
 
-	private float gameTime;
+	protected float gameTime;
 	
+
 	/**
-	 * @param activity
+	 * @param context The render context
+	 * @param attr The attribute set
 	 */
 	public RenderView(Context context, AttributeSet attr)
 	{
@@ -47,9 +47,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
         requestFocus();
 		setFocusableInTouchMode(true);
 		
-		timer = TimeUtil.getInstance();
+		gameManager = null;
+		timer = TimeUtil.instance;
 		gameTime = 60.f;
-	
 	}
 	
 	
@@ -61,12 +61,14 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {			
 
 		//Settings
-		gl.glClearColor(0.3f, 0.3f, 0.3f, 1); 				// Gray Background
+		gl.glClearColor(0.3f, 0.3f, 0.3f, 1); 		// Gray Background
 		gl.glClearDepthf(1);
 		
-//		gl.glDisable(GL10.GL_DITHER);				//Disable dithering ( NEW )
 		gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping		
-		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
+		gl.glShadeModel(GL10.GL_FLAT);//SMOOTH); 			//Enable Smooth Shading
+		
+		gl.glDisable(GL10.GL_LIGHTING);
+		gl.glDisable(GL10.GL_DITHER);				//Disable dithering
 		
 		//gl.glEnable(GL10.GL_DEPTH_TEST);				
 		//gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
@@ -77,15 +79,45 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
-		//Really Nice Perspective Calculations
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST); 
+		// Really fast perspective calculations
+//		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);        
+        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
+		
+		// Rendering via arrays
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
 		
 		// Create this here, so we can pass "gl" to the GameManager.
-		gameManager = new GameManager(this, gl);
+//		if (gameManager == null) {
+			gameManager = new GameManager(this, gl);
+//		}
 	}
 
 	
+
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView#onPause()
+	 */
+	@Override
+	public void onPause() {
+		
+		super.onPause();
+	}
+
+
+
+	
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView#onResume()
+	 */
+	@Override
+	public void onResume() {
+		super.onResume();		
+		timer.reset();
+	}
+
+
 
 	/* (non-Javadoc)
 	 * @see android.opengl.GLSurfaceView.Renderer#onDrawFrame(javax.microedition.khronos.opengles.GL10)
@@ -133,13 +165,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
 
 	}
 
-	/* ***** Listener Events ( NEW ) ***** */	
-	/**
-	 * Override the key listener to receive keyUp events.
-	 * 
-	 * Check for the DPad presses left, right, up, down and middle.
-	 * Change the rotation speed according to the presses
-	 * or change the texture filter used through the middle press.
+
+	/* (non-Javadoc)
+	 * @see android.view.View#onKeyUp(int, android.view.KeyEvent)
 	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -170,10 +198,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	}
 	
 	
-	/**
-	 * Override the touch screen listener.
-	 * 
-	 * Reacts to moves and presses on the touchscreen.
+
+	/* (non-Javadoc)
+	 * @see android.view.View#onTouchEvent(android.view.MotionEvent)
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
