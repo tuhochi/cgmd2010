@@ -16,8 +16,8 @@ public class Gamefield {
 	private int mYSegCount = -1;
 	private float mSegLength = 1;
 	private float mLastFieldLength = 5.0f;
-	private float[] mSegCol1  = {1.0f, 0.0f, 0.0f };
-	private float[] mSegCol2  = {1.0f, 0.0f, 0.0f };
+	private float[] mSegCol1  = {1.0f, 1.0f, 1.0f };
+	private float[] mSegCol2  = {1.0f, 1.0f, 1.0f };
 	
 	
 	public Gamefield( int xSegCount, int ySegCount, float segLength){		

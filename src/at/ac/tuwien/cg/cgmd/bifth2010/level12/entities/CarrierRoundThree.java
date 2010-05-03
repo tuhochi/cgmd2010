@@ -12,9 +12,9 @@ public class CarrierRoundThree extends MoneyCarrier {
 		mType = 1;
 		mMoney = Definitions.THIRD_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.THIRD_ROUND_ENEMIE_SPEED;
-		mColor[0] = 0.0f;
+		mColor[0] = 1.0f;
 		mColor[1] = 1.0f;
-		mColor[2] = 0.0f;
+		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
 		mTexture = R.drawable.l12_enemie_lvl2;
 		mType = 3;
