@@ -16,6 +16,7 @@ public class GameState implements Serializable {
 	private int coinCount = 0;
 	private float rabbitX = 0;
 	private float rabbitY = 0;
+	private GameScene.CurrentState currentState = GameScene.CurrentState.INTRO;
 	
 	public GameState() {}
 
@@ -60,6 +61,18 @@ public class GameState implements Serializable {
 	public void saveTimeManger(TimeManager timeManager) {
 		if (timeManager != null) {
 			elapsedTime = timeManager.getElapsed();
+		}
+	}
+	
+	public void restoreCurrentState(GameScene scene) {
+		if (scene != null) {
+			scene.setCurrentState(currentState);
+		}
+	}
+	
+	public void saveCurrentState(GameScene scene) {
+		if (scene != null) {
+			currentState = scene.getCurrentState();
 		}
 	}
 }

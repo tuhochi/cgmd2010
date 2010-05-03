@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.DoubleTap;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.SingleTap;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
@@ -44,14 +45,14 @@ public class GameThread extends Thread {
 				public void run() {
 					// Currently in Intro-Mode
 					if (scene.getCurrentState().equals(GameScene.CurrentState.INTRO)) {
-						rabbit.setPosition((float) (scene.getWidth() / 2 + scene.getWidth() / 5 * Math.sin((double) (System.currentTimeMillis() / 10000.))),
+						rabbit.setPosition((float) (scene.getWidth() / 2 + scene.getWidth() / 6 * Math.sin((double) (System.currentTimeMillis() / 10000.))),
 								(float) (scene.getHeight() / 3));
 						rabbit.getSprite().setScale((float) (.5 + .5 * Math.abs(Math.sin((double) (System.currentTimeMillis() / 5000.)))));
 						rabbit.getSprite().setWingAngle((float) (Math.sin((double) (System.currentTimeMillis() / 100.)) * 45));
 						rabbit.getSprite().setRotation((float) (10 - Math.sin((double) (System.currentTimeMillis() / 1000.)) * 20));
 
-						// continue with double-tap
-						if (scene.getNextInputGesture() instanceof DoubleTap) {
+						// continue with single-tap
+						if (scene.getNextInputGesture() instanceof SingleTap) {
 							scene.setCurrentState(GameScene.CurrentState.RUNNING);
 							
 							// start time for physical movement is resetted
@@ -66,6 +67,9 @@ public class GameThread extends Thread {
 					// currently in Playing-Mode
 					else if (scene.getCurrentState().equals(GameScene.CurrentState.RUNNING)) {
 						if (levelFinished()) {
+							rabbit.setBoundaryCheck(false);
+							rabbit.resetStartTime(0);
+							
 							scene.setCurrentState(GameScene.CurrentState.EXTRO);
 						}
 
@@ -94,7 +98,25 @@ public class GameThread extends Thread {
 
 					// currently in Extro-Mode
 					else if (scene.getCurrentState().equals(GameScene.CurrentState.EXTRO)) {
-						scene.finishLevel();
+						// movement depends on current rotation
+						if (rabbit.getSprite().getRotation() < -5.f) {
+							rabbit.processGesture(new Swipe(5, 0, scene.getHeight(), 5, InputGesture.Position.LEFT));
+						} else if (rabbit.getSprite().getRotation() > 5.f) {
+							rabbit.processGesture(new Swipe(scene.getWidth() - 5, 0, scene.getHeight(), scene.getWidth() - 5, InputGesture.Position.RIGHT));
+						} else {
+							rabbit.processGesture(new DoubleTap(4.f, 4.f));
+						}
+						
+						rabbit.move();
+						
+						// shrink rabbit
+						if (System.currentTimeMillis() % 4 == 0)
+							rabbit.getSprite().setScale(rabbit.getSprite().getScale() * 0.997f);
+						
+						// rabbit isn't visible anymore -> finish level
+						if (rabbit.getY() + rabbit.getSprite().getHeight() < - 40) {
+							scene.finishLevel();
+						}
 					}
 				}
 			});
