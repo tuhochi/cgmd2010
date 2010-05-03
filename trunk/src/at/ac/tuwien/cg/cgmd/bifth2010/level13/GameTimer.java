@@ -36,7 +36,7 @@ public class GameTimer {
 	}
 	
 	public String getRemainingTimeString() {
-		//convert ms to 1:34
+		//convert ms to mm:ss
 		long minutes = (remainingTime / 1000) / 60;
 		long seconds = (remainingTime / 1000) - minutes * 60;
 		if(seconds < 10) {
@@ -53,5 +53,19 @@ public class GameTimer {
 		}
 		return false;
 	}
+
+	public long getRemainingTime() {
+		return remainingTime;
+	}
+
+	public void setRemainingTime(long remainingTime) {
+		this.remainingTime = remainingTime;
+	}
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
+	}
+	
+	
 	
 }

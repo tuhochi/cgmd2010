@@ -42,7 +42,19 @@ public class LevelActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("df", "called oncreate");
-        GameControl.init();
+        
+        //restore state
+        if(savedInstanceState != null && savedInstanceState.containsKey("money") && savedInstanceState.containsKey("gametime")) {
+        	GameControl.money = savedInstanceState.getInt("money");
+        	GameTimer.getInstance().setRemainingTime(savedInstanceState.getLong("gametime"));
+        	GameTimer.getInstance().setStartTime(System.currentTimeMillis());
+        	MyRenderer.isFirstFrame = false;
+        	
+        }
+        else {
+        	GameControl.init();
+        	MyRenderer.isFirstFrame = true;
+        }
         
         //make window fullscreen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -52,17 +64,10 @@ public class LevelActivity extends Activity {
 	 
 	 	//setup layout with fps-overlay
 	 	setContentView(R.layout.l13_level);
-	 	//FrameLayout frameLayout = (FrameLayout)findViewById(R.id.l13_levelLayout);
 	 	myRenderer = (MyRenderer)findViewById(R.id.l13_MyRenderer);
 	 	fpsTextView = (TextView)findViewById(R.id.l13_fpsTextView);
 	 	timeTextView = (TextView)findViewById(R.id.l13_timeText);
 	 	moneyTextView = (TextView)findViewById(R.id.l13_moneyText);
-	 	//frameLayout.removeView(fpsTextView);
-	 	//frameLayout.addView(myRenderer);
-	 	//frameLayout.addView(fpsTextView);
-	
-
-	 	
 
 	 	//timer for fps display
 	 	fpsUpdateTimer = new Timer();
@@ -146,7 +151,6 @@ public class LevelActivity extends Activity {
 		super.onPause();
 		myRenderer.onPause();
 		SoundManager.stopMusic();
-		//todo pause timers
 		
 		Log.d("df", "called onpause");
 	}
@@ -176,6 +180,15 @@ public class LevelActivity extends Activity {
 		s.setProgress(-GameControl.money); 
 		setResult(Activity.RESULT_OK, s.asIntent());
 		super.finish();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		Log.d("df", "called onsaveinstancestate");
+		//save money and game time
+		outState.putInt("money", GameControl.money);
+		outState.putLong("gametime", GameTimer.getInstance().getRemainingTime());
 	}
 	
 	
