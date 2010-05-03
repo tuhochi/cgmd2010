@@ -89,7 +89,7 @@ public class Shelf extends RenderEntity {
 			
 			ProductEntity pe = products.get(keys.nextElement());
 			
-			// They are updated elsewhere
+			// If animated, they are updated elsewhere
 			if (pe.animated) {
 				continue;
 			}
@@ -100,27 +100,16 @@ public class Shelf extends RenderEntity {
 			if (pe.x < -pe.width) {
 				// If added to this list, they are removed from the rendered products Hashtable later
 				removeFromProducts.add(pe);
-				continue;
 			}
-			
-			// TODO: Whats wrong here?
-			// Else check if there was a touch
-//			else if (GameManager.touchDown && pe.clickable && pe.visible && pe.hitTest(GameManager.touchX, GameManager.touchY)) {
-//				
-//				pe.clickable = false;
-//				
-//				// Tell the game to attach an Animator to move it into a shopping cart
-//				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
-//				
-//				// Mark neighbors as not clickable too
-//				for (int i = 0; i < pe.neighbors.length; i++) {
-//					products.get(pe.neighbors[i]).clickable = false;
-//					
-//					// TODO: Small hack, do something better:
-//					products.get(pe.neighbors[i]).visible = false;
-//				}
-//			}
 		}
+			
+			
+		// Check every frame if the touch touches a product
+		if (GameManager.touchDown) {			
+			touchEvent(GameManager.touchX, GameManager.touchY);
+		}
+		
+		
 		
 		// Now remove all marked products and empty the list again
 		for (ProductEntity pe : removeFromProducts) {			
@@ -141,6 +130,76 @@ public class Shelf extends RenderEntity {
 		}
 	}
 	
+	
+
+	/**
+	 * Checks if there is a clickable product on this position
+	 * 
+	 * @param x The x coord on screen
+	 * @param y The y coord on screen
+	 */
+	public void touchEvent(float x, float y) {
+		
+		Enumeration<Integer> keys = products.keys();		
+		while(keys.hasMoreElements()) {
+			
+			ProductEntity pe = products.get(keys.nextElement());
+			
+			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
+				
+				pe.clickable = false;				
+				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
+				
+				//Mark neighbors as not clickable too
+				for (int i = 0; i < pe.neighbors.length; i++) {
+					
+					ProductEntity ne = products.get(pe.neighbors[i]);
+					ne.clickable = false;
+					
+					// TODO: Small hack, do something better:
+					ne.angle = 45;
+				}				
+				break;
+			}
+		}
+	}
+	
+	
+	
+	/**
+	 * The object own drawing function.
+	 * Called from the renderer to redraw this instance
+	 * with possible changes in values.
+	 * 
+	 * @param gl - The GL Context
+	 */
+	public void render(GL10 gl) {
+		
+		
+		// Apply Texture Matrix Transformation
+		gl.glMatrixMode(GL10.GL_TEXTURE);		
+		gl.glPushMatrix();
+		// Translate the texture in texture coordinate system (, so divide it by the screen width).
+		gl.glTranslatef(pixelsX / width, 0, 0);
+		
+		// Switch to ModelView and render as usual
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		super.render(gl);
+			
+		// Now pop Texture Matrix back, so that further objects are drawn with texture at origin. 
+		gl.glMatrixMode(GL10.GL_TEXTURE);
+		gl.glPopMatrix();
+		
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		
+		// Render products.	
+		Enumeration<Integer> keys = products.keys();
+		while(keys.hasMoreElements()) {
+			products.get(keys.nextElement()).render(gl);
+		}	
+	}
+	
+
 	/**
 	 * Creates a product for the shelf.
 	 */
@@ -181,70 +240,6 @@ public class Shelf extends RenderEntity {
 		}	
 	}
 	
-	
-	
-	
-	
-	/**
-	 * The object own drawing function.
-	 * Called from the renderer to redraw this instance
-	 * with possible changes in values.
-	 * 
-	 * @param gl - The GL Context
-	 */
-	public void render(GL10 gl) {
-		
-		
-		// Apply Texture Matrix Transformation
-		gl.glMatrixMode(GL10.GL_TEXTURE);		
-		gl.glPushMatrix();
-		// Translate the texture in texture coordinate system (, so divide it by the screen width).
-		gl.glTranslatef(pixelsX / width, 0, 0);
-		
-		// Switch to ModelView and render as usual
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		super.render(gl);
-			
-		// Now pop Texture Matrix back, so that further objects are drawn with texture at origin. 
-		gl.glMatrixMode(GL10.GL_TEXTURE);
-		gl.glPopMatrix();
-		
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		
-		// Render products.	
-		Enumeration<Integer> keys = products.keys();
-		while(keys.hasMoreElements()) {
-			products.get(keys.nextElement()).render(gl);
-		}	
-	}
-	
-	/**
-	 * @param x
-	 * @param y
-	 */
-	public void touchEvent(float x, float y) {
-		
-		Enumeration<Integer> keys = products.keys();		
-		while(keys.hasMoreElements()) {
-			
-			ProductEntity pe = products.get(keys.nextElement());
-			
-			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
-				
-				pe.clickable = false;				
-				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
-				
-				//Mark neighbors as not clickable too
-				for (int i = 0; i < pe.neighbors.length; i++) {
-					products.get(pe.neighbors[i]).clickable = false;
-					
-					// TODO: Small hack, do something better:
-					products.get(pe.neighbors[i]).visible = false;
-				}				
-				break;
-			}
-		}
-	}
 	
 }
 	

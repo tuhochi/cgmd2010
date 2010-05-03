@@ -75,8 +75,8 @@ public class RenderEntity extends GameEntity implements Renderable {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
 		
 		//Point to our buffers
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
+//		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+//		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
 		
 		//Point to our buffers
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
@@ -95,8 +95,8 @@ public class RenderEntity extends GameEntity implements Renderable {
 		gl.glPopMatrix();
 		
 		//Disable the client state before leaving
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+//		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+//		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}	
 	
 	// FERDI: Das brauch ma doch nicht :P Und verwenden tuts im Moment auch keine Komponente

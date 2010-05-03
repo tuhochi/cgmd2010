@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -30,6 +31,19 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
  * @author Reinhard Sprung
  */
 public class GameManager implements Renderable, EventListener {
+	
+	// TODO: Not used yet
+	 /** TestHandle Class */
+	class TestThread implements Runnable{
+		  
+    	@Override
+        public void run() {
+    		moneyText.setText(Math.round(renderView.timer.getFPS()));
+        }
+    	
+    	
+		
+    };
 	
 	// Textures.
 	static final int[] TEXTURE_BUNNY = {R.drawable.l20_bunny1, R.drawable.l20_bunny2,
@@ -63,6 +77,9 @@ public class GameManager implements Renderable, EventListener {
 	protected ShoppingCart shoppingCart;
 	protected SpriteAnimationEntity bunny;
 	
+	public Handler handler;
+	public TestThread testThread;
+	
 	/** The TextView to show the money count. */
 	private TextView moneyText;
 	/** The run time of the game in seconds. */
@@ -88,6 +105,10 @@ public class GameManager implements Renderable, EventListener {
 		animators = new Hashtable<Integer, Animator>();
 		
 		EventManager.getInstance().addListener(this);
+		
+		// TODO: They have to be started in the other thread
+//		handler = new Handler();
+//		testThread = new TestThread();
 		
 		touchDown = false;
 		touchX = 0;
@@ -150,6 +171,8 @@ public class GameManager implements Renderable, EventListener {
 			animators.get(keys.nextElement()).update(dt);
 		}
 		
+//		handler.post(testThread);
+		
 		// TODO: Move gameTime to TimeUtil
 		gameTime -= (dt/1000.f);
 		// TODO Somehow this doesn't work here (and at many more places :( )
@@ -197,11 +220,12 @@ public class GameManager implements Renderable, EventListener {
 	 */
 	public void touchEvent(float x, float y, int action) {
 		
+		// Set these variables so that the touch can checked each frame
 		touchDown = (action != MotionEvent.ACTION_UP);
 		touchX = x;
 		touchY = y;
 		
-		// TODO: Do it the classic way
+		// And touch right now too, so we don't miss very short touches. (Useful on the emulator where fps are very low)
 		shelf.touchEvent(x, y);
 	}
 	
@@ -225,12 +249,12 @@ public class GameManager implements Renderable, EventListener {
 			ProductEntity pe = (ProductEntity)eventData;
 			totalMoney -= pe.price;			
 			// This prevents displaying a negative money count.
-			if(totalMoney < 0) totalMoney = 0;
-			moneyText.setText("Money:" + totalMoney + "$");
-			if (totalMoney == 0) {
-				// TODO Enable this again
-//				gameOver();
-			}
+//			if(totalMoney < 0) totalMoney = 0;
+//			moneyText.setText("Money:" + totalMoney + "$");
+//			if (totalMoney == 0) {
+//				// TODO Enable this again
+////				gameOver();
+//			}
 			
 			
 			// Move it to the basket.
@@ -247,6 +271,11 @@ public class GameManager implements Renderable, EventListener {
 		}
 		
 	}
+	
+	
+//	public void testTextView() {
+//		moneyText.setText(Math.round(renderView.timer.getFPS()));
+//	}
 
 
 	/** 
