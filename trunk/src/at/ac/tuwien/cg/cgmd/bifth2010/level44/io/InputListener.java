@@ -61,7 +61,14 @@ public class InputListener extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
-		scene.addInputGesture(new DoubleTap(e.getX(), e.getY()));
+		//scene.addInputGesture(new DoubleTap(e.getX(), e.getY()));
+		
+		return true;
+	}
+	
+	@Override
+	public boolean onSingleTapConfirmed(MotionEvent e) {
+		scene.addInputGesture(new SingleTap(e.getX(), e.getY()));
 		
 		return true;
 	}

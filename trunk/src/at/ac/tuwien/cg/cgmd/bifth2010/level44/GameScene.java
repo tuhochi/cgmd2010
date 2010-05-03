@@ -1,8 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -18,11 +16,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.CoinBucketSprite;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.IntroBackground;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TexturePart;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TimeDisplay;
 
@@ -45,7 +43,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	/** the time display sprite */
 	private Sprite timeDisplay;
 	/** background during intro */
-	private Sprite introBackground;
+	private IntroBackground introBackground;
 
 	/** thread for game logic */
 	private GameThread gameThread;
@@ -171,14 +169,15 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		timeDisplay = new TimeDisplay(mainTexture, timeManager);
 		timeDisplay.setPosition(getWidth()-timeDisplay.getWidth()-10, 10);
 		
-		introBackground = new Sprite(TextureParts.makeIntroBackground(mainTexture));
-		introBackground.setPosition(0, 0);
+		introBackground = new IntroBackground(mainTexture,getWidth(),getHeight());
 		
 		if (gameState != null) {
 			/* consume restored values and remove gameState */
 			gameState.restoreTimeManger(timeManager);
 			gameState.restoreCrosshairs(crosshairs);
 			gameState.restoreRabbit(rabbit);
+			gameState.restoreCurrentState(this);
+			
 			gameState = null;
 		}
 		
@@ -251,15 +250,19 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	public void saveInstanceState(Bundle outState) {
 		System.err.println("Saving instance state");
+		
 		gameState = new GameState();
 		gameState.saveTimeManger(timeManager);
 		gameState.saveCrosshairs(crosshairs);
 		gameState.saveRabbit(rabbit);
+		gameState.saveCurrentState(this);
+		
 		outState.putSerializable(GameState.KEY, gameState);
 	}
 
 	public void restoreInstanceState(Bundle savedInstanceState) {
 		System.err.println("Restoring instance state");
+		
 		Serializable restoredState = savedInstanceState.getSerializable(GameState.KEY);
 		
 		if (restoredState != null && restoredState instanceof GameState) {

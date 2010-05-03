@@ -69,6 +69,7 @@ public class TextureParts {
 	}
 	
 	public static TexturePart makeIntroBackground(Texture texture) {
-		return new TexturePart(texture,1024-480,1024-320,480,320);
+		// TODO change texture and return real values
+		return new TexturePart(texture,1024-480,1024-320,1024,1024);
 	}
 }

@@ -57,6 +57,10 @@ public class Sprite {
 		this.scale = scale;
 	}
 	
+	public float getScale() {
+		return scale;
+	}
+	
 	public void setCenter(float cx, float cy) {
 		recalculateVtxCoords(cx, cy);
 	}
