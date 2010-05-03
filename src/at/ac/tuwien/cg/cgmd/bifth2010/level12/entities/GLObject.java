@@ -5,6 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -40,6 +41,7 @@ public abstract class GLObject {
 			
 			gl.glVertexPointer( 3, GL10.GL_FLOAT, 0, mVerticesBuffer);		
 			gl.glColorPointer( 4, GL10.GL_FLOAT, 0, mColorBuffer );	
+			TextureManager.getSingletonObject().setTexture(mTexture);
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
 			
 			gl.glDrawElements(GL10.GL_TRIANGLES, mIndicesCounter, GL10.GL_UNSIGNED_SHORT, mIndicesBuffer);

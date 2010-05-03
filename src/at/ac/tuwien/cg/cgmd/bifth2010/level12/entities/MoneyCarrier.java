@@ -19,7 +19,7 @@ public abstract class MoneyCarrier extends GLObject {
 	protected short mHp = 10;
 	protected short mStrength = 1; //how much damage it can do
 	protected int mType = 0; //zombie type
-	protected int mTexture = R.drawable.l12_icon;
+	protected int mTexture = R.drawable.l12_enemie_lvl0;
 	protected int mMoney = 10;
 	protected float mSpeed = 5;
 	
@@ -97,7 +97,6 @@ public abstract class MoneyCarrier extends GLObject {
 		mX = mStartPos + mMovePos;
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
-		TextureManager.getSingletonObject().setTexture( mTexture);
 		super.draw(gl);
 		gl.glPopMatrix();
 	}

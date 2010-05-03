@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
@@ -16,6 +17,7 @@ public abstract class Projectile extends GLObject{
 	protected float mRadius = 4;
 	protected float mSpeed = 5;
 	protected short mDmg = 10;
+	protected int mTexture = R.drawable.l12_basic_projectile;
 	
 	
 	public float getSpeed(){
