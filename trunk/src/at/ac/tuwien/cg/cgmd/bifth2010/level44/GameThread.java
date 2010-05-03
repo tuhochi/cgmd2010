@@ -75,7 +75,11 @@ public class GameThread extends Thread {
 
 						// process input gesture
 						gesture = scene.getNextInputGesture();
+						if (gesture instanceof SingleTap)
+							gesture = null;
+						
 						rabbit.processGesture(gesture);
+						
 						// perform movement of rabbit
 						rabbit.move();
 						// move crosshairs
