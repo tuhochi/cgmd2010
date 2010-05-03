@@ -87,7 +87,7 @@ public abstract class Tower extends GLObject {
 	
 	@Override
 	public void draw( GL10 gl ){
-		TextureManager.getSingletonObject().setTexture( mTexture );
+		
 		//pause
 		if( GameMechanics.getGameMecanics().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
 		
@@ -119,6 +119,7 @@ public abstract class Tower extends GLObject {
 				mProjectiles[i].draw(gl);
 			}
 		}
+		TextureManager.getSingletonObject().setTexture( mTexture );
 		super.draw(gl);
 	}
 	

@@ -5,6 +5,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.GLObject;
 
@@ -25,11 +27,17 @@ public class Field extends GLObject{
 	}
 	
 	public void initVBOs(){
-		float[] vertices = {
+		/*float[] vertices = {
 				mXStart,	mYStart,	0.0f,
 				mXEnd,		mYStart,	0.0f,
 				mXEnd,		mYEnd,		0.0f,
 				mXStart,	mYEnd,		0.0f,
+		};*/
+		float[] vertices = {
+				mXStart,	mYStart,	0.0f,
+				mXEnd,		mYStart,	0.0f,
+				mXStart,	mYEnd,		0.0f,
+				mXEnd,		mYEnd,		0.0f,				
 		};
 		
 		ByteBuffer vertbuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -38,10 +46,11 @@ public class Field extends GLObject{
 		mVerticesBuffer.put( vertices );
 		mVerticesBuffer.position( 0 );
 		
-		short[] points = { 
-				0, 1, 2, 
-				0, 2, 3,
-				};
+		short[] points = {
+				0,1,3,
+				0,3,2,
+		};
+
 		
 		ByteBuffer indbuf = ByteBuffer.allocateDirect(points.length * 2);
 		mIndicesCounter = points.length;
@@ -97,6 +106,11 @@ public class Field extends GLObject{
 		mColor = colors;
 		if( texture == 0 ) mTexture = R.drawable.l12_grass1;
 		if( texture == 1 ) mTexture = R.drawable.l12_grass2;
+	}
+	
+	public void draw( GL10 gl){
+		TextureManager.getSingletonObject().setTexture( mTexture);
+		super.draw(gl);
 	}
 	
 }

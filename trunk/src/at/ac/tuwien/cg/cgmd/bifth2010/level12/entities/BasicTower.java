@@ -13,9 +13,9 @@ public class BasicTower extends Tower {
 	
 	public BasicTower( ){
 		mRadius = Definitions.BASIC_TOWER_RADIUS;
-		mColor[0] = 0.5f;
-		mColor[1] = 0.5f;
-		mColor[2] = 0.0f;
+		mColor[0] = 1.0f;
+		mColor[1] = 1.0f;
+		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
 		mTexture =  R.drawable.l12_icon;
 		ByteBuffer tbb = ByteBuffer.allocateDirect(mTexturePoints.length * 4);

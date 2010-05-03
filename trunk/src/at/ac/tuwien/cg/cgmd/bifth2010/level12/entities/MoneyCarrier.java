@@ -97,6 +97,7 @@ public abstract class MoneyCarrier extends GLObject {
 		mX = mStartPos + mMovePos;
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
+		TextureManager.getSingletonObject().setTexture( mTexture );
 		super.draw(gl);
 		gl.glPopMatrix();
 	}
