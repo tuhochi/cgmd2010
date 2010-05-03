@@ -23,22 +23,39 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
 
 public class GameControl {
 
-	static int consumedBeer = 0;
-	static int mistressCounter = 0;
+	private static int consumedBeer = 0;
+	private static int mistressCounter = 0;
 	public static boolean drunkState = false;
-	static int drunkTime = 150;
-	static int currentDrunkTime = 0;
-	static int bustTime = 50;
-	static int currentBustTime = 0;
-	static boolean inJail = false;
-	static SoundManager sound;
-	static boolean musicRunning = false;
-	static int money = 0;
+	private static final int DRUNKTIME = 150;
+	private static int currentDrunkTime = 0;
+	private static final int BUSTTIME = 50;
+	private static int currentBustTime = 0;
+	private static boolean inJail = false;
+	private static SoundManager sound;
+	private static boolean musicRunning = false;
+	public static int money = 0;
 	//movement vector
 	public static Vector2 movement = new Vector2(0, 0);
 	//old movement vector
 	public static Vector2 oldMovement = new Vector2(0, 0);
 	
+	
+	//reset variables
+	public static void init() {
+		consumedBeer = 0;
+		mistressCounter = 0;
+		drunkState = false;
+		currentDrunkTime = 0;
+		currentBustTime = 0;
+		inJail = false;
+		musicRunning = false;
+		money = 0;
+		//movement vector
+		movement = new Vector2(0, 0);
+		//old movement vector
+		oldMovement = new Vector2(0, 0);
+		GameTimer.getInstance().reset();
+	}
 	/**
 	 * needs to be called every frame to update game logic
 	 */
@@ -48,16 +65,19 @@ public class GameControl {
 		GameObject.updateOffset(movement);
 		handleDrunkState();
 		handleJailState();
+		
+		//update game time
+		GameTimer.getInstance().update();
 	}
 	
 
 	public static void updateDrunkStatus(StatusBar drunkBar){
-		drunkBar.updateScale( 1.0f/(float)drunkTime * (float)currentDrunkTime);
+		drunkBar.updateScale( 1.0f/(float)DRUNKTIME * (float)currentDrunkTime);
 	}
 	
 	public static void updateJailStatus(StatusBar jailBar){
 		if(inJail)
-			jailBar.updateScale(1.0f/(float)bustTime * (float)currentBustTime);
+			jailBar.updateScale(1.0f/(float)BUSTTIME * (float)currentBustTime);
 		else
 			jailBar.updateScale(0.0f);
 	}
@@ -152,7 +172,7 @@ public class GameControl {
 		if (consumedBeer >= 5){
 			consumedBeer = 0;
 			// Set player to drunk state
-			currentDrunkTime = drunkTime;
+			currentDrunkTime = DRUNKTIME;
 			SoundManager.playSound(SoundFX.DRUNK);
 			if (musicRunning == false){
 				SoundManager.playSound(SoundFX.MUSIC);
@@ -219,7 +239,7 @@ public class GameControl {
 		//TODO: CREATE VARIABLE FOR ESCAPING COP LIKE ADRENALINE SHOTS TO PIC UP WITH A TIMER.
 		if (drunkState & !inJail){
 				SoundManager.playSound(SoundFX.POLICE);
-				currentBustTime = bustTime;
+				currentBustTime = BUSTTIME;
 				inJail = true;
 		
 		}

@@ -150,9 +150,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			accTime = 0;
 		}
 		
-		//update game time
-		GameTimer.getInstance().update();
-		
 		//clear color
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -191,7 +188,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
 		
 		gl.glViewport(0, 0, width, height);
-		
+		/*
 		//init all textures
 		TextureSingletons.initTextures(gl, context);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -216,7 +213,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 
 		
 		//player = new PlayerObject();
-		gameObjects.add(new PlayerObject());
+		gameObjects.add(new PlayerObject());*/
 	}
 
 	/**
@@ -240,6 +237,38 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		//set background color
 		gl.glClearColor(1.0f, 0.0f, 0.0f, 0.5f);
+		
+		//set display size
+		MyRenderer.screenHeight = this.getHeight();
+		MyRenderer.screenWidth = this.getWidth();
+		
+		//init all textures
+		TextureSingletons.releaseTextures();
+		TextureSingletons.initTextures(gl, context);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		
+		//create all game objects
+		gameObjects.add(new BackgroundObject());
+		for(int i = 0; i < MyRenderer.map.length; i++) {
+			for(int j = 0; j < MyRenderer.map[i].length; j++) {
+				if(MyRenderer.map[i][j] == 2) {
+					gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
+				}
+				else if (MyRenderer.map[i][j] == 3){
+					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
+				}
+				else if (MyRenderer.map[i][j] == 4){
+					gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
+				}
+			}
+		}
+		drunkStatusBar = new DrunkBar(200, 50);
+		jailStatusBar = new JailBar(200, 50);
+	    jailStatusBar.position.y = 50;
+
+		
+		//player = new PlayerObject();
+		gameObjects.add(new PlayerObject());
 	
 	}
 	

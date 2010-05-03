@@ -7,9 +7,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
@@ -30,6 +30,10 @@ public class LevelActivity extends Activity {
 	private TextView timeTextView;
 	private String timeString;
 	
+	private Timer fpsUpdateTimer;
+	private Timer gameTimeUpdateTimer;
+	private Timer moneyUpdateTimer;
+	
 	
     /**
      *  called when the activity is first created
@@ -37,6 +41,8 @@ public class LevelActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("df", "called oncreate");
+        GameControl.init();
         
         //make window fullscreen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -59,7 +65,7 @@ public class LevelActivity extends Activity {
 	 	
 
 	 	//timer for fps display
-	 	Timer fpsUpdateTimer = new Timer();
+	 	fpsUpdateTimer = new Timer();
 	 	fpsUpdateTimer.schedule(new TimerTask() {
 	 	
 	 		@Override
@@ -72,7 +78,7 @@ public class LevelActivity extends Activity {
 	 	}, 0, 1000);
 	 	
 	 	//timer for game time
-		Timer gameTimeUpdateTimer = new Timer();
+		gameTimeUpdateTimer = new Timer();
 	 	gameTimeUpdateTimer.schedule(new TimerTask() {
 	 	
 	 		@Override
@@ -81,16 +87,13 @@ public class LevelActivity extends Activity {
 	 			timeString = "Time: " + gameTimer.getRemainingTimeString();
 	 			handleUIChanges.sendEmptyMessage(0);
 	 			if(gameTimer.isOver()) {
-	 				SessionState s = new SessionState();
-	 				s.setProgress(-GameControl.money); 
-	 				setResult(Activity.RESULT_OK, s.asIntent());
 	 				finish();
 	 			}
 	 		}
 	 	}, 0, 500);
 	 	
 	 	//timer for money
-		Timer moneyUpdateTimer = new Timer();
+		moneyUpdateTimer = new Timer();
 	 	moneyUpdateTimer.schedule(new TimerTask() {
 	 	
 	 		@Override
@@ -99,10 +102,6 @@ public class LevelActivity extends Activity {
 	 			handleUIChanges.sendEmptyMessage(0);
 	 		}
 	 	}, 0, 500);
-	 	
-	 	SessionState s = new SessionState();
-		s.setProgress(0); 
-		setResult(Activity.RESULT_OK, s.asIntent());
     }
     
    private Handler handleUIChanges = new Handler() {
@@ -115,6 +114,18 @@ public class LevelActivity extends Activity {
 	 }
    };
    
+   @Override
+   protected void onStart() {
+	   super.onStart();
+	   Log.d("df", "called onstart");
+   }
+   
+   @Override
+   protected void onRestart() {
+	   super.onRestart();
+	   Log.d("df", "called onrestart");
+   }
+   
 	/**
 	 * Remember to resume the glSurface
 	 */
@@ -122,6 +133,8 @@ public class LevelActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		myRenderer.onResume();
+		
+		Log.d("df", "called onresume");
 
 	}
 
@@ -133,14 +146,37 @@ public class LevelActivity extends Activity {
 		super.onPause();
 		myRenderer.onPause();
 		SoundManager.stopMusic();
+		//todo pause timers
+		
+		Log.d("df", "called onpause");
 	}
 	
-	 @Override
-	    protected void onDestroy() {
-	    	// TODO Auto-generated method stub
-	    	super.onDestroy();
-	    	SoundManager.stopMusic();
-	    	
-	    }
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d("df", "called onstop");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		//release resources
+	    super.onDestroy();
+	    SoundManager.stopMusic();
+	    
+	    //stop timers
+	    fpsUpdateTimer.cancel();
+	    gameTimeUpdateTimer.cancel();
+	    moneyUpdateTimer.cancel();
+	    Log.d("df", "called ondestroy");
+	}
+	
+	@Override
+	public void finish() {
+	    SessionState s = new SessionState();
+		s.setProgress(-GameControl.money); 
+		setResult(Activity.RESULT_OK, s.asIntent());
+		super.finish();
+	}
+	
 	
 }

@@ -33,8 +33,6 @@ public class GameTimer {
 		long passedTime = currentTime - startTime;
 		remainingTime -= passedTime;
 		startTime = currentTime;
-		
-		Log.d("df", "passed: " + passedTime + " remaining: " + remainingTime);
 	}
 	
 	public String getRemainingTimeString() {
