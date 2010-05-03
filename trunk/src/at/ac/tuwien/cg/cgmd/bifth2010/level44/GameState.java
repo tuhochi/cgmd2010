@@ -62,5 +62,4 @@ public class GameState implements Serializable {
 			elapsedTime = timeManager.getElapsed();
 		}
 	}
-
 }

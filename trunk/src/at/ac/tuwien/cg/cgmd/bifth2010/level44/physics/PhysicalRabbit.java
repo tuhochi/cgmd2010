@@ -256,6 +256,10 @@ public class PhysicalRabbit implements PhysicalObject {
 			}
 		}
 	}
+	
+	public void clearInputQueue() {
+		inputQueue.clear();
+	}
 
 	@Override
 	public void draw(GL10 gl) {
@@ -334,5 +338,14 @@ public class PhysicalRabbit implements PhysicalObject {
 	 */
 	public boolean hasLanded() {
 		return sprite.isUnder(screenHeight - 5);
+	}
+
+	@Override
+	public void resetMovement() {
+		setVelocity(0.f);
+		getSprite().setRotation(0.f);
+		getSprite().setScale(1.f);
+		getSprite().resetWings();
+		clearInputQueue();
 	}
 }

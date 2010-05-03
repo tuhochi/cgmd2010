@@ -22,11 +22,16 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TexturePart;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TimeDisplay;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
+	public enum CurrentState {
+		INTRO, RUNNING, EXTRO
+	}
+	
 	/** the context of the scene */
 	private LevelActivity activity = null;
 	/** the flying rabbit */
@@ -39,6 +44,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private Sprite coin;
 	/** the time display sprite */
 	private Sprite timeDisplay;
+	/** background during intro */
+	private Sprite introBackground;
 
 	/** thread for game logic */
 	private GameThread gameThread;
@@ -52,8 +59,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	/** the system's vibrator */
 	private Vibrator vibrator = null;
 	
-	/* restored game state */
+	/** restored game state */
 	private GameState gameState = null;
+	/** current state of game */
+	private CurrentState currentState = CurrentState.INTRO;
 
 	
 	public GameScene(LevelActivity context) {
@@ -71,6 +80,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		rabbit = null;
 		landscape = null;
+		introBackground = null;
 		coin = null;
 		timeDisplay = null;
 		gameThread = null;
@@ -84,29 +94,38 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
-		// first draw landscape and rabbit
-		if (landscape != null) {
-			landscape.draw(gl);
+		// Intro-Mode
+		if (this.getCurrentState().equals(CurrentState.INTRO)) {
+			introBackground.draw(gl);
+			rabbit.draw(gl);
 		}
 		
-		// then draw the crosshairs
-		if (crosshairs != null) {
-			crosshairs.draw(gl);
-		}
-		
-		// draw the coins that are left to loose
-		if (rabbit != null && coin != null) {
-			int coins = rabbit.getCoinCount();
-			
-			for (int i=0; i<coins; i++) {
-				coin.setPosition(20+i*coin.getWidth()/2, 20);
-				coin.draw(gl);				
+		// Running-Mode or Extro-Mode
+		else if (this.getCurrentState().equals(CurrentState.RUNNING) || this.getCurrentState().equals(CurrentState.EXTRO)) {
+			// first draw landscape and rabbit
+			if (landscape != null) {
+				landscape.draw(gl);
 			}
-		}
-		
-		// draw the time left
-		if (timeDisplay != null) {
-			timeDisplay.draw(gl);
+			
+			// then draw the crosshairs
+			if (crosshairs != null && this.getCurrentState().equals(CurrentState.RUNNING)) {
+				crosshairs.draw(gl);
+			}
+			
+			// draw the coins that are left to loose
+			if (rabbit != null && coin != null) {
+				int coins = rabbit.getCoinCount();
+				
+				for (int i=0; i<coins; i++) {
+					coin.setPosition(20+i*coin.getWidth()/2, 20);
+					coin.draw(gl);				
+				}
+			}
+			
+			// draw the time left
+			if (timeDisplay != null) {
+				timeDisplay.draw(gl);
+			}
 		}
 	}
 
@@ -151,6 +170,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		timeDisplay = new TimeDisplay(mainTexture, timeManager);
 		timeDisplay.setPosition(getWidth()-timeDisplay.getWidth()-10, 10);
+		
+		introBackground = new Sprite(TextureParts.makeIntroBackground(mainTexture));
+		introBackground.setPosition(0, 0);
 		
 		if (gameState != null) {
 			/* consume restored values and remove gameState */
@@ -243,5 +265,13 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		if (restoredState != null && restoredState instanceof GameState) {
 			gameState = (GameState)restoredState;
 		}		
+	}
+
+	public synchronized void setCurrentState(CurrentState currentState) {
+		this.currentState = currentState;
+	}
+
+	public synchronized CurrentState getCurrentState() {
+		return currentState;
 	}
 }
