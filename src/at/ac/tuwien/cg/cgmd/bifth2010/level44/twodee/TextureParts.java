@@ -67,4 +67,8 @@ public class TextureParts {
 	public static TexturePart makeAimBarForeground(Texture texture) {
 		return new TexturePart(texture, 370, 549, 370+185, 549+24);
 	}
+	
+	public static TexturePart makeIntroBackground(Texture texture) {
+		return new TexturePart(texture,1024-480,1024-320,480,320);
+	}
 }

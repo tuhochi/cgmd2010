@@ -41,6 +41,17 @@ public interface PhysicalObject {
 	 * @param gesture the input gesture (Swipe/Double Tap) to be processed
 	 */
 	public void processGesture(InputGesture gesture);
+	
+	/**
+	 * clear all stored inputs
+	 */
+	public void clearInputQueue();
+	
+	/**
+	 * reset all movement-variables
+	 */
+	public void resetMovement();
+	
 	/**
 	 * Draw itself with OpenGL
 	 * 

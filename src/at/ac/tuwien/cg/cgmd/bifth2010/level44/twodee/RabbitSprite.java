@@ -196,7 +196,7 @@ public class RabbitSprite extends SpriteContainer {
 	 * @param swipe
 	 */
 	public void rotate(Swipe swipe) {
-			float angleDelta = (swipe.getStrength() - Swipe.MIN_LENGTH) / 120.f;
+			float angleDelta = (swipe.getStrength() - Swipe.MIN_LENGTH) / 110.f;
 
 			angleDelta *= MAX_ROTATION / Swipe.MAX_MIN_DELTA;
 
