@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.GestureDetector;
