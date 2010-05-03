@@ -19,6 +19,8 @@ public class LevelActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// always change Media Volume
+		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		/* Fullscreen window without title */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		Window window = getWindow();
