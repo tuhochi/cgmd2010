@@ -44,6 +44,7 @@ public class SoundManager {
 		soundMap = new HashMap<SoundFX, Integer>();
 	
 		//TODO: sound for drop, hit (watersplash), ev. streetnoise, ...
+		soundMap.put(SoundFX.HIT, soundPool.load(context,R.raw.l84_hit,1));
 		soundMap.put(SoundFX.MISS, soundPool.load(context,R.raw.l84_miss,1));
 		soundMap.put(SoundFX.BREAK, soundPool.load(context,R.raw.l84_break,1));
 	}
