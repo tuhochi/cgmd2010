@@ -65,9 +65,6 @@ public class GameControl {
 		GameObject.updateOffset(movement);
 		handleDrunkState();
 		handleJailState();
-		
-		//update game time
-		GameTimer.getInstance().update();
 	}
 	
 

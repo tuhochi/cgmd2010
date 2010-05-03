@@ -1,15 +1,18 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
@@ -18,7 +21,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.JailBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.TextureSingletons;
 
 /**
@@ -91,6 +93,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	public JailBar jailStatusBar;
 	SoundManager sound;
 	
+	public static boolean isFirstFrame = true;
 	//public PlayerObject player;
 	/**
 	 * constructor
@@ -115,7 +118,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		
 		int width = MyRenderer.screenWidth;
 		int height = MyRenderer.screenHeight;
 		
@@ -168,6 +170,15 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			GameControl.updateDrunkStatus(drunkStatusBar);
 			GameControl.updateJailStatus(jailStatusBar);
 			jailStatusBar.draw(gl);
+			
+			//reset game time if this is the first frame
+			if(isFirstFrame) {
+				GameTimer.getInstance().reset();
+			}
+			//update game time
+			GameTimer.getInstance().update();
+			
+			isFirstFrame = false;
 	}
 
 	/**
@@ -175,6 +186,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		Log.d("df", "called onsurfacechanged");
 		//set new screen dimensions
 		MyRenderer.screenWidth = width;
 		MyRenderer.screenHeight = height;
@@ -221,7 +233,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		
+		Log.d("df", "called onsurfacecreated");
 		
 		//enable texture mapping
 		gl.glEnable(GL10.GL_TEXTURE_2D);
