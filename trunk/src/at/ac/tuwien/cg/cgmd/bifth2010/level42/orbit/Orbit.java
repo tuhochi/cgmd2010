@@ -390,13 +390,16 @@ public class Orbit extends Motion
 		if(this.directionVec.length()>Config.UNIVERSE_DIRLENGTH_LIMIT)
 			this.directionVecCap = Config.FORCEFIELD_NEW_DIRLENGTH/this.directionVec.length();
 		
-		Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" directionVecCap="+directionVecCap);
+		Log.d(LevelActivity.TAG,"centerVecCap ="+centerVecCap+" length="+this.centerVec.length() +" directionVecCap="+directionVecCap+" length="+this.directionVec.length());
 		
 		if((this.centerVecCap!=1 || this.directionVecCap != 1)){
 			morphAxisScale(centerVecCap, directionVecCap, 20,20);
 		}
 		
 		if(this.newSpeed > Config.UNIVERSE_SPEED_LIMIT){
+			//speedmorphing parameters
+			this.speedMorphStep = (this.newSpeed-Config.UNIVERSE_SPEED_LIMIT)/100;
+			this.dynamicMorphSpeed = 1;
 			this.newSpeed = Config.UNIVERSE_SPEED_LIMIT;
 		}
 	}
@@ -454,7 +457,7 @@ public class Orbit extends Motion
 		limitUniverse();
 		
 		//change the stepsize relative to the new orbitsize
-		//updateStepSize();
+		updateStepSize();
 		
 		//restart ellipse
 		this.u = 0;
