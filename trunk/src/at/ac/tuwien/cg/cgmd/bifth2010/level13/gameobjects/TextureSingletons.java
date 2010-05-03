@@ -50,4 +50,8 @@ public class TextureSingletons {
 			return null;
 		}
 	}
+	
+	public static void releaseTextures() {
+		textures = new HashMap<String, Texture>();
+	}
 }
