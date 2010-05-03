@@ -270,56 +270,56 @@ public class CollisionManager {
 					}
 					else
 					{
-						objAMotion = objA.getMotion();
-						objBMotion = objB.getMotion();
-						
-						if(objAMotion==null)
-						{
-							
-							objAMotion = new Orbit(	objA.getBoundingSphereWorld().center,
-													Config.UNIVERSE_CENTER,
-													Constants.DUMMY_INIT_VEC,
-													0.1f,
-													null);
-							MotionManager.instance.addMotion(objAMotion,objA);
-						}
-						
-	
-						if(objBMotion==null)
-						{
-							objBMotion = new Orbit(	objB.getBoundingSphereWorld().center,
-													Config.UNIVERSE_CENTER,
-													Constants.DUMMY_INIT_VEC,
-													0.1f,
-													null);
-							MotionManager.instance.addMotion(objBMotion,objB);
-						}
-						
-						
-						objACurrDir.set(objA.getMotion().getCurrDirectionVec()).normalize();
-						objBCurrDir.set(objB.getMotion().getCurrDirectionVec()).normalize();
-											
-						//weight with current speed
-						objACurrDir.multiply(objA.getMotion().getSpeed()*0.2f);
-						objBCurrDir.multiply(objB.getMotion().getSpeed()*0.2f);
-						
-						toCenterVecA.set(centerDistance);
-						toCenterVecA.normalize().multiply(-objA.getBoundingSphereWorld().radius);
-						
-						toCenterVecB.set(centerDistance);
-						toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
-						
-						objAPushVec.set(objBCurrDir);
-						objAPushVec.add(toCenterVecA);
-
-						objBPushVec.set(objACurrDir);
-						objBPushVec.add(toCenterVecB);
-
-						objA.getMotion().morph(objAPushVec);
-						objB.getMotion().morph(objBPushVec);
-						
-						MotionManager.instance.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
-						MotionManager.instance.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
+//						objAMotion = objA.getMotion();
+//						objBMotion = objB.getMotion();
+//						
+//						if(objAMotion==null)
+//						{
+//							
+//							objAMotion = new Orbit(	objA.getBoundingSphereWorld().center,
+//													Config.UNIVERSE_CENTER,
+//													Constants.DUMMY_INIT_VEC,
+//													0.1f,
+//													null);
+//							MotionManager.instance.addMotion(objAMotion,objA);
+//						}
+//						
+//	
+//						if(objBMotion==null)
+//						{
+//							objBMotion = new Orbit(	objB.getBoundingSphereWorld().center,
+//													Config.UNIVERSE_CENTER,
+//													Constants.DUMMY_INIT_VEC,
+//													0.1f,
+//													null);
+//							MotionManager.instance.addMotion(objBMotion,objB);
+//						}
+//						
+//						
+//						objACurrDir.set(objA.getMotion().getCurrDirectionVec()).normalize();
+//						objBCurrDir.set(objB.getMotion().getCurrDirectionVec()).normalize();
+//											
+//						//weight with current speed
+//						objACurrDir.multiply(objA.getMotion().getSpeed()*0.2f);
+//						objBCurrDir.multiply(objB.getMotion().getSpeed()*0.2f);
+//						
+//						toCenterVecA.set(centerDistance);
+//						toCenterVecA.normalize().multiply(-objA.getBoundingSphereWorld().radius);
+//						
+//						toCenterVecB.set(centerDistance);
+//						toCenterVecB.normalize().multiply(objB.getBoundingSphereWorld().radius);
+//						
+//						objAPushVec.set(objBCurrDir);
+//						objAPushVec.add(toCenterVecA);
+//
+//						objBPushVec.set(objACurrDir);
+//						objBPushVec.add(toCenterVecB);
+//
+//						objA.getMotion().morph(objAPushVec);
+//						objB.getMotion().morph(objBPushVec);
+//						
+//						MotionManager.instance.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
+//						MotionManager.instance.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
 					}
 					
 

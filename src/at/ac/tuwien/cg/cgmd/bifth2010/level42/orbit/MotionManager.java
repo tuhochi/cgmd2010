@@ -216,12 +216,18 @@ public class MotionManager {
 										oldDirMotion.getSpeed(),
 										oldDirMotion.getBasicOrientation());
 
+			//TODO: reuse obj
+			Vector3 tempCenter = new Vector3(newOrbit.centerVec).normalize();
+			Vector3 tempDir  = new Vector3(newOrbit.directionVec).normalize();
+			float angle = (float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir));
 			
-//			Vector3 tempCenter = new Vector3(newOrbit.centerVec).normalize();
-//			Vector3 tempDir  = new Vector3(newOrbit.directionVec).normalize();
-//
-//			Log.d(LevelActivity.TAG," angle....="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
-			newOrbit.rotateDirectionVec(-90,8);			
+			Log.d(LevelActivity.TAG," angle....="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
+			
+			if(Float.isNaN(angle))
+				angle = 0;
+			
+			newOrbit.rotateDirectionVec(90-angle,6);
+
 			setMotion(newOrbit,obj);
 			checkInnerForceField(obj);
 		}

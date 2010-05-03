@@ -40,10 +40,10 @@ public class Config
 	public static String SATELLITE_PREFIX = "Satellite_";
 	
 	/** defines the maximum of the orbit main axis */
-	public static float UNIVERSE_CENTERLENGTH_LIMIT = 20;
+	public static float UNIVERSE_CENTERLENGTH_LIMIT = 30;
 	
 	/** defines the maximum of the orbit secondary axis */
-	public static float UNIVERSE_DIRLENGTH_LIMIT = 20;
+	public static float UNIVERSE_DIRLENGTH_LIMIT = 30;
 	
 	/** defines the maximum of the orbit main axis */
 	public static float FORCEFIELD_CENTERLENGTH_LIMIT = 10;
@@ -51,8 +51,8 @@ public class Config
 	/** defines the maximum of the orbit secondary axis */
 	public static float FORCEFIELD_DIRLENGTH_LIMIT = 10;
 	
-	public static float FORCEFIELD_NEW_CENTERLENGTH = 15;
-	public static float FORCEFIELD_NEW_DIRLENGTH = 15;
+	public static float FORCEFIELD_NEW_CENTERLENGTH = 20;
+	public static float FORCEFIELD_NEW_DIRLENGTH = 20;
 	
 	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 40;
 	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 30;
