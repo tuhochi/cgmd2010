@@ -32,7 +32,6 @@ public abstract class Projectile extends GLObject{
 	
 	
 	public void initVBOs(){	
-		mXTranslate = 0.0f;
 		mLastFrametime = System.currentTimeMillis();
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
@@ -82,7 +81,7 @@ public abstract class Projectile extends GLObject{
 		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
 		//pause
-		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;		
+		if( GameMechanics.getSingleton().running() == false ) dt = 0;		
 		mLastFrametime = ms;
 		double distance = this.getSpeed() * dt;
 		mXTranslate += (float)distance;		

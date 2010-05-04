@@ -1,10 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 import javax.microedition.khronos.opengles.GL10;

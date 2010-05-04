@@ -66,6 +66,7 @@ public abstract class Tower extends GLObject {
 		mColorBuffer = cbb.asFloatBuffer();
 		mColorBuffer.put( colors );
 		mColorBuffer.position( 0 );
+		
 		mTimeLastProjectileShot = System.currentTimeMillis();
 		for( int c = 0; c < mProjectiles.length; c++){
 			mProjectiles[c].initVBOs();
@@ -89,7 +90,7 @@ public abstract class Tower extends GLObject {
 	public void draw( GL10 gl ){
 		
 		//pause
-		if( GameMechanics.getGameMecanics().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
+		if( GameMechanics.getSingleton().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
 		
 		if( this.getActiveState() == false ) return;
 		double dt =(System.currentTimeMillis() - mTimeLastProjectileShot );//secs

@@ -27,12 +27,6 @@ public class Field extends GLObject{
 	}
 	
 	public void initVBOs(){
-		/*float[] vertices = {
-				mXStart,	mYStart,	0.0f,
-				mXEnd,		mYStart,	0.0f,
-				mXEnd,		mYEnd,		0.0f,
-				mXStart,	mYEnd,		0.0f,
-		};*/
 		float[] vertices = {
 				mXStart,	mYStart,	0.0f,
 				mXEnd,		mYStart,	0.0f,

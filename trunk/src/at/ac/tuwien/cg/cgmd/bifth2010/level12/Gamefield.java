@@ -1,13 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class Gamefield {
 	private Field[] mFields = null;
@@ -56,28 +50,6 @@ public class Gamefield {
 			mLastFields[i].setColor( 1.0f, 1.0f, 0.0f, 3);
 			mLastFields[i].setOccupied(true);
 		}
-		
-		/*ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
-
-		byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
-
-		indexBuffer = ByteBuffer.allocateDirect(indices.length);
-		indexBuffer.put(indices);
-		indexBuffer.position(0);
-		
-		byteBuf = ByteBuffer.allocateDirect(colors.length*4);
-		byteBuf.order(ByteOrder.nativeOrder());
-	    colorBuffer = byteBuf.asFloatBuffer();
-	    colorBuffer.put(colors);
-	    colorBuffer.position(0); */
 	}
 	
 	public void onResume(){
@@ -93,33 +65,6 @@ public class Gamefield {
 		for( int i = 0; i < mLastFields.length; i++ ){
 			mLastFields[i].draw(gl);
 		}
-		
-		/*gl.glTranslatef(mWidth*0.5f, mHeight*0.5f, 0.0f);
-		gl.glScalef(mWidth, mHeight, 1.0f);
-		//tex.setTexture(R.drawable.icon);
-		//TextureManager.getSingletonObject().setTexture(R.drawable.l12_icon);
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-		
-		//Point to our buffers
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-		//Set the face rotation
-		gl.glFrontFace(GL10.GL_CCW);
-		
-		//Enable the vertex and texture state
-		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-		gl.glColorPointer(3, GL10.GL_FLOAT, 0, colorBuffer);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-		
-		//Draw the vertices as triangles, based on the Index Buffer information
-		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
-		
-		//Disable the client state before leaving
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisable(GL10.GL_TEXTURE_2D);
-		gl.glLoadIdentity();*/
 	}
 
 
