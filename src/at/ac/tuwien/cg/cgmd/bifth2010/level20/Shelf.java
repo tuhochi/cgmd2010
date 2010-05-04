@@ -105,8 +105,8 @@ public class Shelf extends RenderEntity {
 			
 			
 		// Check every frame if the touch touches a product
-		if (GameManager.touchDown) {			
-			touchEvent(GameManager.touchX, GameManager.touchY);
+		if (LevelActivity.gameManager.touchDown) {			
+			touchEvent(LevelActivity.gameManager.touchX, LevelActivity.gameManager.touchY);
 		}
 		
 		
@@ -190,13 +190,7 @@ public class Shelf extends RenderEntity {
 		gl.glMatrixMode(GL10.GL_TEXTURE);
 		gl.glPopMatrix();
 		
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		
-		// Render products.	
-		Enumeration<Integer> keys = products.keys();
-		while(keys.hasMoreElements()) {
-			products.get(keys.nextElement()).render(gl);
-		}	
+		gl.glMatrixMode(GL10.GL_MODELVIEW);		
 	}
 	
 
@@ -215,10 +209,11 @@ public class Shelf extends RenderEntity {
 			// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
 			float productSize = 64 * height / 480;
 
-			int texId = GameManager.TEXTURE_PRODUCTS[(int)(Math.random() * GameManager.TEXTURE_PRODUCTS.length)];
+			
+			int texId = RenderView.TEXTURE_PRODUCTS[(int)(Math.random() * RenderView.TEXTURE_PRODUCTS.length)];
 
 			ProductEntity pe = new ProductEntity(x, y, 1, productSize);	
-			pe.texture = GameManager.getTexture(texId);
+			pe.texture = LevelActivity.renderView.getTexture(texId);
 			
 			
 			// Declaring neighbors
