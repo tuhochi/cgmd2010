@@ -7,6 +7,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -22,26 +23,35 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView;
  */
 public class LevelActivity extends Activity {
 
-	private RenderView renderView;
-	private TouchListener touchListener;
+	protected static RenderView renderView;
+	protected static GameManager gameManager;
+//	protected TouchListener touchListener;
+	
+	protected static LevelActivity instance;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		
+		super.onCreate(savedInstanceState);		
+		instance = this;
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        
         setContentView(R.layout.l20_level);
         renderView = (RenderView)findViewById(R.id.l20_RenderView);
-		
+        
+		gameManager = new GameManager();
+		renderView.setOnTouchListener(gameManager);
+                
         // Register our own TouchListener
-		touchListener = new TouchListener();		
-		renderView.setOnTouchListener(touchListener);      
+//		touchListener = new TouchListener();
 		
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());
+		
+		Log.d(getClass().getSimpleName(), "LevelActivity (re)created");
 		
 	}
 	
@@ -69,6 +79,7 @@ public class LevelActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		gameManager.time.reset();
 		renderView.onResume();
 	}
 
