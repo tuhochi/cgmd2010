@@ -22,8 +22,11 @@ public class TextureManager {
 	private int[] textures;
 	private static TextureManager singletonObject;
 	
-	public void initialize(GL10 gl,Context context) {		
+	public void initializeGL(GL10 gl){		
 		this.gl = gl;
+	}
+	
+	public void initializeContext( Context context ){
 		this.context = context;
 		this.textureMap = new java.util.HashMap<Integer, Integer> ();
 	}
@@ -117,5 +120,7 @@ public class TextureManager {
 			return;
 		}
 	}
+	
+
 }
 

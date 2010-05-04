@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
@@ -89,7 +88,7 @@ public abstract class MoneyCarrier extends GLObject {
 	public void draw(GL10 gl){	
 		long ms = System.currentTimeMillis();
 		double dt = (ms - mLastFrametime) * 0.001;
-		if( GameMechanics.getGameMecanics().running() == false ) dt = 0;
+		if( GameMechanics.getSingleton().running() == false ) dt = 0;
 		mLastFrametime = ms;
 		double distance = mSpeed * dt;
 		mMovePos -= distance;

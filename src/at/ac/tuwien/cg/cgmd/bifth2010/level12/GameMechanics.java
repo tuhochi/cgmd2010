@@ -9,15 +9,22 @@ public class GameMechanics {
 	private long mRoundStartedTime = System.currentTimeMillis();
 	private int mRemainingCountdownTime = -1;
 	private long mTimeGamePaused = -1;
+	private int mSelectedTower = 0;
+	private long mLastColDetDone = -1;
 	
+	private static LevelActivity mGameContext = null;	
 	private static GameMechanics mSingleton = null;
 	
 	private GameMechanics( int startMoney ){
-			mMoney = startMoney;	
+		mMoney = startMoney;	
+	}
+	
+	private static void setGameContext( LevelActivity gc ){
+		mGameContext = gc;
 	}
 	
 	
-	public static GameMechanics getGameMecanics(){
+	public static GameMechanics getSingleton(){
 		if( mSingleton == null){
 			mSingleton = new GameMechanics( Definitions.STARTING_MONEY );
 		}
@@ -88,4 +95,21 @@ public class GameMechanics {
 		return mRoundStartedTime;
 	}
 
+
+	public int getSelectedTower() {
+		return mSelectedTower;
+	}
+	
+	public long getLastCollDetDoneTime(){
+		return mLastColDetDone;
+	}
+
+
+	public void setCollDetTime() {
+		mLastColDetDone = System.currentTimeMillis();
+	}
+	
+	public void finishGame(){
+		if( mGameContext != null )mGameContext.finish();
+	}
 }
