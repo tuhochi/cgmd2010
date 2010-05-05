@@ -3,10 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Vibrator;
-import android.provider.UserDictionary.Words;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
@@ -22,9 +18,6 @@ public class LevelHandler {
 	float gameCharacterSpeed = 30;
 	ArrayList<int[]> worldEntry; 
 
-
-	byte way;
-	byte wall;
 	Random rand = new Random();
 	public boolean demomode = false;
 
@@ -60,16 +53,6 @@ public class LevelHandler {
 	world = levelGenration.startCreation();
 	worldEntry=levelGenration.getwallInfo();
 	gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
-		
-
-		
-		
-		
-		// setup surface
-		way = SceneGraph.GEOMETRY_WAY;
-
-		// setup wall
-		wall = SceneGraph.NONE_SPECIAL_WALL_EDGE;	
 		
 	}
 
@@ -172,39 +155,40 @@ public class LevelHandler {
 //		worldIndex = worldDim.y*rows+columns;
 //		Log.d("worldIndex2", String.valueOf(worldIndex));
 //		
+		int value = worldEntry.get(worldIndex)[0];
 		
-		if(world[worldIndex]!=1)
+		if(value!=1)
 		{
 			if(LevelActivity.IS_MUSIC_ON)
 			{
-				if(world[worldIndex]==SceneGraph.GEOMETRY_STONE)
+				if(value==SceneGraph.GEOMETRY_STONE)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.STONE);
 				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_BARREL)
+				else if(value==SceneGraph.GEOMETRY_BARREL)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.BARREL);
 				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_TRASH)
+				else if(value==SceneGraph.GEOMETRY_TRASH)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
 					//LevelActivity.vibrator.vibrate(120L);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.TRASH);
 				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_SPRING)
+				else if(value==SceneGraph.GEOMETRY_SPRING)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.SPRING);
 				}
-				else if(world[worldIndex]==SceneGraph.GEOMETRY_MAP)
+				else if(value==SceneGraph.GEOMETRY_MAP)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
 				}
 			}
-			world[worldIndex]=1;
+			worldEntry.get(worldIndex)[0]=1;
 			
 			
 			
@@ -275,9 +259,13 @@ public class LevelHandler {
 	public boolean isDirectWayPossilbe(Vector2i to){
 
 		Vector2i toReal= getRealWorldCoordinate(to);
+		
+		
+		Log.d("to entry:",""+world[toReal.y*worldDim.x+toReal.x]);
+		Log.d("to entry wordEntry:",""+worldEntry.get(toReal.y*worldDim.x+toReal.x)[0]);
 
 		// if toReal is no wall!
-		if(world[toReal.y*worldDim.x+toReal.x]==this.wall)
+		if(worldEntry.get(toReal.y*worldDim.x+toReal.x)[0]<=SceneGraph.NONE_SPECIAL_WALL_EDGE)
 			return false;
 
 		
@@ -301,7 +289,7 @@ public class LevelHandler {
 				if(diff.x>0)
 					step=1;
 				for(int i= x; i!=to.x;i=i+step)
-					if(getWorldEntry(i,y)[0]<=wall)
+					if(getWorldEntry(i,y)[0]<=SceneGraph.NONE_SPECIAL_WALL_EDGE)
 						return false;
 				return true;
 					
@@ -314,7 +302,7 @@ public class LevelHandler {
 				if(diff.y>0)
 					step=1;
 				for(int i= y; i!=to.y;i=i+step)
-					if(getWorldEntry(x,i)[0]<=wall)
+					if(getWorldEntry(x,i)[0]<=SceneGraph.NONE_SPECIAL_WALL_EDGE)
 						return false;
 				return true;
 			}
@@ -369,6 +357,7 @@ public class LevelHandler {
 		//if(false)
 		if(isDirectWayPossilbe(to))
 		{
+			Log.d("direct","yes");
 			Vector2i pos = new Vector2i(Math.round(gameCharacterPosition.x),Math.round(gameCharacterPosition.y));
 			
 			
@@ -411,9 +400,6 @@ public class LevelHandler {
 			
 		}
 
-		
-			
-		
 		
 	}
 
