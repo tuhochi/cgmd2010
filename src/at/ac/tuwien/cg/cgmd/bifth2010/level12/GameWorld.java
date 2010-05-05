@@ -51,7 +51,11 @@ public class GameWorld {
 	
 	public void initVBOs(){
 		if( mEnemies != null )System.out.println("On Resume - Enemies count: "+mEnemies.size());
-		if( mEnemies != null ) for( int i = 0; i < mEnemies.size(); i++) mEnemies.get(i).initVBOs();
+		if( mEnemies != null ) {
+			synchronized( mEnemies ){
+				for( int i = 0; i < mEnemies.size(); i++) mEnemies.get(i).initVBOs();
+			}	
+		}
 		if( mBasicTower != null) for( int i = 0; i < mBasicTower.length; i++) mBasicTower[i].initVBOs();
 		if( mGamefield != null) mGamefield.onResume();
 	}
@@ -107,7 +111,9 @@ public class GameWorld {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemies.add( carrier );
+					synchronized( mEnemies ){
+						mEnemies.add( carrier );
+					}
 				}
 				break;
 			case(1):
@@ -117,7 +123,9 @@ public class GameWorld {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemies.add( carrier );
+					synchronized( mEnemies ){
+						mEnemies.add( carrier );
+					}
 				}
 				break;
 			case(2):
@@ -127,7 +135,9 @@ public class GameWorld {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemies.add( carrier );
+					synchronized( mEnemies ){
+						mEnemies.add( carrier );
+					}
 				}
 				break;
 			case(3):
@@ -137,7 +147,9 @@ public class GameWorld {
 					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0], correctXYpos[1] );
 					carrier.activate();
-					mEnemies.add( carrier );
+					synchronized( mEnemies ){
+						mEnemies.add( carrier );
+					}
 				}
 				break;
 			default:
@@ -162,10 +174,12 @@ public class GameWorld {
 		if( mEnemies == null ) return;
 		//simple stupid way
 		for( int i = 0; i < mBasicTower.length; i++){
-			if( mBasicTower[i].getActiveState()){	
-				for( int j = 0; j < mEnemies.size() ; j++){
-					if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mBasicTower[i].getY() ){
-						mBasicTower[i].collideX( mEnemies.get(j) );
+			if( mBasicTower[i].getActiveState()){
+				synchronized( mEnemies ){
+					for( int j = 0; j < mEnemies.size() ; j++){
+						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mBasicTower[i].getY() ){
+							mBasicTower[i].collideX( mEnemies.get(j) );
+						}
 					}
 				}
 			}
@@ -188,19 +202,25 @@ public class GameWorld {
 	
 	public Vector<MoneyCarrier> getEnemies(){
 		if( mEnemies == null ) return null;
-		for ( int i = 0; i < mEnemies.size(); i++){
-			boolean remove = false;
-			if( mEnemies.get(i).getX() <= 1.0f) {
-				GameMechanics.getSingleton().addMoney( mEnemies.get(i).getMoney() );
-				mEnemies.get(i).deactivate();
-				remove = true;
+		synchronized( mEnemies ){
+			for ( int i = 0; i < mEnemies.size(); i++){
+				boolean remove = false;
+				if( mEnemies.get(i).getX() <= 1.0f) {
+					GameMechanics.getSingleton().addMoney( mEnemies.get(i).getMoney() );
+					mEnemies.get(i).deactivate();
+					remove = true;
+				}
+				if( mEnemies.get(i).getHP() <= 0 ){
+					mEnemies.get(i).deactivate();
+					remove = true;
+				}
+				if( remove ) mEnemies.remove(i);
 			}
-			if( mEnemies.get(i).getHP() <= 0 ){
-				mEnemies.get(i).deactivate();
-				remove = true;
-			}
-			if( remove ) mEnemies.remove(i);
 		}
 		return mEnemies;
+	}
+
+	public static void destroySingleton() {
+		mSingleton = null;	
 	}
 }

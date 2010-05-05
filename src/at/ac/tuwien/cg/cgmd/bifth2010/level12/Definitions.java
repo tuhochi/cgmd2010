@@ -6,7 +6,7 @@ public final class Definitions {
 	
 	public static final int COLLISION_DETECTION_TIMEOUT = 10;
 	//Game Mechanics:
-	public static final int STARTING_MONEY = 100;
+	public static final int STARTING_MONEY = 90;
 
 	public static final int GAME_ROUND_WAIT_TIME = 20000;
 
@@ -24,7 +24,7 @@ public final class Definitions {
 	public static final int ADVANCED_TOWER_POOL = 5;
 	
 		//Basic Tower:
-		public static final float BASIC_TOWER_RADIUS = 10;
+		public static final float BASIC_TOWER_RADIUS = 30;
 		public static final float BASIC_TOWER_SHOOTING_INTERVALL = 5000;
 	
 		//Basic Tower Projectiles:
@@ -47,28 +47,28 @@ public final class Definitions {
 		//Round one
 		public static final short FIRST_ROUND_ENEMIE_HP = 10;
 		public static final short FIRST_ROUND_ENEMIE_STRENGTH = 10;
-		public static final float FIRST_ROUND_ENEMIE_RADIUS = 10;
+		public static final float FIRST_ROUND_ENEMIE_RADIUS = 20;
 		public static final int FIRST_ROUND_ENEMIE_MONEY = 10;
 		public static final float FIRST_ROUND_ENEMIE_SPEED = 7;
 
 		//Round Two
 		public static final short SECOND_ROUND_ENEMIE_HP = 20;
 		public static final short SECOND_ROUND_ENEMIE_STRENGTH = 20;
-		public static final float SECOND_ROUND_ENEMIE_RADIUS = 12;
+		public static final float SECOND_ROUND_ENEMIE_RADIUS = 25;
 		public static final int SECOND_ROUND_ENEMIE_MONEY = 20;
 		public static final float SECOND_ROUND_ENEMIE_SPEED = 10;
 
 		//Round Three:
 		public static final short THIRD_ROUND_ENEMIE_HP = 30;
 		public static final short THIRD_ROUND_ENEMIE_STRENGTH = 30;
-		public static final float THIRD_ROUND_ENEMIE_RADIUS = 12;
+		public static final float THIRD_ROUND_ENEMIE_RADIUS = 30;
 		public static final int THIRD_ROUND_ENEMIE_MONEY = 20;
 		public static final float THIRD_ROUND_ENEMIE_SPEED = 15;
 
 		//Round Four:
 		public static final short FOURTH_ROUND_ENEMIE_HP = 40;
 		public static final short FOURTH_ROUND_ENEMIE_STRENGTH = 40;
-		public static final float FOURTH_ROUND_ENEMIE_RADIUS = 14;
+		public static final float FOURTH_ROUND_ENEMIE_RADIUS = 35;
 		public static final int FOURTH_ROUND_ENEMIE_MONEY = 20;
 		public static final float FOURTH_ROUND_ENEMIE_SPEED = 20;
 

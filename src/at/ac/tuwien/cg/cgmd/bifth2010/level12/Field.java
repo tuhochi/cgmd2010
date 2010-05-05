@@ -53,10 +53,10 @@ public class Field extends GLObject{
 		mIndicesBuffer.put(  points );
 		mIndicesBuffer.position(0);
 		
-		float[] colors = { mColor[0], mColor[1], mColor[2], 1.0f,
-				mColor[0], mColor[1], mColor[2], 1.0f,
-				mColor[0], mColor[1], mColor[2], 1.0f,
-				mColor[0], mColor[1], mColor[2], 1.0f};
+		float[] colors = { mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3]};
 
 		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
 		cbb.order( ByteOrder.nativeOrder() );

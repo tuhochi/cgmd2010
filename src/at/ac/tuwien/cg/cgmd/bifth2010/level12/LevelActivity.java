@@ -75,6 +75,7 @@ public class LevelActivity extends Activity{
  	   	if( mRenderer == null ) mRenderer = new GLRenderer();
  	   	glview.setRenderer(mRenderer);
     	GameMechanics.getSingleton().unpause();
+    	GameMechanics.getSingleton().setGameContext(this);
         super.onResume();
         setContentView( glview );
     }
@@ -106,7 +107,10 @@ public class LevelActivity extends Activity{
 	   	System.out.println("ON DESTROY ACTIVITY");
 	   	SessionState s = new SessionState();
     	//we set the progress the user has made (must be between 0-100)
+	   	System.out.println("Result: "+GameMechanics.getSingleton().getMoney());
     	s.setProgress( GameMechanics.getSingleton().getMoney() );
+    	GameWorld.destroySingleton();
+    	GameMechanics.destroySingleton();
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
 	   	super.onDestroy();
