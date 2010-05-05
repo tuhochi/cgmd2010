@@ -36,7 +36,11 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 			Vector<Tower> t = GameWorld.getSingleton().getTower();
 			for( int i = 0; i < t.size(); i++) t.get(i).draw(gl);	
 			Vector<MoneyCarrier> e = GameWorld.getSingleton().getEnemies();
-			if( e != null )for( int i = 0; i < t.size(); i++) e.get(i).draw(gl); //BUG: Array out of bounds... manchmal
+			if( e != null ){
+				synchronized( e ){
+					for( int i = 0; i < e.size(); i++) e.get(i).draw(gl);
+				}
+			}
 		}
 	}
 

@@ -12,7 +12,7 @@ public class BasicProjectile extends Projectile {
 		mColor[0] = 1.0f;
 		mColor[1] = 1.0f;
 		mColor[2] = 1.0f;
-		mColor[3] = 1.5f;
+		mColor[3] = 1.0f;
 		mActive = false;
 		mTexture = R.drawable.l12_basic_projectile;
 	}

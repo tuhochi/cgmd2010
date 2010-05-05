@@ -57,10 +57,10 @@ public abstract class Tower extends GLObject {
 		mIndicesBuffer.position(0);	
 		mIndicesCounter = indices.length;
 		
-		float[] colors = { mColor[0], mColor[1], mColor[2], 1.0f,
-				mColor[0], mColor[1], mColor[2], 1.0f,
-				mColor[0], mColor[1], mColor[2], 1.0f,
-				mColor[0], mColor[1], mColor[2], 1.0f};
+		float[] colors = { mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3]};
 		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
 		cbb.order( ByteOrder.nativeOrder() );
 		mColorBuffer = cbb.asFloatBuffer();

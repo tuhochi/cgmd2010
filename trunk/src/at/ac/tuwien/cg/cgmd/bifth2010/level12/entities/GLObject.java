@@ -12,7 +12,7 @@ public abstract class GLObject {
 	protected FloatBuffer mColorBuffer = null;
 	protected ShortBuffer mIndicesBuffer = null;
 	protected FloatBuffer mTextureBuffer = null;
-	protected float[] mColor = {0.3f, 1.0f, 0.5f, 1.0f };
+	protected float[] mColor = {1.0f, 1.0f, 1.0f, 1.0f };
 	protected int mIndicesCounter = -1;
 	protected float mY = 0;
 	protected float mX = 0;
@@ -39,6 +39,8 @@ public abstract class GLObject {
 			
 			gl.glVertexPointer( 3, GL10.GL_FLOAT, 0, mVerticesBuffer);		
 			gl.glColorPointer( 4, GL10.GL_FLOAT, 0, mColorBuffer );	
+			gl.glEnable(GL10.GL_BLEND);
+			gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 			TextureManager.getSingletonObject().setTexture(mTexture);
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
 			

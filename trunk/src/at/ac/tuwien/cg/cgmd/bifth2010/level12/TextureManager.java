@@ -99,6 +99,7 @@ public class TextureManager {
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 			
+			
 			//Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 	        bitmap.recycle();

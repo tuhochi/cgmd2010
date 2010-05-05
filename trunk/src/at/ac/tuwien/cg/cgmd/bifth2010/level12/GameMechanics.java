@@ -11,15 +11,15 @@ public class GameMechanics {
 	private long mTimeGamePaused = -1;
 	private int mSelectedTower = 0;
 	private long mLastColDetDone = -1;
+	private LevelActivity mGameContext = null;	
 	
-	private static LevelActivity mGameContext = null;	
 	private static GameMechanics mSingleton = null;
 	
 	private GameMechanics( int startMoney ){
 		mMoney = startMoney;	
 	}
 	
-	private static void setGameContext( LevelActivity gc ){
+	public void setGameContext( LevelActivity gc ){
 		mGameContext = gc;
 	}
 	
@@ -111,5 +111,10 @@ public class GameMechanics {
 	
 	public void finishGame(){
 		if( mGameContext != null )mGameContext.finish();
+		else System.out.println("Could not end game, no pointer to Context");
+	}
+
+	public static void destroySingleton() {
+		mSingleton = null;
 	}
 }
