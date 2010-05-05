@@ -96,11 +96,10 @@ public class Geometry {
 	/**
 	 * this constructor accept the ObjModel
 	 * @param gl
-	 * @param type Primitive Type eg.: Triangel
 	 * @param objModel Object Geometry
 	 * @param textur Texture ID
 	 */
-	public Geometry(GL10 gl, Type[] type, ObjModel objModel, int textur) {
+	public Geometry(GL10 gl, ObjModel objModel, int textur) {
 		
 		this.gl = gl;
 		this.type = objModel.type;

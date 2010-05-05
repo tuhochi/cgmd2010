@@ -16,6 +16,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryLoader;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.ObjModel;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 /**
  * The Class SceneGraph
@@ -112,10 +114,13 @@ public class SceneGraph {
 
 		// load Objects
 		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_models);
-		//InputStream isImage = SceneGraph.context.getResources().openRawResource();
 		geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
 		
-		//geometry.write("/sdcard/test.out");
+//		ObjModel obj = geometry.GetObjModel();
+//		obj.write();
+//		
+//		ObjModel obj = ObjModel.read("/sdcard/test.out", context);
+//		Geometry geometry = new Geometry(gl, obj,R.drawable.l33_textur);
 
 				geometry.render();
 
@@ -217,38 +222,81 @@ public class SceneGraph {
 					
 					
 					if(type[0]<=GEOMETRY_WALL)
-						geometry.render(0);
+					{
+						if(type[1]!=0)
+						{
+							glPushMatrix();
+							gl.glRotatef(type[1], 0, 1, 0);
+						}
+
+							 if (type[0]==NONE_SPECIAL_WALL_EDGE)
+							geometry.render(10);
+						else if (type[0]==ONE_SPECIAL_WALL_EDGE)
+							geometry.render(11);
+						else if (type[0]==COUNTERPART_SPECIAL_WALL_EDGE)
+							geometry.render(12);
+						else if (type[0]==THREE_SPECIAL_WALL_EDGE)
+							geometry.render(13);
+						else if (type[0]==FOUR_SPECIAL_WALL_EDGE)
+							geometry.render(14);
+						else if (type[0]==TWO_SPECIAL_WALL_EDGE)
+							geometry.render(15);
+						else if (type[0]==ONE_SPECIAL_CORNER)
+							geometry.render(16);
+						else if (type[0]==TWO_SPECIAL_CORNER)
+							geometry.render(17);
+						else if (type[0]==THREE_SPECIAL_CORNER)
+							geometry.render(18);
+						else if (type[0]==FOUR_SPECIAL_CORNER)
+							geometry.render(19);
+						else if (type[0]==COUNTERPART_SPECIAL_CORNER)
+							geometry.render(20);
+						else if (type[0]==ONE_EDGE_ONE_RIGHT_SPECIAL_CORNER_WALL)
+							geometry.render(21);
+						else if (type[0]==ONE_EDGE_ONE_LEFT_SPECIAL_CORNER_WALL)
+							geometry.render(22);
+						else if (type[0]==ONE_EDGE_TWO_SPECIAL_CORNER_WALL)
+							geometry.render(23);
+						else if (type[0]==TWO_EDGE_ONE_SPECIAL_CORNER_WALL)
+							geometry.render(24);
+							 
+						if(type[1]!=0)
+							glPopMatrix();
+						
+					}
 					else{
 
 						if(type[0]==GEOMETRY_STONE)
 						{
-							geometry.render(1);
-							geometry.render(8);
+							geometry.render(0);
+							geometry.render(7);
 						}
 						else if(type[0]==GEOMETRY_BARREL)
 						{
-							geometry.render(2);
-							geometry.render(8);
+							geometry.render(1);
+							geometry.render(7);
 						}
 						else if(type[0]==GEOMETRY_TRASH)
 						{
-							geometry.render(3);
-							geometry.render(10);
+							geometry.render(2);
+							geometry.render(9);
 						}
 						else if(type[0]==GEOMETRY_MAP)
-						{ 	geometry.render(8);
+						{ 	geometry.render(7);
 							glPushMatrix();
 							gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
-							geometry.render(4);
+							geometry.render(3);
 							glPopMatrix();
 						}
 						else if(type[0]==GEOMETRY_SPRING)
 						{
-							geometry.render(5);
-							geometry.render(9);
+							geometry.render(4);
+							geometry.render(8);
 						}	
 						else 
-							geometry.render(7);
+							geometry.render(6);
+						
+						//geometry.render(30);
 						
 						}
 					glPopMatrix();
@@ -292,7 +340,7 @@ public class SceneGraph {
 
 		// render the character
 		glPushMatrix();
-		geometry.render(6);
+		geometry.render(5);
 		glPopMatrix();
 		
 	}
