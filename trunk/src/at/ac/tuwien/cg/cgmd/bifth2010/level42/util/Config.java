@@ -27,6 +27,7 @@ public class Config
 	
 	/** The Constant TOUCH_DEADZONE. */
 	public static final int TOUCH_DEADZONE = 30;
+
 	
 	/** PHYSICS / UNIVERSE. */
 
@@ -54,8 +55,8 @@ public class Config
 	public static float FORCEFIELD_NEW_CENTERLENGTH = 20;
 	public static float FORCEFIELD_NEW_DIRLENGTH = 20;
 	
-	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 40;
-	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 30;
+	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 20;
+	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 20;
 	
 	/** defines the maximum relative speed for satellites */
 	public static float UNIVERSE_SPEED_LIMIT = 8;
@@ -79,5 +80,9 @@ public class Config
 	
 	/** the selection vector gets divided by this factor */
 	public static float SELECTION_FORCE_FACTOR = 0.8f;
+	
+	public static final float DIRORBITTRANSFORM_DIRVEC_FACTOR = 5;
+	public static final float DIRVEC_ROTATION_STEPS = 6;
+	public static final float TRANSFORMATION_DISTANCE = 10;
 	
 }

@@ -174,6 +174,11 @@ public class MotionManager {
 			}
 		
 			if(dirRatio!=1f || centerRatio!=1f){
+//				Log.d(LevelActivity.TAG,"FF center length="+orbit.centerVec.length()+
+//										"ratio="+centerRatio+
+//										" dir length="+orbit.directionVec.length()+
+//										"ratio="+dirRatio);
+				
 				orbit.morphAxisScale(	centerRatio, 
 										dirRatio, 
 										Config.FORCEFIELD_CENTERLENGTH_SCALESPEED,
@@ -190,7 +195,7 @@ public class MotionManager {
 		if(motion instanceof DirectionalMotion){
 			if(entity.getCurrentPosition().length()>Config.UNIVERSE_CENTERLENGTH_LIMIT){
 				//change to orbit motion
-				Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());
+				//Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());
 				transformDirMotionInOrbit(entity);
 			}
 		}
@@ -200,13 +205,14 @@ public class MotionManager {
 		
 		if(obj.getMotion() instanceof DirectionalMotion){
 			
-			Log.d(LevelActivity.TAG,"TRANSFORM");
+			Log.d(LevelActivity.TAG,"TRANSFORM in ORBIT");
+			
 			DirectionalMotion oldDirMotion = (DirectionalMotion)obj.getMotion();
 			
 			//set to the actual direction and normalize
 			deflactionDirVec.set(obj.getMotion().getCurrDirectionVec()).normalize();
 			// * centerVec * 4
-			deflactionDirVec.multiply(obj.getCurrentPosition().length()*4f);
+			deflactionDirVec.multiply(obj.getCurrentPosition().length()*Config.DIRORBITTRANSFORM_DIRVEC_FACTOR);
 			// + small deflaction for cross prod
 			deflactionDirVec.add(Constants.DUMMY_VARIATION_VEC);
 									
@@ -219,14 +225,16 @@ public class MotionManager {
 			//TODO: reuse obj
 			Vector3 tempCenter = new Vector3(newOrbit.centerVec).normalize();
 			Vector3 tempDir  = new Vector3(newOrbit.directionVec).normalize();
-			float angle = (float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir));
+			float angle = Vector3.getAngle(tempCenter, tempDir);
 			
-			Log.d(LevelActivity.TAG," angle....="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
 			
+			Log.d(LevelActivity.TAG,"ANGLE between center="+tempCenter.toString()+" dir="+tempDir+" angle....="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
+		
+			//dir = center 
 			if(Float.isNaN(angle))
 				angle = 0;
 			
-			newOrbit.rotateDirectionVec(90-angle,6);
+			newOrbit.rotateDirectionVec(Constants.PIHALF-angle,Config.DIRVEC_ROTATION_STEPS);
 
 			setMotion(newOrbit,obj);
 			checkInnerForceField(obj);

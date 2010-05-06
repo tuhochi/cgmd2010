@@ -326,10 +326,13 @@ public class CollisionManager {
 				}else{
 					//special case: sat is not longer "inside the planet"
 					if(objA.getMotion()!=null && objA.getMotion().isInsidePlanet()){
-						if(objA.getMotion() instanceof DirectionalMotion){
-							MotionManager.instance.transformDirMotionInOrbit(objA);
-						}else{
-							objA.getMotion().setInsidePlanet(false);
+					
+						if(objA.getCurrentPosition().length()>Config.TRANSFORMATION_DISTANCE){
+							if(objA.getMotion() instanceof DirectionalMotion){
+								MotionManager.instance.transformDirMotionInOrbit(objA);
+							}else{
+								objA.getMotion().setInsidePlanet(false);
+							}
 						}
 					}
 				}
@@ -342,7 +345,7 @@ public class CollisionManager {
 	public Movable getNearestToCenterEntity()
 	{
 		for(int i=0;i<aimingList.size();i++)
-			Log.d(LevelActivity.TAG,i+ " length = "+aimingList.get(i).getBoundingSphereWorld().center.toString());
+			Log.d(LevelActivity.TAG,i+ " length = "+aimingList.get(i).getBoundingSphereWorld().center.length());
 		
 		if(aimingList.size()>0)		
 			return aimingList.get(0);
