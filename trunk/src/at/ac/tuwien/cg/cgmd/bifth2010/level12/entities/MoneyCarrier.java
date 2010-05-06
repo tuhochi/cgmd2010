@@ -113,4 +113,9 @@ public abstract class MoneyCarrier extends GLObject {
 	public int getHP() {
 		return mHp;
 	}	
+	
+	@Override
+	public float getX(){
+		return mX - mRadius;
+	}
 }

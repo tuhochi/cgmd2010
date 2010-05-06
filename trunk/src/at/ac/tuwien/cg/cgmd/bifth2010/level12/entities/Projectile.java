@@ -94,7 +94,7 @@ public abstract class Projectile extends GLObject{
 	
 	@Override
 	public float getX(){
-		return mXTranslate + mX; //returns the bullet real position because it gets translated and not moved
+		return mXTranslate + mX + mRadius; //returns the bullet real position because it gets translated and not moved
 	}
 
 

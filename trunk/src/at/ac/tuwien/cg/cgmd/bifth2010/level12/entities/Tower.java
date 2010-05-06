@@ -18,8 +18,8 @@ import java.lang.System;
 
 public abstract class Tower extends GLObject {
 	protected float mRadius = -1.0f;
-	protected float mShootingInterval = 1.0f; //secs
-	protected double mTimeLastProjectileShot = System.currentTimeMillis();
+	protected int mShootingInterval = 3000;//ms
+	protected long mTimeLastProjectileShot = System.currentTimeMillis();
 	protected Projectile[] mProjectiles = null;
 	protected int mScreenWidth = 800;
 	protected short mDmg = 10;
@@ -87,13 +87,11 @@ public abstract class Tower extends GLObject {
 	
 	
 	@Override
-	public void draw( GL10 gl ){
-		
+	public void draw( GL10 gl ){	
 		//pause
 		if( GameMechanics.getSingleton().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
-		
 		if( this.getActiveState() == false ) return;
-		double dt =(System.currentTimeMillis() - mTimeLastProjectileShot );//secs
+		long dt =(System.currentTimeMillis() - mTimeLastProjectileShot );
 		if( dt >= mShootingInterval ){
 			if( mProjectiles != null ){
 				boolean found = false;
@@ -102,7 +100,7 @@ public abstract class Tower extends GLObject {
 						found = true;
 						mProjectiles[i].setActiveState( true );
 						mProjectiles[i].setXY( this.getX(), mY);
-						mTimeLastProjectileShot = System.currentTimeMillis();
+						mTimeLastProjectileShot = System.currentTimeMillis();		
 						break;
 					}
 				}
@@ -116,7 +114,7 @@ public abstract class Tower extends GLObject {
 		
 		//all active sollen gezeichnet werden
 		for( int  i = 0; i < mProjectiles.length; i++){
-			if(mProjectiles[i].getActiveState()) {
+			if(mProjectiles[i].getActiveState() == true) {
 				mProjectiles[i].draw(gl);
 			}
 		}
@@ -139,6 +137,11 @@ public abstract class Tower extends GLObject {
 	
 	public void reset(){
 		this.setActiveState(false);
+	}
+	
+	@Override
+	public float getX(){
+		return mX + mRadius;
 	}
 }
 

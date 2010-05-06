@@ -12,6 +12,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
 
 public class GLRenderer implements GLSurfaceView.Renderer{
+	private int mFPS = 0;
 	
 	@Override
 	public void onDrawFrame(GL10 gl) {
@@ -41,6 +42,11 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 					for( int i = 0; i < e.size(); i++) e.get(i).draw(gl);
 				}
 			}
+		}
+		FPSCounter.getSingleton().addFrame();
+		if( FPSCounter.getSingleton().getFPS() != mFPS){
+			mFPS = FPSCounter.getSingleton().getFPS();
+			System.out.println("FPS: "+FPSCounter.getSingleton().getFPS());
 		}
 	}
 
