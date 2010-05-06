@@ -48,6 +48,9 @@ public class Model implements Movable,Persistable
 	/** The bounding sphere in world space. */
 	private final Sphere boundingSphereWorld;
 	
+	/** A temp matrix used to calculate the boundingSphereWorld */
+	private final Matrix44 tempMatrixForBoundingSphereWorldCalculation;
+	
 	/** The motion. */
 	private Motion motion;
 
@@ -75,6 +78,7 @@ public class Model implements Movable,Persistable
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
+		tempMatrixForBoundingSphereWorldCalculation = new Matrix44();
 		initialized = false;
 		currentPos = new Vector3();
 	}
@@ -93,6 +97,7 @@ public class Model implements Movable,Persistable
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
 		boundingSphere = new Sphere(other.boundingSphere);
 		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
+		tempMatrixForBoundingSphereWorldCalculation = new Matrix44();
 		currentPos = new Vector3();
 		
 		int numGeoms = other.geometries.size();
@@ -207,15 +212,21 @@ public class Model implements Movable,Persistable
 	
 	/**
 	 * Update.
+	 *
+	 * @param sceneEntityTransformation the scene entity transformation
 	 */
-	public void update()
+	public void update(Matrix44 sceneEntityTransformation)
 	{
 		int numGeoms = geometries.size();
 		for(int i=0; i<numGeoms; i++)
 			geometries.get(i).update();
 
 		transformation.copy(transformation_temp);
-		transformation.transformSphere(boundingSphere, boundingSphereWorld);
+		
+		tempMatrixForBoundingSphereWorldCalculation.copy(sceneEntityTransformation);
+		tempMatrixForBoundingSphereWorldCalculation.mult(transformation);
+		
+		tempMatrixForBoundingSphereWorldCalculation.transformSphere(boundingSphere, boundingSphereWorld);
 	}
 	
 	/**

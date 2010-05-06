@@ -169,9 +169,24 @@ public class SceneEntity implements Movable,Persistable
 	{		
 		int numModels = models.size();
 		for(int i=0; i<numModels; i++)
-			models.get(i).update();
+			// Models need the SceneEntitie's transformation to transform their bounding sphere into world space
+			models.get(i).update(transformation_temp);
 
 		transformation.copy(transformation_temp);
+		
+		/*
+		 * TODO: actually it would be cleaner if the bounding sphere of 
+		 * a SceneEntity would be resized to contain all of this SceneEntities models.
+		 * Currently this is only done during scene loading, but it should be done in every frame.
+		 * 
+		 * But resizing the Sphere would cause troubles because of the parts of the planet that fly away.
+		 * If those would be considered in the bounding sphere calculation, the planets bounding sphere
+		 * would grow -> infinite after the first part flies away.
+		 * 
+		 * Possible Solutions:
+		 * 	1) don't resize the SceneEntities bounding sphere (currently done)
+		 * 	2) mark the flying parts in some way, so that they're not considered when recalculating the bounding sphere.
+		 */
 		transformation.transformSphere(boundingSphere, boundingSphereWorld);
 	}
 	
