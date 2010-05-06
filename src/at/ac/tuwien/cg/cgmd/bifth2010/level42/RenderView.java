@@ -376,11 +376,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 	 */
 	private void pre_render()
 	{
-//		glLoadIdentity(); // not needed, because cam.look() sets the modelview matrix completely new
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
-		
+//		glLoadIdentity(); // not needed, because cam.look() sets the modelview matrix completely new
 		cam.look();
+		glLightfv(GL_LIGHT0, GL_POSITION, LIGHT_POSITION,0);
 	}
 	
 	/**

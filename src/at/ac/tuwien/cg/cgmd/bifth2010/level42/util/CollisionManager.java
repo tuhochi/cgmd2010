@@ -7,13 +7,11 @@ import java.util.Vector;
 
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Model;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;

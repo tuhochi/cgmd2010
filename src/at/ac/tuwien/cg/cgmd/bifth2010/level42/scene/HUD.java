@@ -118,7 +118,7 @@ public class HUD
 		// reset projection
 		glLoadIdentity();
 		
-		// make projection ortho (with = aspect, height = 1)
+		// make projection ortho (width = aspect, height = 1)
 		glOrthof(0, aspect, 1, 0, 0, 1);
 		
 		// switch to modelview again
