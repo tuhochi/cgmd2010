@@ -62,7 +62,8 @@ public class Orbit extends Motion
 	private final Vector3 normalVec;
 	
 	/** The ref center vec. */
-	private final Vector3 currtDirApproximation,tempDirectionVec,
+	private final Vector3 currtDirApproximation,
+						  tempDirectionVec,tempCenterVec,
 						  refDirectionVec,refCenterVec;
 
 	/** The generated transformation matrix. */
@@ -95,6 +96,7 @@ public class Orbit extends Motion
 		directionVec = new Vector3();
 		currtDirApproximation = new Vector3();
 		tempDirectionVec = new Vector3();
+		tempCenterVec = new Vector3();
 		refDirectionVec = new Vector3();
 		refCenterVec = new Vector3();
 		
@@ -209,6 +211,13 @@ public class Orbit extends Motion
 			//for axis scaling..
 			dirRotationMatrix.transformPoint(refDirectionVec);
 			dirVecRotationDiff -= (float)Math.abs(dirVecRotationDiffIteration);
+			
+			//TODO: reuse obj
+			Vector3 tempCenter = new Vector3(centerVec).normalize();
+			Vector3 tempDir  = new Vector3(directionVec).normalize();
+			float rotAngle = (float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir));
+			Log.d(LevelActivity.TAG,"ROTANGLE rotated="+(float)Math.toDegrees(dirVecRotationDiffIteration)+"currAngle="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
+			
 		}
 	}
 	
@@ -324,7 +333,7 @@ public class Orbit extends Motion
 	
 	public void rotateDirectionVec(float angle,float stepSize){
 		
-		this.dirVecRotationDiff = (float)Math.toRadians(angle);
+		this.dirVecRotationDiff = angle;
 		this.dirVecRotationDiffStep = dirVecRotationDiff/stepSize;
 		
 		this.dirVecRotationDiff = (float)Math.abs(this.dirVecRotationDiff);
@@ -423,10 +432,18 @@ public class Orbit extends Motion
 	 */
 	public void morph(Vector3 pushVec)
 	{
+		
+		Log.d(LevelActivity.TAG,"MORPH dirRot="+dirVecRotationDiff);
+		
 		//stop scale morphing
 		directionDiffFactor = directionDiff;
 		centerDiffFactor = centerDiff;
 		
+		//check if there is dir vec rotation in progress
+		boolean dirVecRotationInProgress = false;
+		if(dirVecRotationDiff!=0)
+			dirVecRotationInProgress = true;
+			
 		//approx current direction vec
 		currtDirApproximation.set(ellipse.getPoint(u+step));
 		currtDirApproximation.subtract(position);
@@ -455,6 +472,23 @@ public class Orbit extends Motion
 		//cap size and speed of orbit
 		//-> get the new speed value
 		limitUniverse();
+		
+		
+		//continue dir vec rotation
+		//TODO: nicht konstant auf 90° drehen
+		if(dirVecRotationInProgress){
+			tempDirectionVec.set(directionVec).normalize();
+			tempCenterVec.set(centerVec).normalize();
+			float angle = Vector3.getAngle(tempCenterVec, tempDirectionVec);
+			if(Float.isNaN(angle))
+				angle = 0;
+			else
+				angle = Constants.PIHALF-angle;
+			
+			rotateDirectionVec(angle,Config.DIRORBITTRANSFORM_DIRVEC_FACTOR);
+			Log.d(LevelActivity.TAG,"DIRVECROT UPDATE angle="+(float)Math.toDegrees(dirVecRotationDiff));
+		}
+		
 		
 		//change the stepsize relative to the new orbitsize
 		updateStepSize();
