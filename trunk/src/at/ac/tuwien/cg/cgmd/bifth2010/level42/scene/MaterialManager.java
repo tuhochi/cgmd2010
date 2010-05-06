@@ -303,7 +303,7 @@ public class MaterialManager
 			}
 			catch(Throwable t)
 			{
-				Log.e(LevelActivity.TAG, "Could not load Texture: " + filename);
+				Log.e(LevelActivity.TAG, "Could not load Texture: " + filename, t);
 				bitmap = null;
 			}
 			finally
