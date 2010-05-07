@@ -25,7 +25,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
-public class LevelActivity extends Activity implements OnGestureListener {
+public class LevelActivity extends Activity implements OnGestureListener{
 	
 	/**
 	 * the name of the preference file that stores global user settings 
@@ -54,12 +54,20 @@ public class LevelActivity extends Activity implements OnGestureListener {
 	public static boolean running = true;
 	public static int height=1; 
 	public static int width=1; 
+	
+	private TextView tvLevelFps;
+	private Thread uiThread;
+
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{ 
 		super.onCreate(savedInstanceState);
+		
+
+		
+		
 		
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  
@@ -98,9 +106,12 @@ public class LevelActivity extends Activity implements OnGestureListener {
         
         // setup vibrator
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        
+        tvLevelFps = (TextView)findViewById(R.id.l33_level_fps);
 	}
 	
-
+	
+	
 
 	/**
 	 * the onTouchEvent handle the advanced Gesture Scanner
@@ -210,4 +221,9 @@ public class LevelActivity extends Activity implements OnGestureListener {
 		super.onDestroy();
 		
 	}
+
+
+
+
+
 }

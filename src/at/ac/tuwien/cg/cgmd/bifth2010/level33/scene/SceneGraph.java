@@ -9,7 +9,6 @@ import java.io.InputStream;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -18,14 +17,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryLoader;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.ObjModel;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 /**
  * The Class SceneGraph
  * @author roman hochstoger & christoph fuchs
  */
-public class SceneGraph {
+public class SceneGraph  {
 
 	public static LevelHandler level;
 
@@ -79,7 +76,7 @@ public class SceneGraph {
 	public final static int FOUR_CONNECTION_WALL = 4;
 	public final static int COUNTERPART_CONNECTION_WALL = 5;
 	
-	public static Context context;
+	public static LevelActivity activity;
 	public  static Vector2f touchDim = new Vector2f(0, 0);
 	public  static Vector2i frustumDim = new Vector2i(3, 5);
 	private Vector2i frustumMin = new Vector2i(0, 0);
@@ -95,15 +92,14 @@ public class SceneGraph {
 	/**
 	 * constructor
 	 * @param level is the level to play
-	 * @param context is the GameView 
+	 * @param activity is the GameView 
 	 * @param tvLevelFps 
 	 */
 	
 	public SceneGraph(LevelHandler level, LevelActivity activity) {
 		this.level = level;
-		this.context = activity;
-		this.tvLevelFps = (TextView) activity.findViewById(R.id.l33_level_fps);
-
+		this.activity = activity;
+		this.tvLevelFps = (TextView)activity.findViewById(R.id.l33_level_fps);
 
 	}
 
@@ -118,7 +114,7 @@ public class SceneGraph {
 		StopTimer t = new StopTimer();
 		SceneGraph.camera = new Camera();
 		// load Objects
-		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_models);
+		InputStream is = SceneGraph.activity.getResources().openRawResource(R.raw.l33_models);
 		geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
 //		ObjModel obj = geometry.GetObjModel();
 //		obj.write();
@@ -131,6 +127,9 @@ public class SceneGraph {
 		t.logTime("Geometry laden und init dauerte:");
 		
 	}
+	
+
+	
 
 	/**
 	 * This Method represent the main render loop of the SceneGraph
@@ -149,8 +148,10 @@ public class SceneGraph {
 
 			
 			
-			Log.d("fps", String.valueOf(framesSinceLastSecound)+"  "+(this.tvLevelFps!=null));
-			//tvLevelFps.setText("fps: ");
+			
+			activity.runOnUiThread(new Runnable() {public void run() {
+					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		}});
+			
 			
 			framesSinceLastSecound = 0;
 			deltaTimeCount = 0f;
@@ -183,8 +184,6 @@ public class SceneGraph {
 		// updateLogic
 		level.updateLogic();
 
-		
-Log.d("now camera.look at","0");
 		// upadate Camera
 		camera.lookAt(gl);
 		
@@ -353,6 +352,7 @@ Log.d("now camera.look at","0");
 		glPopMatrix();
 		
 	}
+
 
 
 }

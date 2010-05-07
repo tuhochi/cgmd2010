@@ -39,7 +39,6 @@ public class Camera {
      * @param gl
      */
 	public void lookAt(GL10 gl) {
-		 Log.d("lookAt","0");
 		// if nothing has changed -> do nothing
 		if(!somethingChanged)
 			return;

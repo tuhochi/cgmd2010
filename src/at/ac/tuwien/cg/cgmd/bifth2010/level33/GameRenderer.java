@@ -27,8 +27,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-
-		Log.d("onDrawFrame","jo");
 		LevelActivity.sceneGraph.render(gl);
 	}
 
