@@ -14,6 +14,12 @@ public class Config
 	public static long FPS_UPDATE_INTERVAL = 1000;
 	public static long GAMETIME_UPDATE_INTERVAL = 1000;
 	
+	// bounding sphere stuff
+	/** determines how many degrees are between the control points of the bounding sphere. Higher value = faster rendering, but more visible edges */
+	public static int BOUNGING_SPHERE_SPACING = 30;
+	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = false;
+	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
+	
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;
 	
