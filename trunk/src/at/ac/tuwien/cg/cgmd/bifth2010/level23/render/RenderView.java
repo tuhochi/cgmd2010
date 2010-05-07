@@ -44,6 +44,14 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         }
     };
     
+    class ScoreHandle implements Runnable{
+		  
+    	@Override
+        public void run() {
+            context.scoreChanged(score);
+        }
+    };
+    
     /** The instance of the RenderView to pass it around. */
 	public static RenderView instance;
     
@@ -136,6 +144,12 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	private CutScenes cutScenes;
 	
+	private int score;
+
+	private int lastScore;
+	
+	private ScoreHandle scoreHandle;
+	
 	/**
 	 * Instantiates a new render view.
 	 *
@@ -155,8 +169,11 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         timer = TimeUtil.instance;
         textureManager = TextureManager.instance;
         serializer = Serializer.getInstance();
-        serializer.setContext(context); 
+        serializer.setContext(context);
+        
         fpsHandle = new FpsHandle();
+        scoreHandle = new ScoreHandle();
+        
         soundManager = new SoundManager(context);
         obstacleManager = new ObstacleManager();
         cutScenes = new CutScenes();
@@ -220,17 +237,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			fpsChanged();
 			accTime = 0;
 		}
-		
-		if (!released)
-			handleOnTouchMovement(lastMotionEvent);
-		else
-		{	
-			if(!useSensor)
-				mainCharMoveDir = MainChar.NO_MOVEMENT;
-		}
-		
-		fetchKeyMoveData();
-		
+
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
 		switch(gameState)
@@ -240,10 +247,25 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 					gameState=INGAME;
 				break;
 			case INGAME:	
+				if (!released)
+					handleOnTouchMovement(lastMotionEvent);
+				else
+				{	
+					if(!useSensor)
+						mainCharMoveDir = MainChar.NO_MOVEMENT;
+				}
+				
+				fetchKeyMoveData();
+				
 				balloonHeight += dt*Settings.BALLOON_SPEED;
+				score = (int)(balloonHeight*Settings.SCOREHEIGHT_MODIFIER);
+				if(lastScore != score)
+				{
+					scoreChanged();
+					lastScore = score;
+				}
 				mainChar.update(dt,mainCharMoveDir);
 				background.update(dt);
-				
 				background.render();
 				obstacleManager.renderVisibleObstacles((int)balloonHeight);
 				hud.render();
@@ -373,7 +395,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			public void run() 
 			{	
 				float x = evt.getRawX()*100.0f/screenWidth;
-				float y = topBounds-evt.getRawY()*100.0f/screenHeight;
+				float y = topBounds-evt.getRawY()*(100.0f*aspectRatio)/screenHeight;
+				
+				System.out.println("touchX: " + x );
+				System.out.println("touchY: " + y );
 				
 				if(hud.testPressed(x,y) || useSensor)
 					return;
@@ -491,6 +516,13 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 */
 	public void fpsChanged() {	        
         LevelActivity.handler.post(fpsHandle);	
+	}
+	
+	/** 
+	 * triggers score textview in the activity thread
+	 */
+	public void scoreChanged() {	        
+        LevelActivity.handler.post(scoreHandle);	
 	}
 	
 	/**

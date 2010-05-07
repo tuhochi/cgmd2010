@@ -37,6 +37,11 @@ public class Obstacle implements Serializable {
 		
 		switch(type)
 		{
+			case(ObstacleManager.OBSTACLE_TYPE_FINISH):
+				position.x=0;
+				width = 100;
+				height = 5;
+				break;
 			case(ObstacleManager.OBSTACLE_TYPE1):
 				position.x=0;
 				width = 20;

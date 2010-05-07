@@ -54,6 +54,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 	
 	/** The Vibrator to trigger phone vibration */
 	private Vibrator vibrator;
+
+	private TextView scoreText;
 	
 	//private Vector2 mainCharPos; 
 	/**
@@ -76,8 +78,10 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 	setContentView(R.layout.l23_level);
 		renderer = (RenderView)findViewById(R.id.l23_RenderView);
 		renderer.setOrientationListener(this);
+		
 		fpsText = (TextView)findViewById(R.id.l23_TextViewFps);
-        
+		scoreText = (TextView)findViewById(R.id.l23_TextViewScore);
+		
         CONTEXT = this; 
                         		
         OrientationManager.registerListener(this);
@@ -303,6 +307,15 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void fpsChanged(float fps)
 	{
 		fpsText.setText(Math.round(fps) + " fps");
+	}
+	
+	/**
+	 * Called when the games score has changed
+	 * @param score new score value
+	 */
+	public void scoreChanged(int score)
+	{
+		scoreText.setText("Score: " + score);
 	}
 	
 	/**

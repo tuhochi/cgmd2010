@@ -14,7 +14,7 @@
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content" 
         android:layout_marginBottom="2dip"
-        android:layout_gravity="center_horizontal|top"
+        android:layout_gravity="right|top"
 
         android:padding="2dip"
         
@@ -22,5 +22,19 @@
         android:textColor="#ffffffff"
         
         android:text="0 fps" />
+        
+     <TextView
+   		android:id="@+id/l23_TextViewScore" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_marginBottom="2dip"
+        android:layout_gravity="left|top"
+
+        android:padding="2dip"
+        
+        android:background="#AA000000"
+        android:textColor="#ffffffff"
+        
+        android:text="Score: 0" />
 
 </FrameLayout>
