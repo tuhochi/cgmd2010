@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +22,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 // TODO: Auto-generated Javadoc
@@ -92,13 +95,15 @@ public class LevelActivity extends Activity
 		
 		scoreUpdateRunnable = new Runnable()
 		{
+			NumberFormat formatter = new DecimalFormat("#0.00");
+			
 			@Override
 			public void run()
 			{
 				/*
 				 * TODO: set correct score!
 				 */
-				score.setText("");
+				score.setText(formatter.format(100-GameManager.instance.getScorePercent())+"%");
 			}
 		};
 		

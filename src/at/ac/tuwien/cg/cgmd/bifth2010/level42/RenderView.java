@@ -28,6 +28,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
@@ -67,6 +68,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 	
 	/** The motion manager. */
 	private final MotionManager motionManager = MotionManager.instance;
+	
+	private final GameManager gameManager;
 	
 	/** The ogl manager. */
 	private final OGLManager oglManager = OGLManager.instance;
@@ -143,6 +146,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 		scene.setHud(hud);
 		motionManager.generateRandomOrbit(scene,Config.UNIVERSE_SPEED_LIMIT/2,Config.UNIVERSE_SPEED_LIMIT,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
 		collManager = new CollisionManager(scene);
+		//init of the GameManager in CollisionManager!
+		gameManager = GameManager.instance;
 		
 		guiThreadHandler = this.context.handler;
 		fpsUpdateRunnable = this.context.fpsUpdateRunnable;
@@ -274,8 +279,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		/*
 		 * Update Score
 		 */
-		boolean scoreChanged = false;
-		if(scoreChanged)
+		if(gameManager.scoreHasChanged())
 			guiThreadHandler.post(scoreUpdateRunnable);
 		
 		synchronizer.logicDone(); 

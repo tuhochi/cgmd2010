@@ -39,7 +39,8 @@ public class Orbit extends Motion
 					
 					//speed morphing
 					newSpeed,oldPerimeter,oldStepSize,
-					speedMorphStep,speedMorphIteration,dynamicMorphSpeed;
+					speedMorphStep,speedMorphIteration,speedMorphDifference,
+					dynamicMorphSpeed;
 
 	/** The do direction vec scaling. */
 	private boolean doCenterVecScaling,doDirectionVecScaling;
@@ -108,6 +109,8 @@ public class Orbit extends Motion
 		
 		dirVecRotationDiff = 0;
 		dirVecRotationDiffStep = 0;
+		
+		speedMorphDifference = 0;
 	}
 
 	/**
@@ -180,13 +183,14 @@ public class Orbit extends Motion
 		if(satTrans!=null)
 			satTrans.update(dt);
 		
-		updateDirVecRotation(dt);
 	
 		//update the morphing for the direction vec length
 		updateSpeedMorphing(dt);
 		
 		//update the morphing for the axis scaling
 		updateAxisScaling(dt);
+	
+		updateDirVecRotation(dt);
 		
 		//calc position on ellipse - build transformation matrix
 		evaluatePos();
@@ -216,7 +220,9 @@ public class Orbit extends Motion
 			Vector3 tempCenter = new Vector3(centerVec).normalize();
 			Vector3 tempDir  = new Vector3(directionVec).normalize();
 			float rotAngle = (float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir));
-			Log.d(LevelActivity.TAG,"ROTANGLE rotated="+(float)Math.toDegrees(dirVecRotationDiffIteration)+"currAngle="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
+			tempDir.set(directionVec);
+			tempCenter.set(centerVec);
+						Log.d(LevelActivity.TAG,"ROTANGLE u="+u+" dirvec="+getCurrDirectionVec().normalize().toString()+" length="+tempDir.length()+" centervec="+tempCenter.length()+"currAngle="+rotAngle);
 			
 		}
 	}
@@ -228,7 +234,7 @@ public class Orbit extends Motion
 	 */
 	private void updateSpeedMorphing(float dt)
 	{
-		if(speed!=newSpeed)
+		if(speedMorphDifference>0)
 		{
 			speedMorphIteration = speedMorphStep * dt * dynamicMorphSpeed;
 			
@@ -248,9 +254,12 @@ public class Orbit extends Motion
 					speed+=speedMorphIteration;
 				}
 			}
-				
-		
-			//Log.d(LevelActivity.TAG,"Morph speed curr="+speed+" iteration="+speedMorphIteration+" newspeed="+newSpeed + " dynSpeed="+dynamicMorphSpeed);
+			
+			speedMorphDifference -= Math.abs(speedMorphIteration);
+			//avoid numerical problems
+			speedMorphDifference = (speedMorphDifference<0.01f)?0:speedMorphDifference;
+			
+			Log.d(LevelActivity.TAG,"Morph speed  diff="+speedMorphDifference+" step="+speedMorphStep+" iteration="+speedMorphIteration+" curr="+speed+" newspeed="+newSpeed + " dynSpeed="+dynamicMorphSpeed);
 		}
 	}
 	
@@ -267,7 +276,7 @@ public class Orbit extends Motion
 		doCenterVecScaling = false;
 		doDirectionVecScaling = false;
 		
-		if(Math.signum(centerDiffStep)<0){
+		if(centerDiffStep<0){
 			if(centerDiffFactor<centerDiff){
 				doCenterVecScaling = true;
 				centerDiffIteration = centerDiffStep * dt * aScalingMorphSpeed;
@@ -288,7 +297,7 @@ public class Orbit extends Motion
 			}
 		}
 
-		if(Math.signum(directionDiffStep)<0){
+		if(directionDiffStep<0){
 			if(directionDiffFactor<directionDiff){
 				doDirectionVecScaling = true;
 				directionDiffIteration = directionDiffStep * dt * bScalingMorphSpeed;
@@ -334,7 +343,11 @@ public class Orbit extends Motion
 	public void rotateDirectionVec(float angle,float stepSize){
 		
 		this.dirVecRotationDiff = angle;
-		this.dirVecRotationDiffStep = dirVecRotationDiff/stepSize;
+		
+		if(Math.signum(angle)!=0)
+			this.dirVecRotationDiffStep = Math.signum(angle)*stepSize;
+		else
+			this.dirVecRotationDiffStep = stepSize;
 		
 		this.dirVecRotationDiff = (float)Math.abs(this.dirVecRotationDiff);
 		
@@ -406,10 +419,8 @@ public class Orbit extends Motion
 		}
 		
 		if(this.newSpeed > Config.UNIVERSE_SPEED_LIMIT){
-			//speedmorphing parameters
-			this.speedMorphStep = (this.newSpeed-Config.UNIVERSE_SPEED_LIMIT)/100;
 			this.dynamicMorphSpeed = 1;
-			this.newSpeed = Config.UNIVERSE_SPEED_LIMIT;
+			morphSpeed(Config.UNIVERSE_SPEED_LIMIT, Config.ORBIT_DYNAMIC_SPEEDFACTOR);
 		}
 	}
 	
@@ -475,7 +486,7 @@ public class Orbit extends Motion
 		
 		
 		//continue dir vec rotation
-		//TODO: nicht konstant auf 90° drehen
+		//TODO: nicht konstant auf 90ï¿½ drehen
 		if(dirVecRotationInProgress){
 			tempDirectionVec.set(directionVec).normalize();
 			tempCenterVec.set(centerVec).normalize();
@@ -498,15 +509,21 @@ public class Orbit extends Motion
 
 		//add dynamic speed boost :)
 		if(newSpeed<speed){
-			this.dynamicMorphSpeed = (newSpeed/speed)*120;
-			this.speed -= (pushVec.length()*0.25f);
+			morphSpeed(this.speed - (pushVec.length()*Config.ORBIT_SPEEDMORPH_PUSHVECFACTOR),
+						(newSpeed/speed)*Config.ORBIT_DYNAMIC_SPEEDFACTOR);
 		}else{
-			this.dynamicMorphSpeed = (speed/newSpeed)*120;
-			this.speed += (pushVec.length()*0.25f);
+			morphSpeed(	this.speed+ (pushVec.length()*Config.ORBIT_SPEEDMORPH_PUSHVECFACTOR),
+						(speed/newSpeed)*Config.ORBIT_DYNAMIC_SPEEDFACTOR);
 		}
+	}
+	
+	
+	public void morphSpeed(float newSpeed,float dynamicMorphSpeed){
 		//speedmorphing parameters
+		this.newSpeed = newSpeed;
+		this.dynamicMorphSpeed = dynamicMorphSpeed;
 		this.speedMorphStep = (this.newSpeed-this.speed)/100;
-		
+		this.speedMorphDifference = Math.abs(newSpeed - speed);
 	}
 	
 	/* (non-Javadoc)
@@ -535,7 +552,7 @@ public class Orbit extends Motion
 		dos.writeFloat(oldPerimeter);
 		dos.writeFloat(oldStepSize);
 		dos.writeFloat(speedMorphStep);
-		dos.writeFloat(speedMorphIteration); 
+		dos.writeFloat(speedMorphDifference); 
 		dos.writeFloat(dynamicMorphSpeed);
 	
 		centerPos.persist(dos);
@@ -577,7 +594,7 @@ public class Orbit extends Motion
 		oldPerimeter = dis.readFloat();
 		oldStepSize = dis.readFloat();
 		speedMorphStep = dis.readFloat();
-		speedMorphIteration = dis.readFloat(); 
+		speedMorphDifference = dis.readFloat(); 
 		dynamicMorphSpeed = dis.readFloat();
 		
 		centerPos.restore(dis);
