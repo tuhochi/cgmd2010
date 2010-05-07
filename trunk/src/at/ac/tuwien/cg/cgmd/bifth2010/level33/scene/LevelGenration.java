@@ -3,7 +3,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
@@ -48,11 +50,12 @@ public class LevelGenration {
 	//Verhältniss Goodies/Wege
 	double goodiesWayRatio = 0.3;
 	
-	int numberOfMaps=2;
-	int numberOfStone=6;
-	int numberOfBarrel=4;
-	int numberOfTrashes=3;
-	int numberOfSpring=3;
+	int numberOfMaps=3;
+	int numberOfStone=20;
+	int numberOfBarrel=5;
+	int numberOfTrashes=4;
+	int numberOfSpring=4;
+	//double percentOfWay=0.2;
 	
 	/**
 	 * 
@@ -705,6 +708,22 @@ public class LevelGenration {
 		
 		
 		return new Vector2i(createdWays[0]%columns,createdWays[0]/columns);
+	}
+	
+	/**#
+	 * 
+	 * Get the field-numbers where all positive goodies like barrel, stone and spring are placed.
+	 * 
+	 * @return goodiesIndex			The position where the goodies are placed will be returned.
+	 */
+	public List<Integer> getGoodiesPointsList(){
+		List<Integer> goodiesList = new Vector<Integer>();
+		
+		for(int i=0;i<goodiesIndex.length;i++)
+		{
+			goodiesList.add(goodiesIndex[i]);
+		}
+		return goodiesList;
 	}
 	
 	
