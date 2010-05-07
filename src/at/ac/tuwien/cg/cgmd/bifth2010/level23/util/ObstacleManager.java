@@ -69,6 +69,9 @@ public class ObstacleManager
 	/** The number of obstacles to be rendered. */
 	public final int NR_OF_OBSTACLES = 50;
 	
+	/** The constant for obstacle type FINISH */
+	public static final int OBSTACLE_TYPE_FINISH = 0;
+	
 	/** The constant for obstacle type 1  */
 	public static final int OBSTACLE_TYPE1 = 1;
 	
@@ -97,6 +100,8 @@ public class ObstacleManager
 	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
 	/** The Constant HORIZONTAL_SPACING to define the horizontal spacing between obstacles. */
 	public final static int HORIZONTAL_SPACING = 100;
+	
+	public int finishPosition;
 	
 	/** The main char. */
 	private MainChar mainChar;
@@ -214,6 +219,8 @@ public class ObstacleManager
 			obstacles.add(new Obstacle(currentPosition, selectRandomType()));
 			currentPosition += HORIZONTAL_SPACING;
 		}
+		
+		obstacles.add(new Obstacle(currentPosition, OBSTACLE_TYPE_FINISH));
 	}
 	
 	/**
