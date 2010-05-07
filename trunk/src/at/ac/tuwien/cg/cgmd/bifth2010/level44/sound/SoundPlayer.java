@@ -10,7 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class SoundPlayer {
 	/** The Sound Effects we support */
-	public enum SoundEffect { LOAD, SHOT, FLAP, DROP };
+	public enum SoundEffect { LOAD, SHOT, FLAP, DROP, BEEP };
 
 	/** SoundPool for playing sounds */
 	private SoundPool soundPool;
@@ -46,6 +46,7 @@ public class SoundPlayer {
 		sounds.put(SoundEffect.SHOT, soundPool.load(context, R.raw.l44_shot, 1));
 		sounds.put(SoundEffect.FLAP, soundPool.load(context, R.raw.l44_flap, 1));
 		sounds.put(SoundEffect.DROP, soundPool.load(context, R.raw.l44_drop, 1));
+		sounds.put(SoundEffect.BEEP, soundPool.load(context, R.raw.l44_beep, 1));
 
 		// get system volume
 		AudioManager mgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);

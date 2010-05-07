@@ -166,7 +166,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		coin = new Sprite(TextureParts.makeCoin(mainTexture));
 		
-		timeDisplay = new TimeDisplay(mainTexture, timeManager);
+		timeDisplay = new TimeDisplay(activity, mainTexture, timeManager);
 		timeDisplay.setPosition(getWidth()-timeDisplay.getWidth()-10, 10);
 		
 		introBackground = new IntroBackground(mainTexture,getWidth(),getHeight());
