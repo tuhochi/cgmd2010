@@ -396,10 +396,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			{	
 				float x = evt.getRawX()*100.0f/screenWidth;
 				float y = topBounds-evt.getRawY()*(100.0f*aspectRatio)/screenHeight;
-				
-				System.out.println("touchX: " + x );
-				System.out.println("touchY: " + y );
-				
+
 				if(hud.testPressed(x,y) || useSensor)
 					return;
 				
