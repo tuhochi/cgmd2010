@@ -11,7 +11,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
@@ -84,21 +86,25 @@ public class SceneGraph {
 	private Vector2i frustumMax = new Vector2i(0, 0);
 	private static boolean init = false;
 	private long secoundCount;
+	private TextView tvLevelFps;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	
 	StopTimer frameTimer = new StopTimer();
 	
-	
 	/**
 	 * constructor
 	 * @param level is the level to play
 	 * @param context is the GameView 
+	 * @param tvLevelFps 
 	 */
 	
-	public SceneGraph(LevelHandler level, Context context) {
+	public SceneGraph(LevelHandler level, LevelActivity activity) {
 		this.level = level;
-		this.context = context; 
+		this.context = activity;
+		this.tvLevelFps = (TextView) activity.findViewById(R.id.l33_level_fps);
+
+
 	}
 
 	/**
@@ -107,15 +113,13 @@ public class SceneGraph {
 	 * @param gl  OpenGlHandler
 	 */
 	public static void init(GL10 gl) {
+		Log.d("SceneGraph inti","0");
 		
 		StopTimer t = new StopTimer();
-		
 		SceneGraph.camera = new Camera();
-
 		// load Objects
 		InputStream is = SceneGraph.context.getResources().openRawResource(R.raw.l33_models);
 		geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
-		
 //		ObjModel obj = geometry.GetObjModel();
 //		obj.write();
 //		
@@ -142,7 +146,12 @@ public class SceneGraph {
 		deltaTimeCount+=deltaTime;
 		lastFrameStart = currentFrameStart;		
 		if (deltaTimeCount >= 1) {
-			Log.d("fps", String.valueOf(framesSinceLastSecound));
+
+			
+			
+			Log.d("fps", String.valueOf(framesSinceLastSecound)+"  "+(this.tvLevelFps!=null));
+			//tvLevelFps.setText("fps: ");
+			
 			framesSinceLastSecound = 0;
 			deltaTimeCount = 0f;
 			secoundCount++;
@@ -175,7 +184,7 @@ public class SceneGraph {
 		level.updateLogic();
 
 		
-
+Log.d("now camera.look at","0");
 		// upadate Camera
 		camera.lookAt(gl);
 		

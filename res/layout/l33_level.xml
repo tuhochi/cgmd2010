@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content" android:layout_height="wrap_content">
+<RelativeLayout
+ android:id="@+id/l33_FrameLayout01"
+ xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent">
+<android.opengl.GLSurfaceView
+ android:id="@+id/l33_openglview" 
+ android:layout_width="fill_parent" 
+ android:layout_height="fill_parent"/>
+ 
+ <TableLayout
+ android:id="@+id/l33_TableLayout" 
+ android:layout_width="wrap_content" 
+ android:layout_height="wrap_content" 
+ android:layout_marginTop="3pt" 
+ android:layout_marginLeft="3pt">
+ 
 
+	 <TextView 
+	 android:layout_above="@+id/l33_openglview" 
+	 android:text="fps:" 
+	 android:layout_width="wrap_content" 
+	 android:layout_height="wrap_content" 
+	 android:id="@+id/l33_level_fps" 
+	 android:layout_marginTop="3pt"></TextView>
 
-
-	<android.opengl.GLSurfaceView android:id="@+id/l33_openglview"
-		android:layout_width="fill_parent" android:layout_height="fill_parent" />
-
-	<TableLayout android:id="@+id/l33_TableLayout"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:layout_marginTop="3pt" android:layout_marginLeft="3pt">
-		
-		<TextView android:layout_above="@+id/l33_openglview"
-			android:text="--teststring--" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/l33_Points"
-			android:textStyle="bold" android:shadowColor="@+id/l33_level_text"
-			android:shadowDx="4.0" android:shadowDy="4.0" android:shadowRadius="4.0"
-			android:textColor="@color/l33_level_text">
-		</TextView>
-	</TableLayout>
+ 
+</TableLayout>
 
 </RelativeLayout>
