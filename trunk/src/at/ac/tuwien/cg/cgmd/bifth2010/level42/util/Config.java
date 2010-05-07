@@ -87,8 +87,10 @@ public class Config
 	/** the selection vector gets divided by this factor */
 	public static float SELECTION_FORCE_FACTOR = 0.8f;
 	
-	public static final float DIRORBITTRANSFORM_DIRVEC_FACTOR = 5;
-	public static final float DIRVEC_ROTATION_STEPS = 6;
+	public static final float DIRORBITTRANSFORM_DIRVEC_FACTOR = 2;
+	public static final float DIRVEC_ROTATION_STEPS = 0.5f;
 	public static final float TRANSFORMATION_DISTANCE = 10;
+	public static final float ORBIT_SPEEDMORPH_PUSHVECFACTOR = 0.25f;
+	public static final float ORBIT_DYNAMIC_SPEEDFACTOR = 120f;
 	
 }

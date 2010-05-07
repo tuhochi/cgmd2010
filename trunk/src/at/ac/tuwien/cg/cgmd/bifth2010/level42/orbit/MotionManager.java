@@ -237,7 +237,7 @@ public class MotionManager {
 			newOrbit.rotateDirectionVec(Constants.PIHALF-angle,Config.DIRVEC_ROTATION_STEPS);
 
 			setMotion(newOrbit,obj);
-			checkInnerForceField(obj);
+			//checkInnerForceField(obj);
 		}
 	}
 	
