@@ -13,4 +13,5 @@
 <string name="l33_help_entry3_head">Stone</string>
 <string name="l33_help_entry4_head">Barrel</string>
 <string name="l33_help_entry5_head">Well</string>
+<string name="l33_level_fps">fps: 0</string>
 </resources>

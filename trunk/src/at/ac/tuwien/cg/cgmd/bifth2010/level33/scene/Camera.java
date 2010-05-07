@@ -39,15 +39,17 @@ public class Camera {
      * @param gl
      */
 	public void lookAt(GL10 gl) {
-		
+		 Log.d("lookAt","0");
 		// if nothing has changed -> do nothing
 		if(!somethingChanged)
 			return;
 		
+		 Log.d("lookAt","1");
+		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-        System.out.println("lookAt");
+        Log.d("lookAt","2");
 
         eye.y=zoom;
         
@@ -59,7 +61,7 @@ public class Camera {
       //  DebugView
       //  	eye.set(((GameView.lastTouch.x*2)-1)*10,((GameView.lastTouch.y*2)-1)*10,((GameView.lastTouch.x*2)-1)*10);
         
-        
+        	 Log.d("lookAt","3");
       	gluLookAt(gl,eye.x, eye.y, eye.z, view.x, view.y, view.z , up.x, up.y, up.z  );// momentan nur zum probieren, danach von oben
 
       	// set to standard -> hasNotChanged == true

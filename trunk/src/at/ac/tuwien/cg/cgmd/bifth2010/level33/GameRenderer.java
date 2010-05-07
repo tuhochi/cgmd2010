@@ -22,17 +22,19 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 	public GameRenderer() {
 		// TODO Auto-generated constructor stub
+		Log.d("GameRenderer","constructor");
 	}
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
 
-		GameView.sceneGraph.render(gl);
+		Log.d("onDrawFrame","jo");
+		LevelActivity.sceneGraph.render(gl);
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+		Log.d("onSurfaceChanged","jo");
 		if (height == 0) {
 			height = 1;
 		}
@@ -41,16 +43,16 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
-		GameView.resolution = new Vector2f(width, height);
-		Log.d("onSurfaceChanged","jo");
+		LevelActivity.resolution = new Vector2f(width, height);
+		
 		
 		
 		
 		
 		
 		// set Game Frustum
-		double x =Camera.standardZoom/Math.sqrt(2)*(GameView.resolution.x/GameView.resolution.y);
-		double y = x/(GameView.resolution.x/GameView.resolution.y);
+		double x =Camera.standardZoom/Math.sqrt(2)*(LevelActivity.resolution.x/LevelActivity.resolution.y);
+		double y = x/(LevelActivity.resolution.x/LevelActivity.resolution.y);
 		
 		SceneGraph.touchDim.set((float)x,(float)y);
 		
@@ -68,8 +70,10 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		SceneGraph.init(gl); // now init the Geometry VBO´s
 		Log.d("onSurfaceCreated","jo");
+		SceneGraph.init(gl); // now init the Geometry VBO´s
+		Log.d("onSurfaceCreated","fin");
+		
 	}
 
 }
