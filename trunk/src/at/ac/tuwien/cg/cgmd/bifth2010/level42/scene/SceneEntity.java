@@ -1,8 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
-import static android.opengl.GLES10.glMultMatrixf;
-import static android.opengl.GLES10.glPopMatrix;
-import static android.opengl.GLES10.glPushMatrix;
+import static android.opengl.GLES10.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 /**
@@ -160,6 +159,33 @@ public class SceneEntity implements Movable,Persistable
 		for(int i=0; i<numModels; i++)
 			models.get(i).render(rendermode);
 		glPopMatrix();
+	}
+	
+	/**
+	 * Render bounding spheres.
+	 */
+	void renderBoundingSpheres(int rendermode)
+	{
+		if(Config.SHOW_MODEL_BOUNDING_SPHERES)
+		{
+			int numModels = models.size();
+			for(int i=0; i<numModels; i++)
+				models.get(i).renderBoundingSpheres(rendermode);
+		}
+
+		
+		
+		if(Config.SHOW_SCENEENTITY_BOUNDING_SPHERES)
+		{
+			Vector3 translation = boundingSphereWorld.center;
+			float scale = boundingSphereWorld.radius;
+			
+			glPushMatrix();
+			glTranslatef(translation.x, translation.y, translation.z);
+			glScalef(scale, scale, scale);
+			Scene.SPHERE.render(rendermode);
+			glPopMatrix();
+		}
 	}
 	
 	/**

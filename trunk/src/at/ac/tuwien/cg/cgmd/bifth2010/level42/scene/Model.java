@@ -211,6 +211,21 @@ public class Model implements Movable,Persistable
 	}
 	
 	/**
+	 * Render bounding spheres.
+	 */
+	void renderBoundingSpheres(int rendermode)
+	{
+		Vector3 translation = boundingSphereWorld.center;
+		float scale = boundingSphereWorld.radius;
+		
+		glPushMatrix();
+		glTranslatef(translation.x, translation.y, translation.z);
+		glScalef(scale, scale, scale);
+		Scene.SPHERE.render(rendermode);
+		glPopMatrix();
+	}
+	
+	/**
 	 * Update.
 	 *
 	 * @param sceneEntityTransformation the scene entity transformation
