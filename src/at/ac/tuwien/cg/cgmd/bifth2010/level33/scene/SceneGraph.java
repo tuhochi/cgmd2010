@@ -34,6 +34,8 @@ public class SceneGraph  {
 	static long lastFrameStart;
 	static int framesSinceLastSecound=0;
 	
+	public static long timeInSeconds=0;
+	
 	public final static byte GEOMETRY_WALL = 0;
 	public final static byte GEOMETRY_WAY = 1;
 	public final static byte GEOMETRY_WORLD = 2;
@@ -152,7 +154,7 @@ public class SceneGraph  {
 			activity.runOnUiThread(new Runnable() {public void run() {
 					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		}});
 			
-			
+			timeInSeconds++;
 			framesSinceLastSecound = 0;
 			deltaTimeCount = 0f;
 			secoundCount++;

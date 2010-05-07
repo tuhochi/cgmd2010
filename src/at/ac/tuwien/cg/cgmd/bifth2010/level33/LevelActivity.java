@@ -21,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.LevelHandler;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.ProgressHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
@@ -41,6 +42,7 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	private GLSurfaceView openglview;
 	private MediaPlayer mAudioPlayer = null;
 	public static SoundHandler soundHandler = null;
+	public static ProgressHandler progressHandler = null;
 	public static Vibrator vibrator;
 	
 	private GestureDetector gestureScanner; // needed for advanced Gestures
@@ -80,6 +82,9 @@ public class LevelActivity extends Activity implements OnGestureListener{
 //		requestFocus();
 		
 		gestureScanner = new GestureDetector(this);
+		
+		//init progressHandler
+		progressHandler = new ProgressHandler();
 		
 		StopTimer t = new StopTimer();
 		LevelHandler level = new LevelHandler();// init new Level here!
