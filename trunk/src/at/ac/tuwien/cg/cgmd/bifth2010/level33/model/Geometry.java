@@ -171,7 +171,7 @@ public class Geometry {
 		// init Texture
 		if(textur!=-1){
 			
-			InputStream isImage = SceneGraph.context.getResources().openRawResource(textur);
+			InputStream isImage = SceneGraph.activity.getResources().openRawResource(textur);
 			
 			if(isImage!=null){
 				try {
