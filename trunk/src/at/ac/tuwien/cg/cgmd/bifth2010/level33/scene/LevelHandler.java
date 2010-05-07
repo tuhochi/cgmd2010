@@ -1,12 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.scene;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
 public class LevelHandler {
 
@@ -16,13 +19,24 @@ public class LevelHandler {
 	Vector2f gameCharacterTargetPosition; // target Position
 	boolean characterMoves = false; // if Character is moving in this moment
 	float gameCharacterSpeed = 30;
-	ArrayList<int[]> worldEntry; 
+	ArrayList<int[]> worldEntry;
+	List<Integer> goodiesIndex;
+	
+	List<int[]> springChangeList = new Vector<int[]>();
+	MapCalculationThread mapCalculationThread = null;
+	boolean isFirstMap = true;
+	int mapIsActiveTimer = 0;
+	boolean mapIsActive = false;
+	int[][] mapResult;
+	
+	StopTimer t;
 
 	Random rand = new Random();
 	public boolean demomode = false;
 
 	public LevelHandler() {
 		generateLevel();
+		mapCalculationThread = new MapCalculationThread(this, worldDim.x);
 		gameCharacterTargetPosition = new Vector2f(gameCharacterPosition);
 	}
 
@@ -52,6 +66,7 @@ public class LevelHandler {
 		
 	world = levelGenration.startCreation();
 	worldEntry=levelGenration.getwallInfo();
+	goodiesIndex = levelGenration.getGoodiesPointsList();
 	gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
 		
 	}
@@ -79,6 +94,17 @@ public class LevelHandler {
 		// END DEMO: random walk
 
 		// update level
+		// change spring to an other item
+		updateSpringChanges();
+		
+		//check if it's necessary to rebuild the way-elements after shown way to a goody
+		if(mapIsActive && mapIsActiveTimer<SceneGraph.timeInSeconds)
+			reUpdateMapChanges();
+		
+		//check if map-trhead is ready or not
+		if(MapCalculationThread.isThreadReady)
+			updateMapChanges();
+			
 
 		// now update Character Position
 
@@ -165,27 +191,67 @@ public class LevelHandler {
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.STONE);
+					
+					//Update GoodiesList
+					updateGoodiesList(worldIndex);
+					
+					//add to progress
+					LevelActivity.progressHandler.collectStone();
 				}
 				else if(value==SceneGraph.GEOMETRY_BARREL)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.BARREL);
+				
+					//Update GoodiesList
+					updateGoodiesList(worldIndex);
+					
+					//add to progress
+					LevelActivity.progressHandler.collectBarrel();
 				}
 				else if(value==SceneGraph.GEOMETRY_TRASH)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
 					//LevelActivity.vibrator.vibrate(120L);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.TRASH);
+				
+					//add to progress
+					LevelActivity.progressHandler.collectTrash();
 				}
 				else if(value==SceneGraph.GEOMETRY_SPRING)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.SPRING);
+				
+					//Update GoodiesList
+					updateGoodiesList(worldIndex);
+					
+					//Add to springList
+					int newGoody = rand.nextInt(3);
+					if(newGoody==0)
+						newGoody=SceneGraph.GEOMETRY_STONE;
+					else if(newGoody==1)
+						newGoody=SceneGraph.GEOMETRY_BARREL;
+					else if(newGoody==2)
+						newGoody=SceneGraph.GEOMETRY_TRASH;
+					int[] addSpring = new int[]{worldIndex,(int)SceneGraph.timeInSeconds+3,newGoody};
+					springChangeList.add(addSpring);
 				}
 				else if(value==SceneGraph.GEOMETRY_MAP)
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
+				
+					if(isFirstMap)
+						isFirstMap = false;
+					else
+					{
+						//start thread to calculate way to goody
+						t = new StopTimer();
+						mapCalculationThread.setStartProperties(worldIndex, goodiesIndex, worldEntry);
+						mapCalculationThread.start();	
+					}
+
 				}
 			}
 			worldEntry.get(worldIndex)[0]=1;
@@ -197,6 +263,98 @@ public class LevelHandler {
 		}
 		//LevelActivity.soundHandler.releaseActivityAudioPlayer();
 	}
+	
+	/**
+	 * The goodiesList contains all items which are available in the labyrinth. If an item 
+	 * will be collected it will be removed from this list.
+	 * @param fieldIndex
+	 */
+	private void updateGoodiesList(int fieldIndex){
+		
+		for(int i=0;i<goodiesIndex.size();i++)
+		{
+			if(goodiesIndex.get(i)==fieldIndex)
+			{
+				goodiesIndex.remove(i);
+				return;
+			}
+		}	
+	}
+	
+	/**
+	 * In a list all collected springs will be stored until the springs changed to
+	 * new items. For each spring the way-element and the time when the item should be
+	 * visible will be considered. If the time is over the spring changes to the new
+	 * item and the spring will be removed from the list. 
+	 */
+	private void updateSpringChanges(){
+		
+		if(springChangeList==null)
+			return;
+		for(int i=0; i<springChangeList.size();i++)
+		{
+			if(springChangeList.get(i)[1]<=SceneGraph.timeInSeconds)
+			{
+				int[] newGoody = springChangeList.get(i);
+				worldEntry.get(newGoody[0])[0]=newGoody[2];
+				springChangeList.remove(i);
+			}
+		}
+	}
+	
+	/**
+	 * The way to an item will be calculated by the thread. If the thread is
+	 * ready the information about the way which should be displayed will be transfered.
+	 * The thread terminates. Then the arrows which show the way will be added to the world.
+	 */
+	private void updateMapChanges(){
+		t.logTime("Map-Thread fertig nach: ");
+		/*
+		if(mapIsActive)
+			reUpdateMapChanges();
+		mapResult = mapCalculationThread.getMapResult();
+		int[] pointChanges = new int[2];
+		for(int i=0;i<mapResult.length;i++)
+		{
+			pointChanges = mapResult[i];
+			if(worldEntry.get(pointChanges[0])[0]==SceneGraph.GEOMETRY_WAY)
+			{
+				worldEntry.get(pointChanges[0])[0]=pointChanges[1];
+			}
+		}
+		
+		//SetTime
+		float additionalTime = (float) (mapResult.length*0.8);
+		mapIsActiveTimer= Math.round(SceneGraph.timeInSeconds+additionalTime);
+		mapIsActive = true;
+		*/
+	}
+	
+	/**
+	 * If it's time to reset the shortest way to a item, the arrows will be replaced
+	 * with normal-way-elements. If you follow the arrows you will pick up them and so
+	 * these way-elements wont be reseted.
+	 */
+	private void reUpdateMapChanges(){
+		
+		/*
+		int[] pointChanges = new int[2];
+		for(int i=0;i<mapResult.length;i++)
+		{
+			pointChanges = mapResult[i];
+			int actuallyPointValue = worldEntry.get(pointChanges[0])[0];
+			if(actuallyPointValue==SceneGraph.LEFT_ARROW  || 
+			   actuallyPointValue==SceneGraph.UP_ARROW    ||
+			   actuallyPointValue==SceneGraph.RIGHT_ARROW ||
+			   actuallyPointValue==SceneGraph.DOWN_ARROW)
+			{
+				worldEntry.get(pointChanges[0])[0]=SceneGraph.GEOMETRY_WAY;
+			}
+		}
+		mapIsActive = false;
+		*/	
+	}
+
 
 	/**
 	 * 
