@@ -15,6 +15,15 @@ public class Sprite {
 	private TexturePart texturePart;
 	private FloatBuffer vtxCoords;
 	
+	public void setTexturePart(TexturePart texturePart) {
+		this.texturePart = texturePart;
+		this.recalculateVtxCoords();
+	}
+
+        public Texture getTexture() {
+            return texturePart.getTexture();
+        }
+	
 	public Sprite(TexturePart texturePart) {
 		this(texturePart, texturePart.getWidth(), texturePart.getHeight(), 0, 0);
 	}

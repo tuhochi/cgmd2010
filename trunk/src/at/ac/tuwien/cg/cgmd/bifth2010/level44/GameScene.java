@@ -23,6 +23,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TimeDisplay;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.VirtualFinger;
 
 
 public class GameScene extends GLSurfaceView implements Renderer {
@@ -44,6 +45,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private Sprite timeDisplay;
 	/** background during intro */
 	private IntroBackground introBackground;
+	/** virtual finger for demo */
+	private VirtualFinger virtualFinger;
 
 	/** thread for game logic */
 	private GameThread gameThread;
@@ -96,6 +99,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		if (this.getCurrentState().equals(CurrentState.INTRO)) {
 			introBackground.draw(gl);
 			rabbit.draw(gl);
+			virtualFinger.draw(gl);
 		}
 		
 		// Running-Mode or Extro-Mode
@@ -170,6 +174,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		timeDisplay.setPosition(getWidth()-timeDisplay.getWidth()-10, 10);
 		
 		introBackground = new IntroBackground(mainTexture,getWidth(),getHeight());
+		virtualFinger = new VirtualFinger(mainTexture, getWidth(), getHeight());
+		virtualFinger.setGesture(VirtualFinger.DemoGesture.SWIPE_RIGHT);
 		
 		if (gameState != null) {
 			/* consume restored values and remove gameState */
@@ -187,8 +193,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private void restartGameThread() {
 		stopGameThread();
 		
-		if (rabbit != null && landscape != null && crosshairs != null && timeManager != null) {
-			gameThread = new GameThread(this, rabbit, landscape, crosshairs, timeManager);
+		if (rabbit != null && landscape != null && crosshairs != null && timeManager != null && virtualFinger != null) {
+			gameThread = new GameThread(this, rabbit, landscape, crosshairs, timeManager, virtualFinger);
 			gameThread.start();
 		}
 	}

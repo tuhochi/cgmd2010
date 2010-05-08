@@ -7,6 +7,22 @@ public class TextureParts {
 		return new TexturePart(texture, 70, 519, 70+100, 519+72);
 	}
 	
+	/**
+	 * Make a damaged version of the rabbit head
+	 * 
+	 * @param texture The main texture for the game
+	 * @param severity Severity of damage from 0-3
+	 * @return A TexturePart pointing to the damaged rabbit head
+	 */
+	public static TexturePart makeDamagedRabbitHead(Texture texture, int severity) {
+		float x, y;
+		
+		x = severity*110.f;
+		y = 661.f;
+		
+		return new TexturePart(texture, x, y, x+100.f, y+72.f);
+	}
+	
 	public static TexturePart makeWing(Texture texture) {
 		return new TexturePart(texture, 0, 519, 0+55, 519+60);
 	}
@@ -72,4 +88,16 @@ public class TextureParts {
 		// TODO change texture and return real values
 		return new TexturePart(texture,1024-480,1024-320,1024,1024);
 	}
+	
+	public static TexturePart makeVirtualFinger(Texture texture) {
+		return new TexturePart(texture, 565, 521, 565+48, 521+48);
+	}
+
+        public static TexturePart makeRedStar(Texture texture) {
+            return new TexturePart(texture, 630, 519, 630+30, 519+30);
+        }
+
+        public static TexturePart makeYellowStar(Texture texture) {
+            return new TexturePart(texture, 630, 554, 630+30, 554+30);
+        }
 }
