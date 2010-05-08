@@ -23,7 +23,7 @@ public class LevelHandler {
 	List<Integer> goodiesIndex;
 	
 	List<int[]> springChangeList = new Vector<int[]>();
-	MapCalculationThread mapCalculationThread = null;
+	public static MapCalculationThread mapCalculationThread = null;
 	boolean isFirstMap = true;
 	int mapIsActiveTimer = 0;
 	boolean mapIsActive = false;
@@ -36,7 +36,6 @@ public class LevelHandler {
 
 	public LevelHandler() {
 		generateLevel();
-		mapCalculationThread = new MapCalculationThread(this, worldDim.x);
 		gameCharacterTargetPosition = new Vector2f(gameCharacterPosition);
 	}
 
@@ -242,15 +241,18 @@ public class LevelHandler {
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
 				
-					if(isFirstMap)
-						isFirstMap = false;
-					else
-					{
+//					if(isFirstMap)
+//						isFirstMap = false;
+//					else
+//					{
 						//start thread to calculate way to goody
 						t = new StopTimer();
+						
+
+						mapCalculationThread = new MapCalculationThread(this, worldDim.x);
 						mapCalculationThread.setStartProperties(worldIndex, goodiesIndex, worldEntry);
 						mapCalculationThread.start();	
-					}
+//					}
 
 				}
 			}
@@ -507,7 +509,8 @@ public class LevelHandler {
 		
 		Vector2i to = new Vector2i(Math.round(x+gameCharacterPosition.x), Math.round(y+gameCharacterPosition.y));
 		
-		Log.d("to=", to.x+" "+to.y);
+		Log.w("lastouch= ",lastTouch.toString());
+		Log.w("to=", to.toString());
 		
 //		if(1==1)
 //		return;

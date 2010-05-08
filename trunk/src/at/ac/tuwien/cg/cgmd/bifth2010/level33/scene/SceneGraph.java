@@ -10,6 +10,8 @@ import java.io.InputStream;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
@@ -83,9 +85,10 @@ public class SceneGraph  {
 	public  static Vector2i frustumDim = new Vector2i(3, 5);
 	private Vector2i frustumMin = new Vector2i(0, 0);
 	private Vector2i frustumMax = new Vector2i(0, 0);
-	private static boolean init = false;
 	private long secoundCount;
 	private TextView tvLevelFps;
+	private ImageView ivFullscreenImage;
+	private ProgressBar pbProgressBar;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	
@@ -102,6 +105,11 @@ public class SceneGraph  {
 		this.level = level;
 		this.activity = activity;
 		this.tvLevelFps = (TextView)activity.findViewById(R.id.l33_level_fps);
+		this.ivFullscreenImage = (ImageView)activity.findViewById(R.id.l33_FullscreenImage);
+		this.pbProgressBar = (ProgressBar)activity.findViewById(R.id.l33_ProgressBar);
+		pbProgressBar.setMax(100);
+		
+
 
 	}
 
@@ -111,6 +119,9 @@ public class SceneGraph  {
 	 * @param gl  OpenGlHandler
 	 */
 	public static void init(GL10 gl) {
+
+		
+		
 		Log.d("SceneGraph inti","0");
 		
 		StopTimer t = new StopTimer();
@@ -152,14 +163,24 @@ public class SceneGraph  {
 			
 			
 			activity.runOnUiThread(new Runnable() {public void run() {
-					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		}});
+					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		
+					ivFullscreenImage.setBackgroundResource(R.drawable.l33_nix);
+					
+					
+					
+			
+			}});
+			
 			
 			timeInSeconds++;
 			framesSinceLastSecound = 0;
 			deltaTimeCount = 0f;
 			secoundCount++;
 		}
-
+		
+		
+		//TODO: Hier noch Gold/Geld/Progress setzen
+		pbProgressBar.setProgress((int) timeInSeconds%100);
 		
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -193,9 +214,6 @@ public class SceneGraph  {
 
 		// now render the Scene
 		renderScene(gl);
-
-
-		// ?? sleep rest of time?
 	}
 
 	/**

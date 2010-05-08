@@ -20,6 +20,12 @@ public class Vector2i {
 	public Vector2i(int x, int y) {
 		set(x,y);
 	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "x="+x+" y="+y;
+	}
 
 	public Vector2i add(Vector2i other)
 	{

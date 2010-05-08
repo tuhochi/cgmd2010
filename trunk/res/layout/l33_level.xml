@@ -2,28 +2,99 @@
 <RelativeLayout
  android:id="@+id/l33_FrameLayout01"
  xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent">
+
 <android.opengl.GLSurfaceView
  android:id="@+id/l33_openglview" 
  android:layout_width="fill_parent" 
- android:layout_height="fill_parent"/>
+ android:layout_height="fill_parent"
+ />
  
- <TableLayout
- android:id="@+id/l33_TableLayout" 
- android:layout_width="wrap_content" 
- android:layout_height="wrap_content" 
- android:layout_marginTop="3pt" 
- android:layout_marginLeft="3pt">
+<TableLayout
+android:id="@+id/l33_TableLayout" 
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:layout_marginTop="3pt" 
+android:layout_marginLeft="3pt"
+android:layout_marginRight="3pt"
+android:stretchColumns="1">
  
+<TableRow>
+        <TextView
+        	android:layout_above="@+id/l33_openglview" 
+            android:text="2 min 30 sec"
+            android:padding="3dip" 
+            android:gravity="center"
+            android:background="@layout/l33_background_round"
+            />
+            
 
+        <TextView
+        	android:layout_above="@+id/l33_openglview" 
+            android:text="KARTE"
+            android:gravity="center"
+            android:padding="3dip"
+            android:background="@layout/l33_background_round"
+             />
+             
+
+             <!-- http://www.helloandroid.com/tutorials/custom-view-horizontalslider -->
+             
+             <!-- 
+         <at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.layout.HorizontalSlider
+                android:id="@+id/slider"
+                android:layout_width="100dip"
+                android:layout_height="26dip"
+               android:color="#FF00"
+                android:max="10000"
+                android:layout_centerHorizontal="true" 
+                            android:gravity="center"
+            android:padding="3dip"
+            android:background="@layout/l33_background_round"
+                />
+                 -->
+                
+              	 <ProgressBar  	   
+	android:layout_above="@+id/l33_openglview" 
+	android:id="@+id/l33_ProgressBar"
+    android:indeterminateOnly="false" 
+    android:progressDrawable="@drawable/l33_progress_horizontal" 
+    android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal" 
+    android:minHeight="20dip" 
+    android:maxHeight="20dip"
+    android:padding="3dip"
+    android:background="@layout/l33_background_round"
+    />  
+                
+                
+                
+                
+</TableRow>
+
+ 
+<TableRow>
 	 <TextView 
-	 android:layout_above="@+id/l33_openglview" 
-	 android:text="fps:" 
-	 android:layout_width="wrap_content" 
-	 android:layout_height="wrap_content" 
-	 android:id="@+id/l33_level_fps" 
-	 android:layout_marginTop="3pt"></TextView>
+		 android:layout_above="@+id/l33_openglview" 
+		 android:text="fps:" 
+		 android:id="@+id/l33_level_fps" 
+		 >
+	 </TextView> 
+	 
 
- 
+	 
+
+</TableRow>
 </TableLayout>
 
+
+<!-- and now a fullscreen ImageView android:background="@drawable/l00_red"  -->
+<ImageView 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content" 
+android:id="@+id/l33_FullscreenImage"
+></ImageView>
+
+
+
+
 </RelativeLayout>
+

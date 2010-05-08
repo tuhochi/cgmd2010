@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.GestureDetector.OnGestureListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
@@ -48,36 +49,35 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	private GestureDetector gestureScanner; // needed for advanced Gestures
 	public static GameRenderer renderer;	// Game's Renderer Loop
 	public static SceneGraph sceneGraph;	// Graph with Game Objects
+	public static GameRenderer gameRenderer;
 	public static Vector2f resolution;		// resolution of the screen
 	public static Vector2f lastTouch = new Vector2f(1,1);	// coordinates of the last touch [0 1] 
 	public static Vector2f lastTouchDown = new Vector2f(1,1);
 	public static Vector2f lastTouchUp = new Vector2f(1,1);
 	public static Vector2f diffTouch = new Vector2f();	// difference to the last touch
-	public static boolean running = true;
-	public static int height=1; 
-	public static int width=1; 
+	public static boolean gameWasInit = false;
+	
 	
 	private TextView tvLevelFps;
 	private Thread uiThread;
-
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{ 
-		super.onCreate(savedInstanceState);
-		
 
-		
-		
+		Log.d("_","onCreate");
+		super.onCreate(savedInstanceState);
 		
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); 
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); 
 		setContentView(R.layout.l33_level);
 		
-		
+//		runOnUiThread(new Runnable() {public void run() {
+//			((ImageView)findViewById(R.id.l33_FullscreenImage)).setBackgroundResource(R.drawable.l33_textur);
+//	}});
+	
 //		setFocusable(true);
 //		requestFocus();
 		
@@ -87,21 +87,24 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		progressHandler = new ProgressHandler();
 		
 		StopTimer t = new StopTimer();
+		
 		LevelHandler level = new LevelHandler();// init new Level here!
 		t.logTime("Level Generierung dauerte:");
-		
 		sceneGraph = new SceneGraph(level,this);
 		renderer = new GameRenderer();
         
         //Setting up the soundHandler and mainSoundSettings
         soundHandler = new SoundHandler(this);
+        gameRenderer = new GameRenderer();
+
+		
         SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
 		IS_MUSIC_ON = settings.getBoolean(PREFERENCE_MUSIC, true);
         
         //Setting up my GameRenderer 
      
         openglview = (GLSurfaceView) findViewById(R.id.l33_openglview);
-        GameRenderer gameRenderer = new GameRenderer();
+        
         openglview.setRenderer(gameRenderer);
         
         
@@ -113,6 +116,70 @@ public class LevelActivity extends Activity implements OnGestureListener{
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         
         tvLevelFps = (TextView)findViewById(R.id.l33_level_fps);
+        
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStart()
+	 */
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		Log.v("_","onStart()");
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestart()
+	 */
+	@Override
+	protected void onRestart()
+	{
+		super.onRestart();
+		Log.v("_","onRestart()");
+	}
+	
+	@Override
+	protected void onPause() {
+		Log.d("_","onPause");
+//		soundHandler.releaseLevelAudioPlayer();
+//		openglview.onPause();
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume() {
+		Log.d("_","onResume");
+		super.onResume();
+		//openglview.onResume();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		
+		Log.w("onDestroy", "ok");
+		// stop mapCalculationThread if running
+//		if(LevelHandler.mapCalculationThread!=null)
+//			LevelHandler.mapCalculationThread.suspend();
+		
+		//Stop music if it's running
+		soundHandler.releaseLevelAudioPlayer();
+		
+		super.onDestroy();
+		
+	}
+
+
+	@Override
+	public void finish() {
+		Log.d("_","finish");
+		//next line is for testing only
+		//progman.addPoints(20);
+		//progman.setProgress(Math.min(Math.max(progman.getPoints(), 0), 100));
+		//setResult(Activity.RESULT_OK, progman.asIntent());
+		super.finish();
 	}
 	
 	
@@ -124,7 +191,8 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	public boolean onTouchEvent(final MotionEvent e) {
 		
 		System.out.println("onTouchEvent");
-		lastTouch.set(e.getX() / width, e.getY()/ height);
+		lastTouch.set(e.getX() / resolution.x, e.getY()/ resolution.y);
+		Log.w("resolution:",resolution.toString());
 		
 		if(SceneGraph.camera.zoom==SceneGraph.camera.standardZoom)
 			SceneGraph.level.steerTouchEvent(lastTouch);
@@ -211,20 +279,14 @@ public class LevelActivity extends Activity implements OnGestureListener{
 					sceneGraph.level.demomode=!sceneGraph.level.demomode;
 //				}
 //			});
+		
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+	        Log.d(this.getClass().getName(), "back button pressed");
+	        return super.onKeyDown(keyCode, event);
+	    }
+	    
 
 		return false;
-	}
-	
-	
-	@Override
-	protected void onDestroy() {
-		
-		//Stop music if it's running
-		
-		soundHandler.releaseLevelAudioPlayer();
-		
-		super.onDestroy();
-		
 	}
 
 

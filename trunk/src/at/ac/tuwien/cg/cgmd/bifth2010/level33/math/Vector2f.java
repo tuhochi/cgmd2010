@@ -27,6 +27,11 @@ public class Vector2f {
 		return this;
 		
 	}
+	
+	@Override
+	public String toString() {
+		return "x="+x+" y="+y;
+	}
 	public Vector2f subtract(Vector2f other)
 	{
 		this.x -= other.x;
