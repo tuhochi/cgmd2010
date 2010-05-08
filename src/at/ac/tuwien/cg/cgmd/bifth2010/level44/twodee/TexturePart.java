@@ -143,4 +143,7 @@ public class TexturePart {
 		
 		texCoords = Util.floatArrayToBuffer(coords);
 	}
+
+        public Texture getTexture() { return texture; }
 }
+

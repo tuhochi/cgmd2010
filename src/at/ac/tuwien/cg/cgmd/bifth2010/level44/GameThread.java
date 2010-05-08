@@ -9,6 +9,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.VirtualFinger;
 
 public class GameThread extends Thread {
 	private GameScene scene;
@@ -16,16 +17,18 @@ public class GameThread extends Thread {
 	private Crosshairs crosshairs;
 	private Landscape landscape;
 	private TimeManager timeManager;
+	private VirtualFinger virtualFinger;
 	/** is the thread stopped? */
 	private boolean quit;
 	private InputGesture gesture = null;
 
-	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs, TimeManager timeManager) {
+	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs, TimeManager timeManager, VirtualFinger virtualFinger) {
 		this.scene = scene;
 		this.rabbit = (PhysicalRabbit) rabbit;
 		this.crosshairs = crosshairs;
 		this.landscape = landscape;
 		this.timeManager = timeManager;
+		this.virtualFinger = virtualFinger;
 		this.quit = false;
 	}
 
@@ -45,6 +48,7 @@ public class GameThread extends Thread {
 				public void run() {
 					// Currently in Intro-Mode
 					if (scene.getCurrentState().equals(GameScene.CurrentState.INTRO)) {
+						virtualFinger.step();
 						rabbit.setPosition((float) (scene.getWidth() / 2 + scene.getWidth() / 6 * Math.sin((double) (System.currentTimeMillis() / 10000.))),
 								(float) (scene.getHeight() / 3));
 						rabbit.getSprite().setScale((float) (.5 + .5 * Math.abs(Math.sin((double) (System.currentTimeMillis() / 5000.)))));
@@ -94,6 +98,8 @@ public class GameThread extends Thread {
 							rabbit.setVelocity(0.f);
 						}
 
+                                                rabbit.getSprite().tick();
+
 						// perform movement of landscape
 						landscape.step();
 						// update game-time
@@ -112,6 +118,7 @@ public class GameThread extends Thread {
 						}
 						
 						rabbit.move();
+						landscape.step();
 						
 						// shrink rabbit
 						if (System.currentTimeMillis() % 4 == 0)
@@ -149,8 +156,8 @@ public class GameThread extends Thread {
 			if (gesture instanceof Swipe) {
 				Swipe swipe = (Swipe) gesture;
 
-				// if only left wing is flapped, play the sound from the left
-				// box
+				// if only left wing is flapped, play the sound
+				// from the left channel
 				if (swipe.isLeft()) {
 					soundPosition = 0.2f;
 				} else if (swipe.isRight()) {

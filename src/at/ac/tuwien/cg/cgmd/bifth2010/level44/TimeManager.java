@@ -5,7 +5,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44;
  */
 public class TimeManager {
 	private static final int UPDATE_INTERVAL = 500;
-	public static final int DEFAULT_DURATION = 10000;
+	public static final int DEFAULT_DURATION = 90000;
 	
 	private long duration;
 	private long elapsed;

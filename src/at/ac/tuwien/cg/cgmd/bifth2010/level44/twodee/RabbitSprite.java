@@ -2,6 +2,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 
+import java.util.Vector;
+
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * This class is the visual representation of the Rabbit
  * 
@@ -19,6 +23,11 @@ public class RabbitSprite extends SpriteContainer {
 	/** quotient to map a maximum swipe to ANGLE_MAX and every shorter swipe proportionally */
 	private static final float ANGLE_QUOTIENT = ANGLE_MAX / Swipe.MAX_MIN_DELTA;
 
+        private static final int CENTER_X = 45;
+        private static final int CENTER_Y = 42;
+
+        private Stars stars;
+
 	private Sprite leftWing;
 	private Sprite rightWing;
 	private CoinBucketSprite coinBucket;
@@ -34,7 +43,7 @@ public class RabbitSprite extends SpriteContainer {
 
 	public RabbitSprite(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
-		setCenter(45, 42);
+		setCenter(CENTER_X, CENTER_Y);
 
 		leftWing = new Sprite(TextureParts.makeWing(texture));
 		leftWing.setCenter(leftWing.getWidth(), leftWing.getHeight()/2);
@@ -52,6 +61,8 @@ public class RabbitSprite extends SpriteContainer {
 		addChild(leftWing);
 		addChild(rightWing);
 		addChild(coinBucket);
+
+                stars = new Stars(texture);
 	}
 	
 	public CoinBucketSprite getCoinBucket() {
@@ -222,9 +233,45 @@ public class RabbitSprite extends SpriteContainer {
 	}
 	
 	public boolean looseCoin() {
-		return coinBucket.looseCoin();
+		boolean result = coinBucket.looseCoin();
+		
+		switch (coinBucket.getCoinCount()) {
+			case 8:
+                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 0));
+                            setCenter(CENTER_X, CENTER_Y);
+                            break;
+			case 6:
+                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 1));
+                            setCenter(CENTER_X, CENTER_Y);
+                            break;
+			case 4:
+                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 2));
+                            setCenter(CENTER_X, CENTER_Y);
+                            break;
+			case 2:
+                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 3));
+                            setCenter(CENTER_X, CENTER_Y);
+                            break;
+                        default:
+                            /* do nothing */
+                            break;
+		}
+
+                stars.show();
+
+		return result;
 	}
-	
+
+	@Override
+	protected void onAfterDraw(GL10 gl) {
+		super.onAfterDraw(gl);
+		stars.draw(gl);
+	}
+
+        public void tick() {
+            stars.tick();
+        }
+
 	public int getCoinCount() {
 		return coinBucket.getCoinCount();
 	}
