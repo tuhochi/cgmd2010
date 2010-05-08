@@ -25,7 +25,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LevelActivity.
  *
@@ -42,6 +41,8 @@ public class LevelActivity extends Activity
 	
 	/** The instance. */
 	private static LevelActivity instance;
+	
+	private final SessionState sessionState;
 	
 	/** The render view. */
 	private RenderView renderView;
@@ -100,10 +101,10 @@ public class LevelActivity extends Activity
 			@Override
 			public void run()
 			{
-				/*
-				 * TODO: set correct score!
-				 */
-				score.setText(formatter.format(100-GameManager.instance.getScorePercent())+"%");
+				float scorePercent = GameManager.instance.getScorePercent();
+				score.setText(formatter.format(100-scorePercent)+"%");
+				sessionState.setProgress((int)Math.ceil(scorePercent)); 
+				setResult(Activity.RESULT_OK, sessionState.asIntent());
 			}
 		};
 		
@@ -116,14 +117,6 @@ public class LevelActivity extends Activity
 				if(remainingSeconds <= 0)
 				{
 					time.setText("Time's up!");
-					
-					/*
-					 * TODO: get 'n' set result correctly!
-					 */
-					SessionState s = new SessionState();
-					s.setProgress(1337); 
-					setResult(Activity.RESULT_OK, s.asIntent());
-					
 					finish();
 					return;
 				}
@@ -136,6 +129,7 @@ public class LevelActivity extends Activity
 				time.setText(remainingMinutesString + ":" + remainingSecondsString);
 			}
 		};
+		sessionState = new SessionState();
 	}
 	
 	/**
@@ -172,12 +166,10 @@ public class LevelActivity extends Activity
 
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, TAG); 
-		
-		// set result in case the user cancels the activity
-		SessionState s = new SessionState();
-		s.setProgress(0); 
-		setResult(Activity.RESULT_OK, s.asIntent());
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, TAG);
+        
+        sessionState.setProgress(0); 
+		setResult(Activity.RESULT_OK, sessionState.asIntent());
 	}
 	
 	/* (non-Javadoc)
