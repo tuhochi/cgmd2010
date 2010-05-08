@@ -27,8 +27,10 @@ public class MotionManager {
 	public static final MotionManager instance = new MotionManager();
 	
 	//temp vars
-	private final Vector3 	satTransformAxis,tempDirectionVec,tempPushVec,
-							tempForceDirectionVec, deflactionCenterVec,deflactionDirVec;
+	private final Vector3 	satTransformAxis,
+							tempDirectionVec, tempCenterVec,
+							tempPushVec,
+							tempForceDirectionVec,deflactionDirVec;
 	private final Matrix44 tempBasicOrientation;
 	private Movable tempEntity;
 	
@@ -40,10 +42,10 @@ public class MotionManager {
 		this.list =  new ArrayList<Movable>();
 		this.satTransformAxis = new Vector3();
 		this.tempDirectionVec = new Vector3();
+		this.tempCenterVec = new Vector3();
 		this.tempForceDirectionVec = new Vector3();
 		this.tempPushVec = new Vector3();
 		this.tempBasicOrientation = new Matrix44();
-		this.deflactionCenterVec = new Vector3();
 		this.deflactionDirVec = new Vector3();
 	}
 	
@@ -57,7 +59,6 @@ public class MotionManager {
 		int index = list.indexOf(entity);
 		if(index==-1){
 			entity.setMotion(motion);	
-			//TODO: reuse obj
 			if(motion.getSatTrans()==null)
 				motion.setSatTrans(new VecAxisTransformation(Constants.Y_AXIS,(float)Math.PI,5,null));
 			motion.setTransform(entity.getTransformation());
@@ -88,11 +89,12 @@ public class MotionManager {
 		if(pushVec.length()>= Config.MIN_STRENGTH_FOR_DIRECTIONAL){
 	
 			if(motion instanceof DirectionalMotion){
-				//change only params
+				//TODO change direction
 			}else{
 				//determine aiming center
 				Movable aimEntity = CollisionManager.instance.getNearestToCenterEntity();
 				Vector3 aimCenter = null;
+				
 				if(aimEntity!=null)
 					aimCenter = aimEntity.getBoundingSphereWorld().center;
 				else
@@ -101,7 +103,7 @@ public class MotionManager {
 				tempForceDirectionVec.set(aimCenter);
 				tempForceDirectionVec.subtract(entity.getCurrentPosition());		
 				
-				Log.d(LevelActivity.TAG," push force="+pushVec.length());
+				Log.d(LevelActivity.TAG,"SELECTION push force="+pushVec.length());
 				
 				DirectionalMotion dirMotion =  
 					new DirectionalMotion(	entity.getCurrentPosition(),
@@ -155,38 +157,6 @@ public class MotionManager {
 		}
 	}
 	
-	public void checkInnerForceField(Movable entity)
-	{
-		Motion motion = entity.getMotion();
-		float centerRatio = 1;
-		float dirRatio = 1;
-	
-		
-		if(motion instanceof Orbit){
-			
-			Orbit orbit = (Orbit) motion;
-			
-			if(orbit.directionVec.length()<Config.FORCEFIELD_DIRLENGTH_LIMIT){
-				dirRatio = Config.FORCEFIELD_NEW_DIRLENGTH/(orbit.directionVec.length());
-			}
-			if(orbit.centerVec.length()<Config.FORCEFIELD_CENTERLENGTH_LIMIT){
-				centerRatio = Config.FORCEFIELD_NEW_CENTERLENGTH/(orbit.centerVec.length());
-			}
-		
-			if(dirRatio!=1f || centerRatio!=1f){
-//				Log.d(LevelActivity.TAG,"FF center length="+orbit.centerVec.length()+
-//										"ratio="+centerRatio+
-//										" dir length="+orbit.directionVec.length()+
-//										"ratio="+dirRatio);
-				
-				orbit.morphAxisScale(	centerRatio, 
-										dirRatio, 
-										Config.FORCEFIELD_CENTERLENGTH_SCALESPEED,
-										Config.FORCEFIELD_DIRLENGTH_SCALESPEED );
-			}
-			
-		}
-	}
 	
 	private void checkUniverseLimits(Movable entity)
 	{
@@ -222,22 +192,18 @@ public class MotionManager {
 										oldDirMotion.getSpeed(),
 										oldDirMotion.getBasicOrientation());
 
-			//TODO: reuse obj
-			Vector3 tempCenter = new Vector3(newOrbit.centerVec).normalize();
-			Vector3 tempDir  = new Vector3(newOrbit.directionVec).normalize();
-			float angle = Vector3.getAngle(tempCenter, tempDir);
-			
-			
-			Log.d(LevelActivity.TAG,"ANGLE between center="+tempCenter.toString()+" dir="+tempDir+" angle....="+((float)Math.toDegrees(Vector3.getAngle(tempCenter, tempDir))));
+			tempCenterVec.set(newOrbit.centerVec).normalize();
+			tempDirectionVec.set(newOrbit.directionVec).normalize();
+			float angle = Vector3.getAngle(tempCenterVec, tempDirectionVec);
+
+			Log.d(LevelActivity.TAG,"DIR TO ORBIT TRANSFORM - angle="+((float)Math.toDegrees(angle)));
 		
 			//dir = center 
 			if(Float.isNaN(angle))
 				angle = 0;
 			
-			newOrbit.rotateDirectionVec(Constants.PIHALF-angle,Config.DIRVEC_ROTATION_STEPS);
-
+			newOrbit.rotateDirectionVec(Constants.PIHALF-angle);
 			setMotion(newOrbit,obj);
-			//checkInnerForceField(obj);
 		}
 	}
 	
@@ -303,7 +269,7 @@ public class MotionManager {
 	 * @param minDistanceRatio the minimal distance ratio
 	 * @param maxDistanceRatio the maximal distance ratio
 	 */
-	public void generateRandomOrbit(	Scene scene,
+	public void generateRandomOrbits(	Scene scene,
 										float minSpeed,float maxSpeed,
 										float minQx,float maxQx,
 										float minQz,float maxQz,
@@ -315,7 +281,7 @@ public class MotionManager {
 		Random rand = new Random();
 		Vector3 a = new Vector3();
 		Vector3 b = new Vector3();
-		Vector3 center = new Vector3(0,0,0);
+		Vector3 center = Config.UNIVERSE_CENTER;
 		Vector3 rotationAxis = new Vector3();
 		Orbit generatedOrbit = null;
 		
@@ -323,15 +289,15 @@ public class MotionManager {
 		
 		for(int i=0;i<scene.sceneEntities.size();i++){
 			entity = scene.sceneEntities.get(i);
-			if(entity.getName().startsWith("Satellite_")){
+			if(entity.getName().startsWith(Config.SATELLITE_PREFIX)){
 				
 				//generate the orthonormal axis for the ellipse
 				a.x = ((float)rand.nextDouble()*(maxDistance-minDistance) + minDistance);
-				a.x = (rand.nextBoolean())? a.x*-1 : a.x;
+				a.x = (rand.nextBoolean())? -a.x : a.x;
 				
 				/** generate a similar value for b over the <code>distanceRatio</code> */
 				b.z = a.x *((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio);
-				b.z = (rand.nextBoolean())? b.z*-1 : b.z;
+				b.z = (rand.nextBoolean())? -b.z: b.z;
 				
 //				Log.d(LevelActivity.TAG," a.x="+a.x+" b.z="+b.z + " rand="+((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio));
 				
@@ -346,8 +312,8 @@ public class MotionManager {
 //										+ " qz="+(float)rand.nextDouble()*(maxQz - minQz) + minQz);
 							
 				generatedOrbit = new Orbit(	a,center,b,
-										(float)rand.nextDouble()*maxSpeed + minSpeed,
-										entity.getBasicOrientation());
+											(float)rand.nextDouble()*maxSpeed + minSpeed,
+											entity.getBasicOrientation());
 				
 				
 				//generate random satellite transformation
@@ -365,10 +331,6 @@ public class MotionManager {
 				
 				generatedOrbit.setSatTrans(satTransform);
 				addMotion(generatedOrbit,entity);
-				
-				generatedOrbit.limitUniverse();
-				checkInnerForceField(entity);
-				
 			}
 		}
 	}

@@ -180,7 +180,6 @@ public class DirectionalMotion extends Motion
 	public void morph(Vector3 pushVec) {
 		this.directionVec.multiply(speed).add(pushVec);
 		
-		//TODO: speed
 		this.speed = this.directionVec.length();
 		if(this.speed>Config.UNIVERSE_SPEED_LIMIT)
 			this.speed = Config.UNIVERSE_SPEED_LIMIT;

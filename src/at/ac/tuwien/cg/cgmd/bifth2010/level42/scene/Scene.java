@@ -11,6 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
@@ -212,8 +213,10 @@ public class Scene implements Persistable
 	 */
 	public void render()
 	{
-		if(!initialized)
+		if(!initialized){
 			init();
+			CollisionManager.instance.initAimingList();
+		}
 		int size = sceneEntities.size();
 		
 		for(int i=0;i<size;i++)
