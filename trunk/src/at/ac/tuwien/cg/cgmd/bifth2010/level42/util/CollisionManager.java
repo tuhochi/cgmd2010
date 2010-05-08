@@ -55,8 +55,10 @@ public class CollisionManager {
 	private final Vector<Movable> aimingList;
 	
 	public static CollisionManager instance;
+	public static NearestEntityComperator comperator;
 	
 	private GameManager gameManager;
+	private MotionManager motionManager;
 	
 	
 	/**
@@ -88,7 +90,12 @@ public class CollisionManager {
 			
 		this.minDistance = 0;
 		
-		aimingList = new Vector<Movable>(Config.COUNT_NEAREST_ENTITIES);
+		this.aimingList = new Vector<Movable>();
+		this.comperator = new NearestEntityComperator();
+		
+		this.motionManager = MotionManager.instance;
+		
+		this.instance = this;
 		
 		for(int i=0;i<entityList.size();i++)
 		{
@@ -98,10 +105,12 @@ public class CollisionManager {
 				gameManager = new GameManager(aimingList.size());
 			}
 		}
+	}
+	
+	public void initAimingList()
+	{
+		Collections.sort(aimingList, comperator);
 		getNearestToCenterEntity();
-
-		Collections.sort(aimingList, new NearestEntityComperator());
-		instance = this;
 	}
 	
 	/**
@@ -196,8 +205,6 @@ public class CollisionManager {
 		{
 			objA = entityList.get(i);	
 			objAIsMoveable = (objA.getName().equals(Config.PLANET_NAME))?false:true;
-			//check the inner force field
-			MotionManager.instance.checkInnerForceField(objA);
 			
 			for(int j = i+1; j<entityList.size(); j++)
 			{
@@ -234,14 +241,11 @@ public class CollisionManager {
 						for(int u = 0; u < planet.models.size(); u++)
 						{
 							planetEntity = planet.models.get(u);
-							
-							
-								
+									
 							//check for contact
 							if(collisionDetected(planetEntity,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
 								Motion planetEntityMotion = planetEntity.getMotion();
-		
 								
 								if(planetEntity.getMotion()==null)
 								{
@@ -251,14 +255,14 @@ public class CollisionManager {
 									
 									planetEntityMotion = new DirectionalMotion(	planetEntity.getBoundingSphereWorld().center,
 																				planetPushVec,
-																				satellite.getMotion().getSpeed()/4,
+																				satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
 																				planetEntity.getBasicOrientation());
-									MotionManager.instance.addMotion(planetEntityMotion,planetEntity);
+									motionManager.addMotion(planetEntityMotion,planetEntity);
 									
 									if(satellite.getMotion().getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
 										satellite.getMotion().morph(planetPushVec);
 									
-									Log.d(LevelActivity.TAG,"sat speed="+satellite.getMotion().getSpeed()+" planet speed="+planetEntity.getMotion().getSpeed());
+									Log.d(LevelActivity.TAG,"PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetEntity.getMotion().getSpeed());
 									
 									//report game manager
 									gameManager.incScore();
@@ -268,12 +272,6 @@ public class CollisionManager {
 								aimingList.remove(planetEntity);
 							}
 						}
-					
-						//sort list for autoaim
-						if(aimingList.size()>1){
-							Collections.sort(aimingList, new NearestEntityComperator());
-						}
-						
 					}
 					else
 					{
@@ -288,7 +286,7 @@ public class CollisionManager {
 													Constants.DUMMY_INIT_VEC,
 													0.1f,
 													null);
-							MotionManager.instance.addMotion(objAMotion,objA);
+							motionManager.addMotion(objAMotion,objA);
 						}
 						
 	
@@ -299,7 +297,7 @@ public class CollisionManager {
 													Constants.DUMMY_INIT_VEC,
 													0.1f,
 													null);
-							MotionManager.instance.addMotion(objBMotion,objB);
+							motionManager.addMotion(objBMotion,objB);
 						}
 						
 						
@@ -325,13 +323,10 @@ public class CollisionManager {
 						objA.getMotion().morph(objAPushVec);
 						objB.getMotion().morph(objBPushVec);
 						
-						MotionManager.instance.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
-						MotionManager.instance.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
-						//TODO: CHECK LIMITS
+						motionManager.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
+						motionManager.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
 					}
-					
 
-					
 				//END of contact detection
 				}else{
 					//special case: sat is not longer "inside the planet"
@@ -339,7 +334,7 @@ public class CollisionManager {
 					
 						if(objA.getCurrentPosition().length()>Config.TRANSFORMATION_DISTANCE){
 							if(objA.getMotion() instanceof DirectionalMotion){
-								MotionManager.instance.transformDirMotionInOrbit(objA);
+								motionManager.transformDirMotionInOrbit(objA);
 							}else{
 								objA.getMotion().setInsidePlanet(false);
 							}
@@ -354,8 +349,8 @@ public class CollisionManager {
 	
 	public Movable getNearestToCenterEntity()
 	{
-		for(int i=0;i<aimingList.size();i++)
-			Log.d(LevelActivity.TAG,i+ " length = "+aimingList.get(i).getBoundingSphereWorld().center.length());
+//		for(int i=0;i<aimingList.size();i++)
+//			Log.d(LevelActivity.TAG,"AUTOAIM: i+ " length = "+aimingList.get(i).getBoundingSphereWorld().center.length());
 		
 		if(aimingList.size()>0)		
 			return aimingList.get(0);

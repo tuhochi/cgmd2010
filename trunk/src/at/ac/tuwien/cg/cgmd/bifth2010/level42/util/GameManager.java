@@ -36,7 +36,7 @@ public class GameManager {
 		scoreHasChanged=true;
 	}
 	
-	public boolean scoreHasChanged(){
+	public synchronized boolean scoreHasChanged(){
 		if(scoreHasChanged)
 		{
 			scoreHasChanged = false;
