@@ -37,7 +37,12 @@ public class GameManager {
 	}
 	
 	public boolean scoreHasChanged(){
-		return scoreHasChanged;
+		if(scoreHasChanged)
+		{
+			scoreHasChanged = false;
+			return true;
+		}
+		return false;
 	}
 	
 }
