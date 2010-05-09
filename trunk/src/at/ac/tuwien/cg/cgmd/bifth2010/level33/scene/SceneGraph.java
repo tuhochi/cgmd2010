@@ -251,8 +251,70 @@ public class SceneGraph  {
 					
 					if(type[0]<=GEOMETRY_WALL)
 					{
-						//if(type[3]==ONE_CONNECTION_WALL)
+						if(type[2]==ONE_CONNECTION_WALL){
+							
+							if(type[3]==0)
 							geometry.render(25);
+							
+							else if(type[3]==90)
+								geometry.render(26);
+							
+							else if(type[3]==180)
+								geometry.render(27);
+							
+							else
+								geometry.render(28);
+						}
+						
+						if(type[2]==TWO_CONNECTION_WALL){
+							
+							if(type[3]==0)
+							{
+								geometry.render(25);
+								geometry.render(27);
+							}
+							else
+							{
+								geometry.render(26);
+								geometry.render(28);
+							}	
+						}
+						
+						if(type[2]==THREE_CONNECTION_WALL){
+							
+							if(type[3]==0)
+							{
+								geometry.render(26);
+								geometry.render(27);
+								geometry.render(28);
+							}
+							else if(type[3]==90)
+							{
+								geometry.render(25);
+								geometry.render(27);
+								geometry.render(28);
+							}	
+							else if(type[3]==180)
+							{
+								geometry.render(25);
+								geometry.render(26);
+								geometry.render(28);
+							}	
+							else
+							{
+								geometry.render(25);
+								geometry.render(26);
+								geometry.render(27);
+							}	
+						}
+						
+						if(type[2]==FOUR_CONNECTION_WALL){
+								geometry.render(25);
+								geometry.render(26);
+								geometry.render(27);
+								geometry.render(28);
+						}
+							
 						
 						if(type[1]!=0)
 						{
@@ -300,6 +362,7 @@ public class SceneGraph  {
 
 						if(type[0]==GEOMETRY_STONE)
 						{
+						
 							geometry.render(0);
 							geometry.render(7);
 						}
@@ -325,10 +388,36 @@ public class SceneGraph  {
 							geometry.render(4);
 							geometry.render(8);
 						}	
-						else 
-							geometry.render(6);
-						
-						//geometry.render(30);
+						// normal Way
+						else {
+								geometry.render(6);
+								
+								// links
+								if(type[0]==UP_ARROW){
+									geometry.render(29);	
+								}
+								else if(type[0]==LEFT_ARROW){
+									glPushMatrix();
+									gl.glRotatef(90, 0, 1, 0);
+									geometry.render(29);	
+									glPopMatrix();
+								}
+								else if(type[0]==RIGHT_ARROW){
+									glPushMatrix();
+									gl.glRotatef(-90, 0, 1, 0);
+									geometry.render(29);
+									glPopMatrix();
+								}
+								else if(type[0]==DOWN_ARROW){
+									glPushMatrix();
+									gl.glRotatef(180, 0, 1, 0);
+									geometry.render(29);	
+									glPopMatrix();
+								}
+							
+						}
+							
+					
 						
 						}
 					glPopMatrix();
