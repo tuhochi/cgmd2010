@@ -22,6 +22,8 @@ public class ModelDrain extends Model {
 	/** texture for drain with octagon hole **/
 	private int texture_drain4 = R.drawable.l84_drain_oct;
 	
+	private int drainStyle = 0;
+	
 	/** orientation (angle) of the drain **/
 	private float orientation = 0;
 	
@@ -37,9 +39,11 @@ public class ModelDrain extends Model {
 	 */
 	public ModelDrain(int drainstyle, float pos, float orientation)
 	{
+		this.drainStyle = drainstyle;
 		this.setTexture(drainstyle);
 		this.setPosition(pos);
 		this.orientation = orientation;
+		
 		
 		//Adjust the width of Model's quad.
 		vertices[0] = vertices[6] = -width/2.0f;
@@ -96,4 +100,10 @@ public class ModelDrain extends Model {
 	public float getPosition() {
 		return this.pos;
 	}
+	
+	public int getDrainStyle()
+	{
+		return this.drainStyle;
+	}
+	
 }

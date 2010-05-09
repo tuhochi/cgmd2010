@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -105,6 +106,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f - 5f) / 3f) * 3;
 			int drainType = (int)(Math.random() * 4.0);
 			float drainOrientation = (float)Math.random() * 360f;
+			//Log.i("DrainOrientation","#" + i + ": " + drainOrientation);
 			
 			if (!drains.containsKey(drainPos)) {
 				drains.put(drainPos, new ModelDrain(drainType, drainPos, drainOrientation));
@@ -118,16 +120,16 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		tfPoints.setText("$" + moneyToSpend);
 		
 		//Create gems
-		gemRound = new ModelGem(R.drawable.l84_tex_gem_round);
+		gemRound = new ModelGem(1,R.drawable.l84_tex_gem_round);
 		gemRound.setSoundManager(soundManager);
 		gems.add(gemRound);
-		gemDiamond = new ModelGem(R.drawable.l84_tex_gem_diamond);
+		gemDiamond = new ModelGem(2,R.drawable.l84_tex_gem_diamond);
 		gemDiamond.setSoundManager(soundManager);
 		gems.add(gemDiamond);
-		gemRect = new ModelGem(R.drawable.l84_tex_gem_rect);
+		gemRect = new ModelGem(3,R.drawable.l84_tex_gem_rect);
 		gemRect.setSoundManager(soundManager);
 		gems.add(gemRect);
-		gemOct = new ModelGem(R.drawable.l84_tex_gem_oct);
+		gemOct = new ModelGem(4,R.drawable.l84_tex_gem_oct);
 		gemOct.setSoundManager(soundManager);
 		gems.add(gemOct);
 		
@@ -163,10 +165,10 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
-		case R.id.l84_ButtonGemRound: gemRound.startFall(); break;
-		case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(); break;
-		case R.id.l84_ButtonGemRect: gemRect.startFall(); break;
-		case R.id.l84_ButtonGemOct: gemOct.startFall(); break;
+		case R.id.l84_ButtonGemRound: gemRound.startFall(drains); break;
+		case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(drains); break;
+		case R.id.l84_ButtonGemRect: gemRect.startFall(drains); break;
+		case R.id.l84_ButtonGemOct: gemOct.startFall(drains); break;
 		}
 	}
 
