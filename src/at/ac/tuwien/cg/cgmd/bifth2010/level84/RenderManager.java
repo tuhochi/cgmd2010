@@ -29,6 +29,7 @@ public class RenderManager implements Renderer {
 	private TextView tfFps;
 	private int fps = 0;
 	private ProgressManager progman;
+	private SoundManager soundman;
 	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
@@ -40,12 +41,13 @@ public class RenderManager implements Renderer {
 		}
 	};
 	
-	public RenderManager(LevelActivity activity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman) {
+	public RenderManager(LevelActivity activity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman, SoundManager soundManager) {
 		this.activity = activity;
 		this.street = street;
 		this.gems = gems;
 		this.accelerometer = accelerometer;
 		this.progman = progman;
+		this.soundman = soundManager;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 
 		Timer fpsUpdateTimer = new Timer();
@@ -86,7 +88,7 @@ public class RenderManager implements Renderer {
 		ListIterator<Model> i = gems.listIterator();
 		while(i.hasNext()) {
 			ModelGem m = (ModelGem)i.next();
-			m.update(gl, deltaTime);
+			m.update(gl, deltaTime, soundman);
 			m.draw(gl);
 		}
 	}

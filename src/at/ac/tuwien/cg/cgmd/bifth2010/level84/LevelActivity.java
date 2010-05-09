@@ -46,6 +46,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
 	private ProgressManager progman;
+	private SoundManager soundManager;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,16 +62,23 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
 		progman = new ProgressManager();
-		renderManager = new RenderManager(this, street, gems, accelerometer, progman);	
+		soundManager = new SoundManager(this);
+		renderManager = new RenderManager(this, street, gems, accelerometer, progman, soundManager);	
 		openglview.setRenderer(renderManager);
 	}
 
+	/**
+	 * init level parameters
+	 */
 	private void initLevelParams() {
 		levelWidth = 240f;
 		levelSpeed = 2f;
 		numDrains = 50;
 	}
 
+	/**
+	 * init input options of the GUi
+	 */
 	private void initGui() {
 		ImageButton btnGemRound = (ImageButton) findViewById(R.id.l84_ButtonGemRound);
 		btnGemRound.setOnClickListener(this);    
@@ -81,10 +89,14 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		ImageButton btnGemOct = (ImageButton) findViewById(R.id.l84_ButtonGemOct);
 		btnGemOct.setOnClickListener(this);
 		
+		//TODO: only show seekbar, if no HW-accelerator is available 
 		SeekBar accelBar = (SeekBar) findViewById(R.id.l84_AccelBar);
 		accelBar.setOnSeekBarChangeListener(this);
 	}
 
+	/**
+	 * create the street and the drains of the level
+	 */
 	private void initLevel() {
 		//Create street
 		street = new ModelStreet(levelWidth, 17f, -levelWidth/2f + 8f, levelSpeed, R.drawable.l84_tex_street, drains);
