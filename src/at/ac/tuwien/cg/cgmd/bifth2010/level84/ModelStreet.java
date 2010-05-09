@@ -6,6 +6,7 @@ import java.util.Iterator;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 /**
  * Model representing a "Street". Gets a HashMap full of drains that are then rendered onto the street.
@@ -91,6 +92,7 @@ public class ModelStreet extends Model {
 		
 			gl.glPushMatrix();
 			gl.glTranslatef(drain.getPosition(), 0, 0);
+			gl.glRotatef(drain.getOrientationAngle(), 0, 0, 1.0f);
 				
 			//Draw drain.
 			drain.draw(gl);
