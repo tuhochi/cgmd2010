@@ -251,6 +251,9 @@ public class SceneGraph  {
 					
 					if(type[0]<=GEOMETRY_WALL)
 					{
+						//if(type[3]==ONE_CONNECTION_WALL)
+							geometry.render(25);
+						
 						if(type[1]!=0)
 						{
 							glPushMatrix();
@@ -287,6 +290,7 @@ public class SceneGraph  {
 							geometry.render(23);
 						else if (type[0]==TWO_EDGE_ONE_SPECIAL_CORNER_WALL)
 							geometry.render(24);
+							 
 							 
 						if(type[1]!=0)
 							glPopMatrix();
