@@ -88,7 +88,7 @@ public class RenderManager implements Renderer {
 		ListIterator<Model> i = gems.listIterator();
 		while(i.hasNext()) {
 			ModelGem m = (ModelGem)i.next();
-			m.update(gl, deltaTime, soundman);
+			m.update(gl, deltaTime);
 			m.draw(gl);
 		}
 	}

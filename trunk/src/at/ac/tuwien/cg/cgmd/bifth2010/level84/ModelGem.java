@@ -24,6 +24,9 @@ public class ModelGem extends Model {
 	/** position of the streetlevel **/
 	private float streetLevel = -10f; 	//TODO: ev. Übergabe des wertes ??
 	
+	/** soundmanager for executing soundfx **/
+	private SoundManager soundman;
+	
 	/**
 	 * Creates a new gem model.
 	 */
@@ -50,6 +53,11 @@ public class ModelGem extends Model {
 		this.isFalling = false;
 	}
 
+	public void setSoundManager(SoundManager soundManager)
+	{
+		this.soundman = soundManager;
+	}
+	
 	/**
 	 * reset gem position
 	 */
@@ -89,7 +97,7 @@ public class ModelGem extends Model {
 	/**
 	 * Update the model's transformations.
 	 */
-	public void update(GL10 gl, double deltaTime, SoundManager soundman) {
+	public void update(GL10 gl, double deltaTime) {
 		
 		if (this.isFalling) {
 			if (!checkCollision()) {
@@ -98,7 +106,7 @@ public class ModelGem extends Model {
 			}
 			else {
 				//TODO: check ausrichtung, punkte, ...
-				soundman.playSound(SoundFX.HIT);
+				this.soundman.playSound(SoundFX.MISS);
 				endFall();
 			}
 		}
