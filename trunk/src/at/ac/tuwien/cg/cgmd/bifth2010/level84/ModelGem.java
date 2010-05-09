@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
+
 /**
  * Model representing a "Gem". Gets texture dependent on gem type.
  * @author Gerald, Georg
@@ -67,6 +69,7 @@ public class ModelGem extends Model {
 	 * end fall animation
 	 */
 	public void endFall() {
+		
 		this.isFalling = false;
 		resetPosition();
 	}
@@ -86,7 +89,7 @@ public class ModelGem extends Model {
 	/**
 	 * Update the model's transformations.
 	 */
-	public void update(GL10 gl, double deltaTime) {
+	public void update(GL10 gl, double deltaTime, SoundManager soundman) {
 		
 		if (this.isFalling) {
 			if (!checkCollision()) {
@@ -95,6 +98,7 @@ public class ModelGem extends Model {
 			}
 			else {
 				//TODO: check ausrichtung, punkte, ...
+				soundman.playSound(SoundFX.HIT);
 				endFall();
 			}
 		}
