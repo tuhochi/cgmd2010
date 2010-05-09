@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +53,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		
 		drains = new HashMap<Integer, ModelDrain>();
 		gems = new LinkedList<Model>();
+		soundManager = new SoundManager(this);
 		
 		initGui();
 		initLevelParams();
@@ -62,7 +62,6 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
 		progman = new ProgressManager();
-		soundManager = new SoundManager(this);
 		renderManager = new RenderManager(this, street, gems, accelerometer, progman, soundManager);	
 		openglview.setRenderer(renderManager);
 	}
@@ -120,12 +119,16 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		
 		//Create gems
 		gemRound = new ModelGem(R.drawable.l84_tex_gem_round);
+		gemRound.setSoundManager(soundManager);
 		gems.add(gemRound);
 		gemDiamond = new ModelGem(R.drawable.l84_tex_gem_diamond);
+		gemDiamond.setSoundManager(soundManager);
 		gems.add(gemDiamond);
 		gemRect = new ModelGem(R.drawable.l84_tex_gem_rect);
+		gemRect.setSoundManager(soundManager);
 		gems.add(gemRect);
 		gemOct = new ModelGem(R.drawable.l84_tex_gem_oct);
+		gemOct.setSoundManager(soundManager);
 		gems.add(gemOct);
 		
 		//TODO: loading obj-files
