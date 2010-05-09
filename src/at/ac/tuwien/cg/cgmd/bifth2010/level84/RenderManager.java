@@ -80,7 +80,7 @@ public class RenderManager implements Renderer {
 		
 		gl.glLoadIdentity();
 		
-		//At first: Render street.
+		//At first: Render street with drains
 		street.update(gl, deltaTime, accelerometer.getOrientation());
 		street.draw(gl);
 		
@@ -88,7 +88,7 @@ public class RenderManager implements Renderer {
 		ListIterator<Model> i = gems.listIterator();
 		while(i.hasNext()) {
 			ModelGem m = (ModelGem)i.next();
-			m.update(gl, deltaTime);
+			m.update(gl, deltaTime,street.getStreetPos(),accelerometer.getOrientation());
 			m.draw(gl);
 		}
 	}

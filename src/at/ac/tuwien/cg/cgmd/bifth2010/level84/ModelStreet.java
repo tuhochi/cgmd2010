@@ -62,6 +62,16 @@ public class ModelStreet extends Model {
 		fillBuffers();
 	}
 	
+	
+	/**
+	 * @return actual horizontal street translation 
+	 */
+	public float getStreetPos()
+	{
+		return this.posX;
+	}
+	
+	
 	/**
 	 * Update the model's transformations.
 	 * @param gl OpenGL ES context
@@ -71,8 +81,9 @@ public class ModelStreet extends Model {
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
 		super.update(gl, deltaTime, deviceRotation);
 		float deltaSpeed = (float)((double)speed * deltaTime);
-		posX += deltaSpeed;
+		this.posX += deltaSpeed;
 	}
+	
 	
 	/**
 	 * Draws the street and all drains.
@@ -81,7 +92,7 @@ public class ModelStreet extends Model {
 	public void draw(GL10 gl) {
 		gl.glPushMatrix();
 		gl.glRotatef(deviceRotation, 0, 0, 1);
-		gl.glTranslatef(posX, 0, posZ);
+		gl.glTranslatef(this.posX, 0, posZ);
 		
 		//Draw street.
 		super.draw(gl);
@@ -90,6 +101,7 @@ public class ModelStreet extends Model {
 		while(i.hasNext()) {
 			ModelDrain drain = i.next();
 		
+			//set translation and rotation of the drains
 			gl.glPushMatrix();
 			gl.glTranslatef(drain.getPosition(), 0, 0);
 			gl.glRotatef(drain.getOrientationAngle(), 0, 0, 1.0f);

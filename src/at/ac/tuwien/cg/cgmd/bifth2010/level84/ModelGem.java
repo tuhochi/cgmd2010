@@ -1,7 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ListIterator;
+
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 /**
@@ -11,6 +16,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 public class ModelGem extends Model {
 
+	private int gemType;
+	
 	/** width of the gem **/
 	float width = 0.3f;
 	/** starting position where gem begings to fall **/
@@ -26,6 +33,9 @@ public class ModelGem extends Model {
 	
 	/** soundmanager for executing soundfx **/
 	private SoundManager soundman;
+	
+	/** drainMap used for collision detection **/
+	private HashMap<Integer, ModelDrain> drainMap;
 	
 	/**
 	 * Creates a new gem model.
@@ -47,8 +57,9 @@ public class ModelGem extends Model {
 	 * Creates a new gem model with an initial texture resource.
 	 * @param textureResource
 	 */
-	public ModelGem(int textureResource) {
+	public ModelGem(int gemType, int textureResource) {
 		this();
+		this.gemType = gemType;
 		this.textureResource = textureResource;
 		this.isFalling = false;
 	}
@@ -69,8 +80,9 @@ public class ModelGem extends Model {
 	/**
 	 * start fall animation
 	 */
-	public void startFall()	{
+	public void startFall(HashMap<Integer, ModelDrain> drains)	{
 		this.isFalling = true;
+		drainMap = drains;
 	}
 	
 	/**
@@ -86,26 +98,81 @@ public class ModelGem extends Model {
 	 * check collision of gem and drain
 	 * @return collision: true/false
 	 */
-	public boolean checkCollision()	{
-		if (gemPos <= streetLevel) {
+	public boolean checkFallCollision()	{
+		if (gemPos < streetLevel) {
 			return true;
+		}	
+		else return false;
+	}
+
+	public void checkCollisionType(float streetPos, float deviceRotation)
+	{
+		//check type of collision (hit/miss)
+		Iterator<ModelDrain> i = drainMap.values().iterator();
+		while(i.hasNext())
+		{
+			ModelDrain drain = i.next();
+			// calculate get the position of the drain
+			
+			float tempPos = streetPos + drain.getPosition();
+			
+			if ((tempPos > -2) || (tempPos < 2))
+			{
+				Log.i("POSITION", "drainstlye: " + drain.getDrainStyle() + " / "+ tempPos);
+
+				//check draintype and see if it fits
+				int drainType = drain.getDrainStyle();
+				if ( drainType == 0)
+				{
+					this.soundman.playSound(SoundFX.BREAK);
+				}
+					else //check if gem hits or misses the drain
+					{
+
+							if (this.gemType == drainType)
+							{
+								this.soundman.playSound(SoundFX.HIT);
+								break;
+							}
+							else
+							{
+								this.soundman.playSound(SoundFX.MISS);
+								break;
+							}
+//								if (Math.abs(drain.getOrientationAngle() - deviceRotation ) < 1.0f)
+//								{
+//									this.soundman.playSound(SoundFX.HIT);
+//									break;
+//								}
+//								else
+//								{
+//									this.soundman.playSound(SoundFX.MISS);
+//									break;
+//								}
+//							}
+					}
+			}
+			else
+			{
+				break;
+			}
 		}
-		else 
-			return false;
 	}
 	
 	/**
+	 *
 	 * Update the model's transformations.
 	 */
-	public void update(GL10 gl, double deltaTime) {
+	public void update(GL10 gl, double deltaTime, float streetPos, float deviceRotation) {
 		
 		if (this.isFalling) {
-			if (!checkCollision()) {
+			if (!checkFallCollision()) {
 				fallSpeed += 5f * deltaTime;
 				gemPos -= fallSpeed;
 			}
-			else {
-				//TODO: check ausrichtung, punkte, ...
+			else
+			{
+				//checkCollisionType(streetPos, deviceRotation);
 				this.soundman.playSound(SoundFX.MISS);
 				endFall();
 			}
