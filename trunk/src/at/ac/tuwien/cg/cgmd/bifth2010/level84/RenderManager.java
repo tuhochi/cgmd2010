@@ -14,7 +14,9 @@ import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class RenderManager implements Renderer {
@@ -31,6 +33,11 @@ public class RenderManager implements Renderer {
 	private int fps = 0;
 	private ProgressManager progman;
 	private SoundManager soundman;
+	private Toast toast;
+	private float streetStepHalf = 0;
+	private float streetStepSize = 0;
+	private int streetStepCounter = 1;
+	
 	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
@@ -61,6 +68,12 @@ public class RenderManager implements Renderer {
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 
+		streetStepHalf = (street.width / 2);
+		streetStepSize =  (street.width / 2) / 5;
+		
+		CharSequence endtext = "The end is near";
+		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
+		
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
 			@Override
@@ -70,6 +83,7 @@ public class RenderManager implements Renderer {
 			}
 		}, 1000, 1000);
 	}
+	
 	
 	
 	/**
@@ -96,10 +110,14 @@ public class RenderManager implements Renderer {
 		street.update(gl, deltaTime, accelerometer.getOrientation());
 		street.draw(gl);
 		
-		//TODO: update progress if a certain amount of the street has passed 
-		progman.updatePointProgress(20);
-
-		//TODO: if street ends -> call finish method to finish activity
+		
+		float streetPos = street.getStreetPos();
+		
+		//update progress if a certain amount of the streetwidth has passed
+		checkStreetProgress(streetPos);
+		
+		//if the street end is near -> call finish method to finish activity
+		checkStreetEnd(streetPos);
 		
 		//Afterwards: Render gems.
 		ListIterator<Model> i = gems.listIterator();
@@ -110,6 +128,40 @@ public class RenderManager implements Renderer {
 		}
 	}
 
+	
+	private void checkStreetProgress(float streetPos)
+	{
+		if ( streetPos < 0)
+		{	
+			if (streetPos > (-streetStepHalf + (streetStepSize * streetStepCounter)))
+			{
+				progman.updatePointProgress(streetStepCounter * 5);
+				streetStepCounter++;
+			}
+		}
+		else
+		{
+			if (streetPos > (streetStepHalf - (streetStepSize * streetStepCounter)))
+			{
+				progman.updatePointProgress(20 + (30 - streetStepCounter * 5));
+				streetStepCounter--;
+			}	
+		}
+		//Log.i("PROGRESS","-> " + progman.getPointProgress());
+	}
+	
+	
+	private void checkStreetEnd(float streetPos)
+	{
+		if (streetPos > ((street.width / 2) - 5f))
+		{
+			//TODO: maybe show a result before kicking the player out of the activity
+			toast.show();
+			progman.setProgress(50);
+			this.activity.finish();
+		}
+	}
+	
 	/**
 	 * called when size/orientation changes   
 	 */
