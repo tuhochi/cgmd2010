@@ -106,9 +106,10 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f - 5f) / 3f) * 3;
 			int drainType = (int)(Math.random() * 4.0);
 			float drainOrientation = (float)Math.random() * 360f;
-			//Log.i("DrainOrientation","#" + i + ": " + drainOrientation);
+			
 			
 			if (!drains.containsKey(drainPos)) {
+				//Log.i("DrainPos","#" + i + ": " + drainPos + " / Orientation: " + drainOrientation);
 				drains.put(drainPos, new ModelDrain(drainType, drainPos, drainOrientation));
 				i++;
 				

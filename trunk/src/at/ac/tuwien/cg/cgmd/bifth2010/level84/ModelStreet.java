@@ -6,6 +6,7 @@ import java.util.Iterator;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 /**
@@ -44,6 +45,7 @@ public class ModelStreet extends Model {
 		this.width = width;
 		this.height = height;
 		this.posX = posX;
+		Log.i("StreetPos",": " + posX);
 		this.speed = speed;
 		this.textureResource = textureResource;
 		this.drains = drains;
@@ -71,6 +73,11 @@ public class ModelStreet extends Model {
 		return this.posX;
 	}
 	
+	public float getStreetWidth()
+	{
+		return this.width/2f + 8f;
+	}
+	
 	
 	/**
 	 * Update the model's transformations.
@@ -82,6 +89,7 @@ public class ModelStreet extends Model {
 		super.update(gl, deltaTime, deviceRotation);
 		float deltaSpeed = (float)((double)speed * deltaTime);
 		this.posX += deltaSpeed;
+		//Log.i("Street posX",": " + this.posX);
 	}
 	
 	
