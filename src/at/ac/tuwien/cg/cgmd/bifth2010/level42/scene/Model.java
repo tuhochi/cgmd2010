@@ -27,6 +27,9 @@ import static android.opengl.GLES10.*;
 public class Model implements Movable,Persistable
 {
 	
+	/** The name. */
+	private String name;
+	
 	/** The material manager. */
 	private final MaterialManager materialManager = MaterialManager.instance;
 
@@ -329,10 +332,17 @@ public class Model implements Movable,Persistable
 	@Override
 	public String getName()
 	{
-		//TODO hack
-		return "";
+		return name;
 	}
 	
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	@Override
 	public Vector3 getCurrentPosition() {
 		currentPos.set( transformation.m[0][3],
