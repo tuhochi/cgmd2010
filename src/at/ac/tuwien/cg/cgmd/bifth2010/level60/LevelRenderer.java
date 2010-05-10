@@ -34,8 +34,12 @@ public class LevelRenderer implements Renderer {
 	private final float BUNNY_MOVEMENT_UNIT = 9.0f; 
 	private final float COP_MOVEMENT_UNIT = 6.0f;
 	
+	private Tablet bunny;
+	private Tablet cop;
 	private final static String BUNNY_X = "BUNNY_X";
 	private final static String BUNNY_Y = "BUNNY_Y";
+	private final static String COP_X = "COP_X";
+	private final static String COP_Y = "COP_Y";
 	private final static String MAP_OFFSET_X = "MAP_OFFSET_X";
 	private final static String MAP_OFFSET_Y = "MAP_OFFSET_Y";
 	
@@ -98,14 +102,14 @@ public class LevelRenderer implements Renderer {
 	}
 	
 	public void moveBunny(float x, float y) {
-		float xPos = manager.getGameObject("bunny").getX();
-		float yPos = manager.getGameObject("bunny").getY();
+		float xPos = bunny.getX();
+		float yPos = bunny.getY();
 		
 		if (!checkCollision(xPos,yPos,x,y) && 
 			xPos+x >= 0 && yPos+y >= 0 && 
 			xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 			yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
-				manager.getGameObject("bunny").move(x, y);
+				bunny.move(x, y);
 				posX = x; posY = y;
 				//if (x + xPos + mapOffset_x < 0 || 
 					//x + xPos + mapOffset_x + BUNNY_WIDTH > screenWidth)
@@ -119,14 +123,14 @@ public class LevelRenderer implements Renderer {
 	}
 	
 	public void moveCop(float x, float y) {
-		float xPos = manager.getGameObject("cop").getX();
-		float yPos = manager.getGameObject("cop").getY();
+		float xPos = cop.getX();
+		float yPos = cop.getY();
 		
 		if (!checkCollision(xPos,yPos,x,y) && 
 			xPos+x >= 0 && yPos+y >= 0 && 
 			xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 			yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
-				manager.getGameObject("cop").move(x, y);
+				cop.move(x, y);
 		}
 	}
 	
@@ -222,15 +226,15 @@ public class LevelRenderer implements Renderer {
 		handleCop();
 		
 		// render
-		manager.getGameObject("cop").draw(gl);
-		manager.getGameObject("bunny").draw(gl);
+		cop.draw(gl);
+		bunny.draw(gl);
 	}
 	
 	private void handleCop() {
-		float bx = manager.getGameObject("bunny").getX();
-		float by = manager.getGameObject("bunny").getY();
-		float cx = manager.getGameObject("cop").getX();
-		float cy = manager.getGameObject("cop").getY();
+		float bx = bunny.getX();
+		float by = bunny.getY();
+		float cx = cop.getX();
+		float cy = cop.getY();
 		
 		float dx = bx - cx;
 		float dy = by - cy;
@@ -254,7 +258,7 @@ public class LevelRenderer implements Renderer {
 		gl.glLoadIdentity();		
 		
 		//manager.getGameObject("bunny").setXY(width/2-BUNNY_WIDTH/2, height/2-BUNNY_HEIGHT/2);
-		manager.getGameObject("cop").setXY(20, 40);
+		//cop.setXY(20, 40);
 	}
 
 	@Override
@@ -274,19 +278,25 @@ public class LevelRenderer implements Renderer {
 		
 		//create all needed textures
 		this.manager = new textureManager(context, gl);
+		bunny = manager.getGameObject("bunny");
+		cop = manager.getGameObject("cop");
 		
 		if(mSavedInstance != null)
 		{
-			if(mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y))
-				manager.getGameObject("bunny").setXY(mSavedInstance.getFloat(BUNNY_X), mSavedInstance.getFloat(BUNNY_Y));
+			if(mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y) &&
+					mSavedInstance.containsKey(COP_X) && mSavedInstance.containsKey(COP_Y))
+				bunny.setXY(mSavedInstance.getFloat(BUNNY_X), mSavedInstance.getFloat(BUNNY_Y));
+				cop.setXY(mSavedInstance.getFloat(COP_X), mSavedInstance.getFloat(COP_Y));
 			if(mSavedInstance.containsKey(MAP_OFFSET_X) && mSavedInstance.containsKey(MAP_OFFSET_Y)) {
 				mapOffset_x = mSavedInstance.getFloat(MAP_OFFSET_X);
 				mapOffset_y = mSavedInstance.getFloat(MAP_OFFSET_Y);
 				Tablet.addMapOffset(mapOffset_x, mapOffset_y);
 			}
 		}
-		manager.getGameObject("bunny").setXY(100, 20);
-		manager.getGameObject("cop").setXY(20, 60);
+		else {
+			bunny.setXY(100, 20);
+			cop.setXY(20, 60);
+		}
 	}
 	
 	/*public void saveLevel(SharedPreferences.Editor prefEditor) {
@@ -320,9 +330,10 @@ public class LevelRenderer implements Renderer {
 	
 	public void onSaveInstanceState(Bundle outState) {
 		mSavedInstance = outState;
-		Tablet bunny = manager.getGameObject("bunny");
 		outState.putFloat(BUNNY_Y, bunny.getY());
 		outState.putFloat(BUNNY_X, bunny.getX());
+		outState.putFloat(COP_Y, cop.getY());
+		outState.putFloat(COP_X, cop.getX());
 		outState.putFloat(MAP_OFFSET_X, -mapOffset_x);
 		outState.putFloat(MAP_OFFSET_Y, -mapOffset_y);
 	}
