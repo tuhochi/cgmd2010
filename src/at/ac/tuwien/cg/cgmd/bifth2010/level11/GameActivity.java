@@ -1,5 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -28,8 +31,10 @@ public class GameActivity extends Activity {
 	private Vector2 _displayResolution;
     
 	
-    @Override
+
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
+		System.out.println("Create");
         super.onCreate(savedInstanceState);
         
         // set to fullscreen and no bars
@@ -76,13 +81,14 @@ public class GameActivity extends Activity {
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams2.setMargins(10, 10, 10, 10);
         llayout.addView(_textTreasureLeft, layoutParams2); 
-
+        /*if(savedInstanceState.containsKey("isLoadable"))
+        	this.onRestoreInstanceState(savedInstanceState);*/
         _level.start();
     }
     
     @Override
     protected void onResume() {
-    	_level.pause_level();
+		System.out.println("Resume");
 		_level.resume_level();
         _gameView.onResume();
 		super.onResume();
@@ -90,6 +96,7 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onPause() {
+		//System.out.println("Pause");
     	_level.pause_level();
         _gameView.onPause();
 		super.onPause();
@@ -97,14 +104,21 @@ public class GameActivity extends Activity {
     
     @Override
 	protected void onStart() {
+		//System.out.println("Start");
 		super.onStart();
 	}
 
 	@Override
 	protected void onStop() {
+		//System.out.println("Stop");
 		super.onStop();
 	}
-	
+
+	@Override
+	protected void onDestroy() {
+		//System.out.println("Destroy");
+		super.onDestroy();
+	}
 	@Override
 	public void finish() {
 		SessionState s = new SessionState();
@@ -119,11 +133,67 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) 
 	{
+		System.out.println("Save");
+		Timing timing = this._level.getTiming();
+		timing.pause();
+		outState.putFloat("startTimeStamp", timing.getStartTime());
+		outState.putFloat("pauseTimeStamp", timing.getPauseTimeStamp());
+		outState.putFloat("pauseTime", timing.getPausedTime());
+		outState.putFloat("grabbedTreasureValueOfDeletedTreasures", this._level.getGrabbedTreasureValueOfDeletedTreasures());
+		LinkedList<Pedestrian>pl = _level.getPedestrianList();
+		outState.putInt("pedestrianListSize", pl.size());
+		for(int i = 0; i < pl.size(); i++){
+			outState.putFloat("pedestrian"+i+"PosX", pl.get(i).getPosition().x);
+			outState.putFloat("pedestrian"+i+"PosY", pl.get(i).getPosition().y);
+		}
 		
-		GameLogic.makePersistentState( outState );
-		outState.putBoolean( "isLoadable", true );
+		LinkedList<Treasure>tl = _level.getTreasureList();
+		outState.putInt("pedestrianListSize", tl.size());
+		for(int i = 0; i < tl.size(); i++){
+			outState.putFloat("treasure"+i+"PosX", tl.get(i).getPosition().x);
+			outState.putFloat("treasure"+i+"PosY", tl.get(i).getPosition().y);
+			outState.putFloat("treasure"+i+"Value", tl.get(i).getValue());
+			outState.putFloat("treasure"+i+"StartingValue", tl.get(i).getStartingValue());
+		}
+		outState.putBoolean("isLoadable", true);
+		//super.onSaveInstanceState(outState);
+		System.out.println(outState);
+	}
+    @Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		System.out.println("Restore");
+		//super.onRestoreInstanceState(savedInstanceState);
 		
-		super.onSaveInstanceState(outState);
+		Timing timing = new Timing();
+		timing.setStartTime(savedInstanceState.getFloat("startTimeStamp"));
+		timing.setPauseTimeStamp(savedInstanceState.getFloat("pauseTimeStamp"));
+		timing.setPausedTime(savedInstanceState.getFloat("pauseTime"));
+		this._level.setTiming(timing);
+		this._level.setGrabbedTreasureValueOfDeletedTreasures(savedInstanceState.getFloat("grabbedTreasureValueOfDeletedTreasures"));
+		LinkedList<Pedestrian>pl = new LinkedList<Pedestrian>();
+		int plSize = savedInstanceState.getInt("pedestrianListSize");
+		for(int i = 0; i < plSize; i++){
+			Pedestrian p = new Pedestrian(this._level.getGL(), this);
+			Vector2 pos = new Vector2();
+			pos.x = savedInstanceState.getFloat("pedestrian"+i+"PosX");
+			pos.y = savedInstanceState.getFloat("pedestrian"+i+"PosY");
+			p.setPosition(pos);
+			pl.add(p);
+		}
+		this._level.setPedestrianList(pl);
+		
+		LinkedList<Treasure>tl = new LinkedList<Treasure>();
+		int tlSize = savedInstanceState.getInt("pedestrianListSize");
+		for(int i = 0; i < tlSize; i++){
+			Vector2 pos = new Vector2();
+			pos.x = savedInstanceState.getFloat("treasure"+i+"PosX");
+			pos.y = savedInstanceState.getFloat("treasure"+i+"PosY");
+			float value = savedInstanceState.getFloat("treasure"+i+"Value");
+			float startingValue = savedInstanceState.getFloat("treasure"+i+"StartingValue");
+			tl.add(new Treasure(value, startingValue, pos));
+		}
+		this._level.setTreasureList(tl);
+		System.out.println(savedInstanceState);
 	}
 	
     /**

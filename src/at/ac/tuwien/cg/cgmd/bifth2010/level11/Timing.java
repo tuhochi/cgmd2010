@@ -21,6 +21,13 @@ public class Timing {
 		pauseTimeStamp = 0.0f;
 		pausedTime = 0.0f;
 	}
+	public void start(){
+		System.out.println("start timer");
+		startTime = System.nanoTime()/1000000000.0f;
+		currTime = 0.0f;
+		pauseTimeStamp = 0.0f;
+		pausedTime = 0.0f;
+	}
 	/**
 	 * refreshes time
 	 */
@@ -54,13 +61,50 @@ public class Timing {
 	 * pauses timer
 	 */
 	public void pause(){
-		pauseTimeStamp = (System.nanoTime()/1000000000.0f);
+		System.out.println("pause timer at "+currTime);
+		if(pauseTimeStamp == 0.0f)
+			pauseTimeStamp = (System.nanoTime()/1000000000.0f);
+		else{
+			this.resume();
+			pauseTimeStamp = (System.nanoTime()/1000000000.0f);
+		}
 	}
 	/**
 	 * resumes timer. pause() must be called previously
 	 */
 	public void resume(){
-		pausedTime += (System.nanoTime()/1000000000.0f)-pauseTimeStamp;
+		//System.out.println("resume timer");
+		if(pauseTimeStamp != 0.0f){
+			pausedTime += (System.nanoTime()/1000000000.0f) - pauseTimeStamp;
+			currTime = (System.nanoTime()/1000000000.0f) - startTime - pausedTime;
+			pauseTimeStamp = 0.0f;
+			System.out.println("resume in timer from paused; currTime: "+currTime);
+		}
+	}
+	/**
+	 * returns the time to the last update call
+	 * @return
+	 */
+	public float getDeltaTime(){
+		return this.deltaFrameTime;
+	}
+	public float getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(float startTime) {
+		this.startTime = startTime;
+	}
+	public float getPauseTimeStamp() {
+		return pauseTimeStamp;
+	}
+	public void setPauseTimeStamp(float pauseTimeStamp) {
+		this.pauseTimeStamp = pauseTimeStamp;
+	}
+	public float getPausedTime() {
+		return pausedTime;
+	}
+	public void setPausedTime(float pausedTime) {
+		this.pausedTime = pausedTime;
 	}
 	
 }
