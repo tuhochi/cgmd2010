@@ -107,56 +107,38 @@ public class ModelGem extends Model {
 
 	public void checkCollisionType(float streetPos, float deviceRotation)
 	{
+		boolean drainhit = false;
 		//check type of collision (hit/miss)
 		Iterator<ModelDrain> i = drainMap.values().iterator();
 		while(i.hasNext())
 		{
-			ModelDrain drain = i.next();
-			// calculate get the position of the drain
-			
-			float tempPos = streetPos + drain.getPosition();
-			
-			if ((tempPos > -2) || (tempPos < 2))
+			if (!drainhit)
 			{
-				Log.i("POSITION", "drainstlye: " + drain.getDrainStyle() + " / "+ tempPos);
-
-				//check draintype and see if it fits
-				int drainType = drain.getDrainStyle();
-				if ( drainType == 0)
+				ModelDrain drain = i.next();
+				// calculate the position of the drain
+				
+				float tempPos = streetPos + drain.getPosition();
+				if ((tempPos > 1) || (tempPos < -1)){ } //if this drain has no interesting position, skip to the next one
+				else
 				{
-					this.soundman.playSound(SoundFX.BREAK);
+					
+					int drainType = drain.getDrainStyle();
+					if (drainType == 0) { this.soundman.playSound(SoundFX.BREAK); }
+					else if (drainType == this.gemType) {
+						//TODO: check orientations
+						this.soundman.playSound(SoundFX.HIT); }
+					else { this.soundman.playSound(SoundFX.MISS); }
+					drainhit = true;
+					break;
 				}
-					else //check if gem hits or misses the drain
-					{
-
-							if (this.gemType == drainType)
-							{
-								this.soundman.playSound(SoundFX.HIT);
-								break;
-							}
-							else
-							{
-								this.soundman.playSound(SoundFX.MISS);
-								break;
-							}
-//								if (Math.abs(drain.getOrientationAngle() - deviceRotation ) < 1.0f)
-//								{
-//									this.soundman.playSound(SoundFX.HIT);
-//									break;
-//								}
-//								else
-//								{
-//									this.soundman.playSound(SoundFX.MISS);
-//									break;
-//								}
-//							}
-					}
 			}
-			else
-			{
-				break;
-			}
+			
 		}
+		if (!drainhit)
+		{
+			this.soundman.playSound(SoundFX.MISS);
+		}
+		
 	}
 	
 	/**
@@ -172,8 +154,8 @@ public class ModelGem extends Model {
 			}
 			else
 			{
-				//checkCollisionType(streetPos, deviceRotation);
-				this.soundman.playSound(SoundFX.MISS);
+				checkCollisionType(streetPos, deviceRotation);
+				//this.soundman.playSound(SoundFX.MISS);
 				endFall();
 			}
 		}
