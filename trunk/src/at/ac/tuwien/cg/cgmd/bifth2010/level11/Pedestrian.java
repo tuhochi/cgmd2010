@@ -33,10 +33,7 @@ public class Pedestrian implements Target{
 	private float moveSpeed;
 	private float angle;
 	private Target target;
-	private float oldTime;
 	private Vector2 temp;
-	private float levelSizeX;
-	private float levelSizeY;
 	private Random rand;
 	/**
 	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
@@ -72,7 +69,6 @@ public class Pedestrian implements Target{
 		this.moveSpeed = 4.0f;
 		this.target = null;
 		this.setColors();
-		this.oldTime = 0;
 		this.temp = new Vector2();
 	}
 	/**
@@ -150,11 +146,7 @@ public class Pedestrian implements Target{
 	 * performs walking, moving towards target, fighting, grabbing treasure and updates position of the body parts
 	 * @param time
 	 */
-	public void update(float time) {
-		if(oldTime == 0)
-			oldTime = time;
-		float deltaTime = time - oldTime;
-		oldTime = time;
+	public void update(float time, float deltaTime) {
 		if(target != null){//target exists
 			if(target instanceof Pedestrian){
 				legs.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));

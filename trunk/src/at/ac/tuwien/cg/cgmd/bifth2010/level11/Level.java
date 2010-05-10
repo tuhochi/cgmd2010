@@ -36,8 +36,8 @@ public class Level extends Thread {
 	private Context context;
 	
 	private Timing timing;
-	private int grabbedTreasureValueOfDeletedTreasures;
-	private int grabbedTreasureValue;
+	private float grabbedTreasureValueOfDeletedTreasures;
+	private float grabbedTreasureValue;
 	
 	/**
 	 * Level constructor
@@ -58,8 +58,9 @@ public class Level extends Thread {
 		this.isPaused = false;
 		this._isActive = true;
 		
-		timing = new Timing();
 		this.maxPlayTime = 60;
+		timing = new Timing();
+		timing.start();
 
 	}
 	
@@ -119,22 +120,21 @@ public class Level extends Thread {
 	 * runs level main loop
 	 */
 	public void run() {
-		
 		while (_isActive) {
 			while (_isRunning) {
 				while (isPaused) {
-					try {
+					/*try {
 						sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
-					}
+					}*/
 				}
 				update();
-				try {
+				/*try {
 					sleep(0);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}
+				}*/
 			}
 		}
 	}
@@ -153,8 +153,8 @@ public class Level extends Thread {
 	 * @param pause
 	 */
 	public void resume_level() {
-		this.isPaused = false;
-		this.timing.resume();	
+		this.timing.resume();
+		this.isPaused = false;	
 	}
 	
 	/**
@@ -171,10 +171,10 @@ public class Level extends Thread {
 	private  void update() {
 		//synchronized(this){
 		timing.update();
-		
+		//System.out.println(timing.getDeltaTime());
 		for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
 			Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
-			pedestrian.update(timing.getCurrTime());
+			pedestrian.update(timing.getCurrTime(), timing.getDeltaTime());
 			float bestRating = Float.MAX_VALUE;
 			float tempDist = 0;
 			float rating = 0;
@@ -303,5 +303,78 @@ public class Level extends Thread {
 	 */
 	public float getRemainigTime(){
 		return this.maxPlayTime-this.timing.getCurrTime();
+	}
+	/**
+	 * sets the maximal play time to time. You can also use it to limit the time after resuming the game.
+	 * @param time
+	 */
+	public void setMaxTime(float time){
+		this.maxPlayTime = time;
+	}
+	/**
+	 * returns the level's treasure list for purpose of saving
+	 * @return
+	 */
+	public LinkedList<Treasure> getTreasureList(){
+		return this.treasureList;
+	}
+	/**
+	 * sets the level's treasure list for the purpose of loading
+	 * @param tl
+	 */
+	public void setTreasureList(LinkedList<Treasure> tl){
+		this.treasureList = tl;
+	}
+	/**
+	 * returns the level's pedestrian list for purpose of saving
+	 * @return
+	 */
+	public LinkedList<Pedestrian> getPedestrianList(){
+		return this.pedestrianList;
+	}
+	/**
+	 * sets the level's pedestrian list for the purpose of loading
+	 * @param tl
+	 */
+	public void setPedestrianList(LinkedList<Pedestrian> pl){
+		this.pedestrianList = pl;
+	}
+	/**
+	 * returns the level's grabbedTreasureValueOfDeletedTreasures for purpose of saving
+	 * @return
+	 */
+	public float getGrabbedTreasureValueOfDeletedTreasures() {
+		return grabbedTreasureValueOfDeletedTreasures;
+	}
+	/**
+	 * sets the level's grabbedTreasureValueOfDeletedTreasures for the purpose of loading
+	 * @param grabbedTreasureValueOfDeletedTreasures
+	 */
+	public void setGrabbedTreasureValueOfDeletedTreasures(
+			float grabbedTreasureValueOfDeletedTreasures) {
+		this.grabbedTreasureValueOfDeletedTreasures = grabbedTreasureValueOfDeletedTreasures;
+	}
+
+	/**
+	 * returns the level's timing for purpose of saving
+	 * @return
+	 */
+	public Timing getTiming() {
+		return timing;
+	}
+	/**
+	 * sets the level's timing for the purpose of loading
+	 * @param timing
+	 */
+	public void setTiming(Timing timing) {
+		this.timing = timing;
+	}
+
+	/**
+	 * returns the level's gl for purpose of load
+	 * @return
+	 */
+	public GL10 getGL(){
+		return this.gl;
 	}
 }

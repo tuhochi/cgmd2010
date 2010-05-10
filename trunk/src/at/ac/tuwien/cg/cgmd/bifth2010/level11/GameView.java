@@ -48,7 +48,6 @@ public class GameView extends GLSurfaceView {
             _value = (System.currentTimeMillis()-this.touchedTime)/100.0f;
         	((GameActivity)_renderer.context)._level.
         	addTreasure(new Treasure(_value,
-        			200.0f,
         			new Vector2(_x/_renderer._width*Level.sizeX,
         			Level.sizeY-(_y/_renderer._height*Level.sizeY))));
 

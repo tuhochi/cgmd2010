@@ -11,10 +11,13 @@ public class Treasure implements Target{
 	private static final int treasure_texture_id = R.drawable.l11_treasure;
 	private Square sprite;
 	private float startingValue;
-	public Treasure(float value, float attractionRadius, Vector2 position){
+	public Treasure(float value, Vector2 position){
+		this(value, value, position);
+	}
+	public Treasure(float value, float startingValue, Vector2 position){
 		this.startingValue = value;
 		this.value = this.startingValue;
-		this.attractionRadius = attractionRadius;
+		this.attractionRadius = 200.0f;
 		this.position = position;
 		this.sprite = new Square();
 	}
