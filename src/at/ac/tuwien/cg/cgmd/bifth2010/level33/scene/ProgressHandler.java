@@ -7,10 +7,11 @@ public class ProgressHandler extends SessionState{
 	private int stoneGoldDecrease = 3;
 	private int barrelGoldDecrease = 8;
 	private int thrashGoldIncrease = 5;
+	private int springGoldDecrease = 1;
 	
 	private int actuallyProgress = 0;
 	
-	public static boolean isLvelCompleted = false;
+	public static boolean isLevelCompleted = false;
 	
 	public ProgressHandler(){
 		this.actuallyProgress = this.getProgress();
@@ -32,11 +33,16 @@ public class ProgressHandler extends SessionState{
 		checkNewProgress();
 	}
 	
+	public void collectSpring(){
+		actuallyProgress = actuallyProgress + springGoldDecrease;
+		checkNewProgress();
+	}
+	
 	private void checkNewProgress(){
 		if(actuallyProgress>=100)
 		{
 			actuallyProgress=100;
-			isLvelCompleted=true;
+			isLevelCompleted=true;
 		}
 		if(actuallyProgress<0)
 			actuallyProgress=0;

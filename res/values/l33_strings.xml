@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l33_help_headline">The mysterious labyrinth</string>
-<string name="l33_help_main">Carrying a huge treasure in the luggage one is on the run and arrives/lands in a mysterious labyrinth. Move across the labyrinth with the aid of the cursor keys and try to leave as much of your gold as possible at suitable places within the time span of two minutes. However, do not be afraid if you are confronted with strange things on your way.</string>
+<string name="l33_help_main">Carrying a huge treasure in the luggage one is on the run and arrives/lands in a mysterious labyrinth. Move across the labyrinth with the aid of the cursor keys or by using the touch-screen and try to leave as much of your gold as possible at suitable places within the time span of three minutes. However, do not be afraid if you are confronted with strange things on your way.</string>
 <string name="l33_GameName">The mysterious labyrinth</string>
 <string name="l33_help_entry1">Try to avoid the treasure, because otherwise you will be punished with wealth.</string>
 <string name="l33_help_entry2">This old map will help you to find your way before it finally disintegrates.</string>
