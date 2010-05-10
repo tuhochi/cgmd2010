@@ -110,14 +110,10 @@ public class RenderManager implements Renderer {
 		street.update(gl, deltaTime, accelerometer.getOrientation());
 		street.draw(gl);
 		
-		
 		float streetPos = street.getStreetPos();
-		
-		//update progress if a certain amount of the streetwidth has passed
-		checkStreetProgress(streetPos);
-		
-		//if the street end is near -> call finish method to finish activity
-		checkStreetEnd(streetPos);
+		checkStreetProgress(streetPos); //update progress if a certain amount of the streetwidth has passed
+		checkMoney(); //check if there is any money left
+		checkStreetEnd(streetPos); //if the street end is near -> call finish method to finish activity
 		
 		//Afterwards: Render gems.
 		ListIterator<Model> i = gems.listIterator();
@@ -127,6 +123,7 @@ public class RenderManager implements Renderer {
 			m.draw(gl);
 		}
 	}
+
 
 	
 	private void checkStreetProgress(float streetPos)
@@ -150,9 +147,18 @@ public class RenderManager implements Renderer {
 		//Log.i("PROGRESS","-> " + progman.getPointProgress());
 	}
 	
+	private void checkMoney()
+	{
+		if (progman.getActualMoney() == 0)
+		{
+			progman.updatePointProgress(100);
+			this.activity.finish();
+		}
+	}
 	
 	private void checkStreetEnd(float streetPos)
 	{
+		
 		if (streetPos > ((street.width / 2) - 5f))
 		{
 			//TODO: maybe show a result before kicking the player out of the activity
