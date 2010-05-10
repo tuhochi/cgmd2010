@@ -42,6 +42,7 @@ public class RenderManager implements Renderer {
 		}
 	};
 	
+	/** Handler for points */
 	private Handler updatePoints = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -98,6 +99,7 @@ public class RenderManager implements Renderer {
 		//TODO: update progress if a certain amount of the street has passed 
 		progman.updatePointProgress(20);
 
+		//TODO: if street ends -> call finish method to finish activity
 		
 		//Afterwards: Render gems.
 		ListIterator<Model> i = gems.listIterator();
