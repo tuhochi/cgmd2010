@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l33_help_headline">Das geheimnisvolle Labyrinth</string>
-<string name="l33_help_main">Mit einem großen Schatz im Gepäck ist man auf der Flucht und landet in einem geheimnisvollen Labyrinth. Beweg dich mit den Cursor-Tasten durch das Labyrinth und versuche innerhalb von zwei Minuten soviel von deinem Gold wie möglich an geeigneten Stellen zu hinterlassen. Aber fürchte dich nicht, wenn dir auf deinem Weg sonderbare Dinge begegnen.</string>
+<string name="l33_help_main">Mit einem großen Schatz im Gepäck ist man auf der Flucht und landet in einem geheimnisvollen Labyrinth. Beweg dich mit den Cursor-Tasten oder mit Hilfe des Touch-Screens durch das Labyrinth und versuche innerhalb von drei Minuten soviel von deinem Gold wie möglich an geeigneten Stellen zu hinterlassen. Aber fürchte dich nicht, wenn dir auf deinem Weg sonderbare Dinge begegnen.</string>
 <string name="l33_GameName">Das geheimnissvolle Labyrinth</string>
 <string name="l33_help_entry1">Versuche den Schatz zu vermeiden, denn sonst wirst du mit Reichtum bestraft.</string>
 <string name="l33_help_entry2">Diese alte Karte wird dir helfen, dich zurecht zu finden, bevor sie endgültig zerfällt.</string>
