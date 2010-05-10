@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.opengl.GLSurfaceView;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
@@ -12,9 +13,9 @@ public class LevelSurfaceView extends GLSurfaceView {
 	private int score = 10;
 	private SessionState s;
 	
-	public LevelSurfaceView(Context context) {
+	public LevelSurfaceView(Context context, Bundle msavedstate) {
 		super(context);
-		lr = new LevelRenderer(context);
+		lr = new LevelRenderer(context, msavedstate);
         setRenderer(lr);
         setFocusableInTouchMode(true);
 	}
@@ -47,23 +48,27 @@ public class LevelSurfaceView extends GLSurfaceView {
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	public SessionState saveData (SharedPreferences prefs) {
+	/*public SessionState saveData (SharedPreferences prefs) {
 		//save bunny pos & action map
         SharedPreferences.Editor prefEditor = prefs.edit();
-        prefEditor.putInt("l60_score", score);
-		lr.saveLevel(prefEditor);
+        //prefEditor.putInt("l60_score", score);
+		//lr.saveLevel(prefEditor);
 		prefEditor.commit();
 		return getState();
 	}
 	
 	public void updateData (SharedPreferences prefs) {
-		lr.loadLevel(prefs);
+		//lr.loadLevel(prefs);
 		score = prefs.getInt("l60_score", 100);
 	}
-	
+	*/
 	public SessionState getState() {
 		s = new SessionState();
 		s.setProgress(100-score);
 		return s;
+	}
+	
+	public void onSaveInstanceState(Bundle outState) {
+		lr.onSaveInstanceState(outState);
 	}
 }

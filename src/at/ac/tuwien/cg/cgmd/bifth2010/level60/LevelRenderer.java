@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Bundle;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -19,6 +20,7 @@ public class LevelRenderer implements Renderer {
 	private float posY;
 	private float mapOffset_x;//, savedMapOffset_x;
 	private float mapOffset_y;//, savedMapOffset_y;
+	private Bundle mSavedInstance;
 	
 	private final static int BUNNY_WIDTH = 55;
 	private final static int BUNNY_HEIGHT = 60;
@@ -27,6 +29,11 @@ public class LevelRenderer implements Renderer {
 	private final static int LEVEL_TILESIZE = 100;
 	private final static int ACTION_WIDTH = 5;
 	private final static int ACTION_HEIGHT = 6;
+	
+	private final static String BUNNY_X = "BUNNY_X";
+	private final static String BUNNY_Y = "BUNNY_Y";
+	private final static String MAP_OFFSET_X = "MAP_OFFSET_X";
+	private final static String MAP_OFFSET_Y = "MAP_OFFSET_Y";
 	
 	private final static HashMap<Integer, String> keks = new HashMap<Integer, String>(){
         {
@@ -70,10 +77,11 @@ public class LevelRenderer implements Renderer {
 		{ 4, 1, 1, 4, 1 }
 	};
 	
-	public LevelRenderer(Context context) {
+	public LevelRenderer(Context context, Bundle msavedinstance) {
 		this.context = context;
 		mapOffset_x = mapOffset_y = 0 ;// = savedMapOffset_x = savedMapOffset_y = 0;
 		posX = posY = 0;
+		mSavedInstance = msavedinstance;
 	}
 	
 	public void moveObject(float x, float y) {
@@ -218,29 +226,39 @@ public class LevelRenderer implements Renderer {
 		//create all needed textures
 		this.manager = new textureManager(context, gl);
 		
+		if(mSavedInstance != null)
+		{
+			if(mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y))
+				manager.getGameObject("bunny").setXY(mSavedInstance.getFloat(BUNNY_X), mSavedInstance.getFloat(BUNNY_Y));
+			if(mSavedInstance.containsKey(MAP_OFFSET_X) && mSavedInstance.containsKey(MAP_OFFSET_Y)) {
+				mapOffset_x = mSavedInstance.getFloat(MAP_OFFSET_X);
+				mapOffset_y = mSavedInstance.getFloat(MAP_OFFSET_Y);
+				Tablet.addMapOffset(mapOffset_x, mapOffset_y);
+			}
+		}
 		//update in case of resume
-//		manager.getGameObject("bunny").setXY(posX, posY);
+		//manager.getGameObject("bunny").setXY(posX, posY);
 	}
 	
-	public void saveLevel(SharedPreferences.Editor prefEditor) {
-//		Tablet bunny = manager.getGameObject("bunny");
+	/*public void saveLevel(SharedPreferences.Editor prefEditor) {
+		Tablet bunny = manager.getGameObject("bunny");
 //		prefEditor.putFloat("l60_posX", 0);
 //		prefEditor.putFloat("l60_posY", 0);
 //		prefEditor.putFloat("l60_mapOffset_x", 0);
 //		prefEditor.putFloat("l60_mapOffset_y", 0);
-//		prefEditor.putFloat("l60_posX", bunny.getX());
-//		prefEditor.putFloat("l60_posY", bunny.getY());
+		prefEditor.putFloat("l60_posX", bunny.getX());
+		prefEditor.putFloat("l60_posY", bunny.getY());
 ////		
-//		prefEditor.putFloat("l60_mapOffset_x", mapOffset_x);
-//		prefEditor.putFloat("l60_mapOffset_y", mapOffset_y);
+		prefEditor.putFloat("l60_mapOffset_x", mapOffset_x);
+		prefEditor.putFloat("l60_mapOffset_y", mapOffset_y);
 //		
 		//save action map too!
 	}
 	
 	public void loadLevel(SharedPreferences prefs) {
 		
-//		posX = prefs.getFloat("l60_posX",0);
-//		posY = prefs.getFloat("l60_posY",0);
+		posX = prefs.getFloat("l60_posX",0);
+		posY = prefs.getFloat("l60_posY",0);
 		//moveMap(prefs.getFloat("l60_mapOffset_x", 0), prefs.getFloat("l60_mapOffset_y", 0));
 		
 //		Tablet bunny = manager.getGameObject("bunny");
@@ -249,5 +267,14 @@ public class LevelRenderer implements Renderer {
 //		moveMap(prefs.getFloat("l60_mapOffset_x", 0), prefs.getFloat("l60_mapOffset_y", 0));
 		
 		//load action map too!
+	}*/
+	
+	public void onSaveInstanceState(Bundle outState) {
+		mSavedInstance = outState;
+		Tablet bunny = manager.getGameObject("bunny");
+		outState.putFloat(BUNNY_Y, bunny.getY());
+		outState.putFloat(BUNNY_X, bunny.getX());
+		outState.putFloat(MAP_OFFSET_X, mapOffset_x);
+		outState.putFloat(MAP_OFFSET_Y, -mapOffset_y);
 	}
 }
