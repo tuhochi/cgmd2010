@@ -37,15 +37,28 @@ public class SceneGraph  {
 	static int framesSinceLastSecound=0;
 	
 	public static long timeInSeconds=0;
+	public static int levelEndTimeInSeconds=0;
+	private int gameTimeInSeconds=180;
+	private boolean playingFinalSound=true;
 	
 	public final static byte GEOMETRY_WALL = 0;
 	public final static byte GEOMETRY_WAY = 1;
 	public final static byte GEOMETRY_WORLD = 2;
 	
-	public final static byte LEFT_ARROW = 5;
-	public final static byte DOWN_ARROW = 6;
-	public final static byte RIGHT_ARROW = 7;
-	public final static byte UP_ARROW = 8;
+	public final static byte ARROW_LEFT = 5;
+	public final static byte ARROW_DOWN = 6;
+	public final static byte ARROW_RIGHT = 7;
+	public final static byte ARROW_UP = 8;
+	
+	public final static byte ARROW_BOTTOM_TO_RIGHT = 21;
+	public final static byte ARROW_RIGHT_TO_TOP = 22;
+	public final static byte ARROW_TOP_TO_LEFT = 23;
+	public final static byte ARROW_LEFT_TO_BOTTOM = 24;
+	
+	public final static byte ARROW_BOTTOM_TO_LEFT = 25;
+	public final static byte ARROW_LEFT_TO_TOP = 26;
+	public final static byte ARROW_TOP_TO_RIGHT = 27;
+	public final static byte ARROW_RIGHT_TO_BOTTOM = 28;
 	
 	public final static byte GEOMETRY_STONE = 11;
 	public final static byte GEOMETRY_BARREL = 12;
@@ -54,31 +67,31 @@ public class SceneGraph  {
 	public final static byte GEOMETRY_SPRING = 15;
 	public final static byte GEOMETRY_CHARACTER = 16;
 	
-	public final static int NONE_SPECIAL_WALL_EDGE = 0;
-	public final static int ONE_SPECIAL_WALL_EDGE = -1;
-	public final static int TWO_SPECIAL_WALL_EDGE = -2;
-	public final static int THREE_SPECIAL_WALL_EDGE = -3;
-	public final static int FOUR_SPECIAL_WALL_EDGE = -4;
-	public final static int COUNTERPART_SPECIAL_WALL_EDGE = -5;
+	public final static int EDGE_NONE_SPECIAL_WALL = 0;
+	public final static int EDGE_ONE_SPECIAL_WALL = -1;
+	public final static int EDGE_TWO_SPECIAL_WALL = -2;
+	public final static int EDGE_THREE_SPECIAL_WALL = -3;
+	public final static int EDGE_FOUR_SPECIAL_WALL = -4;
+	public final static int EDGE_COUNTERPART_SPECIAL_WALL = -5;
 	
-	public final static int NONE_SPECIAL_CORNER = -6;
-	public final static int ONE_SPECIAL_CORNER = -7;
-	public final static int TWO_SPECIAL_CORNER = -8;
-	public final static int THREE_SPECIAL_CORNER = -9;
-	public final static int FOUR_SPECIAL_CORNER = -10;
-	public final static int COUNTERPART_SPECIAL_CORNER = -11;
+	public final static int CORNER_NONE_SPECIAL = -6;
+	public final static int CORNER_ONE_SPECIAL = -7;
+	public final static int CORNER_TWO_SPECIAL = -8;
+	public final static int CORNER_THREE_SPECIAL = -9;
+	public final static int CORNER_FOUR_SPECIAL = -10;
+	public final static int CORNER_COUNTERPART_SPECIAL = -11;
 	
-	public final static int ONE_EDGE_ONE_RIGHT_SPECIAL_CORNER_WALL = -12;
-	public final static int ONE_EDGE_ONE_LEFT_SPECIAL_CORNER_WALL = -13;
-	public final static int ONE_EDGE_TWO_SPECIAL_CORNER_WALL = -14;
-	public final static int TWO_EDGE_ONE_SPECIAL_CORNER_WALL = -15;
+	public final static int SPECIAL_ONE_EDGE_ONE_RIGHT_CORNER_WALL = -12;
+	public final static int SPECIAL_ONE_EDGE_ONE_LEFT_CORNER_WALL = -13;
+	public final static int SPECIAL_ONE_EDGE_TWO_CORNER_WALL = -14;
+	public final static int SPECIAL_TWO_EDGE_ONE_CORNER_WALL = -15;
 	
-	public final static int NONE_CONNECTION_WALL = 0;
-	public final static int ONE_CONNECTION_WALL = 1;
-	public final static int TWO_CONNECTION_WALL = 2;
-	public final static int THREE_CONNECTION_WALL = 3;
-	public final static int FOUR_CONNECTION_WALL = 4;
-	public final static int COUNTERPART_CONNECTION_WALL = 5;
+	public final static int CONNECTION_NONE_WALL = 0;
+	public final static int CONNECTION_ONE_WALL = 1;
+	public final static int CONNECTION_TWO_WALL = 2;
+	public final static int CONNECTION_THREE_WALL = 3;
+	public final static int CONNECTION_FOUR_WALL = 4;
+	public final static int CONNECTION_COUNTERPART_WALL = 5;
 	
 	public static LevelActivity activity;
 	public  static Vector2f touchDim = new Vector2f(0, 0);
@@ -89,6 +102,7 @@ public class SceneGraph  {
 	private TextView tvLevelFps;
 	private ImageView ivFullscreenImage;
 	private ProgressBar pbProgressBar;
+	private TextView tvLevelTime;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	
@@ -107,9 +121,12 @@ public class SceneGraph  {
 		this.tvLevelFps = (TextView)activity.findViewById(R.id.l33_level_fps);
 		this.ivFullscreenImage = (ImageView)activity.findViewById(R.id.l33_FullscreenImage);
 		this.pbProgressBar = (ProgressBar)activity.findViewById(R.id.l33_ProgressBar);
+		this.tvLevelTime = (TextView)activity.findViewById(R.id.l33_level_time);
+		
 		pbProgressBar.setMax(100);
 		
-
+		
+		levelEndTimeInSeconds = (int)timeInSeconds+gameTimeInSeconds;
 
 	}
 
@@ -159,28 +176,42 @@ public class SceneGraph  {
 		lastFrameStart = currentFrameStart;		
 		if (deltaTimeCount >= 1) {
 
-			
-			
-			
-			activity.runOnUiThread(new Runnable() {public void run() {
-					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		
-					ivFullscreenImage.setBackgroundResource(R.drawable.l33_nix);
-					
-					
-					
-			
-			}});
-			
-			
 			timeInSeconds++;
 			framesSinceLastSecound = 0;
 			deltaTimeCount = 0f;
 			secoundCount++;
+			gameTimeInSeconds--;
+			
+			activity.runOnUiThread(new Runnable() {public void run() {
+				//FPS
+				tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		
+				ivFullscreenImage.setBackgroundResource(R.drawable.l33_nix);
+				
+				//Time 
+				int minutes=gameTimeInSeconds/60;
+				int seconds=gameTimeInSeconds%60;
+				
+				if(minutes<0 || seconds<0)
+				{
+					minutes=0;
+					seconds=0;
+				}
+				String text_LevelTime;
+				if(seconds<10)
+					text_LevelTime = minutes+" min 0"+seconds+" sec";
+				else
+					text_LevelTime = minutes+" min "+seconds+" sec";
+				
+				//TESTEN
+				
+				tvLevelTime.setText(text_LevelTime);
+			}});
 		}
 		
 		
-		//TODO: Hier noch Gold/Geld/Progress setzen
-		pbProgressBar.setProgress((int) timeInSeconds%100);
+		//Set the progress
+		pbProgressBar.setProgress(LevelActivity.progressHandler.getActualllyProgress());
+		//pbProgressBar.setProgress((int) timeInSeconds%100);
 		
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -202,11 +233,32 @@ public class SceneGraph  {
 		//gl.glDepthFunc(GL10.GL_LEQUAL);
 		// Really nice perspective calculations.
 //		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-
+		
+		
+		
+		
+		
+		/* TODO
+		if(timeInSeconds>levelEndTimeInSeconds || LevelActivity.progressHandler.isLevelCompleted)
+		{
+			//GAME OVER
+			if(playingFinalSound)
+			{
+				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.FINAL);
+				playingFinalSound=false;
+			}
+			//TODO
+			//Anzeige
+		}
+		else
+		{
+			// updateLogic
+			level.updateLogic();
+		}*/
 		
 		// updateLogic
 		level.updateLogic();
-
+		
 		// upadate Camera
 		camera.lookAt(gl);
 		
@@ -251,7 +303,7 @@ public class SceneGraph  {
 					
 					if(type[0]<=GEOMETRY_WALL)
 					{
-						if(type[2]==ONE_CONNECTION_WALL){
+						if(type[2]==CONNECTION_ONE_WALL){
 							
 							if(type[3]==0)
 							geometry.render(25);
@@ -266,49 +318,73 @@ public class SceneGraph  {
 								geometry.render(28);
 						}
 						
-						if(type[2]==TWO_CONNECTION_WALL){
+						if(type[2]==CONNECTION_TWO_WALL){
+							
+							if(type[3]==0)
+							{
+								geometry.render(25);
+								geometry.render(28);
+							}
+							else if(type[3]==90)
+							{
+								geometry.render(26);
+								geometry.render(25);
+							}
+							else if(type[3]==180)
+							{
+								geometry.render(26);
+								geometry.render(27);
+							}
+							else 
+							{
+								geometry.render(27);
+								geometry.render(28);
+							}
+						}
+						
+						if(type[2]==CONNECTION_COUNTERPART_WALL){
 							
 							if(type[3]==0)
 							{
 								geometry.render(25);
 								geometry.render(27);
 							}
-							else
+							else 
 							{
 								geometry.render(26);
 								geometry.render(28);
-							}	
+							}
 						}
 						
-						if(type[2]==THREE_CONNECTION_WALL){
+						if(type[2]==CONNECTION_THREE_WALL){
 							
 							if(type[3]==0)
 							{
-								geometry.render(26);
+								geometry.render(25);
 								geometry.render(27);
 								geometry.render(28);
 							}
 							else if(type[3]==90)
 							{
 								geometry.render(25);
-								geometry.render(27);
+								geometry.render(26);
 								geometry.render(28);
 							}	
 							else if(type[3]==180)
 							{
 								geometry.render(25);
 								geometry.render(26);
-								geometry.render(28);
+								geometry.render(27);
 							}	
 							else
 							{
-								geometry.render(25);
 								geometry.render(26);
+								geometry.render(28);
 								geometry.render(27);
 							}	
 						}
 						
-						if(type[2]==FOUR_CONNECTION_WALL){
+						if(type[2]==CONNECTION_FOUR_WALL){
 								geometry.render(25);
 								geometry.render(26);
 								geometry.render(27);
@@ -322,35 +398,35 @@ public class SceneGraph  {
 							gl.glRotatef(type[1], 0, 1, 0);
 						}
 
-							 if (type[0]==NONE_SPECIAL_WALL_EDGE)
+							 if (type[0]==EDGE_NONE_SPECIAL_WALL)
 							geometry.render(10);
-						else if (type[0]==ONE_SPECIAL_WALL_EDGE)
+						else if (type[0]==EDGE_ONE_SPECIAL_WALL)
 							geometry.render(11);
-						else if (type[0]==COUNTERPART_SPECIAL_WALL_EDGE)
+						else if (type[0]==EDGE_COUNTERPART_SPECIAL_WALL)
 							geometry.render(12);
-						else if (type[0]==THREE_SPECIAL_WALL_EDGE)
+						else if (type[0]==EDGE_THREE_SPECIAL_WALL)
 							geometry.render(13);
-						else if (type[0]==FOUR_SPECIAL_WALL_EDGE)
+						else if (type[0]==EDGE_FOUR_SPECIAL_WALL)
 							geometry.render(14);
-						else if (type[0]==TWO_SPECIAL_WALL_EDGE)
+						else if (type[0]==EDGE_TWO_SPECIAL_WALL)
 							geometry.render(15);
-						else if (type[0]==ONE_SPECIAL_CORNER)
+						else if (type[0]==CORNER_ONE_SPECIAL)
 							geometry.render(16);
-						else if (type[0]==TWO_SPECIAL_CORNER)
+						else if (type[0]==CORNER_TWO_SPECIAL)
 							geometry.render(17);
-						else if (type[0]==THREE_SPECIAL_CORNER)
+						else if (type[0]==CORNER_THREE_SPECIAL)
 							geometry.render(18);
-						else if (type[0]==FOUR_SPECIAL_CORNER)
+						else if (type[0]==CORNER_FOUR_SPECIAL)
 							geometry.render(19);
-						else if (type[0]==COUNTERPART_SPECIAL_CORNER)
+						else if (type[0]==CORNER_COUNTERPART_SPECIAL)
 							geometry.render(20);
-						else if (type[0]==ONE_EDGE_ONE_RIGHT_SPECIAL_CORNER_WALL)
+						else if (type[0]==SPECIAL_ONE_EDGE_ONE_RIGHT_CORNER_WALL)
 							geometry.render(21);
-						else if (type[0]==ONE_EDGE_ONE_LEFT_SPECIAL_CORNER_WALL)
+						else if (type[0]==SPECIAL_ONE_EDGE_ONE_LEFT_CORNER_WALL)
 							geometry.render(22);
-						else if (type[0]==ONE_EDGE_TWO_SPECIAL_CORNER_WALL)
+						else if (type[0]==SPECIAL_ONE_EDGE_TWO_CORNER_WALL)
 							geometry.render(23);
-						else if (type[0]==TWO_EDGE_ONE_SPECIAL_CORNER_WALL)
+						else if (type[0]==SPECIAL_TWO_EDGE_ONE_CORNER_WALL)
 							geometry.render(24);
 							 
 							 
@@ -393,22 +469,22 @@ public class SceneGraph  {
 								geometry.render(6);
 								
 								// links
-								if(type[0]==UP_ARROW){
+								if(type[0]==ARROW_UP){
 									geometry.render(29);	
 								}
-								else if(type[0]==LEFT_ARROW){
+								else if(type[0]==ARROW_LEFT){
 									glPushMatrix();
 									gl.glRotatef(90, 0, 1, 0);
 									geometry.render(29);	
 									glPopMatrix();
 								}
-								else if(type[0]==RIGHT_ARROW){
+								else if(type[0]==ARROW_RIGHT){
 									glPushMatrix();
 									gl.glRotatef(-90, 0, 1, 0);
 									geometry.render(29);
 									glPopMatrix();
 								}
-								else if(type[0]==DOWN_ARROW){
+								else if(type[0]==ARROW_DOWN){
 									glPushMatrix();
 									gl.glRotatef(180, 0, 1, 0);
 									geometry.render(29);	

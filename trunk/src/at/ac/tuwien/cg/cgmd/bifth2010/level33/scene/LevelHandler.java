@@ -28,6 +28,7 @@ public class LevelHandler {
 	int mapIsActiveTimer = 0;
 	boolean mapIsActive = false;
 	int[][] mapResult;
+	boolean isMapThreadStarted = false;
 	
 	StopTimer t;
 
@@ -101,8 +102,11 @@ public class LevelHandler {
 			reUpdateMapChanges();
 		
 		//check if map-trhead is ready or not
-		if(MapCalculationThread.isThreadReady)
+		if(isMapThreadStarted && MapCalculationThread.isThreadReady)
+		{
 			updateMapChanges();
+			isMapThreadStarted=false;
+		}
 			
 
 		// now update Character Position
@@ -221,7 +225,10 @@ public class LevelHandler {
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.SPRING);
-				
+					
+					//add to progress
+					LevelActivity.progressHandler.collectSpring();
+					
 					//Update GoodiesList
 					updateGoodiesList(worldIndex);
 					
@@ -251,7 +258,8 @@ public class LevelHandler {
 
 						mapCalculationThread = new MapCalculationThread(this, worldDim.x);
 						mapCalculationThread.setStartProperties(worldIndex, goodiesIndex, worldEntry);
-						mapCalculationThread.start();	
+						mapCalculationThread.start();
+						isMapThreadStarted = true;
 //					}
 
 				}
@@ -311,7 +319,7 @@ public class LevelHandler {
 	 */
 	private void updateMapChanges(){
 		t.logTime("Map-Thread fertig nach: ");
-		/*
+		
 		if(mapIsActive)
 			reUpdateMapChanges();
 		mapResult = mapCalculationThread.getMapResult();
@@ -329,7 +337,7 @@ public class LevelHandler {
 		float additionalTime = (float) (mapResult.length*0.8);
 		mapIsActiveTimer= Math.round(SceneGraph.timeInSeconds+additionalTime);
 		mapIsActive = true;
-		*/
+		
 	}
 	
 	/**
@@ -339,22 +347,22 @@ public class LevelHandler {
 	 */
 	private void reUpdateMapChanges(){
 		
-		/*
+		
 		int[] pointChanges = new int[2];
 		for(int i=0;i<mapResult.length;i++)
 		{
 			pointChanges = mapResult[i];
 			int actuallyPointValue = worldEntry.get(pointChanges[0])[0];
-			if(actuallyPointValue==SceneGraph.LEFT_ARROW  || 
-			   actuallyPointValue==SceneGraph.UP_ARROW    ||
-			   actuallyPointValue==SceneGraph.RIGHT_ARROW ||
-			   actuallyPointValue==SceneGraph.DOWN_ARROW)
+			if(actuallyPointValue==SceneGraph.ARROW_LEFT  || 
+			   actuallyPointValue==SceneGraph.ARROW_UP    ||
+			   actuallyPointValue==SceneGraph.ARROW_RIGHT ||
+			   actuallyPointValue==SceneGraph.ARROW_DOWN)
 			{
 				worldEntry.get(pointChanges[0])[0]=SceneGraph.GEOMETRY_WAY;
 			}
 		}
 		mapIsActive = false;
-		*/	
+			
 	}
 
 
@@ -425,7 +433,7 @@ public class LevelHandler {
 		Log.d("to entry wordEntry:",""+worldEntry.get(toReal.y*worldDim.x+toReal.x)[0]);
 
 		// if toReal is no wall!
-		if(worldEntry.get(toReal.y*worldDim.x+toReal.x)[0]<=SceneGraph.NONE_SPECIAL_WALL_EDGE)
+		if(worldEntry.get(toReal.y*worldDim.x+toReal.x)[0]<=SceneGraph.EDGE_NONE_SPECIAL_WALL)
 			return false;
 
 		
@@ -449,7 +457,7 @@ public class LevelHandler {
 				if(diff.x>0)
 					step=1;
 				for(int i= x; i!=to.x;i=i+step)
-					if(getWorldEntry(i,y)[0]<=SceneGraph.NONE_SPECIAL_WALL_EDGE)
+					if(getWorldEntry(i,y)[0]<=SceneGraph.EDGE_NONE_SPECIAL_WALL)
 						return false;
 				return true;
 					
@@ -462,7 +470,7 @@ public class LevelHandler {
 				if(diff.y>0)
 					step=1;
 				for(int i= y; i!=to.y;i=i+step)
-					if(getWorldEntry(x,i)[0]<=SceneGraph.NONE_SPECIAL_WALL_EDGE)
+					if(getWorldEntry(x,i)[0]<=SceneGraph.EDGE_NONE_SPECIAL_WALL)
 						return false;
 				return true;
 			}

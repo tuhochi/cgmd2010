@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.media.MediaPlayer.OnErrorListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer.SoundEffect;
 
 /**
@@ -50,7 +51,7 @@ public class SoundHandler {
 	private MediaPlayer activityAudioPlayer2 = null;
 	
 	private SoundPool soundPool = null;
-	public enum SoundEffect { STONE, BARREL, TRASH,SPRING,MAP };
+	public enum SoundEffect { STONE, BARREL, TRASH,SPRING,MAP,FINAL };
 	private HashMap<SoundEffect, Integer> soundMap;
 	
 	private float volume = 1.0f;
@@ -106,6 +107,7 @@ public class SoundHandler {
 		soundMap.put(SoundEffect.SPRING, soundPool.load(context, R.raw.l33_spring, 1));
 		soundMap.put(SoundEffect.MAP, soundPool.load(context, R.raw.l33_map, 1));
 		soundMap.put(SoundEffect.TRASH, soundPool.load(context, R.raw.l33_trash, 1));
+		soundMap.put(SoundEffect.FINAL, soundPool.load(context, R.raw.l33_final, 1));
 		
 		AudioManager audioM = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 		volume = (float)audioM.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);	
@@ -118,7 +120,8 @@ public class SoundHandler {
 	 * @param soundEffect			The specify sound which should be played.
 	 */
 	public void playSoundEffect(SoundEffect soundEffect){
-		soundPool.play(soundMap.get(soundEffect), volume, volume, 1, 0, 1);
+		if(LevelActivity.IS_MUSIC_ON)
+			soundPool.play(soundMap.get(soundEffect), volume, volume, 1, 0, 1);
 	}
 	
 	
