@@ -49,13 +49,13 @@ public class MapCalculationThread extends Thread {
 				int[] neighbours = checkWayPossibility(waySequenze[i]);
 				
 				if(waySequenze[i+1]==neighbours[1])
-					arrowOrder[i][1]= SceneGraph.UP_ARROW;
+					arrowOrder[i][1]= SceneGraph.ARROW_UP;
 				else if(waySequenze[i+1]==neighbours[2])
-					arrowOrder[i][1]= SceneGraph.RIGHT_ARROW;
+					arrowOrder[i][1]= SceneGraph.ARROW_RIGHT;
 				else if(waySequenze[i+1]==neighbours[3])
-					arrowOrder[i][1]= SceneGraph.DOWN_ARROW;
+					arrowOrder[i][1]= SceneGraph.ARROW_DOWN;
 				else if(waySequenze[i+1]==neighbours[4])
-					arrowOrder[i][1]= SceneGraph.LEFT_ARROW;
+					arrowOrder[i][1]= SceneGraph.ARROW_LEFT;
 			}
 		}
 		
