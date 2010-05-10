@@ -20,6 +20,7 @@ public class LevelRenderer implements Renderer {
 	private float posY;
 	private float mapOffset_x;//, savedMapOffset_x;
 	private float mapOffset_y;//, savedMapOffset_y;
+	private boolean[] keystates = new boolean[4];
 	private Bundle mSavedInstance;
 	
 	private final static int BUNNY_WIDTH = 55;
@@ -29,6 +30,9 @@ public class LevelRenderer implements Renderer {
 	private final static int LEVEL_TILESIZE = 100;
 	private final static int ACTION_WIDTH = 5;
 	private final static int ACTION_HEIGHT = 6;
+	
+	private final float BUNNY_MOVEMENT_UNIT = 9.0f; 
+	private final float COP_MOVEMENT_UNIT = 6.0f;
 	
 	private final static String BUNNY_X = "BUNNY_X";
 	private final static String BUNNY_Y = "BUNNY_Y";
@@ -63,8 +67,8 @@ public class LevelRenderer implements Renderer {
 		{ 1, 1, 1, 5, 1 },
 		{ 0, 0, 0, 2, 0 },
 		{ 5, 1, 1, 3, 1 },
-		{ 2, 0, 0, 2, 0 },
-		{ 2, 0, 0, 2, 0 },
+		{ 2, 8, 9, 2, 0 },
+		{ 2,10,11, 2, 0 },
 		{ 4, 1, 1, 4, 1 }
 	};
 	
@@ -82,9 +86,18 @@ public class LevelRenderer implements Renderer {
 		mapOffset_x = mapOffset_y = 0 ;// = savedMapOffset_x = savedMapOffset_y = 0;
 		posX = posY = 0;
 		mSavedInstance = msavedinstance;
+		for (int i=0;i<4;i++) keystates[i] = false;
 	}
 	
-	public void moveObject(float x, float y) {
+	public void setKey(int code) {
+		keystates[code] = true;
+	}
+	
+	public void releaseKey(int code) {
+		keystates[code] = false;
+	}
+	
+	public void moveBunny(float x, float y) {
 		float xPos = manager.getGameObject("bunny").getX();
 		float yPos = manager.getGameObject("bunny").getY();
 		
@@ -94,12 +107,26 @@ public class LevelRenderer implements Renderer {
 			yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
 				manager.getGameObject("bunny").move(x, y);
 				posX = x; posY = y;
-				if (x + xPos + mapOffset_x < 0 || 
-					x + xPos + mapOffset_x + BUNNY_WIDTH > screenWidth)
+				//if (x + xPos + mapOffset_x < 0 || 
+					//x + xPos + mapOffset_x + BUNNY_WIDTH > screenWidth)
+				if (xPos > screenWidth/2 && xPos < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/2)
 						moveMap(x, 0);
-				if (y + yPos + mapOffset_y < 0 || 
-					y + yPos + mapOffset_y + BUNNY_HEIGHT > screenHeight) 
+				//if (y + yPos + mapOffset_y < 0 || 
+					//y + yPos + mapOffset_y + BUNNY_HEIGHT > screenHeight) 
+				if (yPos > screenHeight/2 && yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/2)
 						moveMap(0, y);
+		}
+	}
+	
+	public void moveCop(float x, float y) {
+		float xPos = manager.getGameObject("cop").getX();
+		float yPos = manager.getGameObject("cop").getY();
+		
+		if (!checkCollision(xPos,yPos,x,y) && 
+			xPos+x >= 0 && yPos+y >= 0 && 
+			xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
+			yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
+				manager.getGameObject("cop").move(x, y);
 		}
 	}
 	
@@ -187,10 +214,31 @@ public class LevelRenderer implements Renderer {
 //			}
 //		}
 
-		manager.getGameObject("cop").setXY(20, 60);
+		// update
+		if (keystates[0]) moveBunny(-BUNNY_MOVEMENT_UNIT, 0);
+		if (keystates[1]) moveBunny(BUNNY_MOVEMENT_UNIT, 0);
+		if (keystates[2]) moveBunny(0, BUNNY_MOVEMENT_UNIT);
+		if (keystates[3]) moveBunny(0, -BUNNY_MOVEMENT_UNIT);
+		handleCop();
+		
+		// render
 		manager.getGameObject("cop").draw(gl);
-		//manager.getGameObject("cop").setXY(posX, posY);
 		manager.getGameObject("bunny").draw(gl);
+	}
+	
+	private void handleCop() {
+		float bx = manager.getGameObject("bunny").getX();
+		float by = manager.getGameObject("bunny").getY();
+		float cx = manager.getGameObject("cop").getX();
+		float cy = manager.getGameObject("cop").getY();
+		
+		float dx = bx - cx;
+		float dy = by - cy;
+		float d_len = (float) Math.sqrt(dx*dx+dy*dy);
+		d_len += 3.0f;
+		dx /= d_len;
+		dy /= d_len;
+		moveCop(dx*COP_MOVEMENT_UNIT, dy*COP_MOVEMENT_UNIT);
 	}
 
 	@Override
@@ -205,7 +253,8 @@ public class LevelRenderer implements Renderer {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();		
 		
-		//manager.getGameObject("bunny").setXY(posX, posY);
+		//manager.getGameObject("bunny").setXY(width/2-BUNNY_WIDTH/2, height/2-BUNNY_HEIGHT/2);
+		manager.getGameObject("cop").setXY(20, 40);
 	}
 
 	@Override
@@ -236,8 +285,8 @@ public class LevelRenderer implements Renderer {
 				Tablet.addMapOffset(mapOffset_x, mapOffset_y);
 			}
 		}
-		//update in case of resume
-		//manager.getGameObject("bunny").setXY(posX, posY);
+		manager.getGameObject("bunny").setXY(100, 20);
+		manager.getGameObject("cop").setXY(20, 60);
 	}
 	
 	/*public void saveLevel(SharedPreferences.Editor prefEditor) {
@@ -274,7 +323,7 @@ public class LevelRenderer implements Renderer {
 		Tablet bunny = manager.getGameObject("bunny");
 		outState.putFloat(BUNNY_Y, bunny.getY());
 		outState.putFloat(BUNNY_X, bunny.getX());
-		outState.putFloat(MAP_OFFSET_X, mapOffset_x);
+		outState.putFloat(MAP_OFFSET_X, -mapOffset_x);
 		outState.putFloat(MAP_OFFSET_Y, -mapOffset_y);
 	}
 }
