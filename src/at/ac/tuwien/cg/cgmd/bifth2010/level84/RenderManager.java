@@ -27,6 +27,7 @@ public class RenderManager implements Renderer {
 	private Accelerometer accelerometer;
 	
 	private TextView tfFps;
+	private TextView tfPoints;
 	private int fps = 0;
 	private ProgressManager progman;
 	private SoundManager soundman;
@@ -41,6 +42,14 @@ public class RenderManager implements Renderer {
 		}
 	};
 	
+	private Handler updatePoints = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			tfPoints.setText("$" + progman.getActualMoney());
+		}
+	};
+	
 	public RenderManager(LevelActivity activity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman, SoundManager soundManager) {
 		this.activity = activity;
 		this.street = street;
@@ -49,12 +58,14 @@ public class RenderManager implements Renderer {
 		this.progman = progman;
 		this.soundman = soundManager;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
+		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				updateFps.sendEmptyMessage(0);
+				updatePoints.sendEmptyMessage(0);
 			}
 		}, 1000, 1000);
 	}
@@ -83,6 +94,8 @@ public class RenderManager implements Renderer {
 		//At first: Render street with drains
 		street.update(gl, deltaTime, accelerometer.getOrientation());
 		street.draw(gl);
+		
+		//TODO: update progress if a certain amount of the street has passed
 		
 		//Afterwards: Render gems.
 		ListIterator<Model> i = gems.listIterator();

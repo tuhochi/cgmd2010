@@ -54,6 +54,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		
 		drains = new HashMap<Integer, ModelDrain>();
 		gems = new LinkedList<Model>();
+		progman = new ProgressManager();
 		soundManager = new SoundManager(this);
 		
 		initGui();
@@ -62,7 +63,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
-		progman = new ProgressManager();
+		
 		renderManager = new RenderManager(this, street, gems, accelerometer, progman, soundManager);	
 		openglview.setRenderer(renderManager);
 	}
@@ -119,6 +120,8 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		}
 		TextView tfPoints = (TextView) findViewById(R.id.l84_Points);
 		tfPoints.setText("$" + moneyToSpend);
+		progman.setMaxMoney(moneyToSpend);
+		
 		
 		//Create gems
 		gemRound = new ModelGem(1,R.drawable.l84_tex_gem_round);
@@ -155,9 +158,6 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 
 	@Override
 	public void finish() {
-		
-		//next line is for testing only
-		//progman.addPoints(20);
 		progman.setProgress(Math.min(Math.max(progman.getProgress(), 0), 100));
 		setResult(Activity.RESULT_OK, progman.asIntent());
 		super.finish();
