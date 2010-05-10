@@ -157,8 +157,8 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	public void finish() {
 		
 		//next line is for testing only
-		progman.addPoints(20);
-		progman.setProgress(Math.min(Math.max(progman.getPoints(), 0), 100));
+		//progman.addPoints(20);
+		progman.setProgress(Math.min(Math.max(progman.getProgress(), 0), 100));
 		setResult(Activity.RESULT_OK, progman.asIntent());
 		super.finish();
 	}

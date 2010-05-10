@@ -105,7 +105,7 @@ public class ModelGem extends Model {
 		else return false;
 	}
 
-	public void checkCollisionType(float streetPos, float deviceRotation)
+	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
 	{
 		boolean drainhit = false;
 		//check type of collision (hit/miss)
@@ -123,11 +123,18 @@ public class ModelGem extends Model {
 				{
 					
 					int drainType = drain.getDrainStyle();
-					if (drainType == 0) { this.soundman.playSound(SoundFX.BREAK); }
-					else if (drainType == this.gemType) {
+					if (drainType == 0)
+					{
+						this.soundman.playSound(SoundFX.BREAK);
+						progman.loseMoney_by_hit(drainType);
+					}
+					else if (drainType == this.gemType)
+					{
 						//TODO: check orientations
 						//if (Math.abs(drain.getOrientationAngle() - deviceRotation ) < 1.0f)
-						this.soundman.playSound(SoundFX.HIT); }
+						this.soundman.playSound(SoundFX.HIT);
+						progman.loseMoney_by_break(drainType);
+					}
 					else { this.soundman.playSound(SoundFX.MISS); }
 					drainhit = true;
 					break;
@@ -146,7 +153,7 @@ public class ModelGem extends Model {
 	 *
 	 * Update the model's transformations.
 	 */
-	public void update(GL10 gl, double deltaTime, float streetPos, float deviceRotation) {
+	public void update(GL10 gl, double deltaTime, float streetPos, float deviceRotation, ProgressManager progman) {
 		
 		if (this.isFalling) {
 			if (!checkFallCollision()) {
@@ -155,7 +162,7 @@ public class ModelGem extends Model {
 			}
 			else
 			{
-				checkCollisionType(streetPos, deviceRotation);
+				checkCollisionType(streetPos, deviceRotation, progman);
 				//this.soundman.playSound(SoundFX.MISS);
 				endFall();
 			}
