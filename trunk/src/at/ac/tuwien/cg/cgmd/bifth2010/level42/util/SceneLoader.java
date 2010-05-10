@@ -243,7 +243,7 @@ public class SceneLoader
 			{
 				Model m = new Model();
 				
-				String name = dis.readUTF();
+				m.setName(dis.readUTF());
 				
 				int numGeoms = dis.readInt();
 				for(int j=0; j<numGeoms; j++)
@@ -251,17 +251,17 @@ public class SceneLoader
 					String geometryName = dis.readUTF();
 					Geometry geometry = geometries.get(geometryName);
 					if(geometry == null)
-						throw new IOException("Model " + name + " specifies an invalid Geometry " + geometryName);
+						throw new IOException("Model " + m.getName() + " specifies an invalid Geometry " + geometryName);
 					
 					String materialName = dis.readUTF();
 					Material mat = materials.get(materialName);
 					if(mat==null)
-						throw new IOException("Model " + name + " specifies an invalid Material " + materialName);
+						throw new IOException("Model " + m.getName() + " specifies an invalid Material " + materialName);
 					
 					m.add(geometry, mat);
 				}
 				
-				models.put(name, m);
+				models.put(m.getName(), m);
 			}
 			
 			/*
