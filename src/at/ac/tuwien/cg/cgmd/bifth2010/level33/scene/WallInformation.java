@@ -117,7 +117,7 @@ public class WallInformation {
 		
 		if(isOnlyWallAround)
 		{
-			field[0]=SceneGraph.NONE_SPECIAL_WALL_EDGE;
+			field[0]=SceneGraph.EDGE_NONE_SPECIAL_WALL;
 			field[1]=0;
 			field[2]=0;
 			field[3]=0;
@@ -125,24 +125,24 @@ public class WallInformation {
 		}else
 		if(numberOfSpecialEdges==1)
 		{
-			field[0]=SceneGraph.ONE_SPECIAL_WALL_EDGE;
+			field[0]=SceneGraph.EDGE_ONE_SPECIAL_WALL;
 		}
 		else
 		if(numberOfSpecialEdges==2 && ((neighbours[0]==0 && neighbours[4]==0) ||
 									   (neighbours[2]==0 && neighbours[6]==0)))
 		{
-			field[0]=SceneGraph.COUNTERPART_SPECIAL_WALL_EDGE;
+			field[0]=SceneGraph.EDGE_COUNTERPART_SPECIAL_WALL;
 			numberOfSpecialEdges=5;
 		}
 		else
 		if(numberOfSpecialEdges==2)
-			field[0]=SceneGraph.TWO_SPECIAL_WALL_EDGE;
+			field[0]=SceneGraph.EDGE_TWO_SPECIAL_WALL;
 		else
 		if(numberOfSpecialEdges==3)
-			field[0]=SceneGraph.THREE_SPECIAL_WALL_EDGE;
+			field[0]=SceneGraph.EDGE_THREE_SPECIAL_WALL;
 		else
 		if(numberOfSpecialEdges==4)
-			field[0]=SceneGraph.FOUR_SPECIAL_WALL_EDGE;
+			field[0]=SceneGraph.EDGE_FOUR_SPECIAL_WALL;
 		
 		//Model-Rotation
 		if(numberOfSpecialEdges!=0)
@@ -196,16 +196,16 @@ public class WallInformation {
 			}
 		}
 		
-		if( field[0] != 0 &&(numberOfSpecialCorners==0 || field[0]==SceneGraph.THREE_SPECIAL_WALL_EDGE ||
-							 field[0]==SceneGraph.FOUR_SPECIAL_WALL_EDGE))
+		if( field[0] != 0 &&(numberOfSpecialCorners==0 || field[0]==SceneGraph.EDGE_THREE_SPECIAL_WALL ||
+							 field[0]==SceneGraph.EDGE_FOUR_SPECIAL_WALL))
 			return;
 		
 		//There is already a wall
-		if(field[0]==SceneGraph.ONE_SPECIAL_WALL_EDGE)
+		if(field[0]==SceneGraph.EDGE_ONE_SPECIAL_WALL)
 		{
 			if(numberOfSpecialCorners==2)
 			{
-				field[0]=SceneGraph.ONE_EDGE_TWO_SPECIAL_CORNER_WALL;
+				field[0]=SceneGraph.SPECIAL_ONE_EDGE_TWO_CORNER_WALL;
 				return;
 			}
 			else
@@ -215,26 +215,26 @@ public class WallInformation {
 				   field[1]==180 && onlyOneCorner==3 ||
 				   field[1]==270 && onlyOneCorner==1)
 				{
-					field[0]=SceneGraph.ONE_EDGE_ONE_RIGHT_SPECIAL_CORNER_WALL;
+					field[0]=SceneGraph.SPECIAL_ONE_EDGE_ONE_RIGHT_CORNER_WALL;
 					return;
 				}
 				else
 				{
-					field[0]=SceneGraph.ONE_EDGE_ONE_LEFT_SPECIAL_CORNER_WALL;
+					field[0]=SceneGraph.SPECIAL_ONE_EDGE_ONE_LEFT_CORNER_WALL;
 					return;
 				}		
 			}	
 		}
 		else
-		if(field[0]==SceneGraph.TWO_SPECIAL_WALL_EDGE)
+		if(field[0]==SceneGraph.EDGE_TWO_SPECIAL_WALL)
 		{
-			field[0]=SceneGraph.TWO_EDGE_ONE_SPECIAL_CORNER_WALL;
+			field[0]=SceneGraph.SPECIAL_TWO_EDGE_ONE_CORNER_WALL;
 			return;
 		}
 		
 		
 		if(numberOfSpecialCorners==1)
-			field[0]=SceneGraph.ONE_SPECIAL_CORNER;
+			field[0]=SceneGraph.CORNER_ONE_SPECIAL;
 		else
 		if(numberOfSpecialCorners==2)
 		{
@@ -243,17 +243,17 @@ public class WallInformation {
 			   (tempNeighbours[7]==-1 && tempNeighbours[3]==-1))
 			{
 				numberOfSpecialCorners=5;
-				field[0]= SceneGraph.COUNTERPART_SPECIAL_CORNER;
+				field[0]= SceneGraph.CORNER_COUNTERPART_SPECIAL;
 			}
 			else
-				field[0]=SceneGraph.TWO_SPECIAL_CORNER;
+				field[0]=SceneGraph.CORNER_TWO_SPECIAL;
 		}
 		else
 		if(numberOfSpecialCorners==3)
-			field[0]=SceneGraph.THREE_SPECIAL_CORNER;
+			field[0]=SceneGraph.CORNER_THREE_SPECIAL;
 		else
 		if(numberOfSpecialCorners==4)
-			field[0]=SceneGraph.FOUR_SPECIAL_CORNER;
+			field[0]=SceneGraph.CORNER_FOUR_SPECIAL;
 		else
 			System.err.println("Error-CornerCalculation.");
 		
@@ -372,12 +372,12 @@ public class WallInformation {
 		
 		if(numberOfSubModels==0)
 		{
-			field[2]=SceneGraph.NONE_CONNECTION_WALL;
+			field[2]=SceneGraph.CONNECTION_NONE_WALL;
 			return;
 		}	
 		else
 		if(numberOfSubModels==1)
-			field[2]=SceneGraph.ONE_CONNECTION_WALL;
+			field[2]=SceneGraph.CONNECTION_ONE_WALL;
 		else
 		if(numberOfSubModels==2)
 		{
@@ -386,17 +386,17 @@ public class WallInformation {
 			   (tempNeighbours[7]==-1 && tempNeighbours[3]==-1))
 			{
 				numberOfSubModels=5;
-				field[2]= SceneGraph.COUNTERPART_CONNECTION_WALL;
+				field[2]= SceneGraph.CONNECTION_COUNTERPART_WALL;
 			}
 			else
-				field[2]=SceneGraph.TWO_CONNECTION_WALL;
+				field[2]=SceneGraph.CONNECTION_TWO_WALL;
 		}
 		else
 		if(numberOfSubModels==3)
-			field[0]=SceneGraph.THREE_CONNECTION_WALL;
+			field[2]=SceneGraph.CONNECTION_THREE_WALL;
 		else
 		if(numberOfSubModels==4)
-			field[0]=SceneGraph.FOUR_CONNECTION_WALL;
+			field[2]=SceneGraph.CONNECTION_FOUR_WALL;
 		else
 			System.err.println("Error-ConnectionWallCalculation.");
 		
