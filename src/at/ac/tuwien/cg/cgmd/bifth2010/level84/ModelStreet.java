@@ -45,7 +45,6 @@ public class ModelStreet extends Model {
 		this.width = width;
 		this.height = height;
 		this.posX = posX;
-		Log.i("StreetPos",": " + posX);
 		this.speed = speed;
 		this.textureResource = textureResource;
 		this.drains = drains;
