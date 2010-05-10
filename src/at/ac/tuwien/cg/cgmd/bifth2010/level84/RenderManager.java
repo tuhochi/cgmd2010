@@ -95,7 +95,9 @@ public class RenderManager implements Renderer {
 		street.update(gl, deltaTime, accelerometer.getOrientation());
 		street.draw(gl);
 		
-		//TODO: update progress if a certain amount of the street has passed
+		//TODO: update progress if a certain amount of the street has passed 
+		progman.updatePointProgress(20);
+
 		
 		//Afterwards: Render gems.
 		ListIterator<Model> i = gems.listIterator();

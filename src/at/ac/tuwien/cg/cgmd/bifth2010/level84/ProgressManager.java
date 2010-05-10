@@ -5,8 +5,22 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 public class ProgressManager extends SessionState {
 
 	private int progress = 0; // must be between 0-100
-	private int moneyToSpend = 0;
+	private int maxMoney = 0;
 	private int actualMoney = 0;
+	
+	/** values if gems hit a drain **/
+	private int drain_closed_hit = 0;
+	private int drain_round_hit = 1000;
+	private int drain_diamond_hit = 4000;
+	private int drain_rect_hit = 2000;
+	private int drain_oct_hit = 3000;
+	
+	/** values if gems break **/
+	private int drain_closed_break = 5000;
+	private int drain_round_break = drain_round_hit / 2;
+	private int drain_diamond_break = drain_diamond_hit / 2;
+	private int drain_rect_break = drain_rect_hit / 2;
+	private int drain_oct_break = drain_oct_hit / 2;
 	
 	
 	/**
@@ -29,7 +43,7 @@ public class ProgressManager extends SessionState {
 	
 	public void setMaxMoney(int moneyToSpend)
 	{
-		this.moneyToSpend = moneyToSpend;
+		this.maxMoney = moneyToSpend;
 		actualMoney = moneyToSpend;
 	}
 	
@@ -47,11 +61,11 @@ public class ProgressManager extends SessionState {
 		int value = 0;
 		switch (drainType)
 		{
-		case 0: value = 0;
-		case 1: value = 1000;
-		case 2: value = 4000;
-		case 3: value = 2000;
-		case 4: value = 3000;
+		case 0: value = drain_closed_hit;
+		case 1: value = drain_round_hit;
+		case 2: value = drain_diamond_hit;
+		case 3: value = drain_rect_hit;
+		case 4: value = drain_oct_hit;
 		}
 		
 		actualMoney -= value;
@@ -66,24 +80,25 @@ public class ProgressManager extends SessionState {
 		int value = 0;
 		switch (drainType)
 		{
-			case 0: value = 5000 / 2;
-			case 1: value = 1000 / 2;
-			case 2: value = 3000 / 2;
-			case 3: value = 2000 / 2;
-			case 4: value = 4000 / 2;
+			case 0: value = drain_closed_break;
+			case 1: value = drain_round_break;
+			case 2: value = drain_diamond_break;
+			case 3: value = drain_rect_break;
+			case 4: value = drain_oct_break;
 		}
 		
 		actualMoney -= value;
 	}
 	
-	public void setProgress(int actualprogress)
+	public void updatePointProgress(int actualprogress)
 	{
 		progress = actualprogress;
 	}
 	
-	public int getProgress()
+	public int getPointProgress()
 	{
 		//TODO: formel für fortschritt
+		
 		return progress;
 	}
 	
