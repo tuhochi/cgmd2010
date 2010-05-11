@@ -13,6 +13,10 @@ public class GameMechanics {
 	private long mLastColDetDone = -1;
 	private LevelActivity mGameContext = null;	
 	
+	private boolean mBasicTowerSelected = true;
+	private boolean mAdvancedTowerSelected = true;
+	private boolean mHyperTowerSelected = true;
+	
 	private static GameMechanics mSingleton = null;
 	
 	private GameMechanics( int startMoney ){
@@ -116,5 +120,23 @@ public class GameMechanics {
 
 	public static void destroySingleton() {
 		mSingleton = null;
+	}
+
+	public void setBasicTowerSelected() {
+		mBasicTowerSelected = true;
+		mAdvancedTowerSelected = false;
+		mHyperTowerSelected = false;
+	}
+	
+	public void setAdvancedTowerSelected() {
+		mBasicTowerSelected = false;
+		mAdvancedTowerSelected = true;
+		mHyperTowerSelected = false;
+	}
+	
+	public void setHyperTowerSelected() {
+		mBasicTowerSelected = false;
+		mAdvancedTowerSelected = false;
+		mHyperTowerSelected = true;
 	}
 }

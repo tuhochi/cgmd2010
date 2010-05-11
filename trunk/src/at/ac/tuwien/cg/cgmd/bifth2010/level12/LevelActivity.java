@@ -9,11 +9,13 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level00.TestLevelActivity;
 
 public class LevelActivity extends Activity{
 	private Display mDisplay = null;
@@ -67,7 +69,9 @@ public class LevelActivity extends Activity{
     	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl3);
     	TextureManager.getSingletonObject().add(R.drawable.l12_icon);	
     	
-    	GameWorld.setDisplay( mDisplay.getHeight(), mDisplay.getWidth());
+    	int fieldheight = (int)( mDisplay.getHeight() * 0.9 ) ;
+    	int menuheight = mDisplay.getHeight() - fieldheight;
+    	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
 	
 		System.out.println("ON RESUME ACTIVITY!");
@@ -76,8 +80,19 @@ public class LevelActivity extends Activity{
  	   	glview.setRenderer(mRenderer);
     	GameMechanics.getSingleton().unpause();
     	GameMechanics.getSingleton().setGameContext(this);
+    	
+    	
+    	
+        
+        LinearLayout l = new LinearLayout( this );
+        l.setLayoutParams( new LayoutParams( LayoutParams.FILL_PARENT,   LayoutParams.FILL_PARENT));
+        l.setOrientation(LinearLayout.VERTICAL);
+        l.addView( GameUI.getSingleton( this, menuheight, mDisplay.getWidth() ) );
+        l.addView( glview );
+        
+        setContentView( l );
+       
         super.onResume();
-        setContentView( glview );
     }
     
     

@@ -1,7 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public final class Definitions {
-	public static final int FIELD_WIDTH_SEGMENTS = 8;
 	public static final int FIELD_HEIGHT_SEGMENTS = 5;
 	
 	public static final int COLLISION_DETECTION_TIMEOUT = 10;

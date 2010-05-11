@@ -61,9 +61,9 @@ public class GameWorld {
 	}
 	
 	public void initGameField(){
-		int xSegCount = Definitions.FIELD_WIDTH_SEGMENTS;
 		int ySegCount = Definitions.FIELD_HEIGHT_SEGMENTS;
 		float segLength = mHeight / ySegCount;
+		int xSegCount = (int) Math.ceil( mWidth / segLength );
 		if( mGamefield == null) mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
 	}
 	
