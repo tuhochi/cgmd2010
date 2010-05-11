@@ -14,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 
@@ -44,8 +45,8 @@ public class MainChar implements SceneEntity {
 	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
 	
-	/** The texture coordinate buffer. */
-	private FloatBuffer texCoordBuffer;
+	/** The texturePart for the mainChar. */
+	private TexturePart texture;
 	
 	/** The unique vertex buffer id. */
 	private int vboId; 
@@ -179,10 +180,13 @@ public class MainChar implements SceneEntity {
 		
 		GeometryManager geometryManager = GeometryManager.instance; 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
-		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
+//		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
+		
+		texture = TextureAtlas.instance.getMainCharTextur();
+		
 		if(Settings.GLES11Supported) 
 		{
-			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+			vboId = geometryManager.createVBO(vertexBuffer, texture.texCoords);
 		}
 		
 		soundPlayed = false; 
@@ -343,11 +347,9 @@ public class MainChar implements SceneEntity {
 		
 		glTranslatef(position.x, 0, 0);
 		
-		glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-		
 		if(!Settings.GLES11Supported) 
 		{			
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
 		
 			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
@@ -396,12 +398,10 @@ public class MainChar implements SceneEntity {
 			
 			glTranslatef(xCoord, yCoord, 0);
 			glScalef(gameOverScale, gameOverScale, 1.0f);
-			
-			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			
+						
 			if(!Settings.GLES11Supported) 
 			{
-				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
 				glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 				glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 			

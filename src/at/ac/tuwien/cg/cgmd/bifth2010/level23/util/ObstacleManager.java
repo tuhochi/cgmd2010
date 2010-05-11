@@ -230,11 +230,12 @@ public class ObstacleManager
 	 */
 	public void renderVisibleObstacles(int currentHeight)
 	{
+		RenderView renderView = RenderView.instance;
 		if(mainChar == null)
-			mainChar = RenderView.instance.getMainCharInstance();
+			mainChar = renderView.getMainCharInstance();
 		
 		//calculate current topBounds value for relative position
-		int topBounds = currentHeight+(int)RenderView.instance.getTopBounds();
+		int topBounds = currentHeight+(int)renderView.getTopBounds();
 		//Log.v("topBounds Height: ", String.valueOf(topBounds));
 		boolean renderNext = true;
 		boolean leastRenderedFound = false;
@@ -259,7 +260,6 @@ public class ObstacleManager
 		{
 			Obstacle tempObstacle = obstacles.get(i);
 			int posY = (int)tempObstacle.position.y;
-			
 			
 			//test visibility
 			if(posY > currentHeight-tempObstacle.height && posY < topBounds)
@@ -293,7 +293,7 @@ public class ObstacleManager
 						    	@Override
 						        public void run() 
 						    	{
-						            LevelActivity.instance.triggerVibrate(500);
+						            LevelActivity.instance.triggerVibrate(200);
 						        }
 							});
 				}

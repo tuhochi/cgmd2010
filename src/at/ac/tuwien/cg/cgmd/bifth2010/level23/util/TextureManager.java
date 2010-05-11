@@ -74,12 +74,13 @@ public class TextureManager {
 		InputStream is = context.getResources().openRawResource(resId);
 		Bitmap bitmap = null;
 		try
-		{
+		{	
 			bitmap = BitmapFactory.decodeStream(is);
 		}
 		catch(Throwable t)
 		{
-			Log.e("TextureLoader::loadTexture", "Could not load Texture: " + res.toString());
+			
+			Log.e("TextureLoader::loadTexture", "Could not load Texture: " + t.getMessage());
 			bitmap = null;
 		}
 		finally

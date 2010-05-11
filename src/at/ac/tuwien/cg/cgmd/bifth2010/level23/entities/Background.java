@@ -23,6 +23,7 @@ import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
 
 /**
  * This class does the background
@@ -37,7 +38,7 @@ public class Background implements SceneEntity
 	private static final long serialVersionUID = -8706705496517584380L;
 	private FloatBuffer vertexBuffer;
 	private int textureID;
-	private FloatBuffer texCoordBuffer;
+	private TexturePart texture;
 	private final float[] texCoords = {0.f, 0.5f, 1.f, 0.5f, 0.f, 0.f, 1.f, 0.f}; 
 	private float scrollSpeed = 0.01f;
 	private float positionY;
@@ -92,12 +93,12 @@ public class Background implements SceneEntity
 		RenderView renderView = RenderView.instance; 
 		GeometryManager geometryManager = GeometryManager.instance;
 		
-		texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords)[0];
+		texture = TextureAtlas.instance.getBackgroundTextur();
 		vertexBuffer = geometryManager.createVertexBufferQuad(renderView.getRightBounds(), renderView.getTopBounds());
 		//texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords);
 		if(Settings.GLES11Supported) 
 		{
-			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+			vboId = geometryManager.createVBO(vertexBuffer, texture.texCoords);
 		}
 		
 	}
@@ -142,19 +143,15 @@ public class Background implements SceneEntity
 			if(!isGameOver())
 				glTranslatef(0, positionY, 0);
 			
-			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
 			if (!Settings.GLES11Supported) 
 			{
-				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
 				glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 				
-				
 				GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4); 
-			
 			} 
 			else 
 			{
-		
 				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
 
 				GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);

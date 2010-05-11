@@ -125,7 +125,6 @@ public class Button
 		} 
 		else 
 		{
-	
 			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
 			
 //			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
