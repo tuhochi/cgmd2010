@@ -146,8 +146,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 		scene.setHud(hud);
 		motionManager.generateRandomOrbits(scene,Config.UNIVERSE_SPEED_LIMIT/2,Config.UNIVERSE_SPEED_LIMIT,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
 		collManager = new CollisionManager(scene);
-		//init of the GameManager in CollisionManager!
-		gameManager = GameManager.instance;
+		gameManager = new GameManager(collManager.remainingPlanetParts.size());
+		//TODO: ref setzen
+		collManager.gameManager = gameManager;
 		
 		guiThreadHandler = this.context.handler;
 		fpsUpdateRunnable = this.context.fpsUpdateRunnable;
