@@ -7,6 +7,16 @@ import java.util.Vector;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 
+
+/**
+ * 
+ * This thread calculates the shortest path to a random target. The thread will be started when a map was picked up.
+ * Then a random item will be chosen. Therefore the frustum will be considered because the target should be outer
+ * the frustum if it is possible.
+ * Then the path to this item will be calculated. All way-possibilities will be considered an the path which has the
+ * lowest way-cost which we are looking for.
+ *
+ */
 public class MapCalculationThread extends Thread {
 	
 	private int startPoint = 0;
@@ -17,6 +27,7 @@ public class MapCalculationThread extends Thread {
 	private int columns = 0;
 	private int rows = 0;
 	private int[][] arrowOrder;
+	private int[][] newArrowOrder;
 	private LevelHandler level = null;
 	
 	public static boolean isThreadReady = false;
@@ -29,12 +40,24 @@ public class MapCalculationThread extends Thread {
 		
 	}
 	
+	/**
+	 * 
+	 * The actually level-properties will be set to find a target which is available.
+	 * 
+	 * @param startPoint				start-point of the way
+	 * @param goodiesIndex				possible targets
+	 * @param walls						the labyrinth itself
+	 */
 	public void setStartProperties(int startPoint,List<Integer> goodiesIndex,ArrayList<int[]> walls){
 		this.startPoint = startPoint;
 		this.goodiesIndex = goodiesIndex;
 		this.walls = walls;
 	}
 	
+	/**
+	 * The thread which calculates the shortest path to a random target will be started. If the calculations
+	 * are done, a boolean variable will be set. So the update-logic knows that there will be some changes.
+	 */
 	public void run(){
 				
 		int targetField = findMapTarget();
@@ -59,12 +82,118 @@ public class MapCalculationThread extends Thread {
 			}
 		}
 		
+		//add corner-arrows
+		addCornerArrows();
+		
 		isThreadReady=true;
 		
 		while(!done){}
 		
 	}
 	
+	/**
+	 * The array which contains all arrows in a row will be updated. This is necessary to find corners and
+	 * these arrows will be updated to corner-arrows. For each way-element of the shortest path the parent-way-element
+	 * will be considered. If the direction of the actually arrow is not equal to the parent-arrow, then there have to
+	 * be a corner-arrow.
+	 */
+	private void addCornerArrows(){
+		
+		newArrowOrder = new int[arrowOrder.length][2];
+		for(int i=0;i<arrowOrder.length && i+1<arrowOrder.length;i++)
+		{
+			if(i==0)
+			{
+				int[] mainNeighbours = checkWayPossibility(arrowOrder[i][0]);
+				for(int j=1;j<mainNeighbours.length;j++)
+				{
+					if(mainNeighbours[j]==startPoint)
+					{
+						int[] startPointNeighbours = calculateAllNeighbours(mainNeighbours[j]);
+						newArrowOrder[i][0]=arrowOrder[i][0];
+						if(startPointNeighbours[1]==arrowOrder[i+1][0])
+						{
+							if(startPointNeighbours[0]==arrowOrder[i][0])
+								newArrowOrder[i][1]=SceneGraph.ARROW_BOTTOM_TO_RIGHT;
+							else
+								newArrowOrder[i][1]=SceneGraph.ARROW_LEFT_TO_TOP;
+						}	
+						else if(startPointNeighbours[3]==arrowOrder[i+1][0])
+						{
+							if(startPointNeighbours[2]==arrowOrder[i][0])
+								newArrowOrder[i][1]=SceneGraph.ARROW_LEFT_TO_BOTTOM;
+							else
+								newArrowOrder[i][1]=SceneGraph.ARROW_TOP_TO_RIGHT;
+						}	
+						else if(startPointNeighbours[5]==arrowOrder[i+1][0])
+						{
+							if(startPointNeighbours[4]==arrowOrder[i][0])
+								newArrowOrder[i][1]=SceneGraph.ARROW_TOP_TO_LEFT;
+							else
+								newArrowOrder[i][1]=SceneGraph.ARROW_RIGHT_TO_BOTTOM;
+						}
+							
+						else if(startPointNeighbours[7]==arrowOrder[i+1][0])
+						{
+							if(startPointNeighbours[6]==arrowOrder[i][0])
+								newArrowOrder[i][1]=SceneGraph.ARROW_RIGHT_TO_TOP;
+							else
+								newArrowOrder[i][1]=SceneGraph.ARROW_BOTTOM_TO_LEFT;
+						}	
+						else
+							newArrowOrder[i][1]=arrowOrder[i+1][1];
+					}
+				}
+			}
+			else
+			{
+				newArrowOrder[i][0]=arrowOrder[i][0];
+				
+				if(arrowOrder[i-1][1]==arrowOrder[i][1])
+					newArrowOrder[i][1]=arrowOrder[i][1];
+				else
+				{
+					if(arrowOrder[i][1]==SceneGraph.ARROW_LEFT)
+					{
+						if(arrowOrder[i-1][1]==SceneGraph.ARROW_DOWN)
+							newArrowOrder[i][1]=SceneGraph.ARROW_TOP_TO_LEFT;
+						else if(arrowOrder[i-1][1]==SceneGraph.ARROW_UP)
+							newArrowOrder[i][1]=SceneGraph.ARROW_BOTTOM_TO_LEFT;
+					}
+					else if(arrowOrder[i][1]==SceneGraph.ARROW_RIGHT)
+					{
+						if(arrowOrder[i-1][1]==SceneGraph.ARROW_DOWN)
+							newArrowOrder[i][1]=SceneGraph.ARROW_TOP_TO_RIGHT;
+						else if(arrowOrder[i-1][1]==SceneGraph.ARROW_UP)
+							newArrowOrder[i][1]=SceneGraph.ARROW_BOTTOM_TO_RIGHT;
+					}
+					else if(arrowOrder[i][1]==SceneGraph.ARROW_UP)
+					{
+						if(arrowOrder[i-1][1]==SceneGraph.ARROW_LEFT)
+							newArrowOrder[i][1]=SceneGraph.ARROW_RIGHT_TO_TOP;
+						else if(arrowOrder[i-1][1]==SceneGraph.ARROW_RIGHT)
+							newArrowOrder[i][1]=SceneGraph.ARROW_LEFT_TO_TOP;
+					}
+					else if(arrowOrder[i][1]==SceneGraph.ARROW_DOWN)
+					{
+						if(arrowOrder[i-1][1]==SceneGraph.ARROW_LEFT)
+							newArrowOrder[i][1]=SceneGraph.ARROW_RIGHT_TO_BOTTOM;
+						else if(arrowOrder[i-1][1]==SceneGraph.ARROW_RIGHT)
+							newArrowOrder[i][1]=SceneGraph.ARROW_LEFT_TO_BOTTOM;
+					}
+				}	
+			}
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * Returns the result of the thread. Before the result will be returned the boolean-variable will be set false.
+	 * After this the thread will be terminated.
+	 * 
+	 * @return	arrowOrder[][]			way-sequence and which arrows will be used
+	 */
 	public int[][] getMapResult(){
 		done=true;
 		isThreadReady=false;
@@ -262,6 +391,63 @@ public class MapCalculationThread extends Thread {
 		}
 				
 		return wayNeighbourPreferences;
+	}
+	
+	/**
+	 * 
+	 * All neighbours-indexes will be calculated an the value of each neighbour will be
+	 * determined. 
+	 * 
+	 * 	7	0	1
+	 *	6	SP	2
+	 * 	5	4	3
+	 * 
+	 * 
+	 * @param seedPoint			The point in the middle of the neighbours
+	 * @return neighbours		All neighbours-values will be returned.
+	 */
+	public int[] calculateAllNeighbours(int seedPoint){
+		
+		/*
+		 * 	7	0	1
+		 * 	6	SP	2
+		 * 	5	4	3
+		 */
+		
+		int[] allNeighbours = new int[8];
+		int[] mainNeighbours = checkWayPossibility(seedPoint);
+		
+		allNeighbours[0]=mainNeighbours[1];
+		allNeighbours[2]=mainNeighbours[2];
+		allNeighbours[4]=mainNeighbours[3];
+		allNeighbours[6]=mainNeighbours[4];
+		
+		//1
+		if(mainNeighbours[2]-columns<0)
+			allNeighbours[1]=mainNeighbours[2]+(rows-1)*columns;
+		else
+			allNeighbours[1]=mainNeighbours[2]-columns;
+		
+		//3
+		if(mainNeighbours[2]+columns>columns*rows-1)
+			allNeighbours[3]=mainNeighbours[2]-(rows-1)*columns;
+		else
+			allNeighbours[3]=mainNeighbours[2]+columns;
+
+		
+		//5
+		if(mainNeighbours[4]+columns>columns*rows-1)
+			allNeighbours[5]=mainNeighbours[4]-(rows-1)*columns;
+		else
+			allNeighbours[5]=mainNeighbours[4]+columns;
+		
+		//7
+		if(mainNeighbours[4]-columns<0)
+			allNeighbours[7]=mainNeighbours[4]+(rows-1)*columns;
+		else
+			allNeighbours[7]=mainNeighbours[4]-columns;				
+		
+		return allNeighbours;
 	}
 	
 	/**
