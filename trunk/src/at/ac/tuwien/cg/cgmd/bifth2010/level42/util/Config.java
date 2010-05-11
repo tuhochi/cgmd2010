@@ -47,26 +47,29 @@ public class Config
 	public static String SATELLITE_PREFIX = "Satellite_";
 	
 	/** defines the maximum of the orbit main axis */
-	public static float UNIVERSE_CENTERLENGTH_LIMIT = 30;
+	public static float UNIVERSE_CENTERLENGTH_LIMIT = 35;
 	
 	/** defines the maximum of the orbit secondary axis */
-	public static float UNIVERSE_DIRLENGTH_LIMIT = 30;
+	public static float UNIVERSE_DIRLENGTH_LIMIT = 35;
 	
 	/** defines the maximum of the orbit main axis */
-	public static float FORCEFIELD_CENTERLENGTH_LIMIT = 10;
+	public static float FORCEFIELD_CENTERLENGTH_LIMIT = 15;
 	
 	/** defines the maximum of the orbit secondary axis */
-	public static float FORCEFIELD_DIRLENGTH_LIMIT = 10;
+	public static float FORCEFIELD_DIRLENGTH_LIMIT = 15;
 	
-	public static float FORCEFIELD_NEW_CENTERLENGTH = 20;
-	public static float FORCEFIELD_NEW_DIRLENGTH = 20;
+	public static float FORCEFIELD_NEW_CENTERLENGTH = 25;
+	public static float FORCEFIELD_NEW_DIRLENGTH = 25;
 	
 	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 20;
 	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 20;
 	
 	/** defines the maximum relative speed for satellites */
-	public static float UNIVERSE_SPEED_LIMIT = 8;
+	public static float UNIVERSE_SPEED_LIMIT = 2;
 	
+	public static float ORBIT_TEMP_MAXSPEED_FAC = 3;
+	public static float ORBIT_MIN_SPEED = 0.5f;
+
 	/** ratio between speed and rotation angle */
 	public static float SATELLITE_SPEEDROTA_RATIO = 4f;
 	
@@ -92,5 +95,7 @@ public class Config
 	public static final float ORBIT_SPEEDMORPH_PUSHVECFACTOR = 0.25f;
 	public static final float ORBIT_DYNAMIC_SPEEDFACTOR = 120f;
 	public static final float PLANETCOLL_SPEED_FROM_SAT_FACTOR = 0.25f;
+
+	
 	
 }

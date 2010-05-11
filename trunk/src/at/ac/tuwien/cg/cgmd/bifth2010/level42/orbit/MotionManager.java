@@ -285,6 +285,8 @@ public class MotionManager {
 		Vector3 rotationAxis = new Vector3();
 		Orbit generatedOrbit = null;
 		
+		int orbitCounter = 0;
+		
 		VecAxisTransformation satTransform = null;
 		
 		for(int i=0;i<scene.sceneEntities.size();i++){
@@ -314,8 +316,7 @@ public class MotionManager {
 				generatedOrbit = new Orbit(	a,center,b,
 											(float)rand.nextDouble()*maxSpeed + minSpeed,
 											entity.getBasicOrientation());
-				
-				
+								
 				//generate random satellite transformation
 				rotationAxis.x = (float)rand.nextDouble();
 				rotationAxis.y = (float)rand.nextDouble();
@@ -331,7 +332,10 @@ public class MotionManager {
 				
 				generatedOrbit.setSatTrans(satTransform);
 				addMotion(generatedOrbit,entity);
+				
+				orbitCounter++;
 			}
 		}
+		Log.d(LevelActivity.TAG,orbitCounter+" RANDOM SAT ORBITS GENERATED");
 	}
 }

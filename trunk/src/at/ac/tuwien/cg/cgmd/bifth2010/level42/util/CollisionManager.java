@@ -10,6 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalPlanetMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
@@ -52,7 +53,7 @@ public class CollisionManager {
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
 	
-	private final Vector<Movable> aimingList;
+	private final Vector<Model> remainingPlanetParts;
 	
 	public static CollisionManager instance;
 	public static NearestEntityComperator comperator;
@@ -90,7 +91,7 @@ public class CollisionManager {
 			
 		this.minDistance = 0;
 		
-		this.aimingList = new Vector<Movable>();
+		this.remainingPlanetParts = new Vector<Model>();
 		comperator = new NearestEntityComperator();
 		
 		this.motionManager = MotionManager.instance;
@@ -100,19 +101,13 @@ public class CollisionManager {
 		for(int i=0;i<entityList.size();i++)
 		{
 			if(entityList.get(i).getName().equals(Config.PLANET_NAME)){
-				aimingList.addAll(entityList.get(i).models);
+				remainingPlanetParts.addAll(entityList.get(i).models);
 				//init gamemanager with the count of planet parts
-				gameManager = new GameManager(aimingList.size());
+				gameManager = new GameManager(remainingPlanetParts.size());
 				break;
 			}
 		}
-
-		initAimingList();
-	}
-	
-	public void initAimingList()
-	{
-		Collections.sort(aimingList, comperator);
+		Collections.sort(remainingPlanetParts, comperator);
 		getNearestToCenterEntity();
 	}
 	
@@ -198,7 +193,7 @@ public class CollisionManager {
 	}
 	
 	/**
-	 * Do collision detection between all objects in the scene
+	 * Do collision detection between all scene entities in the scene
 	 */
 	public void doCollisionDetection()
 	{
@@ -218,7 +213,7 @@ public class CollisionManager {
 				if(collisionDetected(objA,objB,Config.COLLISION_PENETRATION_DEPTH,centerDistance))
 				{
 					//collision detected
-					
+					Log.d(LevelActivity.TAG,"COLLISION DETECTED");
 					//check for collision between satellite and planet
 					if(!objAIsMoveable||!objBIsMoveable)
 					{
@@ -241,9 +236,10 @@ public class CollisionManager {
 						Model planetEntity = null;
 						
 						//find out which part of the planet got hit
-						for(int u = 0; u < planet.models.size(); u++)
+						//only search in remaining planet parts
+						for(int u = 0; u < remainingPlanetParts.size(); u++)
 						{
-							planetEntity = planet.models.get(u);
+							planetEntity = remainingPlanetParts.get(u);
 									
 							//check for contact
 							if(collisionDetected(planetEntity,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
@@ -256,10 +252,10 @@ public class CollisionManager {
 									planetPushVec.set(planetEntity.getBoundingSphereWorld().center);
 									planetPushVec.subtract(planet.getBoundingSphereWorld().center);
 									
-									planetEntityMotion = new DirectionalMotion(	planetEntity.getBoundingSphereWorld().center,
-																				planetPushVec,
-																				satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
-																				planetEntity.getBasicOrientation());
+									planetEntityMotion = new DirectionalPlanetMotion(	planetEntity.getBoundingSphereWorld().center,
+																						planetPushVec,
+																						satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
+																						planetEntity.getBasicOrientation());
 									motionManager.addMotion(planetEntityMotion,planetEntity);
 									
 									if(satellite.getMotion().getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
@@ -272,7 +268,7 @@ public class CollisionManager {
 								}
 								
 								//delete from aiming list
-								aimingList.remove(planetEntity);
+								remainingPlanetParts.remove(planetEntity);
 							}
 						}
 					}
@@ -352,11 +348,11 @@ public class CollisionManager {
 	
 	public Movable getNearestToCenterEntity()
 	{
-		for(int i=0;i<aimingList.size();i++)
-			Log.d(LevelActivity.TAG,"AUTOAIM: i=" + i + " length=" + aimingList.get(i).getBoundingSphereWorld().center.length());
+//		for(int i=0;i<aimingList.size();i++)
+//			Log.d(LevelActivity.TAG,"AUTOAIM: i=" + i + " length=" + aimingList.get(i).getBoundingSphereWorld().center.length());
 		
-		if(aimingList.size()>0)		
-			return aimingList.get(0);
+		if(remainingPlanetParts.size()>0)		
+			return remainingPlanetParts.get(0);
 		else 
 			return null;
 	}

@@ -404,7 +404,7 @@ public class Orbit extends Motion
 				this.directionVec.length()<Config.FORCEFIELD_DIRLENGTH_LIMIT)
 			this.directionVecCap = Config.FORCEFIELD_NEW_DIRLENGTH/this.directionVec.length();
 		
-		Log.d(LevelActivity.TAG,"LIMIT - centerVecCap ="+centerVecCap+" length="+this.centerVec.length() +" directionVecCap="+directionVecCap+" length="+this.directionVec.length());
+		Log.d(LevelActivity.TAG,"LIMIT - centerVecCap ="+centerVecCap+" length="+this.centerVec.length() +" directionVecCap="+directionVecCap+" length="+this.directionVec.length()+" speed="+this.speed +" newspeed="+this.newSpeed);
 		
 		if((this.centerVecCap!=1 || this.directionVecCap != 1)){
 			morphAxisScale(	centerVecCap, 
@@ -510,11 +510,21 @@ public class Orbit extends Motion
 	
 	
 	public void morphSpeed(float newSpeed,float dynamicMorphSpeed){
+
+		//CAP
+		float tempMaxSpeedLimit = Config.UNIVERSE_SPEED_LIMIT*Config.ORBIT_TEMP_MAXSPEED_FAC;
+		if(newSpeed>tempMaxSpeedLimit)
+			newSpeed = tempMaxSpeedLimit;
+		if(newSpeed<=0)
+			newSpeed = Config.ORBIT_MIN_SPEED;
+		
 		//speedmorphing parameters
 		this.newSpeed = newSpeed;
 		this.dynamicMorphSpeed = dynamicMorphSpeed;
 		this.speedMorphStep = (this.newSpeed-this.speed)/100;
 		this.speedMorphDifference = Math.abs(newSpeed - speed);
+		
+		
 	}
 	
 	/* (non-Javadoc)
