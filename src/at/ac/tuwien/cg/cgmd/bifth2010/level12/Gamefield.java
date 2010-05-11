@@ -5,11 +5,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Gamefield {
 	private Field[] mFields = null;
-	private Field[] mLastFields = null;
 	private int mXSegCount = -1;
 	private int mYSegCount = -1;
 	private float mSegLength = 1;
-	private float mLastFieldLength = 5.0f;
 	private float[] mSegCol1  = {1.0f, 1.0f, 1.0f };
 	private float[] mSegCol2  = {1.0f, 1.0f, 1.0f };
 	
@@ -31,39 +29,29 @@ public class Gamefield {
 					f.setColor(mSegCol1[0], mSegCol1[1], mSegCol1[2], 0);
 					f.initVBOs();
 					fieldone = false;
+					if( x*mSegLength > mXSegCount * mSegLength * 0.6 ) f.setOccupied(true);
 				}
 				else{
 					f = new Field( x*mSegLength, y*mSegLength, (x+1)*mSegLength, (y+1)*mSegLength );
 					f.setColor(mSegCol2[0], mSegCol2[1], mSegCol2[2], 1);
 					f.initVBOs();
 					fieldone = true;
+					if( x*mSegLength > mXSegCount * mSegLength * 0.6 ) f.setOccupied(true);
 				}
 				mFields[fieldcounter] = f;
 				fieldcounter++;
 			}
 		}
-		
-		//Abgrenzungsfelder
-		mLastFields = new Field[ mXSegCount ];
-		for( int i = 0; i < mLastFields.length; i++){
-			mLastFields[i] = new Field( mXSegCount * mSegLength, i * mSegLength, (mXSegCount * mSegLength + mLastFieldLength), (i+1)*mSegLength );
-			mLastFields[i].setColor( 1.0f, 1.0f, 0.0f, 3);
-			mLastFields[i].setOccupied(true);
-		}
 	}
 	
 	public void onResume(){
 		for( int i = 0; i < mFields.length; i++) mFields[i].initVBOs();
-		for( int i = 0; i < mLastFields.length; i++) mLastFields[i].initVBOs();
 	}
 	
 	
 	public void draw( GL10 gl){
 		for( int i = 0; i < mFields.length; i++){
 			mFields[i].draw(gl);
-		}
-		for( int i = 0; i < mLastFields.length; i++ ){
-			mLastFields[i].draw(gl);
 		}
 	}
 
@@ -88,6 +76,7 @@ public class Gamefield {
 
 	public boolean getOccupied(float xpos, float ypos) {
 		int f = getFieldCount( xpos, ypos );
+		if( f >= mFields.length) return true;
 		return mFields[ f ].getOccupied();
 	}
 	
