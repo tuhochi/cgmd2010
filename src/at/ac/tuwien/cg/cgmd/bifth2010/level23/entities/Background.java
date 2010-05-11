@@ -3,7 +3,6 @@ import static android.opengl.GLES10.GL_FLOAT;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.GL_TEXTURE;
 import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
-import static android.opengl.GLES10.glBindTexture;
 import static android.opengl.GLES10.glDrawArrays;
 import static android.opengl.GLES10.glMatrixMode;
 import static android.opengl.GLES10.glPopMatrix;
@@ -37,9 +36,7 @@ public class Background implements SceneEntity
 
 	private static final long serialVersionUID = -8706705496517584380L;
 	private FloatBuffer vertexBuffer;
-	private int textureID;
 	private TexturePart texture;
-	private final float[] texCoords = {0.f, 0.5f, 1.f, 0.5f, 0.f, 0.f, 1.f, 0.f}; 
 	private float scrollSpeed = 0.01f;
 	private float positionY;
 	private boolean gameOver = false; 
@@ -102,16 +99,7 @@ public class Background implements SceneEntity
 		}
 		
 	}
-	
-	/**
-	 * Sets the unique texture id 
-	 * @param texID texture id 
-	 */
-	public void setTextureID(int texID)
-	{
-		textureID = texID;
-	}
-	
+		
 	/**
 	 * Updates the vertical position, depending on time 
 	 * @param dt time elapsed
