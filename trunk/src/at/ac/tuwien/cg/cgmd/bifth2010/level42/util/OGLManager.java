@@ -78,7 +78,7 @@ public class OGLManager
 	{
 		modelview = new Matrix44();
 		projection = new Matrix44();
-		viewport = new int[4];
+		viewport = new int[]{0,0,1,1};	// dummy viewport
 		
 		window = new float[3];
 		unprojectedPos = new float[4];

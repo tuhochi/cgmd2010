@@ -317,6 +317,8 @@ public class SceneLoader
 			Log.i(LevelActivity.TAG, "Successfully read Scene '" + filename + "' in " + duration + " ms");
 		}
 		
+		scene.update();
+		
 		return scene;
 	}
 	
