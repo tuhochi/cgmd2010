@@ -10,13 +10,14 @@
  />
  
 <TableLayout
-android:id="@+id/l33_TableLayout" 
+android:id="@+id/l33_TableLayoutTop" 
 android:layout_width="fill_parent"
-android:layout_height="fill_parent"
+android:layout_height="wrap_content"
 android:layout_marginTop="3pt" 
 android:layout_marginLeft="3pt"
 android:layout_marginRight="3pt"
 android:stretchColumns="1"
+
 >
 
  
@@ -45,7 +46,7 @@ android:stretchColumns="1"
             android:padding="3dip"
             android:background="@layout/l33_background_round"
             
-            
+            android:layout_below="@id/l33_TableLayout"
                 />
                  -->
         <TextView 
@@ -80,25 +81,42 @@ android:stretchColumns="1"
 	 <TextView 
 		 android:layout_above="@+id/l33_openglview" 
 		 android:text="fps:" 
-		 android:id="@+id/l33_level_fps" 
+		 android:id="@+id/l33_level_fps"
+		 android:layout_marginTop="3pt"  
 		 >
 	 </TextView> 
 </TableRow>
 
+</TableLayout>
+
+
+<TableLayout
+android:id="@+id/l33_TableLayoutMiddle" 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginLeft="3pt"
+android:layout_marginRight="3pt"
+android:layout_marginBottom="3pt"
+android:layout_below="@id/l33_TableLayoutTop"
+android:stretchColumns="1"
+>
+
 <TableRow>
+	
 	 <TextView 
-		 android:layout_above="@+id/l33_openglview" 
 		 android:text="Items:" 
 		 android:id="@+id/l33_goodies_Count"
 		 android:layout_width="wrap_content"
 		 android:layout_height="wrap_content"
 		 android:background="@layout/l33_background_round"
-		 android:padding="3dip" 
+		 android:padding="3dip"
+		 
 		 >
 	 </TextView> 
 </TableRow>
 
 <TableRow>
+
 	 <TextView 
 		 android:layout_above="@+id/l33_openglview" 
 		 android:text="Map:"
@@ -111,6 +129,24 @@ android:stretchColumns="1"
 		 >
 	 </TextView> 
 </TableRow>
+
+</TableLayout>
+
+
+
+
+<TableLayout
+android:id="@+id/l33_TableLayoutBottom" 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginLeft="3pt"
+android:layout_marginRight="3pt"
+android:layout_marginBottom="3pt"
+android:layout_alignParentBottom="true"
+android:stretchColumns="1"
+
+
+>
 
 <TableRow>
 	 <ImageButton
@@ -128,7 +164,9 @@ android:stretchColumns="1"
              />
 </TableRow>
 
+
 </TableLayout>
+
 
 
 <!-- and now a fullscreen ImageView android:background="@drawable/l00_red"  -->
