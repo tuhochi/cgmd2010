@@ -41,7 +41,6 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	
 	public static boolean IS_MUSIC_ON = false;
 	private GLSurfaceView openglview;
-	private MediaPlayer mAudioPlayer = null;
 	public static SoundHandler soundHandler = null;
 	public static ProgressHandler progressHandler = null;
 	public static Vibrator vibrator;
@@ -144,7 +143,7 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	@Override
 	protected void onPause() {
 		Log.d("_","onPause");
-//		soundHandler.releaseLevelAudioPlayer();
+		soundHandler.pauseLevelAudioPlayer();
 //		openglview.onPause();
 		super.onPause();
 	}
@@ -154,6 +153,8 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		Log.d("_","onResume");
 		super.onResume();
 		//openglview.onResume();
+		if(IS_MUSIC_ON)
+        	soundHandler.resumeLevelAudioPlayer();
 	}
 	
 	@Override
@@ -175,10 +176,8 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	@Override
 	public void finish() {
 		Log.d("_","finish");
-		//next line is for testing only
-		//progman.addPoints(20);
-		//progman.setProgress(Math.min(Math.max(progman.getPoints(), 0), 100));
-		//setResult(Activity.RESULT_OK, progman.asIntent());
+		progressHandler.setProgress(progressHandler.getActualllyProgress());
+		setResult(Activity.RESULT_OK, progressHandler.asIntent());
 		super.finish();
 	}
 	

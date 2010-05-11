@@ -142,20 +142,6 @@ public class SoundHandler {
 		//Release the SoundPool
 		soundPool.release();
 		
-		//Check if other players are not released
-		/*
-		if(activityAudioPlayer1 != null)
-		{
-			if(activityAudioPlayer1.isPlaying())
-				activityAudioPlayer1.stop();
-		}
-		if(activityAudioPlayer2 != null)
-		{
-			if(activityAudioPlayer2.isPlaying())
-				activityAudioPlayer2.stop();
-		}
-		releaseActivityAudioPlayer();
-		*/
 	}
 	
 	/**
@@ -170,94 +156,22 @@ public class SoundHandler {
 	}
 	
 	/**
-	 * Creates an Audio-Player and plays the current sound-activity
+	 * Pauses the Audio-Player which plays the level-music.
 	 */
-	/*
-	public void playActivitySound(int soundIndex) {
-			
+	public void pauseLevelAudioPlayer() {
 		
+		if(levelAudioPlayer != null && levelAudioPlayer.isPlaying())
+			levelAudioPlayer.pause();
 		
-		if(activityAudioPlayer1==null)
-		{
-			initActivityPlayer(1, soundIndex);
-			activityAudioPlayer1.start();
-		} else
-		if(activityAudioPlayer2==null)
-		{
-			initActivityPlayer(2, soundIndex);
-			activityAudioPlayer2.start();
-		}
-		
-		releaseActivityAudioPlayer();
 	}
-	*/
-	/**
-	 * Inits an free player 
-	 */
-	
-//	private void initActivityPlayer(int actPlayer, int soundIndex) {
-//		
-//		if(actPlayer==1)
-//		{
-//			activityAudioPlayer1 = MediaPlayer.create(context, soundIndex);
-//			/*activityAudioPlayer1.setOnErrorListener(new OnErrorListener(){
-//
-//				@Override
-//				public boolean onError(MediaPlayer mp, int what, int extra) {
-//					//on any error we create a new media player
-//					activityAudioPlayer1.release();
-//					activityAudioPlayer1 = MediaPlayer.create(context, soundIndex);
-//					activityAudioPlayer1.setOnErrorListener(this);
-//					return true;
-//				}
-//	        });
-//			*/
-//			activityAudioPlayer1.setLooping(false);
-//			
-//		}
-//		else
-//		{
-//			activityAudioPlayer2 = MediaPlayer.create(context, soundIndex);
-//			/*activityAudioPlayer2.setOnErrorListener(new OnErrorListener(){
-//				
-//				
-//				@Override
-//				public boolean onError(MediaPlayer mp, int what, int extra) {
-//					//on any error we create a new media player
-//					activityAudioPlayer2.release();
-//					activityAudioPlayer2 = MediaPlayer.create(context, soundIndex);
-//					activityAudioPlayer2.setOnErrorListener(this);
-//					return true;
-//				}
-//	        });
-//	        */
-//			activityAudioPlayer2.setLooping(false);
-//		}
-//	}
-	
-	
 	
 	/**
-	 * Releases the activityAudioPlayer
+	 * Resumes the Audio-Player which plays the level-music.
 	 */
-	/*
-	public void releaseActivityAudioPlayer() {
+	public void resumeLevelAudioPlayer() {
 		
-		//Release Player if it`s not playing
-		if(activityAudioPlayer1!=null){
-			//??? wenn audioFile zu ende, ist der status noch immer auf playing?
-			if(!activityAudioPlayer1.isPlaying()){
-				activityAudioPlayer1.release();
-				activityAudioPlayer1=null;
-			}
-		}
-		if(activityAudioPlayer2!=null){
-			//??? wenn audioFile zu ende, ist der status noch immer auf playing?
-			if(!activityAudioPlayer2.isPlaying()){
-				activityAudioPlayer2.release();
-				activityAudioPlayer2=null;
-			}
-		}
+		if(levelAudioPlayer != null && !levelAudioPlayer.isPlaying())
+			levelAudioPlayer.start();
 		
-	}*/
+	}
 }

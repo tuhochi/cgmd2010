@@ -177,7 +177,7 @@ public class SceneGraph  {
 		if (deltaTimeCount >= 1) {
 
 			timeInSeconds++;
-			framesSinceLastSecound = 0;
+			
 			deltaTimeCount = 0f;
 			secoundCount++;
 			gameTimeInSeconds--;
@@ -201,11 +201,10 @@ public class SceneGraph  {
 					text_LevelTime = minutes+" min 0"+seconds+" sec";
 				else
 					text_LevelTime = minutes+" min "+seconds+" sec";
-				
-				//TESTEN
-				
+							
 				tvLevelTime.setText(text_LevelTime);
 			}});
+			framesSinceLastSecound = 0;
 		}
 		
 		
