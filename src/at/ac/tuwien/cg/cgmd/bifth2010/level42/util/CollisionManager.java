@@ -91,11 +91,11 @@ public class CollisionManager {
 		this.minDistance = 0;
 		
 		this.aimingList = new Vector<Movable>();
-		this.comperator = new NearestEntityComperator();
+		comperator = new NearestEntityComperator();
 		
 		this.motionManager = MotionManager.instance;
 		
-		this.instance = this;
+		instance = this;
 		
 		for(int i=0;i<entityList.size();i++)
 		{
@@ -103,8 +103,11 @@ public class CollisionManager {
 				aimingList.addAll(entityList.get(i).models);
 				//init gamemanager with the count of planet parts
 				gameManager = new GameManager(aimingList.size());
+				break;
 			}
 		}
+
+		initAimingList();
 	}
 	
 	public void initAimingList()
@@ -349,8 +352,8 @@ public class CollisionManager {
 	
 	public Movable getNearestToCenterEntity()
 	{
-//		for(int i=0;i<aimingList.size();i++)
-//			Log.d(LevelActivity.TAG,"AUTOAIM: i+ " length = "+aimingList.get(i).getBoundingSphereWorld().center.length());
+		for(int i=0;i<aimingList.size();i++)
+			Log.d(LevelActivity.TAG,"AUTOAIM: i=" + i + " length=" + aimingList.get(i).getBoundingSphereWorld().center.length());
 		
 		if(aimingList.size()>0)		
 			return aimingList.get(0);

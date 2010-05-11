@@ -176,9 +176,12 @@ public class HUD
 		aspect = width/height;
 		circleRender = circleActive;
 		
-		float scale = ((float)Math.min(timeManager.getTimeOfLastFrame()-circleStartMillis,Config.MAX_LONG_PRESS_TIME))/1000.0f;
-		circleTransformation.setScale(scale,scale,scale);
-		circleTransformation.addTranslate(circleCenter.x, circleCenter.y, 0);
+		if(circleRender)
+		{
+			float scale = ((float)Math.min(timeManager.getTimeOfLastFrame()-circleStartMillis,Config.MAX_LONG_PRESS_TIME))/1000.0f;
+			circleTransformation.setScale(scale,scale,scale);
+			circleTransformation.addTranslate(circleCenter.x, circleCenter.y, 0);
+		}
 	}
 	
 	
