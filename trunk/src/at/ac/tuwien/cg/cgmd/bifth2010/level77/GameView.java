@@ -53,10 +53,13 @@ public class GameView extends GLSurfaceView
 		//audio.playSound(Audio.BUNNY_BLOCK_THEME);
 		audio.playSound(Audio.BLOCK_EXPLODE_SOUND_1);
 
-
 		jni = new Native(context, audio, gameEnded, updateScore);
 		
-		setRenderer(new L77Renderer(true, context));
+		// native depends on renderer vars initialised
+		setRenderer(new L77Renderer(true, context, jni));
+
+		
+		
 	}
 	
 
