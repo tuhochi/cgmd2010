@@ -53,12 +53,12 @@ public class CollisionManager {
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
 	
-	private final Vector<Model> remainingPlanetParts;
+	public final Vector<Model> remainingPlanetParts;
 	
 	public static CollisionManager instance;
 	public static NearestEntityComperator comperator;
 	
-	private GameManager gameManager;
+	public GameManager gameManager;
 	private MotionManager motionManager;
 	
 	
@@ -102,14 +102,14 @@ public class CollisionManager {
 		{
 			if(entityList.get(i).getName().equals(Config.PLANET_NAME)){
 				remainingPlanetParts.addAll(entityList.get(i).models);
-				//init gamemanager with the count of planet parts
-				gameManager = new GameManager(remainingPlanetParts.size());
 				break;
 			}
 		}
 		Collections.sort(remainingPlanetParts, comperator);
 		getNearestToCenterEntity();
 	}
+	
+	
 	
 	/**
 	 * Shoot a ray through the scene and detect nearest intersection with the 
