@@ -1,11 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 
-import static android.opengl.GLES10.glTranslatef;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 public class Cloud 
 {
