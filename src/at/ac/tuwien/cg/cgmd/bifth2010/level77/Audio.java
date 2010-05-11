@@ -48,6 +48,10 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	private static java.util.Map<MediaPlayer, Boolean> mpBlocked = new HashMap<MediaPlayer, Boolean>();
 
 	
+	/**
+	 * ctor - loads game sounds using android MediaPlayer
+	 * @param context
+	 */
 	public Audio (Context context)
 	{
 		this.context = context;
@@ -62,19 +66,32 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 		putMp(BLOCK_SWAPPED_SOUND);
 	}
 	
-	private static void StaticAudioTest()
-	{
-		Log.d("l77native", "static callback!");
-	}
-	
-	public void AudioTest()
+	/**
+	 * JNI Callback from the native code - plays sound from java
+	 * @param sound_id
+	 */
+	public void playCallback(int sound_jni_id)
 	{
 		Log.d("l77native", "non-static callback!");
-		//putMp(BLOCK_DROPPED_SOUND);
-		//Log.d( "l77native", String.format("solve sound value %d %x", BLOCK_SOLVE_SOUND, test_var) );
-		playSound(Audio.BLOCK_EXPLODE_SOUND_1);
+		
+		switch (sound_jni_id)
+		{
+		case 1:
+			playSound(Audio.BLOCK_EXPLODE_SOUND_1);
+			break;
+		default:
+			playSound(Audio.BLOCK_SWAPPED_SOUND);
+		}
 	}
 	
+	public void voidTest()
+	{
+		Log.d("l77native", "--jne debug callback, voidTest()--");
+	}
+	
+	/**
+	 * Registers audio callback with jni
+	 */
 	public void registerNativeCall()
 	{
 		nativeRegisterAudio();

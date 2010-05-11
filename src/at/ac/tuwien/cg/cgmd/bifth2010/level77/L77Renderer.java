@@ -21,52 +21,49 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 
-public class L77Renderer implements Renderer {
-
-    
-	// c++ inteface/adaptors
-	private static native void nativeInit();
-	private static native void nativeInitClasses();    
-    private static native void nativeDone();
-    private static native void nativeRender();
-    private static native void nativeResize(int w, int h);
-    //debug
-    private static native int nativeNumDrawn();
-
+/**
+ * @author mike_vasiljevs
+ * Instance of renderer for Level77
+ */
+public class L77Renderer implements Renderer 
+{
     private boolean mTranslucentBackground;
     private Context mContext;
-    private Images mImages;
+    private Native jni;
 
-    public L77Renderer(boolean useTranslucentBackground, Context aContext) {
+    /**
+     * constructor for Level 77 Renderer
+     * @param useTranslucentBackground
+     * @param aContext
+     */
+    public L77Renderer(boolean useTranslucentBackground, Context aContext, Native native_jni) {
         mTranslucentBackground = useTranslucentBackground;
         mContext = aContext;
-        mImages = new Images(mContext);
+        jni = native_jni;
     }
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-       nativeRender();
+       jni.render();
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		nativeResize(width, height);
-		Log.i("renderer", "surface changed/resized");
+		jni.resizeView(width, height);
+		Log.i( "l77renderer", String.format("surface resized to %dx%d", width, height) );
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {	
- 		nativeInit();
- 		
- 		mImages.loadImages();
- 		
- 		nativeInitClasses();
  		Log.i("renderer", "initiliased");
+        //init first part of jni stuff
+        jni.init();
+ 		jni.init2();
 	}
 	
 	public void finalize()
 	{
-		nativeDone();
+		jni.deInit();
 	}
 
 }

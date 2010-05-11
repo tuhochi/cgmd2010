@@ -16,6 +16,19 @@ public class Native
 	public native void nativeTouchesBegan(int [] touches);
 	public native void nativeTouchesMoved(int [] touches);
 	public native void nativeTouchesEnded(int [] touches);
+	
+	//drawing moved from render
+	private static native void nativeInit();
+	private static native void nativeInitClasses();
+
+	// rendering 
+    private static native void nativeDone();
+    private static native void nativeRender();
+    private static native void nativeResize(int w, int h);
+    //debug
+    private static native int nativeNumDrawn();
+	
+	public native void nativeRegisterCallbacks(Audio a, Images i);
 
 	private static final int BLOCK_DROPPED_SOUND = 0;
 	private static final int BLOCK_SWAPPED_SOUND = 1;
@@ -26,6 +39,7 @@ public class Native
 	private static final int BLOCK_SOLVE_SOUND = 6;
 	
 	private Audio audio;
+	private Images images;
 	private Context context;
 	private Callback<Integer> callbackGameEnded;
 	private Callback<Integer> callbackUpdateScore;
@@ -43,10 +57,42 @@ public class Native
 		this.context = context;
 		this.callbackGameEnded = gameEnded;
 		this.callbackUpdateScore = updateScore;
-		
-		
+		this.images = new Images(this.context);
+	
+	}
+	
+	/* NOTE!! must be run after(!) renderer creates a context */
+	public void init()
+	{	
+ 		nativeInit();
+
 		//Audio.AudioTest();
-		audio.registerNativeCall();
+		nativeRegisterCallbacks(this.audio, this.images);
+	}
+	
+	/* second step of init */
+	public void init2()
+	{
+		//TODO replace with callbacks! 
+ 		this.images.loadImages();
+ 		
+ 		nativeInitClasses();
+	}
+	
+	/* call native render methods */
+	public void render()
+	{
+		nativeRender();	
+	}
+	
+	public void deInit()
+	{
+		nativeDone();
+	}
+	
+	public void resizeView(int w, int h)
+	{
+		nativeResize(w, h);
 	}
 	
 	/**
