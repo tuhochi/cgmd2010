@@ -87,32 +87,37 @@ public class MotionManager {
 		
 		//check for a change to directional motion
 		if(pushVec.length()>= Config.MIN_STRENGTH_FOR_DIRECTIONAL){
-	
+				
+			//determine aiming center
+			Movable aimEntity = CollisionManager.instance.getNearestToCenterEntity();
+			Vector3 aimCenter = null;
+			
+			if(aimEntity!=null)
+				aimCenter = aimEntity.getBoundingSphereWorld().center;
+			else
+				aimCenter = Config.UNIVERSE_CENTER;
+			
+			tempForceDirectionVec.set(aimCenter);
+			tempForceDirectionVec.subtract(entity.getCurrentPosition());		
+			
+			Log.d(LevelActivity.TAG,"SELECTION push force="+pushVec.length());
+			
 			if(motion instanceof DirectionalMotion){
-				//TODO change direction
-			}else{
-				//determine aiming center
-				Movable aimEntity = CollisionManager.instance.getNearestToCenterEntity();
-				Vector3 aimCenter = null;
-				
-				if(aimEntity!=null)
-					aimCenter = aimEntity.getBoundingSphereWorld().center;
-				else
-					aimCenter = Config.UNIVERSE_CENTER;
-				
-				tempForceDirectionVec.set(aimCenter);
-				tempForceDirectionVec.subtract(entity.getCurrentPosition());		
-				
-				Log.d(LevelActivity.TAG,"SELECTION push force="+pushVec.length());
-				
-				DirectionalMotion dirMotion =  
-					new DirectionalMotion(	entity.getCurrentPosition(),
+				DirectionalMotion dirMotion = (DirectionalMotion)motion;
+				dirMotion.reconfigMotion(	entity.getCurrentPosition(),
 											tempForceDirectionVec,
 											pushVec.length()*Config.SELECTION_FORCE_FACTOR,
 											motion.getBasicOrientation());
+			}else{
+				DirectionalSatelliteMotion dirMotion =  
+					new DirectionalSatelliteMotion(	entity.getCurrentPosition(),
+													tempForceDirectionVec,
+													pushVec.length()*Config.SELECTION_FORCE_FACTOR,
+													motion.getBasicOrientation());
 				//exchange motion
 				setMotion(dirMotion, entity);
 			}
+			
 		}else{
 			motion.morph(pushVec);
 		}
@@ -162,7 +167,7 @@ public class MotionManager {
 	{
 		Motion motion = entity.getMotion();
 		
-		if(motion instanceof DirectionalMotion){
+		if(motion instanceof DirectionalSatelliteMotion){
 			if(entity.getCurrentPosition().length()>Config.UNIVERSE_CENTERLENGTH_LIMIT){
 				//change to orbit motion
 				//Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());

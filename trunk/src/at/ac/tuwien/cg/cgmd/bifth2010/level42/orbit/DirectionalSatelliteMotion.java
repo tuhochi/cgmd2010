@@ -14,9 +14,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
  * @author Alex Druml
  * @author Lukas Roessler
  */
-public class DirectionalPlanetMotion extends DirectionalMotion
+public class DirectionalSatelliteMotion extends DirectionalMotion
 {
-	public DirectionalPlanetMotion(Vector3 startPos,Vector3 directionVec,float speed,Matrix44 basicOrientation)
+	public DirectionalSatelliteMotion(Vector3 startPos,Vector3 directionVec,float speed,Matrix44 basicOrientation)
 	{
 		super(startPos,directionVec,speed,basicOrientation);
 	}
