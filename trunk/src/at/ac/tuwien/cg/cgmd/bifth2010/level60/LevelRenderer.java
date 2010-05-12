@@ -24,10 +24,16 @@ public class LevelRenderer implements Renderer {
 	private textureManager manager;
 	private Tablet bunny;
 	private Tablet cop;
-//	private Tablet gold;
-	private Tablet gold_0;
-	private Tablet gold_00;
-	private Tablet gold_000;
+	private Tablet gold;
+	private int gold_000;
+	private int gold_00;
+	private int gold_0;
+	private float goldOffsetX;
+	private float goldOffsetY;
+//	private Tablet gold_000;
+//	private Tablet gold_00;
+//	private Tablet gold_0;
+	
 	private float posX;
 	private float posY;
 	private float mapOffset_x;
@@ -223,8 +229,13 @@ public class LevelRenderer implements Renderer {
 		moveCop(dx*COP_MOVEMENT_UNIT, dy*COP_MOVEMENT_UNIT);
 		
 		//check if cop catches bunny
-		if (d_len < 5)
+//		if (d_len < 5)
 			//bunnyWasCaught();
+	}
+	
+	private void drawDigit(GL10 gl, int position, int offset) {
+		manager.getGameObject(goldLUT.get(position)).setXY(offset+goldOffsetX,screenHeight-30+goldOffsetY);		
+		manager.getGameObject(goldLUT.get(position)).draw(gl);
 	}
 	
 	@Override
@@ -260,11 +271,21 @@ public class LevelRenderer implements Renderer {
 		bunny.draw(gl);
 		
 		//write score
-		gold_000.draw(gl);
-		gold_00.draw(gl);
-		gold_0.draw(gl);
-	//	gold.draw(gl);
-
+		gold.draw(gl);
+		int offset = 0;
+		for (int i = 1; i<4; i++) {
+			switch (i) {
+				case 1:
+					offset = 20;
+					drawDigit(gl,gold_000, offset);
+				case 2:
+					offset = 30;
+					drawDigit(gl,gold_00, offset);
+				case 3:;
+					offset = 40;
+					drawDigit(gl,gold_0, offset);
+			}
+		}
 	}
 
 	@Override
@@ -274,10 +295,7 @@ public class LevelRenderer implements Renderer {
 		
 		bunny.setXY(100, 20);
 		cop.setXY(20, 60);
-//		gold.setXY(0, screenHeight-30);
-		gold_0.setXY(50,screenHeight-30);
-		gold_00.setXY(35,screenHeight-30);
-		gold_000.setXY(20,screenHeight-30);
+		gold.setXY(5, screenHeight-30);
 		
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -307,10 +325,11 @@ public class LevelRenderer implements Renderer {
 		this.manager = new textureManager(context, gl);
 		bunny = manager.getGameObject("bunny");
 		cop = manager.getGameObject("cop");
-		gold_000 = manager.getGameObject(goldLUT.get(1));
-		gold_00 = manager.getGameObject(goldLUT.get(0));
-		gold_0 = manager.getGameObject(goldLUT.get(2));
-//		gold = manager.getGameObject("gold");
+		
+		gold = manager.getGameObject("gold");
+		gold_000 = 1;
+		gold_00 = 0;
+		gold_0 = 0;
 		
 		if(mSavedInstance != null)
 		{
@@ -353,16 +372,15 @@ public class LevelRenderer implements Renderer {
 		int ten = (int)Math.floor((score-(hundred*100))/10);
 		int one = (int)Math.floor((score-(hundred*100)-(ten*10)));
 		
-		gold_000 = manager.getGameObject(goldLUT.get(hundred));
-		gold_00 = manager.getGameObject(goldLUT.get(ten));
-		gold_0 = manager.getGameObject(goldLUT.get(one));
+		gold_000 = hundred;
+		gold_00 = ten;
+		gold_0 = one;
 
 	}
 	
 	private void moveScore(float x, float y) {
-		gold_000.move(x, y);
-		gold_00.move(x, y);
-		gold_0.move(x, y);
-//		gold.move(x, y);
+		gold.move(x, y);
+		goldOffsetX += x;
+		goldOffsetY += y;
 	}
 }
