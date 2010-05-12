@@ -87,7 +87,8 @@ public class LevelActivity extends Activity{
         LinearLayout l = new LinearLayout( this );
         l.setLayoutParams( new LayoutParams( LayoutParams.FILL_PARENT,   LayoutParams.FILL_PARENT));
         l.setOrientation(LinearLayout.VERTICAL);
-        l.addView( GameUI.getSingleton( this, menuheight, mDisplay.getWidth() ) );
+        GameUI.createSingleton( this, menuheight, mDisplay.getWidth() );
+        l.addView( GameUI.getSingleton() );
         l.addView( glview );
         
         setContentView( l );
