@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,12 +14,14 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
@@ -47,14 +47,14 @@ public class LevelActivity extends Activity
 	/** The render view. */
 	private RenderView renderView;
 	
-	/** The score TextView. */
-	private TextView score;
-	
 	/** The time TextView. */
 	private TextView time;
 	
 	/** The fps TextView. */
 	private TextView fps;
+	
+	private ProgressBar scoreProgress;
+	private ProgressBar timeProgress;
 	
 	/** The handler. */
 	public final Handler handler;
@@ -96,13 +96,11 @@ public class LevelActivity extends Activity
 		
 		scoreUpdateRunnable = new Runnable()
 		{
-			NumberFormat formatter = new DecimalFormat("#0.00");
-			
 			@Override
 			public void run()
 			{
 				float scorePercent = GameManager.instance.getScorePercent();
-				score.setText(formatter.format(100-scorePercent)+"%");
+				scoreProgress.setProgress((int)Math.ceil(100-scorePercent));
 				sessionState.setProgress((int)Math.ceil(scorePercent)); 
 				setResult(Activity.RESULT_OK, sessionState.asIntent());
 			}
@@ -114,6 +112,10 @@ public class LevelActivity extends Activity
 			public void run()
 			{
 				int remainingSeconds = (int)(timeManager.getRemainingGameTime()/1000);
+				float totalSeconds = Config.GAMETIME/1000;
+				
+				timeProgress.setProgress((int)(100-(remainingSeconds*100)/(totalSeconds)));
+				
 				if(remainingSeconds <= 0)
 				{
 					time.setText("Time's up!");
@@ -160,9 +162,12 @@ public class LevelActivity extends Activity
 		
 	 	setContentView(R.layout.l42_level);
 		renderView = (RenderView)findViewById(R.id.l42_RenderView);
-		score = (TextView)findViewById(R.id.l42_scoreTextField);
+		//score = (TextView)findViewById(R.id.l42_scoreTextField);
+		scoreProgress = (ProgressBar)findViewById(R.id.l42_scoreProgressbar);
 		time = (TextView)findViewById(R.id.l42_timeTextField);
+		timeProgress = (ProgressBar)findViewById(R.id.l42_timeProgressbar);
 		fps = (TextView)findViewById(R.id.l42_fpsTextField);
+		
 
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
