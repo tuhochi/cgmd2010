@@ -197,8 +197,8 @@ public class MapCalculationThread extends Thread {
 	public int[][] getMapResult(){
 		done=true;
 		isThreadReady=false;
-		//return newArrowOrder;
-		return arrowOrder;
+		return newArrowOrder;
+		//return arrowOrder;
 	}
 	
 	

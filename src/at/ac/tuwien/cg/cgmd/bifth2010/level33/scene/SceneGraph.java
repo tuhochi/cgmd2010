@@ -103,6 +103,10 @@ public class SceneGraph  {
 	private ImageView ivFullscreenImage;
 	private ProgressBar pbProgressBar;
 	private TextView tvLevelTime;
+	private TextView tvGoodyCount;
+	private ImageView ivGoodyCountIcon;
+	private TextView tvMapTime;
+	private ImageView ivMapTimeIcon;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	
@@ -122,7 +126,8 @@ public class SceneGraph  {
 		this.ivFullscreenImage = (ImageView)activity.findViewById(R.id.l33_FullscreenImage);
 		this.pbProgressBar = (ProgressBar)activity.findViewById(R.id.l33_ProgressBar);
 		this.tvLevelTime = (TextView)activity.findViewById(R.id.l33_level_time);
-		
+		this.tvGoodyCount = (TextView)activity.findViewById(R.id.l33_goodies_Count);
+		this.tvMapTime = (TextView)activity.findViewById(R.id.l33_map_timer);
 		pbProgressBar.setMax(100);
 		
 		
@@ -181,6 +186,8 @@ public class SceneGraph  {
 			deltaTimeCount = 0f;
 			secoundCount++;
 			gameTimeInSeconds--;
+			if(LevelHandler.mapIsActiveTimer>0)
+				LevelHandler.mapIsActiveTimer--;
 			
 			activity.runOnUiThread(new Runnable() {public void run() {
 				//FPS
@@ -190,6 +197,7 @@ public class SceneGraph  {
 				//Time 
 				int minutes=gameTimeInSeconds/60;
 				int seconds=gameTimeInSeconds%60;
+				int goodyIconCount = gameTimeInSeconds%10;
 				
 				if(minutes<0 || seconds<0)
 				{
@@ -203,6 +211,63 @@ public class SceneGraph  {
 					text_LevelTime = minutes+" min "+seconds+" sec";
 							
 				tvLevelTime.setText(text_LevelTime);
+				
+				//Goodies-Count
+				String text_GoodyCount="";
+				if(goodyIconCount==9 || goodyIconCount==0)
+				{
+					if(LevelGenration.numberOfStone<10)
+						text_GoodyCount = "x 0"+LevelGenration.numberOfStone;
+					else
+						text_GoodyCount = "x "+LevelGenration.numberOfStone;
+				}
+				else if(goodyIconCount==8 || goodyIconCount==7)
+				{
+					if(LevelGenration.numberOfBarrel<10)
+						text_GoodyCount = "x 0"+LevelGenration.numberOfBarrel;
+					else
+						text_GoodyCount = "x "+LevelGenration.numberOfBarrel;
+				}
+				else if(goodyIconCount==6 || goodyIconCount==5)
+				{
+					if(LevelGenration.numberOfSpring<10)
+						text_GoodyCount = "x 0"+LevelGenration.numberOfSpring;
+					else
+						text_GoodyCount = "x "+LevelGenration.numberOfSpring;
+				}
+				else if(goodyIconCount==4 || goodyIconCount==3)
+				{
+					if(LevelGenration.numberOfTrashes<10)
+						text_GoodyCount = "x 0"+LevelGenration.numberOfTrashes;
+					else
+						text_GoodyCount = "x "+LevelGenration.numberOfTrashes;
+				}
+				else if(goodyIconCount==2 || goodyIconCount==1)
+				{
+					if(LevelGenration.numberOfMaps<10)
+						text_GoodyCount = "x 0"+LevelGenration.numberOfMaps;
+					else
+						text_GoodyCount = "x "+LevelGenration.numberOfMaps;
+				}
+				tvGoodyCount.setText(text_GoodyCount);
+				
+				//Path-Time
+				if(LevelHandler.mapIsActive)
+				{
+					String text_MapTimer;
+					
+					if(LevelHandler.mapIsActiveTimer<10)
+						text_MapTimer = " 0"+LevelHandler.mapIsActiveTimer;
+					else
+						text_MapTimer = " "+LevelHandler.mapIsActiveTimer;
+					tvMapTime.setText(text_MapTimer);
+					tvMapTime.setVisibility(TextView.VISIBLE);
+				}
+				else
+				{
+					tvMapTime.setVisibility(TextView.INVISIBLE);
+				}
+					
 			}});
 			framesSinceLastSecound = 0;
 		}
@@ -487,6 +552,49 @@ public class SceneGraph  {
 									glPushMatrix();
 									gl.glRotatef(180, 0, 1, 0);
 									geometry.render(29);	
+									glPopMatrix();
+								}
+								//Corners
+								else if(type[0]==ARROW_BOTTOM_TO_RIGHT){
+									geometry.render(31);	
+								}
+								else if(type[0]==ARROW_RIGHT_TO_TOP){
+									glPushMatrix();
+									gl.glRotatef(90, 0, 1, 0);
+									geometry.render(31);	
+									glPopMatrix();
+								}
+								else if(type[0]==ARROW_TOP_TO_LEFT){
+									glPushMatrix();
+									gl.glRotatef(180, 0, 1, 0);
+									geometry.render(31);	
+									glPopMatrix();
+								}
+								else if(type[0]==ARROW_LEFT_TO_BOTTOM){
+									glPushMatrix();
+									gl.glRotatef(270, 0, 1, 0);
+									geometry.render(31);	
+									glPopMatrix();
+								}
+								else if(type[0]==ARROW_BOTTOM_TO_LEFT){
+									geometry.render(30);	
+								}
+								else if(type[0]==ARROW_RIGHT_TO_BOTTOM){
+									glPushMatrix();
+									gl.glRotatef(90, 0, 1, 0);
+									geometry.render(30);	
+									glPopMatrix();
+								}
+								else if(type[0]==ARROW_TOP_TO_RIGHT){
+									glPushMatrix();
+									gl.glRotatef(180, 0, 1, 0);
+									geometry.render(30);	
+									glPopMatrix();
+								}
+								else if(type[0]==ARROW_LEFT_TO_TOP){
+									glPushMatrix();
+									gl.glRotatef(270, 0, 1, 0);
+									geometry.render(30);	
 									glPopMatrix();
 								}
 							
