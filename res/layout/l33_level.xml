@@ -46,7 +46,14 @@ android:stretchColumns="1"
             android:padding="3dip"
             android:background="@layout/l33_background_round"
             
-            android:layout_below="@id/l33_TableLayout"
+            <ImageView
+		android:id="@+id/l33_item_icon"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="@layout/l33_background_round"
+		android:padding="3dip" 
+		>
+	</ImageView>
                 />
                  -->
         <TextView 
@@ -92,7 +99,7 @@ android:stretchColumns="1"
 
 <TableLayout
 android:id="@+id/l33_TableLayoutMiddle" 
-android:layout_width="fill_parent"
+android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_marginLeft="3pt"
 android:layout_marginRight="3pt"
@@ -103,31 +110,52 @@ android:stretchColumns="1"
 
 <TableRow>
 	
-	 <TextView 
-		 android:text="Items:" 
+	<ImageView
+		android:id="@+id/l33_item_icon"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="@layout/l33_background_round"
+		android:padding="3dip"
+		android:layout_gravity="left" 
+		>
+	</ImageView>
+	<TextView 
+		 android:text="x 00" 
 		 android:id="@+id/l33_goodies_Count"
-		 android:layout_width="wrap_content"
-		 android:layout_height="wrap_content"
 		 android:background="@layout/l33_background_round"
 		 android:padding="3dip"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:layout_gravity="left"
 		 
 		 >
 	 </TextView> 
 </TableRow>
 
 <TableRow>
-
-	 <TextView 
+	
+	<ImageView
+		android:id="@+id/l33_map_timer_icon"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="@layout/l33_background_round"
+		android:padding="3dip"
+		android:layout_gravity="left"
+		android:visibility="invisible" 
+		>
+	</ImageView>
+	<TextView 
 		 android:layout_above="@+id/l33_openglview" 
-		 android:text="Map:"
+		 android:text="  00"
 		 android:visibility="invisible" 
 		 android:id="@+id/l33_map_timer"
 		 android:layout_width="wrap_content"
 		 android:layout_height="wrap_content"
 		 android:background="@layout/l33_background_round"
-		 android:padding="3dip" 
+		 android:padding="3dip"
+		 android:layout_gravity="left" 
 		 >
-	 </TextView> 
+	</TextView> 
 </TableRow>
 
 </TableLayout>
