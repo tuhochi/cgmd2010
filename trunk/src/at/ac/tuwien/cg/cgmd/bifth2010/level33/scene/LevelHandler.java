@@ -25,8 +25,8 @@ public class LevelHandler {
 	List<int[]> springChangeList = new Vector<int[]>();
 	public static MapCalculationThread mapCalculationThread = null;
 	boolean isFirstMap = true;
-	int mapIsActiveTimer = 0;
-	boolean mapIsActive = false;
+	public static int mapIsActiveTimer = 0;
+	public static boolean mapIsActive = false;
 	int[][] mapResult;
 	boolean isMapThreadStarted = false;
 	
@@ -98,7 +98,7 @@ public class LevelHandler {
 		updateSpringChanges();
 		
 		//check if it's necessary to rebuild the way-elements after shown way to a goody
-		if(mapIsActive && mapIsActiveTimer<SceneGraph.timeInSeconds)
+		if(mapIsActive && mapIsActiveTimer<=0)
 			reUpdateMapChanges();
 		
 		//check if map-trhead is ready or not
@@ -200,6 +200,7 @@ public class LevelHandler {
 					
 					//add to progress
 					LevelActivity.progressHandler.collectStone();
+					LevelGenration.numberOfStone--;
 				}
 				else if(value==SceneGraph.GEOMETRY_BARREL)
 				{
@@ -211,6 +212,7 @@ public class LevelHandler {
 					
 					//add to progress
 					LevelActivity.progressHandler.collectBarrel();
+					LevelGenration.numberOfBarrel--;
 				}
 				else if(value==SceneGraph.GEOMETRY_TRASH)
 				{
@@ -220,6 +222,7 @@ public class LevelHandler {
 				
 					//add to progress
 					LevelActivity.progressHandler.collectTrash();
+					LevelGenration.numberOfTrashes--;
 				}
 				else if(value==SceneGraph.GEOMETRY_SPRING)
 				{
@@ -228,6 +231,7 @@ public class LevelHandler {
 					
 					//add to progress
 					LevelActivity.progressHandler.collectSpring();
+					LevelGenration.numberOfSpring--;
 					
 					//Update GoodiesList
 					updateGoodiesList(worldIndex);
@@ -247,7 +251,8 @@ public class LevelHandler {
 				{
 					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
 					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
-				
+					
+					LevelGenration.numberOfMaps--;
 //					if(isFirstMap)
 //						isFirstMap = false;
 //					else
@@ -334,8 +339,8 @@ public class LevelHandler {
 		}
 		
 		//SetTime
-		float additionalTime = (float) (mapResult.length*0.8);
-		mapIsActiveTimer= Math.round(SceneGraph.timeInSeconds+additionalTime);
+		float additionalTime = (float) (mapResult.length*0.7);
+		mapIsActiveTimer= Math.round(additionalTime);
 		mapIsActive = true;
 		
 	}

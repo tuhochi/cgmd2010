@@ -50,11 +50,11 @@ public class LevelGenration {
 	//Verhältniss Goodies/Wege
 	double goodiesWayRatio = 0.3;
 	
-	int numberOfMaps=3;
-	int numberOfStone=20;
-	int numberOfBarrel=5;
-	int numberOfTrashes=4;
-	int numberOfSpring=4;
+	public static int numberOfMaps=3;
+	public static int numberOfStone=20;
+	public static int numberOfBarrel=5;
+	public static int numberOfTrashes=4;
+	public static int numberOfSpring=4;
 	//double percentOfWay=0.2;
 	
 	/**
@@ -725,7 +725,6 @@ public class LevelGenration {
 		}
 		return goodiesList;
 	}
-	
 	
 	/**
 	 * Print the created labyrinth
