@@ -57,6 +57,15 @@ public class DirectionalMotion extends Motion
 			this.basicOrientation.copy(basicOrientation);
 	}
 	
+	public void reconfigMotion(Vector3 startPos,Vector3 directionVec,float speed,Matrix44 basicOrientation){
+		this.directionVec.set(directionVec.normalize());
+		this.position.set(startPos);
+		this.speed = speed;
+		
+		if(basicOrientation!=null)
+			this.basicOrientation.copy(basicOrientation);
+	}
+	
 	/**
 	 * Instantiates a new directional motion.
 	 */
