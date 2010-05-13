@@ -17,7 +17,7 @@ public class Config
 	// bounding sphere stuff
 	/** determines how many degrees are between the control points of the bounding sphere. Higher value = faster rendering, but more visible edges */
 	public static int BOUNGING_SPHERE_SPACING = 30;
-	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = true;
+	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = false;
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
 	
 	/** the total level gametime in ms */
