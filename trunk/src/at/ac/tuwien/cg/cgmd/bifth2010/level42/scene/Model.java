@@ -51,8 +51,8 @@ public class Model implements Movable,Persistable
 	/** The bounding sphere in world space. */
 	private final Sphere boundingSphereWorld;
 	
-	/** A temp matrix used to calculate the boundingSphereWorld */
-	private final Matrix44 tempMatrixForBoundingSphereWorldCalculation;
+	/** The bounding sphere in scene entity space. */
+	private final Sphere boundingSphereSceneEntity;
 	
 	/** The motion. */
 	private Motion motion;
@@ -81,7 +81,7 @@ public class Model implements Movable,Persistable
 		boundingBox = new AxisAlignedBox3();
 		boundingSphere = new Sphere();
 		boundingSphereWorld = new Sphere();
-		tempMatrixForBoundingSphereWorldCalculation = new Matrix44();
+		boundingSphereSceneEntity = new Sphere();
 		initialized = false;
 		currentPos = new Vector3();
 	}
@@ -100,7 +100,7 @@ public class Model implements Movable,Persistable
 		boundingBox = new AxisAlignedBox3(other.boundingBox);
 		boundingSphere = new Sphere(other.boundingSphere);
 		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
-		tempMatrixForBoundingSphereWorldCalculation = new Matrix44();
+		boundingSphereSceneEntity = new Sphere(other.boundingSphereSceneEntity);
 		currentPos = new Vector3();
 		
 		int numGeoms = other.geometries.size();
@@ -240,11 +240,9 @@ public class Model implements Movable,Persistable
 			geometries.get(i).update();
 
 		transformation.copy(transformation_temp);
-		
-		tempMatrixForBoundingSphereWorldCalculation.copy(sceneEntityTransformation);
-		tempMatrixForBoundingSphereWorldCalculation.mult(transformation);
-		
-		tempMatrixForBoundingSphereWorldCalculation.transformSphere(boundingSphere, boundingSphereWorld);
+
+		transformation.transformSphere(boundingSphere, boundingSphereSceneEntity);
+		sceneEntityTransformation.transformSphere(boundingSphereSceneEntity, boundingSphereWorld);
 	}
 	
 	/**
@@ -265,6 +263,22 @@ public class Model implements Movable,Persistable
 		return boundingSphereWorld;
 	}
 	
+	/**
+	 * @return the boundingSphere
+	 */
+	public Sphere getBoundingSphere()
+	{
+		return boundingSphere;
+	}
+
+	/**
+	 * @return the boundingSphereSceneEntity
+	 */
+	public Sphere getBoundingSphereSceneEntity()
+	{
+		return boundingSphereSceneEntity;
+	}
+
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#getTransformation()
 	 */
@@ -292,7 +306,6 @@ public class Model implements Movable,Persistable
 		geometries.add(geometry);
 		materials.add(material);
 		boundingBox.include(geometry.getBoundingBox());
-		boundingSphere.include(geometry.getBoundingSphere());
 	}
 
 	/* (non-Javadoc)

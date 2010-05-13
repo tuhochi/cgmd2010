@@ -59,6 +59,10 @@ public class SceneEntity implements Movable,Persistable
 	/** The current position */
 	private final Vector3 currentPos;
 	
+	private final ArrayList<Sphere> modelBoundingSpheres;
+	
+	private boolean boundingspherecalced = false;
+	
 	/**
 	 * Instantiates a new scene entity.
 	 */
@@ -73,6 +77,7 @@ public class SceneEntity implements Movable,Persistable
 		boundingSphereWorld = new Sphere();
 		initialized = false;
 		currentPos = new Vector3();
+		modelBoundingSpheres = new ArrayList<Sphere>();
 	}
 	
 	/**
@@ -173,8 +178,6 @@ public class SceneEntity implements Movable,Persistable
 				models.get(i).renderBoundingSpheres(rendermode);
 		}
 
-		
-		
 		if(Config.SHOW_SCENEENTITY_BOUNDING_SPHERES)
 		{
 			Vector3 translation = boundingSphereWorld.center;
@@ -195,8 +198,12 @@ public class SceneEntity implements Movable,Persistable
 	{		
 		int numModels = models.size();
 		for(int i=0; i<numModels; i++)
+		{
+			Model m = models.get(i);
 			// Models need the SceneEntitie's transformation to transform their bounding sphere into world space
-			models.get(i).update(transformation_temp);
+			m.update(transformation_temp);
+			modelBoundingSpheres.add(m.getBoundingSphereSceneEntity());
+		}
 
 		transformation.copy(transformation_temp);
 		
@@ -213,6 +220,14 @@ public class SceneEntity implements Movable,Persistable
 		 * 	1) don't resize the SceneEntities bounding sphere (currently done)
 		 * 	2) mark the flying parts in some way, so that they're not considered when recalculating the bounding sphere.
 		 */
+		
+		//HACK - prevent the sphere from growing
+		if(!boundingspherecalced)
+		{
+			boundingSphere.setSphereSet(modelBoundingSpheres);
+			modelBoundingSpheres.clear();
+			boundingspherecalced = true;
+		}
 		transformation.transformSphere(boundingSphere, boundingSphereWorld);
 	}
 	
@@ -241,7 +256,6 @@ public class SceneEntity implements Movable,Persistable
 	{
 		models.add(model);
 		boundingBox.include(model.getBoundingBox());
-		boundingSphere.include(model.boundingSphere);
 	}
 
 	/* (non-Javadoc)

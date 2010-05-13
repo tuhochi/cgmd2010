@@ -96,6 +96,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
  * for(numModels)
  * {
  * 	modelName				String			Name of this Model (must be unique)
+ * 	boundingSphereCenter	float[3]		Center of the bounding sphere
+ * 	boundingSphereRadius	float			Radius of the bounding sphere
  * 	numGeoms				int				Number of Geometries in this Model
  * 	for(numGeoms)
  * 	{
@@ -126,7 +128,7 @@ public class SceneLoader
 {
 	
 	/** The Constant CURRENT_VERSION. */
-	private static final int CURRENT_VERSION = 5;
+	private static final int CURRENT_VERSION = 6;
 	
 	/** The Constant instance. */
 	public static final SceneLoader instance = new SceneLoader();
@@ -244,6 +246,12 @@ public class SceneLoader
 				Model m = new Model();
 				
 				m.setName(dis.readUTF());
+				
+				readFloatArray(temp3, dis);
+				Vector3 boundingSphereCenter = new Vector3(temp3);
+				float boundingSphereRadius = dis.readFloat();
+				Sphere boundingSphere = new Sphere(boundingSphereCenter, boundingSphereRadius);
+				m.getBoundingSphere().set(boundingSphere);
 				
 				int numGeoms = dis.readInt();
 				for(int j=0; j<numGeoms; j++)
