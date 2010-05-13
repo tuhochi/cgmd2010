@@ -20,6 +20,7 @@ public class Bunny {
 	public float translateX, translateY;
 	private Quad bunnyQuad;
 	private Vector2 groundYDir, groundXDir;
+	private float powerUp_remainingTime_speed;
 
 	/**
 	 * Moving possibilities of the bunny
@@ -43,22 +44,17 @@ public class Bunny {
 		translateX = 0;
 		translateY = 0;
 		moveStatus = STANDING;
+		powerUp_remainingTime_speed = 0;
 		
 		transitionTime = 0.5f;
 		transition = 0;
 		stopTransition = false;
 
-		float norm;
-        groundYDir = new Vector2(-229, -169);
-        norm = 1.0f / groundYDir.length();
-        groundYDir.mult(norm);
-        groundXDir = new Vector2(329, -131);
-        groundXDir.mult(norm);
+		groundYDir = new Vector2(-0.81f, -0.59f);
+		groundXDir = new Vector2(1.16f, -0.46f);
 
-        Vector2 xDir = new Vector2(400, 0);
-        xDir.mult(norm);
-        Vector2 yDir = new Vector2(0, -400);
-        yDir.mult(norm);
+        Vector2 xDir = new Vector2(1.41f, 0);
+        Vector2 yDir = new Vector2(0, -1.41f);
 
         Vector2 quadBase = new Vector2();
         quadBase.add(groundYDir);
@@ -67,7 +63,7 @@ public class Bunny {
         quadBase.add(xDir);
         quadBase.add(yDir);
         quadBase.mult(-0.5f);
-        quadBase.add(new Vector2(0, -80*norm));        
+        quadBase.add(new Vector2(0, -0.28f));       
 
         bunnyQuad = new Quad(quadBase, xDir, yDir);
 	}
@@ -81,7 +77,15 @@ public class Bunny {
 	 * @param elapsedSeconds time between the last update and now
 	 */
 	public void update(float elapsedSeconds) {
-		transition += elapsedSeconds;
+		if( powerUp_remainingTime_speed > 0 )
+		{
+			transition += elapsedSeconds * 1.5f;
+			powerUp_remainingTime_speed -= elapsedSeconds;
+		}
+		else
+		{
+			transition += elapsedSeconds;
+		}
 		if( transition >= transitionTime )
 		{
 			transition -= transitionTime;
@@ -137,7 +141,7 @@ public class Bunny {
 	        	int x=currentPosX, y=currentPosY, nx=0, ny=0;
 	        	
 	        	/*
-				 * Calculate shift relativ to the current position
+				 * Calculate shift relative to the current position
 				 */
 	        	if( moveStatus == MOVE_LEFT )		nx--;
 	        	else if( moveStatus == MOVE_RIGHT )	nx++;
@@ -162,7 +166,7 @@ public class Bunny {
 	
 	   				moveStatus = dirs.get(0);
 	   				/*
-	   				 * Calculate shift relativ to the current position. It has to be done again since the move direction changed
+	   				 * Calculate shift relative to the current position. It has to be done again since the move direction changed
 	   				 */
 	   				nx=ny=0;
 	   	        	if( moveStatus == MOVE_LEFT )		nx--;
@@ -178,6 +182,11 @@ public class Bunny {
 	        	if( game.map.cells[x+nx][y+ny].isStreetForBunny ) {
 	    			setPosition(x+nx, y+ny);
 	    			stopTransition = false;
+	    			
+	    			if( game.map.cells[x+nx][y+ny].type=='g' )
+	    			{
+	    				powerUp_remainingTime_speed = 10.0f;
+	    			}
 	    		}
 	        }
 		}
