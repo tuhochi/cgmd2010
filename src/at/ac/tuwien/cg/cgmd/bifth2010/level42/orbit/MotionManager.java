@@ -142,7 +142,11 @@ public class MotionManager {
 	 */
 	public Movable getMotion(Movable entity)
 	{
-		return list.get(list.indexOf(entity));
+		int index = list.indexOf(entity);
+		if(index>=0)
+			return list.get(index);
+		
+		return null;		
 	}
 	
 	

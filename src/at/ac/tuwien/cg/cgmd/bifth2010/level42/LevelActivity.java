@@ -21,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
@@ -114,7 +115,7 @@ public class LevelActivity extends Activity
 				int remainingSeconds = (int)(timeManager.getRemainingGameTime()/1000);
 				float totalSeconds = Config.GAMETIME/1000;
 				
-				timeProgress.setProgress((int)(100-(remainingSeconds*100)/(totalSeconds)));
+				timeProgress.setProgress((int)((remainingSeconds*100)/(totalSeconds)));
 				
 				if(remainingSeconds <= 0)
 				{
@@ -162,7 +163,6 @@ public class LevelActivity extends Activity
 		
 	 	setContentView(R.layout.l42_level);
 		renderView = (RenderView)findViewById(R.id.l42_RenderView);
-		//score = (TextView)findViewById(R.id.l42_scoreTextField);
 		scoreProgress = (ProgressBar)findViewById(R.id.l42_scoreProgressbar);
 		time = (TextView)findViewById(R.id.l42_timeTextField);
 		timeProgress = (ProgressBar)findViewById(R.id.l42_timeProgressbar);
@@ -255,6 +255,7 @@ public class LevelActivity extends Activity
 		
 		Scene scene = renderView.scene;
 		Camera cam = renderView.cam;
+		CollisionManager collManager = CollisionManager.instance;
 
 		try
 		{
@@ -262,6 +263,7 @@ public class LevelActivity extends Activity
 			DataOutputStream dos = new DataOutputStream(baos);
 			cam.persist(dos);
 			scene.persist(dos);
+			collManager.persist(dos);
 			dos.close();
 			baos.close();
 			byte[] state = baos.toByteArray();
@@ -292,10 +294,15 @@ public class LevelActivity extends Activity
 				
 				Scene scene = renderView.scene;
 				Camera cam = renderView.cam;
-				
+
 				MotionManager.instance.reset();
 				cam.restore(dis);
 				scene.restore(dis);
+				//apply the motion transformation
+				scene.update();
+				
+				CollisionManager collManager = new CollisionManager(scene);
+				collManager.restore(dis);
 				
 				dis.close();
 				bais.close();

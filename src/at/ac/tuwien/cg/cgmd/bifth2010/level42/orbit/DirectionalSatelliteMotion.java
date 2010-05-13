@@ -16,6 +16,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
  */
 public class DirectionalSatelliteMotion extends DirectionalMotion
 {
+	public DirectionalSatelliteMotion()
+	{
+		super();
+	}
 	public DirectionalSatelliteMotion(Vector3 startPos,Vector3 directionVec,float speed,Matrix44 basicOrientation)
 	{
 		super(startPos,directionVec,speed,basicOrientation);

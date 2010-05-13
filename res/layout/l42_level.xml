@@ -45,6 +45,7 @@
 		style="?android:attr/progressBarStyleHorizontal"
 		android:id="@+id/l42_timeProgressbar"
 		android:max="100"
+		android:progress="100"
 	    android:minWidth="50dip"
 	    android:maxWidth="50dip"
 	    android:padding="6dip"
