@@ -30,6 +30,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
  */
 public class CollisionManager implements Persistable{
 
+	private final Scene scene;
+	
 	private ArrayList<SceneEntity> entityList;
 	private SceneEntity entity,nearestEntity;
 	
@@ -71,6 +73,7 @@ public class CollisionManager implements Persistable{
 	 */
 	public CollisionManager(Scene scene)
 	{
+		this.scene = scene;
 		this.entityList = scene.sceneEntities;
 		
 		this.p = new Vector3();
@@ -247,6 +250,7 @@ public class CollisionManager implements Persistable{
 							//check for contact
 							if(collisionDetected(planetPart,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
+								
 								Motion planetPartMotion = planetPart.getMotion();
 								
 								if(planetPart.getMotion()==null)
@@ -272,6 +276,8 @@ public class CollisionManager implements Persistable{
 								
 								//delete from aiming list
 								remainingPlanetParts.remove(planetPart);
+								// schedule for untie
+								scene.unTie(planet, planetPart);
 							}
 						}
 					}
