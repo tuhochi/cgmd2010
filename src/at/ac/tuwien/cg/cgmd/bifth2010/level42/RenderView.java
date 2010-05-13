@@ -129,7 +129,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		this.context = (LevelActivity)context;
 		
-		cam = new Camera(40.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
+		cam = new Camera(13.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 		
 		synchronizer = new Synchronizer();
 		motionEvents = new LinkedList<MotionEvent>();

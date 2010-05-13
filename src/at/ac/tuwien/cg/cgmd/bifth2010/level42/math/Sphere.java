@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 import java.util.ArrayList;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Sphere.
  *
@@ -10,13 +11,20 @@ import java.util.ArrayList;
  */
 public class Sphere
 {
+	
+	/** The center. */
 	public final Vector3 center;
+	
+	/** The radius. */
 	public float radius;
 	
+	/** The temp. */
 	private final Vector3 temp;
 	
+	private final Vector3 temp2;
+	
 	/**
-	 * Instantiates a new sphere with zero radius
+	 * Instantiates a new sphere with zero radius.
 	 */
 	public Sphere()
 	{
@@ -24,7 +32,7 @@ public class Sphere
 	}
 	
 	/**
-	 * Copy constructor
+	 * Copy constructor.
 	 *
 	 * @param other the other
 	 */
@@ -55,46 +63,18 @@ public class Sphere
 		this.center = center;
 		this.radius = radius;
 		temp = new Vector3();
+		temp2 = new Vector3();
 	}
 	
 	/**
-	 * Includes a Sphere into this
+	 * copy method.
 	 *
-	 * @param boundingSphere the bounding sphere
+	 * @param other the other
 	 */
-	public void include(Sphere boundingSphere)
+	public void set(Sphere other)
 	{
-		// temp = vector between centers
-		temp.x = boundingSphere.center.x - center.x;
-		temp.y = boundingSphere.center.y - center.y;
-		temp.z = boundingSphere.center.z - center.z;
-		
-		float distanceBetweenCenters = temp.length();
-		
-
-		if(distanceBetweenCenters != 0)	// spheres have different centers
-		{
-			// radius of the resulting sphere
-			float newRadius = (distanceBetweenCenters + boundingSphere.radius + radius)/2.0f;
-			
-			// temp = radius of this sphere in direction of the two centers
-			temp.normalize();
-			temp.multiply(radius);
-			// center = point on hull of this sphere on the line containing both centers
-			center.subtract(temp);
-			
-			// temp = radius of the resulting sphere
-			temp.normalize();
-			temp.multiply(newRadius);
-			
-			// center = center of the resulting sphere
-			center.add(temp);
-			radius = newRadius;
-		}
-		else	// both spheres share the same center
-		{
-			radius = Math.max(radius, boundingSphere.radius);
-		}
+		this.center.set(other.center);
+		this.radius = other.radius;
 	}
 	
 	/**
@@ -110,7 +90,7 @@ public class Sphere
 	}
 	
 	/**
-	 * Calculates this sphere from a set of Vector3s
+	 * Calculates this sphere from a set of Vector3s.
 	 *
 	 * @param vertices the point set
 	 */
@@ -135,7 +115,48 @@ public class Sphere
 	}
 	
 	/**
-	 * Calculates a sphere with it's center at the bounding boxes center
+	 * Sets the sphere set.
+	 *
+	 * @param sphereSet the new sphere set
+	 */
+	public void setSphereSet(ArrayList<Sphere> sphereSet)
+	{
+		int size = sphereSet.size();
+		
+		if(size == 1)
+		{
+			center.set(sphereSet.get(0).center);
+			radius = sphereSet.get(0).radius;
+			return;
+		}
+		
+		temp.set(0,0,0);
+		
+		for(int i=0; i<size; i++)
+			temp.add(sphereSet.get(i).center);
+		
+		temp.divide(size);
+		
+		/*
+		 * temp holds the centroid now
+		 */
+		
+		float radius = 0;
+		
+		for(int i=0; i<size; i++)
+		{
+			Sphere s = sphereSet.get(i);
+			float r = temp2.set(s.center).subtract(temp).length() + s.radius;
+			if(r > radius)
+				radius = r;
+		}
+
+		this.radius = radius;
+		this.center.set(temp);
+	}
+	
+	/**
+	 * Calculates a sphere with it's center at the bounding boxes center.
 	 *
 	 * @param vertices the vertices
 	 * @param center the center
@@ -160,7 +181,7 @@ public class Sphere
 	}
 	
 	/**
-	 * Calculates a sphere with it's center at the vertices centroid
+	 * Calculates a sphere with it's center at the vertices centroid.
 	 *
 	 * @param vertices the vertices
 	 * @param center the center

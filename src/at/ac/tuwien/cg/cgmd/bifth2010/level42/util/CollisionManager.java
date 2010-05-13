@@ -236,42 +236,42 @@ public class CollisionManager implements Persistable{
 						//set planet entrance flag
 						satellite.getMotion().setInsidePlanet(true);
 						
-						Model planetEntity = null;
+						Model planetPart = null;
 						
 						//find out which part of the planet got hit
 						//only search in remaining planet parts
 						for(int u = 0; u < remainingPlanetParts.size(); u++)
 						{
-							planetEntity = remainingPlanetParts.get(u);
+							planetPart = remainingPlanetParts.get(u);
 									
 							//check for contact
-							if(collisionDetected(planetEntity,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
+							if(collisionDetected(planetPart,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
-								Motion planetEntityMotion = planetEntity.getMotion();
+								Motion planetPartMotion = planetPart.getMotion();
 								
-								if(planetEntity.getMotion()==null)
+								if(planetPart.getMotion()==null)
 								{
 									
-									planetPushVec.set(planetEntity.getBoundingSphereWorld().center);
+									planetPushVec.set(planetPart.getBoundingSphereWorld().center);
 									planetPushVec.subtract(planet.getBoundingSphereWorld().center);
 									
-									planetEntityMotion = new DirectionalPlanetMotion(	planetEntity.getBoundingSphereWorld().center,
+									planetPartMotion = new DirectionalPlanetMotion(	planetPart.getBoundingSphereWorld().center,
 																						planetPushVec,
 																						satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
-																						planetEntity.getBasicOrientation());
-									motionManager.addMotion(planetEntityMotion,planetEntity);
+																						planetPart.getBasicOrientation());
+									motionManager.addMotion(planetPartMotion,planetPart);
 									
 									if(satellite.getMotion().getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
 										satellite.getMotion().morph(planetPushVec);
 									
-									Log.d(LevelActivity.TAG,"PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetEntity.getMotion().getSpeed());
+									Log.d(LevelActivity.TAG,"PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetPart.getMotion().getSpeed());
 									
 									//report game manager
 									gameManager.incScore();
 								}
 								
 								//delete from aiming list
-								remainingPlanetParts.remove(planetEntity);
+								remainingPlanetParts.remove(planetPart);
 							}
 						}
 					}
