@@ -1,5 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,7 +28,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
  * @author Alex Druml
  * @author Lukas Roessler
  */
-public class CollisionManager {
+public class CollisionManager implements Persistable{
 
 	private ArrayList<SceneEntity> entityList;
 	private SceneEntity entity,nearestEntity;
@@ -106,7 +109,7 @@ public class CollisionManager {
 			}
 		}
 		Collections.sort(remainingPlanetParts, comperator);
-		getNearestToCenterEntity();
+		printRemaingingPlanetParts();
 	}
 	
 	
@@ -348,9 +351,7 @@ public class CollisionManager {
 	
 	public Movable getNearestToCenterEntity()
 	{
-//		for(int i=0;i<aimingList.size();i++)
-//			Log.d(LevelActivity.TAG,"AUTOAIM: i=" + i + " length=" + aimingList.get(i).getBoundingSphereWorld().center.length());
-		
+		printRemaingingPlanetParts();
 		if(remainingPlanetParts.size()>0)		
 			return remainingPlanetParts.get(0);
 		else 
@@ -373,5 +374,30 @@ public class CollisionManager {
 			return 1;
 		}
 		
+	}
+
+
+	@Override
+	public void persist(DataOutputStream dos) throws IOException {
+	}
+
+
+	private void printRemaingingPlanetParts()
+	{
+		Log.d(LevelActivity.TAG,"AUTOAIM ----");
+		for(int i=0;i<remainingPlanetParts.size();i++)
+			Log.d(LevelActivity.TAG,"AUTOAIM: i=" + i + " length=" + remainingPlanetParts.get(i).getBoundingSphereWorld().center.length());
+	}
+
+	@Override
+	public void restore(DataInputStream dis) throws IOException {
+		for(int u = remainingPlanetParts.size()-1; u >= 0; u--)
+		{
+			if(remainingPlanetParts.get(u).getMotion()!=null)
+				remainingPlanetParts.remove(u);
+		}
+		Collections.sort(remainingPlanetParts, comperator);
+		
+		printRemaingingPlanetParts();
 	}
 }

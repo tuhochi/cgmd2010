@@ -85,7 +85,7 @@ public class Orbit extends Motion
 	/**
 	 * Instantiates a new orbit.
 	 */
-	private Orbit()
+	public Orbit()
 	{	
 		//init
 		position = new Vector3();
@@ -539,6 +539,7 @@ public class Orbit extends Motion
 
 		//scale morphing
 		dos.writeFloat(aScalingMorphSpeed);
+		dos.writeFloat(bScalingMorphSpeed);
 		dos.writeFloat(centerDiffFactor);
 		dos.writeFloat(centerDiffStep);
 		dos.writeFloat(centerDiff);
@@ -554,6 +555,10 @@ public class Orbit extends Motion
 		dos.writeFloat(speedMorphDifference); 
 		dos.writeFloat(dynamicMorphSpeed);
 	
+		//dir vec rotation
+		dos.writeFloat(dirVecRotationDiff);
+		dos.writeFloat(dirVecRotationDiffStep);
+		
 		centerPos.persist(dos);
 		centerVec.persist(dos);
 		directionVec.persist(dos);
@@ -579,6 +584,7 @@ public class Orbit extends Motion
 
 		//scale morphing
 		aScalingMorphSpeed = dis.readFloat();
+		bScalingMorphSpeed = dis.readFloat();
 		centerDiffFactor = dis.readFloat();
 		centerDiffStep = dis.readFloat();
 		centerDiff = dis.readFloat();
@@ -593,6 +599,10 @@ public class Orbit extends Motion
 		speedMorphStep = dis.readFloat();
 		speedMorphDifference = dis.readFloat(); 
 		dynamicMorphSpeed = dis.readFloat();
+
+		//dir vec rotation
+		dirVecRotationDiff = dis.readFloat(); 
+		dirVecRotationDiffStep = dis.readFloat(); 
 		
 		centerPos.restore(dis);
 		centerVec.restore(dis);

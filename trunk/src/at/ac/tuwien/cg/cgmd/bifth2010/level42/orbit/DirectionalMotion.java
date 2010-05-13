@@ -125,6 +125,7 @@ public class DirectionalMotion extends Motion
 		this.directionVec.persist(dos);
 		this.position.persist(dos);
 		dos.writeFloat(this.speed);
+		this.basicOrientation.persist(dos);
 		
 		if(satTrans != null){
 			dos.writeBoolean(true);
@@ -143,6 +144,7 @@ public class DirectionalMotion extends Motion
 		this.directionVec.restore(dis);
 		this.position.restore(dis);
 		this.speed = dis.readFloat();
+		this.basicOrientation.restore(dis);
 		
 		if(dis.readBoolean()){
 			String className = dis.readUTF();
