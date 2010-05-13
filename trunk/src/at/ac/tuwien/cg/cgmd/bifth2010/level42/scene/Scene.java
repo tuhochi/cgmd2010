@@ -5,14 +5,17 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Pair;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 
@@ -125,6 +128,9 @@ public class Scene implements Persistable
 	/** The OpenGL Manager. */
 	private final OGLManager oglManager = OGLManager.instance;
 	
+	/** The Motion Manager */
+	private final MotionManager motionManager = MotionManager.instance;
+	
 	/** The scene entities. */
 	public final ArrayList<SceneEntity> sceneEntities;
 	
@@ -137,6 +143,11 @@ public class Scene implements Persistable
 	/** if this is initialized. */
 	private boolean initialized;
 		
+	/*
+	 * Action stuff
+	 */
+	private final LinkedList<Pair<SceneEntity,Model>> toUntie;
+	
 	/**
 	 * Instantiates a new scene.
 	 */
@@ -144,6 +155,7 @@ public class Scene implements Persistable
 	{	
 		sceneEntities = new ArrayList<SceneEntity>();
 		initialized = false;
+		toUntie = new LinkedList<Pair<SceneEntity,Model>>();
 	}
 	
 	/**
@@ -240,6 +252,27 @@ public class Scene implements Persistable
 	 */
 	public void update()
 	{
+		synchronized(toUntie)
+		{
+			if(!toUntie.isEmpty())
+			{
+				int size = toUntie.size();
+				for(int i=0; i<size; i++)
+				{
+					Pair<SceneEntity, Model> p = toUntie.poll();
+					SceneEntity s = p.getFirst();
+					Model m = p.getSecond();
+					SceneEntity new_s = new SceneEntity();
+					new_s.setName(Config.SATELLITE_PREFIX + m.getName() + "UNTIED");
+					new_s.add(m);
+					new_s.getTransformation().copy(s.getTransformation());
+					motionManager.transferMotion(m, new_s);
+					s.remove(m);
+					sceneEntities.add(new_s);
+				}
+			}
+		}
+		
 		int size = sceneEntities.size();
 		for(int i=0;i<size;i++)
 			sceneEntities.get(i).update();
@@ -277,5 +310,13 @@ public class Scene implements Persistable
 	public void setHud(HUD hud)
 	{
 		this.hud = hud;
+	}
+	
+	public void unTie(SceneEntity entity, Model model)
+	{
+		synchronized(toUntie)
+		{
+			toUntie.add(new Pair<SceneEntity, Model>(entity, model));
+		}
 	}
 }

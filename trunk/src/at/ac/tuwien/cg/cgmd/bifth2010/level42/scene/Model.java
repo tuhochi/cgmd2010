@@ -102,6 +102,7 @@ public class Model implements Movable,Persistable
 		boundingSphereWorld = new Sphere(other.boundingSphereWorld);
 		boundingSphereSceneEntity = new Sphere(other.boundingSphereSceneEntity);
 		currentPos = new Vector3();
+		name = other.name;
 		
 		int numGeoms = other.geometries.size();
 		

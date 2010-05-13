@@ -61,8 +61,6 @@ public class SceneEntity implements Movable,Persistable
 	
 	private final ArrayList<Sphere> modelBoundingSpheres;
 	
-	private boolean boundingspherecalced = false;
-	
 	/**
 	 * Instantiates a new scene entity.
 	 */
@@ -220,14 +218,9 @@ public class SceneEntity implements Movable,Persistable
 		 * 	1) don't resize the SceneEntities bounding sphere (currently done)
 		 * 	2) mark the flying parts in some way, so that they're not considered when recalculating the bounding sphere.
 		 */
-		
-		//HACK - prevent the sphere from growing
-		if(!boundingspherecalced)
-		{
-			boundingSphere.setSphereSet(modelBoundingSpheres);
-			modelBoundingSpheres.clear();
-			boundingspherecalced = true;
-		}
+
+		boundingSphere.setSphereSet(modelBoundingSpheres);
+		modelBoundingSpheres.clear();
 		transformation.transformSphere(boundingSphere, boundingSphereWorld);
 	}
 	
@@ -256,6 +249,11 @@ public class SceneEntity implements Movable,Persistable
 	{
 		models.add(model);
 		boundingBox.include(model.getBoundingBox());
+	}
+	
+	public void remove(Model model)
+	{
+		models.remove(model);
 	}
 
 	/* (non-Javadoc)
