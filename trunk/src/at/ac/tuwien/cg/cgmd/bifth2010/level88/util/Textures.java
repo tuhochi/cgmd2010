@@ -37,39 +37,17 @@ public class Textures {
 		gl = _gl;
 		resources2texIds = new HashMap<Integer,Integer>();
 		lastBound = -1;
-		
-		addTexture(R.drawable.l88_street_turn);
-		addTexture(R.drawable.l88_street_junction);
-		addTexture(R.drawable.l88_street_straight);
-		addTexture(R.drawable.l88_street_tjunction);
-		addTexture(R.drawable.l88_street_none);
-		addTexture(R.drawable.l88_street_end);
-		
-		addTexture(R.drawable.l88_house_jail);
-		addTexture(R.drawable.l88_house_block1);
-		addTexture(R.drawable.l88_house_block2);
-		addTexture(R.drawable.l88_house_block3);
-		addTexture(R.drawable.l88_house_block4);
-		addTexture(R.drawable.l88_house_block5);
-		
+
 		addTexture(R.drawable.l88_bunny);
 		addTexture(R.drawable.l88_police);
 		addTexture(R.drawable.l88_stash_red);
-		addTexture(R.drawable.l88_stash_green);
-		addTexture(R.drawable.l88_stash_blue);
 		addTexture(R.drawable.l88_stash_yellow);
 		addTexture(R.drawable.l88_stash_orange);
-		addTexture(R.drawable.l88_stash_magenta);
-		addTexture(R.drawable.l88_stash_cyan);
-		addTexture(R.drawable.l88_stash_dark);
-		addTexture(R.drawable.l88_stash_light);
 		
 		addTexture(R.drawable.l88_testtex);
-		addTexture(R.drawable.l88_greenstar);
-		addTexture(R.drawable.l88_redstar);
-		addTexture(R.drawable.l88_yellowstar);
 		
-		
+		addTexture(R.drawable.l88_atlas);
+	
 		
 		loadTextures();
 	}
@@ -117,6 +95,11 @@ public class Textures {
 			}
 
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, textureIds[i]);
+					
+			//Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
+			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+
+			gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
 			
 			//Create Nearest Filtered Texture
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
@@ -126,9 +109,7 @@ public class Textures {
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 			
-			//Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-			
+		
 			//Clean up
 			bitmap.recycle();
 		}

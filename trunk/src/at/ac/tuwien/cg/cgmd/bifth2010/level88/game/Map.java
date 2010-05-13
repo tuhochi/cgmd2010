@@ -12,6 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vertexbuffers;
 
 /**
  * The class representing the whole level
@@ -28,22 +29,12 @@ public class Map {
 		 * Constructor 
 		 */
 		public MapCell() {
-			x = y = -1;
-			groundRotation = 0;
-			groundTexture = R.drawable.l88_street_none;
-			houseTexture = -1;
 			isStreetForPolice=false;
 			isStreetForBunny=false;
 			isPolicePresent=false;
 			numStreetNeighboursPolice=0;
 			numStreetNeighboursBunny=0;
 		}
-
-		public int x, y;
-		public float translateX, translateY;
-		public int groundTexture;
-		public int houseTexture;
-		public int groundRotation; // Tex-Coords
 
 		public boolean isStreetForPolice;
 		public boolean isStreetForBunny;
@@ -56,9 +47,9 @@ public class Map {
 	private Game game;
 	public MapCell[][] cells;
 	public Vector2 groundXDir, groundYDir;
-	private Quad groundQuad;
-	public Quad houseQuad;
-
+	public Vector2 houseXDir, houseYDir, houseQuadBase;
+	public Vertexbuffers vbos;
+	public int numVertices;
 
 	/**
 	 * Constructor
@@ -69,24 +60,16 @@ public class Map {
 		game = _game;
 
 		float norm;
-		groundYDir = new Vector2(-229, -169);
-		norm = 1.0f / groundYDir.length();
-		groundYDir.mult(norm);
-		groundXDir = new Vector2(329, -131);
-		groundXDir.mult(norm);
-		groundQuad = new Quad(new Vector2(), groundXDir, groundYDir);
+		groundYDir = new Vector2(-0.81f, -0.59f);
+		groundXDir = new Vector2(1.16f, -0.46f);
 
-		Vector2 houseXDir = new Vector2(660, 0);
-		houseXDir.mult(norm);
-		Vector2 houseYDir = new Vector2(0, -538);
-		houseYDir.mult(norm);
-		Vector2 houseQuadBase = new Vector2();
+		houseXDir = new Vector2(2.23f, 0);
+		//houseYDir = new Vector2(0, -1.89f);
+		houseYDir = new Vector2(0, -2.23f);
+		houseQuadBase = new Vector2();
 		houseQuadBase.x = -groundXDir.x;
-		houseQuad = new Quad(houseQuadBase, houseXDir, houseYDir);
-
 	}
 
-	
 	/**
 	 * Update the map
 	 * @param elapsedSeconds
@@ -101,39 +84,10 @@ public class Map {
 	 * @param gl OpenGL-information to use in the context
 	 */
 	public void draw(GL10 gl) {
-		groundQuad.vbos.set(gl);
-		for(int x=0; x<cells.length; x++) {
-			for(int y=0; y<cells[0].length; y++) {
-				gl.glMatrixMode(GL10.GL_MODELVIEW);
-				gl.glPushMatrix();
-				gl.glTranslatef(cells[x][y].translateX, cells[x][y].translateY, 0);
-				gl.glMatrixMode(GL10.GL_TEXTURE);
-				gl.glPushMatrix();
-				gl.glRotatef(cells[x][y].groundRotation*90, 0, 0, 1);
 
-				game.textures.bind(cells[x][y].groundTexture);
-				gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, 4);
-
-				gl.glPopMatrix();
-				gl.glMatrixMode(GL10.GL_MODELVIEW);
-				gl.glPopMatrix();
-			}
-		}
-
-		/*houseQuad.vbos.set(gl);
-		for(int x=cells.length-1; x>=0; x--) {
-			for(int y=cells[0].length-1; y>=0; y--) {
-				if( cells[x][y].houseTexture != -1 ) {
-					gl.glPushMatrix();
-					gl.glTranslatef(cells[x][y].translateX, cells[x][y].translateY, 0);
-
-					game.textures.bind(cells[x][y].houseTexture);
-					gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, 4);
-
-					gl.glPopMatrix();
-				}
-			}
-		}*/
+		vbos.set(gl);
+		game.textures.bind(R.drawable.l88_atlas);
+		gl.glDrawArrays(GL10.GL_TRIANGLES, 0, numVertices);
 	}
 
 	
@@ -181,13 +135,10 @@ public class Map {
 		for(int x=0; x<cells.length; x++) {
 			for(int y=0; y<cells[0].length; y++) {
 				cells[x][y] = new MapCell();
-				cells[x][y].x = x;
-				cells[x][y].y = y;
-				cells[x][y].translateX = groundXDir.x*x + groundYDir.x*y;
-				cells[x][y].translateY = groundXDir.y*x + groundYDir.y*y;
 			}
 		}
 
+		int numHouses=0;
 		for(int y=0; y<values.size(); y++){
 			char[] zeichen = values.get(y).toCharArray();
 			for(int x=0; x<values.get(y).length(); x++){
@@ -195,50 +146,28 @@ public class Map {
 				switch(zeichen[x]){
 				case 'X':
 				case 'x':
-
-					int t = Math.abs((r.nextInt()%5));
-					switch(t){
-					case 0:
-						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block1;
-						break;
-					case 1:
-						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block2;
-						break;
-					case 2:
-						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block3;
-						break;
-					case 3:
-						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block4;
-						break;
-					case 4:
-						cells[x+1][values.size()-y].houseTexture = R.drawable.l88_house_block5;
-						break;
-					}
 					cells[x+1][values.size()-y].type = 'x';
+					numHouses++;
 					break;
 				case ' ':
 					//Straße
-					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '1':
-					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
 					game.addStash(x+1, values.size()-y, 1);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '2':
-					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
 					game.addStash(x+1, values.size()-y, 2);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case '3':
-					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
 					game.addStash(x+1, values.size()-y, 3);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
@@ -246,47 +175,62 @@ public class Map {
 					break;
 				case 'B':
 				case 'b':
-					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
 					game.bunny.initPosition(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
+				case 'F':
+				case 'f':
+					cells[x+1][values.size()-y].type = 'f';
+					cells[x+1][values.size()-y].isStreetForBunny = false;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
+					numHouses++;
+					break;
+				case 'T':
+				case 't':
+					cells[x+1][values.size()-y].type = 't';
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = false;
+					numHouses++;
+					break;
+				case 'G':
+				case 'g':
+					cells[x+1][values.size()-y].type = 'g';
+					cells[x+1][values.size()-y].isStreetForBunny = true;
+					cells[x+1][values.size()-y].isStreetForPolice = true;
+					numHouses++;
+					break;
 				case 'P':
 				case 'p':
-					cells[x+1][values.size()-y].groundTexture = R.drawable.l88_street_none;
 					cells[x+1][values.size()-y].type = 's';
 					game.addPolice(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					cells[x+1][values.size()-y].isPolicePresent = true;
 					break;
-
-
 				}
-
 			}//end for
 		}//end for
 
+		numVertices = (w*h + numHouses)*6;
+		Vector2[] vertices = new Vector2[numVertices];
+		Vector2[] texCoords = new Vector2[numVertices];
 
-		//Nun die Straßenorientierung anpassen
-		/*
-		 * 1 ist oben
-		 * 2 ist rechts
-		 * 4 ist unten
-		 * 8 ist links
-		 * binäres zählen
-		 */
-		int counter = 0;
+		int i=0;
+		float tx, ty, dt, mt;
+		dt = 1.0f/8.0f;
+		mt = 1.0f/512.0f;
 
-		//startend immer von eins, da wir rund um den Level ne Puffer zone bauen
-		for(int x = 1; x <cells.length-1; x++ ){
-			for(int y = 1; y < cells[x].length-1; y++){
+		for(int x=0; x<w; x++)
+		{
+			for(int y=0; y<h; y++)
+			{
+				tx = 0.0f;
+				ty = 0.0f;
 
-				//zuvor abfragen ob dieses Feld ein Straßenfeld ist
-				if(cells[x][y].type == 's'){
-					counter = 0;
-
+				if( x>0 && x<w-1 && y>0 && y<h-1 )
+				{
 					if(cells[x-1][y].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
 					if(cells[x+1][y].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
 					if(cells[x][y-1].isStreetForPolice ) cells[x][y].numStreetNeighboursPolice++;
@@ -296,7 +240,11 @@ public class Map {
 					if(cells[x+1][y].isStreetForBunny ) cells[x][y].numStreetNeighboursBunny++;
 					if(cells[x][y-1].isStreetForBunny ) cells[x][y].numStreetNeighboursBunny++;
 					if(cells[x][y+1].isStreetForBunny ) cells[x][y].numStreetNeighboursBunny++;
-					
+				}
+				
+				if( x>0 && x<w-1 && y>0 && y<h-1 && cells[x][y].type == 's'){
+					int counter = 0;
+
 					if(cells[x-1][y].type == 's'){
 						counter += 8;
 					}
@@ -309,74 +257,175 @@ public class Map {
 					if(cells[x][y+1].type == 's'){
 						counter += 1;
 					}
-
-
+					
 					//Straßenanordnung
 					switch(counter){
-					case 1:
-						cells[x][y].groundTexture = R.drawable.l88_street_end;
-						cells[x][y].groundRotation = 2;
+					case 1: // dead end
+						ty = 3.0f;
 						break;
-					case 2:
-						cells[x][y].groundTexture = R.drawable.l88_street_end;
-						cells[x][y].groundRotation = 1;
+					case 2: // dead end
+						tx = 1.0f;
 						break;
-					case 3:
-						cells[x][y].groundTexture = R.drawable.l88_street_turn;
-						cells[x][y].groundRotation = 1;
+					case 3: // turn
+						tx = 1.0f;
+						ty = 3.0f;
 						break;
-					case 4:
-						cells[x][y].groundTexture = R.drawable.l88_street_end;
-						cells[x][y].groundRotation = 0;
+					case 4: // dead end
+						ty = 1.0f;
 						break;
-					case 5:
-						cells[x][y].groundTexture = R.drawable.l88_street_straight;
-						cells[x][y].groundRotation = 0;
+					case 5: // straight
+						ty = 2.0f;
 						break;
-					case 6:
-						cells[x][y].groundTexture = R.drawable.l88_street_turn;
-						cells[x][y].groundRotation = 0;
+					case 6: // turn
+						tx = 1.0f;
+						ty = 1.0f;
 						break;
-					case 7:
-						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
-						cells[x][y].groundRotation = 0;
+					case 7: // t-junction
+						tx = 1.0f;
+						ty = 2.0f;
 						break;
-					case 8:
-						cells[x][y].groundTexture = R.drawable.l88_street_end;
-						cells[x][y].groundRotation = 3;
+					case 8: // dead end
+						tx = 3.0f;
 						break;
-					case 9:
-						cells[x][y].groundTexture = R.drawable.l88_street_turn;
-						cells[x][y].groundRotation = 2;
+					case 9: // turn
+						tx = 3.0f;
+						ty = 3.0f;
 						break;
-					case 10:
-						cells[x][y].groundTexture = R.drawable.l88_street_straight;
-						cells[x][y].groundRotation = 1;
+					case 10: // straight
+						tx = 2.0f;
 						break;
-					case 11:
-						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
-						cells[x][y].groundRotation = 1;
+					case 11: // t-junction
+						tx = 2.0f;
+						ty = 3.0f;
 						break;
-					case 12:
-						cells[x][y].groundTexture = R.drawable.l88_street_turn;
-						cells[x][y].groundRotation = 3;
+					case 12: // turn
+						tx = 3.0f;
+						ty = 1.0f;
 						break;
-					case 13:
-						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
-						cells[x][y].groundRotation = 2;
+					case 13: // t-junction
+						tx = 3.0f;
+						ty = 2.0f;
 						break;
-					case 14:
-						cells[x][y].groundTexture = R.drawable.l88_street_tjunction;
-						cells[x][y].groundRotation = 3;
+					case 14: // t-junction
+						tx = 2.0f;
+						ty = 1.0f;
 						break;
-					case 15:
-						cells[x][y].groundTexture = R.drawable.l88_street_junction;
-						cells[x][y].groundRotation = 0;
+					case 15: // junction
+						tx = ty = 2.0f;
 						break;
 
 					}//end switch
 				}
+				
+				Vector2 v1 = new Vector2(groundXDir.x*x + groundYDir.x*y, groundXDir.y*x + groundYDir.y*y);
+				Vector2 v2 = Vector2.add(v1, groundXDir);
+				Vector2 v3 = Vector2.add(Vector2.add(v1, groundXDir), groundYDir);
+				Vector2 v4 = Vector2.add(v1, groundYDir);
+				Vector2 t1 = new Vector2(tx*dt+mt,			(ty+1.0f)*dt-mt);
+				Vector2 t2 = new Vector2((tx+1.0f)*dt-mt,	(ty+1.0f)*dt-mt);
+				Vector2 t3 = new Vector2((tx+1.0f)*dt-mt,	ty*dt+mt);
+				Vector2 t4 = new Vector2(tx*dt+mt,			ty*dt+mt);
+				
+				vertices[6*i  ] = v1;
+				vertices[6*i+1] = v2;
+				vertices[6*i+2] = v3;
+				vertices[6*i+3] = v1;
+				vertices[6*i+4] = v3;
+				vertices[6*i+5] = v4;
+				
+				texCoords[6*i  ] = t1;
+				texCoords[6*i+1] = t2;
+				texCoords[6*i+2] = t3;
+				texCoords[6*i+3] = t1;
+				texCoords[6*i+4] = t3;
+				texCoords[6*i+5] = t4;
+				
+				i++;
 			}
 		}
+		
+		for(int x=cells.length-1; x>=0; x--)
+		{
+			for(int y=cells[0].length-1; y>=0; y--)
+			{
+				boolean containsHouse = true;
+				Vector2 v1, v2, v3, v4, t1, t2, t3, t4;
+				v1 = v2 = v3 = v4 = t1 = t2 = t3 = t4 = new Vector2();
+				tx = 0.0f;
+				ty = 0.0f;
+
+				v1 = new Vector2(houseQuadBase.x + groundXDir.x*x + groundYDir.x*y, houseQuadBase.y + groundXDir.y*x + groundYDir.y*y);
+				v2 = Vector2.add(v1, houseXDir);
+				v3 = Vector2.add(Vector2.add(v1, houseXDir), houseYDir);
+				v4 = Vector2.add(v1, houseYDir);
+				
+				if( cells[x][y].type == 'x' )
+				{
+					tx = (float)(r.nextInt(8));
+					ty = 5.0f;
+				}
+				else if( cells[x][y].type == 'f' )
+				{
+					if( r.nextInt(2) == 0 )
+					{
+						tx = 1.0f;
+					}
+					else
+					{
+						tx = 4.0f;
+					}
+					ty = 7.0f;
+				}
+				else if( cells[x][y].type == 't' )
+				{
+					if( r.nextInt(2) == 0 )
+					{
+						tx = 3.0f;
+					}
+					else
+					{
+						tx = 2.0f;
+					}
+					ty = 7.0f;
+				}
+				else if( cells[x][y].type == 'g' )
+				{
+					tx = 6.0f;
+					ty = 7.0f;
+				}
+				else
+				{
+					containsHouse = false;
+				}
+
+				if( containsHouse )
+				{
+					t1 = new Vector2(tx*dt+mt,			(ty+1.0f)*dt-mt);
+					t2 = new Vector2((tx+1.0f)*dt-mt,	(ty+1.0f)*dt-mt);
+					t3 = new Vector2((tx+1.0f)*dt-mt,	ty*dt+mt);
+					t4 = new Vector2(tx*dt+mt,			ty*dt+mt);
+					
+					vertices[6*i  ] = v1;
+					vertices[6*i+1] = v2;
+					vertices[6*i+2] = v3;
+					vertices[6*i+3] = v1;
+					vertices[6*i+4] = v3;
+					vertices[6*i+5] = v4;
+
+					texCoords[6*i  ] = t1;
+					texCoords[6*i+1] = t2;
+					texCoords[6*i+2] = t3;
+					texCoords[6*i+3] = t1;
+					texCoords[6*i+4] = t3;
+					texCoords[6*i+5] = t4;
+					
+					i++;
+				}
+			}
+		}
+
+		vbos = new Vertexbuffers();
+		vbos.setData(Vertexbuffers.Type.POSITION, vertices);
+		vbos.setData(Vertexbuffers.Type.TEX_COORD, texCoords);
 	}
 }

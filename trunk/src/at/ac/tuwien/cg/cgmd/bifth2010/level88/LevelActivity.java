@@ -114,7 +114,7 @@ public class LevelActivity extends Activity{
 	 * Update the screen texts 
 	 */
 	public void updateTexts() {
-   		goldText.setText(" " + getString(getResources().getIdentifier("l88_gold_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")) + game.gold + " ");
+		goldText.setText(" " + getString(getResources().getIdentifier("l88_gold_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")) + game.gold + " ");
 	}
 
 	/* (non-Javadoc)

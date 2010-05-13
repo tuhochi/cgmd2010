@@ -8,7 +8,9 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLU;
 import android.os.Handler;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.LevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Textures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
@@ -38,6 +40,11 @@ public class Game {
 	public ArrayList<Police> police;
 	public ArrayList<Stash> stashes;
 	
+	public Quad objectQuad;
+	public ArrayList<Stash> stashes_size1;
+	public ArrayList<Stash> stashes_size2;
+	public ArrayList<Stash> stashes_size3;
+	
 	public boolean newTouch;
 	public Vector2 touchPosition;
 	
@@ -59,6 +66,9 @@ public class Game {
 		
 		police = new ArrayList<Police> ();
 		stashes = new ArrayList<Stash> ();
+		stashes_size1 = new ArrayList<Stash> ();
+		stashes_size2 = new ArrayList<Stash> ();
+		stashes_size3 = new ArrayList<Stash> ();
 			
 		bunny = new Bunny(this);
 		map = new Map(this);
@@ -71,6 +81,25 @@ public class Game {
         newTime = date.getTime();
         oldTime = newTime;
         elapsedSeconds = 0;
+        
+        
+        
+
+		Vector2 groundYDir = new Vector2(-0.81f, -0.59f);
+		Vector2 groundXDir = new Vector2(1.16f, -0.46f);
+        Vector2 xDir = new Vector2(1.41f, 0);
+        Vector2 yDir = new Vector2(0, -1.41f);
+        Vector2 quadBase = new Vector2();
+        quadBase.add(groundYDir);
+        quadBase.add(groundXDir);
+        quadBase.mult(-1.0f);
+        quadBase.add(xDir);
+        quadBase.add(yDir);
+        quadBase.mult(-0.5f);
+        quadBase.add(new Vector2(0, -0.28f));        
+        objectQuad = new Quad(quadBase, xDir, yDir);
+        
+        
         
         Log.d(TAG, "Game() - end");
 	}
@@ -139,7 +168,21 @@ public class Game {
 	 * @param size size of the stash 
 	 */
 	public void addStash(int x, int y, int size) {
-		stashes.add(new Stash(this, x, y, size));
+		Stash stash = new Stash(this, x, y, size); 
+		stashes.add(stash);
+		
+		if( size==1 )
+		{
+			stashes_size1.add(stash);
+		}
+		else if( size==2 )
+		{
+			stashes_size2.add(stash);
+		}
+		else
+		{
+			stashes_size3.add(stash);
+		}
 	}
 
 	/**
@@ -180,7 +223,7 @@ public class Game {
     	gl.glClearColor(1, 1, 1, 0);
 
     	gl.glEnable(GL10.GL_TEXTURE_2D);			//Enable Texture Mapping
-		gl.glShadeModel(GL10.GL_SMOOTH); 			//Enable Smooth Shading
+		gl.glShadeModel(GL10.GL_FLAT); 			//Enable Smooth Shading
 		gl.glClearDepthf(1.0f); 					//Depth Buffer Setup
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 
@@ -275,10 +318,22 @@ public class Game {
         
         map.draw(gl);
 
-        for(int i=0; i<stashes.size(); i++) {
-        	stashes.get(i).draw(gl);
+        objectQuad.vbos.set(gl);
+
+		textures.bind(R.drawable.l88_stash_yellow);
+        for(int i=0; i<stashes_size1.size(); i++) {
+        	stashes_size1.get(i).draw(gl);
         }
-        
+		textures.bind(R.drawable.l88_stash_orange);
+        for(int i=0; i<stashes_size2.size(); i++) {
+        	stashes_size2.get(i).draw(gl);
+        }
+		textures.bind(R.drawable.l88_stash_red);
+        for(int i=0; i<stashes_size3.size(); i++) {
+        	stashes_size3.get(i).draw(gl);
+        }
+
+        textures.bind(R.drawable.l88_police);
         for(int i=0; i<police.size(); i++) {
         	police.get(i).draw(gl);
         }

@@ -19,7 +19,6 @@ public class Police {
 	public float transition, transitionTime;
 	public boolean stopTransition;
 	public float translateX, translateY;
-	private Quad policeQuad;
 	private boolean wasStuckLastFrame;
 
 	/**
@@ -54,29 +53,7 @@ public class Police {
 		wasStuckLastFrame=false;
 
 		updateTranslation();
-		
-		float norm;
-        Vector2 groundYDir = new Vector2(-229, -169);
-        norm = 1.0f / groundYDir.length();
-        groundYDir.mult(norm);
-        Vector2 groundXDir = new Vector2(329, -131);
-        groundXDir.mult(norm);
 
-        Vector2 xDir = new Vector2(400, 0);
-        xDir.mult(norm);
-        Vector2 yDir = new Vector2(0, -400);
-        yDir.mult(norm);
-
-        Vector2 quadBase = new Vector2();
-        quadBase.add(groundYDir);
-        quadBase.add(groundXDir);
-        quadBase.mult(-1.0f);
-        quadBase.add(xDir);
-        quadBase.add(yDir);
-        quadBase.mult(-0.5f);
-        quadBase.add(new Vector2(0, -80*norm));        
-        
-        policeQuad = new Quad(quadBase, xDir, yDir);
 	}
 	
 	
@@ -191,7 +168,10 @@ public class Police {
 				 * Select a random direction from the collected directions.
 				 * All of this directions are valid (so the next field is a street for the police).
 				 */
-				if( dirs.size()==1 ) {
+				if( dirs.size()==0 ) {
+					/* do nothing */
+				}
+				else if( dirs.size()==1 ) {
 					newMoveDir = dirs.get(0);
 				}
 				else {
@@ -266,14 +246,9 @@ public class Police {
 	 * @param gl OpenGL context of android
 	 */
 	public void draw(GL10 gl) {
-		policeQuad.vbos.set(gl);
-
 		gl.glPushMatrix();
 		gl.glTranslatef(translateX, translateY, 0);
-		
-		game.textures.bind(R.drawable.l88_police);
 		gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, 4);
-		
 		gl.glPopMatrix();
 	}
 	
