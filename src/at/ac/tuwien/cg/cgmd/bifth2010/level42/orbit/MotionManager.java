@@ -99,7 +99,7 @@ public class MotionManager {
 		if(pushVec.length()>= Config.MIN_STRENGTH_FOR_DIRECTIONAL){
 				
 			//determine aiming center
-			Movable aimEntity = CollisionManager.instance.getNearestToCenterEntity();
+			Movable aimEntity = CollisionManager.instance.getAutoAimEntity();
 			Vector3 aimCenter = null;
 			
 			if(aimEntity!=null)
@@ -189,10 +189,9 @@ public class MotionManager {
 			}
 		}else{
 			if(motion instanceof DirectionalPlanetMotion){
-				Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getName());
 				if(!entity.isDisabled()){
 					if(entity.getCurrentPosition().length()>Config.PLANETPART_CULL_DISTANCE){
-						Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());
+						//Log.d(LevelActivity.TAG,"CULLING ENTITY:"+entity.getName());
 						entity.setDisabled(true);
 						removeMotion(entity);
 					}

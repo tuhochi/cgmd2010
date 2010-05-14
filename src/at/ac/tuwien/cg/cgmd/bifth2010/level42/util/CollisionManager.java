@@ -65,9 +65,12 @@ public class CollisionManager implements Persistable{
 	
 	public GameManager gameManager;
 	private MotionManager motionManager;
+	private TimeManager timeManager;
 	
 	private int collOffset;
 	private int collOffsetLimit;
+
+
 	
 	/**
 	 * Instantiates a new collision manager.
@@ -104,6 +107,7 @@ public class CollisionManager implements Persistable{
 		comperator = new NearestEntityComperator();
 		
 		this.motionManager = MotionManager.instance;
+		this.timeManager = TimeManager.instance;
 		
 		instance = this;
 		
@@ -260,7 +264,7 @@ public class CollisionManager implements Persistable{
 						 */
 						if(satellite.getMotion() instanceof DirectionalPlanetMotion){
 							if(satellite.getMotion().isInsidePlanet()){
-								Log.d(LevelActivity.TAG,"AVOID PLANETPART COLL");
+								//Log.d(LevelActivity.TAG,"AVOID PLANETPART COLL");
 								continue;
 							}
 						}else{
@@ -385,12 +389,15 @@ public class CollisionManager implements Persistable{
 	}
 	
 	
-	public Movable getNearestToCenterEntity()
+	public Movable getAutoAimEntity()
 	{
-		printRemaingingPlanetParts();
-		if(remainingPlanetParts.size()>0)		
-			return remainingPlanetParts.get(0);
-		else 
+		//printRemaingingPlanetParts();
+		if(remainingPlanetParts.size()>0){	
+			//pseudo random selection of next element
+			int index = (int)timeManager.getRemainingGameTime()%remainingPlanetParts.size();
+			Log.d(LevelActivity.TAG,"RANDOM SELECTION INDEX:"+index);
+			return remainingPlanetParts.get(index);
+		}else 
 			return null;
 	}
 	
