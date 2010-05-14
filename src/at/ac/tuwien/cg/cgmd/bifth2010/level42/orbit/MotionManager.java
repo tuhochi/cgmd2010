@@ -84,6 +84,7 @@ public class MotionManager {
 	{
 		newMovable.setMotion(oldMovable.getMotion());
 		oldMovable.setMotion(null);
+		newMovable.getMotion().setBasicOrientation(newMovable.getBasicOrientation());
 		list.remove(oldMovable);
 		list.add(newMovable);
 		newMovable.getMotion().setTransform(newMovable.getTransformation());
@@ -184,6 +185,17 @@ public class MotionManager {
 				//change to orbit motion
 				//Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());
 				transformDirMotionInOrbit(entity);
+			}
+		}else{
+			if(motion instanceof DirectionalPlanetMotion){
+				Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getName());
+				if(!entity.isDisabled()){
+					if(entity.getCurrentPosition().length()>Config.PLANETPART_CULL_DISTANCE){
+						Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());
+						entity.setDisabled(true);
+						removeMotion(entity);
+					}
+				}
 			}
 		}
 	}
@@ -354,5 +366,10 @@ public class MotionManager {
 			}
 		}
 		Log.d(LevelActivity.TAG,orbitCounter+" RANDOM SAT ORBITS GENERATED");
+	}
+	
+	public void removeMotion(Movable entity){
+		entity.setMotion(null);
+		list.remove(entity);
 	}
 }

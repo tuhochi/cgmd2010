@@ -202,4 +202,10 @@ public class DirectionalMotion extends Motion
 	public Matrix44 getBasicOrientation() {
 		return basicOrientation;
 	}
+	
+	@Override
+	public void setBasicOrientation(Matrix44 basicOrientation){
+		if(basicOrientation!=null)
+			this.basicOrientation.set(basicOrientation.m);
+	}
 }

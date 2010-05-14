@@ -95,6 +95,7 @@ public class Config
 	public static final float ORBIT_SPEEDMORPH_PUSHVECFACTOR = 0.25f;
 	public static final float ORBIT_DYNAMIC_SPEEDFACTOR = 120f;
 	public static final float PLANETCOLL_SPEED_FROM_SAT_FACTOR = 0.25f;
+	public static final float PLANETPART_CULL_DISTANCE = 30;
 
 	
 	

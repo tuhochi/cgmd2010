@@ -62,4 +62,8 @@ public interface Movable {
 	 * @return the name of the object
 	 */
 	public String getName();
+	
+	public boolean isDisabled();
+	public void setDisabled(boolean disabled);
+	
 }

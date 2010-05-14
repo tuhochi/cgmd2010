@@ -221,6 +221,11 @@ public class CollisionManager implements Persistable{
 		for(int i=collOffset; i<collOffsetLimit; i++) 
 		{
 			objA = entityList.get(i);	
+			
+			//only collide with active entities
+			if(objA.isDisabled())
+				continue;
+			
 			objAIsMoveable = (objA.getName().equals(Config.PLANET_NAME))?false:true;
 			
 			for(int j = i+1; j<entityList.size(); j++)
