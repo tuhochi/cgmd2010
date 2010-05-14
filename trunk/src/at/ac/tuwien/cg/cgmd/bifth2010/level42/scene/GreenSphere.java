@@ -15,7 +15,7 @@ public class GreenSphere extends Model
 	public GreenSphere()
 	{
 		super();
-		int spacing = Config.BOUNGING_SPHERE_SPACING;
+		int spacing = Config.BOUNDING_SPHERE_SPACING;
 		int thetaDegree = 360; // horizontal
 		int phiDegree = 180; // vertical
 		float[] temp = new float[12];						// 4 vertices with 3 floats each

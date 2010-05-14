@@ -20,10 +20,10 @@ public class Config
 	 * Must be a divisor of 180.
 	 * Higher value = faster rendering, uglier sphere
 	 * Formula for calculating the number of faces: 
-	 * nrOfFaces = ((360*180)/(BOUNGING_SPHERE_SPACING^2))*2
-	 * so: BOUNGING_SPHERE_SPACING = 20 -> 324 Faces
+	 * nrOfFaces = ((360*180)/(BOUNDING_SPHERE_SPACING^2))*2
+	 * so: BOUNDING_SPHERE_SPACING = 20 -> 324 Faces
 	 */
-	public static int BOUNGING_SPHERE_SPACING = 20;
+	public static int BOUNDING_SPHERE_SPACING = 20;
 	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = false;
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
 	
