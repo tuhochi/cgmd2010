@@ -141,7 +141,7 @@ public class MapCalculationThread extends Thread {
 								newArrowOrder[i][1]=SceneGraph.ARROW_BOTTOM_TO_LEFT;
 						}	
 						else
-							newArrowOrder[i][1]=arrowOrder[i+1][1];
+							newArrowOrder[i][1]=arrowOrder[i][1];
 					}
 				}
 			}
