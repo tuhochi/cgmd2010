@@ -59,7 +59,11 @@ public class SceneEntity implements Movable,Persistable
 	/** The current position */
 	private final Vector3 currentPos;
 	
+	/** A List for all the Bounding Spheres of this SceneEntity */
 	private final ArrayList<Sphere> modelBoundingSpheres;
+	
+	/** whether this SceneEntity is disabled (not rendered, not updated) */
+	private boolean disabled;
 	
 	/**
 	 * Instantiates a new scene entity.
@@ -76,6 +80,7 @@ public class SceneEntity implements Movable,Persistable
 		initialized = false;
 		currentPos = new Vector3();
 		modelBoundingSpheres = new ArrayList<Sphere>();
+		disabled = false;
 	}
 	
 	/**
@@ -156,6 +161,9 @@ public class SceneEntity implements Movable,Persistable
 	 */
 	public void render(int rendermode)
 	{
+		if(disabled)
+			return;
+		
 		glPushMatrix();
 		glMultMatrixf(transformation.getArray16(), 0);
 		int numModels = models.size();
@@ -169,6 +177,9 @@ public class SceneEntity implements Movable,Persistable
 	 */
 	void renderBoundingSpheres(int rendermode)
 	{
+		if(disabled)
+			return;
+		
 		if(Config.SHOW_MODEL_BOUNDING_SPHERES)
 		{
 			int numModels = models.size();
@@ -193,7 +204,10 @@ public class SceneEntity implements Movable,Persistable
 	 * Update.
 	 */
 	public void update()
-	{		
+	{
+		if(disabled)
+			return;
+		
 		int numModels = models.size();
 		for(int i=0; i<numModels; i++)
 		{
@@ -329,4 +343,22 @@ public class SceneEntity implements Movable,Persistable
 		
 		return currentPos;
 	}
+
+	/**
+	 * @return the disabled
+	 */
+	public boolean isDisabled()
+	{
+		return disabled;
+	}
+
+	/**
+	 * @param disabled the disabled to set
+	 */
+	public void setDisabled(boolean disabled)
+	{
+		this.disabled = disabled;
+	}
+	
+	
 }
