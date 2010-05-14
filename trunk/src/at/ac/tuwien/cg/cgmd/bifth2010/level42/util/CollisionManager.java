@@ -150,6 +150,11 @@ public class CollisionManager implements Persistable{
 		for(int i=0;i<entityList.size();i++)
 		{
 			entity = entityList.get(i);
+			
+			//exclude inactive entities
+			if(entity.isDisabled())
+				continue;
+			
 			//get entity bounding sphere position
 			q.set(entity.getBoundingSphereWorld().center);
 			
