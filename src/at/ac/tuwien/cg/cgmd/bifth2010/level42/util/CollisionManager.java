@@ -12,6 +12,7 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalPlanetMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalSatelliteMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
@@ -262,7 +263,7 @@ public class CollisionManager implements Persistable{
 						 * SPECIAL CASE
 						 * planet part moves out of the planet -> avoid collision with planet
 						 */
-						if(satellite.getMotion() instanceof DirectionalPlanetMotion){
+						if(motionManager.isPlanetPart(satellite)){
 							if(satellite.getMotion().isInsidePlanet()){
 								//Log.d(LevelActivity.TAG,"AVOID PLANETPART COLL");
 								continue;
@@ -373,11 +374,17 @@ public class CollisionManager implements Persistable{
 				//END of contact detection
 				}else{
 					//special case: sat is not longer "inside the planet"
-					if(objA.getMotion()!=null && objA.getMotion().isInsidePlanet()){
+					Motion motion = objA.getMotion();
+					
+					if(motion !=null && motion.isInsidePlanet()){
 						if(objA.getCurrentPosition().length()>Config.TRANSFORMATION_DISTANCE){
-							if(objA.getMotion() instanceof DirectionalSatelliteMotion){
-								motionManager.transformDirMotionInOrbit(objA);
+							if(motion instanceof DirectionalMotion){
+								if(motionManager.isPlanetPart(objA))
+									motion.setInsidePlanet(false);
+								else
+									motionManager.transformDirMotionInOrbit(objA);
 							}else{
+								//orbit collision
 								objA.getMotion().setInsidePlanet(false);
 							}
 						}
@@ -443,4 +450,5 @@ public class CollisionManager implements Persistable{
 		
 		printRemaingingPlanetParts();
 	}
+
 }

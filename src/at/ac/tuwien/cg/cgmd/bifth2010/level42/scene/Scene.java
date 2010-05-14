@@ -264,7 +264,7 @@ public class Scene implements Persistable
 					SceneEntity s = p.getFirst();
 					Model m = p.getSecond();
 					SceneEntity new_s = new SceneEntity();
-					new_s.setName(Config.SATELLITE_PREFIX + m.getName() + "UNTIED");
+					new_s.setName(Config.SATELLITE_PREFIX + m.getName() + Config.PLANETPART_SUFFIX);
 					new_s.add(m);
 					Matrix44 new_s_transformation = new_s.getTransformation();
 					new_s_transformation.copy(s.getTransformation());

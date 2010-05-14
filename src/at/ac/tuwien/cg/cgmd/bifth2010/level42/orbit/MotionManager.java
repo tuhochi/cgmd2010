@@ -180,7 +180,7 @@ public class MotionManager {
 	private void checkUniverseLimits(Movable entity)
 	{
 		Motion motion = entity.getMotion();
-		
+		//check only for directional motions
 		if(motion instanceof DirectionalSatelliteMotion){
 			if(entity.getCurrentPosition().length()>Config.UNIVERSE_CENTERLENGTH_LIMIT){
 				//change to orbit motion
@@ -188,7 +188,7 @@ public class MotionManager {
 				transformDirMotionInOrbit(entity);
 			}
 		}else{
-			if(motion instanceof DirectionalPlanetMotion){
+			if(isPlanetPart(entity)){
 				if(!entity.isDisabled()){
 					if(entity.getCurrentPosition().length()>Config.PLANETPART_CULL_DISTANCE){
 						//Log.d(LevelActivity.TAG,"CULLING ENTITY:"+entity.getName());
@@ -371,5 +371,12 @@ public class MotionManager {
 	public void removeMotion(Movable entity){
 		entity.setMotion(null);
 		list.remove(entity);
+	}
+	
+	public boolean isPlanetPart(Movable entity){
+		if(entity!=null)
+			return entity.getName().endsWith(Config.PLANETPART_SUFFIX);
+			
+		return false;
 	}
 }
