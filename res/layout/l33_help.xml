@@ -46,6 +46,11 @@
 				android:text="@string/l33_help_entry2_head" android:gravity="center">
 			</TextView>
 			
+			<!--entry2_icon-->
+			<ImageView android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center"
+				android:src="@drawable/l33_map_small">
+			</ImageView>
+			
 			<!--entry2-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
 				android:paddingBottom="@dimen/l33_help_headPadding"

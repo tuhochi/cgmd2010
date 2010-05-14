@@ -17,18 +17,19 @@ public class ProgressHandler extends SessionState{
 	private int springGoldDecrease = 1;
 	
 	private int actuallyProgress = 0;
+	private int actuallyGold = 0;
 	
 	public static boolean isLevelCompleted = false;
 	
 	public ProgressHandler(){
-		this.actuallyProgress = this.getProgress();
+		this.actuallyProgress = 100-this.getProgress(); 
 	}
 	
 	/**
 	 * A stone was picked up. You loose some gold, your gold amount will be decreased
 	 */
 	public void collectStone(){
-		actuallyProgress = actuallyProgress + stoneGoldDecrease;
+		actuallyProgress = actuallyProgress - stoneGoldDecrease;
 		checkNewProgress();
 	}
 	
@@ -36,7 +37,7 @@ public class ProgressHandler extends SessionState{
 	 * A barrel was picked up. You loose some gold, your gold amount will be decreased
 	 */
 	public void collectBarrel(){
-		actuallyProgress = actuallyProgress + barrelGoldDecrease;
+		actuallyProgress = actuallyProgress - barrelGoldDecrease;
 		checkNewProgress();
 	}
 	
@@ -44,7 +45,7 @@ public class ProgressHandler extends SessionState{
 	 * A trash was picked up. You get some gold, your gold amount will be increased
 	 */
 	public void collectTrash(){
-		actuallyProgress = actuallyProgress - thrashGoldIncrease;
+		actuallyProgress = actuallyProgress + thrashGoldIncrease;
 		checkNewProgress();
 	}
 	
@@ -52,7 +53,7 @@ public class ProgressHandler extends SessionState{
 	 * A spring was picked up. You loose a few gold, your gold amount will be decreased
 	 */
 	public void collectSpring(){
-		actuallyProgress = actuallyProgress + springGoldDecrease;
+		actuallyProgress = actuallyProgress - springGoldDecrease;
 		checkNewProgress();
 	}
 	
@@ -64,19 +65,27 @@ public class ProgressHandler extends SessionState{
 		if(actuallyProgress>=100)
 		{
 			actuallyProgress=100;
+		}
+		if(actuallyProgress<=0)
+		{
+			actuallyProgress=0;
 			isLevelCompleted=true;
 		}
-		if(actuallyProgress<0)
-			actuallyProgress=0;
 	}
 	
 	/**
 	 * Returns the actually amount of gold. This is necessary for the progressBar
 	 * @return actuallyProgress			
 	 */
-	public int getActualllyProgress(){
+	public int getActualllyGold(){
 		return actuallyProgress;
 	}
 	
-
+	/**
+	 * Returns the actually progress which is inverse to gold.
+	 * @return actuallyProgress			
+	 */
+	public int getActualllyProgress(){
+		return 100-actuallyProgress;
+	}
 }
