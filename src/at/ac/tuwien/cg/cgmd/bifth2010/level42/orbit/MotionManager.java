@@ -82,12 +82,13 @@ public class MotionManager {
 	
 	public void transferMotion(Movable oldMovable, Movable newMovable)
 	{
-		newMovable.setMotion(oldMovable.getMotion());
+		Motion motion = oldMovable.getMotion();
+		newMovable.setMotion(motion);
 		oldMovable.setMotion(null);
-		newMovable.getMotion().setBasicOrientation(newMovable.getBasicOrientation());
+		motion.setBasicOrientation(newMovable.getBasicOrientation());
+		motion.setTransform(newMovable.getTransformation());
 		list.remove(oldMovable);
 		list.add(newMovable);
-		newMovable.getMotion().setTransform(newMovable.getTransformation());
 	}
 	
 	public void applySelectionForce(Movable entity, Vector3 pushVec)
