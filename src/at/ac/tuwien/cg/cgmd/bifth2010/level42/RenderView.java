@@ -323,13 +323,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 				int power = ((int)duration)/Config.PRESS_TIME_TO_FORCE_DIVISOR;
 				selectionDirection.normalize().multiply(power);
 				
+				Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
+				
 				// vibrate according to the strength
 				context.vibrate(power);
-				Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length()+ " currSpeed="+entity.getMotion().getSpeed());
-				
 				motionManager.applySelectionForce(entity, selectionDirection);				
 				motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
-				
 			}
 			
 			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
