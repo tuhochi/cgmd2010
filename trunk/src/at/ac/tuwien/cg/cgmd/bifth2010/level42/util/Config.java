@@ -65,7 +65,7 @@ public class Config
 	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 20;
 	
 	/** defines the maximum relative speed for satellites */
-	public static float UNIVERSE_SPEED_LIMIT = 2;
+	public static float UNIVERSE_SPEED_LIMIT = 8;
 	
 	public static float ORBIT_TEMP_MAXSPEED_FAC = 3;
 	public static float ORBIT_MIN_SPEED = 0.5f;

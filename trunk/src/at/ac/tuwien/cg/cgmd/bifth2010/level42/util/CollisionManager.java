@@ -14,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalPlanetMotion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalSatelliteMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
@@ -152,10 +153,10 @@ public class CollisionManager implements Persistable{
 				Log.d(LevelActivity.TAG,"found hit with " + entity.getName() + " distance="+normalDistance.length()+" sphereradius="+entity.getBoundingSphereWorld().radius);
 				
 				//only store the one with the min distance
-				if(nearestEntity==null)
+				if(nearestEntity==null && entity.getName().startsWith(Config.SATELLITE_PREFIX))
 					nearestEntity = entity;
 				
-				if(pq.length()<minDistance)
+				if(pq.length()<minDistance && entity.getName().startsWith(Config.SATELLITE_PREFIX));
 				{
 					nearestEntity = entity;
 					minDistance = pq.length();
@@ -236,8 +237,19 @@ public class CollisionManager implements Persistable{
 							satellite = (SceneEntity) objA;
 						}
 						
-						//set planet entrance flag
-						satellite.getMotion().setInsidePlanet(true);
+						/**
+						 * SPECIAL CASE
+						 * planet part moves out of the planet -> avoid collision with planet
+						 */
+						if(satellite.getMotion() instanceof DirectionalPlanetMotion){
+							if(satellite.getMotion().isInsidePlanet()){
+								Log.d(LevelActivity.TAG,"AVOID PLANETPART COLL");
+								continue;
+							}
+						}else{
+							//set planet entrance flag
+							satellite.getMotion().setInsidePlanet(true);
+						}
 						
 						Model planetPart = null;
 						
@@ -260,9 +272,11 @@ public class CollisionManager implements Persistable{
 									planetPushVec.subtract(planet.getBoundingSphereWorld().center);
 									
 									planetPartMotion = new DirectionalPlanetMotion(	planetPart.getBoundingSphereWorld().center,
-																						planetPushVec,
-																						satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
-																						planetPart.getBasicOrientation());
+																					planetPushVec,
+																					satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
+																					planetPart.getBasicOrientation());
+									planetPartMotion.setInsidePlanet(true);
+									
 									motionManager.addMotion(planetPartMotion,planetPart);
 									
 									if(satellite.getMotion().getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
@@ -339,9 +353,8 @@ public class CollisionManager implements Persistable{
 				}else{
 					//special case: sat is not longer "inside the planet"
 					if(objA.getMotion()!=null && objA.getMotion().isInsidePlanet()){
-					
 						if(objA.getCurrentPosition().length()>Config.TRANSFORMATION_DISTANCE){
-							if(objA.getMotion() instanceof DirectionalMotion){
+							if(objA.getMotion() instanceof DirectionalSatelliteMotion){
 								motionManager.transformDirMotionInOrbit(objA);
 							}else{
 								objA.getMotion().setInsidePlanet(false);
