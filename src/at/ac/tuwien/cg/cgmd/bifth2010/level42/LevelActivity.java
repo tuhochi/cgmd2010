@@ -12,6 +12,9 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -314,6 +317,37 @@ public class LevelActivity extends Activity
 		}
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId())
+		{
+		case R.id.l42_Menu_BoundingSphereSE:
+			Config.SHOW_SCENEENTITY_BOUNDING_SPHERES ^= true;
+			item.setTitle(Config.SHOW_SCENEENTITY_BOUNDING_SPHERES ? 
+					R.string.l42_Menu_BoundingSphereSE_hide : 
+					R.string.l42_Menu_BoundingSphereSE_show);
+			return true;
+		case R.id.l42_Menu_BoundingSphereModel:
+			Config.SHOW_MODEL_BOUNDING_SPHERES ^= true;
+			item.setTitle(Config.SHOW_MODEL_BOUNDING_SPHERES ? 
+					R.string.l42_Menu_BoundingSphereModel_hide : 
+					R.string.l42_Menu_BoundingSphereModel_show);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.l42_menu, menu);
+	    return true;
+	}
+	
+	
+	
 	/**
 	 * Gets the single instance of LevelActivity.
 	 *
