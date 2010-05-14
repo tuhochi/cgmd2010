@@ -86,6 +86,7 @@ public class MotionManager {
 		oldMovable.setMotion(null);
 		list.remove(oldMovable);
 		list.add(newMovable);
+		newMovable.getMotion().setTransform(newMovable.getTransformation());
 	}
 	
 	public void applySelectionForce(Movable entity, Vector3 pushVec)
