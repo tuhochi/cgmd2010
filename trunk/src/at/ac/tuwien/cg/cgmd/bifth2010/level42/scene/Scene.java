@@ -269,8 +269,8 @@ public class Scene implements Persistable
 					Matrix44 new_s_transformation = new_s.getTransformation();
 					new_s_transformation.copy(s.getTransformation());
 					new_s_transformation.mult(m.getTransformation());
-					m.getTransformation().setIdentity();
 					motionManager.transferMotion(m, new_s);
+					m.getTransformation().setIdentity();
 					s.remove(m);
 					sceneEntities.add(new_s);
 				}
