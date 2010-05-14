@@ -69,6 +69,9 @@ public class Model implements Movable,Persistable
 	/** The current position */
 	private final Vector3 currentPos;
 	
+	/** whether this Model is disabled (not rendered, not updated) */
+	private boolean disabled;
+	
 	/**
 	 * Instantiates a new model.
 	 */
@@ -84,6 +87,7 @@ public class Model implements Movable,Persistable
 		boundingSphereSceneEntity = new Sphere();
 		initialized = false;
 		currentPos = new Vector3();
+		disabled = false;
 	}
 	
 	/**
@@ -103,6 +107,7 @@ public class Model implements Movable,Persistable
 		boundingSphereSceneEntity = new Sphere(other.boundingSphereSceneEntity);
 		currentPos = new Vector3();
 		name = other.name;
+		disabled = other.disabled;
 		
 		int numGeoms = other.geometries.size();
 		
@@ -203,6 +208,9 @@ public class Model implements Movable,Persistable
 	 */
 	public void render(int rendermode)
 	{
+		if(disabled)
+			return;
+		
 		glPushMatrix();
 		glMultMatrixf(transformation.getArray16(), 0);
 		int numGeoms = geometries.size();
@@ -219,6 +227,9 @@ public class Model implements Movable,Persistable
 	 */
 	void renderBoundingSpheres(int rendermode)
 	{
+		if(disabled)
+			return;
+		
 		Vector3 translation = boundingSphereWorld.center;
 		float scale = boundingSphereWorld.radius;
 		
@@ -236,6 +247,9 @@ public class Model implements Movable,Persistable
 	 */
 	public void update(Matrix44 sceneEntityTransformation)
 	{
+		if(disabled)
+			return;
+		
 		int numGeoms = geometries.size();
 		for(int i=0; i<numGeoms; i++)
 			geometries.get(i).update();
@@ -364,5 +378,21 @@ public class Model implements Movable,Persistable
 						transformation.m[2][3]);
 		
 		return currentPos;
+	}
+
+	/**
+	 * @return the disabled
+	 */
+	public boolean isDisabled()
+	{
+		return disabled;
+	}
+
+	/**
+	 * @param disabled the disabled to set
+	 */
+	public void setDisabled(boolean disabled)
+	{
+		this.disabled = disabled;
 	}
 }
