@@ -12,7 +12,6 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalPlanetMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalSatelliteMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
