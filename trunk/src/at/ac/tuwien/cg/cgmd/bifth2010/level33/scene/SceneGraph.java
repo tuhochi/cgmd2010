@@ -10,9 +10,12 @@ import java.io.InputStream;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
@@ -39,6 +42,8 @@ public class SceneGraph  {
 	public static long timeInSeconds=0;
 	public static int levelEndTimeInSeconds=0;
 	private int gameTimeInSeconds=180;
+	private int maxTranslation = 8;
+	private float translationSteps = maxTranslation/100;
 	private boolean playingFinalSound=true;
 	
 	public final static byte GEOMETRY_WALL = 0;
@@ -107,6 +112,12 @@ public class SceneGraph  {
 	private ImageView ivGoodyCountIcon;
 	private TextView tvMapTime;
 	private ImageView ivMapTimeIcon;
+	private ImageView ivItemIcon;
+	private ImageButton ibGeneralViewButton;
+	public static ImageButton ibPathButton;
+	public static TextView tvPathCount;
+	String collectedMapText="";
+	
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	
@@ -128,7 +139,59 @@ public class SceneGraph  {
 		this.tvLevelTime = (TextView)activity.findViewById(R.id.l33_level_time);
 		this.tvGoodyCount = (TextView)activity.findViewById(R.id.l33_goodies_Count);
 		this.tvMapTime = (TextView)activity.findViewById(R.id.l33_map_timer);
+		this.ibGeneralViewButton = (ImageButton)activity.findViewById(R.id.l33_Map_Image_Button);
+		this.ivItemIcon = (ImageView)activity.findViewById(R.id.l33_item_icon);
+		this.ivMapTimeIcon = (ImageView)activity.findViewById(R.id.l33_map_timer_icon);
+		this.ibPathButton = (ImageButton)activity.findViewById(R.id.l33_Path_Image_Button);
+		this.tvPathCount = (TextView)activity.findViewById(R.id.l33_path_counter);
+		
+		//TODO richtige Icons verwenden
+		ivMapTimeIcon.setImageResource(R.drawable.l33_map_small);
+		//Nur für Test 
+		ivItemIcon.setImageResource(R.drawable.l33_map_small);
+		ibGeneralViewButton.setImageResource(R.drawable.l33_map);
+		ibPathButton.setImageResource(R.drawable.l33_map);
 		pbProgressBar.setMax(100);
+		
+		//EventListener
+		//GeneralView
+		ibGeneralViewButton.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	
+	            	SceneGraph.camera.switchZoom();
+	            }
+	        });
+		//ShortestPath
+		ibPathButton.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	
+	            	LevelHandler.mapCalculationThread = new MapCalculationThread(SceneGraph.level, LevelHandler.worldDim.x);
+					LevelHandler.mapCalculationThread.setStartProperties(LevelHandler.gameCharacterField, LevelHandler.goodiesIndex, LevelHandler.worldEntry);
+					LevelHandler.mapCalculationThread.start();
+					LevelHandler.isMapThreadStarted = true;
+					
+					LevelHandler.collectedMap--;
+					if(LevelHandler.collectedMap==0)
+					{
+						SceneGraph.activity.runOnUiThread(new Runnable() {public void run() {
+							SceneGraph.ibPathButton.setVisibility(ImageButton.INVISIBLE);
+							SceneGraph.tvPathCount.setVisibility(TextView.INVISIBLE);	
+							SceneGraph.tvPathCount.setText(collectedMapText);
+						}});
+					}
+					else
+					{
+						if(LevelHandler.collectedMap<10)
+							collectedMapText=" x 0"+LevelHandler.collectedMap;
+						else
+							collectedMapText=" x "+LevelHandler.collectedMap;
+						SceneGraph.activity.runOnUiThread(new Runnable() {public void run() {	
+							SceneGraph.tvPathCount.setText(collectedMapText);
+						}});
+					}
+	            }
+	        });
+
 		
 		
 		levelEndTimeInSeconds = (int)timeInSeconds+gameTimeInSeconds;
@@ -188,94 +251,118 @@ public class SceneGraph  {
 			gameTimeInSeconds--;
 			if(LevelHandler.mapIsActiveTimer>0)
 				LevelHandler.mapIsActiveTimer--;
-			
-			activity.runOnUiThread(new Runnable() {public void run() {
-				//FPS
-				tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		
-				ivFullscreenImage.setBackgroundResource(R.drawable.l33_nix);
-				
-				//Time 
-				int minutes=gameTimeInSeconds/60;
-				int seconds=gameTimeInSeconds%60;
-				int goodyIconCount = gameTimeInSeconds%10;
-				
-				if(minutes<0 || seconds<0)
-				{
-					minutes=0;
-					seconds=0;
-				}
-				String text_LevelTime;
-				if(seconds<10)
-					text_LevelTime = minutes+" min 0"+seconds+" sec";
-				else
-					text_LevelTime = minutes+" min "+seconds+" sec";
-							
-				tvLevelTime.setText(text_LevelTime);
-				
-				//Goodies-Count
-				String text_GoodyCount="";
-				if(goodyIconCount==9 || goodyIconCount==0)
-				{
-					if(LevelGenration.numberOfStone<10)
-						text_GoodyCount = "x 0"+LevelGenration.numberOfStone;
-					else
-						text_GoodyCount = "x "+LevelGenration.numberOfStone;
-				}
-				else if(goodyIconCount==8 || goodyIconCount==7)
-				{
-					if(LevelGenration.numberOfBarrel<10)
-						text_GoodyCount = "x 0"+LevelGenration.numberOfBarrel;
-					else
-						text_GoodyCount = "x "+LevelGenration.numberOfBarrel;
-				}
-				else if(goodyIconCount==6 || goodyIconCount==5)
-				{
-					if(LevelGenration.numberOfSpring<10)
-						text_GoodyCount = "x 0"+LevelGenration.numberOfSpring;
-					else
-						text_GoodyCount = "x "+LevelGenration.numberOfSpring;
-				}
-				else if(goodyIconCount==4 || goodyIconCount==3)
-				{
-					if(LevelGenration.numberOfTrashes<10)
-						text_GoodyCount = "x 0"+LevelGenration.numberOfTrashes;
-					else
-						text_GoodyCount = "x "+LevelGenration.numberOfTrashes;
-				}
-				else if(goodyIconCount==2 || goodyIconCount==1)
-				{
-					if(LevelGenration.numberOfMaps<10)
-						text_GoodyCount = "x 0"+LevelGenration.numberOfMaps;
-					else
-						text_GoodyCount = "x "+LevelGenration.numberOfMaps;
-				}
-				tvGoodyCount.setText(text_GoodyCount);
-				
-				//Path-Time
-				if(LevelHandler.mapIsActive)
-				{
-					String text_MapTimer;
+			if(timeInSeconds<=levelEndTimeInSeconds || !LevelActivity.progressHandler.isLevelCompleted || LevelHandler.numberOfGoodGoodies!=0)
+			{
+				activity.runOnUiThread(new Runnable() {public void run() {
+					//FPS
+					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		
+					ivFullscreenImage.setBackgroundResource(R.drawable.l33_nix);
 					
-					if(LevelHandler.mapIsActiveTimer<10)
-						text_MapTimer = " 0"+LevelHandler.mapIsActiveTimer;
-					else
-						text_MapTimer = " "+LevelHandler.mapIsActiveTimer;
-					tvMapTime.setText(text_MapTimer);
-					tvMapTime.setVisibility(TextView.VISIBLE);
-				}
-				else
-				{
-					tvMapTime.setVisibility(TextView.INVISIBLE);
-				}
+					//Time 
+					int minutes=gameTimeInSeconds/60;
+					int seconds=gameTimeInSeconds%60;
+					int goodyIconCount = gameTimeInSeconds%10;
 					
-			}});
+					if(minutes<0 || seconds<0)
+					{
+						minutes=0;
+						seconds=0;
+					}
+					String text_LevelTime;
+					if(seconds<10)
+						text_LevelTime = minutes+" min 0"+seconds+" sec";
+					else
+						text_LevelTime = minutes+" min "+seconds+" sec";
+								
+					tvLevelTime.setText(text_LevelTime);
+					
+					//Goodies-Count
+					String text_GoodyCount="";
+					if(goodyIconCount==9 || goodyIconCount==0)
+					{
+						if(LevelGenration.numberOfStone<10)
+							text_GoodyCount = "x 0"+LevelGenration.numberOfStone;
+						else
+							text_GoodyCount = "x "+LevelGenration.numberOfStone;
+						//StoneIcon
+						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+					}
+					else if(goodyIconCount==8 || goodyIconCount==7)
+					{
+						if(LevelGenration.numberOfBarrel<10)
+							text_GoodyCount = "x 0"+LevelGenration.numberOfBarrel;
+						else
+							text_GoodyCount = "x "+LevelGenration.numberOfBarrel;
+						//BarrelIcon
+						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+					}
+					else if(goodyIconCount==6 || goodyIconCount==5)
+					{
+						if(LevelGenration.numberOfSpring<10)
+							text_GoodyCount = "x 0"+LevelGenration.numberOfSpring;
+						else
+							text_GoodyCount = "x "+LevelGenration.numberOfSpring;
+						//SpringIcon
+						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+					}
+					else if(goodyIconCount==4 || goodyIconCount==3)
+					{
+						if(LevelGenration.numberOfTrashes<10)
+							text_GoodyCount = "x 0"+LevelGenration.numberOfTrashes;
+						else
+							text_GoodyCount = "x "+LevelGenration.numberOfTrashes;
+						//TrashIcon
+						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+					}
+					else if(goodyIconCount==2 || goodyIconCount==1)
+					{
+						if(LevelGenration.numberOfMaps<10)
+							text_GoodyCount = "x 0"+LevelGenration.numberOfMaps;
+						else
+							text_GoodyCount = "x "+LevelGenration.numberOfMaps;
+						//MapIcon
+						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+					}
+					tvGoodyCount.setText(text_GoodyCount);
+					
+					//Path-Time
+					if(LevelHandler.mapIsActive)
+					{
+						String text_MapTimer;
+						
+						if(LevelHandler.mapIsActiveTimer<10)
+							text_MapTimer = " 0"+LevelHandler.mapIsActiveTimer;
+						else
+							text_MapTimer = " "+LevelHandler.mapIsActiveTimer;
+						tvMapTime.setText(text_MapTimer);
+						tvMapTime.setVisibility(TextView.VISIBLE);
+						ivMapTimeIcon.setVisibility(ImageView.VISIBLE);
+					}
+					else
+					{
+						tvMapTime.setVisibility(TextView.INVISIBLE);
+						ivMapTimeIcon.setVisibility(ImageView.INVISIBLE);
+					}
+						
+				}});
+			}
 			framesSinceLastSecound = 0;
 		}
 		
 		
+		if(LevelHandler.isFirstMap && LevelHandler.collectedMap==-1)
+		{
+			activity.runOnUiThread(new Runnable() {public void run() {
+				ibGeneralViewButton.setVisibility(ImageButton.VISIBLE);		
+			}});
+			
+			LevelHandler.collectedMap=0;
+		}
+		
+		
+		
 		//Set the progress
-		pbProgressBar.setProgress(LevelActivity.progressHandler.getActualllyProgress());
-		//pbProgressBar.setProgress((int) timeInSeconds%100);
+		pbProgressBar.setProgress(LevelActivity.progressHandler.getActualllyGold());
 		
 		// Clears the screen and depth buffer.
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -303,7 +390,7 @@ public class SceneGraph  {
 		
 		
 		/* TODO
-		if(timeInSeconds>levelEndTimeInSeconds || LevelActivity.progressHandler.isLevelCompleted)
+		if(timeInSeconds>levelEndTimeInSeconds || LevelActivity.progressHandler.isLevelCompleted || LevelHandler.numberOfGoodGoodies==0)
 		{
 			//GAME OVER
 			if(playingFinalSound)
@@ -608,6 +695,54 @@ public class SceneGraph  {
 				}
 			}
 			
+			//collected Items
+			/*
+			if(LevelHandler.collectedItemList!=null)
+			{
+				for(int i=0;i<LevelHandler.collectedItemList.size();i++)
+				{
+					int[] translatedItem = LevelHandler.collectedItemList.get(i);
+					if(level.isFieldInFrustum(translatedItem[0], frustumMin, frustumMax))
+					{
+						Vector2i position = level.getWorldCoordinate(translatedItem[0]);
+						glPushMatrix();
+						gl.glTranslatef(position.x-level.gameCharacterPosition.x,translationSteps*translatedItem[2],position.y-level.gameCharacterPosition.y);
+						if(translatedItem[1]==GEOMETRY_STONE)
+						{
+						
+							geometry.render(0);
+							geometry.render(7);
+						}
+						else if(translatedItem[1]==GEOMETRY_BARREL)
+						{
+							geometry.render(1);
+							geometry.render(7);
+						}
+						else if(translatedItem[1]==GEOMETRY_TRASH)
+						{
+							geometry.render(2);
+							geometry.render(9);
+						}
+						else if(translatedItem[1]==GEOMETRY_MAP)
+						{ 	geometry.render(7);
+							glPushMatrix();
+							gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
+							geometry.render(3);
+							glPopMatrix();
+						}
+						else if(translatedItem[1]==GEOMETRY_SPRING)
+						{
+							geometry.render(4);
+							geometry.render(8);
+						}	
+						
+						glPopMatrix();
+					}
+					LevelHandler.collectedItemList.get(i)[2]++;
+					if(LevelHandler.collectedItemList.get(i)[2]>100)
+						LevelHandler.collectedItemList.remove(i);
+				}
+			}*/
 			
 			
 		}

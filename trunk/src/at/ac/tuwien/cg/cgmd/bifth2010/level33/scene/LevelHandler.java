@@ -6,29 +6,39 @@ import java.util.Random;
 import java.util.Vector;
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
 public class LevelHandler {
+	
+	
 
 	int world[];
-	Vector2i worldDim;
+	public static Vector2i worldDim;
 	Vector2f gameCharacterPosition; // actual Position
 	Vector2f gameCharacterTargetPosition; // target Position
 	boolean characterMoves = false; // if Character is moving in this moment
 	float gameCharacterSpeed = 30;
-	ArrayList<int[]> worldEntry;
-	List<Integer> goodiesIndex;
+	public static ArrayList<int[]> worldEntry;
+	public static List<Integer> goodiesIndex;
+	public static int gameCharacterField;
 	
 	List<int[]> springChangeList = new Vector<int[]>();
+	public static List<int[]> collectedItemList = new Vector<int[]>();
 	public static MapCalculationThread mapCalculationThread = null;
-	boolean isFirstMap = true;
+	public static boolean isFirstMap = false;
 	public static int mapIsActiveTimer = 0;
 	public static boolean mapIsActive = false;
 	int[][] mapResult;
-	boolean isMapThreadStarted = false;
+	public static boolean isMapThreadStarted = false;
+	public static int numberOfGoodGoodies=0;
+	public static int collectedMap=-1;
+	String collectedMapText="";
 	
 	StopTimer t;
 
@@ -67,7 +77,9 @@ public class LevelHandler {
 	world = levelGenration.startCreation();
 	worldEntry=levelGenration.getwallInfo();
 	goodiesIndex = levelGenration.getGoodiesPointsList();
+	numberOfGoodGoodies = goodiesIndex.size();
 	gameCharacterPosition = new Vector2f(levelGenration.getStartPosition().x,levelGenration.getStartPosition().y);
+	
 		
 	}
 
@@ -177,7 +189,7 @@ public class LevelHandler {
 	private void updateLevelAfterStep() {
 		
 		int worldIndex = getWorldId(Math.round((gameCharacterPosition.x)), Math.round((gameCharacterPosition.y)));
-		
+		gameCharacterField = worldIndex;
 //		int rows = new Float(gameCharacterPosition.y).intValue();
 //		int columns = new Float(gameCharacterPosition.x).intValue();
 //		Log.d("worldIndex1", String.valueOf(worldIndex));
@@ -188,95 +200,129 @@ public class LevelHandler {
 		
 		if(value!=1)
 		{
-			if(LevelActivity.IS_MUSIC_ON)
+			if(value==SceneGraph.GEOMETRY_STONE)
 			{
-				if(value==SceneGraph.GEOMETRY_STONE)
-				{
-					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
-					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.STONE);
-					
-					//Update GoodiesList
-					updateGoodiesList(worldIndex);
-					
-					//add to progress
-					LevelActivity.progressHandler.collectStone();
-					LevelGenration.numberOfStone--;
-				}
-				else if(value==SceneGraph.GEOMETRY_BARREL)
-				{
-					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
-					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.BARREL);
+				//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_STONE);
+				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.STONE);
 				
-					//Update GoodiesList
-					updateGoodiesList(worldIndex);
-					
-					//add to progress
-					LevelActivity.progressHandler.collectBarrel();
-					LevelGenration.numberOfBarrel--;
-				}
-				else if(value==SceneGraph.GEOMETRY_TRASH)
-				{
-					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
-					//LevelActivity.vibrator.vibrate(120L);
-					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.TRASH);
+				//Update GoodiesList
+				updateGoodiesList(worldIndex);
 				
-					//add to progress
-					LevelActivity.progressHandler.collectTrash();
-					LevelGenration.numberOfTrashes--;
-				}
-				else if(value==SceneGraph.GEOMETRY_SPRING)
+				//add to progress
+				LevelActivity.progressHandler.collectStone();
+				
+				LevelGenration.numberOfStone--;
+				numberOfGoodGoodies--;
+				
+				//add to translateList
+				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_STONE,worldEntry.get(worldIndex)[1]};
+				collectedItemList.add(addCollectedItem);
+				
+			}
+			else if(value==SceneGraph.GEOMETRY_BARREL)
+			{
+				//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_BARREL);
+				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.BARREL);
+			
+				//Update GoodiesList
+				updateGoodiesList(worldIndex);
+				
+				//add to progress
+				LevelActivity.progressHandler.collectBarrel();
+				
+				LevelGenration.numberOfBarrel--;
+				numberOfGoodGoodies--;
+				
+				//add to translateList
+				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_BARREL,worldEntry.get(worldIndex)[1]};
+				collectedItemList.add(addCollectedItem);
+			}
+			else if(value==SceneGraph.GEOMETRY_TRASH)
+			{
+				//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_TRASH);
+				//LevelActivity.vibrator.vibrate(120L);
+				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.TRASH);
+			
+				//add to progress
+				LevelActivity.progressHandler.collectTrash();
+				
+				LevelGenration.numberOfTrashes--;
+				
+				//add to translateList
+				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_TRASH,worldEntry.get(worldIndex)[1]};
+				collectedItemList.add(addCollectedItem);
+			}
+			else if(value==SceneGraph.GEOMETRY_SPRING)
+			{
+				//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
+				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.SPRING);
+				
+				//add to progress
+				LevelActivity.progressHandler.collectSpring();
+				
+				LevelGenration.numberOfSpring--;
+				numberOfGoodGoodies--;
+				
+				//Update GoodiesList
+				updateGoodiesList(worldIndex);
+				
+				//Add to springList
+				int newGoody = rand.nextInt(3);
+				if(newGoody==0)
+					newGoody=SceneGraph.GEOMETRY_STONE;
+				else if(newGoody==1)
+					newGoody=SceneGraph.GEOMETRY_BARREL;
+				else if(newGoody==2)
+					newGoody=SceneGraph.GEOMETRY_TRASH;
+				int[] addSpring = new int[]{worldIndex,(int)SceneGraph.timeInSeconds+3,newGoody};
+				springChangeList.add(addSpring);
+				
+				//add to translateList
+				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_SPRING,worldEntry.get(worldIndex)[1]};
+				collectedItemList.add(addCollectedItem);
+			}
+			else if(value==SceneGraph.GEOMETRY_MAP)
+			{
+				//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
+				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
+				
+				//add to translateList
+				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_MAP,worldEntry.get(worldIndex)[1]};
+				collectedItemList.add(addCollectedItem);
+				
+				LevelGenration.numberOfMaps--;
+				if(!isFirstMap)
+					isFirstMap = true;
+				else
 				{
-					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_SPRING);
-					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.SPRING);
+					collectedMap++;
 					
-					//add to progress
-					LevelActivity.progressHandler.collectSpring();
-					LevelGenration.numberOfSpring--;
+					if(collectedMap<10)
+						collectedMapText=" x 0"+collectedMap;
+					else
+						collectedMapText=" x "+collectedMap;
 					
-					//Update GoodiesList
-					updateGoodiesList(worldIndex);
-					
-					//Add to springList
-					int newGoody = rand.nextInt(3);
-					if(newGoody==0)
-						newGoody=SceneGraph.GEOMETRY_STONE;
-					else if(newGoody==1)
-						newGoody=SceneGraph.GEOMETRY_BARREL;
-					else if(newGoody==2)
-						newGoody=SceneGraph.GEOMETRY_TRASH;
-					int[] addSpring = new int[]{worldIndex,(int)SceneGraph.timeInSeconds+3,newGoody};
-					springChangeList.add(addSpring);
+					if(collectedMap==1)
+					{
+						//SceneGraph.ibPathButton.setVisibility(ImageButton.VISIBLE);
+						//SceneGraph.tvPathCount.setVisibility(TextView.VISIBLE);
+						SceneGraph.activity.runOnUiThread(new Runnable() {public void run() {
+							SceneGraph.ibPathButton.setVisibility(ImageButton.VISIBLE);
+							SceneGraph.tvPathCount.setVisibility(TextView.VISIBLE);	
+							SceneGraph.tvPathCount.setText(collectedMapText);
+						}});
+					}
+					else
+					{
+						SceneGraph.activity.runOnUiThread(new Runnable() {public void run() {
+							SceneGraph.tvPathCount.setText(collectedMapText);
+						}});
+					}
 				}
-				else if(value==SceneGraph.GEOMETRY_MAP)
-				{
-					//LevelActivity.soundHandler.playActivitySound(SoundHandler.ACTIVITY_MUSIC_MAP);
-					LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
-					
-					LevelGenration.numberOfMaps--;
-//					if(isFirstMap)
-//						isFirstMap = false;
-//					else
-//					{
-						//start thread to calculate way to goody
-						t = new StopTimer();
-						
 
-						mapCalculationThread = new MapCalculationThread(this, worldDim.x);
-						mapCalculationThread.setStartProperties(worldIndex, goodiesIndex, worldEntry);
-						mapCalculationThread.start();
-						isMapThreadStarted = true;
-//					}
-
-				}
 			}
 			worldEntry.get(worldIndex)[0]=1;
-			
-			
-			
-			//AlphaBLENDING
-			//TODO
 		}
-		//LevelActivity.soundHandler.releaseActivityAudioPlayer();
 	}
 	
 	/**
@@ -323,7 +369,7 @@ public class LevelHandler {
 	 * The thread terminates. Then the arrows which show the way will be added to the world.
 	 */
 	private void updateMapChanges(){
-		t.logTime("Map-Thread fertig nach: ");
+		//t.logTime("Map-Thread fertig nach: ");
 		
 		if(mapIsActive)
 			reUpdateMapChanges();
@@ -361,7 +407,15 @@ public class LevelHandler {
 			if(actuallyPointValue==SceneGraph.ARROW_LEFT  || 
 			   actuallyPointValue==SceneGraph.ARROW_UP    ||
 			   actuallyPointValue==SceneGraph.ARROW_RIGHT ||
-			   actuallyPointValue==SceneGraph.ARROW_DOWN)
+			   actuallyPointValue==SceneGraph.ARROW_DOWN  ||
+			   actuallyPointValue==SceneGraph.ARROW_BOTTOM_TO_LEFT ||
+			   actuallyPointValue==SceneGraph.ARROW_BOTTOM_TO_RIGHT ||
+			   actuallyPointValue==SceneGraph.ARROW_LEFT_TO_BOTTOM ||
+			   actuallyPointValue==SceneGraph.ARROW_LEFT_TO_TOP ||
+			   actuallyPointValue==SceneGraph.ARROW_RIGHT_TO_BOTTOM ||
+			   actuallyPointValue==SceneGraph.ARROW_RIGHT_TO_TOP ||
+			   actuallyPointValue==SceneGraph.ARROW_TOP_TO_LEFT ||
+			   actuallyPointValue==SceneGraph.ARROW_TOP_TO_RIGHT)
 			{
 				worldEntry.get(pointChanges[0])[0]=SceneGraph.GEOMETRY_WAY;
 			}
@@ -398,6 +452,56 @@ public class LevelHandler {
 	private Vector2i getRealWorldCoordinate(Vector2i pos) {
 		Vector2f real= getRealWorldCoordinate(new Vector2f(pos.x, pos.y));
 		return new Vector2i((int)real.x,(int)real.y);
+	}
+	
+	public Vector2i getWorldCoordinate(int fieldNumber){
+		Vector2i position = new Vector2i(fieldNumber%worldDim.x,fieldNumber/worldDim.x);
+		return position;
+	}
+	
+	public boolean isFieldInFrustum(int fieldNumber,Vector2i frustumMin, Vector2i frustumMax){
+		
+		Vector2i position = getWorldCoordinate(fieldNumber);
+		boolean result=false;
+		
+		if(frustumMin.x<frustumMax.x && frustumMin.y<frustumMax.y)
+		{
+			if((position.x>frustumMax.x || position.x<frustumMin.x) ||
+			   (position.y>frustumMax.y || position.y<frustumMin.y))
+			{
+				result=false;
+			}
+		}
+		else if(frustumMin.x>frustumMax.x && frustumMin.y<frustumMax.y)
+		{
+			if((position.x>frustumMax.x && position.x<frustumMin.x) ||
+			   (position.y>frustumMax.y || position.y<frustumMin.y))
+			{
+				result=false;
+			}
+		}
+		else if(frustumMin.x<frustumMax.x && frustumMin.y>frustumMax.y)
+		{
+			if((position.x>frustumMax.x || position.x<frustumMin.x) ||
+			   (position.y>frustumMax.y && position.y<frustumMin.y))
+			{
+				result=false;
+			}
+		}
+		else if(frustumMin.x>frustumMax.x && frustumMin.y>frustumMax.y)
+		{
+			if((position.x>frustumMax.x && position.x<frustumMin.x) &&
+			   (position.y>frustumMax.y && position.y<frustumMin.y))
+			{
+				result=false;
+			}
+		}
+		else
+		{
+			result= true;
+		}
+		
+		return result;
 	}
 	
 	/**
