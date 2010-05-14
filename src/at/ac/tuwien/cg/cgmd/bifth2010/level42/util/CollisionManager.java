@@ -67,6 +67,8 @@ public class CollisionManager implements Persistable{
 	public GameManager gameManager;
 	private MotionManager motionManager;
 	
+	private int collOffset;
+	private int collOffsetLimit;
 	
 	/**
 	 * Instantiates a new collision manager.
@@ -98,6 +100,7 @@ public class CollisionManager implements Persistable{
 			
 		this.minDistance = 0;
 		
+		
 		this.remainingPlanetParts = new Vector<Model>();
 		comperator = new NearestEntityComperator();
 		
@@ -114,6 +117,9 @@ public class CollisionManager implements Persistable{
 		}
 		Collections.sort(remainingPlanetParts, comperator);
 		printRemaingingPlanetParts();
+		
+		this.collOffset = (int)(entityList.size()/2);
+		this.collOffsetLimit = entityList.size();
 	}
 	
 	
@@ -204,9 +210,16 @@ public class CollisionManager implements Persistable{
 	 */
 	public void doCollisionDetection()
 	{
+		if(collOffset==0){
+			collOffset = (int)(entityList.size()/2);
+			collOffsetLimit = entityList.size();
+		}else{
+			collOffset = 0;
+			collOffsetLimit = (int)(entityList.size()/2);
+		}
 		
 		//for each entity
-		for(int i=0; i<entityList.size(); i++) 
+		for(int i=collOffset; i<collOffsetLimit; i++) 
 		{
 			objA = entityList.get(i);	
 			objAIsMoveable = (objA.getName().equals(Config.PLANET_NAME))?false:true;
