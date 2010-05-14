@@ -324,18 +324,36 @@ public class LevelActivity extends Activity
 		{
 		case R.id.l42_Menu_BoundingSphereSE:
 			Config.SHOW_SCENEENTITY_BOUNDING_SPHERES ^= true;
-			item.setTitle(Config.SHOW_SCENEENTITY_BOUNDING_SPHERES ? 
-					R.string.l42_Menu_BoundingSphereSE_hide : 
-					R.string.l42_Menu_BoundingSphereSE_show);
 			return true;
 		case R.id.l42_Menu_BoundingSphereModel:
 			Config.SHOW_MODEL_BOUNDING_SPHERES ^= true;
-			item.setTitle(Config.SHOW_MODEL_BOUNDING_SPHERES ? 
-					R.string.l42_Menu_BoundingSphereModel_hide : 
-					R.string.l42_Menu_BoundingSphereModel_show);
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu)
+	{
+		int size = menu.size();
+		for(int i=0; i<size; i++)
+		{
+			MenuItem item = menu.getItem(i);
+			switch(item.getItemId())
+			{
+			case R.id.l42_Menu_BoundingSphereSE:
+				item.setTitle(Config.SHOW_SCENEENTITY_BOUNDING_SPHERES ? 
+						R.string.l42_Menu_BoundingSphereSE_hide : 
+						R.string.l42_Menu_BoundingSphereSE_show);
+				break;
+			case R.id.l42_Menu_BoundingSphereModel:
+				item.setTitle(Config.SHOW_MODEL_BOUNDING_SPHERES ? 
+						R.string.l42_Menu_BoundingSphereModel_hide : 
+						R.string.l42_Menu_BoundingSphereModel_show);
+				break;
+			}
+		}
+		return super.onPrepareOptionsMenu(menu);
 	}
 	
 	@Override

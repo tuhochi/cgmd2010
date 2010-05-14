@@ -15,8 +15,15 @@ public class Config
 	public static long GAMETIME_UPDATE_INTERVAL = 1000;
 	
 	// bounding sphere stuff
-	/** determines how many degrees are between the control points of the bounding sphere. Higher value = faster rendering, but more visible edges */
-	public static int BOUNGING_SPHERE_SPACING = 90;
+	/**
+	 * Determines how many degrees are between the control points of the bounding sphere.
+	 * Must be a divisor of 180.
+	 * Higher value = faster rendering, uglier sphere
+	 * Formula for calculating the number of faces: 
+	 * nrOfFaces = ((360*180)/(BOUNGING_SPHERE_SPACING^2))*2
+	 * so: BOUNGING_SPHERE_SPACING = 20 -> 324 Faces
+	 */
+	public static int BOUNGING_SPHERE_SPACING = 20;
 	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = false;
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
 	
@@ -96,8 +103,5 @@ public class Config
 	public static final float ORBIT_DYNAMIC_SPEEDFACTOR = 120f;
 	public static final float PLANETCOLL_SPEED_FROM_SAT_FACTOR = 0.25f;
 	public static final float PLANETPART_CULL_DISTANCE = 30;
-	public static final String PLANETPART_SUFFIX = "UNTIED";
-
-	
-	
+	public static final String PLANETPART_SUFFIX = "_unTied";	
 }
