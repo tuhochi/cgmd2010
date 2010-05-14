@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
@@ -265,7 +266,10 @@ public class Scene implements Persistable
 					SceneEntity new_s = new SceneEntity();
 					new_s.setName(Config.SATELLITE_PREFIX + m.getName() + "UNTIED");
 					new_s.add(m);
-					new_s.getTransformation().copy(s.getTransformation());
+					Matrix44 new_s_transformation = new_s.getTransformation();
+					new_s_transformation.copy(s.getTransformation());
+					new_s_transformation.mult(m.getTransformation());
+					m.getTransformation().setIdentity();
 					motionManager.transferMotion(m, new_s);
 					s.remove(m);
 					sceneEntities.add(new_s);
