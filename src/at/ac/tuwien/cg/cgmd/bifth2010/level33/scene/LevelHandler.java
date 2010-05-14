@@ -29,7 +29,7 @@ public class LevelHandler {
 	public static int gameCharacterField;
 	
 	List<int[]> springChangeList = new Vector<int[]>();
-	public static List<int[]> collectedItemList = new Vector<int[]>();
+	public static List<float[]> collectedItemList = new Vector<float[]>();
 	public static MapCalculationThread mapCalculationThread = null;
 	public static boolean isFirstMap = false;
 	public static int mapIsActiveTimer = 0;
@@ -215,7 +215,7 @@ public class LevelHandler {
 				numberOfGoodGoodies--;
 				
 				//add to translateList
-				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_STONE,worldEntry.get(worldIndex)[1]};
+				float[] addCollectedItem = new float[]{worldIndex,SceneGraph.GEOMETRY_STONE,worldEntry.get(worldIndex)[1]};
 				collectedItemList.add(addCollectedItem);
 				
 			}
@@ -234,7 +234,7 @@ public class LevelHandler {
 				numberOfGoodGoodies--;
 				
 				//add to translateList
-				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_BARREL,worldEntry.get(worldIndex)[1]};
+				float[] addCollectedItem = new float[]{worldIndex,SceneGraph.GEOMETRY_BARREL,worldEntry.get(worldIndex)[1]};
 				collectedItemList.add(addCollectedItem);
 			}
 			else if(value==SceneGraph.GEOMETRY_TRASH)
@@ -249,7 +249,7 @@ public class LevelHandler {
 				LevelGenration.numberOfTrashes--;
 				
 				//add to translateList
-				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_TRASH,worldEntry.get(worldIndex)[1]};
+				float[] addCollectedItem = new float[]{worldIndex,SceneGraph.GEOMETRY_TRASH,worldEntry.get(worldIndex)[1]};
 				collectedItemList.add(addCollectedItem);
 			}
 			else if(value==SceneGraph.GEOMETRY_SPRING)
@@ -278,7 +278,7 @@ public class LevelHandler {
 				springChangeList.add(addSpring);
 				
 				//add to translateList
-				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_SPRING,worldEntry.get(worldIndex)[1]};
+				float[] addCollectedItem = new float[]{worldIndex,SceneGraph.GEOMETRY_SPRING,worldEntry.get(worldIndex)[1]};
 				collectedItemList.add(addCollectedItem);
 			}
 			else if(value==SceneGraph.GEOMETRY_MAP)
@@ -287,7 +287,7 @@ public class LevelHandler {
 				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.MAP);
 				
 				//add to translateList
-				int[] addCollectedItem = new int[]{worldIndex,SceneGraph.GEOMETRY_MAP,worldEntry.get(worldIndex)[1]};
+				float[] addCollectedItem = new float[]{worldIndex,SceneGraph.GEOMETRY_MAP,worldEntry.get(worldIndex)[1]};
 				collectedItemList.add(addCollectedItem);
 				
 				LevelGenration.numberOfMaps--;
@@ -358,6 +358,22 @@ public class LevelHandler {
 			{
 				int[] newGoody = springChangeList.get(i);
 				worldEntry.get(newGoody[0])[0]=newGoody[2];
+				if(newGoody[2]==SceneGraph.GEOMETRY_BARREL)
+				{
+					LevelGenration.numberOfBarrel++;
+					goodiesIndex.add(newGoody[0]);
+					numberOfGoodGoodies++;
+				}
+				else if(newGoody[2]==SceneGraph.GEOMETRY_STONE)
+				{
+					LevelGenration.numberOfStone++;
+					goodiesIndex.add(newGoody[0]);
+					numberOfGoodGoodies++;
+				}
+				else if(newGoody[2]==SceneGraph.GEOMETRY_TRASH)
+				{
+					LevelGenration.numberOfTrashes++;
+				}
 				springChangeList.remove(i);
 			}
 		}
@@ -462,46 +478,33 @@ public class LevelHandler {
 	public boolean isFieldInFrustum(int fieldNumber,Vector2i frustumMin, Vector2i frustumMax){
 		
 		Vector2i position = getWorldCoordinate(fieldNumber);
-		boolean result=false;
 		
 		if(frustumMin.x<frustumMax.x && frustumMin.y<frustumMax.y)
 		{
 			if((position.x>frustumMax.x || position.x<frustumMin.x) ||
 			   (position.y>frustumMax.y || position.y<frustumMin.y))
-			{
-				result=false;
-			}
+					return false;
 		}
 		else if(frustumMin.x>frustumMax.x && frustumMin.y<frustumMax.y)
 		{
 			if((position.x>frustumMax.x && position.x<frustumMin.x) ||
 			   (position.y>frustumMax.y || position.y<frustumMin.y))
-			{
-				result=false;
-			}
+					return false;
 		}
 		else if(frustumMin.x<frustumMax.x && frustumMin.y>frustumMax.y)
 		{
 			if((position.x>frustumMax.x || position.x<frustumMin.x) ||
 			   (position.y>frustumMax.y && position.y<frustumMin.y))
-			{
-				result=false;
-			}
+					return false;
 		}
 		else if(frustumMin.x>frustumMax.x && frustumMin.y>frustumMax.y)
 		{
 			if((position.x>frustumMax.x && position.x<frustumMin.x) &&
 			   (position.y>frustumMax.y && position.y<frustumMin.y))
-			{
-				result=false;
-			}
+					return false;
 		}
-		else
-		{
-			result= true;
-		}
-		
-		return result;
+	
+		return true;
 	}
 	
 	/**

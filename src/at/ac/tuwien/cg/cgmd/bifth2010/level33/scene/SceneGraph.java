@@ -42,8 +42,8 @@ public class SceneGraph  {
 	public static long timeInSeconds=0;
 	public static int levelEndTimeInSeconds=0;
 	private int gameTimeInSeconds=180;
-	private int maxTranslation = 8;
-	private float translationSteps = maxTranslation/100;
+	private int maxTranslation = 4;
+	private float translationSteps = (float)maxTranslation/100;
 	private boolean playingFinalSound=true;
 	
 	public final static byte GEOMETRY_WALL = 0;
@@ -696,35 +696,31 @@ public class SceneGraph  {
 			}
 			
 			//collected Items
-			/*
+			
 			if(LevelHandler.collectedItemList!=null)
 			{
 				for(int i=0;i<LevelHandler.collectedItemList.size();i++)
 				{
-					int[] translatedItem = LevelHandler.collectedItemList.get(i);
-					if(level.isFieldInFrustum(translatedItem[0], frustumMin, frustumMax))
+					float[] translatedItem = LevelHandler.collectedItemList.get(i);
+					if(level.isFieldInFrustum((int)translatedItem[0], frustumMin, frustumMax))
 					{
-						Vector2i position = level.getWorldCoordinate(translatedItem[0]);
+						Vector2i position = level.getWorldCoordinate((int)translatedItem[0]);
 						glPushMatrix();
 						gl.glTranslatef(position.x-level.gameCharacterPosition.x,translationSteps*translatedItem[2],position.y-level.gameCharacterPosition.y);
 						if(translatedItem[1]==GEOMETRY_STONE)
 						{
-						
 							geometry.render(0);
-							geometry.render(7);
 						}
 						else if(translatedItem[1]==GEOMETRY_BARREL)
 						{
 							geometry.render(1);
-							geometry.render(7);
 						}
 						else if(translatedItem[1]==GEOMETRY_TRASH)
 						{
 							geometry.render(2);
-							geometry.render(9);
 						}
 						else if(translatedItem[1]==GEOMETRY_MAP)
-						{ 	geometry.render(7);
+						{
 							glPushMatrix();
 							gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
 							geometry.render(3);
@@ -733,7 +729,6 @@ public class SceneGraph  {
 						else if(translatedItem[1]==GEOMETRY_SPRING)
 						{
 							geometry.render(4);
-							geometry.render(8);
 						}	
 						
 						glPopMatrix();
@@ -742,7 +737,7 @@ public class SceneGraph  {
 					if(LevelHandler.collectedItemList.get(i)[2]>100)
 						LevelHandler.collectedItemList.remove(i);
 				}
-			}*/
+			}
 			
 			
 		}
