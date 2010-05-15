@@ -323,9 +323,8 @@ public class SceneLoader
 		{
 			long duration = System.currentTimeMillis()-startTime;
 			Log.i(LevelActivity.TAG, "Successfully read Scene '" + filename + "' in " + duration + " ms");
+			scene.update();
 		}
-		
-		scene.update();
 		
 		return scene;
 	}
