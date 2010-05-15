@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -31,6 +32,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener;
@@ -64,7 +66,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 	
 	// Managers
 	/** The timer. */
-	private final TimeManager timer = TimeManager.instance; 
+	private final TimeManager timer = TimeManager.instance;
+	
+	/** The Sound Manager. */
+	private final SoundManager soundManager;
 	
 	/** The motion manager. */
 	private final MotionManager motionManager = MotionManager.instance;
@@ -128,6 +133,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 		setRenderer(this);
 		
 		this.context = (LevelActivity)context;
+		
+		soundManager = SoundManager.getInstance(context);
 		
 		cam = new Camera(25.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 		
@@ -327,6 +334,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 				
 				// vibrate according to the strength
 				context.vibrate(power);
+				
+				// play sound
+				soundManager.playSound(R.raw.l42_test);
+				
 				motionManager.applySelectionForce(entity, selectionDirection);				
 				motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
 			}
