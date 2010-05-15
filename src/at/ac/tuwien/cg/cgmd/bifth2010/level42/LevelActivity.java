@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -27,6 +28,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 /**
@@ -74,6 +76,8 @@ public class LevelActivity extends Activity
 	
 	/** The time manager. */
 	private final TimeManager timeManager = TimeManager.instance;
+	
+	private SoundManager soundManager;
 	
 	/** The vibrator. */
 	private Vibrator vibrator;
@@ -160,6 +164,8 @@ public class LevelActivity extends Activity
 		if(savedInstanceState == null)	// first start or restart
 			timeManager.reset(true);
 		
+		soundManager = SoundManager.getInstance(this);
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -175,6 +181,9 @@ public class LevelActivity extends Activity
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, TAG);
+
+	 	//set dedicated volume buttons to control music volume
+	 	setVolumeControlStream(AudioManager.STREAM_MUSIC);
         
         sessionState.setProgress(0); 
 		setResult(Activity.RESULT_OK, sessionState.asIntent());
@@ -210,6 +219,7 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onResume()");
 		
 		wakeLock.acquire();
+		soundManager.onResume();
 		renderView.synchronizer.setActive(true);
 		renderView.onResume();
 	}
@@ -224,6 +234,7 @@ public class LevelActivity extends Activity
 		Log.v(TAG,"onPause()");
 		renderView.synchronizer.setActive(false);
 		renderView.onPause();
+		soundManager.onPause();
 		wakeLock.release();
 	}
 	
@@ -244,6 +255,7 @@ public class LevelActivity extends Activity
 	protected void onDestroy()
 	{
 		super.onDestroy();
+		soundManager.onDestroy();
 		Log.v(TAG,"onDestroy()");
 	}
 	
