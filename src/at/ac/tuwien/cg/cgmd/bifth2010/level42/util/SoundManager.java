@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 
 /**
@@ -176,8 +175,9 @@ public class SoundManager
 			availablePlayers.add(new Pair<MediaPlayer, Integer>(new MediaPlayer(),null));
 		
 		// prepare two players for each audio resource
-		preparePlayer(R.raw.l42_test);
-		preparePlayer(R.raw.l42_test);
+		for(int j=0;j<Config.SOUND_LIST.length;j++){
+			preparePlayer(Config.SOUND_LIST[j]);
+		}
 	}
 	
 	public synchronized void onResume()
