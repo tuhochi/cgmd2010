@@ -22,6 +22,7 @@ public abstract class Motion implements Persistable
 {	
 	boolean isInsidePlanet = false;
 	boolean filterPlanetColl = false;
+	boolean playedCollSound = false;
 	
 	/**
 	 * Do the next iteration step 
@@ -84,6 +85,13 @@ public abstract class Motion implements Persistable
 	}
 	public void setFilterPlanetColl(boolean filterPlanetColl){
 		this.filterPlanetColl = filterPlanetColl;		
+	}
+	
+	public boolean getPlayedCollSound(){
+		return playedCollSound;		
+	}
+	public void setPlayedCollSound(boolean playedCollSound){
+		this.playedCollSound = playedCollSound;		
 	}
 	
 	public abstract Matrix44 getBasicOrientation();

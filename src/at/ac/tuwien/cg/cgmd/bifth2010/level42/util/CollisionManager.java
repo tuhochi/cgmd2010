@@ -220,7 +220,7 @@ public class CollisionManager implements Persistable{
 	 * Do collision detection between all scene entities in the scene
 	 */
 	public void doCollisionDetection()
-	{
+	{		
 		if(collOffset==0){
 			collOffset = (int)(entityList.size()/2);
 			collOffsetLimit = entityList.size();
@@ -266,8 +266,6 @@ public class CollisionManager implements Persistable{
 							satellite = (SceneEntity) objA;
 						}
 						
-						playCollSound(satellite);
-						
 						/**
 						 * SPECIAL CASE
 						 * planet part moves out of the planet -> avoid collision with planet
@@ -289,6 +287,11 @@ public class CollisionManager implements Persistable{
 							//check for contact
 							if(collisionDetected(planetPart,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
+								if(!satellite.getMotion().getPlayedCollSound()){
+									playCollSound(satellite);
+									satellite.getMotion().setPlayedCollSound(true);
+								}
+								
 								Motion planetPartMotion = planetPart.getMotion();
 								
 								if(planetPart.getMotion()==null)
@@ -327,6 +330,7 @@ public class CollisionManager implements Persistable{
 								scene.unTie(planet, planetPart);
 							}
 						}
+						
 					}
 					else
 					{
@@ -393,20 +397,23 @@ public class CollisionManager implements Persistable{
 					float distance = objA.getCurrentPosition().length();
 					
 					if(motion !=null && motion.isInsidePlanet()){
-						
+				
 						if(!motionManager.isPlanetPart(objA)){
 							if(distance > Config.TRANSFORMATION_DISTANCE){
 								if(motion instanceof DirectionalMotion){
 									motionManager.transformDirMotionInOrbit(objA);
+									motion.setPlayedCollSound(false);
 								}else{
 									//orbit collision
 									objA.getMotion().setInsidePlanet(false);
+									motion.setPlayedCollSound(false);
 								}
 							}
 						}else{
 							if(distance > goldPlanet.getBoundingSphereWorld().radius + Config.PLANETPART_REUSE_MINDISTANCE){
 								motion.setInsidePlanet(false);
 								motion.setFilterPlanetColl(false);
+								motion.setPlayedCollSound(false);
 							}
 						}
 						
@@ -419,11 +426,10 @@ public class CollisionManager implements Persistable{
 	private void playCollSound(Movable satellite)
 	{
 		//play sound per sat - planet hit only once
-		if(!satellite.getMotion().isInsidePlanet())
-			if(satellite.getMotion().getSpeed()>Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
-				soundManager.playSound(Config.SOUND_HEAVYIMPACT);
-			else
-				soundManager.playSound(Config.SOUND_IMPACT);
+		if(satellite.getMotion().getSpeed()>Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
+			soundManager.playSound(Config.SOUND_HEAVYIMPACT);
+		else
+			soundManager.playSound(Config.SOUND_IMPACT);
 	}
 	
 	public Movable getAutoAimEntity()
