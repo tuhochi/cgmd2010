@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +37,8 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mBasicTowerButton.setMinimumWidth( elementWidth );
 	    mBasicTowerButton.setMaxWidth( elementWidth );
 	    mBasicTowerButton.setImageResource(R.drawable.l12_basic_tower);
+	    mBasicTowerButton.setId( 1 );
+	    mBasicTowerButton.setOnClickListener(this);
 	    this.addView( mBasicTowerButton );
 	        
 	    mAdvancedTowerButton = new ImageButton( context );
@@ -44,6 +47,8 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mAdvancedTowerButton.setMinimumWidth( elementWidth );
 	    mAdvancedTowerButton.setMaxWidth( elementWidth );
 	    mAdvancedTowerButton.setImageResource(R.drawable.l12_advanced_tower);
+	    mAdvancedTowerButton.setId( 2 );
+	    mAdvancedTowerButton.setOnClickListener(this);
 	    this.addView( mAdvancedTowerButton );
 	        
 	    mHyperTowerButton = new ImageButton( context );
@@ -52,6 +57,8 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mHyperTowerButton.setMinimumWidth( elementWidth );
 	    mHyperTowerButton.setMaxWidth( elementWidth );
 	    mHyperTowerButton.setImageResource(R.drawable.l12_hyper_tower);
+	    mHyperTowerButton.setId( 3 );
+	    mHyperTowerButton.setOnClickListener(this);
 	    this.addView( mHyperTowerButton );
 	        
 	    mTV = new TextView( context );
@@ -59,11 +66,10 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    updateText();
 	    basicTowerButtonPressed();
 	    this.addView(mTV);
-	    this.setOnClickListener(this);
 	}
 	
 	public static void createSingleton( Context context, int height, int width ){
-		if( mSingleton == null ) mSingleton = new GameUI( context, height, width);
+		mSingleton = new GameUI( context, height, width);
 	}
 
 	public static LinearLayout getSingleton() {
@@ -75,6 +81,9 @@ public class GameUI extends LinearLayout implements OnClickListener{
 		mBasicTowerButton.setPressed(true);
 		mAdvancedTowerButton.setPressed(false);
 		mHyperTowerButton.setPressed(false);
+		mBasicTowerButton.setColorFilter(Color.DKGRAY, Mode.MULTIPLY);
+		mAdvancedTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
+		mHyperTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
 		GameMechanics.getSingleton().setBasicTowerSelected();
 	}
 	
@@ -82,6 +91,9 @@ public class GameUI extends LinearLayout implements OnClickListener{
 		mBasicTowerButton.setPressed(false);
 		mAdvancedTowerButton.setPressed(true);
 		mHyperTowerButton.setPressed(false);
+		mAdvancedTowerButton.setColorFilter(Color.DKGRAY, Mode.MULTIPLY);
+		mBasicTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
+		mHyperTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
 		GameMechanics.getSingleton().setAdvancedTowerSelected();
 	}
 	
@@ -89,21 +101,32 @@ public class GameUI extends LinearLayout implements OnClickListener{
 		mBasicTowerButton.setPressed(false);
 		mAdvancedTowerButton.setPressed(false);
 		mHyperTowerButton.setPressed(true);
+		mHyperTowerButton.setColorFilter(Color.DKGRAY, Mode.MULTIPLY);
+		mAdvancedTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
+		mBasicTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
 		GameMechanics.getSingleton().setHyperTowerSelected();
 	}
 	
 	public static void updateText(){
-		mSingleton.mTV.setText( FPSCounter.getSingleton().getFPS()+" FPS | Money: "+GameMechanics.getSingleton().getMoney()+" | Rounds left: "+(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber()) +" | Countdown: "+(int)(GameMechanics.getSingleton().getRemainingWaitTime()*0.001));
+		mSingleton.mTV.setText( 
+				FPSCounter.getSingleton().getFPS()+" FPS | " +
+				"Money: "+GameMechanics.getSingleton().getMoney()+" | " +
+				"Rounds left: "+(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber()) +" |" +
+				" Countdown: "+(int)(GameMechanics.getSingleton().getRemainingWaitTime()*0.001));
 	}
 
 	@Override
 	public void onClick(View v) {
-		if( v == mBasicTowerButton ){
+		System.out.println("On Click Listener!!!!! ID: "+v.getId());
+		if( v.getId() == mBasicTowerButton.getId() ){
+			System.out.println("Basic Tower Button");
 			basicTowerButtonPressed();
-		} else if( v == mAdvancedTowerButton ){
+		} else if( v.getId() == mAdvancedTowerButton.getId() ){
 			advancedTowerButtonPressed();
-		} else if( v == mHyperTowerButton){
+			System.out.println("Advanced Tower Button");
+		} else if( v.getId() == mHyperTowerButton.getId() ){
 			hyperTowerButtonPressed();
+			System.out.println("Hyper Tower Button");
 		}
 	}
 

@@ -13,9 +13,6 @@ public class GameMechanics {
 	private long mLastColDetDone = -1;
 	private LevelActivity mGameContext = null;	
 	
-	private boolean mBasicTowerSelected = true;
-	private boolean mAdvancedTowerSelected = true;
-	private boolean mHyperTowerSelected = true;
 	
 	private static GameMechanics mSingleton = null;
 	
@@ -123,20 +120,14 @@ public class GameMechanics {
 	}
 
 	public void setBasicTowerSelected() {
-		mBasicTowerSelected = true;
-		mAdvancedTowerSelected = false;
-		mHyperTowerSelected = false;
+		mSelectedTower = Definitions.BASIC_TOWER;
 	}
 	
 	public void setAdvancedTowerSelected() {
-		mBasicTowerSelected = false;
-		mAdvancedTowerSelected = true;
-		mHyperTowerSelected = false;
+		mSelectedTower = Definitions.ADVANCED_TOWER;
 	}
 	
 	public void setHyperTowerSelected() {
-		mBasicTowerSelected = false;
-		mAdvancedTowerSelected = false;
-		mHyperTowerSelected = true;
+		mSelectedTower = Definitions.HYPER_TOWER;
 	}
 }

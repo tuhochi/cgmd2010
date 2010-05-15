@@ -44,10 +44,6 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 			}
 		}
 		FPSCounter.getSingleton().addFrame();
-		if( FPSCounter.getSingleton().getFPS() != mFPS){
-			mFPS = FPSCounter.getSingleton().getFPS();
-			System.out.println("FPS: "+FPSCounter.getSingleton().getFPS());
-		}
 	}
 
 	@Override

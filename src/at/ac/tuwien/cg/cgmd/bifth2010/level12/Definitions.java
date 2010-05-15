@@ -17,10 +17,12 @@ public final class Definitions {
 	//Towers:
 	public static final int BASIC_TOWER = 0;
 	public static final int ADVANCED_TOWER = 1;
+	public static final int HYPER_TOWER = 2;
 	
 	//Tower Counts:
 	public static final int BASIC_TOWER_POOL = 5;
 	public static final int ADVANCED_TOWER_POOL = 5;
+	public static final int HYPER_TOWER_POOL = 5;
 	
 		//Basic Tower:
 		public static final float BASIC_TOWER_RADIUS = 30;
@@ -30,6 +32,26 @@ public final class Definitions {
 		public static final int BASIC_PROJECTILE_POOL = 4;
 		public static final float BASIC_TOWER_PROJECTILE_SPEED = 7;
 		public static final int BASIC_TOWER_PROJECTILE_DAMAGE = 10;
+		
+		
+		//Advanced Tower:
+		public static final float ADVANCED_TOWER_RADIUS = 20;
+		public static final float ADVANCED_TOWER_SHOOTING_INTERVALL = 7000;
+	
+		//Advanced Tower Projectiles:
+		public static final int ADVANCED_PROJECTILE_POOL = 4;
+		public static final float ADVANCED_TOWER_PROJECTILE_SPEED = 5;
+		public static final int ADVANCED_TOWER_PROJECTILE_DAMAGE = 20;
+		
+		
+		//Hyper Tower:
+		public static final float HYPER_TOWER_RADIUS = 20;
+		public static final float HYPER_TOWER_SHOOTING_INTERVALL = 2000;
+	
+		//Hyper Tower Projectiles:
+		public static final int HYPER_PROJECTILE_POOL = 7;
+		public static final float HYPER_TOWER_PROJECTILE_SPEED = 12;
+		public static final int HYPER_TOWER_PROJECTILE_DAMAGE = 9;
 		
 	
 	
@@ -70,6 +92,7 @@ public final class Definitions {
 		public static final float FOURTH_ROUND_ENEMIE_RADIUS = 35;
 		public static final int FOURTH_ROUND_ENEMIE_MONEY = 20;
 		public static final float FOURTH_ROUND_ENEMIE_SPEED = 20;
+
 
 
 		
