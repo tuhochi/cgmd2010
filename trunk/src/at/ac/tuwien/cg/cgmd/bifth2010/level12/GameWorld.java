@@ -3,11 +3,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 import java.util.Random;
 import java.util.Vector;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.AdvancedTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundFour;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundOne;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundThree;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundTwo;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.HyperTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
 
@@ -19,7 +21,10 @@ public class GameWorld {
 	
 	private int mBasicTowerCounter = 0;
 	private BasicTower[] mBasicTower = null; //tower types, wo gezeichnet in der towerklasse
-	private int mAdvancedTowerCount = 0;
+	private int mAdvancedTowerCounter = 0;
+	private AdvancedTower[] mAdvancedTower = null;
+	private int mHyperTowerCounter = 0;
+	private HyperTower[] mHyperTower = null;
 	
 	private float mXPos, mYPos; //picking	
 	private static int mWidth = -1;
@@ -72,24 +77,43 @@ public class GameWorld {
 		float[] correctXYpos = mGamefield.correctXYpos( xpos, ypos);
 		mXPos = correctXYpos[0];
 		mYPos = correctXYpos[1];
+		boolean last = false;
 			switch ( GameMechanics.getSingleton().getSelectedTower() ){
 				case Definitions.BASIC_TOWER:
-					boolean last = false;
 					for( int i = mBasicTowerCounter; i < Definitions.BASIC_TOWER_POOL && !last; i++){
 						if( mBasicTower[i].getActiveState() == false){
 							mBasicTower[i].setXY(mXPos, mYPos);
 							mBasicTowerCounter++;
-							System.out.println("Setting tower at x/y: "+mXPos+"/"+mYPos);
 							last = true;
 							mGamefield.setFieldOccupied(mXPos, mYPos);
 							break;
 						}
 						if ( i == mBasicTower.length -1 ) last = true;
 					}
-					//mNewTower = false;
 					break;
 				case Definitions.ADVANCED_TOWER:
-					//TODO
+					for( int i = mAdvancedTowerCounter; i < Definitions.ADVANCED_TOWER_POOL && !last; i++){
+						if( mAdvancedTower[i].getActiveState() == false){
+							mAdvancedTower[i].setXY(mXPos, mYPos);
+							mAdvancedTowerCounter++;
+							last = true;
+							mGamefield.setFieldOccupied(mXPos, mYPos);
+							break;
+						}
+						if ( i == mAdvancedTower.length -1 ) last = true;
+					}
+					break;
+				case Definitions.HYPER_TOWER:
+					for( int i = mHyperTowerCounter; i < Definitions.HYPER_TOWER_POOL && !last; i++){
+						if( mHyperTower[i].getActiveState() == false){
+							mHyperTower[i].setXY(mXPos, mYPos);
+							mHyperTowerCounter++;
+							last = true;
+							mGamefield.setFieldOccupied(mXPos, mYPos);
+							break;
+						}
+						if ( i == mHyperTower.length -1 ) last = true;
+					}
 					break;
 				default:
 					System.out.println("Selected TowerType not found!");
@@ -162,9 +186,16 @@ public class GameWorld {
 	public void initTower(){
 		//BasicTower init
 		if( mBasicTower == null){
-			System.out.println("mBASICTOWER == NULL");
 			mBasicTower = new BasicTower[ Definitions.BASIC_TOWER_POOL ];
 			for ( int i = 0; i < mBasicTower.length; i++) mBasicTower[i] = new BasicTower();
+		}
+		if( mAdvancedTower == null){
+			mAdvancedTower = new AdvancedTower[ Definitions.ADVANCED_TOWER_POOL ];
+			for ( int i = 0; i < mAdvancedTower.length; i++) mAdvancedTower[i] = new AdvancedTower();
+		}
+		if( mHyperTower == null){
+			mHyperTower = new HyperTower[ Definitions.HYPER_TOWER_POOL ];
+			for ( int i = 0; i < mHyperTower.length; i++) mHyperTower[i] = new HyperTower();
 		}
 	}
 	
@@ -184,6 +215,28 @@ public class GameWorld {
 				}
 			}
 		}
+		for( int i = 0; i < mAdvancedTower.length; i++){
+			if( mAdvancedTower[i].getActiveState()){
+				synchronized( mEnemies ){
+					for( int j = 0; j < mEnemies.size() ; j++){
+						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mAdvancedTower[i].getY() ){
+							mAdvancedTower[i].collideX( mEnemies.get(j) );
+						}
+					}
+				}
+			}
+		}
+		for( int i = 0; i < mBasicTower.length; i++){
+			if( mHyperTower[i].getActiveState()){
+				synchronized( mEnemies ){
+					for( int j = 0; j < mEnemies.size() ; j++){
+						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mHyperTower[i].getY() ){
+							mHyperTower[i].collideX( mEnemies.get(j) );
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public Gamefield getGamefield(){
@@ -195,6 +248,12 @@ public class GameWorld {
 		Vector<Tower> ret = new Vector<Tower>();	
 		for ( int i = 0; i < mBasicTower.length; i++){
 			if( mBasicTower[i].getActiveState()) ret.add( mBasicTower[i] ); 
+		}
+		for ( int i = 0; i < mAdvancedTower.length; i++){
+			if( mAdvancedTower[i].getActiveState()) ret.add( mAdvancedTower[i] ); 
+		}
+		for ( int i = 0; i < mHyperTower.length; i++){
+			if( mHyperTower[i].getActiveState()) ret.add( mHyperTower[i] ); 
 		}
 		return ret;
 	}
