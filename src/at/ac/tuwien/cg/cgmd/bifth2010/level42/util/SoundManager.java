@@ -23,47 +23,29 @@ public class SoundManager
 	/**
 	 * Instance of this Manager
 	 */
-	public static SoundManager instance;
+	public static final SoundManager instance = new SoundManager();
 	
 	/**
 	 * The context
 	 */
-	private final Context context;
+	private Context context;
 			
 	/**
 	 * Currently ready MediaPlayers for each resID
 	 */
-	private final HashMap<Integer, ArrayList<MediaPlayer>> players;
+	private HashMap<Integer, ArrayList<MediaPlayer>> players;
 	
-	private final ArrayList<Pair<MediaPlayer,Integer>> availablePlayers;
+	private ArrayList<Pair<MediaPlayer,Integer>> availablePlayers;
 	
-	private final ArrayList<MediaPlayer> pausedPlayers;
-
-	public static SoundManager getInstance(Context context)
-	{
-		if(instance == null)
-			instance = new SoundManager(context);
-		return instance;
-	}
+	private ArrayList<MediaPlayer> pausedPlayers;
 	
 	/**
 	 * Default Constructor
 	 * @param context
 	 */
-	private SoundManager(Context context)
+	private SoundManager()
 	{
-		this.context = context;
-		players = new HashMap<Integer, ArrayList<MediaPlayer>>();
-		availablePlayers = new ArrayList<Pair<MediaPlayer,Integer>>();
-		pausedPlayers = new ArrayList<MediaPlayer>();
 		
-		// create a fixed number of players
-		for(int i=0; i<20; i++)
-			availablePlayers.add(new Pair<MediaPlayer, Integer>(new MediaPlayer(),null));
-		
-		// prepare two players for each audio resource
-		preparePlayer(R.raw.l42_test);
-		preparePlayer(R.raw.l42_test);
 	}
 	
 	private synchronized MediaPlayer preparePlayer(int resID)
@@ -182,6 +164,31 @@ public class SoundManager
 		}
 	}
 	
+	public synchronized void onCreate(Context context)
+	{
+		this.context = context;
+		players = new HashMap<Integer, ArrayList<MediaPlayer>>();
+		availablePlayers = new ArrayList<Pair<MediaPlayer,Integer>>();
+		pausedPlayers = new ArrayList<MediaPlayer>();
+		
+		// create a fixed number of players
+		for(int i=0; i<20; i++)
+			availablePlayers.add(new Pair<MediaPlayer, Integer>(new MediaPlayer(),null));
+		
+		// prepare two players for each audio resource
+		preparePlayer(R.raw.l42_test);
+		preparePlayer(R.raw.l42_test);
+	}
+	
+	public synchronized void onResume()
+	{
+		ArrayList<MediaPlayer> pausedPlayers = this.pausedPlayers;
+	
+		int size = pausedPlayers.size();
+		for(int i=0; i<size; i++)
+			pausedPlayers.get(i).start();
+	}
+	
 	public synchronized void onPause()
 	{
 		ArrayList<Pair<MediaPlayer, Integer>> availablePlayers = this.availablePlayers;
@@ -198,15 +205,6 @@ public class SoundManager
 				pausedPlayers.add(currentPlayer);
 			}
 		}
-	}
-	
-	public synchronized void onResume()
-	{
-		ArrayList<MediaPlayer> pausedPlayers = this.pausedPlayers;
-	
-		int size = pausedPlayers.size();
-		for(int i=0; i<size; i++)
-			pausedPlayers.get(i).start();
 	}
 	
 	public synchronized void onDestroy()
