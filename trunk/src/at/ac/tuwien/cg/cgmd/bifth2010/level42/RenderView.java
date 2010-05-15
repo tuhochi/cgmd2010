@@ -334,7 +334,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 				context.vibrate(power);
 				
 				// play sound
-				soundManager.playSound(R.raw.l42_test);
+				soundManager.playSound(Config.SOUND_SHOOT);
 				
 				motionManager.applySelectionForce(entity, selectionDirection);				
 				motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);

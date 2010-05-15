@@ -439,7 +439,7 @@ public class Orbit extends Motion
 	public void morph(Vector3 pushVec)
 	{
 		
-		//Log.d(LevelActivity.TAG,"MORPH OPERATION");
+		Log.d(LevelActivity.TAG,"MORPH OPERATION "+pushVec.toString());
 		
 		//stop scale morphing
 		directionDiffFactor = directionDiff;

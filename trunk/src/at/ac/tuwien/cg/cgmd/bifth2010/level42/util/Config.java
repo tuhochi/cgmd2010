@@ -1,7 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 /**
  * This Class represents the configuration for the level 42
  *
@@ -104,4 +104,26 @@ public class Config
 	public static final float PLANETCOLL_SPEED_FROM_SAT_FACTOR = 0.25f;
 	public static final float PLANETPART_CULL_DISTANCE = 30;
 	public static final String PLANETPART_SUFFIX = "_unTied";	
+	public static final float PLANETPART_REUSE_MINDISTANCE = 2;
+	
+	public static final float SELECTION_BSPHERE_INCREMENT = 0.5f;
+	
+	
+	public static final int SOUND_IMPACT = R.raw.l42_impact;
+	public static final int SOUND_HEAVYIMPACT = R.raw.l42_heavyimpact;
+	public static final int SOUND_LOADFORCE = R.raw.l42_loadforce;
+	public static final int SOUND_SHOOT = R.raw.l42_shoot;
+	public static final int SOUND_TERRIBLEDAMAGE = R.raw.l42_terribledamage;
+
+	
+	public static int[] SOUND_LIST = 
+		new int[] {
+			SOUND_IMPACT,
+			SOUND_HEAVYIMPACT,
+			SOUND_LOADFORCE,
+			SOUND_SHOOT,
+			SOUND_TERRIBLEDAMAGE
+		};
+
+
 }

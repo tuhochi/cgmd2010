@@ -21,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 public abstract class Motion implements Persistable
 {	
 	boolean isInsidePlanet = false;
+	boolean filterPlanetColl = false;
 	
 	/**
 	 * Do the next iteration step 
@@ -77,6 +78,14 @@ public abstract class Motion implements Persistable
 	public void setInsidePlanet(boolean isInsidePlanet){
 		this.isInsidePlanet = isInsidePlanet;
 	}
+	
+	public boolean getFilterPlanetColl(){
+		return filterPlanetColl;		
+	}
+	public void setFilterPlanetColl(boolean filterPlanetColl){
+		this.filterPlanetColl = filterPlanetColl;		
+	}
+	
 	public abstract Matrix44 getBasicOrientation();
 	public abstract void setBasicOrientation(Matrix44 basicOrientation);
 	

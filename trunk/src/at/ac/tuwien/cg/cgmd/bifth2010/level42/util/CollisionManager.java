@@ -53,7 +53,7 @@ public class CollisionManager implements Persistable{
 					      toCenterVecA,toCenterVecB;
 	private Motion objAMotion,objBMotion;
 	
-	private Movable objA,objB;
+	private Movable objA,objB,goldPlanet;
 	
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
@@ -66,6 +66,7 @@ public class CollisionManager implements Persistable{
 	public GameManager gameManager;
 	private MotionManager motionManager;
 	private TimeManager timeManager;
+	private SoundManager soundManager;
 	
 	private int collOffset;
 	private int collOffsetLimit;
@@ -108,12 +109,14 @@ public class CollisionManager implements Persistable{
 		
 		this.motionManager = MotionManager.instance;
 		this.timeManager = TimeManager.instance;
+		this.soundManager = SoundManager.instance;
 		
 		instance = this;
 		
 		for(int i=0;i<entityList.size();i++)
 		{
 			if(entityList.get(i).getName().equals(Config.PLANET_NAME)){
+				goldPlanet = entityList.get(i);
 				remainingPlanetParts.addAll(entityList.get(i).models);
 				break;
 			}
@@ -162,7 +165,7 @@ public class CollisionManager implements Persistable{
 			pq.subtract(q);
 			
 			Vector3.crossProduct(pq,a,normalDistance);
-			if(normalDistance.length()<entity.getBoundingSphereWorld().radius)
+			if(normalDistance.length() < (entity.getBoundingSphereWorld().radius+Config.SELECTION_BSPHERE_INCREMENT))
 			{
 				Log.d(LevelActivity.TAG,"found hit with " + entity.getName() + " distance="+normalDistance.length()+" sphereradius="+entity.getBoundingSphereWorld().radius);
 				
@@ -235,22 +238,22 @@ public class CollisionManager implements Persistable{
 			if(objA.isDisabled())
 				continue;
 			
-			objAIsMoveable = (objA.getName().equals(Config.PLANET_NAME))?false:true;
+			objAIsMoveable = (objA == goldPlanet)?false:true;
 			
 			for(int j = i+1; j<entityList.size(); j++)
 			{
 				objB = entityList.get(j);
-				objBIsMoveable = (objB.getName().equals(Config.PLANET_NAME))?false:true;
+				objBIsMoveable = (objB == goldPlanet)?false:true;
 				
 				//check for contact
 				if(collisionDetected(objA,objB,Config.COLLISION_PENETRATION_DEPTH,centerDistance))
 				{
 					//collision detected
 					Log.d(LevelActivity.TAG,"COLLISION DETECTED");
+					
 					//check for collision between satellite and planet
 					if(!objAIsMoveable||!objBIsMoveable)
 					{
-						
 						//distinguish entities
 						SceneEntity planet = null;
 						SceneEntity satellite = null;
@@ -263,20 +266,18 @@ public class CollisionManager implements Persistable{
 							satellite = (SceneEntity) objA;
 						}
 						
+						playCollSound(satellite);
+						
 						/**
 						 * SPECIAL CASE
 						 * planet part moves out of the planet -> avoid collision with planet
 						 */
-						if(motionManager.isPlanetPart(satellite)){
-							if(satellite.getMotion().isInsidePlanet()){
-								//Log.d(LevelActivity.TAG,"AVOID PLANETPART COLL");
-								continue;
-							}
-						}else{
-							//set planet entrance flag
-							satellite.getMotion().setInsidePlanet(true);
-						}
-						
+						if(satellite.getMotion().getFilterPlanetColl())
+							continue;
+					
+						//set planet entrance flag
+						satellite.getMotion().setInsidePlanet(true);
+												
 						Model planetPart = null;
 						
 						//find out which part of the planet got hit
@@ -288,14 +289,15 @@ public class CollisionManager implements Persistable{
 							//check for contact
 							if(collisionDetected(planetPart,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
-								
 								Motion planetPartMotion = planetPart.getMotion();
 								
 								if(planetPart.getMotion()==null)
 								{
-									
 									planetPushVec.set(planetPart.getBoundingSphereWorld().center);
-									planetPushVec.subtract(planet.getBoundingSphereWorld().center);
+									planetPushVec.subtract(Config.UNIVERSE_CENTER);
+									
+									if(planetPushVec.length()==0)
+										planetPushVec.set(Constants.DUMMY_INIT_VEC);
 									
 									planetPartMotion = new DirectionalPlanetMotion(	planetPart.getBoundingSphereWorld().center,
 																					planetPushVec,
@@ -316,6 +318,11 @@ public class CollisionManager implements Persistable{
 								
 								//delete from aiming list
 								remainingPlanetParts.remove(planetPart);
+								
+								//avoid inter-planet-part-coll
+								if(remainingPlanetParts.size()>1)
+									planetPartMotion.setFilterPlanetColl(true);
+								
 								// schedule for untie
 								scene.unTie(planet, planetPart);
 							}
@@ -368,37 +375,56 @@ public class CollisionManager implements Persistable{
 						objBPushVec.set(objACurrDir);
 						objBPushVec.add(toCenterVecB);
 
-						objA.getMotion().morph(objAPushVec);
-						objB.getMotion().morph(objBPushVec);
+						if(objAPushVec.length()!=0){
+							objA.getMotion().morph(objAPushVec);
+							motionManager.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
+						}
 						
-						motionManager.changeSatelliteTransformation(objA, objACurrDir, objAPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);
-						motionManager.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
-					}
+						if(objBPushVec.length()!=0){
+							objB.getMotion().morph(objBPushVec);
+							motionManager.changeSatelliteTransformation(objB, objBCurrDir, objBPushVec,Config.INTERSATELLITE_SPEEDROTA_RATIO);					
+						}
+				}
 
 				//END of contact detection
 				}else{
 					//special case: sat is not longer "inside the planet"
 					Motion motion = objA.getMotion();
+					float distance = objA.getCurrentPosition().length();
 					
 					if(motion !=null && motion.isInsidePlanet()){
-						if(objA.getCurrentPosition().length()>Config.TRANSFORMATION_DISTANCE){
-							if(motion instanceof DirectionalMotion){
-								if(motionManager.isPlanetPart(objA))
-									motion.setInsidePlanet(false);
-								else
+						
+						if(!motionManager.isPlanetPart(objA)){
+							if(distance > Config.TRANSFORMATION_DISTANCE){
+								if(motion instanceof DirectionalMotion){
 									motionManager.transformDirMotionInOrbit(objA);
-							}else{
-								//orbit collision
-								objA.getMotion().setInsidePlanet(false);
+								}else{
+									//orbit collision
+									objA.getMotion().setInsidePlanet(false);
+								}
+							}
+						}else{
+							if(distance > goldPlanet.getBoundingSphereWorld().radius + Config.PLANETPART_REUSE_MINDISTANCE){
+								motion.setInsidePlanet(false);
+								motion.setFilterPlanetColl(false);
 							}
 						}
+						
 					}
 				}
 				
 			}
 		}
 	}
-	
+	private void playCollSound(Movable satellite)
+	{
+		//play sound per sat - planet hit only once
+		if(!satellite.getMotion().isInsidePlanet())
+			if(satellite.getMotion().getSpeed()>Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
+				soundManager.playSound(Config.SOUND_HEAVYIMPACT);
+			else
+				soundManager.playSound(Config.SOUND_IMPACT);
+	}
 	
 	public Movable getAutoAimEntity()
 	{
