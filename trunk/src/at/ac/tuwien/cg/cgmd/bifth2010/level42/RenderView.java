@@ -69,7 +69,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private final TimeManager timer = TimeManager.instance;
 	
 	/** The Sound Manager. */
-	private final SoundManager soundManager;
+	private final SoundManager soundManager = SoundManager.instance;
 	
 	/** The motion manager. */
 	private final MotionManager motionManager = MotionManager.instance;
@@ -133,8 +133,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 		setRenderer(this);
 		
 		this.context = (LevelActivity)context;
-		
-		soundManager = SoundManager.getInstance(context);
 		
 		cam = new Camera(25.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 		

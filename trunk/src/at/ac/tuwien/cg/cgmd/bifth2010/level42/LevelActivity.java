@@ -77,7 +77,7 @@ public class LevelActivity extends Activity
 	/** The time manager. */
 	private final TimeManager timeManager = TimeManager.instance;
 	
-	private SoundManager soundManager;
+	private final SoundManager soundManager = SoundManager.instance;
 	
 	/** The vibrator. */
 	private Vibrator vibrator;
@@ -164,7 +164,7 @@ public class LevelActivity extends Activity
 		if(savedInstanceState == null)	// first start or restart
 			timeManager.reset(true);
 		
-		soundManager = SoundManager.getInstance(this);
+		soundManager.onCreate(this);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
