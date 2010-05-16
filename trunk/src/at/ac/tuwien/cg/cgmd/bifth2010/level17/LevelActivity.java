@@ -33,6 +33,7 @@ public class LevelActivity extends Activity {
 	private TextView mHealthText;
 	private TextView mSpacer;
 	private TextView mPointsText;
+	private TextView mFPSText;
 	private Vibrator mVibrator;
 	private int mCurrentMoney; 
 
@@ -71,6 +72,13 @@ public class LevelActivity extends Activity {
         mPointsText.setTextColor(Color.BLACK);
         mPointsText.setBackgroundResource(R.drawable.l17_text_bg);
         
+        mFPSText = new TextView(this);
+        mFPSText.setText("0");
+        mFPSText.setTextSize(25);
+        mFPSText.setGravity(Gravity.CENTER);
+        mFPSText.setTextColor(Color.BLACK);
+        mFPSText.setBackgroundResource(R.drawable.l17_text_bg);
+        
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         llparams.weight = 0;
         llparams.setMargins(10, 10, 10, 10);
@@ -79,6 +87,7 @@ public class LevelActivity extends Activity {
         llparams2.weight = 1;
         llparams2.setMargins(10, 10, 10, 10);
         llayout.addView(mSpacer, llparams2);
+        llayout.addView(mFPSText, llparams);
         llayout.addView(mPointsText, llparams);
         
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  
@@ -160,6 +169,11 @@ public class LevelActivity extends Activity {
     	long milliseconds = 100;  
     	mVibrator.vibrate(milliseconds);  
     }    
+    
+    public void updateFPS(float fps)
+    {
+    	mFPSText.setText(Integer.toString((int)fps));
+    }
     
 	/**
 	 * Is called when the money of the player changes
