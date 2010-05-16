@@ -76,7 +76,6 @@ public class LevelActivity extends Activity
 	
 	/** The time manager. */
 	private final TimeManager timeManager = TimeManager.instance;
-	
 	private final SoundManager soundManager = SoundManager.instance;
 	
 	/** The vibrator. */
@@ -84,7 +83,9 @@ public class LevelActivity extends Activity
 	
 	/** The PowerManagers Wake Lock */
 	private PowerManager.WakeLock wakeLock;
-	
+		
+	private float timeSinceComplete;
+	private boolean levelComplete;
 	/**
 	 * Instantiates a new level activity.
 	 */
@@ -93,6 +94,10 @@ public class LevelActivity extends Activity
 		super();
 		instance = this;
 		handler = new Handler();
+		
+		timeSinceComplete = 0;
+		levelComplete = false;		
+				
 		fpsUpdateRunnable = new Runnable()
 		{
 			@Override
@@ -111,17 +116,23 @@ public class LevelActivity extends Activity
 				scoreProgress.setProgress((int)Math.ceil(100-scorePercent));
 				sessionState.setProgress((int)Math.ceil(scorePercent)); 
 				setResult(Activity.RESULT_OK, sessionState.asIntent());
+				if(GameManager.instance.isComplete()){
+					timeSinceComplete = 0;
+					levelComplete = true;
+					soundManager.playSound(Config.SOUND_TERRIBLEDAMAGE);
+				}
 			}
 		};
 		
 		remainingGameTimeRunnable = new Runnable()
 		{
+			float totalSeconds = Config.GAMETIME/1000;
+			
 			@Override
 			public void run()
 			{
+				int dt = (int)timeManager.getDeltaTmillis();
 				int remainingSeconds = (int)(timeManager.getRemainingGameTime()/1000);
-				float totalSeconds = Config.GAMETIME/1000;
-				
 				timeProgress.setProgress((int)((remainingSeconds*100)/(totalSeconds)));
 				
 				if(remainingSeconds <= 0)
@@ -130,6 +141,14 @@ public class LevelActivity extends Activity
 					finish();
 					return;
 				}
+				if(levelComplete){
+					if(timeSinceComplete>=Config.GAMETIME_WAIT_AFTER_COMPLETE){
+						finish();
+						return;
+					}
+					timeSinceComplete+=dt;
+				}
+								
 				int remainingMinutes = remainingSeconds/60;
 				remainingSeconds -= remainingMinutes*60;
 				
