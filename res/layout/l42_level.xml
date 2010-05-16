@@ -21,6 +21,7 @@
 		android:layout_height="wrap_content"
 		style="?android:attr/progressBarStyleHorizontal"
 		android:id="@+id/l42_scoreProgressbar"
+		android:progressDrawable="@layout/l42_progressbar"
 		android:max="100"
 		android:progress="100"
 	    android:minWidth="120dip"
@@ -29,21 +30,23 @@
 	    android:background="@layout/l42_hud_backgroundshape"
 	    android:layout_gravity="top|center"
 	/>	
-	<!-- 
 	<TextView
 		android:id="@+id/l42_scoreTextField"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_gravity="top|left"
-		android:text="100.00%"
+		android:layout_gravity="top|center"
 		android:padding="6dip"
+		android:minWidth="120dip"
+		android:gravity="center"
+		android:text="@string/l42_HUD_PlanetHealth"
+		android:textColor="@color/l42_HUD_OverlayTextColor"
 	/>
-	 -->
 	<ProgressBar
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		style="?android:attr/progressBarStyleHorizontal"
 		android:id="@+id/l42_timeProgressbar"
+		android:progressDrawable="@layout/l42_progressbar"
 		android:max="100"
 		android:progress="100"
 	    android:minWidth="50dip"
@@ -60,6 +63,7 @@
 		android:padding="6dip"
 		android:minWidth="60dip"
 		android:gravity="center"
+		android:textColor="@color/l42_HUD_OverlayTextColor"
 	/>
 	
 	
