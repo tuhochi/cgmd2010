@@ -146,10 +146,10 @@ public class SceneGraph  {
 		this.tvPathCount = (TextView)activity.findViewById(R.id.l33_path_counter);
 		
 		//TODO richtige Icons verwenden
-		ivMapTimeIcon.setImageResource(R.drawable.l33_map_small);
+		ivMapTimeIcon.setImageResource(R.drawable.l33_arrow_small);
 		//Nur für Test 
-		ivItemIcon.setImageResource(R.drawable.l33_map_small);
-		ibGeneralViewButton.setImageResource(R.drawable.l33_map);
+		ivItemIcon.setImageResource(R.drawable.l33_stone_small);
+		ibGeneralViewButton.setImageResource(R.drawable.l33_overview_map);
 		ibPathButton.setImageResource(R.drawable.l33_map);
 		pbProgressBar.setMax(100);
 		
@@ -165,6 +165,8 @@ public class SceneGraph  {
 		ibPathButton.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View v) {
 	            	
+	            	if(LevelHandler.numberOfGoodGoodies<=0)
+	            		return;
 	            	LevelHandler.mapCalculationThread = new MapCalculationThread(SceneGraph.level, LevelHandler.worldDim.x);
 					LevelHandler.mapCalculationThread.setStartProperties(LevelHandler.gameCharacterField, LevelHandler.goodiesIndex, LevelHandler.worldEntry);
 					LevelHandler.mapCalculationThread.start();
@@ -285,7 +287,7 @@ public class SceneGraph  {
 						else
 							text_GoodyCount = "x "+LevelGenration.numberOfStone;
 						//StoneIcon
-						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+						ivItemIcon.setImageResource(R.drawable.l33_stone_small);
 					}
 					else if(goodyIconCount==8 || goodyIconCount==7)
 					{
@@ -294,7 +296,7 @@ public class SceneGraph  {
 						else
 							text_GoodyCount = "x "+LevelGenration.numberOfBarrel;
 						//BarrelIcon
-						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+						ivItemIcon.setImageResource(R.drawable.l33_barrel_small);
 					}
 					else if(goodyIconCount==6 || goodyIconCount==5)
 					{
@@ -303,7 +305,7 @@ public class SceneGraph  {
 						else
 							text_GoodyCount = "x "+LevelGenration.numberOfSpring;
 						//SpringIcon
-						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+						ivItemIcon.setImageResource(R.drawable.l33_spring_small);
 					}
 					else if(goodyIconCount==4 || goodyIconCount==3)
 					{
@@ -312,7 +314,7 @@ public class SceneGraph  {
 						else
 							text_GoodyCount = "x "+LevelGenration.numberOfTrashes;
 						//TrashIcon
-						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+						ivItemIcon.setImageResource(R.drawable.l33_trash_small);
 					}
 					else if(goodyIconCount==2 || goodyIconCount==1)
 					{
@@ -321,7 +323,7 @@ public class SceneGraph  {
 						else
 							text_GoodyCount = "x "+LevelGenration.numberOfMaps;
 						//MapIcon
-						//ivItemIcon.setImageResource(R.drawable.l33_map_16x16);
+						ivItemIcon.setImageResource(R.drawable.l33_map_small);
 					}
 					tvGoodyCount.setText(text_GoodyCount);
 					
