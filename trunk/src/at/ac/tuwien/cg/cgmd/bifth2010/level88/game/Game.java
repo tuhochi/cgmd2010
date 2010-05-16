@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.LevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.Sound;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.Sound.Sounds;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Textures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
@@ -18,10 +20,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 /**
  * Game class for the main logic of the level
  * @author Asperger, Radax
- */
-/**
- * @author Asperger
- *
  */
 public class Game {
 	public static final String TAG = "Game"; 
@@ -49,6 +47,8 @@ public class Game {
 	public Vector2 touchPosition;
 	
 	public int gold;
+	
+	private Sound player = null;
 
 	
 	/**
@@ -82,8 +82,8 @@ public class Game {
         oldTime = newTime;
         elapsedSeconds = 0;
         
-        
-        
+        player = Sound.getInstance(context);
+        //player.play(Sounds.BACKGROUND);
 
 		Vector2 groundYDir = new Vector2(-0.81f, -0.59f);
 		Vector2 groundXDir = new Vector2(1.16f, -0.46f);
@@ -129,6 +129,10 @@ public class Game {
 	 */
 	public void looseGold(int lostGold) {
 		gold -= lostGold;
+		
+		//TODO 
+		player.play(Sounds.GOLD);
+		
 		if( gold <= 0 ) {
 			gold = 0;
 			
@@ -139,6 +143,7 @@ public class Game {
 			class R implements Runnable{
 	        	@Override
 	            public void run() {
+	        		player.destroy();
 	        		context.endLevel();
 	            }
 	        };
@@ -238,6 +243,7 @@ public class Game {
 		
 		//Really Nice Perspective Calculations
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+		
 	}
 	
 	
@@ -301,6 +307,7 @@ public class Game {
 		if( bunny!=null ) {
 			bunny.moveStatus = Bunny.STANDING;
 		}
+		player.pause();
 	}
 	
 	/**

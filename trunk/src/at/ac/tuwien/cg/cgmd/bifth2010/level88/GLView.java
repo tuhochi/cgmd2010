@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
 
 /**
- * Class for the general vieing context of android
+ * Class for the general viewing context of android
  * @author Asperger, Radax
  */
 public class GLView extends GLSurfaceView {
