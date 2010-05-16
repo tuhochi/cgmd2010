@@ -43,6 +43,7 @@ public class BurnTimer extends TimingTask
 	@Override
 	public void update(float dt) {
 		remainingTime -= dt;
+		Hud.instance.burnProgress = remainingTime/time;
 		if (remainingTime <= 0)
 			run();
 	}

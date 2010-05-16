@@ -45,7 +45,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
             context.fpsChanged(timer.getFPS());
         }
     };
-    
+    /** ScoreHandle Class */
     class ScoreHandle implements Runnable{
 		  
     	@Override
@@ -57,8 +57,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
     /** The instance of the RenderView to pass it around. */
 	public static RenderView instance;
     
+	/** The current active gamestate. */
 	public static int gameState=0;
 	
+	/** gamestate constants. */
 	public static final int INTRO=0;
 	public static final int INGAME=1;
 	public static final int GAMEOVER=2;
@@ -144,13 +146,20 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** boolean indicating the first start */
 	private boolean firstStart; 
 	
-	private CutScenes cutScenes;
+	/** The cut scenes manager. */
+	private CutScenes cutScenes; 
 	
+	/** The score. */
 	private int score;
 
+	/** The last shown score. */
 	private int lastScore;
 	
+	/** The ScoreHande */
 	private ScoreHandle scoreHandle;
+	
+	/** Manager for decoration rendering (clouds etc.). */
+	private DecorationManager decorationManager;
 	
 	/**
 	 * Instantiates a new render view.
@@ -179,6 +188,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         soundManager = new SoundManager(context);
         obstacleManager = new ObstacleManager();
         cutScenes = new CutScenes();
+        decorationManager = DecorationManager.instance;
         
         balloonHeight=0;   
         
@@ -234,7 +244,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		float dt = timer.getDt();
 		
 		accTime += dt/1000;
-		if(accTime > 0.5)
+		if(accTime > 0.2)
 		{
 			fpsChanged();
 			accTime = 0;
@@ -246,7 +256,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		{
 			case INTRO:
 				if(cutScenes.renderIntroScene(dt))
+				{
 					gameState=INGAME;
+					TextureAtlas.instance.bindAtlasTexture();
+				}
 				break;
 			case INGAME:	
 				if (!released)
@@ -259,7 +272,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				
 				fetchKeyMoveData();
 				
-				balloonHeight += dt*Settings.BALLOON_SPEED;
+				balloonHeight += dt*Settings.BALLOON_SPEED/aspectRatio;
 				score = (int)(balloonHeight*Settings.SCOREHEIGHT_MODIFIER);
 				
 				if(lastScore != score)
@@ -268,21 +281,19 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 					lastScore = score;
 				}
 				
-				TextureAtlas.instance.bindAtlasTexture();
-				
 				mainChar.update(dt,mainCharMoveDir);
 				background.update(dt);
 				background.render();
 				obstacleManager.renderVisibleObstacles((int)balloonHeight);
 				hud.render();
 				mainChar.render();
-				DecorationManager.instance.renderForegroundClouds(false);
+				decorationManager.renderForegroundClouds(false);
 				break;
 			case GAMEOVER:		
 				background.render();
 				mainChar.renderGameOver(dt);
 				obstacleManager.renderVisibleObstacles((int)balloonHeight);
-				DecorationManager.instance.renderForegroundClouds(true);
+				decorationManager.renderForegroundClouds(true);
 				break;
 		}		
 		
@@ -293,9 +304,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			
 			soundManager.startPlayer(startAudioId);
 			firstStart = false; 
-		}
-		
-	
+		}	
 	}
 	
 	/* (non-Javadoc)
@@ -317,16 +326,12 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		setupGL(gl);
 		
 		reset();
-						
-//		int resID = context.getResources().getIdentifier("l23_balloon", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-//		mainChar.setTextureID(textureManager.getTextureId(context.getResources(), resID));
-//		resID = context.getResources().getIdentifier("l23_bg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-//		background.setTextureID(textureManager.getTextureId(context.getResources(), resID));
+
 		int resID = context.getResources().getIdentifier("l23_intro", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
 		cutScenes.introTexId = textureManager.getTextureId(context.getResources(), resID);
 		TextureAtlas.instance.loadAtlasTexture();
-		setGameOver(false); 
 		
+		setGameOver(false); 
 	}
 		
 	/* (non-Javadoc)
@@ -571,14 +576,14 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		hud.preprocess();
 		cutScenes.preprocess();
 		obstacleManager.preprocess();
-		DecorationManager.instance.preprocess();
+		decorationManager.preprocess();
 		
 		if(!isInitialized)
 		{	
 			hud.reset();
 			mainChar.reset();
 			obstacleManager.reset();
-			DecorationManager.instance.generateRandomCloudPosition();
+			decorationManager.reset();
 			timer.resetTimers();
 			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
 			gameState = INTRO;
@@ -622,6 +627,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	{
 		obstacleManager.writeToBundle(bundle);	
 		timer.writeToBundle(bundle);
+		decorationManager.writeToBundle(bundle);
 	}
 	
 	/**
@@ -632,6 +638,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	{
 		obstacleManager.readFromBundle(bundle);
 		timer.readFromBundle(bundle);
+		decorationManager.readFromBundle(bundle);
 	}
 	
 	/**

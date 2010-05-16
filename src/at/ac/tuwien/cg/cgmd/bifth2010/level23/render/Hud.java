@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.ProgressBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
@@ -37,6 +38,10 @@ public class Hud
 	
 	private int boostAudioId;
 	
+	private ProgressBar progressBar;
+	
+	public float burnProgress = 1;
+	
 	/**
 	 * Instantiates a new hud, including the buttons and the timer for boost operation.
 	 */
@@ -58,8 +63,10 @@ public class Hud
 		float aspectRatio = RenderView.instance.getAspectRatio();
 		goldButton = new Button(10, 10, new Vector2(0,(topBounds-10)/2));
 		moneyButton = new Button(10, 10, new Vector2(rightBounds-10,(topBounds-10)/2));
+		progressBar = new ProgressBar();
 		moneyButton.preprocess();
 		goldButton.preprocess();
+		progressBar.preprocess();
 		timeUtil = TimeUtil.instance;
 	}
 	
@@ -129,6 +136,8 @@ public class Hud
 	 */
 	public void render()
 	{
+		if(!moneyButton.isActive())
+			progressBar.render(burnProgress);
 		goldButton.render();
 		moneyButton.render();
 	}
