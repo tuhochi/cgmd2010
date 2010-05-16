@@ -148,30 +148,27 @@ public class Level {
 		mNextBird -= elapsedSeconds;
 		if(mHouses.size() < 40 && mNextHouse <= 0)
 		{
-			House newHouse = new House();
-			int size = (int)(Math.floor(Math.random() * 5.0));
-			size = (size==5)?4:size;
-			newHouse.setHouseSize(size, new Vector3(mBlockSize, mBlockSize * ((float)size + 1.0f), mBlockSize));
+			int houseSize = (int)(Math.floor(Math.random() * 5.0));
+			houseSize = (houseSize==5)?4:houseSize;
+			Vector3 size =  new Vector3(mBlockSize, mBlockSize * ((float)houseSize + 1.0f), mBlockSize);
 			int xpos = (int)(Math.floor(Math.random() * 5.0)) - 2;
 			int zpos = (int)(Math.floor(Math.random() * 9.0)) - 4;
-			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 130.0f - (newHouse.getSize().y / 2.0f), zpos * mBlockSize + playerPos.z);
+			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 130.0f - (size.y / 2.0f), zpos * mBlockSize + playerPos.z);
 			newPos.x -= newPos.x % mBlockSize;
 			newPos.z -= newPos.z % mBlockSize;
-			newHouse.setPosition(newPos);
-			newHouse.setModel(mHouseModels[newHouse.getHouseSize()]);
+			House newHouse = new House(mHouseModels[houseSize], newPos);
+			newHouse.setHouseSize(houseSize, size);
 			mFadeHouses.add(newHouse);
 			mNextHouse = (float)Math.random() * 0.1f;
 		}
 		if(mNextBird < 0)
 		{	
-			Bird newbird = new Bird();
 			float birdxpos = (float)((Math.floor(Math.random() * 5.0)) - 2) * mBlockSize;
 			float birdzpos = (float)((Math.floor(Math.random() * 9.0)) - 4) * mBlockSize;
 			Vector3 newPos = new Vector3(birdxpos + playerPos.x, playerPos.y - 130.0f, birdzpos + playerPos.z);
-			newbird.setPosition(newPos);
-			newbird.setModel(mBird);
 			float rotation = (float)(Math.random() * 360);
-			newbird.setRotation(rotation);
+
+			Bird newbird = new Bird(mBird, newPos, rotation);
 			mBirds.add(newbird);
 			
 			mNextBird = (float)Math.random() * 1.0f;

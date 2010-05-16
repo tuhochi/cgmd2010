@@ -11,44 +11,19 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Renderable;
  * @author MaMa
  *
  */
-public class Bird {
+public class Bird extends LevelElement{
 	
-	private Vector3 mPosition;
-	private float mRotation;
 	private float mRadius = 3.0f;
-	private Renderable mModel;
-	
-	/**
-	 * Empty Constructor
-	 */
-	public Bird() {}
 	
 	/**
 	 * Create the bird with defined settings
-	 * @param pos The initial position of the bird
-	 * @param radius The size of the bird
 	 * @param model The model of the bird
+	 * @param pos The initial position of the bird
 	 * @param rotation The rotation of the bird
 	 */
-	public Bird(Vector3 pos, float radius, Renderable model, float rotation)
+	public Bird(Renderable model, Vector3 pos, float rotation)
 	{
-		mPosition = pos;
-		mRadius = radius;
-		mModel = model;
-		mRotation = rotation;
-	}
-	
-	/**
-	 * Render the bird
-	 */
-	public void draw() {
-		GLManager.getInstance().getTextures().setTexture(R.drawable.l17_vogel);
-		MatrixTrackingGL gl = GLManager.getInstance().getGLContext();
-		gl.glPushMatrix();
-		gl.glTranslatef(mPosition);
-		gl.glRotatef(-mRotation - 90.0f, 0, 1.0f, 0);
-		mModel.draw(gl);
-		gl.glPopMatrix();
+		super(model, R.drawable.l17_vogel, pos, rotation);
 	}
 	
 	/**
@@ -77,38 +52,6 @@ public class Bird {
 	}
 	
 	/**
-	 * Getter for the bird position
-	 * @return Postion of the bird
-	 */
-	public Vector3 getPosition() {
-		return mPosition;
-	}
-	
-	/**
-	 * Setter for the position
-	 * @param position The position to set
-	 */
-	public void setPosition(Vector3 position) {
-		this.mPosition = position;
-	}
-
-	/**
-	 * Getter for the rotation
-	 * @return The rotation of the bird
-	 */
-	public float getRotation() {
-		return mRotation;
-	}
-
-	/**
-	 * Setter for the rotation
-	 * @param rotation The new rotation of the bird
-	 */
-	public void setRotation(float rotation) {
-		this.mRotation = rotation;
-	}
-
-	/**
 	 * Getter for the size of the bird
 	 * @return Returns the radius of the bird
 	 */
@@ -122,21 +65,5 @@ public class Bird {
 	 */
 	public void setRadius(float radius) {
 		this.mRadius = radius;
-	}	
-	
-	/**
-	 * Getter for the model of the bird
-	 * @return The model of the bird
-	 */
-	public Renderable getModel() {
-		return mModel;
-	}
-
-	/**
-	 * Setter for the model of the bird
-	 * @param model The new model of the bird
-	 */
-	public void setModel(Renderable model) {
-		this.mModel = model;
 	}
 }
