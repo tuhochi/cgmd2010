@@ -13,7 +13,7 @@ public class Config
 	public static boolean GLES11 = false;
 	public static long FPS_UPDATE_INTERVAL = 1000;
 	public static long GAMETIME_UPDATE_INTERVAL = 1000;
-	
+	public static long GAMETIME_WAIT_AFTER_COMPLETE = 2500;
 	// bounding sphere stuff
 	/**
 	 * Determines how many degrees are between the control points of the bounding sphere.

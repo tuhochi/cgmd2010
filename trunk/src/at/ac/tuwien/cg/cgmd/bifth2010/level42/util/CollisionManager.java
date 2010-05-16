@@ -323,8 +323,9 @@ public class CollisionManager implements Persistable{
 								remainingPlanetParts.remove(planetPart);
 								
 								//avoid inter-planet-part-coll
-								if(remainingPlanetParts.size()>1)
+								if(remainingPlanetParts.size()>1){
 									planetPartMotion.setFilterPlanetColl(true);
+								}									
 								
 								// schedule for untie
 								scene.unTie(planet, planetPart);
