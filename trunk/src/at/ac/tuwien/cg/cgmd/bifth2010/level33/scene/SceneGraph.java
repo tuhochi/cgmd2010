@@ -42,8 +42,8 @@ public class SceneGraph  {
 	public static long timeInSeconds=0;
 	public static int levelEndTimeInSeconds=0;
 	private int gameTimeInSeconds=180;
-	private int maxTranslation = 4;
-	private float translationSteps = (float)maxTranslation/100;
+	private float maxTranslation = 5.0f;
+	private float startItemAlpha = 0.90f;
 	private boolean playingFinalSound=true;
 	
 	public final static byte GEOMETRY_WALL = 0;
@@ -379,6 +379,10 @@ public class SceneGraph  {
 		gl.glCullFace(GL10.GL_BACK);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
 		
+		//BlendFunc
+		gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
+		
+		
 
         gl.glDepthFunc(GL10.GL_LEQUAL);
 		gl.glDepthMask(true);
@@ -697,18 +701,30 @@ public class SceneGraph  {
 				}
 			}
 			
-			//collected Items
+			//render character
+			glPushMatrix();
+			geometry.render(5);
+			glPopMatrix();
 			
+			//collected Items
 			if(LevelHandler.collectedItemList!=null)
 			{
 				for(int i=0;i<LevelHandler.collectedItemList.size();i++)
 				{
 					float[] translatedItem = LevelHandler.collectedItemList.get(i);
+					float itemHigh = translatedItem[2];
+					float itemAlpha = startItemAlpha-itemHigh*(startItemAlpha/maxTranslation);
 					if(level.isFieldInFrustum((int)translatedItem[0], frustumMin, frustumMax))
 					{
 						Vector2i position = level.getWorldCoordinate((int)translatedItem[0]);
 						glPushMatrix();
-						gl.glTranslatef(position.x-level.gameCharacterPosition.x,translationSteps*translatedItem[2],position.y-level.gameCharacterPosition.y);
+						
+						//Blending
+						gl.glEnable(GL10.GL_BLEND);
+						gl.glColor4f(1.0f, 1.0f, 1.0f, itemAlpha); 
+						//gl.glRotatef((System.nanoTime()/25000000.0f)%360, 0, 1, 0);
+						
+						gl.glTranslatef(position.x-level.gameCharacterPosition.x,itemHigh,position.y-level.gameCharacterPosition.y);
 						if(translatedItem[1]==GEOMETRY_STONE)
 						{
 							geometry.render(0);
@@ -732,11 +748,12 @@ public class SceneGraph  {
 						{
 							geometry.render(4);
 						}	
-						
+						gl.glDisable(GL10.GL_BLEND);
 						glPopMatrix();
 					}
-					LevelHandler.collectedItemList.get(i)[2]++;
-					if(LevelHandler.collectedItemList.get(i)[2]>100)
+					itemHigh = itemHigh+(2*deltaTime);
+					translatedItem[2]=itemHigh;
+					if(LevelHandler.collectedItemList.get(i)[2]>maxTranslation)
 						LevelHandler.collectedItemList.remove(i);
 				}
 			}
@@ -775,9 +792,9 @@ public class SceneGraph  {
 //		}
 
 		// render the character
-		glPushMatrix();
-		geometry.render(5);
-		glPopMatrix();
+		//glPushMatrix();
+		//geometry.render(5);
+		//glPopMatrix();
 		
 	}
 
