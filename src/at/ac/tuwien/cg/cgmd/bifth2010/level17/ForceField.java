@@ -13,39 +13,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Renderable;
  * @author MaMa
  *
  */
-public class ForceField {
+public class ForceField extends LevelElement{
 
 	private float mForceFieldRadius = 10f;
-	private Vector3 mPosition;
-	private float mRotation;
 	private float mHeight;
-	private FFModel mModel;
 	private Vector2 mTexSpeed = new Vector2(1.0f,-1.0f);
 	private float mForceFieldSpeed;
 	
 
 	public ForceField(float radius, Vector3 pos, float height, float speed)
 	{
+		super(new FFModel(radius, height, 4), R.drawable.l17_forcefield, pos, 0f);
 		mForceFieldRadius = radius;
-		mPosition = pos;
-		mRotation = 0f;
 		mHeight = height;
 		mForceFieldSpeed = speed;
-		mModel = new FFModel(mForceFieldRadius, height, 4);
-	}
-	
-	/**
-	 * Draw the forcefield
-	 */
-	public void draw()
-	{
-		GLManager.getInstance().getTextures().setTexture(R.drawable.l17_forcefield);
-		MatrixTrackingGL gl = GLManager.getInstance().getGLContext();
-		gl.glPushMatrix();
-		gl.glTranslatef(mPosition);
-		gl.glRotatef(-mRotation - 90.0f, 0, 1.0f, 0);
-		mModel.draw(gl);
-		gl.glPopMatrix();
 	}
 	
 	public void update(float elapsedSeconds)
@@ -71,23 +52,7 @@ public class ForceField {
 	}
 
 	/**
-	 * Getter for the forcefield position
-	 * @return Returns the position of the forcefield
-	 */
-	public Vector3 getPosition() {
-		return mPosition;
-	}
-	
-	/**
-	 * Setter for the forcefield position
-	 * @param position The new position of the forcefield
-	 */
-	public void setPosition(Vector3 position) {
-		this.mPosition = position;
-	}
-
-	/**
-	 * Getter fpr the hight of the forcefield
+	 * Getter for the height of the forcefield
 	 * @return the height of the forcefield
 	 */
 	public float getHeight() {
@@ -100,21 +65,5 @@ public class ForceField {
 	 */
 	public void setHeight(float height) {
 		this.mHeight = height;
-	}
-
-	/**
-	 * Getter for the model of the forcefield
-	 * @return Returns the model of the forcefield
-	 */
-	public Renderable getModel() {
-		return mModel;
-	}
-
-	/**
-	 * Setter for the house forcefield
-	 * @param model The new model for the forcefield
-	 */
-	public void setModel(FFModel model) {
-		this.mModel = model;
 	}
 }

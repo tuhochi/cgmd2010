@@ -11,12 +11,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Renderable;
  * @author MaMa
  *
  */
-public class House {
+public class House extends LevelElement{
 
 	private int mHouseSize = 0;
-	private Vector3 mPosition;
 	private Vector3 mSize = new Vector3();
-	private Renderable mModel;
+	
+	/**
+	 * Create the house with defined settings
+	 * @param model The model of the house
+	 * @param pos The initial position of the house
+	 */
+	public House(Renderable model, Vector3 pos)
+	{
+		super(model, R.drawable.l17_crate, pos, 0f);
+	}
 	
 	/**
 	 * Intersect the House with a sphere
@@ -33,18 +41,6 @@ public class House {
 		return false;
 	}
 	
-	/**
-	 * Draw the house
-	 */
-	public void draw()
-	{
-		GLManager.getInstance().getTextures().setTexture(R.drawable.l17_crate);
-		MatrixTrackingGL gl = GLManager.getInstance().getGLContext();
-		gl.glPushMatrix();
-		gl.glTranslatef(mPosition);
-		mModel.draw(gl);
-		gl.glPopMatrix();
-	}
 	
 	/**
 	 * Getter for the house size
@@ -63,22 +59,6 @@ public class House {
 		this.mHouseSize = houseSize;
 		mSize = size;
 	}
-	
-	/**
-	 * Getter for the house position
-	 * @return Returns the position of the house
-	 */
-	public Vector3 getPosition() {
-		return mPosition;
-	}
-	
-	/**
-	 * Setter for the house position
-	 * @param position The new position of the house
-	 */
-	public void setPosition(Vector3 position) {
-		this.mPosition = position;
-	}
 
 	/**
 	 * Getter for the physical house size
@@ -94,21 +74,5 @@ public class House {
 	 */
 	public void setSize(Vector3 size) {
 		this.mSize = size;
-	}
-
-	/**
-	 * Getter for the model of the house
-	 * @return Returns the model of the house
-	 */
-	public Renderable getModel() {
-		return mModel;
-	}
-
-	/**
-	 * Setter for the house model
-	 * @param model The new model for the house
-	 */
-	public void setModel(Renderable model) {
-		this.mModel = model;
 	}
 }
