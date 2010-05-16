@@ -17,17 +17,20 @@ public class ForceField {
 
 	private float mForceFieldRadius = 10f;
 	private Vector3 mPosition;
+	private float mRotation;
 	private float mHeight;
 	private FFModel mModel;
 	private Vector2 mTexSpeed = new Vector2(1.0f,-1.0f);
+	private float mForceFieldSpeed;
 	
 
-	public ForceField(float radius, Vector3 pos, float height, Vector2 texSpeed)
+	public ForceField(float radius, Vector3 pos, float height, float speed)
 	{
 		mForceFieldRadius = radius;
 		mPosition = pos;
+		mRotation = 0f;
 		mHeight = height;
-		mTexSpeed = texSpeed;
+		mForceFieldSpeed = speed;
 		mModel = new FFModel(mForceFieldRadius, height, 4);
 	}
 	
@@ -40,13 +43,15 @@ public class ForceField {
 		MatrixTrackingGL gl = GLManager.getInstance().getGLContext();
 		gl.glPushMatrix();
 		gl.glTranslatef(mPosition);
+		gl.glRotatef(-mRotation - 90.0f, 0, 1.0f, 0);
 		mModel.draw(gl);
 		gl.glPopMatrix();
 	}
 	
 	public void update(float elapsedSeconds)
 	{
-		mModel.setTexOffset(Vector2.add(mModel.getTexOffset(), Vector2.mult(mTexSpeed, elapsedSeconds)));
+		mRotation += elapsedSeconds * mForceFieldSpeed;
+		//mModel.setTexOffset(Vector2.add(mModel.getTexOffset(), Vector2.mult(mTexSpeed, elapsedSeconds)));
 	}
 	
 	/**
