@@ -1,12 +1,16 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 
+import java.io.Serializable;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
-public class Cloud 
+public class Cloud implements Serializable
 {
+	/** serialize id. */
+	private static final long serialVersionUID = 5166547615982136289L;
 	/** Constant for cloud type1. */
 	public final static int CLOUD_TYPE1 = 0;
 	/** Constant for cloud type2. */
@@ -17,13 +21,15 @@ public class Cloud
 	public final static int CLOUD_TYPE4 = 3;
 	
 	/** Constant for Cloud Speed (horizontal). */
-	public final static float CLOUD_SPEED = 0.06f;
+	public final static float CLOUD_SPEED = 0.1f;
 	
 	/** The cloud type. */
 	public int type;
 	
 	/** The cloud position. */
 	public Vector2 position;
+	
+	public int virtualHeight;
 	
 	/** The cloud dimension. */
 	public Vector2 dimensions;
@@ -50,7 +56,8 @@ public class Cloud
 	 */
 	public Cloud(int positionY,int type,boolean startsRight, int heightOffset, float slowDownFactor)
 	{
-		position = new Vector2(0,positionY);
+		virtualHeight = positionY;
+		position = new Vector2(0,RenderView.instance.getTopBounds()-heightOffset);
 		this.type = type;
 		dimensions = new Vector2(50, 20*RenderView.instance.getAspectRatio());
 		this.startRight = startsRight;
@@ -69,7 +76,9 @@ public class Cloud
 	public boolean update()
 	{
 		if(slowDownFactor!=1)
-			position.y += (Settings.BALLOON_SPEED/slowDownFactor)*TimeUtil.instance.getDt();
+			position.y -= (Settings.BALLOON_SPEED/slowDownFactor)*TimeUtil.instance.getDt()/RenderView.instance.getAspectRatio();
+		else
+			position.y -= Settings.BALLOON_SPEED*TimeUtil.instance.getDt()/RenderView.instance.getAspectRatio();
 		if(startRight)
 		{
 			position.x -= CLOUD_SPEED*TimeUtil.instance.getDt();

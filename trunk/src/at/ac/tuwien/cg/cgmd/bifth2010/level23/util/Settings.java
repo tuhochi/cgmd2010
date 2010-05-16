@@ -8,13 +8,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 public class Settings 
 {
 	/** The constant for balloon speed. */
-	public static int OBSTACLE_START = 500;
+	public static int OBSTACLE_START = 300;
 	
 	/** The constant for balloon speed. */
-	public static float BALLOON_STARTSPEED = 0.08f;
+	public static float BALLOON_STARTSPEED = 0.1f;
 	
 	/** The constant for balloon speed. */
-	public static float BALLOON_SPEED = 0.08f;
+	public static float BALLOON_SPEED = BALLOON_STARTSPEED;
 	//units per millisecond
 	/** The Constant MOVE_SPEED. */
 	public static final float MOVE_SPEED = 0.125f;
@@ -24,10 +24,10 @@ public class Settings
 	
 	//item effects
 	/** The Constant BURN_BOOST. */
-	public static final float BURN_BOOST = 0.08f;
+	public static final float BURN_BOOST = 0.04f;
 	//time in milliseconds
 	/** The Constant BURN_BOOST_TIME. */
-	public static final long BURN_BOOST_TIME = 5000;
+	public static final long BURN_BOOST_TIME = 2500;
 	
 	/** The Constant GOLD_BOOST. */
 	public static final float GOLD_BOOST = 0.01f;

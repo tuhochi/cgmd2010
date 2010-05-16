@@ -19,10 +19,17 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES11;
+import android.os.Bundle;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Cloud;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.TexturePart;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
+/**
+ * The Class DecorationManager manages rendering of decoration objects (clouds etc.).
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class DecorationManager 
 {
 	/** The DecorationManager instance. */
@@ -47,6 +54,8 @@ public class DecorationManager
 	
 	/** The TexturePart for clouds. */
 	private TexturePart cloudTexture;
+
+	private boolean wasRestored;
 	
 	/**
 	 * Default Constructor
@@ -80,7 +89,7 @@ public class DecorationManager
 		for(int i=0;i<NR_OF_CLOUDS;i++)
 		{
 
-			currentCloudHeight += randomGenerator.nextInt(200)+200;	
+			currentCloudHeight += randomGenerator.nextInt(200)+150;	
 			clouds.add(new Cloud(currentCloudHeight,randomGenerator.nextInt(4),
 					randomGenerator.nextBoolean(),randomGenerator.nextInt((int)(40*RenderView.instance.getAspectRatio())),
 					randomGenerator.nextInt(2)+1));
@@ -98,11 +107,11 @@ public class DecorationManager
 		for(int i=0;i<clouds.size();i++)
 		{
 			Cloud tempCloud = clouds.get(i);
-			float posY = tempCloud.position.y;
+			float posY = tempCloud.virtualHeight;
 			int topBounds = (int)balloonHeight+(int)renderView.getTopBounds();
 			//test visibility
 			if(tempCloud.isVisible || posY > balloonHeight-tempCloud.dimensions.y && posY < topBounds)
-			{			
+			{		
 				tempCloud.isVisible = true;
 				
 				if(!gameover)
@@ -110,57 +119,89 @@ public class DecorationManager
 					if(!tempCloud.update())
 					{
 						clouds.remove(i);
-						return;
+					}
+					else
+					{
+						glMatrixMode(GL_TEXTURE);
+						
+						glPushMatrix();
+						
+						switch(tempCloud.type)
+						{
+							case Cloud.CLOUD_TYPE1:
+								glTranslatef(cloudTexture.dimension.x, 0, 0);
+								break;
+							case Cloud.CLOUD_TYPE2:
+								glTranslatef(cloudTexture.dimension.x,-cloudTexture.dimension.y, 0);
+								break;
+							case Cloud.CLOUD_TYPE3:
+								glTranslatef(0, -cloudTexture.dimension.y, 0);
+								break;
+//							case Cloud.CLOUD_TYPE4:
+//								break;		
+						}
+												
+						glMatrixMode(GL_MODELVIEW);
+						
+						glPushMatrix();
+						
+						glTranslatef(tempCloud.position.x, tempCloud.position.y, 0);
+
+						if (!Settings.GLES11Supported) {
+							glTexCoordPointer(2, GL10.GL_FLOAT, 0,
+									cloudTexture.texCoords);
+							glVertexPointer(3, GL10.GL_FLOAT, 0, cloudVertexBuffer);
+							glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+
+						} else {
+							GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboID);
+
+							GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
+
+							GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
+
+							glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+						}
+
+						glMatrixMode(GL_TEXTURE);
+						glPopMatrix();
+						glMatrixMode(GL_MODELVIEW);
+						glPopMatrix();						
 					}
 				}
-				
-				glMatrixMode(GL_TEXTURE);
-				
-				glPushMatrix();
-				
-				switch(tempCloud.type)
-				{
-					case Cloud.CLOUD_TYPE1:
-						glTranslatef(cloudTexture.dimension.x, 0, 0);
-						break;
-					case Cloud.CLOUD_TYPE2:
-						glTranslatef(cloudTexture.dimension.x,-cloudTexture.dimension.y, 0);
-						break;
-					case Cloud.CLOUD_TYPE3:
-						glTranslatef(0, -cloudTexture.dimension.y, 0);
-						break;
-					case Cloud.CLOUD_TYPE4:
-						break;		
-				}
-										
-				glMatrixMode(GL_MODELVIEW);
-				
-				glPushMatrix();
-				
-				glTranslatef(tempCloud.position.x, posY-balloonHeight-tempCloud.heightOffset, 0);
-
-				if (!Settings.GLES11Supported) {
-					glTexCoordPointer(2, GL10.GL_FLOAT, 0,
-							cloudTexture.texCoords);
-					glVertexPointer(3, GL10.GL_FLOAT, 0, cloudVertexBuffer);
-					glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-
-				} else {
-					GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboID);
-
-					GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-
-					GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
-
-					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
-				}
-
-				glMatrixMode(GL_TEXTURE);
-				glPopMatrix();
-				glMatrixMode(GL_MODELVIEW);
-				glPopMatrix();
+				return;
 			}
 		}
 	}
 	
+	/**
+	 * Writes to bundle
+	 * @param bundle bundle to write to 
+	 */
+	public void writeToBundle(Bundle bundle) {
+		try {
+			bundle.putSerializable("clouds", clouds);
+		} catch (Throwable t) {
+			Log.e("DecorationManager.java", t.getMessage());
+		}
+	}
+	
+	
+	/**
+	 * Reads from bundle
+	 * @param bundle the bundle to read from
+	 */
+	@SuppressWarnings("unchecked")
+	public void readFromBundle(Bundle bundle) {
+		clouds = (ArrayList<Cloud>)bundle.getSerializable("clouds");
+		wasRestored = true;
+	}
+	
+	public void reset()
+	{
+		if(!wasRestored)
+			generateRandomCloudPosition();
+		else
+			wasRestored=false;
+	}
 }

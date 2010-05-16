@@ -306,7 +306,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	 */
 	public void fpsChanged(float fps)
 	{
-		fpsText.setText(Math.round(fps) + " fps");
+		fpsText.setText(fps + " fps");
 	}
 	
 	/**

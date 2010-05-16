@@ -8,6 +8,11 @@ import java.nio.FloatBuffer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.TexturePart;
 
+/**
+ * The Class TextureAtlas implements the managment of texturecoordinates.
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
 public class TextureAtlas 
 {
 	int textureID;
@@ -79,5 +84,10 @@ public class TextureAtlas
 	public TexturePart getCloudTextur()
 	{
 		return generateTexturePart(new Vector2(768,0), new Vector2(768+128,64));
+	}
+	
+	public TexturePart getProgressBarTextur()
+	{
+		return generateTexturePart(new Vector2(768,515), new Vector2(768+128,512+16));
 	}
 }
