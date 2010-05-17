@@ -90,6 +90,8 @@ public class MainChar implements SceneEntity {
 	/** SoundManager for handling audio */
 	private SoundManager soundManager; 
 	
+	private GeometryManager geometryManager = GeometryManager.instance;
+	
 	/**
 	 * Default constructor
 	 * Instantiates a new main char.
@@ -105,7 +107,7 @@ public class MainChar implements SceneEntity {
 		
 		position = new Vector2();		
 		position.x = Settings.MAINCHAR_STARTPOSX;
-		position.y = Settings.MAINCHAR_STARTPOSY;	
+		position.y = Settings.MAINCHAR_STARTPOSY*RenderView.instance.getAspectRatio();	
 	}
 	
 	/**
@@ -176,12 +178,10 @@ public class MainChar implements SceneEntity {
 	 * Preprocesses, before the main character starts working 
 	 * creates the vertex and texture coordinate buffer and the vbo id 
 	 */
-	public void preprocess() {
-		
-		GeometryManager geometryManager = GeometryManager.instance; 
+	public void preprocess() 
+	{		
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
-//		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
-		
+
 		texture = TextureAtlas.instance.getMainCharTextur();
 		
 		if(Settings.GLES11Supported) 
@@ -191,9 +191,7 @@ public class MainChar implements SceneEntity {
 		
 		soundPlayed = false; 
 		soundManager = SoundManager.instance; 
-		audioIdGameOverSound = soundManager.requestPlayer(R.raw.l23_crashsound, false);
-		
-			
+		audioIdGameOverSound = soundManager.requestPlayer(R.raw.l23_crashsound, false);	
 	}
 	
 
@@ -345,7 +343,7 @@ public class MainChar implements SceneEntity {
 	{
 		glPushMatrix();
 		
-		glTranslatef(position.x, 0, 0);
+		glTranslatef(position.x, position.y, 0);
 		
 		if(!Settings.GLES11Supported) 
 		{			
@@ -408,12 +406,7 @@ public class MainChar implements SceneEntity {
 			} 
 			else 
 			{
-				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
-				
-				GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-				
-				GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
-	
+				geometryManager.bindVBO(vboId);
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 			}
 			

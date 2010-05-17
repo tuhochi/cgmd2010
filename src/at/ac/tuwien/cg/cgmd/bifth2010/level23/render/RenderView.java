@@ -20,6 +20,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.DecorationManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
@@ -58,7 +59,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public static RenderView instance;
     
 	/** The current active gamestate. */
-	public static int gameState=0;
+	public int gameState=0;
 	
 	/** gamestate constants. */
 	public static final int INTRO=0;
@@ -161,6 +162,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** Manager for decoration rendering (clouds etc.). */
 	private DecorationManager decorationManager;
 	
+	private float fixedStep = 25;
+	private float accuTime;
+	
 	/**
 	 * Instantiates a new render view.
 	 *
@@ -243,8 +247,16 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		
 		float dt = timer.getDt();
 		
+//		accuTime += dt;
+//		dt=0;
+//		while(accuTime > fixedStep)
+//		{
+//			accuTime -=fixedStep;
+//			dt += fixedStep;
+//		}
+		
 		accTime += dt/1000;
-		if(accTime > 0.2)
+		if(accTime > 0.05)
 		{
 			fpsChanged();
 			accTime = 0;
@@ -569,6 +581,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	 **/
 	public void reset()
 	{
+		GeometryManager.instance.reset();
 		textureManager.reset();
 		timer.reset();
 		background.reset();

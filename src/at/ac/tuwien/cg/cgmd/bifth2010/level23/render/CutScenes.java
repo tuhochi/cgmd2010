@@ -63,12 +63,14 @@ public class CutScenes
 	
 	private float introTexScale = 1;
 	
+	private GeometryManager geometryManager = GeometryManager.instance;
+	
 	/**
 	 * Loads the geometry
 	 */
 	public void preprocess()
 	{
-		GeometryManager geometryManager = GeometryManager.instance; 
+		geometryManager = GeometryManager.instance; 
 		vertexBuffer = geometryManager.createVertexBufferQuad(1f,1f);
 		texCoordBufferIntro = geometryManager.createTexCoordBufferQuad();
 		
@@ -179,11 +181,7 @@ public class CutScenes
 		} 
 		else 
 		{
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
-
-			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-
-			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
+			geometryManager.bindVBO(vboId);
 		}
 	}
 }

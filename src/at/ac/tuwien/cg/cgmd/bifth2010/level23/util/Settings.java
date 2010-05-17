@@ -40,7 +40,7 @@ public class Settings
 	/** The MainChar start position x-coordinate. */
 	public static final float MAINCHAR_STARTPOSX = 50 - MAINCHAR_WIDTH/2f;
 	/** The MainChar start position y-coordinate. */
-	public static final float MAINCHAR_STARTPOSY = 0f;
+	public static final float MAINCHAR_STARTPOSY = 3f;
 	
 	/** Will be multiplied with balloonHeight for Score */
 	public static final float SCOREHEIGHT_MODIFIER = 0.01f;

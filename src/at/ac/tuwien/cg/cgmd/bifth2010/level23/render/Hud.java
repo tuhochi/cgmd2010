@@ -61,8 +61,8 @@ public class Hud
 		float topBounds = RenderView.instance.getTopBounds();
 		float rightBounds = RenderView.instance.getRightBounds();
 		float aspectRatio = RenderView.instance.getAspectRatio();
-		goldButton = new Button(10, 10, new Vector2(0,(topBounds-10)/2));
-		moneyButton = new Button(10, 10, new Vector2(rightBounds-10,(topBounds-10)/2));
+		goldButton = new Button(15, 15, new Vector2(5,(topBounds-15)/2));
+		moneyButton = new Button(15, 15, new Vector2(rightBounds-20,(topBounds-15)/2));
 		progressBar = new ProgressBar();
 		moneyButton.preprocess();
 		goldButton.preprocess();

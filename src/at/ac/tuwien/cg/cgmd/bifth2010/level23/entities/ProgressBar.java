@@ -30,7 +30,8 @@ public class ProgressBar
 	TexturePart texture;
 	Vector2 position;
 	private FloatBuffer vertexBuffer;
-	private int vboID;
+	private int vboId;
+	private GeometryManager geometryManager = GeometryManager.instance;
 	
 	public ProgressBar()
 	{
@@ -47,7 +48,7 @@ public class ProgressBar
 		
 		if(Settings.GLES11Supported) 
 		{
-			vboID = geometryManager.createVBO(vertexBuffer, texture.texCoords);
+			vboId = geometryManager.createVBO(vertexBuffer, texture.texCoords);
 		}
 	}
 	
@@ -64,12 +65,7 @@ public class ProgressBar
 			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
 		} else {
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboID);
-
-			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-
-			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
-
+			geometryManager.bindVBO(vboId);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 		}
 
@@ -88,17 +84,9 @@ public class ProgressBar
 		glTranslatef(position.x/progress, position.y, 0);
 
 		if (!Settings.GLES11Supported) {
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
-			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
 		} else {
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboID);
-
-			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-
-			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
-
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 		}
 		
