@@ -2,13 +2,17 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import static android.opengl.GLES10.*;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 /**
@@ -17,25 +21,21 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
  * @author Alex Druml
  * @author Lukas Roessler
  */
-public class HUD
+public class HUD extends Model
 {
 	/** The ogl manager. */
-	private final OGLManager oglManager = OGLManager.instance;
+	final OGLManager oglManager = OGLManager.instance;
 	
 	/** The time manager */
-	private final TimeManager timeManager = TimeManager.instance;
+	final TimeManager timeManager = TimeManager.instance;
 	
-	/** The material manager. */
-	private final MaterialManager materialManager = MaterialManager.instance;
+	final SoundManager soundManager = SoundManager.instance;
 	
 	/** The height. */
 	private float width,height;
 	
 	/** The aspect. */
 	private float aspect;
-	
-	/** The circle transformation (used for rendering) */
-	private final Matrix44 circleTransformation;
 	
 	/** The center  of the current circle */
 	private final Vector2 circleCenter;
@@ -49,20 +49,15 @@ public class HUD
 	/** whether a circle should drawn now */
 	private boolean circleRender;
 	
-	/** The circle. */
-	private final Geometry circle;
-	
-	/** The material. */
-	private Material material;
-	
-	/** The initialized. */
-	private boolean initialized;
+//	private MediaPlayer chargePlayer;
 	
 	/**
 	 * Instantiates a new HUD.
 	 */
 	public HUD()
 	{
+		super();
+		name = "HUD";
 		float[] vertices = new float[] {
 			-0.5f,-0.5f, 0.0f,	// upper left
 			-0.5f, 0.5f, 0.0f,	// lower left
@@ -81,27 +76,27 @@ public class HUD
 		};
 		int numVertices = 6;
 		
-		circle = new Geometry(
+		Geometry circle = new Geometry(
 				SceneLoader.instance.arrayToBuffer(vertices),
 				null,
 				SceneLoader.instance.arrayToBuffer(texcoords),
-				null,
-				null,
+				new AxisAlignedBox3(new Vector3(-0.5f, -0.5f, 0.0f), new Vector3(0.5f, 0.5f, 0.0f)),
+				new Sphere(new Vector3(0,0,0), 0.707106781f),
 				numVertices);
 		
-		circleTransformation = new Matrix44();
 		circleCenter = new Vector2();
 		
-		initialized = false;
 		circleActive = false;
 		circleRender = false;
-		material = materialManager.getMaterial("HUDMaterial", 
+		Material material = materialManager.getMaterial("HUDMaterial", 
 				new Color4(0.5f,0.5f,0.5f,0.1f), 
 				new Color4(0.5f,0.5f,0.5f,0.1f), 
 				new Color4(0.5f,0.5f,0.5f,0.1f), 
 				new Color4(0.5f,0.5f,0.5f,0.1f), 
 				0.5f, 
 				"l42_circle");
+		
+		add(circle, material);
 	}
 	
 	/**
@@ -133,19 +128,12 @@ public class HUD
 	 */
 	public void render(int rendermode)
 	{
-		if(!initialized)
-			init();
-
 		if(!circleRender)
 			return;
 		
 		pre_render();
-		
-		materialManager.bindMaterial(material);
-		
-		glMultMatrixf(circleTransformation.getArray16(), 0);
-		
-		circle.render(rendermode);
+
+		super.render(rendermode);
 		
 		post_render();
 	}
@@ -168,7 +156,7 @@ public class HUD
 	/**
 	 * Update.
 	 */
-	public void update()
+	public void update(Matrix44 sceneEntityTransformation)
 	{
 		int[] viewport = oglManager.getViewport();
 		width = viewport[2];
@@ -179,9 +167,14 @@ public class HUD
 		if(circleRender)
 		{
 			float scale = ((float)Math.min(timeManager.getTimeOfLastFrame()-circleStartMillis,Config.MAX_LONG_PRESS_TIME))/1000.0f;
-			circleTransformation.setScale(scale,scale,scale);
-			circleTransformation.addTranslate(circleCenter.x, circleCenter.y, 0);
+			transformation.setScale(scale,scale,scale);
+			transformation.addTranslate(circleCenter.x, circleCenter.y, 0);
 		}
+//		else if(chargePlayer != null && chargePlayer.isPlaying())
+//		{
+//			chargePlayer.pause();
+//			chargePlayer = null;
+//		}
 	}
 	
 	
@@ -197,36 +190,14 @@ public class HUD
 		circleCenter.x = ((float)centerPixelsX / width)*aspect;
 		circleCenter.y = (float)centerPixelsY / height;
 		circleStartMillis = timeManager.getTimeOfLastFrame();
+//		chargePlayer = soundManager.playSound(R.raw.l42_loadforce);
 	}
 	
 	/**
 	 * @param circleActive the circleActive to set
 	 */
-	public void setCircleActive(boolean circleActive)
+	public void disableCircle()
 	{
-		this.circleActive = circleActive;
-	}
-
-	/**
-	 * Inits the HUD
-	 */
-	public void init()
-	{
-		if(!initialized)
-		{
-			material.init();
-			circle.init();
-			initialized = true;
-		}
-	}
-	
-	/**
-	 * De-inits the HUD
-	 */
-	public void deInit()
-	{
-		initialized = false;
-		material.deInit();
-		circle.deInit();
+		this.circleActive = false;
 	}
 }

@@ -311,7 +311,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		{
 			duration = Math.min(duration, Config.MAX_LONG_PRESS_TIME);
 			
-			hud.setCircleActive(false);
+			hud.disableCircle();
 			
 			Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
 			Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
@@ -351,7 +351,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
-			hud.setCircleActive(false);
+			hud.disableCircle();
 			cam.setMouseDiff(distanceX, distanceY);
 			return true;
 		}
@@ -375,7 +375,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		public boolean onUp(MotionEvent e)
 		{
 			Log.v(LevelActivity.TAG, "onUp(" + e + ")");
-			hud.setCircleActive(false);
+			hud.disableCircle();
 			return true;
 		}
 		

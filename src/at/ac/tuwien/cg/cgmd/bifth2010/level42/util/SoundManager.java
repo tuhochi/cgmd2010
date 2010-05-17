@@ -131,7 +131,7 @@ public class SoundManager
 		return myPlayer;
 	}
 	
-	public synchronized void playSound(int resID)
+	public synchronized MediaPlayer playSound(int resID)
 	{
 		MediaPlayer myPlayer = null;
 		
@@ -159,8 +159,8 @@ public class SoundManager
 		{
 			myPlayer.seekTo(0);
 			myPlayer.start();
-			return;
 		}
+		return myPlayer;
 	}
 	
 	public synchronized void onCreate(Context context)
@@ -175,7 +175,9 @@ public class SoundManager
 			availablePlayers.add(new Pair<MediaPlayer, Integer>(new MediaPlayer(),null));
 		
 		// prepare two players for each audio resource
-		for(int j=0;j<Config.SOUND_LIST.length;j++){
+		for(int j=0;j<Config.SOUND_LIST.length;j++)
+		{
+			preparePlayer(Config.SOUND_LIST[j]);
 			preparePlayer(Config.SOUND_LIST[j]);
 		}
 	}
