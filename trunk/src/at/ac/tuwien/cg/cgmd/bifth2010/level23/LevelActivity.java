@@ -10,6 +10,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
@@ -34,6 +35,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 
 public class LevelActivity extends Activity implements OrientationListener {
 
+	/** The Constant TAG. */
+	public static final String TAG = "PimpstyleAirways";
+	
 	/** The renderer. */
 	private RenderView renderer; 
 	
@@ -56,6 +60,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 	private Vibrator vibrator;
 
 	private TextView scoreText;
+
+	private PowerManager.WakeLock wakeLock;
 	
 	//private Vector2 mainCharPos; 
 	/**
@@ -71,6 +77,9 @@ public class LevelActivity extends Activity implements OrientationListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	 	Window window = getWindow();
 	 	window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	 	
+	 	PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, TAG);
 	 	
 	 	//set dedicated volume buttons to control music volume
 	 	setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -135,6 +144,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 		super.onPause(); 
 		renderer.onPause();
 		SoundManager.instance.pauseAllAudio();
+		wakeLock.release();
 		//renderer.persistSceneEntities();
 	}
 	
@@ -147,6 +157,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 		super.onResume(); 
 		renderer.onResume();
 		SoundManager.instance.reset();
+		wakeLock.acquire();
 		//renderer.restoreSceneEntities();
 	}
 	

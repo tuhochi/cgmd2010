@@ -88,6 +88,21 @@ public class TextureAtlas
 	
 	public TexturePart getProgressBarTextur()
 	{
-		return generateTexturePart(new Vector2(768,515), new Vector2(768+128,512+16));
+		return generateTexturePart(new Vector2(768,512), new Vector2(768+128,512+16));
+	}
+	
+	public TexturePart getCowTextur()
+	{
+		return generateTexturePart(new Vector2(896,512), new Vector2(896+128,512+128));
+	}
+	
+	public TexturePart getAmbossTextur()
+	{
+		return generateTexturePart(new Vector2(896,640), new Vector2(896+64,640+64));
+	}
+	
+	public TexturePart getBoostButtonTextur()
+	{
+		return generateTexturePart(new Vector2(768,544), new Vector2(768+64,544+64));
 	}
 }

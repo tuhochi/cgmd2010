@@ -10,6 +10,7 @@ import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
 
 /**
  * Button is used to define buttons shown in the level. 
@@ -37,8 +38,8 @@ public class Button
 	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
 	
-	/** The texture coordinates buffer. */
-	private FloatBuffer texCoordBuffer;
+	/** The texture part. */
+	private TexturePart texture;
 	
 	/** The unique vertex buffer id. */
 	private int vboId;
@@ -66,10 +67,10 @@ public class Button
 	{
 		geometryManager = GeometryManager.instance; 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
-		texCoordBuffer = geometryManager.createTexCoordBufferQuad();
+		texture = TextureAtlas.instance.getBoostButtonTextur();
 		if(Settings.GLES11Supported) 
 		{
-			vboId = geometryManager.createVBO(vertexBuffer, texCoordBuffer);
+			vboId = geometryManager.createVBO(vertexBuffer, texture.texCoords);
 		}
 	}
 	
@@ -101,23 +102,22 @@ public class Button
 	 */
 	public void render()
 	{
-		glDisable(GL_TEXTURE_2D);
 		
-		//just for testing
-		if(active)
-			glColor4f(1f, 0f, 0f, 1f);
-		else
-			glColor4f(0f, 0f, 0f, 1f);
+		if(!active)
+		{
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix();
+			glTranslatef(texture.dimension.x, 0, 0);		
+		}
 		
+		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		
 		glTranslatef(position.x, position.y, 0);
 		
 		if (!Settings.GLES11Supported) 
 		{
-			
-//			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
 		
 			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
@@ -125,19 +125,19 @@ public class Button
 		} 
 		else 
 		{
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
-			
-//			glBindTexture(GL10.GL_TEXTURE_2D, textureID);
-			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-			
-			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
-
+			geometryManager.bindVBO(vboId);
+		
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 		}
 		
+		if(!active)
+		{
+			glMatrixMode(GL_TEXTURE);
+			glPopMatrix();
+		}
+		
+		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
-		glEnable(GL_TEXTURE_2D);
-		glColor4f(1f, 1f, 1f, 1f);
 	}
 
 	/**

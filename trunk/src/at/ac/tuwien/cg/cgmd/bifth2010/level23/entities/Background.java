@@ -41,6 +41,7 @@ public class Background implements SceneEntity
 	private float positionY;
 	private boolean gameOver = false; 
 	private int vboId;
+	private GeometryManager geometryManager = GeometryManager.instance;
 	
 	/**
 	 * Default constructor, which calls @see #preprocess() 
@@ -140,11 +141,7 @@ public class Background implements SceneEntity
 			} 
 			else 
 			{
-				GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
-
-				GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-				GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
-
+				geometryManager.bindVBO(vboId);
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 			}
 		

@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
+import static android.opengl.GLES10.GL_FLOAT;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -16,12 +18,24 @@ public class GeometryManager {
 	/** The geometry manager. */
 	public static GeometryManager instance = new GeometryManager(); 
 	
+	private int currentBoundVBO;
 	
 	/**
 	 * Instantiates a new geometry manager.
 	 */
 	public GeometryManager() {
 		instance = this; 
+	}
+	
+	public void bindVBO(int vboID)
+	{
+		if(vboID != currentBoundVBO)
+		{
+			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboID);
+			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
+			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
+			currentBoundVBO = vboID;
+		}
 	}
 	
 	/**
@@ -164,5 +178,10 @@ public class GeometryManager {
 			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, 0);
 			
 			return vboId; 
+		}
+		
+		public void reset()
+		{
+			currentBoundVBO = 0;
 		}
 }

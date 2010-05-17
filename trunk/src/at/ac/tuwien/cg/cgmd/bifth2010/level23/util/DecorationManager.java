@@ -57,6 +57,8 @@ public class DecorationManager
 
 	private boolean wasRestored;
 	
+	private GeometryManager geometryManager = GeometryManager.instance;
+	
 	/**
 	 * Default Constructor
 	 */
@@ -154,11 +156,7 @@ public class DecorationManager
 							glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
 						} else {
-							GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboID);
-
-							GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-
-							GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
+							geometryManager.bindVBO(vboID);
 
 							glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 						}
@@ -200,7 +198,11 @@ public class DecorationManager
 	public void reset()
 	{
 		if(!wasRestored)
+		{
+			currentCloudHeight = 0;
+			clouds.clear();
 			generateRandomCloudPosition();
+		}
 		else
 			wasRestored=false;
 	}
