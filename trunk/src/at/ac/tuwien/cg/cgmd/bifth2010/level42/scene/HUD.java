@@ -89,10 +89,10 @@ public class HUD extends Model
 		circleActive = false;
 		circleRender = false;
 		Material material = materialManager.getMaterial("HUDMaterial", 
-				new Color4(0.5f,0.5f,0.5f,0.1f), 
-				new Color4(0.5f,0.5f,0.5f,0.1f), 
-				new Color4(0.5f,0.5f,0.5f,0.1f), 
-				new Color4(0.5f,0.5f,0.5f,0.1f), 
+				new Color4(1.0f,1.0f,1.0f,1.0f), 
+				new Color4(0.0f,0.0f,0.0f,0.0f), 
+				new Color4(0.0f,0.0f,0.0f,0.0f), 
+				new Color4(0.0f,0.0f,0.0f,1.0f), 
 				0.5f, 
 				"l42_circle");
 		
@@ -166,8 +166,12 @@ public class HUD extends Model
 		
 		if(circleRender)
 		{
-			float scale = ((float)Math.min(timeManager.getTimeOfLastFrame()-circleStartMillis,Config.MAX_LONG_PRESS_TIME))/1000.0f;
+			long circleTime = timeManager.getTimeOfLastFrame()-circleStartMillis;
+			float circlePercent = (float)Math.min(circleTime,Config.MAX_LONG_PRESS_TIME) / (float)Config.MAX_LONG_PRESS_TIME;
+			float scale = circlePercent * Config.MAX_FORCE_VIS_SIZE;
+			float angle = circleTime * Config.FORCE_VIS_ROTATION_SPEED;
 			transformation.setScale(scale,scale,scale);
+			transformation.addRotateZ(angle);
 			transformation.addTranslate(circleCenter.x, circleCenter.y, 0);
 		}
 //		else if(chargePlayer != null && chargePlayer.isPlaying())
