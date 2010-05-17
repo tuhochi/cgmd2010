@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 /**
@@ -29,6 +30,13 @@ public class Config
 	
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;
+	
+	/** HUD */
+
+	/** 0.5f = half the smaller side of the screen */
+	public static final float MAX_FORCE_VIS_SIZE = 0.55f;
+	/** (PI/2)/1000.0f = 180° per second */
+	public static final float FORCE_VIS_ROTATION_SPEED = Constants.PIHALF/1000.0f;
 	
 	/** GAMEPLAY */
 

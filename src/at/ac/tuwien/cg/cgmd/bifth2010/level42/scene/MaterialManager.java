@@ -300,6 +300,12 @@ public class MaterialManager
 			try
 			{
 				bitmap = BitmapFactory.decodeStream(is);
+				
+				// hack for getting a config... for transparent pngs
+				if(bitmap.getConfig() == null)
+					bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false);
+				
+				Log.i(LevelActivity.TAG, "Loaded Texture '" + filename + "': " + bitmap.getWidth() + "x" + bitmap.getHeight() + ", density=" + bitmap.getDensity() + ", config=" + bitmap.getConfig());
 			}
 			catch(Throwable t)
 			{
