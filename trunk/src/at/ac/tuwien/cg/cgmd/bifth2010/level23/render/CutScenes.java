@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
-import static android.opengl.GLES10.GL_FLOAT;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.GL_TEXTURE;
 import static android.opengl.GLES10.GL_TEXTURE_2D;
@@ -21,7 +20,6 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 

@@ -23,7 +23,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
  * It handles the movement, the rising and the collision detection with the walls 
  */
 public class MainChar implements SceneEntity {
-
 	
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -8661277209785862751L;

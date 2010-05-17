@@ -46,10 +46,7 @@ public class TextureAtlas
 		//normalize pixel coordinates
 		Vector2 tempLowerLeft = new Vector2(lowerLeft.x/atlasDimension.x, 1-lowerLeft.y/atlasDimension.y);
 		Vector2 tempUpperRight = new Vector2((upperRight.x/atlasDimension.x), 1-(upperRight.y/atlasDimension.y));;
-		
-		System.out.println("lowerLeft x: " + tempLowerLeft.x + " y: " + tempLowerLeft.y);
-		System.out.println("upperRight x: " + tempUpperRight.x + " y: " + tempUpperRight.y);
-				
+
 		textureCoordinates[0] = tempLowerLeft.x;
 		textureCoordinates[1] = tempLowerLeft.y;
 
