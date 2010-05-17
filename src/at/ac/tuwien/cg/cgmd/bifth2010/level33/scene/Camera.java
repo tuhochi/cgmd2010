@@ -9,7 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level33.GameView;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 /**
  * The Class Camera
@@ -22,7 +22,7 @@ public class Camera {
 	public static float zoom = standardZoom;
 	private boolean somethingChanged = true;
 	
-	Vector3f eye = new Vector3f(0f,zoom, 0.0000000001f);
+	Vector3f eye = new Vector3f(0,zoom, 0.0000000001f);
 	Vector3f view = new Vector3f(0, 0, 0);
 	Vector3f up = new Vector3f(0, 1, 0);
 	
@@ -50,20 +50,22 @@ public class Camera {
 
         Log.d("lookAt","2");
 
-        eye.y=zoom;
         
-//        if(zoom==standardZoom)
-//        	view.set(0, 0, 0);
-//        else
-        	view.set(0,0,0);
+
+        eye.set(0,zoom, 0.0000000001f);
+        view.set(0, 0, 0);
+       
+        
+
+        	
         	
       //  DebugView
       //  	eye.set(((GameView.lastTouch.x*2)-1)*10,((GameView.lastTouch.y*2)-1)*10,((GameView.lastTouch.x*2)-1)*10);
-        
-        	 Log.d("lookAt","3");
+        //eye.set(0,zoom, 0.0000000001f);
       	gluLookAt(gl,eye.x, eye.y, eye.z, view.x, view.y, view.z , up.x, up.y, up.z  );// momentan nur zum probieren, danach von oben
 
       	// set to standard -> hasNotChanged == true
+
       	somethingChanged=false;
 	}
 
