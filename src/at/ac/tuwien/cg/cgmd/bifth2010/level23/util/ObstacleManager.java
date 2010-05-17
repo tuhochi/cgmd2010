@@ -1,13 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
-import static android.opengl.GLES10.GL_FLOAT;
 import static android.opengl.GLES10.GL_TEXTURE_2D;
-import static android.opengl.GLES10.glDisable;
 import static android.opengl.GLES10.glDrawArrays;
 import static android.opengl.GLES10.glEnable;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
-import static android.opengl.GLES10.glScalef;
 import static android.opengl.GLES10.glTexCoordPointer;
 import static android.opengl.GLES10.glTranslatef;
 import static android.opengl.GLES10.glVertexPointer;
@@ -20,7 +17,6 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLES11;
 import android.os.Bundle;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
@@ -108,11 +104,16 @@ public class ObstacleManager
 	/** The main char. */
 	private MainChar mainChar;
 	
+	/** The vertex buffers for all obstacles. */
 	private FloatBuffer[] vertexBuffers;
+	
+	/** The VBO id for all obstacles. */
 	private int[] vboIDs;
 	
+	/** The texture parts for all obstacles. */
 	private TexturePart[] textures;
 	
+	/** The Geometry Manager. */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
 	/**
@@ -120,16 +121,10 @@ public class ObstacleManager
 	 * @author Markus Ernst
 	 * @author Florian Felberbauer
 	 */
-
 	
 	/** The arraylist of obstacles. */
 	private ArrayList<Obstacle> obstacles;
 		
-	/** The vertex buffer. */
-	private FloatBuffer vertexBuffer;
-
-	private int vboId;
-	
 	/**
 	 * Instantiates a new obstacle manager.
 	 */
@@ -250,19 +245,24 @@ public class ObstacleManager
 		boolean leastRenderedFound = false;
 		int i = leastRenderedObstacle;
 		
-		//disable textures just for testing
-//		glDisable(GL_TEXTURE_2D);
-		
-		
 		while(renderNext && i != NR_OF_OBSTACLES)
 		{
 			Obstacle tempObstacle = obstacles.get(i);
-						
-			float posY = tempObstacle.virtualHeight;
 			
 			//test visibility
-			if(posY < topBounds)
+			if(tempObstacle.virtualHeight < topBounds)
 			{
+				//visible
+				if(renderView.gameState != 2)
+					tempObstacle.update();
+				
+				//find lowest index of a visible obstacle
+				if(!leastRenderedFound)
+				{
+					leastRenderedFound = !leastRenderedFound;
+					leastRenderedObstacle = i;
+				}
+				
 				if(!Settings.GLES11Supported) 
 				{
 					glTexCoordPointer(2, GL10.GL_FLOAT, 0, textures[tempObstacle.type].texCoords);
@@ -271,16 +271,6 @@ public class ObstacleManager
 				else 
 				{
 					geometryManager.bindVBO(vboIDs[tempObstacle.type]);
-				}
-				
-				//visible
-				if(renderView.gameState != 2)
-					tempObstacle.update();
-				//find lowest index of a visible obstacle
-				if(!leastRenderedFound)
-				{
-					leastRenderedFound = !leastRenderedFound;
-					leastRenderedObstacle = i;
 				}
 				
 				//render
@@ -316,8 +306,6 @@ public class ObstacleManager
 					i++;
 			}
 		}
-		
-		glEnable(GL_TEXTURE_2D);
 	}
 	
 	/**

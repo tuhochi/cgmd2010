@@ -162,8 +162,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** Manager for decoration rendering (clouds etc.). */
 	private DecorationManager decorationManager;
 	
-	private float fixedStep = 25;
-	private float accuTime;
+//	private float fixedStep = 25;
+//	private float accuTime;
 	
 	/**
 	 * Instantiates a new render view.

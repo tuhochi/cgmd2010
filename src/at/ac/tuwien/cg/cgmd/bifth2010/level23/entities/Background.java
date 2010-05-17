@@ -1,5 +1,4 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
-import static android.opengl.GLES10.GL_FLOAT;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.GL_TEXTURE;
 import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
@@ -18,7 +17,6 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES10;
-import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
@@ -33,14 +31,28 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
  */
 public class Background implements SceneEntity 
 {
-
+	/** The serialization id. */
 	private static final long serialVersionUID = -8706705496517584380L;
+	
+	/** The vertex buffer. */
 	private FloatBuffer vertexBuffer;
+	
+	/** The texture part. */
 	private TexturePart texture;
+	
+	/** The scroll speed (texture space). */
 	private float scrollSpeed = 0.01f;
+	
+	/** The current y coordinate. */
 	private float positionY;
+	
+	/** The game over status. */
 	private boolean gameOver = false; 
+	
+	/** The VBO id. */
 	private int vboId;
+	
+	/** The Geometry Manager. */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
 	/**

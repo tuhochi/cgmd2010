@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
-import static android.opengl.GLES10.GL_FLOAT;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.GL_TEXTURE;
 import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
@@ -18,7 +17,6 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLES11;
 import android.os.Bundle;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Cloud;

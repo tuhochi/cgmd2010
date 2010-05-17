@@ -7,7 +7,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 public class Obstacle implements Serializable {
 	/**
@@ -27,15 +26,14 @@ public class Obstacle implements Serializable {
 	/** The type. */
 	public int type;
 	
+	/** The virtual height, used to decide when an obstacle is visible. */
 	public float virtualHeight;
 	
+	/** The obstacles acceleration. */
 	public final float accel = 0.000005f;
 	
-	public float constantSpeed = 0.5f*Settings.BALLOON_SPEED;
-	
+	/** The time the obstacle since the obstacle. */
 	public float time = 0;
-	
-	public float initialHeight;
 	
 	/**
 	 * Instantiates a new obstacle.
@@ -80,12 +78,10 @@ public class Obstacle implements Serializable {
 		}
 	}
 	
-	public boolean update()
+	public void update()
 	{
 		float dt = TimeUtil.instance.getDt();
 		time += dt;
-		constantSpeed -= dt*0.25f*Settings.BALLOON_SPEED;
 		position.y -= 0.5f*accel*(time*time) + Settings.BALLOON_SPEED*0.5*dt;
-		return position.y < -height;
 	}
 }

@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 
-import static android.opengl.GLES10.*;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.GL_TEXTURE;
 import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
@@ -8,6 +7,7 @@ import static android.opengl.GLES10.glDrawArrays;
 import static android.opengl.GLES10.glMatrixMode;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
+import static android.opengl.GLES10.glScalef;
 import static android.opengl.GLES10.glTexCoordPointer;
 import static android.opengl.GLES10.glTranslatef;
 import static android.opengl.GLES10.glVertexPointer;
@@ -16,8 +16,6 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLES11;
-import android.opengl.GLSurfaceView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
