@@ -39,7 +39,7 @@ public class Scene implements Persistable
 	public final ArrayList<SceneEntity> sceneEntities;
 	
 	/** The hud. */
-	private HUD hud;
+	private Model hud;
 	
 	/** The rendermode. */
 	private int rendermode;
@@ -188,7 +188,7 @@ public class Scene implements Persistable
 			sceneEntities.get(i).update();
 		
 		if(hud != null)
-			hud.update();
+			hud.update(null);
 	}
 	
 	/**

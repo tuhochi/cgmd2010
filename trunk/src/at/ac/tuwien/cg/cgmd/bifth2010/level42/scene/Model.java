@@ -28,49 +28,49 @@ public class Model implements Movable,Persistable
 {
 	
 	/** The name. */
-	private String name;
+	String name;
 	
 	/** The material manager. */
-	private final MaterialManager materialManager = MaterialManager.instance;
+	final MaterialManager materialManager = MaterialManager.instance;
 
 	/** The transformation used by opengl. */
-	private Matrix44 transformation;
+	Matrix44 transformation;
 
 	/** The transformation the logic thread writes to. is written to transformation in update(). */
-	private Matrix44 transformation_temp;
+	Matrix44 transformation_temp;
 
 	/** The basic orientation (needed for orbit). */
-	private final Matrix44 basicOrientation;
+	final Matrix44 basicOrientation;
 	
 	/** The bounding box in model space. */
-	private final AxisAlignedBox3 boundingBox;
+	final AxisAlignedBox3 boundingBox;
 	
 	/** The bounding sphere in model space. */
-	protected final Sphere boundingSphere;
+	final Sphere boundingSphere;
 	
 	/** The bounding sphere in world space. */
-	private final Sphere boundingSphereWorld;
+	final Sphere boundingSphereWorld;
 	
 	/** The bounding sphere in scene entity space. */
-	private final Sphere boundingSphereSceneEntity;
+	final Sphere boundingSphereSceneEntity;
 	
 	/** The motion. */
-	private Motion motion;
+	Motion motion;
 
 	/** if this is initialized. */
-	private boolean initialized;
+	boolean initialized;
 	
 	/** The geometries. */
-	private final ArrayList<Geometry> geometries;
+	final ArrayList<Geometry> geometries;
 	
 	/** The materials (in the same order as the corresponding geometries). */
-	private final ArrayList<Material> materials;
+	final ArrayList<Material> materials;
 	
 	/** The current position */
-	private final Vector3 currentPos;
+	final Vector3 currentPos;
 	
 	/** whether this Model is disabled (not rendered, not updated) */
-	private boolean disabled;
+	boolean disabled;
 	
 	/**
 	 * Instantiates a new model.
