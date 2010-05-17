@@ -221,12 +221,15 @@ public class CollisionManager implements Persistable{
 	 */
 	public void doCollisionDetection()
 	{		
+		int entityListSize = entityList.size();
+		int listSize = remainingPlanetParts.size();
+		
 		if(collOffset==0){
-			collOffset = (int)(entityList.size()/2);
-			collOffsetLimit = entityList.size();
+			collOffset = (int)(entityListSize/2);
+			collOffsetLimit = entityListSize;
 		}else{
 			collOffset = 0;
-			collOffsetLimit = (int)(entityList.size()/2);
+			collOffsetLimit = (int)(entityListSize/2);
 		}
 		
 		//for each entity
@@ -240,7 +243,7 @@ public class CollisionManager implements Persistable{
 			
 			objAIsMoveable = (objA == goldPlanet)?false:true;
 			
-			for(int j = i+1; j<entityList.size(); j++)
+			for(int j = i+1; j<entityListSize; j++)
 			{
 				objB = entityList.get(j);
 				objBIsMoveable = (objB == goldPlanet)?false:true;
@@ -280,7 +283,8 @@ public class CollisionManager implements Persistable{
 						
 						//find out which part of the planet got hit
 						//only search in remaining planet parts
-						for(int u = 0; u < remainingPlanetParts.size(); u++)
+						listSize = remainingPlanetParts.size();
+						for(int u = listSize-1; u >=0; u--)
 						{
 							planetPart = remainingPlanetParts.get(u);
 									
@@ -478,7 +482,8 @@ public class CollisionManager implements Persistable{
 
 	@Override
 	public void restore(DataInputStream dis) throws IOException {
-		for(int u = remainingPlanetParts.size()-1; u >= 0; u--)
+		int size = remainingPlanetParts.size();
+		for(int u = size-1; u >= 0; u--)
 		{
 			if(remainingPlanetParts.get(u).getMotion()!=null)
 				remainingPlanetParts.remove(u);
