@@ -120,6 +120,7 @@ public class SceneGraph  {
 	
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
+	private float lastZoom;
 	
 	StopTimer frameTimer = new StopTimer();
 	
@@ -414,7 +415,8 @@ public class SceneGraph  {
 		}*/
 		
 		// updateLogic
-		level.updateLogic();
+		if (Camera.zoom == Camera.standardZoom)
+			level.updateLogic();
 		
 		// upadate Camera
 		camera.lookAt(gl);
@@ -432,370 +434,395 @@ public class SceneGraph  {
 	private void renderScene(GL10 gl) {
 				
 		glMatrixMode(GL_MODELVIEW);
+		gl.glPushMatrix();
+		
+        if(Camera.zoom==Camera.outZoom)
+        {
+                	float y = ((LevelActivity.lastTouch.y*2)-1)*25;
+                	float x = ((LevelActivity.lastTouch.x*2)-1)*25;
+                	gl.glTranslatef(x, 0, y);
+                	Log.d("out","zoom");
+        }
 		
 		// render world
 		
+		// if Position or frustumDim changed -> renew frustum min/max
 		if(!lastPos.equals(level.gameCharacterPosition)){
-			lastPos.set(level.gameCharacterPosition);
+
+			// renew frustum-min/max
+			frustumMin.set(Math.round(level.gameCharacterPosition.x-frustumDim.x),Math.round(level.gameCharacterPosition.y-frustumDim.y));
+			frustumMax.set(frustumMin.x+frustumDim.x*2+1, frustumMin.y+frustumDim.y*2+1);
+			
 			Log.d("pos",lastPos.x+" "+lastPos.y);
 		}
 		
-		// view culling
-		if(Camera.zoom==Camera.standardZoom){
-		
-			frustumMin.set(Math.round(level.gameCharacterPosition.x-frustumDim.x),Math.round(level.gameCharacterPosition.y-frustumDim.y));
-			frustumMax.set(frustumMin.x+frustumDim.x*2+1, frustumMin.y+frustumDim.y*2+1);
+		// frustum/view culling
+		if (Camera.zoom == Camera.standardZoom) {
 
+			// render Entry«s
+			for (int y = frustumMin.y; y < frustumMax.y; y++) {
+				for (int x = frustumMin.x; x < frustumMax.x; x++) {
 
-			// rest
-			for(int y=frustumMin.y;y<frustumMax.y;y++){
-				for(int x=frustumMin.x;x<frustumMax.x;x++){
-					
-					int type[] = level.getWorldEntry(x, y);
-					if(type[0]!=GEOMETRY_CHARACTER)
-					{
-					glPushMatrix();
-					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
-					
-					
-					if(type[0]<=GEOMETRY_WALL)
-					{
-						if(type[2]==CONNECTION_ONE_WALL){
-							
-							if(type[3]==0)
-							geometry.render(25);
-							
-							else if(type[3]==90)
-								geometry.render(26);
-							
-							else if(type[3]==180)
-								geometry.render(27);
-							
-							else
-								geometry.render(28);
-						}
-						
-						if(type[2]==CONNECTION_TWO_WALL){
-							
-							if(type[3]==0)
-							{
-								geometry.render(25);
-								geometry.render(28);
-							}
-							else if(type[3]==90)
-							{
-								geometry.render(26);
-								geometry.render(25);
-							}
-							else if(type[3]==180)
-							{
-								geometry.render(26);
-								geometry.render(27);
-							}
-							else 
-							{
-								geometry.render(27);
-								geometry.render(28);
-							}
-						}
-						
-						if(type[2]==CONNECTION_COUNTERPART_WALL){
-							
-							if(type[3]==0)
-							{
-								geometry.render(25);
-								geometry.render(27);
-							}
-							else 
-							{
-								geometry.render(26);
-								geometry.render(28);
-							}
-						}
-						
-						if(type[2]==CONNECTION_THREE_WALL){
-							
-							if(type[3]==0)
-							{
-								geometry.render(25);
-								geometry.render(27);
-								geometry.render(28);
-							}
-							else if(type[3]==90)
-							{
-								geometry.render(25);
-								geometry.render(26);
-								geometry.render(28);
-							}	
-							else if(type[3]==180)
-							{
-								geometry.render(25);
-								geometry.render(26);
-								geometry.render(27);
-							}	
-							else
-							{
-								geometry.render(26);
-								geometry.render(28);
-								geometry.render(27);
-							}	
-						}
-						
-						if(type[2]==CONNECTION_FOUR_WALL){
-								geometry.render(25);
-								geometry.render(26);
-								geometry.render(27);
-								geometry.render(28);
-						}
-							
-						
-						if(type[1]!=0)
-						{
-							glPushMatrix();
-							gl.glRotatef(type[1], 0, 1, 0);
-						}
-
-							 if (type[0]==EDGE_NONE_SPECIAL_WALL)
-							geometry.render(10);
-						else if (type[0]==EDGE_ONE_SPECIAL_WALL)
-							geometry.render(11);
-						else if (type[0]==EDGE_COUNTERPART_SPECIAL_WALL)
-							geometry.render(12);
-						else if (type[0]==EDGE_THREE_SPECIAL_WALL)
-							geometry.render(13);
-						else if (type[0]==EDGE_FOUR_SPECIAL_WALL)
-							geometry.render(14);
-						else if (type[0]==EDGE_TWO_SPECIAL_WALL)
-							geometry.render(15);
-						else if (type[0]==CORNER_ONE_SPECIAL)
-							geometry.render(16);
-						else if (type[0]==CORNER_TWO_SPECIAL)
-							geometry.render(17);
-						else if (type[0]==CORNER_THREE_SPECIAL)
-							geometry.render(18);
-						else if (type[0]==CORNER_FOUR_SPECIAL)
-							geometry.render(19);
-						else if (type[0]==CORNER_COUNTERPART_SPECIAL)
-							geometry.render(20);
-						else if (type[0]==SPECIAL_ONE_EDGE_ONE_RIGHT_CORNER_WALL)
-							geometry.render(21);
-						else if (type[0]==SPECIAL_ONE_EDGE_ONE_LEFT_CORNER_WALL)
-							geometry.render(22);
-						else if (type[0]==SPECIAL_ONE_EDGE_TWO_CORNER_WALL)
-							geometry.render(23);
-						else if (type[0]==SPECIAL_TWO_EDGE_ONE_CORNER_WALL)
-							geometry.render(24);
-							 
-							 
-						if(type[1]!=0)
-							glPopMatrix();
-						
-					}
-					else{
-
-						if(type[0]==GEOMETRY_STONE)
-						{
-						
-							geometry.render(0);
-							geometry.render(7);
-						}
-						else if(type[0]==GEOMETRY_BARREL)
-						{
-							geometry.render(1);
-							geometry.render(7);
-						}
-						else if(type[0]==GEOMETRY_TRASH)
-						{
-							geometry.render(2);
-							geometry.render(9);
-						}
-						else if(type[0]==GEOMETRY_MAP)
-						{ 	geometry.render(7);
-							glPushMatrix();
-							gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
-							geometry.render(3);
-							glPopMatrix();
-						}
-						else if(type[0]==GEOMETRY_SPRING)
-						{
-							geometry.render(4);
-							geometry.render(8);
-						}	
-						// normal Way
-						else {
-								geometry.render(6);
-								
-								// links
-								if(type[0]==ARROW_UP){
-									geometry.render(29);	
-								}
-								else if(type[0]==ARROW_LEFT){
-									glPushMatrix();
-									gl.glRotatef(90, 0, 1, 0);
-									geometry.render(29);	
-									glPopMatrix();
-								}
-								else if(type[0]==ARROW_RIGHT){
-									glPushMatrix();
-									gl.glRotatef(-90, 0, 1, 0);
-									geometry.render(29);
-									glPopMatrix();
-								}
-								else if(type[0]==ARROW_DOWN){
-									glPushMatrix();
-									gl.glRotatef(180, 0, 1, 0);
-									geometry.render(29);	
-									glPopMatrix();
-								}
-								//Corners
-								else if(type[0]==ARROW_BOTTOM_TO_RIGHT){
-									geometry.render(31);	
-								}
-								else if(type[0]==ARROW_RIGHT_TO_TOP){
-									glPushMatrix();
-									gl.glRotatef(90, 0, 1, 0);
-									geometry.render(31);	
-									glPopMatrix();
-								}
-								else if(type[0]==ARROW_TOP_TO_LEFT){
-									glPushMatrix();
-									gl.glRotatef(180, 0, 1, 0);
-									geometry.render(31);	
-									glPopMatrix();
-								}
-								else if(type[0]==ARROW_LEFT_TO_BOTTOM){
-									glPushMatrix();
-									gl.glRotatef(270, 0, 1, 0);
-									geometry.render(31);	
-									glPopMatrix();
-								}
-								else if(type[0]==ARROW_BOTTOM_TO_LEFT){
-									geometry.render(30);	
-								}
-								else if(type[0]==ARROW_RIGHT_TO_BOTTOM){
-									glPushMatrix();
-									gl.glRotatef(90, 0, 1, 0);
-									geometry.render(30);	
-									glPopMatrix();
-								}
-								else if(type[0]==ARROW_TOP_TO_RIGHT){
-									glPushMatrix();
-									gl.glRotatef(180, 0, 1, 0);
-									geometry.render(30);	
-									glPopMatrix();
-								}
-								else if(type[0]==ARROW_LEFT_TO_TOP){
-									glPushMatrix();
-									gl.glRotatef(270, 0, 1, 0);
-									geometry.render(30);	
-									glPopMatrix();
-								}
-							
-						}
-							
-					
-						
-						}
-					glPopMatrix();
-					}
+					renderEntry(x, y, gl);
 				}
 			}
 			
-			//render character
-			glPushMatrix();
+			// render Character
 			geometry.render(5);
-			glPopMatrix();
+
+			// render collected Items
+			renderItems(gl);
+
+		}
+
+		// render overview
+		else {
 			
-			//collected Items
-			if(LevelHandler.collectedItemList!=null)
-			{
-				for(int i=0;i<LevelHandler.collectedItemList.size();i++)
-				{
-					float[] translatedItem = LevelHandler.collectedItemList.get(i);
-					float itemHigh = translatedItem[2];
-					float itemAlpha = startItemAlpha-itemHigh*(startItemAlpha/maxTranslation);
-					if(level.isFieldInFrustum((int)translatedItem[0], frustumMin, frustumMax))
-					{
-						Vector2i position = level.getWorldCoordinate((int)translatedItem[0]);
-						glPushMatrix();
-						
-						//Blending
-						gl.glEnable(GL10.GL_BLEND);
-						gl.glColor4f(1.0f, 1.0f, 1.0f, itemAlpha); 
-						//gl.glRotatef((System.nanoTime()/25000000.0f)%360, 0, 1, 0);
-						
-						gl.glTranslatef(position.x-level.gameCharacterPosition.x,itemHigh,position.y-level.gameCharacterPosition.y);
-						if(translatedItem[1]==GEOMETRY_STONE)
-						{
-							geometry.render(0);
-						}
-						else if(translatedItem[1]==GEOMETRY_BARREL)
-						{
-							geometry.render(1);
-						}
-						else if(translatedItem[1]==GEOMETRY_TRASH)
-						{
-							geometry.render(2);
-						}
-						else if(translatedItem[1]==GEOMETRY_MAP)
-						{
-							glPushMatrix();
-							gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
-							geometry.render(3);
-							glPopMatrix();
-						}
-						else if(translatedItem[1]==GEOMETRY_SPRING)
-						{
-							geometry.render(4);
-						}	
-						gl.glDisable(GL10.GL_BLEND);
-						glPopMatrix();
-					}
-					itemHigh = itemHigh+(2*deltaTime);
-					translatedItem[2]=itemHigh;
-					if(LevelHandler.collectedItemList.get(i)[2]>maxTranslation)
-						LevelHandler.collectedItemList.remove(i);
+//			if(lastZoom==Camera.zoom)
+//				return;
+			
+			Log.d("_","render overview");
+
+			for (int y = 0; y < level.worldDim.y; y++) {
+				for (int x = 0; x < level.worldDim.x; x++) {
+
+					renderEntry(x, y, gl);
+
+					
 				}
 			}
+			// render Character
+			geometry.render(5);
 			
-			
+			// render collected Items
+			renderItems(gl);
+
 		}
 		
-//		// render the whole world
-//		else
-//		{
-//		//	glPushMatrix();
-//		//	gl.glTranslatef(level.worldDim.x/2,0,level.worldDim.y/2);
-//			
-//			
-//			for(int y=0;y<level.worldDim.y;y++){
-//				for(int x=0;x<level.worldDim.x;x++){
-//					//if wall
-//					int type = level.getWorldEntry(x, y);
-//					
-//					glPushMatrix();
-//					gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
-//						
-//							geometry[type].render();	
-//							// render way if no wall
-//							if(type!=GEOMETRY_WALL)
-//								geometry[GEOMETRY_WAY].render();	
-//							
-//					glPopMatrix();
-//					}
-//			}
-//			
-//			geometry[GEOMETRY_CHARACTER].render();
-//			
-//			//glPopMatrix();
-//			return;
-//		}
-
-		// render the character
-		//glPushMatrix();
-		//geometry.render(5);
-		//glPopMatrix();
+		lastPos.set(level.gameCharacterPosition);
+		lastZoom=Camera.zoom;
 		
+		gl.glPopMatrix();
+
+	}
+
+	/**
+	 * this method render a Entry on given Position x,y
+	 * @param x Position
+	 * @param y Position
+	 * @param gl OpenGL GL10
+	 */
+	private void renderEntry(int x, int y, GL10 gl) {
+	
+		
+		int type[] = level.getWorldEntry(x, y);
+		
+		glPushMatrix();
+		
+		gl.glTranslatef(x-level.gameCharacterPosition.x,0,y-level.gameCharacterPosition.y);
+		
+		
+		if(type[0]<=GEOMETRY_WALL)
+		{
+			if(type[2]==CONNECTION_ONE_WALL){
+				
+				if(type[3]==0)
+				geometry.render(25);
+				
+				else if(type[3]==90)
+					geometry.render(26);
+				
+				else if(type[3]==180)
+					geometry.render(27);
+				
+				else
+					geometry.render(28);
+			}
+			
+			if(type[2]==CONNECTION_TWO_WALL){
+				
+				if(type[3]==0)
+				{
+					geometry.render(25);
+					geometry.render(28);
+				}
+				else if(type[3]==90)
+				{
+					geometry.render(26);
+					geometry.render(25);
+				}
+				else if(type[3]==180)
+				{
+					geometry.render(26);
+					geometry.render(27);
+				}
+				else 
+				{
+					geometry.render(27);
+					geometry.render(28);
+				}
+			}
+			
+			if(type[2]==CONNECTION_COUNTERPART_WALL){
+				
+				if(type[3]==0)
+				{
+					geometry.render(25);
+					geometry.render(27);
+				}
+				else 
+				{
+					geometry.render(26);
+					geometry.render(28);
+				}
+			}
+			
+			if(type[2]==CONNECTION_THREE_WALL){
+				
+				if(type[3]==0)
+				{
+					geometry.render(25);
+					geometry.render(27);
+					geometry.render(28);
+				}
+				else if(type[3]==90)
+				{
+					geometry.render(25);
+					geometry.render(26);
+					geometry.render(28);
+				}	
+				else if(type[3]==180)
+				{
+					geometry.render(25);
+					geometry.render(26);
+					geometry.render(27);
+				}	
+				else
+				{
+					geometry.render(26);
+					geometry.render(28);
+					geometry.render(27);
+				}	
+			}
+			
+			if(type[2]==CONNECTION_FOUR_WALL){
+					geometry.render(25);
+					geometry.render(26);
+					geometry.render(27);
+					geometry.render(28);
+			}
+				
+			
+			if(type[1]!=0)
+			{
+				glPushMatrix();
+				gl.glRotatef(type[1], 0, 1, 0);
+			}
+	
+				 if (type[0]==EDGE_NONE_SPECIAL_WALL)
+				geometry.render(10);
+			else if (type[0]==EDGE_ONE_SPECIAL_WALL)
+				geometry.render(11);
+			else if (type[0]==EDGE_COUNTERPART_SPECIAL_WALL)
+				geometry.render(12);
+			else if (type[0]==EDGE_THREE_SPECIAL_WALL)
+				geometry.render(13);
+			else if (type[0]==EDGE_FOUR_SPECIAL_WALL)
+				geometry.render(14);
+			else if (type[0]==EDGE_TWO_SPECIAL_WALL)
+				geometry.render(15);
+			else if (type[0]==CORNER_ONE_SPECIAL)
+				geometry.render(16);
+			else if (type[0]==CORNER_TWO_SPECIAL)
+				geometry.render(17);
+			else if (type[0]==CORNER_THREE_SPECIAL)
+				geometry.render(18);
+			else if (type[0]==CORNER_FOUR_SPECIAL)
+				geometry.render(19);
+			else if (type[0]==CORNER_COUNTERPART_SPECIAL)
+				geometry.render(20);
+			else if (type[0]==SPECIAL_ONE_EDGE_ONE_RIGHT_CORNER_WALL)
+				geometry.render(21);
+			else if (type[0]==SPECIAL_ONE_EDGE_ONE_LEFT_CORNER_WALL)
+				geometry.render(22);
+			else if (type[0]==SPECIAL_ONE_EDGE_TWO_CORNER_WALL)
+				geometry.render(23);
+			else if (type[0]==SPECIAL_TWO_EDGE_ONE_CORNER_WALL)
+				geometry.render(24);
+				 
+				 
+			if(type[1]!=0)
+				glPopMatrix();
+			
+		}
+		else{
+	
+			if(type[0]==GEOMETRY_STONE)
+			{
+			
+				geometry.render(0);
+				geometry.render(7);
+			}
+			else if(type[0]==GEOMETRY_BARREL)
+			{
+				geometry.render(1);
+				geometry.render(7);
+			}
+			else if(type[0]==GEOMETRY_TRASH)
+			{
+				geometry.render(2);
+				geometry.render(9);
+			}
+			else if(type[0]==GEOMETRY_MAP)
+			{ 	geometry.render(7);
+				glPushMatrix();
+				gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
+				geometry.render(3);
+				glPopMatrix();
+			}
+			else if(type[0]==GEOMETRY_SPRING)
+			{
+				geometry.render(4);
+				geometry.render(8);
+			}	
+			// normal Way
+			else {
+					geometry.render(6);
+					
+					// links
+					if(type[0]==ARROW_UP){
+						geometry.render(29);	
+					}
+					else if(type[0]==ARROW_LEFT){
+						glPushMatrix();
+						gl.glRotatef(90, 0, 1, 0);
+						geometry.render(29);	
+						glPopMatrix();
+					}
+					else if(type[0]==ARROW_RIGHT){
+						glPushMatrix();
+						gl.glRotatef(-90, 0, 1, 0);
+						geometry.render(29);
+						glPopMatrix();
+					}
+					else if(type[0]==ARROW_DOWN){
+						glPushMatrix();
+						gl.glRotatef(180, 0, 1, 0);
+						geometry.render(29);	
+						glPopMatrix();
+					}
+					//Corners
+					else if(type[0]==ARROW_BOTTOM_TO_RIGHT){
+						geometry.render(31);	
+					}
+					else if(type[0]==ARROW_RIGHT_TO_TOP){
+						glPushMatrix();
+						gl.glRotatef(90, 0, 1, 0);
+						geometry.render(31);	
+						glPopMatrix();
+					}
+					else if(type[0]==ARROW_TOP_TO_LEFT){
+						glPushMatrix();
+						gl.glRotatef(180, 0, 1, 0);
+						geometry.render(31);	
+						glPopMatrix();
+					}
+					else if(type[0]==ARROW_LEFT_TO_BOTTOM){
+						glPushMatrix();
+						gl.glRotatef(270, 0, 1, 0);
+						geometry.render(31);	
+						glPopMatrix();
+					}
+					else if(type[0]==ARROW_BOTTOM_TO_LEFT){
+						geometry.render(30);	
+					}
+					else if(type[0]==ARROW_RIGHT_TO_BOTTOM){
+						glPushMatrix();
+						gl.glRotatef(90, 0, 1, 0);
+						geometry.render(30);	
+						glPopMatrix();
+					}
+					else if(type[0]==ARROW_TOP_TO_RIGHT){
+						glPushMatrix();
+						gl.glRotatef(180, 0, 1, 0);
+						geometry.render(30);	
+						glPopMatrix();
+					}
+					else if(type[0]==ARROW_LEFT_TO_TOP){
+						glPushMatrix();
+						gl.glRotatef(270, 0, 1, 0);
+						geometry.render(30);	
+						glPopMatrix();
+					}
+				
+			}
+				
+		
+			
+			}
+		glPopMatrix();
+	
+		
+	}
+
+	/**
+	 * this method render the collected Items
+	 * @param gl OpenGl GL10
+	 */
+	private void renderItems(GL10 gl) {
+		
+		// if nothing to render -> return
+		if (LevelHandler.collectedItemList == null)
+			return;
+		
+		for(int i=0;i<LevelHandler.collectedItemList.size();i++)
+		{
+			float[] translatedItem = LevelHandler.collectedItemList.get(i);
+			float itemHigh = translatedItem[2];
+			float itemAlpha = startItemAlpha-itemHigh*(startItemAlpha/maxTranslation);
+			if(level.isFieldInFrustum((int)translatedItem[0], frustumMin, frustumMax))
+			{
+				Vector2i position = level.getWorldCoordinate((int)translatedItem[0]);
+				glPushMatrix();
+				
+				//Blending
+				gl.glEnable(GL10.GL_BLEND);
+				gl.glColor4f(1.0f, 1.0f, 1.0f, itemAlpha); 
+				
+				gl.glTranslatef(position.x-level.gameCharacterPosition.x,itemHigh,position.y-level.gameCharacterPosition.y);
+				gl.glRotatef((System.nanoTime()/25000000.0f)%360, 0, 1, 0);
+				
+				if(translatedItem[1]==GEOMETRY_STONE)
+				{
+					geometry.render(0);
+				}
+				else if(translatedItem[1]==GEOMETRY_BARREL)
+				{
+					geometry.render(1);
+				}
+				else if(translatedItem[1]==GEOMETRY_TRASH)
+				{
+					geometry.render(2);
+				}
+				else if(translatedItem[1]==GEOMETRY_MAP)
+				{
+					glPushMatrix();
+					gl.glRotatef((System.nanoTime()/50000000.0f)%360, 0, 1, 0);
+					geometry.render(3);
+					glPopMatrix();
+				}
+				else if(translatedItem[1]==GEOMETRY_SPRING)
+				{
+					geometry.render(4);
+				}	
+				gl.glDisable(GL10.GL_BLEND);
+				glPopMatrix();
+			}
+			itemHigh = itemHigh+(2*deltaTime);
+			translatedItem[2]=itemHigh;
+			if(LevelHandler.collectedItemList.get(i)[2]>maxTranslation)
+				LevelHandler.collectedItemList.remove(i);
+		}
 	}
 
 
