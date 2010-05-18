@@ -2,4 +2,6 @@
 <resources>
 	<color name="l84_colorBlack">#000</color>
 <color name="l84_colorWhite">#fff</color>
+<dimen name="l84_gemButtonWidth">55dp</dimen>
+<dimen name="l84_gemButtonMargin">10dp</dimen>
 </resources>
