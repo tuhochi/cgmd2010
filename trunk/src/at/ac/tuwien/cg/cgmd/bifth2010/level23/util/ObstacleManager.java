@@ -1,8 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
-import static android.opengl.GLES10.GL_TEXTURE_2D;
 import static android.opengl.GLES10.glDrawArrays;
-import static android.opengl.GLES10.glEnable;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
 import static android.opengl.GLES10.glTexCoordPointer;
@@ -232,14 +230,14 @@ public class ObstacleManager
 	 *
 	 * @param currentHeight the current height
 	 */
-	public void renderVisibleObstacles(int currentHeight)
+	public void renderVisibleObstacles(float currentHeight)
 	{
 		RenderView renderView = RenderView.instance;
 		if(mainChar == null)
 			mainChar = renderView.getMainCharInstance();
 		
 		//calculate current topBounds value for relative position
-		int topBounds = currentHeight+(int)renderView.getTopBounds();
+		float topBounds = currentHeight+(int)renderView.getTopBounds();
 		//Log.v("topBounds Height: ", String.valueOf(topBounds));
 		boolean renderNext = true;
 		boolean leastRenderedFound = false;
@@ -250,7 +248,7 @@ public class ObstacleManager
 			Obstacle tempObstacle = obstacles.get(i);
 			
 			//test visibility
-			if(tempObstacle.virtualHeight < topBounds)
+			if(tempObstacle.virtualHeight < topBounds && tempObstacle.position.y > -tempObstacle.height)
 			{
 				//visible
 				if(renderView.gameState != 2)
@@ -262,24 +260,24 @@ public class ObstacleManager
 					leastRenderedFound = !leastRenderedFound;
 					leastRenderedObstacle = i;
 				}
-				
-				if(!Settings.GLES11Supported) 
-				{
-					glTexCoordPointer(2, GL10.GL_FLOAT, 0, textures[tempObstacle.type].texCoords);
-					glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffers[tempObstacle.type]);
-				} 
-				else 
-				{
-					geometryManager.bindVBO(vboIDs[tempObstacle.type]);
-				}
-				
+
 				//render
 				glPushMatrix();		
 
 				glTranslatef(tempObstacle.position.x, tempObstacle.position.y, 0);									
 				
-				glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-					
+				if(!Settings.GLES11Supported) 
+				{
+					glTexCoordPointer(2, GL10.GL_FLOAT, 0, textures[tempObstacle.type].texCoords);
+					glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffers[tempObstacle.type]);
+					glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+				} 
+				else 
+				{
+					geometryManager.bindVBO(vboIDs[tempObstacle.type]);
+					glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+				}
+				
 				glPopMatrix();
 				
 				if(testCollisionWithMainChar(tempObstacle) && !gameOver)

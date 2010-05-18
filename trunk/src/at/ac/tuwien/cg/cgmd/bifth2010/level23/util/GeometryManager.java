@@ -18,7 +18,7 @@ public class GeometryManager {
 	/** The geometry manager. */
 	public static GeometryManager instance = new GeometryManager(); 
 	
-	private int currentBoundVBO;
+	private int currentBoundVBO =-1;
 	
 	/**
 	 * Instantiates a new geometry manager.
@@ -35,6 +35,10 @@ public class GeometryManager {
 			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
 			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
 			currentBoundVBO = vboID;
+		}
+		else
+		{
+			System.out.println("already bound " + vboID);
 		}
 	}
 	
@@ -182,6 +186,6 @@ public class GeometryManager {
 		
 		public void reset()
 		{
-			currentBoundVBO = 0;
+			currentBoundVBO = -1;
 		}
 }
