@@ -57,6 +57,7 @@ public class RenderManager implements Renderer {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			tfPoints.setText("$" + progman.getActualMoney());
+			tfPointsShadow.setText(tfPoints.getText());
 		}
 	};
 	
