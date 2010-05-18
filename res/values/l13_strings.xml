@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="l13_GameName">Fat Drunken Bunny</string>
-<string name="l13_HelpActivity_Text1">Der durch den Besitz immer unglücklichere Hase versucht, seine Depressionen in Alkohol zu ertränken. Während Frau Hase die Kinder behütet, begibt er sich auf eine nächtliche Zechtour.</string>
-<string name="l13_HelpActivity_Text2">Dein Ziel in diesem Abschnitt ist es, möglichst viel Bier in kurzer Zeit zu trinken. Du stehst am Eingang eines Labyrinths, in welchem an verschiedenen Stellen Bier versteckt ist. Umso mehr Bier du findest, desto höher wird deine Zeche ausfallen. Doch Vorsicht! Halte Abstand von deiner Frau, Prostituierten, Polizei usw.. Es könnte dir teuer zu stehen bekommen. Außerdem wird deine Wahrnehmungsfähigkeit mit steigendem Alkoholkonsum geringer.</string>
-<string name="l13_HelpActivity_Text3">Das Labyrinth wird aus der Vogelperspektive angezeigt. Um auf dem Spielfeld deinen Charakter zu bewegen, berühre den Touchscreen an der vertikalen/horizontalen Achse des Charakters. Abhängig vom bereits getätigten Alkoholkonsum wirst du die richtige Richtung einschlagen.</string>
+<string name="l13_GameName">Drunken Bunny</string>
+<string name="l13_HelpActivity_Text1">TODO</string>
+<string name="l13_HelpActivity_Text2">TODO</string>
+<string name="l13_HelpActivity_Text3">TODO</string>
+<string name="l13_moneyText">Money</string>
+<string name="l13_timeText">Time</string>
 </resources>
