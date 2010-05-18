@@ -21,7 +21,7 @@ public class MistressObject extends EnemyObject{
 		super.setRandomDirection();
 	
 	if (CollisionHelper.checkPlayerObjectCollision((int)this.position.x,(int) this.position.y))
-		GameControl.encounterMistress(this);
+		gameControl.encounterMistress(this);
 	super.draw(gl);
 	}
 }

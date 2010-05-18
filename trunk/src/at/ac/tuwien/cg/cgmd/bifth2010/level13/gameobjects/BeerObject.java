@@ -35,7 +35,7 @@ public class BeerObject extends GameObject {
 		//check for player-collision
 		if(CollisionHelper.checkPlayerObjectCollision((int)this.position.x, (int)this.position.y)) {
 			this.isActive = false;
-			GameControl.consumeBeer();
+			gameControl.consumeBeer();
 		}
 		
 		//update position with offset

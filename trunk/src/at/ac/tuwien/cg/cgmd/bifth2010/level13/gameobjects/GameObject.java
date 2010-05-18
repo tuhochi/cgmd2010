@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -7,6 +8,8 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
@@ -20,7 +23,7 @@ public abstract class GameObject {
 	public static final int BLOCKSIZE = 32;
 	
 	//offset of background and beer due to movement
-	public static final Vector2 offset = new Vector2(0, 0);
+	public static Vector2 offset = new Vector2(0, 0);
 	
 	//position of object ((0,0) is bottom left)
 	public Vector2 position;
@@ -34,15 +37,33 @@ public abstract class GameObject {
 	//texture of object (=singleton)
 	protected Texture texture;
 	
+	protected GameControl gameControl;
+	
 	
 	public boolean isActive = true;
 	
+	public static void reset() {
+		GameObject.offset = new Vector2(0, 0);
+	}
+	
+	public static void setStartTile(Vector2 tile) {
+		//set offset
+		float centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		float centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		//move starting tile to center
+		float startingTileX = tile.x * GameObject.BLOCKSIZE;
+		float startingTileY = tile.y * GameObject.BLOCKSIZE;
+		float offsetX = centerX - startingTileX;
+		float offsetY = centerY - startingTileY;
+		GameObject.offset = new Vector2(-offsetX, -offsetY);
+	}
 	/**
 	 * constructor sets up object (used by subtypes)
 	 * @param objectWidth
 	 * @param objectHeight
 	 */
 	public GameObject(float objectWidth, float objectHeight) {
+		this.gameControl = GameControl.getInstance();
 		//set position
 		this.position = new Vector2(0, 0);
 		

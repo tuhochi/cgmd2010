@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
 
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
@@ -23,43 +24,41 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
 
 public class GameControl {
 
-	private static int consumedBeer = 0;
-	private static int mistressCounter = 0;
-	public static boolean drunkState = false;
+	private int consumedBeer = 0;
+	private int mistressCounter = 0;
+	private boolean drunkState = false;
 	private static final int DRUNKTIME = 150;
-	private static int currentDrunkTime = 0;
+	private int currentDrunkTime = 0;
 	private static final int BUSTTIME = 50;
-	private static int currentBustTime = 0;
-	private static boolean inJail = false;
-	private static SoundManager sound;
-	private static boolean musicRunning = false;
-	public static int money = 0;
+	private int currentBustTime = 0;
+	private boolean inJail = false;
+	//private static SoundManager sound;
+	private boolean musicRunning = false;
+	private int money = 0;
 	//movement vector
-	public static Vector2 movement = new Vector2(0, 0);
+	private Vector2 movement = new Vector2(0, 0);
 	//old movement vector
-	public static Vector2 oldMovement = new Vector2(0, 0);
+	private Vector2 oldMovement = new Vector2(0, 0);
+	
+	private static GameControl instance;
 	
 	
-	//reset variables
-	public static void init() {
-		consumedBeer = 0;
-		mistressCounter = 0;
-		drunkState = false;
-		currentDrunkTime = 0;
-		currentBustTime = 0;
-		inJail = false;
-		musicRunning = false;
-		money = 0;
-		//movement vector
-		movement = new Vector2(0, 0);
-		//old movement vector
-		oldMovement = new Vector2(0, 0);
-		GameTimer.getInstance().reset();
+	public static GameControl getInstance() {
+		if(instance == null) {
+			instance = new GameControl();
+		}
+		return instance;
 	}
+	
+	//reset 
+	public static void reset() {
+		instance = null;
+	}
+	
 	/**
 	 * needs to be called every frame to update game logic
 	 */
-	public static void update(){
+	public void update(){
 		//update offset
 	
 		GameObject.updateOffset(movement);
@@ -68,25 +67,27 @@ public class GameControl {
 	}
 	
 
-	public static void updateDrunkStatus(StatusBar drunkBar){
+	public void updateDrunkStatus(StatusBar drunkBar){
 		drunkBar.updateScale( 1.0f/(float)DRUNKTIME * (float)currentDrunkTime);
 	}
 	
-	public static void updateJailStatus(StatusBar jailBar){
+	public void updateJailStatus(StatusBar jailBar){
 		if(inJail)
 			jailBar.updateScale(1.0f/(float)BUSTTIME * (float)currentBustTime);
 		else
 			jailBar.updateScale(0.0f);
 	}
 	
-	public static void movePlayer(float x,float y){
+	public void movePlayer(float x,float y){
 		//remember old movement
 		oldMovement = movement.clone();
 		
 		if (!inJail && !drunkState){
 		float deltaX = Math.abs( x - MyRenderer.screenWidth / 2.0f);
 		float deltaY = Math.abs( y - MyRenderer.screenHeight / 2.0f);
-		
+	
+		Log.d("df", "moving player");
+		Log.d("df", "x: " +x + "y: " + y + " deltax: " + deltaX + " deltay: " + deltaY);
 		if(deltaX >= deltaY) {
 			if(x < MyRenderer.screenWidth / 2.0f) {
 				//move left
@@ -154,7 +155,7 @@ public class GameControl {
 	
 	
 	
-	public static void consumeBeer(){
+	public void consumeBeer(){
 		SoundManager.playSound(SoundFX.BURP);
 		consumedBeer++;
 		money--;
@@ -165,7 +166,7 @@ public class GameControl {
 	 * Called every frame within the update loop.
 	 */
 	
-	private static void handleDrunkState(){
+	private void handleDrunkState(){
 		if (consumedBeer >= 5){
 			consumedBeer = 0;
 			// Set player to drunk state
@@ -210,7 +211,7 @@ public class GameControl {
 		
 	}
 	
-	private static void handleJailState(){
+	private void handleJailState(){
 		if(inJail){
 			if(currentBustTime > 0){
 				currentBustTime--;
@@ -231,7 +232,7 @@ public class GameControl {
 	 * @param cop 
 	 */
 	
-	public static void encounterCop(CopObject cop){
+	public void encounterCop(CopObject cop){
 	//	cop.isActive = false;
 		//TODO: CREATE VARIABLE FOR ESCAPING COP LIKE ADRENALINE SHOTS TO PIC UP WITH A TIMER.
 		if (drunkState & !inJail){
@@ -250,12 +251,36 @@ public class GameControl {
 	 */
 	
 	
-	public static void encounterMistress(MistressObject mistress){
+	public void encounterMistress(MistressObject mistress){
 		mistress.isActive = false;
 		mistressCounter++;
 		money = money - 10;
 		SoundManager.playSound(SoundFX.ORGASM);
 		
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public boolean isDrunkState() {
+		return drunkState;
+	}
+
+	public Vector2 getMovement() {
+		return movement;
+	}
+
+	public void setMovement(Vector2 movement) {
+		this.movement = movement;
+	}
+
+	public Vector2 getOldMovement() {
+		return oldMovement;
+	}
+
+	public void setOldMovement(Vector2 oldMovement) {
+		this.oldMovement = oldMovement;
 	}
 	
 	

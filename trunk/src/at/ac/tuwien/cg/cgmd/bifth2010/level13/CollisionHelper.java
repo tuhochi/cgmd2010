@@ -36,9 +36,16 @@ public class CollisionHelper {
 		int gameObjectXMax;
 		int gameObjectYMax;
 		
+		float centerX;
+		float centerY;
+		
+		centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		
+		
 		if (gO == null){
-			gameObjectXMin = (int)(PlayerObject.center.x + GameObject.offset.x);
-			gameObjectYMin = (int)(PlayerObject.center.y + GameObject.offset.y);
+			gameObjectXMin = (int)(centerX + GameObject.offset.x);
+			gameObjectYMin = (int)(centerY + GameObject.offset.y);
 			gameObjectXMax = gameObjectXMin + GameObject.BLOCKSIZE;
 			gameObjectYMax = gameObjectYMin + GameObject.BLOCKSIZE;
 		}else{
@@ -99,9 +106,16 @@ public class CollisionHelper {
 	 * @return
 	 */
 	public static boolean checkPlayerObjectCollision(int x, int y) {
+		float centerX;
+		float centerY;
+		
+		centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+	
+		
 		//calculate player's min/max x/y - coordinates
-		int playerXMin = (int)(PlayerObject.center.x + GameObject.offset.x);
-		int playerYMin = (int)(PlayerObject.center.y + GameObject.offset.y);
+		int playerXMin = (int)(centerX + GameObject.offset.x);
+		int playerYMin = (int)(centerY + GameObject.offset.y);
 		int playerXMax = playerXMin + GameObject.BLOCKSIZE;
 		int playerYMax = playerYMin + GameObject.BLOCKSIZE;
 

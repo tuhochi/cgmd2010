@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
@@ -14,7 +15,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 public class PlayerObject extends GameObject {
 
 	//center of screen
-	public static final Vector2 center = new Vector2(((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE, ((MyRenderer.screenHeight / GameObject.BLOCKSIZE / 2) * GameObject.BLOCKSIZE));
+	//public static final Vector2 center = new Vector2(((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE, ((MyRenderer.screenHeight / GameObject.BLOCKSIZE / 2) * GameObject.BLOCKSIZE));
     
 	/**
 	 * constructor calls super with object's dimensions
@@ -24,11 +25,17 @@ public class PlayerObject extends GameObject {
 		super(GameObject.BLOCKSIZE, GameObject.BLOCKSIZE);
 		
 		//set position
-		this.position.x = center.x;
-		this.position.y = center.y;
+	
+		this.position.x = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		this.position.y = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		
 
 	}
 	
+	public void updatePosition() {
+		this.position.x = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		this.position.y = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+	}
 	/**
 	 * @see GameObject#draw(GL10) 
 	 */
@@ -68,5 +75,12 @@ public class PlayerObject extends GameObject {
 		//disable client state
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+	}
+	
+	public Vector2 getCurrentTile() {
+		int tileX = (int) ((position.x + GameObject.offset.x) / GameObject.BLOCKSIZE);
+		int tileY = (int) ((position.y + GameObject.offset.y) / GameObject.BLOCKSIZE);
+		Log.d("df", "tilex: " + tileX + " tiley: " + tileY);
+		return new Vector2(tileX, tileY);
 	}
 }
