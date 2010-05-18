@@ -29,8 +29,10 @@ public class LevelActivity extends Activity {
 	private String fpsString;
 	private TextView moneyTextView;
 	private String moneyString;
+	private String money;
 	private TextView timeTextView;
 	private String timeString;
+	private String time;
 	
 	private Timer fpsUpdateTimer;
 	private Timer gameTimeUpdateTimer;
@@ -86,15 +88,16 @@ public class LevelActivity extends Activity {
 	 			handleUIChanges.sendEmptyMessage(0);
 	 		}
 	 	}, 0, 1000);
-	 	
+	
 	 	//timer for game time
+	 	time = this.getString(R.string.l13_timeText);
 		gameTimeUpdateTimer = new Timer();
 	 	gameTimeUpdateTimer.schedule(new TimerTask() {
 	 	
 	 		@Override
 	 		public void run() {
 	 			GameTimer gameTimer = GameTimer.getInstance();
-	 			timeString = "Time: " + gameTimer.getRemainingTimeString();
+	 			timeString = time + ": " + gameTimer.getRemainingTimeString();
 	 			handleUIChanges.sendEmptyMessage(0);
 	 			if(gameTimer.isOver()) {
 	 				finish();
@@ -102,13 +105,15 @@ public class LevelActivity extends Activity {
 	 		}
 	 	}, 0, 500);
 	 	
+	
 	 	//timer for money
+	 	money = this.getString(R.string.l13_moneyText);
 		moneyUpdateTimer = new Timer();
 	 	moneyUpdateTimer.schedule(new TimerTask() {
 	 	
 	 		@Override
 	 		public void run() {
-	 			moneyString = "Money: " + GameControl.getInstance().getMoney() + "$";
+	 			moneyString = money + ": " + GameControl.getInstance().getMoney() + "$";
 	 			handleUIChanges.sendEmptyMessage(0);
 	 		}
 	 	}, 0, 500);

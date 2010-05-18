@@ -12,7 +12,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
 /**
  * 
  * 
- * @author Sebastian
+ * @author Sebastian/arthur
  *
  * Handles game logic related stuff.
  * 
@@ -172,11 +172,11 @@ public class GameControl {
 			// Set player to drunk state
 			currentDrunkTime = DRUNKTIME;
 			SoundManager.playSound(SoundFX.DRUNK);
-			if (musicRunning == false){
+			/*if (musicRunning == false){
 				SoundManager.playSound(SoundFX.MUSIC);
 				
 				musicRunning = true;
-			}
+			}*/
 			
 			
 			drunkState = true;
@@ -198,8 +198,8 @@ public class GameControl {
 				
 			}
 			else{
-				SoundManager.pauseMusic();
-				musicRunning = false;
+				//SoundManager.pauseMusic();
+				//musicRunning = false;
 				GameObject.drunkenRotation =0;
 				drunkState = false;
 
@@ -239,6 +239,9 @@ public class GameControl {
 				SoundManager.playSound(SoundFX.POLICE);
 				currentBustTime = BUSTTIME;
 				inJail = true;
+				//stop player movement
+				movement = new Vector2(0, 0);
+				oldMovement = new Vector2(0, 0);
 		
 		}
 			
