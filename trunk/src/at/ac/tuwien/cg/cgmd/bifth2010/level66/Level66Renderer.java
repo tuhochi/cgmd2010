@@ -16,7 +16,8 @@ import android.opengl.GLU;
 public class Level66Renderer implements Renderer {
 
 	// model for testing purpose only
-	private Model testModel;
+	private PlayerAircraft player;
+	private World world;
 	private Context mContext;
 	
 	// screen dimension
@@ -29,7 +30,7 @@ public class Level66Renderer implements Renderer {
     private float[] _lightDiffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
     private float[] _lightSpecular = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-    private float[] _lightPosition = { -20.0f, 20.0f, -20.0f };
+    private float[] _lightPosition = { -200.0f, 200.0f, 0.0f };
     private float[] _matSpecular = { 1.0f, 1.0f, 1.0f, 1.0f };
     private float[] _matShininess = { 50.0f };
 	
@@ -47,7 +48,7 @@ public class Level66Renderer implements Renderer {
         float ratio = _width / _height;
         // perspective:
         GLU.gluLookAt(gl, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-        GLU.gluPerspective(gl, 60.0f, 1.0f * ratio, 1.0f, 20.0f);
+        GLU.gluPerspective(gl, 60.0f, 1.0f * ratio, 1.0f, 150.0f);
         // orthographic:
         //gl.glOrthof(-1, 1, -1 / ratio, 1 / ratio, 0.01f, 100.0f);
         
@@ -71,7 +72,7 @@ public class Level66Renderer implements Renderer {
 	    // TODO: does not work yet
 	    //gl.glEnable(GL10.GL_BLEND);
 	    //gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-	    gl.glShadeModel(GL10.GL_SMOOTH);
+	    //gl.glShadeModel(GL10.GL_SMOOTH);
 	    //gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);
 	    
 	    
@@ -88,14 +89,24 @@ public class Level66Renderer implements Renderer {
 	    gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, _lightPosition, 0);
 	    
 	   
-	    gl.glLightModelfv(GL10.GL_LIGHT_MODEL_AMBIENT, _globalAmbient, 0);
+	    //gl.glLightModelfv(GL10.GL_LIGHT_MODEL_AMBIENT, _globalAmbient, 0);
 
 	    gl.glEnable(GL10.GL_LIGHTING);
 	    gl.glEnable(GL10.GL_LIGHT0);
 	    gl.glEnable(GL10.GL_COLOR_MATERIAL);
+	    
+	    gl.glEnable(GL10.GL_FOG);
+	    gl.glFogf(GL10.GL_FOG_START, 50.0f);
+	    gl.glFogf(GL10.GL_FOG_END, 100.0f);
+	    gl.glFogf(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
+	    float[] fogColor = { 0.235f, 0.329f, 0.408f, 1.0f };
+	    gl.glFogfv(GL10.GL_FOG_COLOR, fogColor, 0);
 	 
 		//load and render model
-	    testModel = new PlayerAircraft(mContext);
+	    player = new PlayerAircraft(mContext);
+	    world = new World(mContext);
+ 
+	    
 	    //testModel = new Model("l66_baum.obj", mContext);
 	    Sound.playSound(2.0f);
     }
@@ -104,11 +115,17 @@ public class Level66Renderer implements Renderer {
     public void onSurfaceChanged(GL10 gl, int w, int h) {
         _width = w;
         _height = h;
-        
         float ratio = w / h;
-        GLU.gluPerspective(gl, 60.0f, 1.0f * ratio, 1.0f, 20.0f);
+        
+        gl.glMatrixMode(GL10.GL_PROJECTION);
+        gl.glLoadIdentity();
+        
+        GLU.gluPerspective(gl, 60.0f, 1.0f * ratio, 1.0f, 150.0f);
+        GLU.gluLookAt(gl, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
         
         gl.glViewport(0, 0, w, h);
+        
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
     }
 	
 	@Override
@@ -117,41 +134,35 @@ public class Level66Renderer implements Renderer {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
        
        // render model
-       if( testModel instanceof PlayerAircraft)
-    	   ((PlayerAircraft) testModel).move();
+       player.update();
+       player.render(gl);
        
-       testModel.render(gl);
+       world.update();
+       world.render(gl);
     }
 	
 	public void moveRight()
 	{
-		 if( testModel instanceof PlayerAircraft)
-			 ((PlayerAircraft) testModel).moveRight();
+		player.moveRight();
 	}
 	
 	public void moveLeft()
 	{
-		 if( testModel instanceof PlayerAircraft)
-			 ((PlayerAircraft) testModel).moveLeft();
+		player.moveLeft();
 	}
 	
 	public void moveUp()
 	{
-		if( testModel instanceof PlayerAircraft)
-			 ((PlayerAircraft) testModel).moveUp();
+		player.moveUp();
 	}
 	
 	public void moveDown()
 	{
-		if( testModel instanceof PlayerAircraft)
-			 //((PlayerAircraft) testModel).moveDown();
-			((PlayerAircraft) testModel).moveDown();
+		player.moveDown();
 	}
 	
 	public void moveSpecial()
 	{
-		if( testModel instanceof PlayerAircraft)
-			 //((PlayerAircraft) testModel).moveDown();
-			((PlayerAircraft) testModel).specialMoveRoll();
+		player.specialMoveRoll();
 	}
 }
