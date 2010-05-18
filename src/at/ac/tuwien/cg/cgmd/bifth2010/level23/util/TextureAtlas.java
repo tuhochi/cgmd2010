@@ -14,29 +14,57 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.TexturePart;
  * @author Florian Felberbauer
  */
 public class TextureAtlas 
-{
-	int textureID;
-	
+{	
+	/** The texture id for the atlas texture. */
+	int textureIdAtlas;
+	/** The texture id for the background texture. */
+	int textureIdAtlasBg;
+	/** The dimension of the atlas texture. */
 	Vector2 atlasDimension;
-	
+	/** The instance of TextureAtlas to pass around. */
 	public static TextureAtlas instance = new TextureAtlas();
-	
+		
+	/**
+	 * Default Constructor
+	 */
 	public TextureAtlas()
 	{
 		atlasDimension = new Vector2(1024,1024);		
 	}
-	
+
+	/**
+	 * Loads the textures used in the TextureAtlas
+	 */
 	public void loadAtlasTexture()
 	{
 		int resID = LevelActivity.instance.getResources().getIdentifier("l23_textureatlas", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
-		textureID = TextureManager.instance.getTextureId(LevelActivity.instance.getResources(), resID);
+		textureIdAtlas = TextureManager.instance.getTextureId(LevelActivity.instance.getResources(), resID);
+		resID = LevelActivity.instance.getResources().getIdentifier("l23_textureatlasbg", "drawable", "at.ac.tuwien.cg.cgmd.bifth2010");
+		textureIdAtlasBg = TextureManager.instance.getTextureId(LevelActivity.instance.getResources(), resID);
 	}
 	
+	/**
+	 * Binds the TextureAtlas texture
+	 */
 	public void bindAtlasTexture()
 	{
-		glBindTexture(GL_TEXTURE_2D, textureID);
+		glBindTexture(GL_TEXTURE_2D, textureIdAtlas);
 	}
 	
+	/**
+	 * Binds the texture used for the background
+	 */
+	public void bindAtlasBgTexture()
+	{
+		glBindTexture(GL_TEXTURE_2D, textureIdAtlasBg);
+	}
+	
+	/**
+	 * Returns a texture part for the given pixelvalues
+	 * @param lowerLeft lower left corner of the texture part (in pixels)
+	 * @param upperRight upper right corner of the texture part (in pixels)
+	 * @return the chosen texturepart
+	 */
 	public TexturePart generateTexturePart(Vector2 lowerLeft, Vector2 upperRight)
 	{
 
@@ -68,36 +96,55 @@ public class TextureAtlas
 		return new TexturePart(tempUpperRight, tempLowerLeft, new Vector2(tempUpperRight.x-tempLowerLeft.x,tempLowerLeft.y-tempUpperRight.y), texCoordBuffer); 
 	}
 	
+	/**
+	 * Returns the part of the texture for the mainchar
+	 * @return the texture part for the mainchar
+	 */
 	public TexturePart getMainCharTextur()
 	{
 		return generateTexturePart(new Vector2(512,0), new Vector2(512+128,256));
 	}
 	
-	public TexturePart getBackgroundTextur()
-	{
-		return generateTexturePart(new Vector2(0,0), new Vector2(256,512));
-	}
-	
+	/**
+	 * Returns the part of the texture for a cloud
+	 * @return the texture part for a cloud
+	 */
 	public TexturePart getCloudTextur()
 	{
 		return generateTexturePart(new Vector2(768,0), new Vector2(768+128,64));
 	}
 	
+	/**
+	 * Returns the part of the texture for the progressbar
+	 * @return the texture part for the progressbar
+	 */
 	public TexturePart getProgressBarTextur()
 	{
 		return generateTexturePart(new Vector2(768,512), new Vector2(768+128,512+16));
 	}
 	
+	/**
+	 * Returns the part of the texture for the cow obstacle
+	 * @return the texture part for the cow obstacle
+	 */
 	public TexturePart getCowTextur()
 	{
-		return generateTexturePart(new Vector2(896,512), new Vector2(896+128,512+128));
+		return generateTexturePart(new Vector2(896+0.5f,512), new Vector2(896+128,512+128));
 	}
 	
+	/**
+	 * Returns the part of the texture for the amboss obstacle
+	 * @return the texture part for the mainchar
+	 */
 	public TexturePart getAmbossTextur()
 	{
 		return generateTexturePart(new Vector2(896,640), new Vector2(896+64,640+64));
 	}
 	
+	/**
+	 * Returns the part of the texture for the boost button
+	 * @return the texture part for the boost button
+	 */
 	public TexturePart getBoostButtonTextur()
 	{
 		return generateTexturePart(new Vector2(768,544), new Vector2(768+64,544+64));

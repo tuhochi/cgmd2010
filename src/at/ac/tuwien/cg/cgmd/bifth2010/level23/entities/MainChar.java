@@ -20,15 +20,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 /**
  * The Class MainChar handles the protagonist of the level.
  * It handles the movement, the rising and the collision detection with the walls 
+ *
+ * @author Markus Ernst
+ * @author Florian Felberbauer
  */
+
 public class MainChar implements SceneEntity {
 	
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -8661277209785862751L;
 	
-	/**
-	 * Indicates if the MainChar was restored from Bundle
-	 */
+	/**Indicates if the MainChar was restored from Bundle **/
 	private boolean wasRestored=false;
 	
 	/** The width. */
@@ -88,6 +90,7 @@ public class MainChar implements SceneEntity {
 	/** SoundManager for handling audio */
 	private SoundManager soundManager; 
 	
+	/** GeometryManager creating vertexbuffers */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
 	/**

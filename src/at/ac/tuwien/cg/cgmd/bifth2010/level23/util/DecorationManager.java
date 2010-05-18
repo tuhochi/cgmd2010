@@ -25,6 +25,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
 /**
  * The Class DecorationManager manages rendering of decoration objects (clouds etc.).
+ *
  * @author Markus Ernst
  * @author Florian Felberbauer
  */

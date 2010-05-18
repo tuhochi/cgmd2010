@@ -22,15 +22,31 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
+/**
+ * The Class ProgressBar is used to render a progressbar
+ *
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
+
 public class ProgressBar
 {
+	/** The dimensions of the progressbar. */
 	Vector2 dimension;
+	/** The texture part of the progressbar. */
 	TexturePart texture;
+	/** The position of the progressbar. */
 	Vector2 position;
+	/** The vertexbuffer of the progressbar. */
 	private FloatBuffer vertexBuffer;
+	/** The vbo id of the progressbar. */
 	private int vboId;
+	/** GeometryManager creating vertexbuffers */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
+	/**
+	 * Default Constructor
+	 */
 	public ProgressBar()
 	{
 		dimension = new Vector2(40,3*RenderView.instance.getAspectRatio());
@@ -38,6 +54,9 @@ public class ProgressBar
 		position = new Vector2(50-dimension.x/2f,RenderView.instance.getTopBounds()-5*RenderView.instance.getAspectRatio()-dimension.y);
 	}
 	
+	/**
+	 * Loads the vertex and texturebuffers
+	 */
 	public void preprocess()
 	{
 		GeometryManager geometryManager = GeometryManager.instance; 
@@ -50,6 +69,10 @@ public class ProgressBar
 		}
 	}
 	
+	/**
+	 * Renders the progressbar
+	 * @param progress the progress to be shown by the bar (0-1)
+	 */
 	public void render(float progress) 
 	{
 		//render background bar

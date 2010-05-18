@@ -23,7 +23,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Obstacle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.TexturePart;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 
-
 /**
  * The Class ObstacleManager manages all obstacles in different size and position.
  * @author Markus Ernst
@@ -31,19 +30,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
  */
 public class ObstacleManager
 {
-	/**
-	 * Boolean to indicate if the level is game over
-	 */
+	/** Boolean to indicate if the level is game over */
 	private boolean gameOver = false; 
 	
-	/**
-	 * Boolean to indicate if the activity was restored from bundle
-	 */
+	/** Boolean to indicate if the activity was restored from bundle	 */
 	private boolean wasRestored = false;
 	
-	/**
-	 * the unique serialVersionUID 
-	 */
+	/** the unique serialVersionUID	 */
 	private static final long serialVersionUID = -4564339113161027088L;
 
 	/** The instance of ObstacleManager to pass around. */

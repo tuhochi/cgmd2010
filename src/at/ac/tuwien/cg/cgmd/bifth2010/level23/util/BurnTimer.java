@@ -3,17 +3,21 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Hud;
 
 /**
-	 * Th Class BurnTimer handles all tasks needed for the money bonus 
-	 */
+ * The Class BurnTimer handles all tasks needed for the money bonus 
+ *
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ *
+ */
 public class BurnTimer extends TimingTask 
 {
-	/**
-	 * 
-	 */
+	/** The serialization id. */
 	private static final long serialVersionUID = 4717448091564254143L;
-
+	/** The time when the timer should trigger. */
 	public float time = Settings.BURN_BOOST_TIME;
+	/** The remaining time till the timer triggers. */
 	public float remainingTime = Settings.BURN_BOOST_TIME;
+	/** The id of the associated audio player. */
 	private int audioPlayerId;
 	
 	/**
