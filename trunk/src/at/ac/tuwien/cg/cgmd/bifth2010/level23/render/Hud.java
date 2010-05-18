@@ -6,12 +6,12 @@ import java.io.IOException;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.ProgressBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.BurnTimer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 /**
  * The Class Hud provides the HUD for activating boni and movement arrows
