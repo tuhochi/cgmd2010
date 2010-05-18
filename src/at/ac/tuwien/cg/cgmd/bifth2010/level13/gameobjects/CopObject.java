@@ -24,7 +24,7 @@ public class CopObject extends EnemyObject{
 		super.setRandomDirection();
 	
 	if (CollisionHelper.checkPlayerObjectCollision((int)this.position.x,(int) this.position.y))
-		GameControl.encounterCop(this);
+		gameControl.encounterCop(this);
 	super.draw(gl);
 	}
 }

@@ -51,7 +51,7 @@ public class TextureSingletons {
 		}
 	}
 	
-	public static void releaseTextures() {
+	public static void reset() {
 		textures = new HashMap<String, Texture>();
 	}
 }

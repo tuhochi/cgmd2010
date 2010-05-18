@@ -34,7 +34,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	//the current map in form of an array
 	
 	//Control delay timer
-	public static int controlDelay = 0;
+	//public static int controlDelay = 0;
 	public static int map[][] = {
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		{ 1, 0, 0, 2, 0, 0, 0, 0, 2, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -76,7 +76,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	public static int screenHeight;
 	
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
-	public static final float SPEED = 16f;
+	public static final float SPEED = 8f;
 	
 	private float zoomFactor = 1.0f;
 	private float zoom = 0.0f;
@@ -84,7 +84,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	private Context context;
 	
 	//all game objects
-	private List<GameObject> gameObjects;
+	private static List<GameObject> gameObjects = new ArrayList<GameObject>();
 	
 	//counter for fps
 	private FPSCounter counter;
@@ -92,9 +92,13 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	public DrunkBar drunkStatusBar;
 	public JailBar jailStatusBar;
 	SoundManager sound;
+	private GameControl gameControl;
 	
-	public static boolean isFirstFrame = true;
 	//public PlayerObject player;
+	
+	public static void reset() {
+		gameObjects = new ArrayList<GameObject>();
+	}
 	/**
 	 * constructor
 	 * @param context
@@ -103,16 +107,16 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		super(context, attr);
 		//init members
 		SoundManager.initSoundManager(context);
-		this.context = context;
-		this.gameObjects = new ArrayList<GameObject>();
+		this.context = context; 
 		this.counter = FPSCounter.getInstance();
+		this.gameControl = GameControl.getInstance();
 		//set renderer for view
 		this.setRenderer(this);
 		//make it focusable (for touch events)
 		this.setFocusable(true);
 		
 	}
-
+	
 	/**
 	 * @see Renderer#onDrawFrame(GL10)
 	 */
@@ -125,7 +129,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glLoadIdentity();
 		
 		
-		if(GameControl.drunkState){
+		if(gameControl.isDrunkState()){
 		
 		if (zoomFactor > 1.1f){
 			zoom = -0.01f;
@@ -155,7 +159,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		//clear color
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		GameControl.update();
+		gameControl.update();
 		
 		//draw all game objects
 		for(GameObject gameObject : gameObjects) {
@@ -167,18 +171,14 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		}
 		
 			drunkStatusBar.draw(gl);
-			GameControl.updateDrunkStatus(drunkStatusBar);
-			GameControl.updateJailStatus(jailStatusBar);
+			gameControl.updateDrunkStatus(drunkStatusBar);
+			gameControl.updateJailStatus(jailStatusBar);
 			jailStatusBar.draw(gl);
 			
-			//reset game time if this is the first frame
-			if(isFirstFrame) {
-				GameTimer.getInstance().reset();
-			}
+			
 			//update game time
 			GameTimer.getInstance().update();
 			
-			isFirstFrame = false;
 	}
 
 	/**
@@ -255,32 +255,45 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		MyRenderer.screenWidth = this.getWidth();
 		
 		//init all textures
-		TextureSingletons.releaseTextures();
+		TextureSingletons.reset();
 		TextureSingletons.initTextures(gl, context);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		
 		//create all game objects
-		gameObjects.add(new BackgroundObject());
-		for(int i = 0; i < MyRenderer.map.length; i++) {
-			for(int j = 0; j < MyRenderer.map[i].length; j++) {
-				if(MyRenderer.map[i][j] == 2) {
-					gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
-				}
-				else if (MyRenderer.map[i][j] == 3){
-					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
-				}
-				else if (MyRenderer.map[i][j] == 4){
-					gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
+		if(gameObjects.isEmpty()) {
+			gameObjects.add(new BackgroundObject());
+			for(int i = 0; i < MyRenderer.map.length; i++) {
+				for(int j = 0; j < MyRenderer.map[i].length; j++) {
+					if(MyRenderer.map[i][j] == 2) {
+						gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
+					}
+					else if (MyRenderer.map[i][j] == 3){
+						gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
+					}
+					else if (MyRenderer.map[i][j] == 4){
+						gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
+					}
 				}
 			}
+
+			gameObjects.add(new PlayerObject());
+			GameObject.setStartTile(new Vector2(3, 1));
 		}
+		else {
+			for(GameObject object : gameObjects) {
+				if(object instanceof PlayerObject) {
+					PlayerObject player = (PlayerObject)object;
+					Vector2 currentTile = player.getCurrentTile();
+					player.updatePosition();
+					GameObject.setStartTile(currentTile);
+				}
+			}
+			
+		}
+		
 		drunkStatusBar = new DrunkBar(200, 50);
 		jailStatusBar = new JailBar(200, 50);
 	    jailStatusBar.position.y = 50;
-
-		
-		//player = new PlayerObject();
-		gameObjects.add(new PlayerObject());
 	
 	}
 	
@@ -295,7 +308,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		//only process event if touch is finished
 		if(event.getAction() == MotionEvent.ACTION_UP) {
 			//calculate difference of touch-position and screen-center
-			GameControl.movePlayer(event.getX(), event.getY());
+			gameControl.movePlayer(event.getX(), event.getY());
 			
 			
 			
@@ -303,4 +316,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		}
 		return true;
 	}
+	
+	
 }

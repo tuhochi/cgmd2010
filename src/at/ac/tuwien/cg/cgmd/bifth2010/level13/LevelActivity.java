@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
 
 /**
  * 
@@ -43,17 +45,20 @@ public class LevelActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.d("df", "called oncreate");
         
+        boolean restart = false;
+        if(getLastNonConfigurationInstance() != null) {
+        	restart = (Boolean)getLastNonConfigurationInstance();
+        }
         //restore state
-        if(savedInstanceState != null && savedInstanceState.containsKey("money") && savedInstanceState.containsKey("gametime")) {
-        	GameControl.money = savedInstanceState.getInt("money");
-        	GameTimer.getInstance().setRemainingTime(savedInstanceState.getLong("gametime"));
-        	GameTimer.getInstance().setStartTime(System.currentTimeMillis());
-        	MyRenderer.isFirstFrame = false;
-        	
+        if(restart) {
+        	Log.d("df", "RESTART");
         }
         else {
-        	GameControl.init();
-        	MyRenderer.isFirstFrame = true;
+        	GameControl.reset();
+        	GameTimer.reset();
+        	GameObject.reset();
+        	MyRenderer.reset();
+    
         }
         
         //make window fullscreen
@@ -103,7 +108,7 @@ public class LevelActivity extends Activity {
 	 	
 	 		@Override
 	 		public void run() {
-	 			moneyString = "Money: " + GameControl.money + "$";
+	 			moneyString = "Money: " + GameControl.getInstance().getMoney() + "$";
 	 			handleUIChanges.sendEmptyMessage(0);
 	 		}
 	 	}, 0, 500);
@@ -177,7 +182,7 @@ public class LevelActivity extends Activity {
 	@Override
 	public void finish() {
 	    SessionState s = new SessionState();
-		s.setProgress(-GameControl.money); 
+		s.setProgress(-GameControl.getInstance().getMoney()); 
 		setResult(Activity.RESULT_OK, s.asIntent());
 		super.finish();
 	}
@@ -186,9 +191,12 @@ public class LevelActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		Log.d("df", "called onsaveinstancestate");
-		//save money and game time
-		outState.putInt("money", GameControl.money);
-		outState.putLong("gametime", GameTimer.getInstance().getRemainingTime());
+	
+	}
+	
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		return true;
 	}
 	
 	

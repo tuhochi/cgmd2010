@@ -23,9 +23,8 @@ public class GameTimer {
 		return instance;
 	}
 	
-	public void reset() {
-		startTime = System.currentTimeMillis();
-		remainingTime = TOTALGAMETIME;
+	public static void reset() {
+		instance = null;
 	}
 	
 	public void update() {

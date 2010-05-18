@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHelper;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
 /**
  * 
@@ -20,8 +21,30 @@ public class BackgroundObject extends GameObject {
 	public BackgroundObject() {
 		//object is 1024*1024 pixels
 		super(1024, 1024);
+		/*
+		//set offset
+		float centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		float centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		//move starting tile to center
+		float startingTileX = 3 * GameObject.BLOCKSIZE;
+		float startingTileY = 1 * GameObject.BLOCKSIZE;
+		float offsetX = centerX - startingTileX;
+		float offsetY = centerY - startingTileY;
+		GameObject.offset = new Vector2(-offsetX, -offsetY);*/
+		
 	}
-	
+	/*
+	public void setStartTile() {
+		//set offset
+		float centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		float centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		//move starting tile to center
+		float startingTileX = 3 * GameObject.BLOCKSIZE;
+		float startingTileY = 1 * GameObject.BLOCKSIZE;
+		float offsetX = centerX - startingTileX;
+		float offsetY = centerY - startingTileY;
+		GameObject.offset = new Vector2(-offsetX, -offsetY);
+	}*/
 	/**
 	 * @see GameObject#draw(GL10)
 	 */
@@ -35,20 +58,19 @@ public class BackgroundObject extends GameObject {
 		//test for collision with solid tiles
 		if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
 			//reset offset
-			GameObject.offset.sub(GameControl.movement);
+			GameObject.offset.sub(gameControl.getMovement());
 			//check if old movement is possible (only at corners)
-			if((GameControl.movement.x == 0 && GameControl.oldMovement.x != 0)|| (GameControl.movement.y == 0 && GameControl.oldMovement.y != 0)) {
-				GameObject.offset.add(GameControl.oldMovement);
+			if((gameControl.getMovement().x == 0 && gameControl.getOldMovement().x != 0)|| (gameControl.getMovement().y == 0 && gameControl.getOldMovement().y != 0)) {
+				GameObject.offset.add(gameControl.getOldMovement());
 				if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
-					GameObject.offset.sub(GameControl.oldMovement);
+					GameObject.offset.sub(gameControl.getOldMovement());
 					//stop movement
-					GameControl.oldMovement.x = 0;
-					GameControl.oldMovement.y = 0;
+					gameControl.setOldMovement(new Vector2(0, 0));
 				}
 			}
 		}
 		else {
-			GameControl.oldMovement = GameControl.movement.clone();
+			gameControl.setOldMovement(gameControl.getMovement().clone());
 		}
 		//enable client state
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
