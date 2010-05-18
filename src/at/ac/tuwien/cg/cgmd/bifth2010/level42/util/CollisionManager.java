@@ -49,7 +49,7 @@ public class CollisionManager implements Persistable{
 	
 	private final Vector3 centerDistance, planetCenterDistance,
 						  objACurrDir,objBCurrDir,
-						  objAPushVec,objBPushVec,planetPushVec,
+						  objAPushVec,objBPushVec,planetPushVec,morphPlanetPushVec,
 					      toCenterVecA,toCenterVecB;
 	private Motion objAMotion,objBMotion;
 	
@@ -97,6 +97,7 @@ public class CollisionManager implements Persistable{
 		this.objAPushVec = new Vector3();
 		this.objBPushVec = new Vector3();
 		this.planetPushVec = new Vector3();
+		this.morphPlanetPushVec = new Vector3();
 		
 		this.toCenterVecA = new Vector3();
 		this.toCenterVecB = new Vector3();
@@ -123,6 +124,7 @@ public class CollisionManager implements Persistable{
 		}
 		Collections.sort(remainingPlanetParts, comperator);
 		printRemaingingPlanetParts();
+		Log.d(LevelActivity.TAG,"PLANET BSPHERE RADIUS:"+goldPlanet.getBoundingSphereWorld().radius);
 		
 		this.collOffset = (int)(entityList.size()/2);
 		this.collOffsetLimit = entityList.size();
@@ -310,12 +312,17 @@ public class CollisionManager implements Persistable{
 																					planetPushVec,
 																					satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
 																					planetPart.getBasicOrientation());
-									planetPartMotion.setInsidePlanet(true);
+									
+									
+									if(satellite.getMotion().getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL){
+										morphPlanetPushVec.set(planetPushVec);
+										morphPlanetPushVec.normalize();
+										morphPlanetPushVec.multiply(satellite.getMotion().getSpeed()*Config.PLANETPART_BOUNCE_FAC);
+										satellite.getMotion().morph(morphPlanetPushVec);
+									}
 									
 									motionManager.addMotion(planetPartMotion,planetPart);
-									
-									if(satellite.getMotion().getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL)
-										satellite.getMotion().morph(planetPushVec);
+									planetPartMotion.setInsidePlanet(true);
 									
 									Log.d(LevelActivity.TAG,"PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetPart.getMotion().getSpeed());
 									

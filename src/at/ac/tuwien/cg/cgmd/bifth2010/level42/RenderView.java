@@ -133,7 +133,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		
 		this.context = (LevelActivity)context;
 		
-		cam = new Camera(25.0f,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
+		cam = new Camera(Config.CAM_DISTANCE,-80.0f,80.0f,0.0f,0.0f,1.0f/60.0f,1.0f,200.0f);
 		
 		synchronizer = new Synchronizer();
 		motionEvents = new LinkedList<MotionEvent>();
@@ -146,7 +146,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		//init temp vars
 		selectionDirection = new Vector3();
 		
-		scene = SceneLoader.instance.readScene("l42_orbit");
+		scene = SceneLoader.instance.readScene(Config.LEVELNAME);
 		scene.setHud(hud);
 		motionManager.generateRandomOrbits(scene,Config.UNIVERSE_SPEED_LIMIT/2,Config.UNIVERSE_SPEED_LIMIT,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
 		collManager = new CollisionManager(scene);

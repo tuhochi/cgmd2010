@@ -12,9 +12,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class Config
 {
 	public static boolean GLES11 = false;
+
 	public static long FPS_UPDATE_INTERVAL = 1000;
 	public static long GAMETIME_UPDATE_INTERVAL = 1000;
 	public static long GAMETIME_WAIT_AFTER_COMPLETE = 2500;
+	
+	public static String LEVELNAME = "l42_orbit";
+	
 	// bounding sphere stuff
 	/**
 	 * Determines how many degrees are between the control points of the bounding sphere.
@@ -34,7 +38,7 @@ public class Config
 	/** HUD */
 
 	/** 0.5f = half the smaller side of the screen */
-	public static final float MAX_FORCE_VIS_SIZE = 0.55f;
+	public static final float MAX_FORCE_VIS_SIZE = 0.50f;
 	/** (PI/2)/1000.0f = 180° per second */
 	public static final float FORCE_VIS_ROTATION_SPEED = Constants.PIHALF/1000.0f;
 	
@@ -49,6 +53,7 @@ public class Config
 	/** The Constant TOUCH_DEADZONE. */
 	public static final int TOUCH_DEADZONE = 30;
 
+	public static final float CAM_DISTANCE = 30f;
 	
 	/** PHYSICS / UNIVERSE. */
 
@@ -62,25 +67,25 @@ public class Config
 	public static String SATELLITE_PREFIX = "Satellite_";
 	
 	/** defines the maximum of the orbit main axis */
-	public static float UNIVERSE_CENTERLENGTH_LIMIT = 35;
+	public static float UNIVERSE_CENTERLENGTH_LIMIT = 24;
 	
 	/** defines the maximum of the orbit secondary axis */
-	public static float UNIVERSE_DIRLENGTH_LIMIT = 35;
+	public static float UNIVERSE_DIRLENGTH_LIMIT = 24;
 	
 	/** defines the maximum of the orbit main axis */
-	public static float FORCEFIELD_CENTERLENGTH_LIMIT = 15;
+	public static float FORCEFIELD_CENTERLENGTH_LIMIT = 11;
 	
 	/** defines the maximum of the orbit secondary axis */
-	public static float FORCEFIELD_DIRLENGTH_LIMIT = 15;
+	public static float FORCEFIELD_DIRLENGTH_LIMIT = 11;
 	
-	public static float FORCEFIELD_NEW_CENTERLENGTH = 25;
-	public static float FORCEFIELD_NEW_DIRLENGTH = 25;
+	public static float FORCEFIELD_NEW_CENTERLENGTH = 15;
+	public static float FORCEFIELD_NEW_DIRLENGTH = 15;
 	
-	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 20;
-	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 20;
+	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 25;
+	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 25;
 	
 	/** defines the maximum relative speed for satellites */
-	public static float UNIVERSE_SPEED_LIMIT = 8;
+	public static float UNIVERSE_SPEED_LIMIT = 7.5f;
 	
 	public static float ORBIT_TEMP_MAXSPEED_FAC = 3;
 	public static float ORBIT_MIN_SPEED = 0.5f;
@@ -95,12 +100,10 @@ public class Config
 	public static float COLLISION_PENETRATION_DEPTH = 0.2f;
 	
 	/** minimal force to change the motion into a directional motion */
-	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 10f;
+	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 12f;
 	
 	/** minimal force to change the motion into a directional motion */
-	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 20f;
-	
-	public static int COUNT_NEAREST_ENTITIES = 5;
+	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 20.5f;
 	
 	/** the selection vector gets divided by this factor */
 	public static float SELECTION_FORCE_FACTOR = 0.8f;
@@ -112,7 +115,8 @@ public class Config
 	public static final float PLANETCOLL_SPEED_FROM_SAT_FACTOR = 0.25f;
 	public static final float PLANETPART_CULL_DISTANCE = 30;
 	public static final String PLANETPART_SUFFIX = "_unTied";	
-	public static final float PLANETPART_REUSE_MINDISTANCE = 2;
+	public static final float PLANETPART_REUSE_MINDISTANCE = 1f;
+	public static final float PLANETPART_BOUNCE_FAC = 4f;
 	
 	public static final float SELECTION_BSPHERE_INCREMENT = 0.5f;
 	
@@ -123,7 +127,6 @@ public class Config
 	public static final int SOUND_SHOOT = R.raw.l42_shoot;
 	public static final int SOUND_TERRIBLEDAMAGE = R.raw.l42_terribledamage;
 
-	
 	public static int[] SOUND_LIST = 
 		new int[] {
 			SOUND_IMPACT,
