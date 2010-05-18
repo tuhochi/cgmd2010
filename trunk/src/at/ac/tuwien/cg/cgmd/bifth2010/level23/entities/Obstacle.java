@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
@@ -8,10 +9,16 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
-public class Obstacle implements Serializable {
-	/**
-	 * 
-	 */
+/**
+ * The Class Obstacle is a container for the falling obstacles.
+ *
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
+
+public class Obstacle implements Serializable 
+{
+	/** The serialization id */
 	private static final long serialVersionUID = 8841834994514009996L;
 
 	/** The width. */
@@ -47,6 +54,7 @@ public class Obstacle implements Serializable {
 		position.y = RenderView.instance.getTopBounds();
 		virtualHeight = y;
 		this.type = type; 
+		Random randomGenerator = new Random(System.currentTimeMillis());
 		
 		switch(type)
 		{
@@ -54,28 +62,27 @@ public class Obstacle implements Serializable {
 				position.x=0;
 				width = 100;
 				height = 5;
-				break;
+				return;
 			case(ObstacleManager.OBSTACLE_TYPE1):
-				position.x=0;
 				width = 40;
 				height = 30;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE2):
-				position.x=20;
 				width = 20;
 				height = 20;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE3):
-				position.x=40;
 				width = 20;
 				height = 20;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE4):
-				position.x=80;
 				width = 20;
 				height = 5;
 				break;			
 		}
+		
+		position.x = randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-width);
+		System.out.println(position.x);
 	}
 	
 	public void update()

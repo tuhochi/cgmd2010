@@ -7,6 +7,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
+/**
+ * The Class Cloud is a container for the clouds used for decoration.
+ *
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ */
+
 public class Cloud implements Serializable
 {
 	/** serialize id. */

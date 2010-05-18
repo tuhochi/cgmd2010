@@ -1,12 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.entities;
 import static android.opengl.GLES10.GL_MODELVIEW;
 import static android.opengl.GLES10.GL_TEXTURE;
+import static android.opengl.GLES10.GL_TEXTURE_2D;
 import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
 import static android.opengl.GLES10.glDrawArrays;
 import static android.opengl.GLES10.glMatrixMode;
 import static android.opengl.GLES10.glPopMatrix;
 import static android.opengl.GLES10.glPushMatrix;
 import static android.opengl.GLES10.glTexCoordPointer;
+import static android.opengl.GLES10.glTexParameterf;
 import static android.opengl.GLES10.glTranslatef;
 import static android.opengl.GLES10.glVertexPointer;
 
@@ -21,6 +23,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 /**
  * This class does the background
@@ -38,7 +41,7 @@ public class Background implements SceneEntity
 	private FloatBuffer vertexBuffer;
 	
 	/** The texture part. */
-	private TexturePart texture;
+	private TexturePart[] textures;
 	
 	/** The scroll speed (texture space). */
 	private float scrollSpeed = 0.01f;
@@ -50,10 +53,14 @@ public class Background implements SceneEntity
 	private boolean gameOver = false; 
 	
 	/** The VBO id. */
-	private int vboId;
+	private int[] vboIDs;
 	
 	/** The Geometry Manager. */
 	private GeometryManager geometryManager = GeometryManager.instance;
+	
+	private int textureLoopValue;
+	
+	private boolean repeat = false;
 	
 	/**
 	 * Default constructor, which calls @see #preprocess() 
@@ -72,6 +79,8 @@ public class Background implements SceneEntity
 		try {
 			dos.writeFloat(positionY);
 			dos.writeFloat(scrollSpeed);
+			dos.writeInt(textureLoopValue);
+			dos.writeBoolean(repeat);
 			
 		} catch (Exception e) {
 			System.out.println("Error writing to stream in Background.java: "+e.getMessage());
@@ -88,6 +97,8 @@ public class Background implements SceneEntity
 		try {
 			positionY = dis.readFloat(); 
 			scrollSpeed = dis.readFloat(); 
+			textureLoopValue = dis.readInt();
+			repeat = dis.readBoolean();
 			
 		} catch (Exception e) {
 			System.out.println("Error reading from stream in Background.java: "+e.getMessage());
@@ -101,16 +112,25 @@ public class Background implements SceneEntity
 	public void preprocess() {
 		
 		RenderView renderView = RenderView.instance; 
-		GeometryManager geometryManager = GeometryManager.instance;
+		textures = new TexturePart[8];
+		vboIDs = new int[8];	
 		
-		texture = TextureAtlas.instance.getBackgroundTextur();
 		vertexBuffer = geometryManager.createVertexBufferQuad(renderView.getRightBounds(), renderView.getTopBounds());
 		//texCoordBuffer = geometryManager.createTexCoordBufferQuad(texCoords);
-		if(Settings.GLES11Supported) 
-		{
-			vboId = geometryManager.createVBO(vertexBuffer, texture.texCoords);
-		}
 		
+		int index = 0;
+		for(int i=0;i<4;i++)
+		{
+			for(int j=0;j<2;j++)
+			{
+				textures[index] = TextureAtlas.instance.generateTexturePart(new Vector2(256*i,512*j), new Vector2(256*i+256,512*j+512));
+				
+				if(Settings.GLES11Supported) 
+					vboIDs[index] = geometryManager.createVBO(vertexBuffer, textures[index].texCoords);
+				
+				index++;
+			}
+		}		
 	}
 		
 	/**
@@ -119,8 +139,10 @@ public class Background implements SceneEntity
 	 */
 	public void update(float dt)
 	{
-		positionY -= dt*scrollSpeed/RenderView.instance.getTopBounds();
-		
+		if(!repeat)
+			positionY -= dt*scrollSpeed;
+		else
+			positionY -= dt*scrollSpeed/(RenderView.instance.getTopBounds()*2);
 //		if(positionY <= renderView.getTopBounds()*-1)
 //		{
 //			positionY += renderView.getTopBounds(); 
@@ -136,30 +158,61 @@ public class Background implements SceneEntity
 	@Override
 	public void render() 
 	{
-		glMatrixMode(GL_TEXTURE);
-		
+		if(repeat)
+		{
+			glTexParameterf(GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
+	        glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
+			glMatrixMode(GL_TEXTURE);
+		}
 		glPushMatrix();
-		
-			//translate texture
-			if(!isGameOver())
-				glTranslatef(0, positionY, 0);
+	
+			if(!repeat && positionY + RenderView.instance.getTopBounds() <= 0)
+			{
+				textureLoopValue++;
+				if(textureLoopValue == 6)
+				{
+					textureLoopValue=6;
+					repeat = true;
+				}
+				positionY = 0;
+			}
+			
+			glTranslatef(0, positionY, 0);
 			
 			if (!Settings.GLES11Supported) 
 			{
-				glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0,textures[textureLoopValue].texCoords);
 				glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 				
-				GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4); 
+				glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4); 
 			} 
 			else 
 			{
-				geometryManager.bindVBO(vboId);
+				geometryManager.bindVBO(vboIDs[textureLoopValue]);
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 			}
-		
-		glPopMatrix();
-		
-		glMatrixMode(GL_MODELVIEW);
+			
+			if(!repeat)
+			{
+				glTranslatef(0, RenderView.instance.getTopBounds(), 0);
+									
+				if (!Settings.GLES11Supported) 
+				{
+					glTexCoordPointer(2, GL10.GL_FLOAT, 0, textures[textureLoopValue].texCoords);
+					glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+					
+					glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4); 
+				} 
+				else 
+				{
+					geometryManager.bindVBO(vboIDs[textureLoopValue+1]);
+					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+				}
+			}
+			
+			glPopMatrix();
+			if(repeat)
+				glMatrixMode(GL_MODELVIEW);
 	}
 	
 	/**

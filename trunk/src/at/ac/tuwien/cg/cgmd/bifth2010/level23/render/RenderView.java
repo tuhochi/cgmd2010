@@ -268,10 +268,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		{
 			case INTRO:
 				if(cutScenes.renderIntroScene(dt))
-				{
 					gameState=INGAME;
-					TextureAtlas.instance.bindAtlasTexture();
-				}
 				break;
 			case INGAME:	
 				if (!released)
@@ -295,14 +292,20 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				
 				mainChar.update(dt,mainCharMoveDir);
 				background.update(dt);
+				
+				TextureAtlas.instance.bindAtlasBgTexture();
 				background.render();
+				TextureAtlas.instance.bindAtlasTexture();
+				
 				obstacleManager.renderVisibleObstacles(balloonHeight);
 				hud.render();
 				mainChar.render();
 				decorationManager.renderForegroundClouds(false);
 				break;
 			case GAMEOVER:		
+				TextureAtlas.instance.bindAtlasBgTexture();
 				background.render();
+				TextureAtlas.instance.bindAtlasTexture();
 				mainChar.renderGameOver(dt);
 				obstacleManager.renderVisibleObstacles((int)balloonHeight);
 				decorationManager.renderForegroundClouds(true);
@@ -525,10 +528,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		gl.glEnable(GL10.GL_BLEND);
 	    gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 	    gl.glShadeModel(GL10.GL_FLAT);
-	    gl.glDisable(GL10.GL_DITHER);
+//	    gl.glDisable(GL10.GL_DITHER);
         gl.glDisable(GL10.GL_LIGHTING);
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
-        
         gl.glClearColor(0, 0, 0, 0);
         
         Settings.GLES11Supported = (gl instanceof GL11);
