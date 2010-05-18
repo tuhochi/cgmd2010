@@ -44,6 +44,9 @@ public class LevelSurfaceView extends GLSurfaceView {
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 				lr.setKey(3);
 				break;
+			case KeyEvent.KEYCODE_DPAD_CENTER:
+				lr.performAction();
+				break;
 			}
 		}
 		return super.onKeyDown(keyCode, event);
