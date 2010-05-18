@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
@@ -14,6 +16,7 @@ import android.content.SharedPreferences;
 public class LevelRenderer implements Renderer {
 	private Context context;
 	private Bundle mSavedInstance;
+	private GL10 gl;
 	
 	private boolean[] keystates = new boolean[4];
 	private int score;
@@ -46,6 +49,7 @@ public class LevelRenderer implements Renderer {
 	private final static int LEVEL_TILESIZE = 100;
 	private final static int ACTION_WIDTH = 5;
 	private final static int ACTION_HEIGHT = 6;
+	private final static int ACTION_TILESIZE = 100;
 	
 	private final float BUNNY_MOVEMENT_UNIT = 9.0f; 
 	private final float COP_MOVEMENT_UNIT = 6.0f;
@@ -57,6 +61,8 @@ public class LevelRenderer implements Renderer {
 	private final static String MAP_OFFSET_X = "MAP_OFFSET_X";
 	private final static String MAP_OFFSET_Y = "MAP_OFFSET_Y";
 	private final static String SCORE = "SCORE";
+	
+	private ArrayList<Tablet> actiontextures;
 		
 	private static int levelMap[][] = {  
 		{ 1, 1, 1, 5, 1 },
@@ -120,6 +126,7 @@ public class LevelRenderer implements Renderer {
 		posX = posY = 0;
 		mSavedInstance = msavedinstance;
 		for (int i=0;i<4;i++) keystates[i] = false;
+		actiontextures = new ArrayList<Tablet>();
 	}
 	
 	public void setKey(int code) {
@@ -128,6 +135,30 @@ public class LevelRenderer implements Renderer {
 	
 	public void releaseKey(int code) {
 		keystates[code] = false;
+	}
+	
+	public void performAction() {
+		//see where the bunny is to find out what we can do
+		float xPos = bunny.getX()+BUNNY_WIDTH/2;
+		float yPos = bunny.getY()+BUNNY_HEIGHT/2;
+		int tile_x = (int)((xPos) / (float)ACTION_TILESIZE);
+		int tile_y = (int)((yPos) / (float)ACTION_TILESIZE);
+		
+		Iterator<Tablet> it = actiontextures.iterator();
+		boolean proximity = false;
+		while(it.hasNext()) {
+			Tablet t = it.next();
+			if (Math.abs(t.getX() - xPos) < 26 && Math.abs(t.getY() - yPos) < 26) proximity = true; 
+		}
+		
+		if (!proximity) {
+			switch (actionMap[tile_y][tile_x]) {
+				case 1:	//spraytag action
+					// 	put spraytag tablet here
+					actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
+				break;
+			}
+		}
 	}
 	
 	private void moveBunny(float x, float y) {
@@ -207,9 +238,8 @@ public class LevelRenderer implements Renderer {
 	}
 	
 	private void bunnyWasCaught () {
-		if (score >= 10 && guilty) {
-			score =- 10;
-			guilty  = false;
+		if (score >= 10) {
+			score -= 10;
 			updateScore();
 		}
 	}
@@ -226,11 +256,16 @@ public class LevelRenderer implements Renderer {
 		d_len += 3.0f;
 		dx /= d_len;
 		dy /= d_len;
-		moveCop(dx*COP_MOVEMENT_UNIT, dy*COP_MOVEMENT_UNIT);
+		
+		if (bx != cx && by != cy) {
+			moveCop(dx*COP_MOVEMENT_UNIT, dy*COP_MOVEMENT_UNIT);
+		}
 		
 		//check if cop catches bunny
-//		if (d_len < 5)
-			//bunnyWasCaught();
+		if (d_len < 5 && guilty) {
+			guilty = false;
+			bunnyWasCaught();
+		}
 	}
 	
 	private void drawDigit(GL10 gl, int position, int offset) {
@@ -266,6 +301,12 @@ public class LevelRenderer implements Renderer {
 		if (keystates[3]) moveBunny(0, -BUNNY_MOVEMENT_UNIT);
 		handleCop();
 		
+		//draw action stuff
+		Iterator<Tablet> it = actiontextures.iterator();
+		while (it.hasNext()) {
+			it.next().draw(gl);
+		}
+		
 		// render
 		cop.draw(gl);
 		bunny.draw(gl);
@@ -290,6 +331,7 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		this.gl = gl;
 		screenWidth = width;
 		screenHeight = height;
 		
@@ -308,7 +350,7 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig paramEGLConfig) {
-		
+		this.gl = gl;
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glClearDepthf(1.0f);
@@ -367,7 +409,8 @@ public class LevelRenderer implements Renderer {
 		outState.putFloat(SCORE, score);
 	}
 	
-	private void updateScore () {		
+	private void updateScore () {
+		if (score < 0) score = 0;
 		int hundred = (int)Math.floor(score/100);
 		int ten = (int)Math.floor((score-(hundred*100))/10);
 		int one = (int)Math.floor((score-(hundred*100)-(ten*10)));

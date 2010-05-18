@@ -63,6 +63,7 @@ public class textureManager {
 		createTexture("housebr", R.drawable.l60_t_intersect_right, 100, 100);
 		createTexture("housecl", R.drawable.l60_t_intersect_right, 100, 100);
 		createTexture("housecr", R.drawable.l60_t_intersect_right, 100, 100);
+		loadTexture("spraytag", R.drawable.l60_spraytag);
 
 		//add all texture elements
 	}
@@ -94,8 +95,8 @@ public class textureManager {
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 		
 		bitmap.recycle();
-		if (!textureMap.containsValue(texId)) {
-			textureMap.put(name, texId);
+		if (!textureMap.containsValue(texture.get(0))) {
+			textureMap.put(name, texture.get(0));
 		}
 	}
 	
