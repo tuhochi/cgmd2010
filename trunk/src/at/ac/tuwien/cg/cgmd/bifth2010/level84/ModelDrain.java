@@ -10,7 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class ModelDrain extends Model {
 
 	/** width of the drain **/
-	private float width = 2.0f;
+	private float width = 3.5f;
 	/** texture for closed drain **/
 	private int texture_drain0 = R.drawable.l84_drain_closed;
 	/** texture for drain with round hole **/
