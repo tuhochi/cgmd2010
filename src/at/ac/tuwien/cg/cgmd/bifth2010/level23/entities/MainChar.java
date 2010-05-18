@@ -8,7 +8,6 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import android.opengl.GLES11;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
@@ -354,12 +353,7 @@ public class MainChar implements SceneEntity {
 		} 
 		else 
 		{
-			GLES11.glBindBuffer(GLES11.GL_ARRAY_BUFFER, vboId);
-			
-			GLES11.glVertexPointer(3, GL_FLOAT, 0, 0);
-			
-			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12*4); // 4 vertices with 3 coordinates, 4 bytes per float
-
+			geometryManager.bindVBO(vboId);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 		}
 		

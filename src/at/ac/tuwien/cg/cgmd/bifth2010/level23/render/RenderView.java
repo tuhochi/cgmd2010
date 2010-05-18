@@ -296,7 +296,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				mainChar.update(dt,mainCharMoveDir);
 				background.update(dt);
 				background.render();
-				obstacleManager.renderVisibleObstacles((int)balloonHeight);
+				obstacleManager.renderVisibleObstacles(balloonHeight);
 				hud.render();
 				mainChar.render();
 				decorationManager.renderForegroundClouds(false);
