@@ -11,18 +11,18 @@ public class ProgressManager extends SessionState {
 	private int moneyProgress = 0;
 	
 	/** values if gems hit a drain **/
-	private int drain_closed_hit = 0;
-	private int drain_round_hit = 10000;
-	private int drain_diamond_hit = 40000;
-	private int drain_rect_hit = 20000;
-	private int drain_oct_hit = 30000;
+	private final int drainClosedHit = 0;
+	private final int drainRoundHit = 10000;
+	private final int drainDiamondHit = 40000;
+	private final int drainRectHit = 30000;
+	private final int drainOctHit = 20000;
 	
 	/** values if gems break **/
-	private int drain_closed_break = 25000;
-	private int drain_round_break = drain_round_hit / 2;
-	private int drain_diamond_break = drain_diamond_hit / 2;
-	private int drain_rect_break = drain_rect_hit / 2;
-	private int drain_oct_break = drain_oct_hit / 2;
+	private final int drainClosedBreak = 25000;
+	private final int drainRoundBreak = drainRoundHit / 2;
+	private final int drainDiamondBreak = drainDiamondHit / 2;
+	private final int drainRectBreak = drainRectHit / 2;
+	private final int drainOctBreak = drainOctHit / 2;
 	
 	
 	/**
@@ -58,16 +58,16 @@ public class ProgressManager extends SessionState {
 	 * define how much money is lost dependent on the draintype
 	 * @param drainType
 	 */
-	public void loseMoney_by_hit(int drainType)
+	public void loseMoneyByHit(int drainType)
 	{
 		int value = 0;
 		switch (drainType)
 		{
-			case 0: value = drain_closed_hit;
-			case 1: value = drain_round_hit;
-			case 2: value = drain_diamond_hit;
-			case 3: value = drain_rect_hit;
-			case 4: value = drain_oct_hit;
+			case 0: value = drainClosedHit;
+			case 1: value = drainRoundHit;
+			case 2: value = drainDiamondHit;
+			case 3: value = drainRectHit;
+			case 4: value = drainOctHit;
 		}
 		
 		actualMoney -= value;
@@ -79,17 +79,17 @@ public class ProgressManager extends SessionState {
 	 * define how much money is lost dependent on the draintype if the gem breaks
 	 * @param drainType
 	 */
-	public void loseMoney_by_break(int drainType)
+	public void loseMoneyByBreak(int drainType)
 	{
 		//TODO: random if gem breaks or not
 		int value = 0;
 		switch (drainType)
 		{
-			case 0: value = drain_closed_break;
-			case 1: value = drain_round_break;
-			case 2: value = drain_diamond_break;
-			case 3: value = drain_rect_break;
-			case 4: value = drain_oct_break;
+			case 0: value = drainClosedBreak;
+			case 1: value = drainRoundBreak;
+			case 2: value = drainDiamondBreak;
+			case 3: value = drainRectBreak;
+			case 4: value = drainOctBreak;
 		}
 		
 		actualMoney -= value;

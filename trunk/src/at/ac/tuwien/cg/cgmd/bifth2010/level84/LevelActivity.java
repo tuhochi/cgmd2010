@@ -42,6 +42,9 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	private int moneyToSpend = 0;
 	private int gemWorth = 5000;
 	
+	private TextView tfPoints;
+	private TextView tfPointsShadow;
+	
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
@@ -118,8 +121,11 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 					moneyToSpend += gemWorth;
 			}
 		}
-		TextView tfPoints = (TextView) findViewById(R.id.l84_Points);
+		tfPoints = (TextView) findViewById(R.id.l84_Points);
 		tfPoints.setText("$" + moneyToSpend);
+		tfPointsShadow = (TextView) findViewById(R.id.l84_PointsShadow);
+		tfPointsShadow.setText(tfPoints.getText());
+		
 		progman.setMaxMoney(moneyToSpend);
 		
 		

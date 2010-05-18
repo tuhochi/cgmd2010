@@ -126,14 +126,14 @@ public class ModelGem extends Model {
 					if (drainType == 0)
 					{
 						this.soundman.playSound(SoundFX.BREAK);
-						progman.loseMoney_by_break(drainType);
+						progman.loseMoneyByBreak(drainType);
 					}
 					else if (drainType == this.gemType)
 					{
 						//TODO: check orientations
 						//if (Math.abs(drain.getOrientationAngle() - deviceRotation ) < 1.0f)
 						this.soundman.playSound(SoundFX.HIT);
-						progman.loseMoney_by_hit(drainType);
+						progman.loseMoneyByHit(drainType);
 					}
 					else { this.soundman.playSound(SoundFX.MISS); }
 					drainhit = true;
