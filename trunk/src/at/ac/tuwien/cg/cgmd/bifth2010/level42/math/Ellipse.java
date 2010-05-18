@@ -9,26 +9,26 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  */
 public class Ellipse
 {
-	
 	/** The center of the ellipse */
-	public Vector3 center;
+	private final Vector3 center;
 	
 	/** The major axis (t=0) */
-	public Vector3 a;
+	private final Vector3 a;
 	
 	/** The secondary axis */
-	public Vector3 b;
+	private final Vector3 b;
 	
 	/** The position along the ellipse */
-	public Vector3 pos;
+	private final Vector3 pos;
 
 	/** The perimeter of the ellipse */
 	public float perimeter;
 	
 	//temp vars
-	private Vector3 aCost,bSint,sumAB;
+	private final Vector3 aCost,bSint,sumAB;
 	private float sint,cost,lambda;
 
+	
 	/**
 	 * Instantiates a new ellipse.
 	 *
