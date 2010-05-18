@@ -9,17 +9,18 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  */
 public class Ellipse
 {
+	
 	/** The center of the ellipse */
-	private final Vector3 center;
+	public final Vector3 center;
 	
 	/** The major axis (t=0) */
-	private final Vector3 a;
+	public final Vector3 a;
 	
 	/** The secondary axis */
-	private final Vector3 b;
+	public final Vector3 b;
 	
 	/** The position along the ellipse */
-	private final Vector3 pos;
+	public final Vector3 pos;
 
 	/** The perimeter of the ellipse */
 	public float perimeter;
@@ -28,7 +29,6 @@ public class Ellipse
 	private final Vector3 aCost,bSint,sumAB;
 	private float sint,cost,lambda;
 
-	
 	/**
 	 * Instantiates a new ellipse.
 	 *
@@ -57,8 +57,14 @@ public class Ellipse
 	 */
 	public void calcPerimeter()
 	{
-		lambda = (a.length()-b.length())/(a.length()+b.length());
-		perimeter = (float)Math.PI * (a.length()+b.length()) * (1 + ((3*(float)Math.pow(lambda, 2))/(10 + ((float)Math.sqrt(4 - 3*((float)Math.pow(lambda, 2)))))));
+		float aLength = a.length();
+		float bLength = b.length();
+		
+		lambda = (aLength-bLength)/(aLength+bLength);
+		
+		float threeLambdaPowTwo = 3*(float)Math.pow(lambda, 2);
+		
+		perimeter = (float)Math.PI * (aLength+bLength) * (1 + (threeLambdaPowTwo/(10 + ((float)Math.sqrt(4 - threeLambdaPowTwo)))));
 	}
 	
 	/**
