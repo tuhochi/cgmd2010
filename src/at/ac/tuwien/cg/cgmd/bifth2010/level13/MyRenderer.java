@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
-import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
@@ -313,6 +313,60 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			
 			
 			
+		}
+		return true;
+	}
+	/**
+	 * handles key movement
+	 */
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		switch(keyCode) {
+			case KeyEvent.KEYCODE_DPAD_UP:
+				gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, 0);
+				break;
+			case KeyEvent.KEYCODE_DPAD_DOWN:
+				gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, MyRenderer.screenHeight);
+				break;
+			case KeyEvent.KEYCODE_DPAD_LEFT:
+				gameControl.movePlayer(0, MyRenderer.screenHeight / 2.0f);
+				break;
+			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				gameControl.movePlayer(MyRenderer.screenWidth, MyRenderer.screenHeight / 2.0f);
+				break;
+			default:
+				break;
+		}
+		return true;
+	}
+	
+	/**
+	 * handles trackball movement
+	 */
+	public boolean onTrackballEvent(MotionEvent event) {
+		if(event.getAction() == MotionEvent.ACTION_MOVE) {
+			float x = event.getX();
+			float y = event.getY();
+			if(Math.abs(x) > Math.abs(y)) {
+			//	if(Math.abs(x) > 0.6) {
+					if(x > 0) {
+						gameControl.movePlayer(MyRenderer.screenWidth, MyRenderer.screenHeight / 2.0f);
+					}
+					else {
+						gameControl.movePlayer(0, MyRenderer.screenHeight / 2.0f);
+					}
+				//}
+			}
+			else {
+				//if(Math.abs(y) > 0.6) {
+					if(y > 0) {
+						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, MyRenderer.screenHeight);
+					}
+					else {
+						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, 0);
+					}
+				//}
+			}
+		
 		}
 		return true;
 	}
