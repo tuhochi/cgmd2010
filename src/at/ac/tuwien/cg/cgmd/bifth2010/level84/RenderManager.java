@@ -30,6 +30,8 @@ public class RenderManager implements Renderer {
 	
 	private TextView tfFps;
 	private TextView tfPoints;
+	private TextView tfPointsShadow;
+	
 	private int fps = 0;
 	private ProgressManager progman;
 	private SoundManager soundman;
@@ -67,6 +69,7 @@ public class RenderManager implements Renderer {
 		this.soundman = soundManager;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
+		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
 
 		streetStepHalf = (street.width / 2);
 		streetStepSize =  (street.width / 2) / 5;
