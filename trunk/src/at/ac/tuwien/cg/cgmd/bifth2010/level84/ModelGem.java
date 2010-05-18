@@ -19,7 +19,7 @@ public class ModelGem extends Model {
 	private int gemType;
 	
 	/** width of the gem **/
-	float width = 0.3f;
+	float width = 1.0f;
 	/** starting position where gem begings to fall **/
 	private final float gemStartpos = -2f; 
 	private float gemPos = gemStartpos;
