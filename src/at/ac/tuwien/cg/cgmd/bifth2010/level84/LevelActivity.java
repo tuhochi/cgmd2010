@@ -105,7 +105,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		//Create drains
 		for (int i = 0; i < numDrains;) {
 			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f - 5f) / 3f) * 3;
-			int drainType = (int)(Math.random() * 4.0);
+			int drainType = (int)(Math.random() * 4.99); //4.99 to also get a (int) casting of 4. 4 = gem oct.
 			float drainOrientation = (float)Math.random() * 360f;
 			
 			
