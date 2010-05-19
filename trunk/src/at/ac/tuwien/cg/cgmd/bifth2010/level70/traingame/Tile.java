@@ -56,7 +56,14 @@ public class Tile {
 		geom.setTexBuffer(tex.getTexBuffer(type.ordinal()));
 		
 		geomAnim = GeometryFactory.createQuad(cx, cy, TILE_SIZE, TILE_SIZE);
-		geomAnim.setTexBuffer(tex.getTexBuffer(4));
+		if (stateAnim == StateAnimEnum.STATE_ANIM_HIGHLIGHT) {
+            if (type == TileEnum.TILE_CLOUD) {
+                geomAnim.setTexBuffer(tex.getTexBuffer(TileEnum.TILE_HIGHLIGHT_CLOUD.ordinal()));
+            }
+            else {
+                geomAnim.setTexBuffer(tex.getTexBuffer(TileEnum.TILE_HIGHLIGHT.ordinal()));
+            }
+		}
 	}
 	
 	public void setIsGoal(boolean flag) {
@@ -65,6 +72,10 @@ public class Tile {
 	
 	public boolean isGoal() {
 		return isGoal;
+	}
+	
+	public boolean isStateTrain() {
+	    return stateAnim == StateAnimEnum.STATE_ANIM_TRAIN;
 	}
 	
 	public void setType(TileEnum type) {
@@ -77,6 +88,11 @@ public class Tile {
 	
 	public TileEnum getType() {
 		return type;
+	}
+	
+	public void setStateRestoreHighlight() {
+	    animScale = 1.0f;
+        stateAnim = StateAnimEnum.STATE_ANIM_HIGHLIGHT;
 	}
 	
 	public void setStateSelect() {
@@ -150,7 +166,6 @@ public class Tile {
 				setStateDeselect();
 				game.onCheckGameState();
 			}
-			
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -37,9 +38,10 @@ public class TrainGame {
 	// ----------------------------------------------------------------------------------
 	// -- Static Members ----
 	
-	private static String STATE_INIT_TILES = "StateInitTiles";
-	private static String STATE_GAME_TILES = "StateGameTiles";
-	private static String STATE_TRAIN      = "StateTrain";
+	private static String STATE_INIT_TILES  = "StateInitTiles";
+	private static String STATE_GAME_TILES  = "StateGameTiles";
+	private static String STATE_TRAIN_TILES = "StateTrainTiles";
+	private static String STATE_HIGHLIGHT_TILES = "StateHighlightTiles";
 
 	
 	private static final float WORLD_WIDTH_HALF  = 5.0f;
@@ -379,6 +381,11 @@ public class TrainGame {
 		}
 	}
 	
+	public void onGameover() {
+	    LevelActivity.getInstance().handler.post(LevelActivity
+                .getInstance().fpsUpdateRunnable);
+	}
+	
 	public void onMotionEvent(MotionEvent event) {
 		
 		int index = getIndex(event.getRawX(), event.getRawY());
@@ -466,11 +473,25 @@ public class TrainGame {
     	}
     	state.putIntArray(STATE_INIT_TILES, tiles);
     	
+    	ArrayList<Integer> trainTiles = new ArrayList<Integer>();
+    	int[] highlights = {-1, -1};
     	tiles = new int[gameTiles.size()];
     	for (int i = 0; i < tiles.length; i++) {
-    		tiles[i] = gameTiles.get(i).getType().ordinal();
+    	    Tile tile = gameTiles.get(i);
+    		tiles[i] = tile.getType().ordinal();
+    		if (tile.isStateTrain()) {
+    		    trainTiles.add(i);
+    		}
+    		if (tile == tileSource) {
+    		    highlights[0] = i;
+    		}
+    		if (tile == tileTarget) {
+                highlights[1] = i;
+            }
     	}
     	state.putIntArray(STATE_GAME_TILES, tiles);
+    	state.putIntArray(STATE_HIGHLIGHT_TILES, highlights);
+    	state.putIntegerArrayList(STATE_TRAIN_TILES, trainTiles);
     	train.onSaveState(state);
     }
     
@@ -483,11 +504,24 @@ public class TrainGame {
     	if (state != null) {
 			int[] stateInit = state.getIntArray(STATE_INIT_TILES);
 			int[] stateGame = state.getIntArray(STATE_GAME_TILES);
+			int[] stateHighlight = state.getIntArray(STATE_HIGHLIGHT_TILES);
 			if (stateInit != null && stateGame != null) {
 				for (int i = 0; i < TILE_CNT; i++) {
 					initTiles.set(i, TileEnum.valueOf(stateInit[i]));
 					gameTiles.get(i).setType(TileEnum.valueOf(stateGame[i]));
 				}
+				ArrayList<Integer> trainTiles = state.getIntegerArrayList(STATE_TRAIN_TILES);
+				for (Integer it : trainTiles) {
+				    gameTiles.get(it).setStateTrain();
+				}
+				if (stateHighlight[0] != -1) {
+				    tileSource = gameTiles.get(stateHighlight[0]);
+				    tileSource.setStateRestoreHighlight();
+				}
+				if (stateHighlight[1] != -1) {
+                    tileTarget = gameTiles.get(stateHighlight[1]);
+                    tileTarget.setStateRestoreHighlight();
+                }
 			}
 			train.onRestoreState(state);
 		}
