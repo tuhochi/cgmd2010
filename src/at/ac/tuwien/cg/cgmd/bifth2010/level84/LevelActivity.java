@@ -60,7 +60,6 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		progman = new ProgressManager();
 		soundManager = new SoundManager(this);
 		
-		initGui();
 		initLevelParams();
 		initLevel();
 		
@@ -69,6 +68,8 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		
 		renderManager = new RenderManager(this, street, gems, accelerometer, progman, soundManager);	
 		openglview.setRenderer(renderManager);
+		
+		initGui();
 	}
 
 	/**
@@ -77,7 +78,7 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	private void initLevelParams() {
 		levelWidth = 240f;
 		levelSpeed = 2f;
-		numDrains = 50;
+		numDrains = 30;
 	}
 
 	/**
@@ -93,9 +94,13 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 		ImageButton btnGemOct = (ImageButton) findViewById(R.id.l84_ButtonGemOct);
 		btnGemOct.setOnClickListener(this);
 		
-		//TODO: only show seekbar, if no HW-accelerator is available 
 		SeekBar accelBar = (SeekBar) findViewById(R.id.l84_AccelBar);
-		accelBar.setOnSeekBarChangeListener(this);
+		
+		//Hide seekbar, if there is no accelerometer available.
+		if (!accelerometer.isOrientationAvailable())
+			accelBar.setOnSeekBarChangeListener(this);
+		else
+			accelBar.setVisibility(View.GONE);
 	}
 
 	/**
