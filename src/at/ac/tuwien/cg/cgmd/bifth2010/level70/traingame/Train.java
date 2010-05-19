@@ -74,6 +74,7 @@ public class Train {
     private float angleOffset;     //< Offset orientation of the train
 
     private int iSprite;
+    private boolean isTrainStopped;
 
     private float tileTime;  //< Time the train needs to move along one tile
     private float totalDt;   //< Total time inside one tile.
@@ -103,6 +104,7 @@ public class Train {
         posY = -2.5f + iyTile * Tile.TILE_SIZE;
 
         iSprite = 0;
+        isTrainStopped = false;
 
         type = TileEnum.TILE_HORIZONTAL;
         totalDt = startTime;
@@ -280,7 +282,11 @@ public class Train {
      *            The delta time
      */
     public void update(float dt) {
-
+          
+        if (isTrainStopped) {
+            return;
+        }
+        
         if (totalDt + dt >= tileTime) {
             updateTrain();
         } 
@@ -348,8 +354,8 @@ public class Train {
         
         // Train moves outside the playfield - game over
         if (ixTile < 0 || iyTile < 0 || ixTile > 9 || iyTile > 5) {
-            LevelActivity.getInstance().handler.post(LevelActivity
-                    .getInstance().fpsUpdateRunnable);
+            isTrainStopped = true;
+            game.onGameover();
             return;
         }
         
@@ -364,8 +370,8 @@ public class Train {
             type = ntile.getType();
         } 
         else {
-            LevelActivity.getInstance().handler.post(LevelActivity
-                    .getInstance().fpsUpdateRunnable);
+            isTrainStopped = true;
+            game.onGameover();
         }
     }
 
