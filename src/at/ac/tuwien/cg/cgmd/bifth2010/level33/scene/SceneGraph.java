@@ -22,6 +22,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.GeometryLoader;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.ObjModel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 /**
  * The Class SceneGraph
@@ -215,15 +216,41 @@ public class SceneGraph  {
 		StopTimer t = new StopTimer();
 		SceneGraph.camera = new Camera();
 		// load Objects
-		InputStream is = SceneGraph.activity.getResources().openRawResource(R.raw.l33_models);
-		geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
-//		ObjModel obj = geometry.GetObjModel();
-//		obj.write();
-//		
-//		ObjModel obj = ObjModel.read("/sdcard/test.out", context);
-//		Geometry geometry = new Geometry(gl, obj,R.drawable.l33_textur);
+//		InputStream is = SceneGraph.activity.getResources().openRawResource(R.raw.l33_models);
+		
+		StopTimer tload = new StopTimer();
+		
 
-				geometry.render();
+//	String path="/sdcard/test.out";
+	
+		ObjModel obj = ObjModel.read(R.raw.l33_model, activity);
+		geometry = new Geometry(gl, obj,R.drawable.l33_textur);
+		geometry.render();
+	
+//		ObjModel obj = ObjModel.read(path, activity);
+//		if(obj!=null)
+//		{
+//			
+//			Log.d("load Model from:","sdcard/test.out");
+//			geometry = new Geometry(gl, obj,R.drawable.l33_textur);
+//			geometry.render();
+//			
+//			Log.e("load","ok");
+//			
+//		}
+//		else
+//		{
+//			
+//			Log.d("load Model from:","not found! must parse obj File!!");
+//			geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
+//			obj = geometry.GetObjModel();
+//			obj.write(path);
+//			Log.e("write","ok");
+//		
+//		}
+		
+		tload.logTime("Geometry laden dauerte:");
+
 
 		t.logTime("Geometry laden und init dauerte:");
 		

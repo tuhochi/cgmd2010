@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.model;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -7,7 +8,10 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import android.content.Context;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 
 /**
  * this Class represent a primitive ObjModel and can read/write them self to the File System
@@ -28,6 +32,7 @@ public class ObjModel implements Serializable{
 	int normalCount = 0;
 	
 	int[] geometryOffset;
+	int numVertices=0;;
 	Type[] type;
 	
 	/**
@@ -38,15 +43,19 @@ public class ObjModel implements Serializable{
 	 * @param colors Colors Array
 	 * @param texCoords Textures Array
 	 * @param normals Normals Array
+	 * @param numVertices 
 	 */
 	public ObjModel(Type[] type, int[] geometryOffset, float[] vertices,
-			float[] colors, float[] texCoords, float[] normals) {
+			float[] colors, float[] texCoords, float[] normals, int numVertices) {
 		this.type=type;
 		this.geometryOffset=geometryOffset;
+		
 		this.vertices=vertices;
 		this.colors=colors;
 		this.texCoords=texCoords;
 		this.normals=normals;
+
+		this.numVertices = numVertices;
 	}
 
 	/**
@@ -78,7 +87,21 @@ public class ObjModel implements Serializable{
 	{
 		ObjModel model = null;
     	try {
-    		InputStream fis = context.getAssets().open(fileName);
+    		InputStream fis = new FileInputStream(fileName);// context.getAssets().open(fileName);
+			ObjectInputStream stream = new ObjectInputStream(fis);
+			model = (ObjModel)stream.readObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return model;
+	}
+
+	public static ObjModel read(int resource, LevelActivity activity) {
+		ObjModel model = null;
+    	try {
+    		
+    		InputStream fis = SceneGraph.activity.getResources().openRawResource(resource);
 			ObjectInputStream stream = new ObjectInputStream(fis);
 			model = (ObjModel)stream.readObject();
 		} catch (Exception e) {
