@@ -11,7 +11,7 @@ public class Player {
 
 	private Vector3 mPosition;
 	private float mRadius = 1.5f;
-	private int mLives = 3;
+	private int mLives = 0;
 	private int mMoney = 0;
 	
 	private PlayerStateListener mListener;

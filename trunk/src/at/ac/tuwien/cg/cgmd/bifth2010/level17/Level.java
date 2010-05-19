@@ -26,6 +26,7 @@ public class Level {
 	private List<House> mHouses = new ArrayList<House>();
 	private List<House> mFadeHouses = new ArrayList<House>();
 	private List<Bird> mBirds = new ArrayList<Bird>();
+	private List<ParticleSystem> mParticleSystems = new ArrayList<ParticleSystem>();
 	private Vector3 mSpeed = new Vector3(0, -20.0f, 0);
 	private float mBlockSize = 5.0f;
 	private float mNextHouse = 0;
@@ -47,7 +48,7 @@ public class Level {
 	public Level(NormalModeWorld world, Bundle savedInstance)
 	{
 		int money = 0;
-		int lifes = 3;
+		int lifes = 30;
 		
 		if(savedInstance != null)
 		{
@@ -69,6 +70,7 @@ public class Level {
         GLManager.getInstance().getTextures().add(R.drawable.l17_vogel);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
         GLManager.getInstance().getTextures().add(R.drawable.l17_forcefield);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_coin);
         
         mForceField1 = new ForceField(50f, new Vector3(0,0,0), 200f, 10f);
         mForceField2 = new ForceField(50f, new Vector3(0,0,0), 200f, -10f);
@@ -116,6 +118,10 @@ public class Level {
 			mBirds.get(i).draw();
 		}
 		
+		for (ParticleSystem pSystem : mParticleSystems) {
+			pSystem.draw();
+		}	
+		
     	gl.glDisable(GL10.GL_BLEND);
 
     	gl.glDepthMask(true);
@@ -136,13 +142,14 @@ public class Level {
 
 		
 		Vector3 playerPos = mPlayer.getPosition();
-		mSpeed.y -= elapsedSeconds * 2.0f;
-		mSpeed.y = (mSpeed.y < -60f) ? -60f : mSpeed.y;
+		mSpeed.y -= elapsedSeconds * 1.5f;
+		mSpeed.y = (mSpeed.y < -40f) ? -40f : mSpeed.y;
 		moveDelta.y = Vector3.mult(mSpeed, elapsedSeconds).y;
 		updatePlayerPosition(moveDelta);
-		mForceField1.setPosition(new Vector3(0,mPlayer.getPosition().y - mForceField1.getHeight() / 2.0f, 0));
+		playerPos = mPlayer.getPosition();
+		mForceField1.setPosition(new Vector3(0,playerPos.y - mForceField1.getHeight() / 2.0f, 0));
 		mForceField1.update(elapsedSeconds);
-		mForceField2.setPosition(new Vector3(0,mPlayer.getPosition().y - mForceField2.getHeight() / 2.0f, 0));
+		mForceField2.setPosition(new Vector3(0,playerPos.y - mForceField2.getHeight() / 2.0f, 0));
 		mForceField2.update(elapsedSeconds);
 		mNextHouse -= elapsedSeconds;
 		mNextBird -= elapsedSeconds;
@@ -200,6 +207,15 @@ public class Level {
 				removeBird.add(bird);
 		}
 		mBirds.removeAll(removeBird);
+		
+		List<ParticleSystem> removePSystems = new ArrayList<ParticleSystem>();
+		for (ParticleSystem pSystem : mParticleSystems) 
+		{
+			pSystem.update(elapsedSeconds, playerPos);
+			if (!pSystem.isActive())
+				removePSystems.add(pSystem);
+		}
+		mParticleSystems.removeAll(removePSystems);
 	}
 	
 	/**
@@ -223,6 +239,7 @@ public class Level {
 				if(mPlayer.getPosition().y > house.getPosition().y + house.getSize().y / 2.0f ){
 					mPlayer.hitHouse();
 					remove.add(house);
+					mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_coin));
 				}
 				else {
 					moveDelta.x = 0;
@@ -235,8 +252,9 @@ public class Level {
 		List<Bird> removeBirds = new ArrayList<Bird>();
 		for(Bird bird:mBirds){
 			if(bird.intersect(newPos, mPlayer.getRadius())) {
-					mPlayer.hitBird();
-					removeBirds.add(bird);
+				mPlayer.hitBird();
+				removeBirds.add(bird);
+				mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_coin));
 			}
 		}
 		mBirds.removeAll(removeBirds);

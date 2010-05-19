@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.MatrixTrackingGL;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
 
@@ -30,7 +33,7 @@ public class ParticleSystem {
 		mTextureID = textureID;
 		mQuad = new Quad(0.2f, 0.2f);
 		Random r = new Random();
-		int numParticles = 5 + r.nextInt(3);
+		int numParticles = 10 + r.nextInt(5);
 		for (int i=0; i<numParticles; i++)
 			mParticles.add(new Particle(r));
 	}
@@ -42,9 +45,16 @@ public class ParticleSystem {
 	 */
 	public void update(float elapsedSeconds, Vector3 currentPlayerPosition)
 	{
-		mPosition.y = currentPlayerPosition.y;
+		List<Particle> removeParticles = new ArrayList<Particle>();
+		mPosition = currentPlayerPosition;
 		for(Particle particle: mParticles)
+		{
 			particle.update(elapsedSeconds);
+			if (!particle.isActive())
+				removeParticles.add(particle);
+		}
+		for(Particle particle: removeParticles)
+			mParticles.remove(particle);
 	}
 	
 	/**
@@ -52,8 +62,20 @@ public class ParticleSystem {
 	 */
 	public void draw()
 	{
+		MatrixTrackingGL gl = GLManager.getInstance().getGLContext();
+        gl.glDisable(GL10.GL_CULL_FACE);
 		GLManager.getInstance().getTextures().setTexture(mTextureID);
 		for(Particle particle: mParticles)
 			particle.draw(mPosition, mQuad);
+        gl.glEnable(GL10.GL_CULL_FACE);
+	}
+	
+	/**
+	 * Returns if the particle system is still active
+	 * @return true if there is at least one active particle
+	 */
+	public boolean isActive()
+	{
+		return (!mParticles.isEmpty());
 	}
 }

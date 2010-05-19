@@ -30,10 +30,10 @@ public class Particle {
 	{
 		mAge = 0f;
 		mLifeSpan = r.nextFloat() * 3f;
-		mRelativePosition = new Vector3(0f, -0.5f, 0f);
-		mDirection = Vector3.mult(getRandomNormalizedVector(true, r), 0.02f);
+		mRelativePosition = new Vector3(0f, -1.0f, 0f);
+		mDirection = Vector3.mult(getRandomNormalizedVector(true, r), 0.6f);
 		mRotation = r.nextFloat();
-		mRotationSpeed = r.nextFloat() * 0.02f;
+		mRotationSpeed = r.nextFloat() * 700f;
 		mRotationAxis = getRandomNormalizedVector(false, r);
 	}
 	

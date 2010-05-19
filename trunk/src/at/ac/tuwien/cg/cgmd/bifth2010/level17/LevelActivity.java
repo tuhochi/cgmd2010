@@ -166,7 +166,7 @@ public class LevelActivity extends Activity {
     		//mHealthText.setText(getString(getResources().getIdentifier("l17_gameover_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")));
     	  
     	// 1. Vibrate for 1000 milliseconds  
-    	long milliseconds = 100;  
+    	long milliseconds = 70;  
     	mVibrator.vibrate(milliseconds);  
     }    
     
@@ -182,7 +182,9 @@ public class LevelActivity extends Activity {
     public void playerMoneyChanged(int money)
     {
     	mPointsText.setText(Integer.toString(money)); 
-    	mCurrentMoney = money;
+    	mCurrentMoney = money; 
+    	long milliseconds = 30;  
+    	mVibrator.vibrate(milliseconds); 
     	if (money >= 100)
     		finish();
     }
