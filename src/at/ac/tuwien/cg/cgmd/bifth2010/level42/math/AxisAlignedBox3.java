@@ -141,7 +141,7 @@ public class AxisAlignedBox3
 	/**
 	 * @return the center of this box
 	 */
-	Vector3 center()
+	public Vector3 center()
 	{ 
 		return new Vector3(0.5f * (min.v[0]+max.v[0]), 0.5f * (min.v[1]+max.v[1]), 0.5f * (min.v[2]+max.v[2])); 
 	}
