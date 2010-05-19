@@ -22,7 +22,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-//import at.ac.tuwien.cg.cgmd.bifth2010.level66.OBJModel;
+import at.ac.tuwien.cg.cgmd.bifth2010.level66.OBJModel;
 
 public class Geometry {
 	public enum Type {
@@ -105,17 +105,20 @@ public class Geometry {
 		this.type = objModel.type;
 		this.geometryOffset=objModel.geometryOffset;
 		
-		vertices = objModel.vertices;
-		colors = objModel.colors;
-		texCoords = objModel.texCoords;
-		normals = objModel.normals;
+		this.vertices = objModel.vertices;
+		this.colors = objModel.colors;
+		this.texCoords = objModel.texCoords;
+		this.normals = objModel.normals;
+		this.numVertices = objModel.numVertices;
+		Log.d("numVertices","= "+objModel.numVertices);
 		
 		this.textur=textur;
 
 	}
 	
 	public ObjModel GetObjModel(){
-		return new ObjModel(type,geometryOffset,vertices,colors,texCoords,normals);
+		Log.d("numVertices","= "+numVertices);
+		return new ObjModel(type,geometryOffset,vertices,colors,texCoords,normals,numVertices);
 	}
 
 	private FloatBuffer allocateBuffer(int size) {
