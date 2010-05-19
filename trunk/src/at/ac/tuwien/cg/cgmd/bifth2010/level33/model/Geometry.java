@@ -22,7 +22,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level66.OBJModel;
+//import at.ac.tuwien.cg.cgmd.bifth2010.level66.OBJModel;
 
 public class Geometry {
 	public enum Type {
@@ -58,7 +58,7 @@ public class Geometry {
 
 	private static Geometry lastGeometry;
 
-	public static boolean useVBO = Config.GLES11;
+	public static boolean useVBO = true;
 
 	public static int geometryCount = 0;
 	
