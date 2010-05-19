@@ -97,7 +97,7 @@ public class DirectionalMotion extends Motion
 			transform.mult(satTrans.getTransform());
 		}
 		
-		transform.addTranslate(position.x, position.y, position.z);
+		transform.addTranslate(position.v[0], position.v[1], position.v[2]);
 	}
 
 	

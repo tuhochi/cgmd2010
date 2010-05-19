@@ -243,21 +243,21 @@ public class OGLManager
 	public void gluLookAt(Vector3 eyePos, Vector3 inverseForwardNormalized, Vector3 rightNormalized, Vector3 upNormalized, Matrix44 result)
 	{
 		float[] view = result.getArray16();
-		view[ 0] = rightNormalized.x;
-		view[ 1] = upNormalized.x;
-		view[ 2] = inverseForwardNormalized.x;
+		view[ 0] = rightNormalized.v[0];
+		view[ 1] = upNormalized.v[0];
+		view[ 2] = inverseForwardNormalized.v[0];
 		view[ 3] = 0.0f;
-		view[ 4] = rightNormalized.y;
-		view[ 5] = upNormalized.y;
-		view[ 6] = inverseForwardNormalized.y;
+		view[ 4] = rightNormalized.v[1];
+		view[ 5] = upNormalized.v[1];
+		view[ 6] = inverseForwardNormalized.v[1];
 		view[ 7] = 0.0f;
-		view[ 8] = rightNormalized.z;
-		view[ 9] = upNormalized.z;
-		view[10] = inverseForwardNormalized.z;
+		view[ 8] = rightNormalized.v[2];
+		view[ 9] = upNormalized.v[2];
+		view[10] = inverseForwardNormalized.v[2];
 		view[11] = 0.0f;
-		view[12] = (rightNormalized.x			* -eyePos.x) + (rightNormalized.y			* -eyePos.y) + (rightNormalized.z			* -eyePos.z);
-		view[13] = (upNormalized.x				* -eyePos.x) + (upNormalized.y				* -eyePos.y) + (upNormalized.z				* -eyePos.z);
-		view[14] = (inverseForwardNormalized.x	* -eyePos.x) + (inverseForwardNormalized.y	* -eyePos.y) + (inverseForwardNormalized.z	* -eyePos.z);
+		view[12] = (rightNormalized.v[0]			* -eyePos.v[0]) + (rightNormalized.v[1]				* -eyePos.v[1]) + (rightNormalized.v[2]				* -eyePos.v[2]);
+		view[13] = (upNormalized.v[0]				* -eyePos.v[0]) + (upNormalized.v[1]				* -eyePos.v[1]) + (upNormalized.v[2]				* -eyePos.v[2]);
+		view[14] = (inverseForwardNormalized.v[0]	* -eyePos.v[0]) + (inverseForwardNormalized.v[1]	* -eyePos.v[1]) + (inverseForwardNormalized.v[2]	* -eyePos.v[2]);
 		view[15] = 1.0f;
 		
 		result.set(view);
@@ -283,9 +283,9 @@ public class OGLManager
         GLU.gluUnProject( 	window[0], window[1], window[2], modelviewArray16, 0, 
         					projectionArray16, 0, viewportArray4, 0, unprojectedPos, 0);
 		
-        unprojectedPosVec.x = unprojectedPos[0];
-        unprojectedPosVec.y = unprojectedPos[1];
-        unprojectedPosVec.z = unprojectedPos[2];
+        unprojectedPosVec.v[0] = unprojectedPos[0];
+        unprojectedPosVec.v[1] = unprojectedPos[1];
+        unprojectedPosVec.v[2] = unprojectedPos[2];
         
         //normalize with 4th component
         unprojectedPosVec.divide(unprojectedPos[3]);

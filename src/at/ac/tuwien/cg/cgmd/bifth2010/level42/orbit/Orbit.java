@@ -361,7 +361,7 @@ public class Orbit extends Motion
 			transform.mult(satTrans.getTransform());
 		
 		//transformation of the ellipsoid
-		transform.addTranslate(position.x,position.y,position.z);
+		transform.addTranslate(position.v[0],position.v[1],position.v[2]);
 	}
 
 

@@ -193,7 +193,7 @@ public class SceneEntity implements Movable,Persistable
 			float scale = boundingSphereWorld.radius;
 			
 			glPushMatrix();
-			glTranslatef(translation.x, translation.y, translation.z);
+			glTranslatef(translation.v[0], translation.v[1], translation.v[2]);
 			glScalef(scale, scale, scale);
 			Scene.SPHERE.render(rendermode);
 			glPopMatrix();
@@ -329,17 +329,17 @@ public class SceneEntity implements Movable,Persistable
 	public Matrix44 getBasicOrientation()
 	{
 		basicOrientation.copy(transformation);
-		basicOrientation.addTranslate(	-basicOrientation.m[0][3],
-										-basicOrientation.m[1][3],
-										-basicOrientation.m[2][3]);
+		basicOrientation.addTranslate(	-basicOrientation.m[12],
+										-basicOrientation.m[13],
+										-basicOrientation.m[14]);
 		return basicOrientation;
 	}
 
 	@Override
 	public Vector3 getCurrentPosition() {
-		currentPos.set( transformation.m[0][3],
-						transformation.m[1][3],
-						transformation.m[2][3]);
+		currentPos.set( transformation.m[12],
+						transformation.m[13],
+						transformation.m[14]);
 		
 		return currentPos;
 	}

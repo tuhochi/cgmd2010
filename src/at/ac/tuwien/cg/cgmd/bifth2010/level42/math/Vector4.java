@@ -8,7 +8,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  */
 public class Vector4
 {
-	public float x,y,z,w;
+	public float[] v = new float[4];
 	
 	/**
 	 * Instantiates a new vector4.
@@ -43,10 +43,10 @@ public class Vector4
 	 */
 	private void set(float x, float y, float z, float w)
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.w = w;
+		this.v[0] = x;
+		this.v[1] = y;
+		this.v[2] = z;
+		this.v[3] = w;
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class Vector4
 	 */
 	public Vector4(Vector4 other)
 	{
-		this(other.x, other.y, other.z, other.w);
+		this(other.v[0], other.v[1], other.v[2], other.v[3]);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class Vector4
 	 */
 	public Vector4(Vector3 other)
 	{
-		this(other.x, other.y, other.z, 1);
+		this(other.v[0], other.v[1], other.v[3], 1);
 	}
 
 	/**
@@ -100,14 +100,6 @@ public class Vector4
 	}
 	
 	/**
-	 * @return this vector as a float[4]
-	 */
-	public float[] getArray4()
-	{
-		return new float[] {x,y,z,w};
-	}
-	
-	/**
 	 * Adds another Vector4 to this
 	 *
 	 * @param other the other Vector4
@@ -117,9 +109,8 @@ public class Vector4
 	{
 		homogenize();
 		other = homogenize(other);
-		x += other.x;
-		y += other.y;
-		z += other.z;
+		for(int i=0; i<3; i++)
+			v[i] += other.v[i];
 		return this;
 	}
 	
@@ -144,9 +135,8 @@ public class Vector4
 	public Vector4 add(Vector3 other)
 	{
 		homogenize();
-		x += other.x;
-		y += other.y;
-		z += other.z;
+		for(int i=0; i<3; i++)
+			v[i] += other.v[i];
 		return this;
 	}
 	
@@ -172,9 +162,8 @@ public class Vector4
 	{
 		homogenize();
 		other = homogenize(other);
-		x -= other.x;
-		y -= other.y;
-		z -= other.z;
+		for(int i=0; i<3; i++)
+			v[i] -= other.v[i];
 		return this;
 	}
 	
@@ -199,9 +188,8 @@ public class Vector4
 	public Vector4 subtract(Vector3 other)
 	{
 		homogenize();
-		x -= other.x;
-		y -= other.y;
-		z -= other.z;
+		for(int i=0; i<3; i++)
+			v[i] -= other.v[i];
 		return this;
 	}
 	
@@ -227,9 +215,8 @@ public class Vector4
 	{
 		homogenize();
 		other = homogenize(other);
-		x *= other.x;
-		y *= other.y;
-		z *= other.z;
+		for(int i=0; i<3; i++)
+			v[i] *= other.v[i];
 		return this;
 	}
 	
@@ -254,9 +241,8 @@ public class Vector4
 	public Vector4 multiply(Vector3 other)
 	{
 		homogenize();
-		x *= other.x;
-		y *= other.y;
-		z *= other.z;
+		for(int i=0; i<3; i++)
+			v[i] *= other.v[i];
 		return this;
 	}
 	
@@ -281,9 +267,8 @@ public class Vector4
 	public Vector4 multiply(float s)
 	{
 		homogenize();
-		x *= s;
-		y *= s;
-		z *= s;
+		for(int i=0; i<3; i++)
+			v[i] *= s;
 		return this;
 	}
 	
@@ -297,9 +282,8 @@ public class Vector4
 	{
 		homogenize();
 		other = homogenize(other);
-		x /= other.x;
-		y /= other.y;
-		z /= other.z;
+		for(int i=0; i<3; i++)
+			v[i] /= other.v[i];
 		return this;
 	}
 	
@@ -324,9 +308,8 @@ public class Vector4
 	public Vector4 divide(Vector3 other)
 	{
 		homogenize();
-		x /= other.x;
-		y /= other.y;
-		z /= other.z;
+		for(int i=0; i<3; i++)
+			v[i] /= other.v[i];
 		return this;
 	}
 	
@@ -351,9 +334,8 @@ public class Vector4
 	public Vector4 divide(float s)
 	{
 		homogenize();
-		x /= s;
-		y /= s;
-		z /= s;
+		for(int i=0; i<3; i++)
+			v[0] /= s;
 		return this;
 	}
 	
@@ -368,9 +350,8 @@ public class Vector4
 		float length = length();
 		if(length != 0 && length != 1)
 		{
-			x /= length;
-			y /= length;
-			z /= length;
+			for(int i=0; i<3; i++)
+				v[i] /= length;
 		}
 		return this;
 	}
@@ -393,12 +374,11 @@ public class Vector4
 	 */
 	public Vector4 homogenize()
 	{
-		if(w != 1.0f)
+		if(v[3] != 1.0f)
 		{
-			x /= w;
-			y /= w;
-			z /= w;
-			w = 1;
+			for(int i=0; i<3; i++)
+				v[i] /= v[3];
+			v[3] = 1;
 		}
 		return this;
 	}
@@ -420,7 +400,7 @@ public class Vector4
 	public float length()
 	{
 		homogenize();
-		return (float)Math.sqrt(x*x + y*y + z*z);
+		return (float)Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
 	}
 	
 	/* (non-Javadoc)
@@ -429,6 +409,6 @@ public class Vector4
 	@Override
 	public String toString()
 	{
-		return "(" + x + "," + y + "," + z + "," + w + ")";
+		return "(" + v[0] + "," + v[1] + "," + v[2] + "," + v[3] + ")";
 	}
 }
