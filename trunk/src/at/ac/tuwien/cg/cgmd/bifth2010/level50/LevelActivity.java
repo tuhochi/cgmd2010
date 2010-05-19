@@ -44,12 +44,25 @@ public class LevelActivity extends Activity {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+		//if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			if (keyCode == KeyEvent.KEYCODE_BACK) {
+				
+				SessionState s = new SessionState();
+				s.setProgress(mGLView.getScore());
+				setResult(Activity.RESULT_OK, s.asIntent());
+				
+		        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+		        SharedPreferences.Editor ed = mPrefs.edit();
+		        ed.putInt("L50_SCORE", 0);
+		        ed.putFloat("L50_POSX", mGLView.getPositionX());
+		        ed.putFloat("L50_POSY", mGLView.getPositionY());
+//		        ed.clear();
+		        ed.commit();
+				
 				finish();
 				return true;
 			}
-		}
+		//}
 		return super.onKeyDown(keyCode, event);
 	}
 				
@@ -63,7 +76,9 @@ public class LevelActivity extends Activity {
         SharedPreferences.Editor ed = mPrefs.edit();
         ed.putInt("L50_SCORE", score);
         ed.putFloat("L50_POSX", mGLView.getPositionX());
-        ed.putFloat("L50_POSY", mGLView.getPositionY());
+        ed.putFloat("L50_POSY", mGLView.getPositionY());        
+        ed.putString("L50_COINS", mGLView.getCoinState());
+        String str = mGLView.getCoinState();
         ed.commit();
         
         SessionState s = new SessionState();
@@ -77,21 +92,25 @@ public class LevelActivity extends Activity {
         mGLView.onResume();
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         mGLView.setScore(mPrefs.getInt("L50_SCORE", 0));
-        mGLView.setPosition(mPrefs.getFloat("L50_POSX", 0.0f), mPrefs.getFloat("L50_POSY", 0.0f));
+        mGLView.setPosition(mPrefs.getFloat("L50_POSX", 10.0f), mPrefs.getFloat("L50_POSY", 0.0f));
+        mGLView.setCoinState(mPrefs.getString("L50_COINS", ""));
     }
     
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor ed = mPrefs.edit();
-        ed.clear();
-        ed.commit();
         
         SessionState s = new SessionState();
-		s.setProgress(30);
+		s.setProgress(mGLView.getScore());
 		setResult(Activity.RESULT_OK, s.asIntent());
-        
+		
+        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor ed = mPrefs.edit();
+        ed.putInt("L50_SCORE", 0);
+//        ed.putFloat("L50_POSX", mGLView.getPositionX());
+//        ed.putFloat("L50_POSY", mGLView.getPositionY());
+        ed.clear();
+        ed.commit();
     }
 
     private LevelSurfaceView mGLView;
