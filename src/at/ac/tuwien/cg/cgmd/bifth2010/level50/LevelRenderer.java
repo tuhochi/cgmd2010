@@ -54,18 +54,18 @@ public class LevelRenderer implements Renderer {
 			score1.setPosition(bunny.getPositionX()-width/2+3*tileSizeX/2, bunny.getPositionY()-height/2+tileSizeY/2);
 			score2.setPosition(bunny.getPositionX()-width/2+2*tileSizeX, bunny.getPositionY()-height/2+tileSizeY/2);
 			score3.setPosition(bunny.getPositionX()-width/2+5*tileSizeX/2, bunny.getPositionY()-height/2+tileSizeY/2);
-			ctrl.setPosition(bunny.getPositionX()+width/2-13*tileSizeX/2, bunny.getPositionY()+height/2-9*tileSizeY/2);
+			ctrl.setPosition(bunny.getPositionX()+width/2-15*tileSizeX/2, bunny.getPositionY()+height/2-7*tileSizeY/2);
 //			arrowRight.setPosition(bunny.getPositionX()+width/2-5*tileSizeX/2, bunny.getPositionY()+height/2-5*tileSizeY/2);
 //			arrowLeft.setPosition(bunny.getPositionX()+width/2-9*tileSizeX/2, bunny.getPositionY()+height/2-5*tileSizeY/2);
 //			arrowUp.setPosition(bunny.getPositionX()-width/2+tileSizeX/2, bunny.getPositionY()+height/2-5*tileSizeY/2);
 		}  else {
 			
 			gl.glClearColor(0.0f, (float)0x99/255*darkness/fadeDuration, (float)0xCC/255*darkness/fadeDuration, 1.0f);
-			bunny.setScore(-100);
 			if(darkness != 0)
 				darkness--;
 			else {
 				resetGame();
+				bunny.setScore(-100);
 			}
 		}
 		
@@ -196,7 +196,7 @@ public class LevelRenderer implements Renderer {
 		score2 = new LevelObject(gl, context, level, bunny.getPositionX()-width/2+2*tileSizeX, bunny.getPositionY()+height/2-tileSizeY/2, tileSizeX/2, tileSizeY/2, R.drawable.l50_numbers, null);
 		score3 = new LevelObject(gl, context, level, bunny.getPositionX()-width/2+5*tileSizeX/2, bunny.getPositionY()+height/2-tileSizeY/2, tileSizeX/2, tileSizeY/2, R.drawable.l50_numbers, null);
 		
-		ctrl = new LevelObject(gl, context, level, 0, 0, tileSizeX*6, tileSizeY*4, R.drawable.l50_ctrl, null);
+		ctrl = new LevelObject(gl, context, level, 0, 0, tileSizeX*7, tileSizeY*3, R.drawable.l50_ctrl, null);
 		touchPoint = new LevelObject(gl, context, level, 0, 0, tileSizeX, tileSizeY, R.drawable.l50_arrow, null);
 		
 //		arrowRight = new LevelObject(gl, context, level, 0, 0, tileSizeX*2, tileSizeY*2, R.drawable.l50_arrow, null);
@@ -245,8 +245,8 @@ public class LevelRenderer implements Renderer {
 		touchPoint.setPosition(bunny.getPositionX()-width/2+x-tileSizeX, bunny.getPositionY()-height/2+y-tileSizeY);
 		
 		
-		if (height-tileSizeY*4 <= y && y <= height && width-tileSizeX*6 <= x && x <= width) {
-			if (y <= height-tileSizeY*3) {
+		if (height-tileSizeY*3 <= y && y <= height && width-tileSizeX*7 <= x && x <= width) {
+			if (y <= height-tileSizeY*2) {
 				newPos = 0*3;
 			} else if (height-tileSizeY <= y) {
 				newPos = 2*3;
@@ -255,10 +255,10 @@ public class LevelRenderer implements Renderer {
 			}
 			if (x <= width-tileSizeX*4) {
 				newPos += 0;
-				amount = (width-tileSizeX*4-x)/tileSizeX/2;
-			} else if (width-tileSizeX*2 <= x) {
+				amount = Math.min(1.0f,(width-tileSizeX*4-x)/tileSizeX/2);
+			} else if (width-tileSizeX*3 <= x) {
 				newPos += 2;
-				amount = (x-width+tileSizeX*2)/tileSizeX/2;
+				amount = Math.min(1.0f,(x-width+tileSizeX*3)/tileSizeX/2);
 			} else {
 				newPos += 1;
 			}
@@ -266,8 +266,8 @@ public class LevelRenderer implements Renderer {
 //		Log.d("actionmove", "x: "+x+" y: "+y+" oldX: "+oldX+" oldY: "+oldY+"border: "+(height-tileSizeY*2));
 		
 		if (event.getAction()==MotionEvent.ACTION_MOVE) {
-			if (height-tileSizeY*4 <= oldY && oldY <= height && width-tileSizeX*6 <= oldX && oldX <= width) {
-				if (oldY <= height-tileSizeY*3) {
+			if (height-tileSizeY*3 <= oldY && oldY <= height && width-tileSizeX*7 <= oldX && oldX <= width) {
+				if (oldY <= height-tileSizeY*2) {
 					oldPos = 0*3;
 				} else if (height-tileSizeY <= oldY) {
 					oldPos = 2*3;
@@ -276,14 +276,15 @@ public class LevelRenderer implements Renderer {
 				}
 				if (oldX <= width-tileSizeX*4) {
 					oldPos += 0;
-				} else if (width-tileSizeX*2 <= oldX) {
+				} else if (width-tileSizeX*3 <= oldX) {
 					oldPos += 2;
 				} else {
 					oldPos += 1;
 				}
 			}
 			if (newPos!=oldPos) {
-				((Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
+				if (oldPos>=3 && newPos<3)
+					((Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(20);
 				killPos=oldPos;
 			}
 		}
@@ -294,7 +295,7 @@ public class LevelRenderer implements Renderer {
 		}
 			
 		
-		if (!jumping && 0 <= newPos && newPos <= 2) {
+		if ((event.getAction()==MotionEvent.ACTION_DOWN || newPos!=oldPos)&& !jumping && 0 <= newPos && newPos <= 2) {
 			bunny.move(0,15.0f);
 //				touchdown[0] = true; //unnecessary
 //			arrowUp.changeTexture(R.drawable.l50_arrow_touched, null);
