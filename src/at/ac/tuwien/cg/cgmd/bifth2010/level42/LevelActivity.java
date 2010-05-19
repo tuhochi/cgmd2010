@@ -119,7 +119,7 @@ public class LevelActivity extends Activity
 				if(GameManager.instance.isComplete()){
 					timeSinceComplete = 0;
 					levelComplete = true;
-					soundManager.playSound(Config.SOUND_TERRIBLEDAMAGE);
+					soundManager.playSound(Config.SOUND_YEAH);
 				}
 			}
 		};
