@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.traingame.TrainGame;
 
 /**
  * Update task.
@@ -14,7 +15,7 @@ public class UpdateTask extends Thread {
 	// ----------------------------------------------------------------------------------
 	// -- Static ----
 	
-	private static final int FRAMES_PER_SECOND = 10;
+	private static final int FRAMES_PER_SECOND = 60;
 	private static final int FRAME_DT   = 1000 / FRAMES_PER_SECOND;
 	
 	
@@ -25,7 +26,7 @@ public class UpdateTask extends Thread {
 	private LinkedList<MotionEvent> inputMotions; //< all motion input events
 	public boolean isRunning; //< True if the main loop is running
 	public boolean isPause;   //< True if the game is paused
-	private GameScene scene;  //< Game scene
+	private TrainGame game;  //< Game scene
 	
 	
 	// ----------------------------------------------------------------------------------
@@ -35,8 +36,8 @@ public class UpdateTask extends Thread {
 	 * Ctor.
 	 * @param The game scene.
 	 */
-	public UpdateTask(GameScene scene) {
-		this.scene = scene;
+	public UpdateTask(TrainGame game) {
+		this.game = game;
 		inputKeys = new LinkedList<KeyEvent>();
 		inputMotions = new LinkedList<MotionEvent>();
 	}
@@ -54,16 +55,18 @@ public class UpdateTask extends Thread {
 		
 		isRunning = true;
 		float dt = 0.0f;
+		float totalDt = 0.0f;
+		int   fpsCnt  = 0;
 		long  milTime = 0;
 		long  endTime = 0;
 		long  begTime = System.nanoTime();
 		while (isRunning) {
 			
-			synchronized(scene) {
+			synchronized(game) {
 				if (!isPause) {
 					doInput();
 					update(dt);
-					scene.notify();
+					game.notify();
 				}
 			}
 			
@@ -72,6 +75,14 @@ public class UpdateTask extends Thread {
 			milTime /= 1000000;
 			begTime = endTime;
 			dt      = milTime / 1000.0f;
+			totalDt += dt;
+			fpsCnt++;
+			if (totalDt > 1.0) {
+				Log.i("FPS: ", Integer.toString(fpsCnt));
+				totalDt = 0;
+				fpsCnt  = 0;
+			}
+
 			try {
 				if (FRAME_DT > milTime) {
 					Thread.sleep(FRAME_DT - milTime);
@@ -126,21 +137,21 @@ public class UpdateTask extends Thread {
 	 * Process input.
 	 */
 	private void doInput() {
-		while (!inputKeys.isEmpty()) {
-			KeyEvent key = inputKeys.remove();
-			int keycode       = key.getKeyCode();
-			boolean isPressed = key.getAction() == KeyEvent.ACTION_DOWN;
-			if (keycode == KeyEvent.KEYCODE_A) {
-				
-			}
-			else if (keycode == KeyEvent.KEYCODE_D) {
-				
-			}
-		}
+//		while (!inputKeys.isEmpty()) {
+//			KeyEvent key = inputKeys.remove();
+//			int keycode       = key.getKeyCode();
+//			boolean isPressed = key.getAction() == KeyEvent.ACTION_DOWN;
+//			if (keycode == KeyEvent.KEYCODE_A) {
+//				
+//			}
+//			else if (keycode == KeyEvent.KEYCODE_D) {
+//				
+//			}
+//		}
 		
 		while (!inputMotions.isEmpty()) {
 			MotionEvent inp = inputMotions.remove();
-			scene.onClick(inp);
+			game.onMotionEvent(inp);
 		}
 	}
 	
@@ -151,6 +162,6 @@ public class UpdateTask extends Thread {
 	 */
 	private void update(float dt) {
 		//Log.i("UpdateTask", "update");
-		scene.update(dt);
+		game.update(dt);
 	}
 }

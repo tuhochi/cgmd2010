@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level70.game;
+package at.ac.tuwien.cg.cgmd.bifth2010.level70.traingame;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
