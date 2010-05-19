@@ -325,12 +325,12 @@ public class MotionManager {
 			if(entity.getName().startsWith(Config.SATELLITE_PREFIX)){
 				
 				//generate the orthonormal axis for the ellipse
-				a.x = ((float)rand.nextDouble()*(maxDistance-minDistance) + minDistance);
-				a.x = (rand.nextBoolean())? -a.x : a.x;
+				a.v[0] = ((float)rand.nextDouble()*(maxDistance-minDistance) + minDistance);
+				a.v[0] = (rand.nextBoolean())? -a.v[0] : a.v[0];
 				
 				/** generate a similar value for b over the <code>distanceRatio</code> */
-				b.z = a.x *((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio);
-				b.z = (rand.nextBoolean())? -b.z: b.z;
+				b.v[2] = a.v[0] *((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio);
+				b.v[2] = (rand.nextBoolean())? -b.v[2]: b.v[2];
 				
 //				Log.d(LevelActivity.TAG," a.x="+a.x+" b.z="+b.z + " rand="+((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio));
 				
@@ -349,9 +349,9 @@ public class MotionManager {
 											entity.getBasicOrientation());
 								
 				//generate random satellite transformation
-				rotationAxis.x = (float)rand.nextDouble();
-				rotationAxis.y = (float)rand.nextDouble();
-				rotationAxis.z = (float)rand.nextDouble();
+				rotationAxis.v[0] = (float)rand.nextDouble();
+				rotationAxis.v[1] = (float)rand.nextDouble();
+				rotationAxis.v[2] = (float)rand.nextDouble();
 				rotationAxis.normalize();
 				
 				satTransform = new VecAxisTransformation(	rotationAxis,

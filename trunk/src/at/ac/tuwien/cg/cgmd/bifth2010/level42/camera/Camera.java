@@ -98,8 +98,8 @@ public class Camera implements Persistable
 		//init position
 		eyePosition = new Vector3(0.0f,0.0f,distance);
 		lastPosition = new float[2];
-		lastPosition[0] = eyePosition.x;
-		lastPosition[1] = eyePosition.y;
+		lastPosition[0] = eyePosition.v[0];
+		lastPosition[1] = eyePosition.v[1];
 		viewPosition =  new Vector3(0.0f,0.0f,0.0f);
 		inverseViewVector = Vector3.subtract(eyePosition,viewPosition);
 		inverseViewVector.normalize();
@@ -229,7 +229,7 @@ public class Camera implements Persistable
 	
 			// create the axis for the vertical rotation (altitude)
 			viewVecXZProjection.set(inverseViewVector);
-			viewVecXZProjection.y = 0.0f;
+			viewVecXZProjection.v[1] = 0.0f;
 			viewVecXZProjection.normalize();
 	
 			// normal of the XZ projection and the y axis = rotation axis

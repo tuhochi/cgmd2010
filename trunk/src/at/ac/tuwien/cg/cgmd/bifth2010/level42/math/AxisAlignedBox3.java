@@ -49,7 +49,7 @@ public class AxisAlignedBox3
 	 */
 	public float getVolume() 
 	{
-		return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
+		return (max.v[0] - min.v[0]) * (max.v[1] - min.v[1]) * (max.v[2] - min.v[2]);
 	}
 	
 	/**
@@ -82,12 +82,12 @@ public class AxisAlignedBox3
 	 */
 	public boolean isInside(Vector3 v)
 	{
-		return !((v.x < min.x) ||
-			     (v.x > max.x) ||
-				 (v.y < min.y) ||
-				 (v.y > max.y) ||
-				 (v.z < min.z) ||
-				 (v.z > max.z));
+		return !((v.v[0] < min.v[0]) ||
+			     (v.v[0] > max.v[0]) ||
+				 (v.v[1] < min.v[1]) ||
+				 (v.v[1] > max.v[1]) ||
+				 (v.v[2] < min.v[2]) ||
+				 (v.v[2] > max.v[2]));
 	}
 
 	/**
@@ -98,12 +98,12 @@ public class AxisAlignedBox3
 	 */
 	public boolean includes(AxisAlignedBox3 box)
 	{
-		return (box.min.x >= min.x &&
-				box.min.y >= min.y &&
-				box.min.z >= min.z &&
-				box.max.x <= max.x &&
-				box.max.y <= max.y &&
-				box.max.z <= max.z);
+		return (box.min.v[0] >= min.v[0] &&
+				box.min.v[1] >= min.v[1] &&
+				box.min.v[2] >= min.v[2] &&
+				box.max.v[0] <= max.v[0] &&
+				box.max.v[1] <= max.v[1] &&
+				box.max.v[2] <= max.v[2]);
 	}
 	
 	/**
@@ -114,12 +114,12 @@ public class AxisAlignedBox3
 	 */
 	void minimize(Vector3 min, Vector3 candidate)
 	{
-		if (candidate.x < min.x)
-			min.x = candidate.x;
-		if (candidate.y < min.y)
-			min.y = candidate.y;
-		if (candidate.z < min.z)
-			min.z = candidate.z;
+		if (candidate.v[0] < min.v[0])
+			min.v[0] = candidate.v[0];
+		if (candidate.v[1] < min.v[1])
+			min.v[1] = candidate.v[1];
+		if (candidate.v[2] < min.v[2])
+			min.v[2] = candidate.v[2];
 	}
 
 	/**
@@ -130,12 +130,12 @@ public class AxisAlignedBox3
 	 */
 	void maximize(Vector3 max, Vector3 candidate)
 	{
-		if (candidate.x > max.x)
-			max.x = candidate.x;
-		if (candidate.y > max.y)
-			max.y = candidate.y;
-		if (candidate.z > max.z)
-			max.z = candidate.z;
+		if (candidate.v[0] > max.v[0])
+			max.v[0] = candidate.v[0];
+		if (candidate.v[1] > max.v[1])
+			max.v[1] = candidate.v[1];
+		if (candidate.v[2] > max.v[2])
+			max.v[2] = candidate.v[2];
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class AxisAlignedBox3
 	 */
 	Vector3 center()
 	{ 
-		return new Vector3(0.5f * (min.x+max.x), 0.5f * (min.y+max.y), 0.5f * (min.z+max.z)); 
+		return new Vector3(0.5f * (min.v[0]+max.v[0]), 0.5f * (min.v[1]+max.v[1]), 0.5f * (min.v[2]+max.v[2])); 
 	}
 	
 	/* (non-Javadoc)

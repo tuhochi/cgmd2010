@@ -8,7 +8,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  */
 public class Vector2
 {
-	public float x,y;
+	public float v[] = new float[2];
 	
 	/**
 	 * Instantiates a new vector2.
@@ -39,8 +39,8 @@ public class Vector2
 	 */
 	private void set(float x, float y)
 	{
-		this.x = x;
-		this.y = y;
+		this.v[0] = x;
+		this.v[1] = y;
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class Vector2
 	 */
 	public Vector2(Vector2 other)
 	{
-		this(other.x, other.y);
+		this(other.v[0], other.v[1]);
 	}
 
 	/**
@@ -72,14 +72,6 @@ public class Vector2
 	}
 	
 	/**
-	 * @return this, as a float[2]
-	 */
-	public float[] getArray2()
-	{
-		return new float[] {x,y};
-	}
-	
-	/**
 	 * Adds the another Vector2 to this
 	 *
 	 * @param other the other Vector2
@@ -87,8 +79,8 @@ public class Vector2
 	 */
 	public Vector2 add(Vector2 other)
 	{
-		x += other.x;
-		y += other.y;
+		for(int i=0; i<2; i++)
+			v[i] += other.v[i];
 		return this;
 	}
 	
@@ -112,8 +104,8 @@ public class Vector2
 	 */
 	public Vector2 subtract(Vector2 other)
 	{
-		x -= other.x;
-		y -= other.y;
+		for(int i=0; i<2; i++)
+			v[i] -= other.v[i];
 		return this;
 	}
 	
@@ -137,8 +129,8 @@ public class Vector2
 	 */
 	public Vector2 multiply(Vector2 other)
 	{
-		x *= other.x;
-		y *= other.y;
+		for(int i=0; i<2; i++)
+			v[i] *= other.v[i];
 		return this;
 	}
 	
@@ -176,7 +168,7 @@ public class Vector2
 	 */
 	public static float dotProduct(Vector2 a, Vector2 b)
 	{
-		return (a.x*b.x + a.y*b.y);
+		return (a.v[0]*b.v[0] + a.v[1]*b.v[1]);
 	}
 	
 	/**
@@ -187,8 +179,8 @@ public class Vector2
 	 */
 	public Vector2 multiply(float s)
 	{
-		x *= s;
-		y *= s;
+		for(int i=0; i<2; i++)
+			v[i] *= s;
 		return this;
 	}
 	
@@ -200,8 +192,8 @@ public class Vector2
 	 */
 	public Vector2 divide(Vector2 other)
 	{
-		x /= other.x;
-		y /= other.y;
+		for(int i=0; i<2; i++)
+			v[i] /= other.v[i];
 		return this;
 	}
 	
@@ -225,8 +217,8 @@ public class Vector2
 	 */
 	public Vector2 divide(float s)
 	{
-		x /= s;
-		y /= s;
+		for(int i=0; i<2; i++)
+			v[i] /= s;
 		return this;
 	}
 	
@@ -240,8 +232,8 @@ public class Vector2
 		float length = length();
 		if(length != 0 && length != 1)
 		{
-			x /= length;
-			y /= length;
+			for(int i=0; i<2; i++)
+				v[i] /= length;
 		}
 		return this;
 	}
@@ -262,7 +254,7 @@ public class Vector2
 	 */
 	public float length()
 	{
-		return (float)Math.sqrt(x*x + y*y);
+		return (float)Math.sqrt(v[0]*v[0] + v[1]*v[1]);
 	}
 	
 	/* (non-Javadoc)
@@ -271,6 +263,6 @@ public class Vector2
 	@Override
 	public String toString()
 	{
-		return "(" + x + "," + y + ")";
+		return "(" + v[0] + "," + v[1] + ")";
 	}
 }

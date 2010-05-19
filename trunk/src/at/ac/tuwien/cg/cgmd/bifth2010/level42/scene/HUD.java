@@ -172,7 +172,7 @@ public class HUD extends Model
 			float angle = circleTime * Config.FORCE_VIS_ROTATION_SPEED;
 			transformation.setScale(scale,scale,scale);
 			transformation.addRotateZ(angle);
-			transformation.addTranslate(circleCenter.x, circleCenter.y, 0);
+			transformation.addTranslate(circleCenter.v[0], circleCenter.v[1], 0);
 		}
 //		else if(chargePlayer != null && chargePlayer.isPlaying())
 //		{
@@ -191,8 +191,8 @@ public class HUD extends Model
 	public void setCircle(float centerPixelsX, float centerPixelsY)
 	{
 		circleActive = true;
-		circleCenter.x = ((float)centerPixelsX / width)*aspect;
-		circleCenter.y = (float)centerPixelsY / height;
+		circleCenter.v[0] = ((float)centerPixelsX / width)*aspect;
+		circleCenter.v[1] = (float)centerPixelsY / height;
 		circleStartMillis = timeManager.getTimeOfLastFrame();
 //		chargePlayer = soundManager.playSound(R.raw.l42_loadforce);
 	}

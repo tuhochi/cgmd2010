@@ -14,7 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
  */
 public class Vector3 implements Persistable
 {
-	public float x,y,z;
+	public float[] v = new float[3];
 	
 	/**
 	 * Instantiates a new vector3.
@@ -43,9 +43,8 @@ public class Vector3 implements Persistable
 	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
-		dos.writeFloat(x);
-		dos.writeFloat(y);
-		dos.writeFloat(z);
+		for(int i=0; i<3; i++)
+			dos.writeFloat(v[i]);
 	}
 	
 	/* (non-Javadoc)
@@ -53,9 +52,8 @@ public class Vector3 implements Persistable
 	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
-		x = dis.readFloat();
-		y = dis.readFloat();
-		z = dis.readFloat();
+		for(int i=0; i<3; i++)
+			v[i] = dis.readFloat();
 	}
 	
 	/**
@@ -67,9 +65,9 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 set(float x, float y, float z)
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.v[0] = x;
+		this.v[1] = y;
+		this.v[2] = z;
 		return this;
 	}
 	
@@ -80,7 +78,7 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 set(Vector3 other)
 	{
-		return set(other.x, other.y, other.z);
+		return set(other.v[0], other.v[1], other.v[2]);
 	}
 	
 	/**
@@ -90,7 +88,7 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3(Vector3 other)
 	{
-		this(other.x, other.y, other.z);
+		this(other.v[0], other.v[1], other.v[2]);
 	}
 
 	/**
@@ -112,25 +110,14 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Gets the array3.
-	 *
-	 * @return this as a float[3]
-	 */
-	public float[] getArray3()
-	{
-		return new float[] {x,y,z};
-	}
-	
-	/**
 	 * Inverts this
 	 *
 	 * @return this
 	 */
 	public Vector3 invert()
 	{
-		x = -x;
-		y = -y;
-		z = -z;
+		for(int i=0; i<3; i++)
+			v[i] = -v[i];
 		return this;
 	}
 	
@@ -142,9 +129,8 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 add(Vector3 other)
 	{
-		x += other.x;
-		y += other.y;
-		z += other.z;
+		for(int i=0; i<3; i++)
+			v[i] += other.v[i];
 		return this;
 	}
 	
@@ -168,9 +154,8 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 subtract(Vector3 other)
 	{
-		x -= other.x;
-		y -= other.y;
-		z -= other.z;
+		for(int i=0; i<3; i++)
+			v[i] -= other.v[i];
 		return this;
 	}
 	
@@ -194,9 +179,8 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 multiply(Vector3 other)
 	{
-		x *= other.x;
-		y *= other.y;
-		z *= other.z;
+		for(int i=0; i<3; i++)
+			v[i] *= other.v[i];
 		return this;
 	}
 	
@@ -234,7 +218,7 @@ public class Vector3 implements Persistable
 	 */
 	public static float dotProduct (Vector3 a, Vector3 b)
 	{
-		return (a.x*b.x + a.y*b.y + a.z*b.z);
+		return (a.v[0]*b.v[0] + a.v[1]*b.v[1] + a.v[2]*b.v[2]);
 	}
 	
 	/**
@@ -260,9 +244,9 @@ public class Vector3 implements Persistable
 	 */
 	public static void crossProduct(Vector3 a, Vector3 b, Vector3 result)
 	{
-		result.x = a.y*b.z - a.z*b.y;
-		result.y = a.z*b.x - a.x*b.z;
-		result.z = a.x*b.y - a.y*b.x;
+		result.v[0] = a.v[1]*b.v[2] - a.v[2]*b.v[1];
+		result.v[1] = a.v[2]*b.v[0] - a.v[0]*b.v[2];
+		result.v[2] = a.v[0]*b.v[1] - a.v[1]*b.v[0];
 	}
 	
 	/**
@@ -273,9 +257,8 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 multiply(float s)
 	{
-		x *= s;
-		y *= s;
-		z *= s;
+		for(int i=0; i<3; i++)
+			v[i] *= s;
 		return this;
 	}
 	
@@ -287,9 +270,8 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 divide(Vector3 other)
 	{
-		x /= other.x;
-		y /= other.y;
-		z /= other.z;
+		for(int i=0; i<3; i++)
+			v[i] /= other.v[i];
 		return this;
 	}
 	
@@ -313,9 +295,8 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 divide(float s)
 	{
-		x /= s;
-		y /= s;
-		z /= s;
+		for(int i=0; i<3; i++)
+			v[i] /= s;
 		return this;
 	}
 	
@@ -329,9 +310,8 @@ public class Vector3 implements Persistable
 		float length = length();
 		if(length != 0 && length != 1)
 		{
-			x /= length;
-			y /= length;
-			z /= length;
+			for(int i=0; i<3; i++)
+				v[i] /= length;
 		}
 		return this;
 	}
@@ -364,7 +344,7 @@ public class Vector3 implements Persistable
 	 */
 	public float length()
 	{
-		return (float)Math.sqrt(x*x + y*y + z*z);
+		return (float)Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
 	}
 	
 	/* (non-Javadoc)
@@ -373,6 +353,6 @@ public class Vector3 implements Persistable
 	@Override
 	public String toString()
 	{
-		return "(" + x + "," + y + "," + z + ")";
+		return "(" + v[0] + "," + v[1] + "," + v[2] + ")";
 	}
 }
