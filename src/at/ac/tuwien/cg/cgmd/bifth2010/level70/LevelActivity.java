@@ -2,11 +2,21 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level70;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer.RendererView;
 
 /**
@@ -19,7 +29,9 @@ public class LevelActivity extends Activity {
 	
 	private static LevelActivity instance; //< Level activity instance for global access
 	private RendererView rendererView;     //< Renderer view
-		
+	public TextView tv;	
+	public Handler handler;
+	public Runnable fpsUpdateRunnable;
 	
 	// ----------------------------------------------------------------------------------
 	// -- Static methods ----
@@ -42,6 +54,17 @@ public class LevelActivity extends Activity {
 	 */
 	public void onCreate(Bundle savedInstanceState) {
 		
+		fpsUpdateRunnable = new Runnable() {
+			public void run() {
+				rendererView.onPause();
+				tv.setVisibility(View.VISIBLE);
+			}
+		};
+		
+		// Set instance for global access
+   		instance = this;
+   		handler = new Handler();
+   		
 		super.onCreate(savedInstanceState);
 		
 		// Set fullscreen
@@ -56,8 +79,7 @@ public class LevelActivity extends Activity {
    		rendererView = new RendererView(this, savedInstanceState, d.getWidth(), d.getHeight());
    		setContentView(rendererView);
    		
-   		// Set instance for global access
-   		instance = this;
+   		setStateLevelEnd(0);
 	}
 	
 	
@@ -120,6 +142,8 @@ public class LevelActivity extends Activity {
      */
     @Override
 	protected void onSaveInstanceState(Bundle outState) {
+        Log.i("LevelActivity70", "onSaveInstanceState");
+        rendererView.onPause();
     	rendererView.onSaveState(outState);
     }
     
@@ -130,5 +154,36 @@ public class LevelActivity extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
     	rendererView.onRestoreState(savedInstanceState);
+    }
+    
+   
+    
+    public void setStateLevelEnd(int progress) {
+    	
+    	LinearLayout llayout = new LinearLayout(this);
+        llayout.setGravity(Gravity.CENTER);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
+        addContentView(llayout, params);
+        
+        tv = new TextView(this);
+        tv.setTextSize(25);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextColor(Color.BLACK);  
+        tv.setText(R.string.l70_GameEnd);
+        tv.setTypeface(Typeface.DEFAULT_BOLD);
+        
+        LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        
+        llparams.weight = 0;
+        llparams.setMargins(10, 10, 10, 10);
+        llayout.addView(tv, llparams);
+        tv.setVisibility(View.INVISIBLE);
+        
+    	//setContentView(tv);
+    	//SessionState s = new SessionState();
+		//s.setProgress(10);
+		//setResult(Activity.RESULT_OK, s.asIntent());
+		//finish();
+		
     }
 }

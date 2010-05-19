@@ -93,12 +93,13 @@ public class GlTexture {
 	 */
 	private void create(int resid) {
 		try {
-			Context     ctx   = LevelActivity.getInstance();
-			InputStream is    = ctx.getResources().openRawResource(resid);
-			Bitmap      bmp   = BitmapFactory.decodeStream(is);
+			Context     ctx = LevelActivity.getInstance();
+			InputStream is  = ctx.getResources().openRawResource(resid);
+			Bitmap      bmp = BitmapFactory.decodeStream(is);
 			is.close();
 
 			texId = new int[1];
+			
 			glGenTextures(1, texId, 0);
 			glBindTexture(GL_TEXTURE_2D, texId[0]);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

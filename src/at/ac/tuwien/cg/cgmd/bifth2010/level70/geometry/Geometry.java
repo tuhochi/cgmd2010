@@ -9,21 +9,11 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Geometry {
 
-	private float[] positions;
-	private float[] texcoords;
-	private short[] indices;
-	public  float[] pos = { 0.0f, 0.0f, 0.0f };
-	
 	private FloatBuffer posBuf;
 	private FloatBuffer texBuf;
 	private ShortBuffer indexBuf;
 
 	public Geometry(float[] positions, float[] texcoords, short[] indices) {
-		
-		// Set vertices and indices
-		this.positions  = positions;
-		this.texcoords = texcoords;
-		this.indices   = indices;
 		
 		// Create positions buffer 
 		ByteBuffer pbuf = ByteBuffer.allocateDirect(positions.length * 4);
@@ -48,17 +38,29 @@ public class Geometry {
 	}
 	
 	
+	/**
+	 * Set texture coordinate buffer.
+	 * @param buf The texture coordinate buffer
+	 */
+	public void setTexBuffer(FloatBuffer buf) {
+		texBuf = buf;
+	}
+	
+	
+	/**
+	 * Draw the quad.
+	 * @param gl OpenGl context.
+	 */
 	public void draw(GL10 gl) {
 		
-		gl.glTranslatef(pos[0], pos[1], pos[2]);
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, posBuf);
-		
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texBuf);
 
-		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_SHORT, indexBuf);
+		gl.glDrawElements(GL10.GL_TRIANGLES, indexBuf.capacity(), GL10.GL_UNSIGNED_SHORT, indexBuf);
 
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
 }
