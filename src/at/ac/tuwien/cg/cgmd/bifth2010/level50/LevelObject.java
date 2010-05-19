@@ -16,13 +16,18 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class LevelObject {
 	
-
-	int tex[]=new int[1];
+	private int tileSizeX = 30;
+	private int tileSizeY = 30;
+	private int tex[]=new int[1];
 	private IntBuffer texBuf=IntBuffer.wrap(tex);
-	private static HashMap<Integer,Integer> textures = new HashMap<Integer, Integer>();
-	Context context;
+	private static HashMap<Integer,Integer> textures = new HashMap<Integer, Integer>(0);
+	private Context context;
 	private LevelCollision level;
-	boolean collision, gravity;
+	private boolean collision = false, gravity = false;
+	private int score = 0;
+	private boolean alive = true;
+	private float scaleX = 1.0f;
+	private float scaleY = 1.0f;
 	
 	float x, y;
 	int width, height;
@@ -57,7 +62,7 @@ public class LevelObject {
 	// Our index buffer.
 	private ShortBuffer indexBuffer;
 
-	public LevelObject(GL10 gl, Context context, LevelCollision level, float x, float y, int width, int height, int id) {
+	public LevelObject(GL10 gl, Context context, LevelCollision level, float x, float y, int width, int height, int id, float texcoords[]) {
 		this.context = context;
 		this.level = level;
 		this.x = x;
@@ -66,6 +71,8 @@ public class LevelObject {
 		this.height = height;
 		this.id = id;
 		this.gl = gl;
+		if (texcoords != null)
+			this.texcoord = texcoords;
 		
 		movement[0]=0.0f;
 		movement[1]=0.0f;
@@ -102,9 +109,42 @@ public class LevelObject {
 			LoadTexture(0,id,gl,context);
 		}
 	}
+	
+	public boolean update(GL10 gl) {
+		float xn = x-(movement[2]-movement[3])*tileSizeX/18;
+		float yn = y-(movement[0]-movement[1])*tileSizeY/18;
+        boolean retVal = false;
+		if (collision)
+			if (!testCollision(xn, yn)){
+				x = xn; y = yn;
+			} else {
+				if (testCollision(x, yn)){
+					if (y<yn) {
+						retVal = true;
+						y = (float)Math.floor(yn/tileSizeY)*tileSizeY;
+					} else {
+						if (movement[0]>5.0f) movement[0] = 5.0f;
+						y = (float)Math.ceil(yn/tileSizeY)*tileSizeY;
+					}
+				} else y = yn;
+				if (testCollision(xn, y)){
+					if (x<xn)
+						x = (float)Math.floor(xn/tileSizeX)*tileSizeX;
+					else
+						x = (float)Math.ceil(xn/tileSizeX)*tileSizeX;
+				} else x = xn;
+			}
+		
+		if (gravity && movement[0]>0.0f) movement[0]-=1.0f;
+		
+		if (movement[3]-movement[2] < 0) direction = -1; //change rabbit direction
+		else if (movement[3]-movement[2] > 0) direction = 1;
+		
+		return retVal;
+	}
 
 	/**
-	 * This function draws our square on screen.
+	 * This function draws our object on screen.
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
@@ -118,21 +158,6 @@ public class LevelObject {
         
         gl.glPushMatrix();
 		gl.glLoadIdentity();
-		float xn = x-movement[2]+movement[3];
-		float yn = y-movement[0]+movement[1];
-		if (collision)
-			if (!testCollision(xn, yn)){
-				x = xn; y = yn;
-			} else if (!testCollision(xn, y)){
-				x = xn;
-			} else if (!testCollision(x, yn)){
-				y = yn;
-			}
-		
-		if (gravity && movement[0]>0.0f) movement[0]-=1.0f;
-		
-		if (movement[3]-movement[2] < 0) direction = -1;
-		else if (movement[3]-movement[2] > 0) direction = 1;
 		
 		gl.glTranslatef(x + (1-direction)/2*width, y, 0);
 		gl.glScalef((float)width*direction, (float)height, 1.0f);
@@ -156,7 +181,7 @@ public class LevelObject {
 	}
 	
 	public void move(int direction, float amount) {
-		if (direction == 0) amount*=3;
+		if (direction != 1)
 		movement[direction] = amount;
 	}
 	
@@ -169,32 +194,60 @@ public class LevelObject {
 	public float getPositionY() {return y;}
 	
 	boolean testCollision(float x, float y) {
-		if ((level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 &&
-				(level.TestCollision((int) Math.floor((x+width)/20), (int) Math.floor((y)/20))&0x00ffffff) != 0 &&
-				(level.TestCollision((int) Math.floor((x+width)/20), (int) Math.floor((y+height)/20))&0x00ffffff) != 0 &&
-				(level.TestCollision((int) Math.floor((x)/20), (int) Math.floor((y+height)/20))&0x00ffffff) != 0) {
+		int ul = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y)/tileSizeY));
+		int ur = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y)/tileSizeY));
+		int lr = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY));
+		int ll = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY));
+		if ((ul&0x00ffffff) == 0x00ff0000)
+			score+=5;
+		if ((ur&0x00ffffff) == 0x00ff0000)
+			score+=5;
+		if ((lr&0x00ffffff) == 0x00ff0000)
+			score+=5;
+		if ((ll&0x00ffffff) == 0x00ff0000)
+			score+=5;
+		
+		if (y>level.getHeight()*tileSizeY)
+			alive = false;
+		
+		if ((ul&0x00ff0000) != 0 &&
+		    (ur&0x00ff0000) != 0 &&
+			(lr&0x00ff0000) != 0 &&
+			(ll&0x00ff0000) != 0) {
 			return false;
 		} else return true;
 	}
 	
-	public void changeTexture(int id) {
-		texBuf.clear();
-		if (textures.containsKey(id)) {
-			texBuf.put(textures.get(id));
-		} else {
-			gl.glGenTextures(1, texBuf);
-			textures.put(id, texBuf.get(0));
-			LoadTexture(0,id,gl,context);
-		}		
+	public void changeTexture(int id, float texcoords[]) {
+		if (texcoords != null && texcoords != texcoord) {
+			ByteBuffer tbb = ByteBuffer.allocateDirect(texcoords.length * 4);
+			tbb.order(ByteOrder.nativeOrder());
+			texcoordBuffer = tbb.asFloatBuffer();
+			texcoordBuffer.put(texcoords);
+			texcoordBuffer.position(0);
+		}
+			
+		if (this.id!=id) {
+			this.id = id;
+			texBuf.clear();
+			if (textures.containsKey(id)) {
+				texBuf.put(textures.get(id));
+			} else {
+				gl.glGenTextures(1, texBuf);
+				textures.put(id, texBuf.get(0));
+				LoadTexture(0,id,gl,context);
+			}	
+		}
 	}
 	
 	public static void clearTextures(GL10 gl) {
-		IntBuffer texInts = IntBuffer.allocate(0);
+		IntBuffer texInts = IntBuffer.allocate(textures.size());
 		for (Integer tex : textures.values()) {
 			texInts.put(tex);
 		}
+		textures.clear();
 		texInts.position(0);
-		gl.glDeleteTextures(texInts.capacity(),texInts);
+		gl.glDeleteTextures(textures.size(),texInts);
 	}
 	
 	private void LoadTexture(int num, int id, GL10 gl, Context context)
@@ -227,8 +280,8 @@ public class LevelObject {
 		IntBuffer tbuf=IntBuffer.wrap(pix1);
 //		ib.position(0);		
 		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, w, h, 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, tbuf);		
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);//LINEAR );
-		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);//LINEAR );											
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR );
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );											
 	}
 	
 	public void enableGravity(boolean b) {
@@ -239,5 +292,24 @@ public class LevelObject {
 	
 	public void enableCollision(boolean b) {
 		collision = b;
+	}
+	
+	public void scale(float xscale, float yscale) {
+		x*=xscale;
+		y*=yscale;
+		width*=xscale;
+		height*=yscale;
+		tileSizeX*=xscale;
+		tileSizeY*=yscale;
+		scaleX*=xscale;
+		scaleY*=yscale;
+	}
+	
+	public int getScore() {return score;}
+	public void setScore(int s) {score = (score+s>0)?s:0;}
+	public boolean getLife(){return alive;}
+
+	public void revive() {
+		alive = true;
 	}
 }

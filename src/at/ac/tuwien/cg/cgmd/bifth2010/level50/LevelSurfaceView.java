@@ -20,26 +20,30 @@ public class LevelSurfaceView extends GLSurfaceView {
 	}
 	
 	public boolean onTouchEvent(final MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-	        queueEvent(new Runnable(){
-	            public void run() {
-	                mRenderer.movePlayer(5.0f,5.0f);
-	            }});
-        	return true;
-		} else return false;
+        queueEvent(new Runnable(){
+            public void run() {
+                mRenderer.touchScreen(event);
+            }});
+    	return true;
     }
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			final int code = keyCode - KeyEvent.KEYCODE_DPAD_UP;
-			if (code>=0 && code<=3
+			if (code>=0 && code<=3 //up-down-left-right
 					&& !keydown[code]) {
 				
 				keydown[code]=true;
 				queueEvent(new Runnable(){
 					public void run() {
-						mRenderer.movePlayer(code, 5.0f);
+						if (code == 0 && !mRenderer.jumping) {
+//							mRenderer.jumping = true;
+							mRenderer.movePlayer(code, 15.0f);
+						} else if (code!=0){
+							mRenderer.moving = true;
+							mRenderer.movePlayer(code, 5.0f);
+						}
 					}
 				});
 				return true;
@@ -55,9 +59,16 @@ public class LevelSurfaceView extends GLSurfaceView {
 			if (code>=0 && code<=3 && keydown[code]) {
 				
 				keydown[code]=false;
+				mRenderer.moving = false;
+				if (keydown[2] == true)
+					mRenderer.moving = true;
+				if (keydown[3] == true)
+					mRenderer.moving = true;
 				queueEvent(new Runnable(){
 					public void run() {
-						mRenderer.movePlayer(code, 0.0f);
+						if (code > 0) {
+							mRenderer.movePlayer(code, 0.0f);
+						}
 					}
 				});
 				return true;
@@ -66,11 +77,13 @@ public class LevelSurfaceView extends GLSurfaceView {
 		return super.onKeyUp(keyCode, event);
 	}
 	
-	public int getScore() {return score;}
-	public void setScore(int score) {this.score = score+10;}
+	public int getScore() {return mRenderer.getScore();}
+	public void setScore(int score) {mRenderer.setScore(score);}
 	public float getPositionX() {return mRenderer.getPositionX();}
 	public float getPositionY() {return mRenderer.getPositionY();}
 	public void setPosition(float x, float y) {mRenderer.setPosition(x, y);}
+	public String getCoinState() {return mRenderer.getCoinState();}
+	public void setCoinState(String state) {mRenderer.setCoinState(state);}
 	
 
 }
