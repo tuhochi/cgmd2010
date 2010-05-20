@@ -71,6 +71,7 @@ public class Level {
         GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
         GLManager.getInstance().getTextures().add(R.drawable.l17_forcefield);
         GLManager.getInstance().getTextures().add(R.drawable.l17_coin);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_bricks);
         
         mForceField1 = new ForceField(50f, new Vector3(0,0,0), 200f, 10f);
         mForceField2 = new ForceField(50f, new Vector3(0,0,0), 200f, -10f);
@@ -239,7 +240,7 @@ public class Level {
 				if(mPlayer.getPosition().y > house.getPosition().y + house.getSize().y / 2.0f ){
 					mPlayer.hitHouse();
 					remove.add(house);
-					mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_coin));
+					mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_bricks));
 				}
 				else {
 					moveDelta.x = 0;
