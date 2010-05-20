@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -35,7 +36,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
  */
 
 public class LevelActivity extends Activity implements OrientationListener {
-
+    
 	/** The Constant TAG. */
 	public static final String TAG = "PimpstyleAirways";
 	
@@ -64,6 +65,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 
 	private PowerManager.WakeLock wakeLock;
 	
+	public ProgressBar boostProgress;
+	
 	//private Vector2 mainCharPos; 
 	/**
 	 * called when the activity is created. Here, the window is created and the the UI is placed by RenderView renderer
@@ -91,7 +94,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 		
 		fpsText = (TextView)findViewById(R.id.l23_TextViewFps);
 		scoreText = (TextView)findViewById(R.id.l23_TextViewScore);
-		
+		boostProgress = (ProgressBar)findViewById(R.id.l23_BoostProgress);
+		System.out.println(boostProgress);
         CONTEXT = this; 
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -297,6 +301,16 @@ public class LevelActivity extends Activity implements OrientationListener {
 			menu.add(0, SENSOR_MENU_ITEM, 0, "Turn Sensor off");
 		}
 	    return true;
+	}
+	
+	public void setBoostProgress(int progress)
+	{
+		boostProgress.setProgress(progress);
+	}
+	
+	public void setProgressVisibility(int visibility)
+	{
+		boostProgress.setVisibility(visibility);
 	}
 	
 	/**

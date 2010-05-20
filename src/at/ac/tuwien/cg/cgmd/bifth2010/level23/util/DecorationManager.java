@@ -11,6 +11,8 @@ import static android.opengl.GLES10.glTexCoordPointer;
 import static android.opengl.GLES10.glTranslatef;
 import static android.opengl.GLES10.glVertexPointer;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Random;
@@ -65,7 +67,7 @@ public class DecorationManager
 	private TexturePart mountainTexture;
 	
 	/** The position of the tree. */
-	private Vector2 mountainPosition;
+	private float mountainPositionY;
 	
 	/** The novement direction for tree. */
 	private float mountainMoveDir=1;
@@ -80,7 +82,7 @@ public class DecorationManager
 	private TexturePart treeTexture;
 	
 	/** The TexturePart of the tree. */
-	private Vector2 treePosition;
+	private float treePositionY;
 	
 	/** The vboID for tree. */
 	private int treeVboID;	
@@ -92,6 +94,7 @@ public class DecorationManager
 	{
 		clouds = new ArrayList<Cloud>(NR_OF_CLOUDS);
 		randomGenerator = new Random(System.currentTimeMillis());
+		
 	}
 	
 	/**
@@ -105,11 +108,9 @@ public class DecorationManager
 		
 		mountainVertexBuffer = geometryManager.createVertexBufferQuad(RenderView.instance.getRightBounds(), RenderView.instance.getTopBounds()/2f);
 		mountainTexture = TextureAtlas.instance.getMountainTextur();
-		mountainPosition = new Vector2(0,-RenderView.instance.getTopBounds()/4f);		
 		
 		treeVertexBuffer = geometryManager.createVertexBufferQuad(RenderView.instance.getRightBounds(), RenderView.instance.getTopBounds()/2f);
 		treeTexture = TextureAtlas.instance.getTreeTextur();
-		treePosition = new Vector2(0,0);
 		
 		if(Settings.GLES11Supported) 
 		{
@@ -212,7 +213,7 @@ public class DecorationManager
 	{		
 		glPushMatrix();
 		
-		glTranslatef(0, mountainPosition.y, 0);
+		glTranslatef(0, mountainPositionY, 0);
 		
 		if (!Settings.GLES11Supported) {
 			glTexCoordPointer(2, GL10.GL_FLOAT, 0,
@@ -233,7 +234,7 @@ public class DecorationManager
 	{				
 		glPushMatrix();
 		
-		glTranslatef(0, treePosition.y, 0);
+		glTranslatef(0, treePositionY, 0);
 		
 		if (!Settings.GLES11Supported) {
 			glTexCoordPointer(2, GL10.GL_FLOAT, 0,
@@ -248,6 +249,40 @@ public class DecorationManager
 		}
 		
 		glPopMatrix();
+	}
+	
+	/**
+	 * Writing to stream 
+	 * @param dos Stream to write to
+	 */
+	public void writeToStream(DataOutputStream dos) {
+		try {
+			dos.writeFloat(mountainPositionY); 
+			dos.writeFloat(mountainMoveDir);
+			dos.writeFloat(treePositionY);
+			
+		} catch (Exception e) {
+			System.out.println("Error writing to stream in MainChar.java: "+e.getMessage());
+		}
+		
+	}
+	
+	/**
+	 * Reading from stream
+	 * @param dis Stream to read from
+	 */
+	public void readFromStream(DataInputStream dis) {
+		
+		try {
+			mountainPositionY = dis.readFloat();
+			mountainMoveDir = dis.readFloat();
+			treePositionY = dis.readFloat();
+			wasRestored=true;
+			
+		} catch (Exception e) {
+			System.out.println("Error reading from stream in MainChar.java: "+e.getMessage());
+		}
+		
 	}
 	
 	/**
@@ -280,6 +315,9 @@ public class DecorationManager
 			currentCloudHeight = 0;
 			clouds.clear();
 			generateRandomCloudPosition();
+			mountainPositionY = -RenderView.instance.getTopBounds()/4f;
+			treePositionY = 0f;
+			mountainTexture = TextureAtlas.instance.getMountainTextur();
 		}
 		else
 			wasRestored=false;
@@ -287,10 +325,10 @@ public class DecorationManager
 	
 	public void update(float dt)
 	{
-		treePosition.y -= TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/8f;
-		if(mountainPosition.y >= 0)
+		treePositionY -= TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/8f;
+		if(mountainPositionY >= 0)
 			mountainMoveDir =-1;
 		
-			mountainPosition.y += mountainMoveDir*TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/16f;
+			mountainPositionY += mountainMoveDir*TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/16f;
 	}
 }
