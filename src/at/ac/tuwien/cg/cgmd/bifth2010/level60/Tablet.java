@@ -84,16 +84,16 @@ public class Tablet {
 		texCoordBuffer = tbb.asFloatBuffer();
 		texCoordBuffer.put(texCoords);
 		texCoordBuffer.position(0);
-		
-//		gl.glGenTextures(1, texture);
-//		
-//		bmp = BitmapFactory.decodeResource(context.getResources(), resource_id);
-//		bb = extract(bmp);
 	}
 	
 	public static void addMapOffset(float x, float y) {
 		mapOffset_x -= x;
 		mapOffset_y -= y;
+	}
+	
+	public static void setMapOffset(float x, float y) {
+		mapOffset_x = x;
+		mapOffset_y = y;
 	}
 	
 	public float getX() {
@@ -126,15 +126,9 @@ public class Tablet {
 	}
 	
 	public void draw(GL10 gl) {
-	//	gl.glGenTextures(1, texture);
-		
-	//	Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resource_id);
-//		ByteBuffer bb = extract(bmp);
+
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
-//		gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA, bmp.getWidth(), bmp.getHeight(), 0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, bb); 
-//		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-//		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-//		
+
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texCoordBuffer);
 		
@@ -151,24 +145,4 @@ public class Tablet {
 		gl.glPopMatrix();
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
-	
-//	private static ByteBuffer extract(Bitmap bmp) {
-//		ByteBuffer bb = ByteBuffer.allocateDirect(bmp.getHeight() * bmp.getWidth() * 4);
-//		bb.order(ByteOrder.BIG_ENDIAN);
-//		IntBuffer ib = bb.asIntBuffer();
-//		// Convert ARGB -> RGBA
-//		for (int y = bmp.getHeight() - 1; y > -1; y--)	{
-//			for (int x = 0; x < bmp.getWidth(); x++) {
-//				int pix = bmp.getPixel(x, bmp.getHeight() - y - 1);
-//				int alpha = ((pix >> 24) & 0xFF);
-//				int red = ((pix >> 16) & 0xFF);
-//				int green = ((pix >> 8) & 0xFF);
-//				int blue = ((pix) & 0xFF);
-//
-//				ib.put(red << 24 | green << 16 | blue << 8 | alpha);
-//			}
-//		}
-//		bb.position(0);
-//		return bb; 
-//	}
 }
