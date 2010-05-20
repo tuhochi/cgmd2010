@@ -36,10 +36,6 @@ public class GeometryManager {
 			GLES11.glTexCoordPointer(2, GL_FLOAT, 0, 12 * 4); 
 			currentBoundVBO = vboID;
 		}
-		else
-		{
-			System.out.println("already bound " + vboID);
-		}
 	}
 	
 	/**
