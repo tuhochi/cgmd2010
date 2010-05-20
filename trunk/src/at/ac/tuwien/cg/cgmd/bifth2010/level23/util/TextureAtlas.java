@@ -149,4 +149,22 @@ public class TextureAtlas
 	{
 		return generateTexturePart(new Vector2(768,544), new Vector2(768+64,544+64));
 	}
+	
+	/**
+	 * Returns the part of the texture for the mountain decoration
+	 * @return the texture part for the boost button
+	 */
+	public TexturePart getMountainTextur()
+	{
+		return generateTexturePart(new Vector2(0,0), new Vector2(256,256-0.5f));
+	}
+	
+	/**
+	 * Returns the part of the texture for the tree decoration
+	 * @return the texture part for the boost button
+	 */
+	public TexturePart getTreeTextur()
+	{
+		return generateTexturePart(new Vector2(0,256), new Vector2(256,256+256));
+	}
 }

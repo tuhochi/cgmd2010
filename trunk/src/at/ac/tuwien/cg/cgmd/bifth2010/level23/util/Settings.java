@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
+
 /**
  * The Class Settings centralizes storage of setting variables
  * @author Markus Ernst
@@ -11,7 +13,7 @@ public class Settings
 	public static int OBSTACLE_START = 300;
 	
 	/** The constant for balloon speed. */
-	public static float BALLOON_STARTSPEED = 0.1f;
+	public static float BALLOON_STARTSPEED = 0.0005f*RenderView.instance.getTopBounds();
 	
 	/** The constant for balloon speed. */
 	public static float BALLOON_SPEED = BALLOON_STARTSPEED;
@@ -24,7 +26,7 @@ public class Settings
 	
 	//item effects
 	/** The Constant BURN_BOOST. */
-	public static final float BURN_BOOST = 0.04f;
+	public static final float BURN_BOOST = 0.0005f*RenderView.instance.getTopBounds();
 	//time in milliseconds
 	/** The Constant BURN_BOOST_TIME. */
 	public static final long BURN_BOOST_TIME = 2500;

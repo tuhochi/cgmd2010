@@ -46,7 +46,7 @@ public class DecorationManager
 	private ArrayList<Cloud> clouds;
 		
 	/** The vboID for clouds. */
-	private int vboID;
+	private int cloudVboID;
 	
 	/** The vertexBuffer for clouds. */
 	private FloatBuffer cloudVertexBuffer;
@@ -57,6 +57,33 @@ public class DecorationManager
 	private boolean wasRestored;
 	
 	private GeometryManager geometryManager = GeometryManager.instance;
+	
+	/** The vertexBuffer for mountain. */
+	private FloatBuffer mountainVertexBuffer;
+	
+	/** The TexturePart for mountain. */
+	private TexturePart mountainTexture;
+	
+	/** The position of the tree. */
+	private Vector2 mountainPosition;
+	
+	/** The novement direction for tree. */
+	private float mountainMoveDir=1;
+	
+	/** The vboID for mountains. */
+	private int mountainVboID;	
+	
+	/** The vertexBuffer for tree. */
+	private FloatBuffer treeVertexBuffer;
+	
+	/** The TexturePart for tree. */
+	private TexturePart treeTexture;
+	
+	/** The TexturePart of the tree. */
+	private Vector2 treePosition;
+	
+	/** The vboID for tree. */
+	private int treeVboID;	
 	
 	/**
 	 * Default Constructor
@@ -76,9 +103,19 @@ public class DecorationManager
 		cloudVertexBuffer = geometryManager.createVertexBufferQuad(50, 20*RenderView.instance.getAspectRatio());
 		cloudTexture = TextureAtlas.instance.getCloudTextur();
 		
+		mountainVertexBuffer = geometryManager.createVertexBufferQuad(RenderView.instance.getRightBounds(), RenderView.instance.getTopBounds()/2f);
+		mountainTexture = TextureAtlas.instance.getMountainTextur();
+		mountainPosition = new Vector2(0,-RenderView.instance.getTopBounds()/4f);		
+		
+		treeVertexBuffer = geometryManager.createVertexBufferQuad(RenderView.instance.getRightBounds(), RenderView.instance.getTopBounds()/2f);
+		treeTexture = TextureAtlas.instance.getTreeTextur();
+		treePosition = new Vector2(0,0);
+		
 		if(Settings.GLES11Supported) 
 		{
-			vboID = geometryManager.createVBO(cloudVertexBuffer, cloudTexture.texCoords);
+			cloudVboID = geometryManager.createVBO(cloudVertexBuffer, cloudTexture.texCoords);
+			mountainVboID = geometryManager.createVBO(mountainVertexBuffer, mountainTexture.texCoords);
+			treeVboID = geometryManager.createVBO(treeVertexBuffer, treeTexture.texCoords);
 		}
 	}
 	
@@ -155,7 +192,7 @@ public class DecorationManager
 							glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
 						} else {
-							geometryManager.bindVBO(vboID);
+							geometryManager.bindVBO(cloudVboID);
 
 							glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
 						}
@@ -169,6 +206,48 @@ public class DecorationManager
 				return;
 			}
 		}
+	}
+	
+	public void renderMountains()
+	{		
+		glPushMatrix();
+		
+		glTranslatef(0, mountainPosition.y, 0);
+		
+		if (!Settings.GLES11Supported) {
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0,
+					cloudTexture.texCoords);
+			glVertexPointer(3, GL10.GL_FLOAT, 0, mountainVertexBuffer);
+			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+
+		} else {
+			geometryManager.bindVBO(mountainVboID);
+
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+		}
+		
+		glPopMatrix();
+	}
+	
+	public void renderTree()
+	{				
+		glPushMatrix();
+		
+		glTranslatef(0, treePosition.y, 0);
+		
+		if (!Settings.GLES11Supported) {
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0,
+					treeTexture.texCoords);
+			glVertexPointer(3, GL10.GL_FLOAT, 0, treeVertexBuffer);
+			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+
+		} else {
+			geometryManager.bindVBO(treeVboID);
+
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+		}
+		
+		glPopMatrix();
 	}
 	
 	/**
@@ -204,5 +283,14 @@ public class DecorationManager
 		}
 		else
 			wasRestored=false;
+	}
+	
+	public void update(float dt)
+	{
+		treePosition.y -= TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/8f;
+		if(mountainPosition.y >= 0)
+			mountainMoveDir =-1;
+		
+			mountainPosition.y += mountainMoveDir*TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/16f;
 	}
 }
