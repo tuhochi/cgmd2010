@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 import java.util.ArrayList;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Sphere.
  *
@@ -96,21 +95,17 @@ public class Sphere
 	 */
 	public void setPointSet(ArrayList<Vector3> vertices)
 	{
-		Vector3 centerBB = new Vector3();
-		float radiusBB = calcSphereFromBBox(vertices, centerBB);
+		center.set(0, 0, 0);
+		for(Vector3 v : vertices)
+			center.add(v);
+		center.divide(vertices.size());
 		
-		Vector3 centerC = new Vector3();
-		float radiusC = calcSphereFromCentroid(vertices, centerC);
-		
-		if(radiusBB < radiusC)
+		radius = 0;
+		for(Vector3 v : vertices)
 		{
-			center.set(centerBB);
-			radius = radiusBB;
-		}
-		else
-		{
-			center.set(centerC);
-			radius = radiusC;
+			float temp_r = Vector3.subtract(v, center).length();
+			if(temp_r > radius)
+				radius = temp_r;
 		}
 	}
 	
@@ -153,56 +148,5 @@ public class Sphere
 
 		this.radius = radius;
 		this.center.set(temp);
-	}
-	
-	/**
-	 * Calculates a sphere with it's center at the bounding boxes center.
-	 *
-	 * @param vertices the vertices
-	 * @param center the center
-	 * @return the radius
-	 */
-	private float calcSphereFromBBox(ArrayList<Vector3> vertices, Vector3 center)
-	{
-		AxisAlignedBox3 bbox = new AxisAlignedBox3();
-		for(Vector3 v : vertices)
-			bbox.include(v);
-		
-		center.set(bbox.center());
-		
-		float r = 0;
-		for(Vector3 v : vertices)
-		{
-			float temp_r = Vector3.subtract(v, center).length();
-			if(temp_r > r)
-				r = temp_r;
-		}
-		return r;
-	}
-	
-	/**
-	 * Calculates a sphere with it's center at the vertices centroid.
-	 *
-	 * @param vertices the vertices
-	 * @param center the center
-	 * @return the radius
-	 */
-	private float calcSphereFromCentroid(ArrayList<Vector3> vertices, Vector3 center)
-	{
-		Vector3 centroid = new Vector3();
-		for(Vector3 v : vertices)
-			centroid.add(v);
-		centroid.divide(vertices.size());
-		
-		center.set(centroid);
-		
-		float r = 0;
-		for(Vector3 v : vertices)
-		{
-			float temp_r = Vector3.subtract(v, center).length();
-			if(temp_r > r)
-				r = temp_r;
-		}
-		return r;
 	}
 }
