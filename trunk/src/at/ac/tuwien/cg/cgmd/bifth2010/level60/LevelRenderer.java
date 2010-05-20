@@ -20,7 +20,7 @@ public class LevelRenderer implements Renderer {
 	
 	private boolean[] keystates = new boolean[4];
 	private int score;
-	private boolean guilty = true;  //TODO: change value when crime committed
+	private int crime = 0;  //TODO: change value when crime committed
 	private int screenWidth;
 	private int screenHeight; 
 	
@@ -33,9 +33,6 @@ public class LevelRenderer implements Renderer {
 	private int gold_0;
 	private float goldOffsetX;
 	private float goldOffsetY;
-//	private Tablet gold_000;
-//	private Tablet gold_00;
-//	private Tablet gold_0;
 	
 	private float posX;
 	private float posY;
@@ -152,12 +149,18 @@ public class LevelRenderer implements Renderer {
 		}
 		
 		if (!proximity) {
+			float offset_x = mapOffset_x;
+			float offset_y = mapOffset_y;
 			switch (actionMap[tile_y][tile_x]) {
 				case 1:	//spraytag action
 					// 	put spraytag tablet here
 					actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
-				break;
+					Tablet.setMapOffset(offset_x, offset_y); //reset ofset cause on new Table it is set to 0
+					crime++;
+					break;
 			}
+			mapOffset_x = offset_x;
+			mapOffset_y = offset_y;
 		}
 	}
 	
@@ -238,10 +241,14 @@ public class LevelRenderer implements Renderer {
 	}
 	
 	private void bunnyWasCaught () {
-		if (score >= 10) {
-			score -= 10;
+//		if (score >= 10) {
+//			score -= 10;
+			score -= crime * 10;
+			
+			if (score < 0)
+				score = 0;
 			updateScore();
-		}
+//		}
 	}
 	
 	private void handleCop() {
@@ -257,14 +264,14 @@ public class LevelRenderer implements Renderer {
 		dx /= d_len;
 		dy /= d_len;
 		
-		if (bx != cx && by != cy) {
+		if (crime > 0 && bx != cx && by != cy) {
 			moveCop(dx*COP_MOVEMENT_UNIT, dy*COP_MOVEMENT_UNIT);
-		}
 		
-		//check if cop catches bunny
-		if (d_len < 5 && guilty) {
-			guilty = false;
-			bunnyWasCaught();
+			//check if cop catches bunny
+			if (d_len < 5) {
+				bunnyWasCaught();
+				crime = 0;
+			}
 		}
 	}
 	

@@ -42,26 +42,19 @@ public class LevelActivity extends Activity {
     @Override
  
     public void onPause() {
-    //	SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         super.onPause();
         glv.onPause();
-        //sessionState = glv.saveData(prefs);
-        
-//        setResult(Activity.RESULT_OK, sessionState.asIntent());
     }
 
     @Override
     public void onResume() {
- //   	SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         super.onResume();
         glv.onResume();
-        //glv.updateData(prefs);
     }
     
 	 @Override
     protected void onDestroy() {
     	super.onDestroy();
-    //	finish();
     }
 	 
 	 public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -69,14 +62,6 @@ public class LevelActivity extends Activity {
 				sessionState = glv.getState();
 		    	setResult(Activity.RESULT_OK, sessionState.asIntent());
 		    	
-		    	/*SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-		    	prefs.edit().remove("l60_posX");
-		    	prefs.edit().remove("l60_posY");
-		    	prefs.edit().remove("l60_mapOffset_x");
-				prefs.edit().remove("l60_mapOffset_y");
-//		    	prefs.edit().clear();
-		    	prefs.edit().commit();
-		    	*/
 		    	if (myState != null) {
 		    		myState.putFloat(BUNNY_Y, 0.0f);
 		    		myState.putFloat(BUNNY_X, 0.0f);
