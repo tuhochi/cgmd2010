@@ -82,7 +82,6 @@ public class Obstacle implements Serializable
 		}
 		
 		position.x = randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-width);
-		System.out.println(position.x);
 	}
 	
 	public void update()
