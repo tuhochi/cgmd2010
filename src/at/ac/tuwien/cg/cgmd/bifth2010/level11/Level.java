@@ -164,7 +164,31 @@ public class Level extends Thread {
 	public  void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
 	}
-	
+	public void bouncePedestrians(float x1, float y1, float x2, float y2, float time){
+		//calculate implicit linear equation constants
+		//float a = (y2-y1)/(x2-x1);
+		//float b = 1;
+		//float c = y1-(y2-y1)/(x2-x1)*x1;
+		for (int i=0; i < pedestrianList.size(); i++) {
+			Pedestrian pedestrian = pedestrianList.get(i);
+			//check if it is in bounding box
+			if(pedestrian.getPosition().x > Math.min(x1, x2)-pedestrian.getBounceRadius()&&
+			   pedestrian.getPosition().x < Math.max(x1, x2)+pedestrian.getBounceRadius()&&
+			   pedestrian.getPosition().y > Math.min(y1, y2)-pedestrian.getBounceRadius()&&
+			   pedestrian.getPosition().y < Math.max(y1, y2)+pedestrian.getBounceRadius()){
+				//System.out.println("in bounding box");
+				//TODO: distance calculation does not work properly
+				//use hesse'sche normal form to calculate distance from pedestrian to line
+				//float dist = (float)((a*pedestrian.getPosition().x+b*pedestrian.getPosition().y+c)/
+				//				Math.sqrt(a*a+b*b));
+				//System.out.println("distance: "+dist);
+				//if(pedestrian.getBounceRadius() > dist){
+					//System.out.println("hit pedestrian");
+					pedestrian.bounce(x1, y1, x2, y2, time);
+				//}
+			}
+		}
+	}
 	/**
 	 * updates level-objects states, such as timing or pedestrians
 	 */

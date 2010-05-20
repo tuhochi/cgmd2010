@@ -34,14 +34,24 @@ public class Pedestrian implements Target{
 	private float angle;
 	private Target target;
 	private Vector2 temp;
+	private Vector2 bounceVector;
 	private Random rand;
+	private float bounceRadius;
+	private float bounceStrength = 0.001f;
+	private float maxBounceVectorLength = 1.0f;
 	/**
 	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
 	 * @param gl
 	 * @param context
 	 */
 	public Pedestrian(GL10 gl, Context context) {
-		this( 30.0f,10.0f,0.01f, 2.0f, gl, context);
+		this( 30.0f,10.0f,10.0f,0.01f, 2.0f, gl, context);
+	}
+	public float getBounceRadius() {
+		return bounceRadius;
+	}
+	public void setBounceRadius(float bounceRadius) {
+		this.bounceRadius = bounceRadius;
 	}
 	/**
 	 * contructor with additional parameters
@@ -52,8 +62,9 @@ public class Pedestrian implements Target{
 	 * @param gl
 	 * @param context
 	 */
-	public Pedestrian(float attractionRadius, float fightingRadius, float moveSpeed, float grabSpeed, GL10 gl, Context context) {
+	public Pedestrian(float attractionRadius, float fightingRadius, float bounceRadius, float moveSpeed, float grabSpeed, GL10 gl, Context context) {
 		this.attractionRadius = attractionRadius;
+		this.bounceRadius = bounceRadius;
 		this.grabSpeed = grabSpeed;
 		this.fightingRadius = fightingRadius;
 		this.moveSpeed = moveSpeed;
@@ -70,6 +81,7 @@ public class Pedestrian implements Target{
 		this.target = null;
 		this.setColors();
 		this.temp = new Vector2();
+		this.bounceVector = new Vector2();
 	}
 	/**
 	 * generates the color of the pedestrian randomly
@@ -147,47 +159,61 @@ public class Pedestrian implements Target{
 	 * @param time
 	 */
 	public void update(float time, float deltaTime) {
-		if(target != null){//target exists
-			if(target instanceof Pedestrian){
-				legs.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
-				arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
-			}else{
-				if(((Treasure)target).getValue() <= 0){
-					target = null;
-					return;
-				}
-				this.temp.set(this.position.x, this.position.y);
-				this.temp.subThisFrom(target.getPosition());
-				if(this.temp.length()>10.0f){//move to target
-					this.position.add(temp.normalize()
-						.mult(this.moveSpeed*deltaTime*2.0f));
-					legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
-					arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
-				}else{//near enough to target, so grab treasure
-					legs.update(position, angle, 0.0f);
+		if(bounceVector.length()>0.01){
+			bounceVector.mult((float)(1/Math.pow((1+deltaTime),2)));
+			position.add(bounceVector);
+			legs.update(position, angle, 0.0f);
+			arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
+			torso.update(position, angle);
+			head.update(position, angle);
+			hair.update(position, angle);
+			
+		}else{
+			if(target != null){//target exists
+				if(target instanceof Pedestrian){
+					legs.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
 					arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
-					((Treasure)target).grabValue(this.grabSpeed*deltaTime);
+				}else{
+					if(((Treasure)target).getValue() <= 0){
+						target = null;
+						return;
+					}
+					this.temp.set(this.position.x, this.position.y);
+					this.temp.subThisFrom(target.getPosition());
+					if(this.temp.length()>10.0f){//move to target
+						this.position.add(temp.normalize()
+							.mult(this.moveSpeed*deltaTime*2.0f));
+						legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+						arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+					}else{//near enough to target, so grab treasure
+						legs.update(position, angle, 0.0f);
+						arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
+						((Treasure)target).grabValue(this.grabSpeed*deltaTime);
+					}
 				}
+				torso.update(position, angle);
+				head.update(position, angle);
+				hair.update(position, angle);
+			}else{//no target
+				this.temp.set((float)Math.cos(angle/180*Math.PI)*deltaTime*moveSpeed, (float)Math.sin(angle/180*Math.PI)*deltaTime*moveSpeed);
+				position.add(this.temp);
+				if(this.position.x > Level.sizeX)
+					angle = 180;
+				else if(this.position.x < 0)
+					angle = 0;
+				else if(this.position.y > Level.sizeY)
+					angle = 270;
+				else if(this.position.y < 0)
+					angle = 90;
+				else 
+					angle += rand.nextGaussian()*100.0f*deltaTime;
+				legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+				arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
+				torso.update(position, angle);
+				head.update(position, angle);
+				hair.update(position, angle);
 			}
-		}else{//no target
-			this.temp.set((float)Math.cos(angle/180*Math.PI)*deltaTime*moveSpeed, (float)Math.sin(angle/180*Math.PI)*deltaTime*moveSpeed);
-			position.add(this.temp);
-			if(this.position.x > Level.sizeX)
-				angle = 180;
-			else if(this.position.x < 0)
-				angle = 0;
-			else if(this.position.y > Level.sizeY)
-				angle = 270;
-			else if(this.position.y < 0)
-				angle = 90;
-			else 
-				angle += rand.nextGaussian()*100.0f*deltaTime;
-			legs.update(position, angle, (float)(Math.sin(time*moveSpeed)));
-			arms.update(position, angle, (float)(Math.sin(time*moveSpeed)));
 		}
-		torso.update(position, angle);
-		head.update(position, angle);
-		hair.update(position, angle);
 	}
 	/**
 	 * sets position to pos in level
@@ -252,5 +278,14 @@ public class Pedestrian implements Target{
 	 */
 	public Target getTarget(){
 		return this.target;
+	}
+	public void bounce(float x1, float y1, float x2, float y2, float time){
+		this.bounceVector.x += x1-x2;
+		this.bounceVector.y += y1-y2;
+		this.bounceVector.mult(bounceStrength/time);
+		if(this.bounceVector.length() > this.maxBounceVectorLength)
+			this.bounceVector.normalize().mult(this.maxBounceVectorLength);
+		target = null;
+		System.out.println("bounceVector: "+bounceVector);
 	}
 }
