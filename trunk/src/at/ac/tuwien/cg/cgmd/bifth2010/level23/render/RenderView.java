@@ -24,7 +24,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.PersistentSettings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Serializer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
@@ -200,9 +199,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         decorationManager = DecorationManager.instance;
         
         balloonHeight=0;   
-        
-        
-        
+
         hud = new Hud();
 		mainChar = new MainChar();
 		background = new Background();
@@ -656,6 +653,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			mainChar.writeToStream(dos); 
 			background.writeToStream(dos); 
 			obstacleManager.writeToStream(dos); 
+			decorationManager.writeToStream(dos);
 			
 		} catch (Exception e) {
 			System.out.println("Error writing to stream in RenderView: "+e.getMessage());
@@ -702,6 +700,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			mainChar.readFromStream(dis); 
 			background.readFromStream(dis); 
 			obstacleManager.readFromStream(dis); 
+			decorationManager.readFromStream(dis);
 			
 		} catch (Exception e) {
 			System.out.println("Error reading from stream in RenderView.java: "+e.getMessage()); 

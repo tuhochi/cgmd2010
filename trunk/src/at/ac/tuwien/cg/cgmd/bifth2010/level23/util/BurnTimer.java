@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
+import android.widget.ProgressBar;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Hud;
 
 /**
@@ -11,6 +13,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Hud;
  */
 public class BurnTimer extends TimingTask 
 {
+	class ProgressHandle implements Runnable{
+		  
+    	@Override
+        public void run() {
+            LevelActivity.instance.boostProgress.setProgress(((int)(remainingTime*100/time)));
+        }
+    };
+    
 	/** The serialization id. */
 	private static final long serialVersionUID = 4717448091564254143L;
 	/** The time when the timer should trigger. */
@@ -20,6 +30,9 @@ public class BurnTimer extends TimingTask
 	/** The id of the associated audio player. */
 	private int audioPlayerId;
 	
+	private ProgressHandle progressHandle;
+	private ProgressVisibilityHandle progressVisibilityHandle;
+	
 	/**
 	 * Default Constructor
 	 * @param audioPlayerId the id of the MediaPlayer which will be stopped by the timer
@@ -27,6 +40,9 @@ public class BurnTimer extends TimingTask
 	public BurnTimer(int audioPlayerId)
 	{
 		this.audioPlayerId = audioPlayerId;
+		progressHandle = new ProgressHandle();
+		progressVisibilityHandle = new ProgressVisibilityHandle();
+		progressVisibilityHandle.visibility = ProgressBar.INVISIBLE;
 	}
 	
 	/**
@@ -39,6 +55,7 @@ public class BurnTimer extends TimingTask
 		isDead = true;
 		remainingTime = time;
 		SoundManager.instance.pausePlayer(audioPlayerId);
+		LevelActivity.handler.post(progressVisibilityHandle);
 	}
 
 	/* (non-Javadoc)
@@ -47,7 +64,7 @@ public class BurnTimer extends TimingTask
 	@Override
 	public void update(float dt) {
 		remainingTime -= dt;
-		Hud.instance.burnProgress = remainingTime/time;
+		LevelActivity.handler.post(progressHandle);
 		if (remainingTime <= 0)
 			run();
 	}

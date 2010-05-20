@@ -1,10 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -31,8 +29,6 @@ public class PersistentSettings {
 	/** The OFF string. */
 	public static String OFF = "OFF"; 
 	
-	/** The root file to write to. */
-	private File file; 
 	/** The FileOutputStream to write the properties to . */
 	private FileOutputStream fos;  
 	/** The FileInputStream to read the properties from */

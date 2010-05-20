@@ -4,10 +4,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.ProgressBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.BurnTimer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ProgressVisibilityHandle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
@@ -38,9 +39,9 @@ public class Hud
 	
 	private int boostAudioId;
 	
-	private ProgressBar progressBar;
-	
 	public float burnProgress = 1;
+	
+	private ProgressVisibilityHandle progressVisibilityHandle;
 	
 	/**
 	 * Instantiates a new hud, including the buttons and the timer for boost operation.
@@ -50,6 +51,8 @@ public class Hud
 		init();
 		boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
 		burnTimer = new BurnTimer(boostAudioId);
+		progressVisibilityHandle = new ProgressVisibilityHandle();
+		progressVisibilityHandle.visibility = android.widget.ProgressBar.VISIBLE;
 		instance=this;
 	}
 	
@@ -60,13 +63,10 @@ public class Hud
 	{
 		float topBounds = RenderView.instance.getTopBounds();
 		float rightBounds = RenderView.instance.getRightBounds();
-		float aspectRatio = RenderView.instance.getAspectRatio();
 		goldButton = new Button(15, 15, new Vector2(5,(topBounds-15)/2));
 		moneyButton = new Button(15, 15, new Vector2(rightBounds-20,(topBounds-15)/2));
-		progressBar = new ProgressBar();
 		moneyButton.preprocess();
 		goldButton.preprocess();
-		progressBar.preprocess();
 		timeUtil = TimeUtil.instance;
 	}
 	
@@ -125,6 +125,7 @@ public class Hud
 			Settings.BALLOON_SPEED += Settings.BURN_BOOST;
 			timeUtil.scheduleTimer(burnTimer);
 			SoundManager.instance.startPlayer(boostAudioId);
+			LevelActivity.handler.post(progressVisibilityHandle);
 			return true;
 		}
 		
@@ -136,8 +137,6 @@ public class Hud
 	 */
 	public void render()
 	{
-		if(!moneyButton.isActive())
-			progressBar.render(burnProgress);
 		goldButton.render();
 		moneyButton.render();
 	}
