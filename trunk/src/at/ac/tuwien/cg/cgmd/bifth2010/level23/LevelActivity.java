@@ -93,21 +93,18 @@ public class LevelActivity extends Activity implements OrientationListener {
 		scoreText = (TextView)findViewById(R.id.l23_TextViewScore);
 		
         CONTEXT = this; 
-            
- 
-      
- 
+
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         
         instance = this;
 
-		
 		  // only register the listener if there is no entry or the entry is ON in the properties for this level
-        if (PersistentSettings.instance.getValue(PersistentSettings.ORIENTATION_SENSOR) == PersistentSettings.ON ||
-      	!PersistentSettings.instance.containsKey(PersistentSettings.ORIENTATION_SENSOR))
+        if (PersistentSettings.instance.getValue(PersistentSettings.ORIENTATION_SENSOR).equals(PersistentSettings.ON))
+        {
       		OrientationManager.registerListener(this);
-      
-      
+      		renderer.setUseSensor(true);
+        }
+            
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());
@@ -188,6 +185,8 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void onDestroy() {
 		super.onDestroy();	
 		SoundManager.instance.releaseAudioResources();
+		PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, renderer.isUseSensor()?PersistentSettings.ON:PersistentSettings.OFF);
+		PersistentSettings.instance.saveToDisk();
 		if (OrientationManager.isListening()) 
 			OrientationManager.unregisterListener(this);
 	}
@@ -289,7 +288,14 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		menu.add(0, SENSOR_MENU_ITEM, 0, "Turn on Sensor");
+		if(!renderer.isUseSensor())
+		{
+			menu.add(0, SENSOR_MENU_ITEM, 0, "Turn on Sensor");
+		}
+		else
+		{
+			menu.add(0, SENSOR_MENU_ITEM, 0, "Turn Sensor off");
+		}
 	    return true;
 	}
 	
@@ -305,7 +311,6 @@ public class LevelActivity extends Activity implements OrientationListener {
 	    	
 	    	if(renderer.isUseSensor())
 	    	{
-	    		
 	    		item.setTitle("Turn on Sensor");
 	    		Toast.makeText(this, "Orientation Sensor is now off", Toast.LENGTH_SHORT).show();
 	    	}
