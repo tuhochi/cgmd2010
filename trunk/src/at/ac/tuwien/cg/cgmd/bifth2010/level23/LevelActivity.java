@@ -305,18 +305,17 @@ public class LevelActivity extends Activity implements OrientationListener {
 	    	
 	    	if(renderer.isUseSensor())
 	    	{
-	    		PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.OFF);
+	    		
 	    		item.setTitle("Turn on Sensor");
 	    		Toast.makeText(this, "Orientation Sensor is now off", Toast.LENGTH_SHORT).show();
 	    	}
 	    	else
 	    	{
-	    		PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.ON);
+	    		
 	    		item.setTitle("Turn off Sensor");
 	    		Toast.makeText(this, "Orientation Sensor is now on", Toast.LENGTH_SHORT).show();
 	    	}
 	        renderer.switchSensor();
-	        PersistentSettings.instance.saveToDisk();
 	        return true;
 
 	    }

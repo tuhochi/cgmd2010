@@ -24,6 +24,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.PersistentSettings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Serializer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
@@ -469,10 +470,15 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void switchSensor()
 	{
 		useSensor = !useSensor; 
-		if (useSensor)
+		if (useSensor) {
 			OrientationManager.registerListener(orientationListener);
-		else
+			PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.ON);
+		} else {
 			OrientationManager.unregisterListener(orientationListener);
+			PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.OFF);
+		}
+		
+		PersistentSettings.instance.saveToDisk();
 	}
 	
 	/**

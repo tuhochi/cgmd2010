@@ -76,6 +76,7 @@ public class PersistentSettings {
 //			out = new BufferedWriter(fileWriter);
 //			out.write("");
 //			out.close();
+			fos = LevelActivity.instance.openFileOutput(filename, Context.MODE_PRIVATE);
 			properties.store(fos, "no comment");
 			fos.close();
 			
@@ -92,12 +93,13 @@ public class PersistentSettings {
 	 */
 	public void readFromDisk() {
 	try {
-		fis = LevelActivity.instance.openFileInput(file.getName());
+		fis = LevelActivity.instance.openFileInput(filename);
 		properties.load(fis);
 		fis.close();
 		
 	} catch (IOException e) {
 		Log.e("PersistentSettings", "Fehler beim Lesen von der SD Karte!"+e.getStackTrace());
+		e.printStackTrace();
 	} catch (Throwable t) {
 		Log.e("PersistentSettings", "Unbekannter Fehler beim Lesen von der SD Karte!\n"+t.getStackTrace());
 	}
@@ -112,6 +114,7 @@ public class PersistentSettings {
 	 */
 	public String getValue(String key) {
 		
+		Log.v(key, "Wert ist: "+properties.getProperty(key, ""));
 		return properties.getProperty(key, "");
 	}
 	
@@ -143,6 +146,7 @@ public class PersistentSettings {
 	 */
 	public void saveProperty(String key, String value) {
 		properties.setProperty(key, value);
+		Log.v(key, "Wert wird gespeichert: "+key+"/"+value);
 	}
 	
 	/**
