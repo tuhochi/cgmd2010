@@ -9,7 +9,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.TexturePart;
 
 /**
- * The Class TextureAtlas implements the managment of texturecoordinates.
+ * The Class TextureAtlas implements the management of texturecoordinates.
  * @author Markus Ernst
  * @author Florian Felberbauer
  */
