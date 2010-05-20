@@ -51,6 +51,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	private boolean mPause = true;
 
 	private Quad mBackground;
+	private float mBGScale = 0.75f;
 	
 	private Bundle mSavedInstance;
 	
@@ -132,6 +133,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 		Vector3 targetPos = Vector3.add(viewPos, mLookDirection);
 		GLU.gluLookAt(trackGl, viewPos.x, viewPos.y, viewPos.z, targetPos.x, targetPos.y, targetPos.z, mUp.x, mUp.y, mUp.z);
     	GLManager.getInstance().getTextures().setTexture(R.drawable.l17_bg);
+    	gl.glScalef(mBGScale, mBGScale, mBGScale);
     	mBackground.draw(gl);
     	gl.glPopMatrix();
     	gl.glDepthMask(true);
