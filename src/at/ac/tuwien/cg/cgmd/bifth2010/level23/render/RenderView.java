@@ -122,7 +122,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private OrientationListener orientationListener; 
 	
 	/** The boolean indicating if orientation sensor is used or not. */
-	private boolean useSensor = false;
+	public boolean useSensor = false;
 	
 	/** The main characters movement direction. */
 	private int mainCharMoveDir;
@@ -472,13 +472,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		useSensor = !useSensor; 
 		if (useSensor) {
 			OrientationManager.registerListener(orientationListener);
-			PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.ON);
 		} else {
 			OrientationManager.unregisterListener(orientationListener);
-			PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.OFF);
 		}
-		
-		PersistentSettings.instance.saveToDisk();
 	}
 	
 	/**

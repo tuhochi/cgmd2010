@@ -53,16 +53,12 @@ public class PersistentSettings {
 				filename = "lvl23Properties";
 				fos = LevelActivity.instance.openFileOutput(filename, Context.MODE_PRIVATE);
 				// reading properties from FileInputStream here 
-				fis = LevelActivity.instance.openFileInput(filename);
-				properties.load(fis);
-				fis.close();
+				readFromDisk();
 				
 					
 					
 		} catch(FileNotFoundException f) {
 			Log.e("PersistentSettings", "File not Found: "+filename+"\n"+f.getStackTrace());
-		} catch(IOException e) {
-			Log.e("PersistentSettings", "Error im Konstruktor beim initialisieren!"+e.getStackTrace());
 		} catch(Throwable t) {
 			Log.e("PersistentSettings", "Unbekannter Fehler im Konstruktor"+t.getStackTrace());
 		}
