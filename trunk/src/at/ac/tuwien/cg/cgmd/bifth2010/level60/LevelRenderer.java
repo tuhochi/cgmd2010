@@ -9,6 +9,7 @@ import java.util.Iterator;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -19,7 +20,7 @@ public class LevelRenderer implements Renderer {
 	private GL10 gl;
 	
 	private boolean[] keystates = new boolean[4];
-	private int score;
+	private int score = 100;
 	private int crime = 0;  //TODO: change value when crime committed
 	private int screenWidth;
 	private int screenHeight; 
@@ -58,6 +59,7 @@ public class LevelRenderer implements Renderer {
 	private final static String MAP_OFFSET_X = "MAP_OFFSET_X";
 	private final static String MAP_OFFSET_Y = "MAP_OFFSET_Y";
 	private final static String SCORE = "SCORE";
+	private final static String CRIME = "CRIME";
 	
 	private ArrayList<Tablet> actiontextures;
 		
@@ -149,18 +151,13 @@ public class LevelRenderer implements Renderer {
 		}
 		
 		if (!proximity) {
-			float offset_x = mapOffset_x;
-			float offset_y = mapOffset_y;
 			switch (actionMap[tile_y][tile_x]) {
 				case 1:	//spraytag action
 					// 	put spraytag tablet here
 					actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
-					Tablet.setMapOffset(offset_x, offset_y); //reset ofset cause on new Table it is set to 0
 					crime++;
 					break;
 			}
-			mapOffset_x = offset_x;
-			mapOffset_y = offset_y;
 		}
 	}
 	
@@ -241,14 +238,8 @@ public class LevelRenderer implements Renderer {
 	}
 	
 	private void bunnyWasCaught () {
-//		if (score >= 10) {
-//			score -= 10;
 			score -= crime * 10;
-			
-			if (score < 0)
-				score = 0;
 			updateScore();
-//		}
 	}
 	
 	private void handleCop() {
@@ -382,22 +373,38 @@ public class LevelRenderer implements Renderer {
 		
 		if(mSavedInstance != null)
 		{
-			if(mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y) &&
-					mSavedInstance.containsKey(COP_X) && mSavedInstance.containsKey(COP_Y))
-				bunny.setXY(mSavedInstance.getFloat(BUNNY_X), mSavedInstance.getFloat(BUNNY_Y));
-				cop.setXY(mSavedInstance.getFloat(COP_X), mSavedInstance.getFloat(COP_Y));
 			if(mSavedInstance.containsKey(MAP_OFFSET_X) && mSavedInstance.containsKey(MAP_OFFSET_Y)) {
 				mapOffset_x = mSavedInstance.getFloat(MAP_OFFSET_X);
 				mapOffset_y = mSavedInstance.getFloat(MAP_OFFSET_Y);
+				
+				Log.d("LevelRenderer", "Load mapOffsetx: " + mSavedInstance.getFloat(MAP_OFFSET_X));
+				Log.d("LevelRenderer", "Load mapOffsety: " + mSavedInstance.getFloat(MAP_OFFSET_Y));
+				
 				Tablet.addMapOffset(mapOffset_x, mapOffset_y);
 			}
-			if(mSavedInstance.containsKey(SCORE))
+			if(mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y) &&
+					mSavedInstance.containsKey(COP_X) && mSavedInstance.containsKey(COP_Y)) {
+				bunny.setXY(mSavedInstance.getFloat(BUNNY_X), mSavedInstance.getFloat(BUNNY_Y));
+				cop.setXY(mSavedInstance.getFloat(COP_X), mSavedInstance.getFloat(COP_Y));
+				
+				Log.d("LevelRenderer", "Load bunny pos: x " + mSavedInstance.getFloat(BUNNY_X) + " y " + mSavedInstance.getFloat(BUNNY_Y));
+				Log.d("LevelRenderer", "Load cop pos: x " + mSavedInstance.getFloat(COP_X) + " y " + mSavedInstance.getFloat(COP_Y));
+			}
+			if(mSavedInstance.containsKey(SCORE) && mSavedInstance.containsKey(CRIME))
+			{
 				score = mSavedInstance.getInt(SCORE);
+				crime = mSavedInstance.getInt(CRIME);
+				
+				Log.d("LevelRenderer", "Load score: " + score);
+				Log.d("LevelRenderer", "Load crime: " + crime);
+			}
 			updateScore();
 			moveScore(mapOffset_x, mapOffset_y);
 		}
 		else {
 			score = 100;
+			mapOffset_x = mapOffset_y = 0;
+			Tablet.setMapOffset(mapOffset_x, mapOffset_y);
 		}
 	}
 	
@@ -413,7 +420,15 @@ public class LevelRenderer implements Renderer {
 		outState.putFloat(COP_X, cop.getX());
 		outState.putFloat(MAP_OFFSET_X, -mapOffset_x);
 		outState.putFloat(MAP_OFFSET_Y, -mapOffset_y);
-		outState.putFloat(SCORE, score);
+		outState.putInt(SCORE, score);
+		outState.putInt(CRIME, crime);
+		
+		Log.d("LevelRenderer", "Save bunny pos: x " + bunny.getX() + " y " + bunny.getY());
+		Log.d("LevelRenderer", "Save cop pos: x " + cop.getX() + " y " + cop.getY());
+		Log.d("LevelRenderer", "Save mapOffsetx: " + (-mapOffset_x));
+		Log.d("LevelRenderer", "Save mapOffsety: " + (-mapOffset_y));
+		Log.d("LevelRenderer", "Save score: " + score);
+		Log.d("LevelRenderer", "Save crime: " + crime);
 	}
 	
 	private void updateScore () {
@@ -429,8 +444,8 @@ public class LevelRenderer implements Renderer {
 	}
 	
 	private void moveScore(float x, float y) {
-		gold.move(x, y);
 		goldOffsetX += x;
 		goldOffsetY += y;
+		gold.move(x, y);
 	}
 }

@@ -43,8 +43,8 @@ public class Tablet {
 	private int rotation_angle;
 	private float scale_x;
 	private float scale_y;
-	private static float mapOffset_x;
-	private static float mapOffset_y;
+	private static float mapOffset_x = 0;
+	private static float mapOffset_y = 0;
 	
 //	Bitmap bmp;
 //	ByteBuffer bb;
@@ -52,7 +52,7 @@ public class Tablet {
 	public Tablet(Context context, int width, int height, int x, int y, int texture, GL10 gl) {
 		this.context = context;
 		
-		mapOffset_x = mapOffset_y = 0;
+//		mapOffset_x = mapOffset_y = 0;
 		
 		vertices[1] = height;
 		vertices[6] = width;
