@@ -12,6 +12,7 @@ public class GameView extends GLSurfaceView {
     private float _x = 0;
     private float _y = 0;
     private float _value = 0.0f;
+    private boolean isBouncing = false;
     public GameView(Context context, Vector2 resolution) {
         super(context);
         _renderer = new GameRenderer(context, resolution);
@@ -34,26 +35,43 @@ public class GameView extends GLSurfaceView {
         }
         
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
-
-            queueEvent(new Runnable() {
+        	float x = event.getX();
+        	float y = event.getY();
+        	float time = (System.currentTimeMillis()-this.touchedTime)/1000.0f;
+        	System.out.println("time: "+time);
+        	System.out.println("deltaX: "+Math.abs(_x-x));
+        	if(Math.abs(_x-x)>time*100 || Math.abs(_y-y)>time*100){
+        		//System.out.println("in");
+        		isBouncing = true;
+        		((GameActivity)_renderer.context)._level.bouncePedestrians(x, Level.sizeY-y, _x, Level.sizeY-_y, time);
+                _x = x;
+                _y = y;
+                this.touchedTime = System.currentTimeMillis();
+        	}
+            /*queueEvent(new Runnable() {
                 public void run() {
             
                 }
-            });
+            });*/
         }
         
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            _x = event.getX();
-            _y = event.getY();
-            _value = (System.currentTimeMillis()-this.touchedTime)/100.0f;
-        	((GameActivity)_renderer.context)._level.
-        	addTreasure(new Treasure(_value,
-        			new Vector2(_x/_renderer._width*Level.sizeX,
-        			Level.sizeY-(_y/_renderer._height*Level.sizeY))));
-
-
-        	((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
-        	
+        	//System.out.println("time: "+time);
+        	//System.out.println("deltaX: "+Math.abs(_x-x));
+        	if(!isBouncing){
+                _x = event.getX();
+                _y = event.getY();
+	            _value = (System.currentTimeMillis()-this.touchedTime)/100.0f;
+	        	((GameActivity)_renderer.context)._level.
+	        	addTreasure(new Treasure(_value,
+	        			new Vector2(_x/_renderer._width*Level.sizeX,
+	        			Level.sizeY-(_y/_renderer._height*Level.sizeY))));
+	
+	
+	        	((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
+        	}else{
+        		isBouncing = false;
+        	}
         }
         return true;
     }

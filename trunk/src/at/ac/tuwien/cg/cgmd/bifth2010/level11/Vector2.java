@@ -96,4 +96,7 @@ public class Vector2 {
 		vec.set(this.x, this.y);
 		return vec;
 	}
+	public String toString(){
+		return "x: "+x+"; y: "+y+"; ";
+	}
 }
