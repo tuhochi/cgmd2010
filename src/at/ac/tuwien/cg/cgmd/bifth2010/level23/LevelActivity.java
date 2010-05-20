@@ -25,6 +25,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.PersistentSettings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 
 /**
@@ -92,16 +93,25 @@ public class LevelActivity extends Activity implements OrientationListener {
 		scoreText = (TextView)findViewById(R.id.l23_TextViewScore);
 		
         CONTEXT = this; 
-                        		
-        OrientationManager.registerListener(this);
+            
+ 
+      
  
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         
         instance = this;
-        
+
+		
+		  // only register the listener if there is no entry or the entry is ON in the properties for this level
+        if (PersistentSettings.instance.getValue(PersistentSettings.ORIENTATION_SENSOR) == PersistentSettings.ON ||
+      	!PersistentSettings.instance.containsKey(PersistentSettings.ORIENTATION_SENSOR))
+      		OrientationManager.registerListener(this);
+      
+      
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());
+		
 	}
 	
 	/**
@@ -292,18 +302,21 @@ public class LevelActivity extends Activity implements OrientationListener {
 	    switch (item.getItemId()) 
 	    {
 	    case SENSOR_MENU_ITEM:
+	    	
 	    	if(renderer.isUseSensor())
 	    	{
+	    		PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.OFF);
 	    		item.setTitle("Turn on Sensor");
 	    		Toast.makeText(this, "Orientation Sensor is now off", Toast.LENGTH_SHORT).show();
 	    	}
 	    	else
 	    	{
+	    		PersistentSettings.instance.saveProperty(PersistentSettings.ORIENTATION_SENSOR, PersistentSettings.ON);
 	    		item.setTitle("Turn off Sensor");
 	    		Toast.makeText(this, "Orientation Sensor is now on", Toast.LENGTH_SHORT).show();
 	    	}
 	        renderer.switchSensor();
-	        
+	        PersistentSettings.instance.saveToDisk();
 	        return true;
 
 	    }
