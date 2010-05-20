@@ -175,13 +175,17 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	{
 		super(context, attr);
 		instance=this;
-		
+
 		this.context = (LevelActivity)context; 
 		
 		setRenderer(this); 
         setFocusable(true);
         requestFocus();
         
+        Display display = this.context.getWindowManager().getDefaultDisplay();
+		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
+		topBounds = rightBounds*aspectRatio;
+		
         timer = TimeUtil.instance;
         textureManager = TextureManager.instance;
         serializer = Serializer.getInstance();
@@ -197,9 +201,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         
         balloonHeight=0;   
         
-        Display display = this.context.getWindowManager().getDefaultDisplay();
-		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
-		topBounds = rightBounds*aspectRatio;
+        
         
         hud = new Hud();
 		mainChar = new MainChar();
@@ -268,8 +270,23 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		switch(gameState)
 		{
 			case INTRO:
+				
+				TextureAtlas.instance.bindAtlasBgTexture();
+				background.render();
+				
+				TextureAtlas.instance.bindAtlasTexture();
+				
+				decorationManager.renderMountains();
+				decorationManager.renderTree();
+				
+				obstacleManager.renderVisibleObstacles(balloonHeight);
+				hud.render();
+				mainChar.render();
+				decorationManager.renderForegroundClouds(false);
 				if(cutScenes.renderIntroScene(dt))
+				{
 					gameState=INGAME;
+				}
 				break;
 			case INGAME:	
 				if (!released)
@@ -293,10 +310,15 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				
 				mainChar.update(dt,mainCharMoveDir);
 				background.update(dt);
+				decorationManager.update(dt);
 				
 				TextureAtlas.instance.bindAtlasBgTexture();
 				background.render();
+				
 				TextureAtlas.instance.bindAtlasTexture();
+				
+				decorationManager.renderMountains();
+				decorationManager.renderTree();
 				
 				obstacleManager.renderVisibleObstacles(balloonHeight);
 				hud.render();
@@ -307,6 +329,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				TextureAtlas.instance.bindAtlasBgTexture();
 				background.render();
 				TextureAtlas.instance.bindAtlasTexture();
+				
+				decorationManager.renderMountains();
+				decorationManager.renderTree();
+				
 				mainChar.renderGameOver(dt);
 				obstacleManager.renderVisibleObstacles((int)balloonHeight);
 				decorationManager.renderForegroundClouds(true);
