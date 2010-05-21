@@ -22,15 +22,13 @@ public class ModelGem extends Model {
 	/** width of the gem **/
 	float width = 1.0f;
 	/** starting position where gem begins to fall **/
-	private final float gemStartpos = -2f; 
-	private float gemPos = gemStartpos;
+	private final float startPosZ = -2f; 
+	private float posZ = startPosZ;
 	/** fall speed of the gem **/
 	private float fallSpeed = 0.0f;
 	
 	/** flag, if gem is falling or not **/
 	private boolean isFalling = false;
-	/** flag, if gem is visible or not **/
-	private boolean isVisible = false;
 	
 	/** z position of the street **/
 	private float streetPosZ;
@@ -89,13 +87,8 @@ public class ModelGem extends Model {
 	 * reset gem position
 	 */
 	public void resetPosition() {
-		gemPos = gemStartpos;
+		posZ = startPosZ;
 		fallSpeed = 0;
-	}
-	
-	public void setVisible(boolean v) {
-		this.isVisible = v;
-		resetPosition();
 	}
 	
 	public boolean isFalling() {
@@ -113,7 +106,6 @@ public class ModelGem extends Model {
 	 * end fall animation
 	 */
 	public void endFall() {
-		this.isVisible = false;
 		this.isFalling = false;
 		resetPosition();
 	}
@@ -123,7 +115,7 @@ public class ModelGem extends Model {
 	 * @return collision: true/false
 	 */
 	public boolean checkFallCollision()	{
-		return gemPos < streetPosZ;
+		return posZ < streetPosZ;
 	}
 
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
@@ -176,12 +168,12 @@ public class ModelGem extends Model {
 	 *
 	 * Update the model's transformations.
 	 */
-	public void update(GL10 gl, double deltaTime, float streetPos, float deviceRotation, ProgressManager progman) {
+	public void update(double deltaTime, float streetPos, float deviceRotation, ProgressManager progman) {
 		
 		if (this.isFalling) {
 			if (!checkFallCollision()) {
 				fallSpeed += 5f * deltaTime;
-				gemPos -= fallSpeed;
+				posZ -= fallSpeed;
 			}
 			else {
 				checkCollisionType(streetPos, deviceRotation, progman);
@@ -195,11 +187,9 @@ public class ModelGem extends Model {
 	 * Draw the gem if it was chosen and is falling
 	 */
 	public void draw(GL10 gl) {
-
-		//mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
-		if (this.isVisible) {
+		if (this.isFalling) {
 			gl.glPushMatrix();
-			gl.glTranslatef(0, 0, gemPos);
+			gl.glTranslatef(0, 0, posZ);
 			gl.glMultMatrixf(mTrans.toFloatArray(), 0);
 			
 			super.draw(gl);

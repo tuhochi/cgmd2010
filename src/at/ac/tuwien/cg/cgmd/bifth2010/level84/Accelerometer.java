@@ -19,7 +19,7 @@ public class Accelerometer extends OrientationEventListener{
 	private float sum = 0;
 	private int filterIndex = 0;
 	
-	private float orientation = -180.0f;
+	private float orientation = 360.0f;
 	private boolean isOrientationAvailable;
 	
 	public Accelerometer (Context context) {
