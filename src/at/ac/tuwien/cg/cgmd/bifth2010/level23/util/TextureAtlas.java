@@ -129,7 +129,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getCowTextur()
 	{
-		return generateTexturePart(new Vector2(896+0.5f,512), new Vector2(896+128,512+128));
+		return generateTexturePart(new Vector2(256,256), new Vector2(256+256,256+192));
 	}
 	
 	/**
@@ -147,7 +147,16 @@ public class TextureAtlas
 	 */
 	public TexturePart getBoostButtonTextur()
 	{
-		return generateTexturePart(new Vector2(768,544), new Vector2(768+64,544+64));
+		return generateTexturePart(new Vector2(768,512), new Vector2(768+128,512+128));
+	}
+	
+	/**
+	 * Returns the part of the texture for the gold button
+	 * @return the texture part for the gold button
+	 */
+	public TexturePart getGoldButtonTextur()
+	{
+		return generateTexturePart(new Vector2(768,768), new Vector2(768+128,768+128));
 	}
 	
 	/**

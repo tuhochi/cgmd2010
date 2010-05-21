@@ -75,20 +75,20 @@ public class ObstacleManager
 	
 	//in numbers per 100, must sum up to 10
 	/** The probability for obstacle type 1. */
-	public final static int TYPE1_PROB = 10;
+	public final static int TYPE1_PROB = 25;
 	
 	/** The probability for obstacle type 2. */
-	public final static int TYPE2_PROB = 10;
+	public final static int TYPE2_PROB = 25;
 	
 	/** The probability for obstacle type 3. */
-	public final static int TYPE3_PROB = 40;
+	public final static int TYPE3_PROB = 25;
 	
 	/** The probability for obstacle type 4. */
-	public final static int TYPE4_PROB = 40;
+	public final static int TYPE4_PROB = 25;
 
 	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
 	/** The Constant HORIZONTAL_SPACING to define the horizontal spacing between obstacles. */
-	public final static int HORIZONTAL_SPACING = 200;
+	public final static float HORIZONTAL_SPACING = 60*RenderView.instance.getAspectRatio();
 	
 	public int finishPosition;
 	
@@ -212,7 +212,7 @@ public class ObstacleManager
 		for(int i=0; i < NR_OF_OBSTACLES-1;i++)
 		{
 			obstacles.add(new Obstacle(currentPosition, selectRandomType()));
-			currentPosition += HORIZONTAL_SPACING;
+			currentPosition += randomGenerator.nextInt((int)(50f*RenderView.instance.getAspectRatio())) + HORIZONTAL_SPACING;
 		}
 		
 		obstacles.add(new Obstacle(currentPosition, OBSTACLE_TYPE_FINISH));
@@ -308,13 +308,13 @@ public class ObstacleManager
 		vertexBuffers = new FloatBuffer[5];
 		vboIDs = new int[5];
 		textures = new TexturePart[5];
-		
+		float aspectRatio = RenderView.instance.getAspectRatio();
 		//wird noch umgebaut nur für testzwecke hier hardcoded
-		vertexBuffers[0] = geometryManager.createVertexBufferQuad(100f, 5f);
-		vertexBuffers[1] = geometryManager.createVertexBufferQuad(40f, 30f);
-		vertexBuffers[2] = geometryManager.createVertexBufferQuad(20f, 20f);
-		vertexBuffers[3] = geometryManager.createVertexBufferQuad(36f,72f);
-		vertexBuffers[4] = geometryManager.createVertexBufferQuad(25f, 50f);
+		vertexBuffers[0] = geometryManager.createVertexBufferQuad(100f, 5f*aspectRatio);
+		vertexBuffers[1] = geometryManager.createVertexBufferQuad(25f*aspectRatio, 25f*aspectRatio/1.333f);
+		vertexBuffers[2] = geometryManager.createVertexBufferQuad(15f*aspectRatio, 15f*aspectRatio);
+		vertexBuffers[3] = geometryManager.createVertexBufferQuad(35f*aspectRatio*0.5f,35f*aspectRatio);
+		vertexBuffers[4] = geometryManager.createVertexBufferQuad(20f*aspectRatio*0.5f, 20f*aspectRatio);
 		
 		textures[0] = TextureAtlas.instance.getCowTextur();
 		textures[1] = TextureAtlas.instance.getCowTextur();

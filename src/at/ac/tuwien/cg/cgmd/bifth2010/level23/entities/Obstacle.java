@@ -22,10 +22,10 @@ public class Obstacle implements Serializable
 	private static final long serialVersionUID = 8841834994514009996L;
 
 	/** The width. */
-	public int width;
+	public float width;
 	
 	/** The height. */
-	public int height;
+	public float height;
 	
 	/** The position. */
 	public Vector2 position;
@@ -55,7 +55,7 @@ public class Obstacle implements Serializable
 		virtualHeight = y;
 		this.type = type; 
 		Random randomGenerator = new Random(System.currentTimeMillis());
-		
+		float aspectRatio = RenderView.instance.getAspectRatio();
 		switch(type)
 		{
 			case(ObstacleManager.OBSTACLE_TYPE_FINISH):
@@ -64,24 +64,24 @@ public class Obstacle implements Serializable
 				height = 5;
 				return;
 			case(ObstacleManager.OBSTACLE_TYPE1):
-				width = 40;
-				height = 30;
+				width = 25f*aspectRatio;
+				height = 25f*aspectRatio/1.333f;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE2):
-				width = 20;
-				height = 20;
+				width = 15f*aspectRatio;
+				height = 15f*aspectRatio;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE3):
-				width = 36;
-				height = 72;
+				width = 35f*aspectRatio*0.5f;
+				height = 35f*aspectRatio;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE4):
-				width = 25;
-				height = 50;
+				width = 20f*aspectRatio*0.5f;
+				height = 20f*aspectRatio;
 				break;			
 		}
 		
-		position.x = randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-width);
+		position.x = randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-(int)width);
 	}
 	
 	public void update()

@@ -17,7 +17,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
-import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
 /**
@@ -63,18 +62,18 @@ public class Button
 	 * @param position describes the 2d position (x,y) of the button, where (0,0) is left bottom  
 	 * 
 	 */
-	public Button(float width, float height, Vector2 position)
+	public Button(float width, float height, Vector2 position,TexturePart texture)
 	{
 		this.width = width;
 		this.height = height;
 		this.position = position;
+		this.texture = texture;
 	}
 	
 	public void preprocess()
 	{
 		geometryManager = GeometryManager.instance; 
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
-		texture = TextureAtlas.instance.getBoostButtonTextur();
 		if(Settings.GLES11Supported) 
 		{
 			vboId = geometryManager.createVBO(vertexBuffer, texture.texCoords);
@@ -114,7 +113,7 @@ public class Button
 		{
 			glMatrixMode(GL_TEXTURE);
 			glPushMatrix();
-			glTranslatef(texture.dimension.x, 0, 0);		
+			glTranslatef(0, -texture.dimension.x, 0);		
 		}
 		
 		glMatrixMode(GL_MODELVIEW);

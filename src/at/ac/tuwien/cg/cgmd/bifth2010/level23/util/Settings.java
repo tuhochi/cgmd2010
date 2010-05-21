@@ -19,14 +19,14 @@ public class Settings
 	public static float BALLOON_SPEED = BALLOON_STARTSPEED;
 	//units per millisecond
 	/** The Constant MOVE_SPEED. */
-	public static final float MOVE_SPEED = 0.125f;
+	public static final float MOVE_SPEED = 0.15f;
 	
 	/** The boolean if GLES11 is supported. */
 	public static boolean GLES11Supported = false;
 	
 	//item effects
 	/** The Constant BURN_BOOST. */
-	public static final float BURN_BOOST = 2f;
+	public static final float BURN_BOOST = 1.75f;
 	//time in milliseconds
 	/** The Constant BURN_BOOST_TIME. */
 	public static final long BURN_BOOST_TIME = 2500;
@@ -35,7 +35,7 @@ public class Settings
 	public static final long GOLD_BOOST_TIME = 3000;
 	
 	/** The Constant GOLD_BOOST. */
-	public static final float GOLD_BOOST = 1.5f;
+	public static final float GOLD_BOOST = 1.2f;
 
 	/** The MainChar width. (will be multiplied by aspect ratio) */
 	public static final float MAINCHAR_WIDTH = 25f;
