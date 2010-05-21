@@ -37,7 +37,6 @@ public class RenderManager implements Renderer {
 	private SoundManager soundman;
 	private Toast toast;
 	
-	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
 		@Override

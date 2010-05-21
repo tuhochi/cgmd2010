@@ -24,16 +24,6 @@ public class ProgressManager extends SessionState {
 	private final int drainRectBreak = drainRectHit / 2;
 	private final int drainOctBreak = drainOctHit / 2;
 	
-	
-	/**
-	 * drainTypes
-	 * 0 ... closed
-	 * 1 ... round
-	 * 2 ... diamond
-	 * 3 ... rect
-	 * 4 ... oct
-	 */
-	
 	// the more difficult the figure of the gem is ...
 	// ... the more points you can lose ?!
 	
@@ -58,20 +48,19 @@ public class ProgressManager extends SessionState {
 	 * define how much money is lost dependent on the draintype
 	 * @param drainType
 	 */
-	public void loseMoneyByHit(int drainType)
-	{
+	public void loseMoneyByHit(int drainType) {
 		int value = 0;
-		switch (drainType)
-		{
-			case 0: value = drainClosedHit;
-			case 1: value = drainRoundHit;
-			case 2: value = drainDiamondHit;
-			case 3: value = drainRectHit;
-			case 4: value = drainOctHit;
+		switch (drainType) {
+			case ModelDrain.CLOSED: value = drainClosedHit; break;
+			case ModelDrain.ROUND: value = drainRoundHit; break;
+			case ModelDrain.DIAMOND: value = drainDiamondHit; break;
+			case ModelDrain.RECT: value = drainRectHit; break;
+			case ModelDrain.OCT: value = drainOctHit; break;
 		}
 		
 		actualMoney -= value;
-		if (actualMoney < 0) { actualMoney = 0; }
+		if (actualMoney < 0)
+			actualMoney = 0;
 	}
 	
 	
@@ -83,17 +72,17 @@ public class ProgressManager extends SessionState {
 	{
 		//TODO: random if gem breaks or not
 		int value = 0;
-		switch (drainType)
-		{
-			case 0: value = drainClosedBreak;
-			case 1: value = drainRoundBreak;
-			case 2: value = drainDiamondBreak;
-			case 3: value = drainRectBreak;
-			case 4: value = drainOctBreak;
+		switch (drainType) {
+			case ModelDrain.CLOSED: value = drainClosedBreak; break;
+			case ModelDrain.ROUND: value = drainRoundBreak; break;
+			case ModelDrain.DIAMOND: value = drainDiamondBreak; break;
+			case ModelDrain.RECT: value = drainRectBreak; break;
+			case ModelDrain.OCT: value = drainOctBreak; break;
 		}
 		
 		actualMoney -= value;
-		if (actualMoney < 0) { actualMoney = 0; }
+		if (actualMoney < 0) 
+			actualMoney = 0;
 	}
 	
 	public int getMoneyProgress()

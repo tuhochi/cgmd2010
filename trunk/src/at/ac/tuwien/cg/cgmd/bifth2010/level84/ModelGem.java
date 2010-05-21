@@ -21,7 +21,7 @@ public class ModelGem extends Model {
 	
 	/** width of the gem **/
 	float width = 1.0f;
-	/** starting position where gem begings to fall **/
+	/** starting position where gem begins to fall **/
 	private final float gemStartpos = -2f; 
 	private float gemPos = gemStartpos;
 	/** fall speed of the gem **/
@@ -32,8 +32,8 @@ public class ModelGem extends Model {
 	/** flag, if gem is visible or not **/
 	private boolean isVisible = false;
 	
-	/** position of the streetlevel **/
-	private float streetLevel = -10f; 	//TODO: ev. †bergabe des wertes ??
+	/** z position of the street **/
+	private float streetPosZ;
 	
 	/** soundmanager for executing soundfx **/
 	private SoundManager soundman;
@@ -44,13 +44,13 @@ public class ModelGem extends Model {
 	private long[] vibratorPattern;
 	
 	/** drainMap used for collision detection **/
-	private HashMap<Integer, ModelDrain> drainMap;
+	private HashMap<Integer, ModelDrain> drains;
 	
 	/**
 	 * Creates a new gem model.
 	 */
 	public ModelGem() {
-
+		
 		//Adjust the width of Model's quad.
 		vertices[0] = vertices[6] = -width/2.0f;
 		vertices[3] = vertices[9] = width/2.0f;
@@ -66,11 +66,13 @@ public class ModelGem extends Model {
 	 * Creates a new gem model with an initial texture resource.
 	 * @param textureResource
 	 */
-	public ModelGem(int gemType, int textureResource) {
+	public ModelGem(int gemType, int textureResource, float streetPosZ, HashMap<Integer, ModelDrain> drains) {
 		this();
+		
 		this.gemType = gemType;
 		this.textureResource = textureResource;
-		this.isFalling = false;
+		this.streetPosZ = streetPosZ;
+		this.drains = drains;
 	}
 
 	public void setSoundManager(SoundManager soundManager)
@@ -103,9 +105,8 @@ public class ModelGem extends Model {
 	/**
 	 * start fall animation
 	 */
-	public void startFall(HashMap<Integer, ModelDrain> drains)	{
+	public void startFall()	{
 		this.isFalling = true;
-		drainMap = drains;
 	}
 	
 	/**
@@ -122,14 +123,14 @@ public class ModelGem extends Model {
 	 * @return collision: true/false
 	 */
 	public boolean checkFallCollision()	{
-		return gemPos < streetLevel;
+		return gemPos < streetPosZ;
 	}
 
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
 	{
 		boolean drainhit = false;
 		//check type of collision (hit/miss)
-		Iterator<ModelDrain> i = drainMap.values().iterator();
+		Iterator<ModelDrain> i = drains.values().iterator();
 		while(i.hasNext())
 		{
 			if (!drainhit)

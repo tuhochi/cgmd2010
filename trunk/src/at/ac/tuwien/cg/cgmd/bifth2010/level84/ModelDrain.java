@@ -9,6 +9,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class ModelDrain extends Model {
 
+	public static final int CLOSED = 0;
+	public static final int ROUND = 1;
+	public static final int OCT = 2;
+	public static final int RECT = 3;
+	public static final int DIAMOND = 4;
+	
 	/** width of the drain **/
 	private float width = 3.2f;
 	/** texture for closed drain **/
@@ -59,15 +65,13 @@ public class ModelDrain extends Model {
 	 * set the drain texture
 	 * @param type texture is set dependent on the drain type
 	 */
-	public void setTexture(int type)
-	{
-		switch (type)
-		{
-			case 0:	this.textureResource = textureClosed; break;
-			case 1:	this.textureResource = textureRound; break;
-			case 2:	this.textureResource = textureDiamond; break;
-			case 3:	this.textureResource = textureRect; break;
-			case 4:	this.textureResource = textureOct; break;
+	public void setTexture(int type) { 
+		switch (type) {
+			case CLOSED:	this.textureResource = textureClosed; break;
+			case ROUND:		this.textureResource = textureRound; break;
+			case DIAMOND:	this.textureResource = textureDiamond; break;
+			case RECT:		this.textureResource = textureRect; break;
+			case OCT:		this.textureResource = textureOct; break;
 		}
 	}
 	

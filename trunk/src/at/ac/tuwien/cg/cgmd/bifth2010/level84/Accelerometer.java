@@ -25,19 +25,7 @@ public class Accelerometer extends OrientationEventListener{
 	public Accelerometer (Context context) {
 		super(context, SensorManager.SENSOR_DELAY_FASTEST);
 		
-		//Doesn't really work. Emulator's canDetectOrientation results in "true" - which is wrong unfortunately.
 		isOrientationAvailable = this.canDetectOrientation();
-		
-		//Other way to check if sensor is available.
-		//Result: Won't work! Because: INFO/sensor available(253): Goldfish 3-axis Accelerometer (within the Emulator!)
-		//So, we have to disable it globally.
-		
-		/*SensorManager sm = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-		List<Sensor> sensors = sm.getSensorList(Sensor.TYPE_ACCELEROMETER);
-		for (Iterator<Sensor> i = sensors.iterator(); i.hasNext();)
-			Log.i("sensor available", i.next().getName());*/
-		
-		Log.i("orientation", "is orientation available: " + isOrientationAvailable);
 		
 		this.enable();
 	}
@@ -61,7 +49,7 @@ public class Accelerometer extends OrientationEventListener{
 	}
 	
 	public void setOrientation(int r) {
-		this.orientation = r;
+		this.orientation = r - 180;
 	}
 
 	/**
