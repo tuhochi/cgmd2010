@@ -14,7 +14,12 @@ import android.view.OrientationEventListener;
  */
 public class Accelerometer extends OrientationEventListener{
 	
-	private int orientation = 180;
+	private final int filterSize = 5;
+	private int[] filter = new int[filterSize];
+	private float sum = 0;
+	private int filterIndex = 0;
+	
+	private float orientation = 180.0f;
 	private boolean isOrientationAvailable;
 	
 	public Accelerometer (Context context) {
@@ -38,13 +43,20 @@ public class Accelerometer extends OrientationEventListener{
 	}
 	
 	public void onOrientationChanged(int orientation) {
-		this.orientation = orientation - 90;
+		
+		//Filter sensor data.
+		sum -= filter[filterIndex];
+		filter[filterIndex] = orientation - 270	;
+		sum += filter[filterIndex];
+		filterIndex = (++filterIndex >= filterSize) ? 0 : filterIndex;
+		
+		this.orientation = sum / (float)filterSize;
 	}
 
 	/**
 	 * @return the orientation in degrees
 	 */
-	public int getOrientation() {
+	public float getOrientation() {
 		return orientation;
 	}
 	

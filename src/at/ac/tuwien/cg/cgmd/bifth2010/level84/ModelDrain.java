@@ -10,19 +10,19 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class ModelDrain extends Model {
 
 	/** width of the drain **/
-	private float width = 3.5f;
+	private float width = 3.2f;
 	/** texture for closed drain **/
-	private int texture_drain0 = R.drawable.l84_drain_closed;
+	private int textureClosed = R.drawable.l84_drain_closed;
 	/** texture for drain with round hole **/
-	private int texture_drain1 = R.drawable.l84_drain_round;
+	private int textureRound = R.drawable.l84_drain_round;
 	/** texture for drain with diamond hole **/
-	private int texture_drain2 = R.drawable.l84_drain_diamond;
+	private int textureDiamond = R.drawable.l84_drain_diamond;
 	/** texture for drain with rectangle hole **/
-	private int texture_drain3 = R.drawable.l84_drain_rect;
+	private int textureRect = R.drawable.l84_drain_rect;
 	/** texture for drain with octagon hole **/
-	private int texture_drain4 = R.drawable.l84_drain_oct;
+	private int textureOct = R.drawable.l84_drain_oct;
 	
-	private int drainStyle = 0;
+	private int drainType = 0;
 	
 	/** orientation (angle) of the drain **/
 	private float orientation = 0;
@@ -33,17 +33,16 @@ public class ModelDrain extends Model {
 	
 	/**
 	 * creates a new drain 
-	 * @param drainstyle style of the drain (closed, hole type, ...)
+	 * @param drainType style of the drain (closed, hole type, ...)
 	 * @param pos (horizontal) position 
 	 * @param orientation 
 	 */
-	public ModelDrain(int drainstyle, float pos, float orientation)
+	public ModelDrain(int drainType, float pos, float orientation)
 	{
-		this.drainStyle = drainstyle;
-		this.setTexture(drainstyle);
+		this.drainType = drainType;
+		this.setTexture(drainType);
 		this.setPosition(pos);
 		this.orientation = orientation;
-		
 		
 		//Adjust the width of Model's quad.
 		vertices[0] = vertices[6] = -width/2.0f;
@@ -58,17 +57,17 @@ public class ModelDrain extends Model {
 	
 	/**
 	 * set the drain texture
-	 * @param drainstyle texture is set dependent on the drain shape
+	 * @param type texture is set dependent on the drain type
 	 */
-	public void setTexture(int drainstyle)
+	public void setTexture(int type)
 	{
-		switch (drainstyle)
+		switch (type)
 		{
-			case 0:	this.textureResource = texture_drain0; break;
-			case 1:	this.textureResource = texture_drain1; break;
-			case 2:	this.textureResource = texture_drain2; break;
-			case 3:	this.textureResource = texture_drain3; break;
-			case 4:	this.textureResource = texture_drain4; break;
+			case 0:	this.textureResource = textureClosed; break;
+			case 1:	this.textureResource = textureRound; break;
+			case 2:	this.textureResource = textureDiamond; break;
+			case 3:	this.textureResource = textureRect; break;
+			case 4:	this.textureResource = textureOct; break;
 		}
 	}
 	
@@ -103,7 +102,7 @@ public class ModelDrain extends Model {
 	
 	public int getDrainStyle()
 	{
-		return this.drainStyle;
+		return this.drainType;
 	}
 	
 }
