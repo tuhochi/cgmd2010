@@ -82,10 +82,10 @@ public class RendererView extends GLSurfaceView {
 	 */
 	public boolean onTouchEvent(MotionEvent event) {
 		LinkedList<MotionEvent> inputs = updateTask.getInputMotions();
-		synchronized(inputs) {
+		synchronized(game) {
 			inputs.add(event);
 		}
-		return false;
+		return super.onTouchEvent(event);
 	}
 	
 	

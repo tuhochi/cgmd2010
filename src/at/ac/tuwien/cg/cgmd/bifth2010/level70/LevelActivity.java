@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer.RendererView;
 
 /**
@@ -31,7 +32,10 @@ public class LevelActivity extends Activity {
 	private RendererView rendererView;     //< Renderer view
 	public TextView tv;	
 	public Handler handler;
-	public Runnable fpsUpdateRunnable;
+	
+	public Runnable displayGameOver;
+	public Runnable displayGameComplete;
+	
 	
 	// ----------------------------------------------------------------------------------
 	// -- Static methods ----
@@ -54,12 +58,19 @@ public class LevelActivity extends Activity {
 	 */
 	public void onCreate(Bundle savedInstanceState) {
 		
-		fpsUpdateRunnable = new Runnable() {
+	    displayGameOver = new Runnable() {
 			public void run() {
-				rendererView.onPause();
+				tv.setText(R.string.l70_GameOver);
 				tv.setVisibility(View.VISIBLE);
 			}
 		};
+		
+		displayGameComplete = new Runnable() {
+            public void run() {
+                tv.setText(R.string.l70_GameComplete);
+                tv.setVisibility(View.VISIBLE);
+            }
+        };
 		
 		// Set instance for global access
    		instance = this;
@@ -79,7 +90,10 @@ public class LevelActivity extends Activity {
    		rendererView = new RendererView(this, savedInstanceState, d.getWidth(), d.getHeight());
    		setContentView(rendererView);
    		
-   		setStateLevelEnd(0);
+   		setTextLayout();
+   		
+   		// Create sound manager
+   		SoundManager.initialize();
 	}
 	
 	
@@ -157,10 +171,8 @@ public class LevelActivity extends Activity {
     }
     
    
-    
-    public void setStateLevelEnd(int progress) {
-    	
-    	LinearLayout llayout = new LinearLayout(this);
+    private void setTextLayout() {
+        LinearLayout llayout = new LinearLayout(this);
         llayout.setGravity(Gravity.CENTER);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
         addContentView(llayout, params);
@@ -168,8 +180,7 @@ public class LevelActivity extends Activity {
         tv = new TextView(this);
         tv.setTextSize(25);
         tv.setGravity(Gravity.CENTER);
-        tv.setTextColor(Color.BLACK);  
-        tv.setText(R.string.l70_GameEnd);
+        tv.setTextColor(Color.BLACK);
         tv.setTypeface(Typeface.DEFAULT_BOLD);
         
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
@@ -178,12 +189,13 @@ public class LevelActivity extends Activity {
         llparams.setMargins(10, 10, 10, 10);
         llayout.addView(tv, llparams);
         tv.setVisibility(View.INVISIBLE);
-        
-    	//setContentView(tv);
-    	//SessionState s = new SessionState();
-		//s.setProgress(10);
-		//setResult(Activity.RESULT_OK, s.asIntent());
-		//finish();
-		
+    }
+    
+    
+    public void setStateProgress(int progress) {
+    	SessionState s = new SessionState();
+		s.setProgress(progress);
+		setResult(Activity.RESULT_OK, s.asIntent());
+		finish();
     }
 }

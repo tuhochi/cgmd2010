@@ -23,6 +23,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.GeometryFactory;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.SpriteTexture;
 
 
@@ -42,6 +43,8 @@ public class TrainGame {
 	private static String STATE_GAME_TILES  = "StateGameTiles";
 	private static String STATE_TRAIN_TILES = "StateTrainTiles";
 	private static String STATE_HIGHLIGHT_TILES = "StateHighlightTiles";
+	private static String STATE_START_TIME = "StateStartTime";
+	private static String STATE_GAME_FLAGS = "StateGameFlags";
 
 	
 	private static final float WORLD_WIDTH_HALF  = 5.0f;
@@ -77,6 +80,9 @@ public class TrainGame {
 	private Tile  tileSource; //< Selected source tile
 	private Tile  tileTarget; //< Selected target tile
 	
+	private boolean isGameOver;
+	private boolean isGameCompleted;
+	private boolean isPlayTrainSound;
 	
 
 	
@@ -96,7 +102,9 @@ public class TrainGame {
 		initTiles = new ArrayList<TileEnum>(TILE_CNT);
 		gameTiles = new ArrayList<Tile>(TILE_CNT);
 		
-		
+		isGameOver = false;
+		isGameCompleted = false;
+		isPlayTrainSound = true;
 		// Create new tiles
 		createNewGame();
 	}
@@ -185,7 +193,7 @@ public class TrainGame {
 		
 		gameTiles.get(iGoal).setIsGoal(true);
 		
-		train = new Train(this, time, 1, iyTile, 0);
+		train = new Train(this, time, -1, iyTile, 0);
 
 		
 		//train = new Train(this, time, -2, iyTile, 2.0f / 8.0f * time);
@@ -323,6 +331,14 @@ public class TrainGame {
 		return gameTiles.get(iy * TILE_X + ix);
 	}
 	
+	public boolean isGameOver() {
+	    return isGameOver;
+	}
+	
+	public boolean isGameCompleted() {
+        return isGameCompleted;
+    }
+	
 	public void update(float dt) {
 		if (!isOpenGl) {
 			return;
@@ -330,6 +346,10 @@ public class TrainGame {
 		
 		if (timeStart > 0) {
 			timeStart -= dt;
+			if (timeStart > 0.5 && isPlayTrainSound) {
+			    SoundManager.getInstance().play(2);
+			    isPlayTrainSound = false;
+			}
 		} 
 		else {
 			train.update(dt);
@@ -375,19 +395,36 @@ public class TrainGame {
 	}
 	
 	
-	public void onCheckGameState() {
-		if (train.isGoalReached()) {
-			train.setTileTime(2.0f);
-		}
+	public void onGameCompleted() {
+	    LevelActivity.getInstance().handler.post(LevelActivity
+	                .getInstance().displayGameComplete);
+		isGameCompleted = true;
+		SoundManager.getInstance().play(2);
 	}
 	
-	public void onGameover() {
+	public void onGameOver() {
 	    LevelActivity.getInstance().handler.post(LevelActivity
-                .getInstance().fpsUpdateRunnable);
+                .getInstance().displayGameOver);
+	    isGameOver = true;
+	    SoundManager.getInstance().play(2);
 	}
 	
 	public void onMotionEvent(MotionEvent event) {
 		
+	    if (isGameOver || isGameCompleted) {
+	        int goldCnt = 0;
+	        for (Tile it : gameTiles) {
+	            if (it.isStateTrain()) {
+	                goldCnt++;
+	            }
+	        }
+	        if (isGameCompleted) {
+	            goldCnt = 100;
+	        }
+	        LevelActivity.getInstance().setStateProgress(goldCnt);
+	        SoundManager.getInstance().stopAll();
+	    }
+	    
 		int index = getIndex(event.getRawX(), event.getRawY());
 		
 		// No tile selected
@@ -412,6 +449,7 @@ public class TrainGame {
 				TileEnum next = initTiles.get(index);
 				tile.setStateSwitch(next);
 				tileTarget = null;
+				SoundManager.getInstance().play(1);
 			}
 			// Highlight initial tile
 			else {
@@ -419,6 +457,7 @@ public class TrainGame {
 				tileTarget = deselect(tileTarget);
 				tileTarget = tile;
 				tileTarget.setStateSelect();
+				SoundManager.getInstance().play(0);
 			}
 		}
 		else {
@@ -429,6 +468,7 @@ public class TrainGame {
 					tileTarget.setStateSwitch(tileSource.getType());
 					tileSource = null;
 					tileTarget = null;
+					SoundManager.getInstance().play(1);
 				}
 				else {
 					// Deselect - When another tile is selected
@@ -438,6 +478,7 @@ public class TrainGame {
 					// Select source tile 
 					tileSource = tile;
 					tileSource.setStateSelect();
+					SoundManager.getInstance().play(0);
 				}
 			}
 			else if (tileSource != null) {
@@ -449,6 +490,7 @@ public class TrainGame {
 					// Select target tile
 					tileTarget = tile;
 					tileTarget.setStateSelect();
+					SoundManager.getInstance().play(0);
 				}
 			}
 			else {
@@ -492,6 +534,12 @@ public class TrainGame {
     	state.putIntArray(STATE_GAME_TILES, tiles);
     	state.putIntArray(STATE_HIGHLIGHT_TILES, highlights);
     	state.putIntegerArrayList(STATE_TRAIN_TILES, trainTiles);
+    	state.putFloat(STATE_START_TIME, timeStart);
+    	boolean gameFlags[] = new boolean[3];
+    	gameFlags[0] = isGameOver;
+    	gameFlags[1] = isGameCompleted;
+    	gameFlags[2] = isPlayTrainSound;
+    	state.putBooleanArray(STATE_GAME_FLAGS, gameFlags);
     	train.onSaveState(state);
     }
     
@@ -522,6 +570,11 @@ public class TrainGame {
                     tileTarget = gameTiles.get(stateHighlight[1]);
                     tileTarget.setStateRestoreHighlight();
                 }
+				timeStart = state.getFloat(STATE_START_TIME);
+				boolean[] gameFlags = state.getBooleanArray(STATE_GAME_FLAGS);
+				isGameOver = gameFlags[0];
+				isGameCompleted = gameFlags[1];
+				isPlayTrainSound = gameFlags[2];
 			}
 			train.onRestoreState(state);
 		}

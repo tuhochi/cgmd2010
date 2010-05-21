@@ -4,5 +4,7 @@
 	<string name="l70_GameDescription_01">Puh, das war keine gute Idee den Großeil meines Vermögens auf diesem Schweizer Bankkonto zu deponieren. Diese hohen Zinsen bereiten mir allmählich Kopfschmerzen. Ganz klar ich muss das Geld hier wegschaffen. Am besten umweltschonend per Zugtransport und bei dieser Gelegenheit gleich ein paar Wagoons mit Münzen loswerden.. Die Jungs von der Zugeskorte könnten mir allerdings einen Strich durch die Rechnung machen, aber die werde ich schon irgendwie austricksen...</string>
 	<string name="l70_GameDescription_02">Deine Aufgabe ist es während der Zugfahrt unbemerkt Wagoons mit Münzen erfolgreich abzukoppeln. Dazu ist es nötig die Jungs von der folgenden Zugeskorte umzuleiten, die natürlich stets bemüht sind alle verlorenen Wagoons wieder anzuhängen. Eine gute Gelegenheit dafür sind die immer wieder auftauchenden Weichen. Mit Geschick und Aufmerksamkeit kannst du hier viel Geld verlieren.</string>
 
-<string name="l70_GameEnd">G A M E   O V E R</string>
+<string name="l70_GameComplete">Game Complete</string>
+<string name="l70_GameOver">Game Over</string>
+
 </resources>
