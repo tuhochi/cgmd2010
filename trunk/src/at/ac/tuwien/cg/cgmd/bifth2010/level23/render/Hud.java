@@ -12,6 +12,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.PermaBoostTimer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ProgressVisibilityHandle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TextureAtlas;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimeUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
 
@@ -67,8 +68,8 @@ public class Hud
 	{
 		float topBounds = RenderView.instance.getTopBounds();
 		float rightBounds = RenderView.instance.getRightBounds();
-		goldButton = new Button(15, 15, new Vector2(5,(topBounds-15)/2));
-		moneyButton = new Button(15, 15, new Vector2(rightBounds-20,(topBounds-15)/2));
+		goldButton = new Button(15, 15, new Vector2(5,(topBounds-15)/2),TextureAtlas.instance.getGoldButtonTextur());
+		moneyButton = new Button(15, 15, new Vector2(rightBounds-20,(topBounds-15)/2),TextureAtlas.instance.getBoostButtonTextur());
 		moneyButton.preprocess();
 		goldButton.preprocess();
 		timeUtil = TimeUtil.instance;
