@@ -147,16 +147,16 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		
 		
 		//Create gems
-		gemRound = new ModelGem(1,R.drawable.l84_tex_gem_round, streetPosZ, drains);
+		gemRound = new ModelGem(ModelDrain.ROUND, R.drawable.l84_tex_gem_round, streetPosZ, drains);
 		gemRound.setSoundManager(soundManager);
 		gems.add(gemRound);
-		gemDiamond = new ModelGem(2,R.drawable.l84_tex_gem_diamond, streetPosZ, drains);
+		gemDiamond = new ModelGem(ModelDrain.DIAMOND, R.drawable.l84_tex_gem_diamond, streetPosZ, drains);
 		gemDiamond.setSoundManager(soundManager);
 		gems.add(gemDiamond);
-		gemRect = new ModelGem(3,R.drawable.l84_tex_gem_rect, streetPosZ, drains);
+		gemRect = new ModelGem(ModelDrain.RECT, R.drawable.l84_tex_gem_rect, streetPosZ, drains);
 		gemRect.setSoundManager(soundManager);
 		gems.add(gemRect);
-		gemOct = new ModelGem(4,R.drawable.l84_tex_gem_oct, streetPosZ, drains);
+		gemOct = new ModelGem(ModelDrain.OCT, R.drawable.l84_tex_gem_oct, streetPosZ, drains);
 		gemOct.setSoundManager(soundManager);
 		gems.add(gemOct);
 		
