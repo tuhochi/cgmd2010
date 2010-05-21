@@ -25,7 +25,7 @@ public class ModelStreet extends Model {
 	/** Horizontal position at startup */
 	private float posX;
 	/** Position along the depth-axis */
-	private float posZ = -10f;
+	private float posZ;
 
 	/** Horizontal translation speed */
 	private float speed;
@@ -39,10 +39,11 @@ public class ModelStreet extends Model {
 	 * @param textureResource The street's texture
 	 * @param drains List containing all drains
 	 */
-	public ModelStreet(float width, float height, float posX, float speed, int textureResource, HashMap<Integer, ModelDrain> drains) {
+	public ModelStreet(float width, float height, float posX, float posZ, float speed, int textureResource, HashMap<Integer, ModelDrain> drains) {
 		this.width = width;
 		this.height = height;
 		this.posX = posX;
+		this.posZ = posZ;
 		this.speed = speed;
 		this.textureResource = textureResource;
 		this.drains = drains;

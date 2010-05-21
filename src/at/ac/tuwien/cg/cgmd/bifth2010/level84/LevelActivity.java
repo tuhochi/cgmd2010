@@ -41,6 +41,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	private int numDrains;
 	private float levelWidth;
 	private float levelSpeed;
+	private float streetPosZ;
 	private int moneyToSpend = 0;
 	private int gemWorth = 5000;
 	
@@ -65,9 +66,6 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		soundManager = new SoundManager(this);
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		
-		//getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
 		
 		
 		initLevelParams();
@@ -89,6 +87,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		levelWidth = 240f;
 		levelSpeed = 2f;
 		numDrains = 30;
+		streetPosZ = -10f;
 	}
 
 	/**
@@ -117,9 +116,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	 * create the street and the drains of the level
 	 */
 	private void initLevel() {
-		//Create street. levelWidth/2f - 8f ... 8f = half horizontal screen offset.
-		street = new ModelStreet(levelWidth, 17f, levelWidth/2f - 8f, levelSpeed, R.drawable.l84_tex_street, drains);
-		
+
 		//Create drains
 		for (int i = 0; i < numDrains;) {
 			
@@ -136,6 +133,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 					moneyToSpend += gemWorth;
 			}
 		}
+		
+		//Create street. levelWidth/2f - 8f ... 8f = half horizontal screen offset.
+		street = new ModelStreet(levelWidth, 17f, levelWidth/2f - 8f, streetPosZ, 
+				levelSpeed, R.drawable.l84_tex_street, drains);
+		
 		tfPoints = (TextView) findViewById(R.id.l84_Points);
 		tfPoints.setText("$" + moneyToSpend);
 		tfPointsShadow = (TextView) findViewById(R.id.l84_PointsShadow);
@@ -145,16 +147,16 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		
 		
 		//Create gems
-		gemRound = new ModelGem(1,R.drawable.l84_tex_gem_round);
+		gemRound = new ModelGem(1,R.drawable.l84_tex_gem_round, streetPosZ, drains);
 		gemRound.setSoundManager(soundManager);
 		gems.add(gemRound);
-		gemDiamond = new ModelGem(2,R.drawable.l84_tex_gem_diamond);
+		gemDiamond = new ModelGem(2,R.drawable.l84_tex_gem_diamond, streetPosZ, drains);
 		gemDiamond.setSoundManager(soundManager);
 		gems.add(gemDiamond);
-		gemRect = new ModelGem(3,R.drawable.l84_tex_gem_rect);
+		gemRect = new ModelGem(3,R.drawable.l84_tex_gem_rect, streetPosZ, drains);
 		gemRect.setSoundManager(soundManager);
 		gems.add(gemRect);
-		gemOct = new ModelGem(4,R.drawable.l84_tex_gem_oct);
+		gemOct = new ModelGem(4,R.drawable.l84_tex_gem_oct, streetPosZ, drains);
 		gemOct.setSoundManager(soundManager);
 		gems.add(gemOct);
 		
@@ -214,13 +216,12 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 				
 			case MotionEvent.ACTION_UP:
 				switch(v.getId()) {
-					case R.id.l84_ButtonGemRound: gemRound.startFall(drains); break;
-					case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(drains); break;
-					case R.id.l84_ButtonGemRect: gemRect.startFall(drains); break;
-					case R.id.l84_ButtonGemOct: gemOct.startFall(drains); break;
+					case R.id.l84_ButtonGemRound: gemRound.startFall(); break;
+					case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(); break;
+					case R.id.l84_ButtonGemRect: gemRect.startFall(); break;
+					case R.id.l84_ButtonGemOct: gemOct.startFall(); break;
 				}
-				break;
-				
+				break;	
 		}
 		return true;
 	}
