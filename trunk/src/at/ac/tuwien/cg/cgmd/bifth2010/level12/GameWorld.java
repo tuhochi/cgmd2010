@@ -26,12 +26,12 @@ public class GameWorld {
 	private int mHyperTowerCounter = 0;
 	private HyperTower[] mHyperTower = null;
 	
-	private float mXPos, mYPos; //picking	
+	private int mXPos, mYPos; //picking	
 	private static int mWidth = -1;
 	private static int mHeight = -1; //viewport
-	private long mLastCollDetDone = 0;
+	//private long mLastCollDetDone = 0;
 	
-	private static LevelActivity mGameContext = null;
+	//private static LevelActivity mGameContext = null;
 	
 	
 	private GameWorld(){
@@ -42,10 +42,6 @@ public class GameWorld {
 	public static void setDisplay( int height, int width){
 		mWidth = width;
 		mHeight = height;
-	}
-	
-	public static void setGameContext( LevelActivity gc ){
-		mGameContext = gc;
 	}
 	
 	public static GameWorld getSingleton(){
@@ -68,13 +64,14 @@ public class GameWorld {
 	public void initGameField(){
 		int ySegCount = Definitions.FIELD_HEIGHT_SEGMENTS;
 		float segLength = mHeight / ySegCount;
+		Definitions.FIELD_SEGMENT_LENGTH = (int)Math.ceil(segLength);
 		int xSegCount = (int) Math.ceil( mWidth / segLength );
 		if( mGamefield == null) mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
 	}
 	
-	public void setXYpos(float xpos, float ypos) {
+	public void setXYpos(int xpos, int ypos) {
 		if( mGamefield.getOccupied( xpos, ypos )) return;
-		float[] correctXYpos = mGamefield.correctXYpos( xpos, ypos);
+		int[] correctXYpos = mGamefield.correctXYpos( xpos, ypos);
 		mXPos = correctXYpos[0];
 		mYPos = correctXYpos[1];
 		boolean last = false;
@@ -125,15 +122,22 @@ public class GameWorld {
 	public void initEnemies(){
 		short roundnr = GameMechanics.getSingleton().getRoundNumber();
 		if( mEnemies == null ) mEnemies = new Vector< MoneyCarrier >();
-		System.out.println("INIT ENEMIES! roundnr: "+roundnr+" #Enemies: "+mEnemies.size());
 		Random rand = new Random();
 		switch (roundnr) {
 			case (0):
 				for( int i = 0; i < Definitions.FIRST_ROUND_ENEMIE_NUMBER; i++){
-					MoneyCarrier carrier = new CarrierRoundOne();
-					float lane = rand.nextInt((int)mHeight);
-					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					int carrierOneChance = rand.nextInt( 50 );
+					int carrierTwoChance = rand.nextInt( 25 );
+					int carrierThreeChance = rand.nextInt( 15 );
+					MoneyCarrier carrier;
+					if( carrierOneChance >= carrierTwoChance && carrierOneChance >= carrierThreeChance ) carrier = new CarrierRoundOne();
+					else if( carrierTwoChance > carrierOneChance && carrierTwoChance > carrierThreeChance) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierOneChance && carrierThreeChance > carrierTwoChance) carrier = new CarrierRoundThree();
+					else carrier = new CarrierRoundOne();
+					int lane = rand.nextInt(mHeight);
+					int xplus = rand.nextInt(100);
+					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -142,10 +146,18 @@ public class GameWorld {
 				break;
 			case(1):
 				for( int i = 0; i < Definitions.SECOND_ROUND_ENEMIE_NUMBER; i++){
-					MoneyCarrier carrier = new CarrierRoundTwo();
-					float lane = rand.nextInt((int)mHeight);
-					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					int carrierTwoChance = rand.nextInt( 50 );
+					int carrierThreeChance = rand.nextInt( 25 );
+					int carrierFourChance = rand.nextInt( 15 );
+					MoneyCarrier carrier;
+					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
+					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
+					else carrier = new CarrierRoundTwo();
+					int lane = rand.nextInt(mHeight);
+					int xplus = rand.nextInt(100);
+					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -154,10 +166,18 @@ public class GameWorld {
 				break;
 			case(2):
 				for( int i = 0; i < Definitions.THIRD_ROUND_ENEMIE_NUMBER; i++){
-					MoneyCarrier carrier = new CarrierRoundThree();
-					float lane = rand.nextInt((int)mHeight);
-					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					int carrierTwoChance = rand.nextInt( 25 );
+					int carrierThreeChance = rand.nextInt( 50 );
+					int carrierFourChance = rand.nextInt( 25 );
+					MoneyCarrier carrier;
+					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
+					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
+					else carrier = new CarrierRoundThree();
+					int lane = rand.nextInt(mHeight);
+					int xplus = rand.nextInt(100);
+					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -166,10 +186,78 @@ public class GameWorld {
 				break;
 			case(3):
 				for( int i = 0; i < Definitions.FOURTH_ROUND_ENEMIE_NUMBER; i++){
-					MoneyCarrier carrier = new CarrierRoundFour();
-					float lane = rand.nextInt((int)mHeight);
-					float[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0], correctXYpos[1] );
+					int carrierTwoChance = rand.nextInt( 15 );
+					int carrierThreeChance = rand.nextInt( 25 );
+					int carrierFourChance = rand.nextInt( 50 );
+					MoneyCarrier carrier;
+					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
+					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
+					else carrier = new CarrierRoundFour();
+					int lane = rand.nextInt(mHeight);
+					int xplus = rand.nextInt(100);
+					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.activate();
+					synchronized( mEnemies ){
+						mEnemies.add( carrier );
+					}
+				}
+				break;
+			case(4):
+				for( int i = 0; i < Definitions.FIFTH_ROUND_ENEMIE_NUMBER; i++){
+					int carrierTwoChance = rand.nextInt( 5 );
+					int carrierThreeChance = rand.nextInt( 25 );
+					int carrierFourChance = rand.nextInt( 70 );
+					MoneyCarrier carrier;
+					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
+					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
+					else carrier = new CarrierRoundFour();
+					int lane = rand.nextInt(mHeight);
+					int xplus = rand.nextInt(100);
+					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.activate();
+					synchronized( mEnemies ){
+						mEnemies.add( carrier );
+					}
+				}
+				break;
+			case(5):
+				for( int i = 0; i < Definitions.SIXTH_ROUND_ENEMIE_NUMBER; i++){
+					int carrierTwoChance = rand.nextInt( 5 );
+					int carrierThreeChance = rand.nextInt( 10 );
+					int carrierFourChance = rand.nextInt( 85 );
+					MoneyCarrier carrier;
+					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
+					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
+					else carrier = new CarrierRoundFour();
+					int lane = rand.nextInt(mHeight);
+					int xplus = rand.nextInt(100);
+					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.activate();
+					synchronized( mEnemies ){
+						mEnemies.add( carrier );
+					}
+				}
+				break;
+			case(6):
+				for( int i = 0; i < Definitions.SEVENTH_ROUND_ENEMIE_NUMBER; i++){
+					int carrierTwoChance = rand.nextInt( 5 );
+					int carrierThreeChance = rand.nextInt( 5 );
+					int carrierFourChance = rand.nextInt( 90 );
+					MoneyCarrier carrier;
+					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
+					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
+					else carrier = new CarrierRoundFour();
+					int lane = rand.nextInt(mHeight);
+					int xplus = rand.nextInt(100);
+					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
+					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -201,7 +289,7 @@ public class GameWorld {
 	
 	
 	public void calcCollisions(){
-		mLastCollDetDone = System.currentTimeMillis();
+		//mLastCollDetDone = System.currentTimeMillis();
 		if( mEnemies == null ) return;
 		//simple stupid way
 		for( int i = 0; i < mBasicTower.length; i++){

@@ -6,7 +6,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 public class AdvancedTower extends Tower {
 
 	public AdvancedTower( ){
-		mRadius = Definitions.ADVANCED_TOWER_RADIUS;
+		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 *  Definitions.ADVANCED_TOWER_RADIUS );
 		mColor[0] = 1.0f;
 		mColor[1] = 1.0f;
 		mColor[2] = 1.0f;

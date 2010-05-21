@@ -8,7 +8,7 @@ public class CarrierRoundThree extends MoneyCarrier {
 	public CarrierRoundThree(){
 		mHp = Definitions.THIRD_ROUND_ENEMIE_HP;
 		mStrength = Definitions.THIRD_ROUND_ENEMIE_STRENGTH;
-		mRadius = Definitions.THIRD_ROUND_ENEMIE_RADIUS;
+		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 * Definitions.THIRD_ROUND_ENEMIE_RADIUS);
 		mType = 1;
 		mMoney = Definitions.THIRD_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.THIRD_ROUND_ENEMIE_SPEED;

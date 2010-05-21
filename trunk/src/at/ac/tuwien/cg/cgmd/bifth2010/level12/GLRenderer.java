@@ -12,17 +12,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
 
 public class GLRenderer implements GLSurfaceView.Renderer{
-	private int mFPS = 0;
 	
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();	
 		GameWorld.getSingleton().getGamefield().draw(gl);
-		GameWorld.getSingleton().calcCollisions();	
+		//GameWorld.getSingleton().calcCollisions();	
 		if( System.currentTimeMillis() - GameMechanics.getSingleton().getLastCollDetDoneTime() > Definitions.COLLISION_DETECTION_TIMEOUT ){
 			GameWorld.getSingleton().calcCollisions();
 			GameMechanics.getSingleton().setCollDetTime();
+			GameUI.updateText();
 		}
 		if( GameMechanics.getSingleton().getRoundNumber() >= 0) {
 			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_ROUND_WAIT_TIME ){

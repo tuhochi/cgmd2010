@@ -3,11 +3,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 public class GameMechanics {
 	private int mMoney = 0;
 	private boolean mGameRunning = true;
-	private int mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME; //für ms
+	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
 	private long mLastCountdownCheck = -1;
 	private short mRound = 0;
 	private long mRoundStartedTime = System.currentTimeMillis();
-	private int mRemainingCountdownTime = -1;
 	private long mTimeGamePaused = -1;
 	private int mSelectedTower = 0;
 	private long mLastColDetDone = -1;
@@ -63,7 +62,7 @@ public class GameMechanics {
 	
 	public void setRoundStartedTime(){
 		mLastCountdownCheck = System.currentTimeMillis();
-		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME;
+		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME / 1000;
 		mRoundStartedTime = System.currentTimeMillis();
 	}
 	
@@ -84,7 +83,7 @@ public class GameMechanics {
 		mRound++;
 		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound = -1;
 		mLastCountdownCheck = System.currentTimeMillis();
-		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME;
+		mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
 	}
 
 

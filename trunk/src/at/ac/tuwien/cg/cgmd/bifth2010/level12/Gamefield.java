@@ -25,14 +25,14 @@ public class Gamefield {
 			for( int x = 0; x < mXSegCount; x++ ){
 				Field f;
 				if( fieldone) {
-					f = new Field( x*mSegLength, y*mSegLength, (x+1)*mSegLength, (y+1)*mSegLength );
+					f = new Field( (int)Math.abs(x*mSegLength), (int)Math.abs(y*mSegLength), (int)Math.abs((x+1)*mSegLength), (int)Math.abs((y+1)*mSegLength) );
 					f.setColor(mSegCol1[0], mSegCol1[1], mSegCol1[2], 0);
 					f.initVBOs();
 					fieldone = false;
 					if( x*mSegLength > mXSegCount * mSegLength * 0.6 ) f.setOccupied(true);
 				}
 				else{
-					f = new Field( x*mSegLength, y*mSegLength, (x+1)*mSegLength, (y+1)*mSegLength );
+					f = new Field( (int)Math.abs(x*mSegLength), (int)Math.abs(y*mSegLength), (int)Math.abs((x+1)*mSegLength), (int)Math.abs((y+1)*mSegLength) );
 					f.setColor(mSegCol2[0], mSegCol2[1], mSegCol2[2], 1);
 					f.initVBOs();
 					fieldone = true;
@@ -56,7 +56,7 @@ public class Gamefield {
 	}
 
 
-	public float[] correctXYpos(float xpos, float ypos) {
+	public int[] correctXYpos(float xpos, float ypos) {
 		int f = getFieldCount( xpos, ypos );
 		return mFields[ f ].getMiddle();
 	}
@@ -68,9 +68,9 @@ public class Gamefield {
 	}
 	
 	public int getFieldCount( float xpos, float ypos ){
-		int xf = (int)(Math.abs(xpos / mSegLength));
-		int yf = (int)(Math.abs(ypos / mSegLength)) * mXSegCount;
-		return (xf+yf);
+		int xf = (int)(Math.floor(xpos / mSegLength));
+		int yf = (int)(Math.floor(ypos / mSegLength)) * mXSegCount;
+		return (xf+yf-1);
 	}
 
 

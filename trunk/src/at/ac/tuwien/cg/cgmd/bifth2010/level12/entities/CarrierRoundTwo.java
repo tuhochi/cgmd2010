@@ -8,7 +8,7 @@ public class CarrierRoundTwo extends MoneyCarrier {
 	public CarrierRoundTwo(){
 		mHp = Definitions.SECOND_ROUND_ENEMIE_HP;
 		mStrength = Definitions.SECOND_ROUND_ENEMIE_STRENGTH;
-		mRadius = Definitions.SECOND_ROUND_ENEMIE_RADIUS;
+		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 *Definitions.SECOND_ROUND_ENEMIE_RADIUS );
 		mType = 1;
 		mMoney = Definitions.SECOND_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.SECOND_ROUND_ENEMIE_SPEED;

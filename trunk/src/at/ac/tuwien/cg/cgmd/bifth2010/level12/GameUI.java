@@ -4,6 +4,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,13 +16,10 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	
 
 	private static TextView mTV;
-	private static TextView mFPSTV;
-	private static TextView mGoldTV;
-	private static TextView mCountdownTV;
-	private static TextView mRoundsLeftTV;
 	private static ImageButton mBasicTowerButton;
 	private static ImageButton mAdvancedTowerButton;
 	private static ImageButton mHyperTowerButton;
+	private static final Handler mHandler = new Handler();
 	
 	private static GameUI mSingleton = null;
 	
@@ -107,26 +105,29 @@ public class GameUI extends LinearLayout implements OnClickListener{
 		GameMechanics.getSingleton().setHyperTowerSelected();
 	}
 	
+	private static Runnable mTVUpdater = new Runnable(){
+		public void run(){
+			mTV.setText( 
+				FPSCounter.getSingleton().getFPS()+" FPS " +
+				"Money: "+GameMechanics.getSingleton().getMoney()+" " +
+				"Rounds left: "+(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber()) +" " +
+				" Countdown: "+(int)(GameMechanics.getSingleton().getRemainingWaitTime()));
+		}
+	};
+	
 	public static void updateText(){
-		mSingleton.mTV.setText( 
-				FPSCounter.getSingleton().getFPS()+" FPS | " +
-				"Money: "+GameMechanics.getSingleton().getMoney()+" | " +
-				"Rounds left: "+(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber()) +" |" +
-				" Countdown: "+(int)(GameMechanics.getSingleton().getRemainingWaitTime()*0.001));
+		mHandler.post( mTVUpdater );
 	}
+	
 
 	@Override
 	public void onClick(View v) {
-		System.out.println("On Click Listener!!!!! ID: "+v.getId());
 		if( v.getId() == mBasicTowerButton.getId() ){
-			System.out.println("Basic Tower Button");
 			basicTowerButtonPressed();
 		} else if( v.getId() == mAdvancedTowerButton.getId() ){
 			advancedTowerButtonPressed();
-			System.out.println("Advanced Tower Button");
 		} else if( v.getId() == mHyperTowerButton.getId() ){
 			hyperTowerButtonPressed();
-			System.out.println("Hyper Tower Button");
 		}
 	}
 
