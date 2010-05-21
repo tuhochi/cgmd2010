@@ -11,16 +11,16 @@ import java.nio.ByteOrder;
 
 
 public abstract class MoneyCarrier extends GLObject {
-	protected float mRadius = -1;
-	private float mMovePos = 0.0f;
+	protected short mRadius = -1;
+	private int mMovePos = 0;
 	private long mLastFrametime = -1;
-	private float mStartPos;
+	private int mStartPos;
 	protected short mHp = 10;
 	protected short mStrength = 1; //how much damage it can do
 	protected int mType = 0; //zombie type
 	protected int mTexture = R.drawable.l12_enemie_lvl0;
-	protected int mMoney = 10;
-	protected float mSpeed = 5;
+	protected short mMoney = 10;
+	protected short mSpeed = 5;
 	
 	
 	public void activate(){
@@ -30,11 +30,11 @@ public abstract class MoneyCarrier extends GLObject {
 
 	public void deactivate(){
 		super.setActiveState(false);
-		mMovePos = 0.0f;
+		mMovePos = 0;
 		mLastFrametime = -1;
 	}
 	
-	public void setXY(float xCentr, float yCentr ){
+	public void setXY(int xCentr, int yCentr ){
 		mStartPos = xCentr;	
 		mX = xCentr;
 		mY = yCentr;
@@ -93,7 +93,7 @@ public abstract class MoneyCarrier extends GLObject {
 		double distance = mSpeed * dt;
 		mMovePos -= distance;
 		//calculate actual position
-		mX = mStartPos + mMovePos;
+		mX = (int)(mStartPos + mMovePos);
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
 		TextureManager.getSingletonObject().setTexture( mTexture );
@@ -115,7 +115,7 @@ public abstract class MoneyCarrier extends GLObject {
 	}	
 	
 	@Override
-	public float getX(){
-		return mX - mRadius;
+	public int getX(){
+		return (int)(mX - mRadius);
 	}
 }

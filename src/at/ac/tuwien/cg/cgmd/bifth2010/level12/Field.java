@@ -17,7 +17,7 @@ public class Field extends GLObject{
 	private float mXStart, mYStart, mXEnd, mYEnd;
 	
 	
-	public Field( float xstart, float ystart, float xend, float yend ){
+	public Field( int xstart, int ystart, int xend, int yend ){
 		mXStart = xstart;
 		mYStart = ystart;
 		mXEnd = xend;
@@ -73,8 +73,8 @@ public class Field extends GLObject{
 	
 
 	
-	public float[] getMiddle() { 
-		float[] xyMid = { mX, mY };
+	public int[] getMiddle() { 
+		int[] xyMid = { mX, mY };
 		return xyMid;
 	}
 	

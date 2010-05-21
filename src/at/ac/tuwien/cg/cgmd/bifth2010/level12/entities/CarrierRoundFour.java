@@ -8,7 +8,7 @@ public class CarrierRoundFour extends MoneyCarrier {
 	public CarrierRoundFour(){
 		mHp = Definitions.FOURTH_ROUND_ENEMIE_HP;
 		mStrength = Definitions.FOURTH_ROUND_ENEMIE_STRENGTH;
-		mRadius = Definitions.FOURTH_ROUND_ENEMIE_RADIUS;
+		mRadius = (short) Math.floor(  (float)Definitions.FIELD_SEGMENT_LENGTH / 100 * Definitions.FOURTH_ROUND_ENEMIE_RADIUS);
 		mType = 1;
 		mMoney = Definitions.FOURTH_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.FOURTH_ROUND_ENEMIE_SPEED;

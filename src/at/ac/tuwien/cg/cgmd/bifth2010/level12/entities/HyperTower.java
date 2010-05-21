@@ -6,7 +6,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 public class HyperTower extends Tower {
 
 	public HyperTower( ){
-		mRadius = Definitions.BASIC_TOWER_RADIUS;
+		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 * Definitions.HYPER_TOWER_RADIUS );
 		mColor[0] = 1.0f;
 		mColor[1] = 1.0f;
 		mColor[2] = 1.0f;

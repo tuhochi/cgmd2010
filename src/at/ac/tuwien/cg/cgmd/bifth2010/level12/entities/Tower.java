@@ -2,13 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
@@ -17,7 +13,7 @@ import java.lang.System;
 
 
 public abstract class Tower extends GLObject {
-	protected float mRadius = -1.0f;
+	protected short mRadius = -1;
 	protected int mShootingInterval = 3000;//ms
 	protected long mTimeLastProjectileShot = System.currentTimeMillis();
 	protected Projectile[] mProjectiles = null;
@@ -26,7 +22,7 @@ public abstract class Tower extends GLObject {
 	
 	
 	
-	public void setXY( float xCentr, float yCentr ){
+	public void setXY( int xCentr, int yCentr ){
 		mX = xCentr;
 		mY = yCentr;
 		this.setActiveState(true);
@@ -140,7 +136,7 @@ public abstract class Tower extends GLObject {
 	}
 	
 	@Override
-	public float getX(){
+	public int getX(){
 		return mX + mRadius;
 	}
 }

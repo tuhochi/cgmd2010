@@ -14,9 +14,8 @@ public abstract class GLObject {
 	protected FloatBuffer mTextureBuffer = null;
 	protected float[] mColor = {1.0f, 1.0f, 1.0f, 1.0f };
 	protected int mIndicesCounter = -1;
-	protected float mY = 0;
-	protected float mX = 0;
-	protected float mSpeed = 0;  //pixel/sec
+	protected int mY = 0;
+	protected int mX = 0;
 	protected boolean mActive = false;
 	protected int mTexture = 0;
 	
@@ -76,12 +75,12 @@ public abstract class GLObject {
 	}
 	
 	
-	public float getY(){
+	public int getY(){
 		return mY;
 	}
 	
 	
-	public float getX(){
+	public int getX(){
 		return mX;
 	}
 	

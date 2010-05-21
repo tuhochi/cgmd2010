@@ -13,9 +13,9 @@ import java.nio.ByteOrder;
 public abstract class Projectile extends GLObject{
 	
 	private long mLastFrametime = -1;
-	private float mXTranslate = 0.0f;
-	protected float mRadius = 4;
-	protected float mSpeed = 5;
+	private int mXTranslate = 0;
+	protected short mRadius = 4;
+	protected short mSpeed = 5;
 	protected short mDmg = 10;
 	protected int mTexture = R.drawable.l12_basic_projectile;
 	
@@ -24,7 +24,7 @@ public abstract class Projectile extends GLObject{
 		return mSpeed;
 	}
 	
-	public void setXY( float x, float y){
+	public void setXY( int x, int y){
 		mX = x;
 		mY = y;
 		initVBOs();
@@ -83,8 +83,8 @@ public abstract class Projectile extends GLObject{
 		//pause
 		if( GameMechanics.getSingleton().running() == false ) dt = 0;		
 		mLastFrametime = ms;
-		double distance = this.getSpeed() * dt;
-		mXTranslate += (float)distance;		
+		int distance = (int)(this.getSpeed() * dt);
+		mXTranslate += distance;		
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
@@ -93,7 +93,7 @@ public abstract class Projectile extends GLObject{
 	}
 	
 	@Override
-	public float getX(){
+	public int getX(){
 		return mXTranslate + mX + mRadius; //returns the bullet real position because it gets translated and not moved
 	}
 
@@ -103,7 +103,7 @@ public abstract class Projectile extends GLObject{
 	}
 	
 	public void reset(){
-		mXTranslate = 0.0f;
+		mXTranslate = 0;
 		this.setActiveState(false);
 	}
 	

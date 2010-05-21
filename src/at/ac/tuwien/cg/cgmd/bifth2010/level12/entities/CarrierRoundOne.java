@@ -8,7 +8,7 @@ public class CarrierRoundOne extends MoneyCarrier {
 	public CarrierRoundOne(){
 		mHp = Definitions.FIRST_ROUND_ENEMIE_HP;
 		mStrength = Definitions.FIRST_ROUND_ENEMIE_STRENGTH;
-		mRadius = Definitions.FIRST_ROUND_ENEMIE_RADIUS;
+		mRadius = (short)Math.floor((float)Definitions.FIELD_SEGMENT_LENGTH / 100  * Definitions.FIRST_ROUND_ENEMIE_RADIUS) ;
 		mType = 1;
 		mMoney = Definitions.FIRST_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.FIRST_ROUND_ENEMIE_SPEED;

@@ -1,15 +1,13 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
@@ -20,8 +18,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 public class LevelActivity extends Activity{
 	private Display mDisplay = null;
 	private GLRenderer mRenderer = null;
-	
-	private int mTowerTypeSelectedByPlayer = Definitions.BASIC_TOWER;
 	
     /** Called when the activity is first created. */
     @Override
@@ -44,7 +40,7 @@ public class LevelActivity extends Activity{
     public boolean onTouchEvent (MotionEvent event)
     {
 		if (event.getAction() == MotionEvent.ACTION_UP) {
-			GameWorld.getSingleton().setXYpos(event.getX(), (mDisplay.getHeight() - event.getY()));
+			GameWorld.getSingleton().setXYpos((int)event.getX(), (int)(mDisplay.getHeight() - event.getY()));
 			//Log.d(LOG_TAG, "width: " + d.getWidth() + " height: " + d.getHeight() + " standard y: " + event.getY());
             //Log.d(LOG_TAG, "screen --> x: " + (event.getX()) + "y: " + (d.getHeight() - event.getY()));
         }
@@ -63,27 +59,26 @@ public class LevelActivity extends Activity{
     	TextureManager.getSingletonObject().add(R.drawable.l12_hyper_tower);
     	TextureManager.getSingletonObject().add(R.drawable.l12_advanced_tower);
     	TextureManager.getSingletonObject().add(R.drawable.l12_basic_projectile);
+    	TextureManager.getSingletonObject().add(R.drawable.l12_advanced_projectile);
+    	TextureManager.getSingletonObject().add(R.drawable.l12_hyper_projectile);
     	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl0);
     	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl1);
     	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl2);
     	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl3);
     	TextureManager.getSingletonObject().add(R.drawable.l12_icon);	
+    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
     	
     	int fieldheight = (int)( mDisplay.getHeight() * 0.9 ) ;
     	int menuheight = mDisplay.getHeight() - fieldheight;
     	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
 	
-		System.out.println("ON RESUME ACTIVITY!");
  	   	GLSurfaceView glview = new GLSurfaceView(this);
  	   	if( mRenderer == null ) mRenderer = new GLRenderer();
  	   	glview.setRenderer(mRenderer);
     	GameMechanics.getSingleton().unpause();
     	GameMechanics.getSingleton().setGameContext(this);
-    	
-    	
-    	
-        
+    	    
         LinearLayout l = new LinearLayout( this );
         l.setLayoutParams( new LayoutParams( LayoutParams.FILL_PARENT,   LayoutParams.FILL_PARENT));
         l.setOrientation(LinearLayout.VERTICAL);
@@ -99,36 +94,37 @@ public class LevelActivity extends Activity{
     
     @Override
     protected void onPause() {
-		System.out.println("ON PAUSE ACTIVITY!");
     	GameMechanics.getSingleton().pause();
         super.onPause();
     }
     
     @Override
 	protected void onStop() {
-		System.out.println("ON STOP ACTIVITY!");
 		//we finish this activity;
 		super.onStop();
     }
     
 	@Override
-	public void finish() {
-		System.out.println("ON FINISHED ACTIVITY!");	
+	public void finish() {	
+		SessionState s = new SessionState();
+		setResult(Activity.RESULT_OK, s.asIntent());
+		s.setProgress( GameMechanics.getSingleton().getMoney() );
+		GameWorld.destroySingleton();
+    	GameMechanics.destroySingleton();
 		super.finish();
 		mDisplay = null;
 	}
 	
 	@Override
 	public void onDestroy(){
-	   	System.out.println("ON DESTROY ACTIVITY");
-	   	SessionState s = new SessionState();
+	   	//SessionState s = new SessionState();
     	//we set the progress the user has made (must be between 0-100)
-	   	System.out.println("Result: "+GameMechanics.getSingleton().getMoney());
-    	s.setProgress( GameMechanics.getSingleton().getMoney() );
-    	GameWorld.destroySingleton();
-    	GameMechanics.destroySingleton();
+	   //	System.out.println("Result: "+GameMechanics.getSingleton().getMoney());
+    	//s.setProgress( GameMechanics.getSingleton().getMoney() );
+    	//GameWorld.destroySingleton();
+    	//GameMechanics.destroySingleton();
 		//we call the activity's setResult method 
-		setResult(Activity.RESULT_OK, s.asIntent());
+		//setResult(Activity.RESULT_OK, s.asIntent());
 	   	super.onDestroy();
 	   	mDisplay = null;
 	}
