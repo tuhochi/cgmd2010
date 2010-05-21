@@ -15,8 +15,9 @@ import android.view.OrientationEventListener;
 public class Accelerometer extends OrientationEventListener{
 	
 	private final int filterSize = 5;
-	private int[] filter = new int[filterSize];
+	private float[] filter = new float[filterSize];
 	private float sum = 0;
+	private float lastOrientation = Float.MAX_VALUE;
 	private int filterIndex = 0;
 	
 	private float orientation = 360.0f;
@@ -32,13 +33,19 @@ public class Accelerometer extends OrientationEventListener{
 	
 	public void onOrientationChanged(int orientation) {
 		
-		//Filter sensor data.
+		//Remove old value from filter kernel.		
 		sum -= filter[filterIndex];
-		filter[filterIndex] = orientation - 270	;
+		
+		//90¡ abziehen, um den 0-durchgang auf eine 180¡ drehung des devices zu bringen. ansonsten gibt es einen
+		//logischen filtering-fehler (delta zwischen den einzelnen filterwerten mšglicherweise > 180¡).
+		filter[filterIndex] = orientation - 90f;
+		if (filter[filterIndex] < 0) filter[filterIndex] += 360;
+		
 		sum += filter[filterIndex];
 		filterIndex = (++filterIndex >= filterSize) ? 0 : filterIndex;
 		
-		this.orientation = sum / (float)filterSize;
+		//in summe 270¡ abziehen (180 + zeile 47), um korrekte device orientierung zu erhalten.
+		this.orientation = sum / (float)filterSize - 180f;
 	}
 
 	/**
