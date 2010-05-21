@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 import java.util.ArrayList;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Sphere.
  *
@@ -16,11 +17,6 @@ public class Sphere
 	
 	/** The radius. */
 	public float radius;
-	
-	/** The temp. */
-	private final Vector3 temp;
-	
-	private final Vector3 temp2;
 	
 	/**
 	 * Instantiates a new sphere with zero radius.
@@ -61,8 +57,6 @@ public class Sphere
 	{
 		this.center = center;
 		this.radius = radius;
-		temp = new Vector3();
-		temp2 = new Vector3();
 	}
 	
 	/**
@@ -76,6 +70,8 @@ public class Sphere
 		this.radius = other.radius;
 	}
 	
+	private native boolean isPointInside(float[] center, float radius, float[] point);
+	
 	/**
 	 * Checks if is point inside.
 	 *
@@ -84,9 +80,13 @@ public class Sphere
 	 */
 	public boolean isPointInside(Vector3 point)
 	{
-		temp.set(point);
-		return temp.subtract(center).length() <= radius;
+		return isPointInside(center.v, radius, point.v);
 	}
+	
+	/*
+	 * uses the centroid as center
+	 */
+	private native float setPointSet(float[] vertices, float[] center);
 	
 	/**
 	 * Calculates this sphere from a set of Vector3s.
@@ -95,19 +95,18 @@ public class Sphere
 	 */
 	public void setPointSet(ArrayList<Vector3> vertices)
 	{
-		center.set(0, 0, 0);
-		for(Vector3 v : vertices)
-			center.add(v);
-		center.divide(vertices.size());
-		
-		radius = 0;
-		for(Vector3 v : vertices)
+		int size = vertices.size();
+		float[] verticesFloats = new float[size*3];
+		for(int i=0; i<size; i++)
 		{
-			float temp_r = Vector3.subtract(v, center).length();
-			if(temp_r > radius)
-				radius = temp_r;
+			Vector3 v = vertices.get(i);
+			for(int j=0; j<3; j++)
+				verticesFloats[3*i + j] = v.v[j];
 		}
+		radius = setPointSet(verticesFloats, center.v);
 	}
+	
+	private native float setSphereSet(float[] centers, float[] radii, float[] center);
 	
 	/**
 	 * Sets the sphere set.
@@ -125,28 +124,16 @@ public class Sphere
 			return;
 		}
 		
-		temp.set(0,0,0);
-		
-		for(int i=0; i<size; i++)
-			temp.add(sphereSet.get(i).center);
-		
-		temp.divide(size);
-		
-		/*
-		 * temp holds the centroid now
-		 */
-		
-		float radius = 0;
-		
+		float[] centers = new float[3*size];
+		float[] radii = new float[size];
 		for(int i=0; i<size; i++)
 		{
 			Sphere s = sphereSet.get(i);
-			float r = temp2.set(s.center).subtract(temp).length() + s.radius;
-			if(r > radius)
-				radius = r;
+			for(int j=0; j<3; j++)
+				centers[3*i + j] = s.center.v[j];
+			radii[i] = s.radius;
 		}
-
-		this.radius = radius;
-		this.center.set(temp);
+		
+		radius = setSphereSet(centers, radii, center.v);
 	}
 }
