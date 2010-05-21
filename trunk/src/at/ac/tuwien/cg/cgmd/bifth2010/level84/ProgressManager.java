@@ -12,17 +12,17 @@ public class ProgressManager extends SessionState {
 	
 	/** values if gems hit a drain **/
 	private final int drainClosedHit = 0;
-	private final int drainRoundHit = 10000;
-	private final int drainDiamondHit = 40000;
-	private final int drainRectHit = 30000;
-	private final int drainOctHit = 20000;
+	private final int drainRoundHit = 1000;
+	private final int drainDiamondHit = 4000;
+	private final int drainRectHit = 3000;
+	private final int drainOctHit = 2000;
 	
 	/** values if gems break **/
-	private final int drainClosedBreak = 25000;
-	private final int drainRoundBreak = drainRoundHit / 2;
-	private final int drainDiamondBreak = drainDiamondHit / 2;
-	private final int drainRectBreak = drainRectHit / 2;
-	private final int drainOctBreak = drainOctHit / 2;
+	private final int drainClosedBreak = 200;
+	private final int drainRoundBreak = drainRoundHit / 20;
+	private final int drainDiamondBreak = drainDiamondHit / 20;
+	private final int drainRectBreak = drainRectHit / 20;
+	private final int drainOctBreak = drainOctHit / 20;
 	
 	// the more difficult the figure of the gem is ...
 	// ... the more points you can lose ?!

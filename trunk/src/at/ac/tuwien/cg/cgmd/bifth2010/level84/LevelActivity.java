@@ -124,7 +124,10 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		for (int i = 0; i < numDrains;) {
 			
 			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f) / 3f) * 3 + 12; //(/ 3f * 3) to get rounded Results.
-			int drainType = (int)(Math.random() * 4.99); //4.99 to also get a (int) casting of 4. 4 = gem oct.
+			
+			//4.49 to also get a (int) casting of 4. 4 = gem oct. 
+			//+ 0.5 to reduce the amount of draintype "closed" by 50%.
+			int drainType = (int)(Math.random() * 4.49 + 0.5); 
 			float drainOrientation = (float)Math.random() * 180f - 90f; //reduce to max. of +/-90¡ to improve gameplay.
 			
 			if (!drains.containsKey(drainPos)) {
