@@ -164,7 +164,6 @@ public class Tile {
 			animAngle -= 200 * dt;
 			if (animAngle <= -180) {
 				setStateDeselect();
-				game.onCheckGameState();
 			}
 		}
 	}
@@ -226,7 +225,8 @@ public class Tile {
 	
 	public boolean isSelectable() {
 		if (stateAnim == StateAnimEnum.STATE_ANIM_SWITCH ||
-			stateAnim == StateAnimEnum.STATE_ANIM_TRAIN) {
+			stateAnim == StateAnimEnum.STATE_ANIM_TRAIN ||
+			isGoal) {
 			return false;
 		}
 		else {

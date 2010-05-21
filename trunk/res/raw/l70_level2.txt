@@ -1,5 +1,5 @@
 # Level configuration
-1,49,12.0,2.0
+1,49,8.0,2.0
 # Game tiles - From bottom to top
 3,3,0,0,0,0,0,0,3,3,
 5,5,0,0,0,0,0,0,3,3,

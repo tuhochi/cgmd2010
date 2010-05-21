@@ -25,6 +25,7 @@ public class Train {
     private static String STATE_TRAIN_DIR = "StateTrainDir";
     private static String STATE_TRAIN_TIME = "StateTrainTime";
     public static final float TILE_SIZE = 1.0f;
+    private static float SPRITE_ANIM_TIME = 0.5f;
 
     /**
      * Wagon data.
@@ -74,7 +75,7 @@ public class Train {
     private float angleOffset;     //< Offset orientation of the train
 
     private int iSprite;
-    private boolean isTrainStopped;
+    private float spriteTime;
 
     private float tileTime;  //< Time the train needs to move along one tile
     private float totalDt;   //< Total time inside one tile.
@@ -104,8 +105,9 @@ public class Train {
         posY = -2.5f + iyTile * Tile.TILE_SIZE;
 
         iSprite = 0;
-        isTrainStopped = false;
+        spriteTime = SPRITE_ANIM_TIME;
 
+        tile = null;
         type = TileEnum.TILE_HORIZONTAL;
         totalDt = startTime;
         angleOrient = 0.0f;
@@ -134,7 +136,7 @@ public class Train {
     public void createOpenGl(SpriteTexture tex) {
         this.tex = tex;
         geom = GeometryFactory.createQuad(0, 0, TILE_SIZE, TILE_SIZE);
-        geom.setTexBuffer(tex.getTexBuffer(0));
+        geom.setTexBuffer(tex.getTexBuffer(iSprite));
         
         // Set OpenGl data for the wagons
         for (Wagon it : wagons) {
@@ -146,6 +148,7 @@ public class Train {
 
     public void setTileTime(float time) {
         tileTime = time;
+        //update(0);
     }
 
 
@@ -282,16 +285,30 @@ public class Train {
      *            The delta time
      */
     public void update(float dt) {
-          
-        if (isTrainStopped) {
-            return;
+        
+        if (!game.isGameOver()) {
+            if (totalDt + dt >= tileTime) {
+                updateTrain();
+            } 
+            else {
+                updateOffset(dt);
+            }
+            
+            if (isGoalReached()) {
+                game.onGameCompleted();
+            }
         }
         
-        if (totalDt + dt >= tileTime) {
-            updateTrain();
-        } 
+        if (spriteTime <= 0) {
+            ++iSprite;
+            if (iSprite > 2) {
+                iSprite = 0;
+            }
+            geom.setTexBuffer(tex.getTexBuffer(iSprite));
+            spriteTime = SPRITE_ANIM_TIME;
+        }
         else {
-            updateOffset(dt);
+            spriteTime -= dt;
         }
     }
 
@@ -351,12 +368,14 @@ public class Train {
         if (tile == null && ixTile < 0) {
             return;
         }
-        
+                
         // Train moves outside the playfield - game over
         if (ixTile < 0 || iyTile < 0 || ixTile > 9 || iyTile > 5) {
-            isTrainStopped = true;
-            game.onGameover();
-            return;
+            if (!game.isGameCompleted()) {
+                geom.setTexBuffer(tex.getTexBuffer(iSprite));
+                game.onGameOver();
+                return;
+            }
         }
         
         // Get next tile and update its state (Tile could be an Switch-state)
@@ -370,8 +389,8 @@ public class Train {
             type = ntile.getType();
         } 
         else {
-            isTrainStopped = true;
-            game.onGameover();
+            geom.setTexBuffer(tex.getTexBuffer(iSprite));
+            game.onGameOver();
         }
     }
 
