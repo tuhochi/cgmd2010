@@ -38,6 +38,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	private ModelGem gemRect;
 	private ModelGem gemOct;
 	
+	private ModelGemShape gemRoundShape;
+	private ModelGemShape gemDiamondShape;
+	private ModelGemShape gemRectShape;
+	private ModelGemShape gemOctShape;
+	
 	private int numDrains;
 	private float levelWidth;
 	private float levelSpeed;
@@ -65,8 +70,6 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		progman = new ProgressManager();
 		soundManager = new SoundManager(this);
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		
-		
 		
 		initLevelParams();
 		initLevel();
@@ -145,7 +148,6 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		
 		progman.setMaxMoney(moneyToSpend);
 		
-		
 		//Create gems
 		gemRound = new ModelGem(ModelDrain.ROUND, R.drawable.l84_tex_gem_round, streetPosZ, drains);
 		gemRound.setSoundManager(soundManager);
@@ -160,8 +162,17 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		gemOct.setSoundManager(soundManager);
 		gems.add(gemOct);
 		
-		if (vibrator != null)
-		{
+		//Create gem shapes
+		gemRoundShape = new ModelGemShape(R.drawable.l84_tex_gemshape_round);
+		gemDiamondShape = new ModelGemShape(R.drawable.l84_tex_gemshape_diamond);
+		gemRectShape = new ModelGemShape(R.drawable.l84_tex_gemshape_rect);
+		gemOctShape = new ModelGemShape(R.drawable.l84_tex_gemshape_oct);
+		gems.add(gemRoundShape);
+		gems.add(gemDiamondShape);
+		gems.add(gemRectShape);
+		gems.add(gemOctShape);
+		
+		if (vibrator != null) {
 			gemRound.setVibrator(vibrator);
 			gemDiamond.setVibrator(vibrator);
 			gemRect.setVibrator(vibrator);
@@ -207,19 +218,19 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				switch(v.getId()) {
-					case R.id.l84_ButtonGemRound: gemRound.setVisible(true); break;
-					case R.id.l84_ButtonGemDiamond: gemDiamond.setVisible(true); break;
-					case R.id.l84_ButtonGemRect: gemRect.setVisible(true); break;
-					case R.id.l84_ButtonGemOct: gemOct.setVisible(true); break;
+					case R.id.l84_ButtonGemRound: gemRoundShape.setVisible(true); break;
+					case R.id.l84_ButtonGemDiamond: gemDiamondShape.setVisible(true); break;
+					case R.id.l84_ButtonGemRect: gemRectShape.setVisible(true); break;
+					case R.id.l84_ButtonGemOct: gemOctShape.setVisible(true); break;
 				}
 				break;
 				
 			case MotionEvent.ACTION_UP:
 				switch(v.getId()) {
-					case R.id.l84_ButtonGemRound: gemRound.startFall(); break;
-					case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(); break;
-					case R.id.l84_ButtonGemRect: gemRect.startFall(); break;
-					case R.id.l84_ButtonGemOct: gemOct.startFall(); break;
+					case R.id.l84_ButtonGemRound: gemRound.startFall(); gemRoundShape.setVisible(false); break;
+					case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(); gemDiamondShape.setVisible(false); break;
+					case R.id.l84_ButtonGemRect: gemRect.startFall(); gemRectShape.setVisible(false); break;
+					case R.id.l84_ButtonGemOct: gemOct.startFall(); gemOctShape.setVisible(false); break;
 				}
 				break;	
 		}

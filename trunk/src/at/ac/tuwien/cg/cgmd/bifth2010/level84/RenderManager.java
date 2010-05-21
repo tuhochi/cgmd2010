@@ -102,8 +102,10 @@ public class RenderManager implements Renderer {
 		
 		fps++;
 		
+		//TODO: lifecycle ... Timer Bug beheben.
+		
 		//UPDATE -------------------------
-		street.update(gl, deltaTime, accelerometer.getOrientation());
+		street.update(deltaTime, accelerometer.getOrientation());
 		
 		checkMoney(); //check if there is any money left
 		checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
@@ -119,8 +121,9 @@ public class RenderManager implements Renderer {
 		//Afterwards: Render gems.
 		ListIterator<Model> i = gems.listIterator();
 		while(i.hasNext()) {
-			ModelGem m = (ModelGem)i.next();
-			m.update(gl, deltaTime,street.getStreetPos(),accelerometer.getOrientation(), progman);
+			Model m = i.next();
+			if (m instanceof ModelGem)
+				((ModelGem)m).update(deltaTime, street.getStreetPos(), accelerometer.getOrientation(), progman);
 			m.draw(gl);
 		}
 	}

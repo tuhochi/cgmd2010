@@ -100,7 +100,7 @@ public class Model {
 	 * Updates the model's transformation(s).
 	 * @param deltaTime
 	 */
-	public void update(GL10 gl, double deltaTime, float deviceRotation) {
+	public void update(double deltaTime, float deviceRotation) {
 		this.deltaTime = deltaTime;
 		this.deviceRotation = deviceRotation;
 	}

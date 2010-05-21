@@ -79,12 +79,11 @@ public class ModelStreet extends Model {
 	
 	/**
 	 * Update the model's transformations.
-	 * @param gl OpenGL ES context
 	 * @param deltaTime Time that passed between the current and the last frame
 	 * @param deviceRotation Current device's rotation in degrees.
 	 */
-	public void update(GL10 gl, double deltaTime, float deviceRotation) {
-		super.update(gl, deltaTime, deviceRotation);
+	public void update(double deltaTime, float deviceRotation) {
+		super.update(deltaTime, deviceRotation);
 		float deltaSpeed = (float)((double)speed * deltaTime);
 		this.posX -= deltaSpeed;
 	}
