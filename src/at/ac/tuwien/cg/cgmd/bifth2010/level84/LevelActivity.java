@@ -5,14 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -55,6 +53,8 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	private ProgressManager progman;
 	private SoundManager soundManager;
 	
+	private Vibrator vibrator;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l84_level);
@@ -63,9 +63,12 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		gems = new LinkedList<Model>();
 		progman = new ProgressManager();
 		soundManager = new SoundManager(this);
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		
 		//getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		
 		
 		initLevelParams();
 		initLevel();
@@ -155,10 +158,13 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		gemOct.setSoundManager(soundManager);
 		gems.add(gemOct);
 		
-		//TODO: loading obj-files
-		//InputStream modelFile1 = getApplicationContext().getResources().openRawResource(R.raw.l84_quad);
-		//gemOct = new ModelObj(modelFile1, R.drawable.l84_gem_oct);
-		//gems.add(gemOct);
+		if (vibrator != null)
+		{
+			gemRound.setVibrator(vibrator);
+			gemDiamond.setVibrator(vibrator);
+			gemRect.setVibrator(vibrator);
+			gemOct.setVibrator(vibrator);
+		}
 	}
 
 	
