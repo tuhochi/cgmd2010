@@ -25,7 +25,7 @@ public class RenderManager implements Renderer {
 	private ModelStreet street;
 	private List<Model> gems;
 	
-	private long lastTime = 0;
+	private long lastTime = -1;
 	private Accelerometer accelerometer;
 	
 	private TextView tfFps;
@@ -67,7 +67,6 @@ public class RenderManager implements Renderer {
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
-
 		
 		CharSequence endtext = "The end is near";
 		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
@@ -94,7 +93,7 @@ public class RenderManager implements Renderer {
 		Date time = new Date();
 		long currentTime = time.getTime();
 		
-		if (lastTime == 0)
+		if (lastTime == -1)
 			lastTime = time.getTime();
 		
 		double deltaTime = (double)(currentTime - lastTime) / 1000.0;
@@ -168,8 +167,10 @@ public class RenderManager implements Renderer {
 	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
-		progman.setProgress(0);
+		
+		//update current time if lifecycle was interrupted.
+		Date time = new Date();
+		lastTime = time.getTime();
 		
 		//Load textures of all available models.
 		street.loadGLTexture(gl, (Context)this.activity);
