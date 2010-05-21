@@ -335,7 +335,7 @@ public class Vector4
 	{
 		homogenize();
 		for(int i=0; i<3; i++)
-			v[0] /= s;
+			v[i] /= s;
 		return this;
 	}
 	
