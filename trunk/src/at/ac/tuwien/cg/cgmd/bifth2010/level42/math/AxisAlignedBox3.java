@@ -138,12 +138,14 @@ public class AxisAlignedBox3
 			max.v[2] = candidate.v[2];
 	}
 	
+	private native Vector3 center(float minx, float maxx, float miny, float maxy, float minz, float maxz);
+	
 	/**
 	 * @return the center of this box
 	 */
 	public Vector3 center()
 	{ 
-		return new Vector3(0.5f * (min.v[0]+max.v[0]), 0.5f * (min.v[1]+max.v[1]), 0.5f * (min.v[2]+max.v[2])); 
+		return center(min.v[0], max.v[0], min.v[1], max.v[1], min.v[2], max.v[2]); 
 	}
 	
 	/* (non-Javadoc)

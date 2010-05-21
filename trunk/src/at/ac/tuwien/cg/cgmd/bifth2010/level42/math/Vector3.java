@@ -109,17 +109,8 @@ public class Vector3 implements Persistable
 		this(arr[0],arr[1],arr[2]);
 	}
 	
-	/**
-	 * Inverts this
-	 *
-	 * @return this
-	 */
-	public Vector3 invert()
-	{
-		for(int i=0; i<3; i++)
-			v[i] = -v[i];
-		return this;
-	}
+	private native void add(float[] v, float[] otherV);
+	private native void add(float[] v, float s);
 	
 	/**
 	 * Adds another Vector3 to this
@@ -129,8 +120,19 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 add(Vector3 other)
 	{
-		for(int i=0; i<3; i++)
-			v[i] += other.v[i];
+		add(v, other.v);
+		return this;
+	}
+	
+	/**
+	 * Adds a skalar to this
+	 *
+	 * @param s the skalar to add
+	 * @return this
+	 */
+	public Vector3 add(float s)
+	{
+		add(v, s);
 		return this;
 	}
 	
@@ -147,6 +149,21 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
+	 * Adds a skalar to a Vector3
+	 *
+	 * @param a the first Vector3
+	 * @param s the skalar
+	 * @return a new Vector3, set to a+b
+	 */
+	public static Vector3 add(Vector3 a, float s)
+	{
+		return new Vector3(a).add(s);
+	}
+	
+	private native void subtract(float[] v, float[] otherV);
+	private native void subtract(float[] v, float s);
+	
+	/**
 	 * Subtracts a Vector3 from this
 	 *
 	 * @param other the Vector3 to subtract
@@ -154,8 +171,19 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 subtract(Vector3 other)
 	{
-		for(int i=0; i<3; i++)
-			v[i] -= other.v[i];
+		subtract(v, other.v);
+		return this;
+	}
+	
+	/**
+	 * Subtracts a skalar from this
+	 *
+	 * @param other the skalar to subtract
+	 * @return this
+	 */
+	public Vector3 subtract(float s)
+	{
+		subtract(v,s);
 		return this;
 	}
 	
@@ -172,6 +200,20 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
+	 * Subtract a skalar from a Vector3
+	 * @param a the Vector3
+	 * @param s the skalar
+	 * @return a new Vector3, set to a-s
+	 */
+	public static Vector3 subtract(Vector3 a, float s)
+	{
+		return new Vector3(a).subtract(s);
+	}
+	
+	private native void multiply(float[] v, float[] otherV);
+	private native void multiply(float[] v, float s);
+	
+	/**
 	 * Multiply this with another Vector3
 	 *
 	 * @param other the Vector3 to multiply
@@ -179,23 +221,21 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 multiply(Vector3 other)
 	{
-		for(int i=0; i<3; i++)
-			v[i] *= other.v[i];
+		multiply(v, other.v);
 		return this;
 	}
-	
+
 	/**
-	 * Multiplies a Vector3 with a factor
+	 * Multiplies this with a factor
 	 *
-	 * @param a the Vector3
-	 * @param b the factor
-	 * @return a new Vector3, set to a*b
+	 * @param s the factor
+	 * @return this
 	 */
-	public static Vector3 multiply(Vector3 a, float b)
+	public Vector3 multiply(float s)
 	{
-		return new Vector3(a).multiply(b);
+		multiply(v,s);
+		return this;
 	}
-	
 	
 	/**
 	 * Multiplies two Vector3
@@ -210,57 +250,19 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Calculates the dot product of two Vector3
+	 * Multiplies a Vector3 with a factor
 	 *
-	 * @param a the first Vector3
-	 * @param b the second Vector3
-	 * @return the dot product of a and b
+	 * @param a the Vector3
+	 * @param b the factor
+	 * @return a new Vector3, set to a*b
 	 */
-	public static float dotProduct (Vector3 a, Vector3 b)
+	public static Vector3 multiply(Vector3 a, float b)
 	{
-		return (a.v[0]*b.v[0] + a.v[1]*b.v[1] + a.v[2]*b.v[2]);
+		return new Vector3(a).multiply(b);
 	}
 	
-	/**
-	 * Calculates the cross product of two Vector3
-	 *
-	 * @param a the first Vector3
-	 * @param b the second Vector3
-	 * @return a new Vector3, set to a x b
-	 */
-	public static Vector3 crossProduct (Vector3 a, Vector3 b)
-	{
-		Vector3 result = new Vector3();
-		crossProduct(a, b, result);
-		return result;
-	}
-	
-	/**
-	 * Calculates the cross product of two Vector3 and writes it back into a parameter
-	 *
-	 * @param a the first Vector3
-	 * @param b the second Vector3
-	 * @param result the result will be written into this parameter
-	 */
-	public static void crossProduct(Vector3 a, Vector3 b, Vector3 result)
-	{
-		result.v[0] = a.v[1]*b.v[2] - a.v[2]*b.v[1];
-		result.v[1] = a.v[2]*b.v[0] - a.v[0]*b.v[2];
-		result.v[2] = a.v[0]*b.v[1] - a.v[1]*b.v[0];
-	}
-	
-	/**
-	 * Multiplies this with a factor
-	 *
-	 * @param s the factor
-	 * @return this
-	 */
-	public Vector3 multiply(float s)
-	{
-		for(int i=0; i<3; i++)
-			v[i] *= s;
-		return this;
-	}
+	private native void divide(float[] v, float[] otherV);
+	private native void divide(float[] v, float s);
 	
 	/**
 	 * Divides this by another Vector3
@@ -270,8 +272,19 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 divide(Vector3 other)
 	{
-		for(int i=0; i<3; i++)
-			v[i] /= other.v[i];
+		divide(v, other.v);
+		return this;
+	}
+	
+	/**
+	 * Divides this by a divisor
+	 *
+	 * @param s the divisor
+	 * @return this
+	 */
+	public Vector3 divide(float s)
+	{
+		divide(v, s);
 		return this;
 	}
 	
@@ -288,17 +301,60 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Divides this by a divisor
+	 * Divides a Vector3 by a skalar
 	 *
-	 * @param s the divisor
-	 * @return this
+	 * @param a the Vector3
+	 * @param s the skalar
+	 * @return a new Vector3, set to a/s
 	 */
-	public Vector3 divide(float s)
+	public static Vector3 divide(Vector3 a, float s)
 	{
-		for(int i=0; i<3; i++)
-			v[i] /= s;
-		return this;
+		return new Vector3(a).divide(s);
 	}
+
+	private static native float dotProduct(float[] a, float[] b);
+	
+	/**
+	 * Calculates the dot product of two Vector3
+	 *
+	 * @param a the first Vector3
+	 * @param b the second Vector3
+	 * @return the dot product of a and b
+	 */
+	public static float dotProduct (Vector3 a, Vector3 b)
+	{
+		return dotProduct(a.v, b.v);
+	}
+
+	private static native void crossProduct(float[] a, float[] b, float[] result);
+	
+	/**
+	 * Calculates the cross product of two Vector3 and writes it back into a parameter
+	 *
+	 * @param a the first Vector3
+	 * @param b the second Vector3
+	 * @param result the result will be written into this parameter
+	 */
+	public static void crossProduct(Vector3 a, Vector3 b, Vector3 result)
+	{
+		crossProduct(a.v, b.v, result.v);
+	}
+	
+	/**
+	 * Calculates the cross product of two Vector3
+	 *
+	 * @param a the first Vector3
+	 * @param b the second Vector3
+	 * @return a new Vector3, set to a x b
+	 */
+	public static Vector3 crossProduct (Vector3 a, Vector3 b)
+	{
+		Vector3 result = new Vector3();
+		crossProduct(a, b, result);
+		return result;
+	}
+
+	private native void normalize(float[] v);
 	
 	/**
 	 * Normalizes this
@@ -307,12 +363,7 @@ public class Vector3 implements Persistable
 	 */
 	public Vector3 normalize()
 	{
-		float length = length();
-		if(length != 0 && length != 1)
-		{
-			for(int i=0; i<3; i++)
-				v[i] /= length;
-		}
+		normalize(v);
 		return this;
 	}
 	
@@ -327,6 +378,19 @@ public class Vector3 implements Persistable
 		return new Vector3(a).normalize();
 	}
 	
+	private native float getAngle(float[] a, float[] b);
+	
+	/**
+	 * Gets the angle between this and another Vector3
+	 *
+	 * @param other the second Vector3
+	 * @return the angle between this and other
+	 */
+	public float getAngle(Vector3 other)
+	{
+		return getAngle(v, other.v);
+	}
+	
 	/**
 	 * Gets the angle between two Vector3
 	 *
@@ -336,15 +400,30 @@ public class Vector3 implements Persistable
 	 */
 	public static float getAngle(Vector3 a, Vector3 b)
 	{
-		return (float)Math.acos((Vector3.dotProduct(a, b)/(a.length()*b.length())));
+		return a.getAngle(b);
 	}
+
+	private native void invert(float[] v);
+	
+	/**
+	 * Inverts this
+	 *
+	 * @return this
+	 */
+	public Vector3 invert()
+	{
+		invert(v);
+		return this;
+	}
+	
+	private native float length(float[] v);
 	
 	/**
 	 * @return the length of this
 	 */
 	public float length()
 	{
-		return (float)Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+		return length(v);
 	}
 	
 	/* (non-Javadoc)

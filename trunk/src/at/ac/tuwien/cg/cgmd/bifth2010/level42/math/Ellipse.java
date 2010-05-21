@@ -24,10 +24,6 @@ public class Ellipse
 
 	/** The perimeter of the ellipse */
 	public float perimeter;
-	
-	//temp vars
-	private final Vector3 aCost,bSint,sumAB;
-	private float sint,cost,lambda;
 
 	/**
 	 * Instantiates a new ellipse.
@@ -40,10 +36,6 @@ public class Ellipse
 	{
 		//init
 		this.pos = new Vector3();
-		this.aCost = new Vector3();
-		this.bSint = new Vector3();
-		this.sumAB = new Vector3();
-		this.lambda = 0;
 		
 		this.center = center;
 		this.a = a;
@@ -52,20 +44,17 @@ public class Ellipse
 		calcPerimeter();
 	}
 
+	private native float calcPerimeter(float[] a, float[] b);
+	
 	/**
 	 * Compute a approximation for the perimeter of the ellipse
 	 */
 	public void calcPerimeter()
 	{
-		float aLength = a.length();
-		float bLength = b.length();
-		
-		lambda = (aLength-bLength)/(aLength+bLength);
-		
-		float threeLambdaPowTwo = 3*(float)Math.pow(lambda, 2);
-		
-		perimeter = (float)Math.PI * (aLength+bLength) * (1 + (threeLambdaPowTwo/(10 + ((float)Math.sqrt(4 - threeLambdaPowTwo)))));
+		perimeter = calcPerimeter(a.v, b.v);
 	}
+	
+	private native void getPoint(float[] center, float[] a, float[] b, float[] result, float t);
 	
 	/**
 	 * Gets the point on the ellipse for a given parameter t
@@ -74,25 +63,8 @@ public class Ellipse
 	 */
 	public Vector3 getPoint(float t)
 	{
-        //pos = center + a cos(t) + b sin(t) - thx to dr. math 
-
-		aCost.set(a);
-		bSint.set(b);
-
-		cost = (float)Math.cos(t);
-		sint = (float)Math.sin(t);
-
-		aCost.multiply(cost);
-		bSint.multiply(sint);
-		
-		//... a cos(t) + b sin(t)
-		sumAB.set(aCost);
-		sumAB.add(bSint);
-		
-		//center + a cos(t) + b sin(t)
-		pos.set(center);
-		pos.add(sumAB);
-		
+        //pos = center + a cos(t) + b sin(t) - thx to dr. math
+		getPoint(center.v, a.v, b.v, pos.v, t);
 		return pos;
 	}
 }

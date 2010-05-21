@@ -39,6 +39,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
  */
 public class LevelActivity extends Activity
 {
+	static
+	{
+		System.loadLibrary("l42signanzorbit");
+		initNative();
+	}
+
+	private static native void initNative();
+
 	/** The Constant TAG. */
 	public static final String TAG = "Signanzorbit";
 	

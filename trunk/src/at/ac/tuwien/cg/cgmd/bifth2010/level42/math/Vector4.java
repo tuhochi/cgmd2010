@@ -99,6 +99,10 @@ public class Vector4
 		this(arr[0],arr[1],arr[2],arr[3]);
 	}
 	
+	private native void add(float[] v, float[] otherV);
+	private native void add3(float[] v, float[] otherV);
+	private native void add(float[] v, float s);
+	
 	/**
 	 * Adds another Vector4 to this
 	 *
@@ -107,10 +111,18 @@ public class Vector4
 	 */
 	public Vector4 add(Vector4 other)
 	{
-		homogenize();
-		other = homogenize(other);
-		for(int i=0; i<3; i++)
-			v[i] += other.v[i];
+		add(v, other.v);
+		return this;
+	}
+	
+	/**
+	 * Adds a skalar to this
+	 * @param s the skalar
+	 * @return this
+	 */
+	public Vector4 add(float s)
+	{
+		add(v, s);
 		return this;
 	}
 	
@@ -127,6 +139,17 @@ public class Vector4
 	}
 	
 	/**
+	 * Adds a skalar to a Vector4
+	 * @param a the Vector4
+	 * @param s the skalar
+	 * @return a new Vector4, set to a+s
+	 */
+	public static Vector4 add(Vector4 a , float s)
+	{
+		return new Vector4(a).add(s);
+	}
+	
+	/**
 	 * Adds a Vector3 to this
 	 *
 	 * @param other a Vector3
@@ -134,9 +157,7 @@ public class Vector4
 	 */
 	public Vector4 add(Vector3 other)
 	{
-		homogenize();
-		for(int i=0; i<3; i++)
-			v[i] += other.v[i];
+		add3(v, other.v);
 		return this;
 	}
 	
@@ -152,6 +173,10 @@ public class Vector4
 		return new Vector4(a).add(b);
 	}
 	
+	private native void subtract(float[] v, float[] otherV);
+	private native void subtract3(float[] v, float[] otherV);
+	private native void subtract(float[] v, float s);
+	
 	/**
 	 * Subtracts a Vector4 from this
 	 *
@@ -160,15 +185,24 @@ public class Vector4
 	 */
 	public Vector4 subtract(Vector4 other)
 	{
-		homogenize();
-		other = homogenize(other);
-		for(int i=0; i<3; i++)
-			v[i] -= other.v[i];
+		subtract(v, other.v);
 		return this;
 	}
 	
 	/**
-	 * Subtracts to Vector4
+	 * Subtracts a skalar from this
+	 *
+	 * @param s the skalar
+	 * @return this
+	 */
+	public Vector4 subtract(float s)
+	{
+		subtract(v, s);
+		return this;
+	}
+	
+	/**
+	 * Subtracts two Vector4
 	 *
 	 * @param a the first Vector4
 	 * @param b the second Vector4
@@ -180,6 +214,18 @@ public class Vector4
 	}
 	
 	/**
+	 * Subtracts a skalar from a Vector4
+	 *
+	 * @param a the Vector4
+	 * @param s the skalar
+	 * @return a new Vector4, set to a-s
+	 */
+	public static Vector4 subtract(Vector4 a, float s)
+	{
+		return new Vector4(a).subtract(s);
+	}
+	
+	/**
 	 * Subtracts a Vector3 from this
 	 *
 	 * @param other the Vector3
@@ -187,9 +233,7 @@ public class Vector4
 	 */
 	public Vector4 subtract(Vector3 other)
 	{
-		homogenize();
-		for(int i=0; i<3; i++)
-			v[i] -= other.v[i];
+		subtract3(v, other.v);
 		return this;
 	}
 	
@@ -205,6 +249,10 @@ public class Vector4
 		return new Vector4(a).subtract(b);
 	}
 	
+	private native void multiply(float[] v, float[] otherV);
+	private native void multiply3(float[] v, float[] otherV);
+	private native void multiply(float[] v, float s);
+	
 	/**
 	 * Multiply this with a Vector4
 	 *
@@ -213,10 +261,19 @@ public class Vector4
 	 */
 	public Vector4 multiply(Vector4 other)
 	{
-		homogenize();
-		other = homogenize(other);
-		for(int i=0; i<3; i++)
-			v[i] *= other.v[i];
+		multiply(v, other.v);
+		return this;
+	}
+	
+	/**
+	 * Multiply this with a factor
+	 *
+	 * @param s the factor
+	 * @return this
+	 */
+	public Vector4 multiply(float s)
+	{
+		multiply(v, s);
 		return this;
 	}
 	
@@ -233,6 +290,18 @@ public class Vector4
 	}
 	
 	/**
+	 * Multiply a Vector4 with a skalar
+	 * 
+	 * @param a the first Vector4
+	 * @param s the skalar
+	 * @return a new Vector4, set to a*s
+	 */
+	public static Vector4 multiply(Vector4 a, float s)
+	{
+		return new Vector4(a).multiply(s);
+	}
+	
+	/**
 	 * Multiply this with a Vector3
 	 *
 	 * @param other the Vector3
@@ -240,9 +309,7 @@ public class Vector4
 	 */
 	public Vector4 multiply(Vector3 other)
 	{
-		homogenize();
-		for(int i=0; i<3; i++)
-			v[i] *= other.v[i];
+		multiply3(v, other.v);
 		return this;
 	}
 	
@@ -257,20 +324,10 @@ public class Vector4
 	{
 		return new Vector4(a).multiply(b);
 	}
-	
-	/**
-	 * Multiply this with a factor
-	 *
-	 * @param s the factor
-	 * @return this
-	 */
-	public Vector4 multiply(float s)
-	{
-		homogenize();
-		for(int i=0; i<3; i++)
-			v[i] *= s;
-		return this;
-	}
+
+	private native void divide(float[] v, float[] otherV);
+	private native void divide3(float[] v, float[] otherV);
+	private native void divide(float[] v, float s);
 	
 	/**
 	 * Divide this by another Vector4
@@ -280,10 +337,19 @@ public class Vector4
 	 */
 	public Vector4 divide(Vector4 other)
 	{
-		homogenize();
-		other = homogenize(other);
-		for(int i=0; i<3; i++)
-			v[i] /= other.v[i];
+		divide(v, other.v);
+		return this;
+	}
+	
+	/**
+	 * Divide this by a factor
+	 *
+	 * @param s the the factor
+	 * @return this
+	 */
+	public Vector4 divide(float s)
+	{
+		divide(v, s);
 		return this;
 	}
 	
@@ -300,6 +366,17 @@ public class Vector4
 	}
 	
 	/**
+	 * Divide a Vector4 by a skalar
+	 * @param a the Vector4
+	 * @param s the skalar
+	 * @return a new Vector4, set to a/s
+	 */
+	public static Vector4 divide(Vector4 a, float s)
+	{
+		return new Vector4(a).divide(s);
+	}
+	
+	/**
 	 * Divide this by a Vector3
 	 *
 	 * @param other the Vector3
@@ -307,9 +384,7 @@ public class Vector4
 	 */
 	public Vector4 divide(Vector3 other)
 	{
-		homogenize();
-		for(int i=0; i<3; i++)
-			v[i] /= other.v[i];
+		divide3(v, other.v);
 		return this;
 	}
 	
@@ -325,19 +400,21 @@ public class Vector4
 		return new Vector4(a).divide(b);
 	}
 	
+	private static native float dotProduct(float[] a, float[] b);
+	
 	/**
-	 * Divide this by a factor
+	 * Calculates the dot product of two Vector3
 	 *
-	 * @param s the the factor
-	 * @return this
+	 * @param a the first Vector4
+	 * @param b the second Vector4
+	 * @return the dot product of a and b
 	 */
-	public Vector4 divide(float s)
+	public static float dotProduct (Vector4 a, Vector4 b)
 	{
-		homogenize();
-		for(int i=0; i<3; i++)
-			v[i] /= s;
-		return this;
+		return dotProduct(a.v, b.v);
 	}
+	
+	private native void normalize(float[] v);
 	
 	/**
 	 * Normalizes this
@@ -346,13 +423,7 @@ public class Vector4
 	 */
 	public Vector4 normalize()
 	{
-		homogenize();
-		float length = length();
-		if(length != 0 && length != 1)
-		{
-			for(int i=0; i<3; i++)
-				v[i] /= length;
-		}
+		normalize(v);
 		return this;
 	}
 	
@@ -367,6 +438,8 @@ public class Vector4
 		return new Vector4(a).normalize();
 	}
 	
+	private native void homogenize(float[] v);
+	
 	/**
 	 * Homogenizes this
 	 *
@@ -374,12 +447,7 @@ public class Vector4
 	 */
 	public Vector4 homogenize()
 	{
-		if(v[3] != 1.0f)
-		{
-			for(int i=0; i<3; i++)
-				v[i] /= v[3];
-			v[3] = 1;
-		}
+		homogenize(v);
 		return this;
 	}
 	
@@ -393,14 +461,28 @@ public class Vector4
 	{
 		return new Vector4(a).homogenize();
 	}
+
+	private native void invert(float[] v);
 	
 	/**
-	 * @return the length of this Vector4
+	 * Inverts this
+	 *
+	 * @return this
+	 */
+	public Vector4 invert()
+	{
+		invert(v);
+		return this;
+	}
+	
+	private native float length(float[] v);
+	
+	/**
+	 * @return the length of this
 	 */
 	public float length()
 	{
-		homogenize();
-		return (float)Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+		return length(v);
 	}
 	
 	/* (non-Javadoc)

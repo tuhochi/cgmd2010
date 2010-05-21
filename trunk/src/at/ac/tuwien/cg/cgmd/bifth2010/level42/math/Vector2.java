@@ -71,6 +71,9 @@ public class Vector2
 		this(arr[0],arr[1]);
 	}
 	
+	private native void add(float[] v, float[] otherV);
+	private native void add(float[] v, float s);
+	
 	/**
 	 * Adds the another Vector2 to this
 	 *
@@ -79,8 +82,19 @@ public class Vector2
 	 */
 	public Vector2 add(Vector2 other)
 	{
-		for(int i=0; i<2; i++)
-			v[i] += other.v[i];
+		add(v, other.v);
+		return this;
+	}
+	
+	/**
+	 * Adds a skalar to this
+	 *
+	 * @param other skalar
+	 * @return this
+	 */
+	public Vector2 add(float s)
+	{
+		add(v, s);
 		return this;
 	}
 	
@@ -97,20 +111,46 @@ public class Vector2
 	}
 	
 	/**
-	 * Subtracts another Vector2 from this
+	 * Adds a skalar to a Vector2
+	 *
+	 * @param a the first Vector2
+	 * @param s the skalar
+	 * @return a new Vector2, set to a+b
+	 */
+	public static Vector2 add(Vector2 a, float s)
+	{
+		return new Vector2(a).add(s);
+	}
+	
+	private native void subtract(float[] v, float[] otherV);
+	private native void subtract(float[] v, float s);
+	
+	/**
+	 * Subtracts the another Vector2 from this
 	 *
 	 * @param other the other Vector2
 	 * @return this
 	 */
 	public Vector2 subtract(Vector2 other)
 	{
-		for(int i=0; i<2; i++)
-			v[i] -= other.v[i];
+		subtract(v, other.v);
 		return this;
 	}
 	
 	/**
-	 * Subtracts two Vector2
+	 * Subtracts a skalar from this
+	 *
+	 * @param other skalar
+	 * @return this
+	 */
+	public Vector2 subtract(float s)
+	{
+		subtract(v, s);
+		return this;
+	}
+	
+	/**
+	 * subtracts two Vector2
 	 *
 	 * @param a the first Vector2
 	 * @param b the second Vector2
@@ -122,6 +162,21 @@ public class Vector2
 	}
 	
 	/**
+	 * subtracts a skalar from a Vector2
+	 *
+	 * @param a the first Vector2
+	 * @param s the skalar
+	 * @return a new Vector2, set to a-b
+	 */
+	public static Vector2 subtract(Vector2 a, float s)
+	{
+		return new Vector2(a).subtract(s);
+	}
+	
+	private native void multiply(float[] v, float[] otherV);
+	private native void multiply(float[] v, float s);
+	
+	/**
 	 * Multiply this by another Vector2
 	 *
 	 * @param other the other Vector2
@@ -129,23 +184,21 @@ public class Vector2
 	 */
 	public Vector2 multiply(Vector2 other)
 	{
-		for(int i=0; i<2; i++)
-			v[i] *= other.v[i];
+		multiply(v, other.v);
 		return this;
 	}
 	
 	/**
-	 * Multiply a Vector2 by a factor
+	 * Multiplies this by a factor
 	 *
-	 * @param a the Vector2
-	 * @param b the factor
-	 * @return a new Vector2, set to a*b
+	 * @param s the factor
+	 * @return this
 	 */
-	public static Vector2 multiply(Vector2 a, float b)
+	public Vector2 multiply(float s)
 	{
-		return new Vector2(a).multiply(b);
+		multiply(v, s);
+		return this;
 	}
-	
 	
 	/**
 	 * Multiplies two Vector2
@@ -160,29 +213,19 @@ public class Vector2
 	}
 	
 	/**
-	 * Calculates the dot product of two Vector2
+	 * Multiply a Vector2 by a factor
 	 *
-	 * @param a the first Vector2
-	 * @param b the second Vector2
-	 * @return the dot product of a and b
+	 * @param a the Vector2
+	 * @param b the factor
+	 * @return a new Vector2, set to a*b
 	 */
-	public static float dotProduct(Vector2 a, Vector2 b)
+	public static Vector2 multiply(Vector2 a, float b)
 	{
-		return (a.v[0]*b.v[0] + a.v[1]*b.v[1]);
+		return new Vector2(a).multiply(b);
 	}
 	
-	/**
-	 * Multiplies this by a factor
-	 *
-	 * @param s the factor
-	 * @return this
-	 */
-	public Vector2 multiply(float s)
-	{
-		for(int i=0; i<2; i++)
-			v[i] *= s;
-		return this;
-	}
+	private native void divide(float[] v, float[] otherV);
+	private native void divide(float[] v, float s);
 	
 	/**
 	 * Divides this by another Vector2
@@ -192,8 +235,19 @@ public class Vector2
 	 */
 	public Vector2 divide(Vector2 other)
 	{
-		for(int i=0; i<2; i++)
-			v[i] /= other.v[i];
+		divide(v,other.v);
+		return this;
+	}
+	
+	/**
+	 * Divides this by a divisor
+	 *
+	 * @param s the divisor
+	 * @return this
+	 */
+	public Vector2 divide(float s)
+	{
+		divide(v,s);
 		return this;
 	}
 	
@@ -208,19 +262,34 @@ public class Vector2
 	{
 		return new Vector2(a).divide(b);
 	}
+
+	/**
+	 * Divides a Vector2 by a factor
+	 *
+	 * @param a the Vector2
+	 * @param b the factor
+	 * @return a new Vector2, set to a/b
+	 */
+	public static Vector2 divide(Vector2 a, float b)
+	{
+		return new Vector2(a).divide(b);
+	}
+	
+	private static native float dotProduct(float[] a, float[] b);
 	
 	/**
-	 * Divides this by a divisor
+	 * Calculates the dot product of two Vector2
 	 *
-	 * @param s the divisor
-	 * @return this
+	 * @param a the first Vector2
+	 * @param b the second Vector2
+	 * @return the dot product of a and b
 	 */
-	public Vector2 divide(float s)
+	public static float dotProduct(Vector2 a, Vector2 b)
 	{
-		for(int i=0; i<2; i++)
-			v[i] /= s;
-		return this;
+		return dotProduct(a.v, b.v);
 	}
+	
+	private native void normalize(float[] v);
 	
 	/**
 	 * Normalizes this
@@ -229,12 +298,7 @@ public class Vector2
 	 */
 	public Vector2 normalize()
 	{
-		float length = length();
-		if(length != 0 && length != 1)
-		{
-			for(int i=0; i<2; i++)
-				v[i] /= length;
-		}
+		normalize(v);
 		return this;
 	}
 	
@@ -248,15 +312,30 @@ public class Vector2
 	{
 		return new Vector2(a).normalize();
 	}
-	
+
+	private native void invert(float[] v);
+
+	/**
+	 * Inverts this
+	 *
+	 * @return this
+	 */
+	public Vector2 invert()
+	{
+		invert(v);
+		return this;
+	}
+
+	private native float length(float[] v);
+
 	/**
 	 * @return the length of this
 	 */
 	public float length()
 	{
-		return (float)Math.sqrt(v[0]*v[0] + v[1]*v[1]);
+		return length(v);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
