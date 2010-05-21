@@ -2,12 +2,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.ListIterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.os.Vibrator;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 /**
@@ -26,6 +24,9 @@ public class ModelGem extends Model {
 	private float posZ = startPosZ;
 	/** fall speed of the gem **/
 	private float fallSpeed = 0.0f;
+	
+	private float maxDeltaPos = 1f;
+	private float maxDeltaAngle = 5f; 
 	
 	/** flag, if gem is falling or not **/
 	private boolean isFalling = false;
@@ -121,47 +122,49 @@ public class ModelGem extends Model {
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
 	{
 		boolean drainhit = false;
-		//check type of collision (hit/miss)
-		Iterator<ModelDrain> i = drains.values().iterator();
-		while(i.hasNext())
-		{
-			if (!drainhit)
-			{
-				ModelDrain drain = i.next();
-				// calculate the position of the drain
-				
-				float tempPos = streetPos + drain.getPosition();
-				if ((tempPos > 1) || (tempPos < -1)){ } //if this drain has no interesting position, skip to the next one
-				else
-				{
-					
-					int drainType = drain.getDrainStyle();
-					if (drainType == 0)
-					{
-						this.soundman.playSound(SoundFX.BREAK);
-						progman.loseMoneyByBreak(drainType);
-					}
-					else if (drainType == this.gemType)
-					{
-						//TODO: check orientations
-						//if (Math.abs(drain.getOrientationAngle() - deviceRotation ) < 1.0f)
-						long vDuration = 300;
-						if (this.vibrator != null) { this.vibrator.vibrate(vDuration); }
-						this.soundman.playSound(SoundFX.HIT);
-						progman.loseMoneyByHit(drainType);
-					}
-					else { this.soundman.playSound(SoundFX.MISS); }
-					drainhit = true;
-					break;
-				}
-			}
-			
-		}
-		if (!drainhit)
-		{
-			this.soundman.playSound(SoundFX.MISS);
-		}
 		
+		//Invert device rotation because we need the real angle, 
+		//because the content (street) is rotated into the very opposite direction.
+		deviceRotation *= -1;
+		
+		for (Iterator<ModelDrain> i = drains.values().iterator(); !drainhit && i.hasNext();)
+		{
+			ModelDrain drain = i.next();
+			// calculate the position of the drain
+			
+			float tempPos = streetPos + drain.getPosition();
+			
+			//if current drain is within range (deltaPos).
+			if (Math.abs(tempPos) < maxDeltaPos) {
+				int drainType = drain.getDrainStyle();
+				
+				if (drainType == ModelDrain.CLOSED)	{
+					this.soundman.playSound(SoundFX.BREAK);
+					progman.loseMoneyByBreak(drainType);
+				}
+				else if (drainType == this.gemType)	{
+					float deltaAngle = Math.abs(drain.getOrientationAngle() - deviceRotation);
+					
+					switch (this.gemType) {
+						case ModelDrain.ROUND: drainhit = true; break;
+						case ModelDrain.OCT: drainhit = (deltaAngle % 45f) < maxDeltaAngle; break;
+						case ModelDrain.RECT: drainhit = (deltaAngle % 180f) < maxDeltaAngle; break;
+						case ModelDrain.DIAMOND: drainhit = deltaAngle < maxDeltaAngle; break;
+					}
+					if (drainhit) {
+						progman.loseMoneyByHit(drainType);
+						
+						long vDuration = 300;
+						if (this.vibrator != null)
+							this.vibrator.vibrate(vDuration);
+						
+						this.soundman.playSound(SoundFX.HIT);
+					}
+					else
+						this.soundman.playSound(SoundFX.MISS);
+				}
+			}			
+		}
 	}
 	
 	/**
@@ -177,7 +180,6 @@ public class ModelGem extends Model {
 			}
 			else {
 				checkCollisionType(streetPos, deviceRotation, progman);
-				//this.soundman.playSound(SoundFX.MISS);
 				endFall();
 			}
 		}
