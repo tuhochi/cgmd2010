@@ -75,6 +75,9 @@ public class DecorationManager
 	/** The vboID for mountains. */
 	private int mountainVboID;	
 	
+	/** The delay how long the mountain stays still before it starts to move down. */
+	private float mountainDelay = 400;
+	
 	/** The vertexBuffer for tree. */
 	private FloatBuffer treeVertexBuffer;
 	
@@ -325,9 +328,13 @@ public class DecorationManager
 	
 	public void update(float dt)
 	{
-		treePositionY -= TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/8f;
+		treePositionY -= dt*Settings.BALLOON_SPEED/8f;
 		if(mountainPositionY >= 0)
-			mountainMoveDir =-1;
+			mountainMoveDir =0;
+		if(mountainMoveDir == 0)
+			mountainDelay -= dt;
+		if(mountainDelay <= 0)
+			mountainMoveDir=-1;
 		
 			mountainPositionY += mountainMoveDir*TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/16f;
 	}

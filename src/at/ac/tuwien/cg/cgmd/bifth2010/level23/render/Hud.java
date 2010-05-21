@@ -8,6 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.BurnTimer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.PermaBoostTimer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ProgressVisibilityHandle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
@@ -34,6 +35,8 @@ public class Hud
 	private TimeUtil timeUtil; 
 	
 	private BurnTimer burnTimer;
+	
+	private PermaBoostTimer goldTimer;
 
 	private boolean wasRestored=false;
 	
@@ -51,6 +54,7 @@ public class Hud
 		init();
 		boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
 		burnTimer = new BurnTimer(boostAudioId);
+		goldTimer = new PermaBoostTimer();
 		progressVisibilityHandle = new ProgressVisibilityHandle();
 		progressVisibilityHandle.visibility = android.widget.ProgressBar.VISIBLE;
 		instance=this;
@@ -104,6 +108,15 @@ public class Hud
 	public void setMoneyButtonActive(boolean b) {
 		moneyButton.setActive(b); 
 	}
+	
+	/**
+	 * Sets the active state of the gold button 
+	 * @param b true if button should be active, false otherwise
+	 */
+	public void setGoldButtonActive(boolean b) {
+		goldButton.setActive(b); 
+	}
+	
 	/**
 	 * Tests if pressed
 	 *
@@ -113,16 +126,18 @@ public class Hud
 	 */
 	public boolean testPressed(float x, float y)
 	{
-		if(goldButton.isPressed(x, y))
+		if(goldButton.isPressed(x, y) && goldButton.isActive())
 		{
-			Settings.BALLOON_SPEED += Settings.GOLD_BOOST;
+			Settings.BALLOON_SPEED *= Settings.GOLD_BOOST;
+			goldButton.setActive(false);
+			timeUtil.scheduleTimer(goldTimer);
 			return true;
 		}
 			
 		if(moneyButton.isPressed(x, y) && moneyButton.isActive())
 		{
 			moneyButton.setActive(false);
-			Settings.BALLOON_SPEED += Settings.BURN_BOOST;
+			Settings.BALLOON_SPEED *= Settings.BURN_BOOST;
 			timeUtil.scheduleTimer(burnTimer);
 			SoundManager.instance.startPlayer(boostAudioId);
 			LevelActivity.handler.post(progressVisibilityHandle);
