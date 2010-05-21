@@ -6,8 +6,6 @@ import java.util.Iterator;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Matrix4x4;
 
 /**
  * Model representing a "Street". Gets a HashMap full of drains that are then rendered onto the street.
@@ -87,8 +85,7 @@ public class ModelStreet extends Model {
 	public void update(GL10 gl, double deltaTime, float deviceRotation) {
 		super.update(gl, deltaTime, deviceRotation);
 		float deltaSpeed = (float)((double)speed * deltaTime);
-		this.posX += deltaSpeed;
-		//Log.i("Street posX",": " + this.posX);
+		this.posX -= deltaSpeed;
 	}
 	
 	

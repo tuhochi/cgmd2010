@@ -72,8 +72,8 @@ public class RenderManager implements Renderer {
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
 
-		streetStepHalf = (street.width / 2);
-		streetStepSize =  (street.width / 2) / 5;
+		streetStepHalf = (street.width / 2.0f);
+		streetStepSize =  (street.width / 2.0f) / 5.0f;
 		
 		CharSequence endtext = "The end is near";
 		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
@@ -108,16 +108,20 @@ public class RenderManager implements Renderer {
 		
 		fps++;
 		
+		//UPDATE -------------------------
+		street.update(gl, deltaTime, accelerometer.getOrientation());
+		
+		checkStreetProgress(street.getStreetPos()); //update progress if a certain amount of the streetwidth has passed
+		checkMoney(); //check if there is any money left
+		checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
+		
+		Log.i("streetPos", "position: " + street.getStreetPos());
+		
+		//DRAW ---------------------------
 		gl.glLoadIdentity();
 		
 		//At first: Render street with drains
-		street.update(gl, deltaTime, accelerometer.getOrientation());
 		street.draw(gl);
-		
-		float streetPos = street.getStreetPos();
-		checkStreetProgress(streetPos); //update progress if a certain amount of the streetwidth has passed
-		checkMoney(); //check if there is any money left
-		checkStreetEnd(streetPos); //if the street end is near -> call finish method to finish activity
 		
 		//Afterwards: Render gems.
 		ListIterator<Model> i = gems.listIterator();
@@ -132,9 +136,9 @@ public class RenderManager implements Renderer {
 	
 	private void checkStreetProgress(float streetPos)
 	{
-		if ( streetPos < 0)
+		if ( streetPos > 0)
 		{	
-			if (streetPos > (-streetStepHalf + (streetStepSize * streetStepCounter)))
+			if (streetPos < (-streetStepHalf - (streetStepSize * streetStepCounter)))
 			{
 				progman.updatePointProgress(streetStepCounter * 5);
 				streetStepCounter++;
@@ -142,9 +146,9 @@ public class RenderManager implements Renderer {
 		}
 		else
 		{
-			if (streetPos > (streetStepHalf - (streetStepSize * streetStepCounter)))
+			if (streetPos < (streetStepHalf + (streetStepSize * streetStepCounter)))
 			{
-				progman.updatePointProgress(20 + (30 - streetStepCounter * 5));
+				progman.updatePointProgress(20 - (30 + streetStepCounter * 5));
 				streetStepCounter--;
 			}	
 		}
@@ -162,8 +166,7 @@ public class RenderManager implements Renderer {
 	
 	private void checkStreetEnd(float streetPos)
 	{
-		
-		if (streetPos > ((street.width / 2) - 5f))
+		if (streetPos < ((-street.width / 2) + 8f))
 		{
 			//TODO: maybe show a result before kicking the player out of the activity
 			toast.show();

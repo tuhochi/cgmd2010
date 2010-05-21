@@ -25,11 +25,14 @@ public class ModelGem extends Model {
 	private float gemPos = gemStartpos;
 	/** fall speed of the gem **/
 	private float fallSpeed = 0.0f;
-	/** flag if gem is falling or not **/
+	
+	/** flag, if gem is falling or not **/
 	private boolean isFalling = false;
+	/** flag, if gem is visible or not **/
+	private boolean isVisible = false;
 	
 	/** position of the streetlevel **/
-	private float streetLevel = -10f; 	//TODO: ev. Übergabe des wertes ??
+	private float streetLevel = -10f; 	//TODO: ev. †bergabe des wertes ??
 	
 	/** soundmanager for executing soundfx **/
 	private SoundManager soundman;
@@ -77,6 +80,15 @@ public class ModelGem extends Model {
 		fallSpeed = 0;
 	}
 	
+	public void setVisible(boolean v) {
+		this.isVisible = v;
+		resetPosition();
+	}
+	
+	public boolean isFalling() {
+		return isFalling;
+	}
+	
 	/**
 	 * start fall animation
 	 */
@@ -89,7 +101,7 @@ public class ModelGem extends Model {
 	 * end fall animation
 	 */
 	public void endFall() {
-		
+		this.isVisible = false;
 		this.isFalling = false;
 		resetPosition();
 	}
@@ -99,10 +111,7 @@ public class ModelGem extends Model {
 	 * @return collision: true/false
 	 */
 	public boolean checkFallCollision()	{
-		if (gemPos < streetLevel) {
-			return true;
-		}	
-		else return false;
+		return gemPos < streetLevel;
 	}
 
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
@@ -160,8 +169,7 @@ public class ModelGem extends Model {
 				fallSpeed += 5f * deltaTime;
 				gemPos -= fallSpeed;
 			}
-			else
-			{
+			else {
 				checkCollisionType(streetPos, deviceRotation, progman);
 				//this.soundman.playSound(SoundFX.MISS);
 				endFall();
@@ -175,7 +183,7 @@ public class ModelGem extends Model {
 	public void draw(GL10 gl) {
 
 		//mTrans = Matrix4x4.mult(Matrix4x4.RotateZ(gemRotation), mTrans);
-		if (this.isFalling) {
+		if (this.isVisible) {
 			gl.glPushMatrix();
 			gl.glTranslatef(0, 0, gemPos);
 			gl.glMultMatrixf(mTrans.toFloatArray(), 0);

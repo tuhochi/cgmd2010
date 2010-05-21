@@ -8,8 +8,10 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -22,7 +24,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * also establishes the connection to the accelerometers. 
  * @author Georg, Gerald
  */
-public class LevelActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
+public class LevelActivity extends Activity implements OnTouchListener, OnSeekBarChangeListener {
 
 	/** The main part of the level */
 	private ModelStreet street;
@@ -86,13 +88,13 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	 */
 	private void initGui() {
 		ImageButton btnGemRound = (ImageButton) findViewById(R.id.l84_ButtonGemRound);
-		btnGemRound.setOnClickListener(this);    
+		btnGemRound.setOnTouchListener(this);
 		ImageButton btnGemDiamond = (ImageButton) findViewById(R.id.l84_ButtonGemDiamond);
-		btnGemDiamond.setOnClickListener(this);
+		btnGemDiamond.setOnTouchListener(this);
 		ImageButton btnGemRect = (ImageButton) findViewById(R.id.l84_ButtonGemRect);
-		btnGemRect.setOnClickListener(this);
+		btnGemRect.setOnTouchListener(this);
 		ImageButton btnGemOct = (ImageButton) findViewById(R.id.l84_ButtonGemOct);
-		btnGemOct.setOnClickListener(this);
+		btnGemOct.setOnTouchListener(this);
 		
 		SeekBar accelBar = (SeekBar) findViewById(R.id.l84_AccelBar);
 		
@@ -107,15 +109,15 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	 * create the street and the drains of the level
 	 */
 	private void initLevel() {
-		//Create street
-		street = new ModelStreet(levelWidth, 17f, -levelWidth/2f + 8f, levelSpeed, R.drawable.l84_tex_street, drains);
+		//Create street. levelWidth/2f - 8f ... 8f = half horizontal screen offset.
+		street = new ModelStreet(levelWidth, 17f, levelWidth/2f - 8f, levelSpeed, R.drawable.l84_tex_street, drains);
 		
 		//Create drains
 		for (int i = 0; i < numDrains;) {
-			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f - 5f) / 3f) * 3;
-			int drainType = (int)(Math.random() * 4.99); //4.99 to also get a (int) casting of 4. 4 = gem oct.
-			float drainOrientation = (float)Math.random() * 360f;
 			
+			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f) / 3f) * 3 + 12; //(/ 3f * 3) to get rounded Results.
+			int drainType = (int)(Math.random() * 4.99); //4.99 to also get a (int) casting of 4. 4 = gem oct.
+			float drainOrientation = (float)Math.random() * 180f - 90f; //reduce to max. of +/-90¡ to improve gameplay.
 			
 			if (!drains.containsKey(drainPos)) {
 				//Log.i("DrainPos","#" + i + ": " + drainPos + " / Orientation: " + drainOrientation);
@@ -175,16 +177,6 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 	}
 
 	@Override
-	public void onClick(View v) {
-		switch(v.getId()) {
-		case R.id.l84_ButtonGemRound: gemRound.startFall(drains); break;
-		case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(drains); break;
-		case R.id.l84_ButtonGemRect: gemRect.startFall(drains); break;
-		case R.id.l84_ButtonGemOct: gemOct.startFall(drains); break;
-		}
-	}
-
-	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		accelerometer.setOrientation(progress);
 	}
@@ -195,5 +187,30 @@ public class LevelActivity extends Activity implements OnClickListener, OnSeekBa
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {	
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				switch(v.getId()) {
+					case R.id.l84_ButtonGemRound: gemRound.setVisible(true); break;
+					case R.id.l84_ButtonGemDiamond: gemDiamond.setVisible(true); break;
+					case R.id.l84_ButtonGemRect: gemRect.setVisible(true); break;
+					case R.id.l84_ButtonGemOct: gemOct.setVisible(true); break;
+				}
+				break;
+				
+			case MotionEvent.ACTION_UP:
+				switch(v.getId()) {
+					case R.id.l84_ButtonGemRound: gemRound.startFall(drains); break;
+					case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(drains); break;
+					case R.id.l84_ButtonGemRect: gemRect.startFall(drains); break;
+					case R.id.l84_ButtonGemOct: gemOct.startFall(drains); break;
+				}
+				break;
+				
+		}
+		return true;
 	}
 }
