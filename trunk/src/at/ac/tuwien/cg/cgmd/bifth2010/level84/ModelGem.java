@@ -6,6 +6,7 @@ import java.util.ListIterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.os.Vibrator;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
@@ -36,6 +37,11 @@ public class ModelGem extends Model {
 	
 	/** soundmanager for executing soundfx **/
 	private SoundManager soundman;
+	
+	/** vibrator for vibrations **/
+	private Vibrator vibrator;
+	
+	private long[] vibratorPattern;
 	
 	/** drainMap used for collision detection **/
 	private HashMap<Integer, ModelDrain> drainMap;
@@ -70,6 +76,11 @@ public class ModelGem extends Model {
 	public void setSoundManager(SoundManager soundManager)
 	{
 		this.soundman = soundManager;
+	}
+	
+	public void setVibrator(Vibrator vibrator)
+	{
+		this.vibrator = vibrator;
 	}
 	
 	/**
@@ -141,6 +152,8 @@ public class ModelGem extends Model {
 					{
 						//TODO: check orientations
 						//if (Math.abs(drain.getOrientationAngle() - deviceRotation ) < 1.0f)
+						long vDuration = 300;
+						if (this.vibrator != null) { this.vibrator.vibrate(vDuration); }
 						this.soundman.playSound(SoundFX.HIT);
 						progman.loseMoneyByHit(drainType);
 					}

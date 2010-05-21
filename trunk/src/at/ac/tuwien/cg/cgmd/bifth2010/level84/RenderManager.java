@@ -37,10 +37,6 @@ public class RenderManager implements Renderer {
 	private SoundManager soundman;
 	private Toast toast;
 	
-	private float streetStepHalf = 0;
-	private float streetStepSize = 0;
-	private int streetStepCounter = 1;
-	
 	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
@@ -73,8 +69,6 @@ public class RenderManager implements Renderer {
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
 
-		streetStepHalf = (street.width / 2.0f);
-		streetStepSize =  (street.width / 2.0f) / 5.0f;
 		
 		CharSequence endtext = "The end is near";
 		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
@@ -112,7 +106,6 @@ public class RenderManager implements Renderer {
 		//UPDATE -------------------------
 		street.update(gl, deltaTime, accelerometer.getOrientation());
 		
-		checkStreetProgress(street.getStreetPos()); //update progress if a certain amount of the streetwidth has passed
 		checkMoney(); //check if there is any money left
 		checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
 		
@@ -133,28 +126,6 @@ public class RenderManager implements Renderer {
 		}
 	}
 
-
-	
-	private void checkStreetProgress(float streetPos)
-	{
-		if ( streetPos > 0)
-		{	
-			if (streetPos < (-streetStepHalf - (streetStepSize * streetStepCounter)))
-			{
-				progman.updatePointProgress(streetStepCounter * 5);
-				streetStepCounter++;
-			}
-		}
-		else
-		{
-			if (streetPos < (streetStepHalf + (streetStepSize * streetStepCounter)))
-			{
-				progman.updatePointProgress(20 - (30 + streetStepCounter * 5));
-				streetStepCounter--;
-			}	
-		}
-		//Log.i("PROGRESS","-> " + progman.getPointProgress());
-	}
 	
 	private void checkMoney()
 	{
