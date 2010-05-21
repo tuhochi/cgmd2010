@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
@@ -61,6 +63,9 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		gems = new LinkedList<Model>();
 		progman = new ProgressManager();
 		soundManager = new SoundManager(this);
+		
+		//getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		initLevelParams();
 		initLevel();

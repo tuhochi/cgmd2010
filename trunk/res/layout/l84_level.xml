@@ -44,6 +44,7 @@
 			android:layout_height="@dimen/l84_gemButtonWidth" 
 			android:background="@drawable/l84_button_gem_round"
 			android:layout_marginBottom="@dimen/l84_gemButtonMargin" 
+			android:layout_marginTop="27dp" 
 			android:id="@+id/l84_ButtonGemRound">
 		</ImageButton>
 		<ImageButton 
