@@ -36,6 +36,7 @@ public class RenderManager implements Renderer {
 	private ProgressManager progman;
 	private SoundManager soundman;
 	private Toast toast;
+	
 	private float streetStepHalf = 0;
 	private float streetStepSize = 0;
 	private int streetStepCounter = 1;
