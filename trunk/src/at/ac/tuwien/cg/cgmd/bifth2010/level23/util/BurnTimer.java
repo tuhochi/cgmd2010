@@ -50,7 +50,7 @@ public class BurnTimer extends TimingTask
 	 */
 	@Override
 	public void run() {
-		Settings.BALLOON_SPEED -= Settings.BURN_BOOST;
+		Settings.BALLOON_SPEED /= Settings.BURN_BOOST;
 		Hud.instance.setMoneyButtonActive(true);
 		isDead = true;
 		remainingTime = time;

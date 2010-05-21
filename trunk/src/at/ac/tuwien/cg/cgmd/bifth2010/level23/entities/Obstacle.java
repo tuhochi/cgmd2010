@@ -72,12 +72,12 @@ public class Obstacle implements Serializable
 				height = 20;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE3):
-				width = 20;
-				height = 20;
+				width = 36;
+				height = 72;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE4):
-				width = 20;
-				height = 5;
+				width = 25;
+				height = 50;
 				break;			
 		}
 		
@@ -88,6 +88,6 @@ public class Obstacle implements Serializable
 	{
 		float dt = TimeUtil.instance.getDt();
 		time += dt;
-		position.y -= 0.5f*accel*(time*time) + Settings.BALLOON_SPEED*0.5*dt;
+		position.y -= (0.5f*accel*(time*time)*0.5 + Settings.BALLOON_SPEED*dt);
 	}
 }

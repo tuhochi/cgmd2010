@@ -152,7 +152,7 @@ public class TextureAtlas
 	
 	/**
 	 * Returns the part of the texture for the mountain decoration
-	 * @return the texture part for the boost button
+	 * @return the texture part for the mountain decoration
 	 */
 	public TexturePart getMountainTextur()
 	{
@@ -161,10 +161,28 @@ public class TextureAtlas
 	
 	/**
 	 * Returns the part of the texture for the tree decoration
-	 * @return the texture part for the boost button
+	 * @return the texture part for the tree decoration
 	 */
 	public TexturePart getTreeTextur()
 	{
 		return generateTexturePart(new Vector2(0,256), new Vector2(256,256+256));
+	}
+	
+	/**
+	 * Returns the part of the texture for the chuck obstacle
+	 * @return the texture part for the chuck obstacle
+	 */
+	public TexturePart getChuckTextur()
+	{
+		return generateTexturePart(new Vector2(256+0.5f,0), new Vector2(256+128,256));
+	}
+	
+	/**
+	 * Returns the part of the texture for the lokus obstacle
+	 * @return the texture part for the lokus obstacle
+	 */
+	public TexturePart getLokusTextur()
+	{
+		return generateTexturePart(new Vector2(384,0), new Vector2(384+128,256));
 	}
 }

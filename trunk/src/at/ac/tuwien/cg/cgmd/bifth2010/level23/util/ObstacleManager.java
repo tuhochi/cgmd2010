@@ -75,16 +75,16 @@ public class ObstacleManager
 	
 	//in numbers per 100, must sum up to 10
 	/** The probability for obstacle type 1. */
-	public final static int TYPE1_PROB = 50;
+	public final static int TYPE1_PROB = 10;
 	
 	/** The probability for obstacle type 2. */
-	public final static int TYPE2_PROB = 50;
+	public final static int TYPE2_PROB = 10;
 	
 	/** The probability for obstacle type 3. */
-	public final static int TYPE3_PROB = 0;
+	public final static int TYPE3_PROB = 40;
 	
 	/** The probability for obstacle type 4. */
-	public final static int TYPE4_PROB = 0;
+	public final static int TYPE4_PROB = 40;
 
 	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
 	/** The Constant HORIZONTAL_SPACING to define the horizontal spacing between obstacles. */
@@ -313,14 +313,14 @@ public class ObstacleManager
 		vertexBuffers[0] = geometryManager.createVertexBufferQuad(100f, 5f);
 		vertexBuffers[1] = geometryManager.createVertexBufferQuad(40f, 30f);
 		vertexBuffers[2] = geometryManager.createVertexBufferQuad(20f, 20f);
-		vertexBuffers[3] = geometryManager.createVertexBufferQuad(20f, 20f);
-		vertexBuffers[4] = geometryManager.createVertexBufferQuad(20f, 20f);
+		vertexBuffers[3] = geometryManager.createVertexBufferQuad(36f,72f);
+		vertexBuffers[4] = geometryManager.createVertexBufferQuad(25f, 50f);
 		
 		textures[0] = TextureAtlas.instance.getCowTextur();
 		textures[1] = TextureAtlas.instance.getCowTextur();
 		textures[2] = TextureAtlas.instance.getAmbossTextur();
-		textures[3] = TextureAtlas.instance.getAmbossTextur();
-		textures[4] = TextureAtlas.instance.getAmbossTextur();
+		textures[3] = TextureAtlas.instance.getChuckTextur();
+		textures[4] = TextureAtlas.instance.getLokusTextur();
 
 		if(Settings.GLES11Supported) 
 		{

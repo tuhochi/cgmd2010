@@ -13,7 +13,7 @@ public class Settings
 	public static int OBSTACLE_START = 300;
 	
 	/** The constant for balloon speed. */
-	public static float BALLOON_STARTSPEED = 0.0005f*RenderView.instance.getTopBounds();
+	public static float BALLOON_STARTSPEED = 0.00025f*RenderView.instance.getTopBounds();
 	
 	/** The constant for balloon speed. */
 	public static float BALLOON_SPEED = BALLOON_STARTSPEED;
@@ -26,13 +26,16 @@ public class Settings
 	
 	//item effects
 	/** The Constant BURN_BOOST. */
-	public static final float BURN_BOOST = 0.0005f*RenderView.instance.getTopBounds();
+	public static final float BURN_BOOST = 2f;
 	//time in milliseconds
 	/** The Constant BURN_BOOST_TIME. */
 	public static final long BURN_BOOST_TIME = 2500;
 	
+	/** The Constant GOLD_BOOST_TIME. */
+	public static final long GOLD_BOOST_TIME = 3000;
+	
 	/** The Constant GOLD_BOOST. */
-	public static final float GOLD_BOOST = 0.01f;
+	public static final float GOLD_BOOST = 1.5f;
 
 	/** The MainChar width. (will be multiplied by aspect ratio) */
 	public static final float MAINCHAR_WIDTH = 25f;
