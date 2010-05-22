@@ -18,6 +18,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 public class RenderManager implements Renderer {
 
@@ -68,6 +69,11 @@ public class RenderManager implements Renderer {
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
 		
+		//start playing background sounds
+		this.soundman.playSound(SoundFX.BACKGROUND, 0.5f, 0.3f, -1);
+		this.soundman.playSound(SoundFX.NATURE, 0.8f, 0.6f, -1);
+
+		//init toast for later usage	
 		CharSequence endtext = "The end is near";
 		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
 		
