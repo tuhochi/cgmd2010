@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
@@ -51,6 +53,7 @@ public class Scene implements Persistable
 	 * Action stuff
 	 */
 	private final LinkedList<Pair<SceneEntity,Model>> toUntie;
+	private final LinkedList<Pair<Integer,Integer>> untied;
 	
 	/**
 	 * Instantiates a new scene.
@@ -60,6 +63,7 @@ public class Scene implements Persistable
 		sceneEntities = new ArrayList<SceneEntity>();
 		initialized = false;
 		toUntie = new LinkedList<Pair<SceneEntity,Model>>();
+		untied = new LinkedList<Pair<Integer,Integer>>();
 	}
 	
 	/**
@@ -106,8 +110,18 @@ public class Scene implements Persistable
 	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
+		LinkedList<Pair<Integer, Integer>> untied = this.untied;
+		int size = untied.size();
+		dos.writeInt(size);
+		for(int i=0; i<size; i++)
+		{
+			Pair<Integer, Integer> p = untied.get(i);
+			dos.writeInt(p.getFirst());
+			dos.writeInt(p.getSecond());
+		}
+		
 		ArrayList<SceneEntity> sceneEntities = this.sceneEntities;
-		int size = sceneEntities.size();
+		size = sceneEntities.size();
 		for(int i=0; i<size; i++)
 			sceneEntities.get(i).persist(dos);
 	}
@@ -117,8 +131,26 @@ public class Scene implements Persistable
 	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
+		int size = dis.readInt();
+		for(int i=0; i<size; i++)
+		{
+			int first = dis.readInt();
+			int second = dis.readInt();
+			
+			SceneEntity s = sceneEntities.get(first);
+			Model m = s.models.get(second);
+			SceneEntity new_s = new SceneEntity();
+			new_s.setName(Config.SATELLITE_PREFIX + m.getName() + Config.PLANETPART_SUFFIX);
+			new_s.add(m);
+			m.getBasicOrientation().setIdentity();
+			
+			s.remove(m);
+			sceneEntities.add(new_s);
+			untied.add(new Pair<Integer, Integer>(first, second));
+		}
+		
 		ArrayList<SceneEntity> sceneEntities = this.sceneEntities;
-		int size = sceneEntities.size();
+		size = sceneEntities.size();
 		for(int i=0; i<size; i++)
 			sceneEntities.get(i).restore(dis);
 	}
@@ -166,6 +198,8 @@ public class Scene implements Persistable
 					Pair<SceneEntity, Model> p = toUntie.poll();
 					SceneEntity s = p.getFirst();
 					Model m = p.getSecond();
+					int sceneEntityIndex = sceneEntities.indexOf(s);
+					int modelIndex = s.models.indexOf(m);
 					SceneEntity new_s = new SceneEntity();
 					new_s.setName(Config.SATELLITE_PREFIX + m.getName() + Config.PLANETPART_SUFFIX);
 					new_s.add(m);
@@ -179,6 +213,7 @@ public class Scene implements Persistable
 					
 					s.remove(m);
 					sceneEntities.add(new_s);
+					untied.add(new Pair<Integer, Integer>(sceneEntityIndex, modelIndex));
 				}
 			}
 		}
@@ -222,11 +257,11 @@ public class Scene implements Persistable
 		this.hud = hud;
 	}
 	
-	public void unTie(SceneEntity entity, Model model)
+	public void unTie(SceneEntity se, Model m)
 	{
 		synchronized(toUntie)
 		{
-			toUntie.add(new Pair<SceneEntity, Model>(entity, model));
+			toUntie.add(new Pair<SceneEntity, Model>(se, m));
 		}
 	}
 }

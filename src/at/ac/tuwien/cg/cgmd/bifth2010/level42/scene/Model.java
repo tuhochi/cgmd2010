@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
@@ -158,6 +160,7 @@ public class Model implements Movable,Persistable
 	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
+		Log.w(LevelActivity.TAG, "writing model " + name);
 		ArrayList<Geometry> geometries = this.geometries;
 		int size = geometries.size();
 		for(int i=0; i<size; i++)
@@ -166,6 +169,7 @@ public class Model implements Movable,Persistable
 			materials.get(i).persist(dos);
 		}
 		transformation.persist(dos);
+		dos.writeBoolean(disabled);
 		
 		if(motion != null)
 		{
@@ -183,6 +187,7 @@ public class Model implements Movable,Persistable
 	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
+		Log.w(LevelActivity.TAG, "reading model " + name);
 		ArrayList<Geometry> geometries = this.geometries;
 		int size = geometries.size();
 		for(int i=0; i<size; i++)
@@ -191,6 +196,7 @@ public class Model implements Movable,Persistable
 			materials.get(i).restore(dis);
 		}
 		transformation_temp.restore(dis);
+		disabled = dis.readBoolean();
 		if(dis.readBoolean())
 		{
 			motion = Motion.restore(dis, dis.readUTF());

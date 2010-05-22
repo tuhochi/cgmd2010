@@ -295,6 +295,10 @@ public class LevelActivity extends Activity
 		super.onSaveInstanceState(outState);
 		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
 		
+		renderView.synchronizer.setActive(false);
+		renderView.synchronizer.waitForLogic();
+		renderView.synchronizer.waitForPreRender();
+		
 		Scene scene = renderView.scene;
 		Camera cam = renderView.cam;
 		CollisionManager collManager = CollisionManager.instance;
