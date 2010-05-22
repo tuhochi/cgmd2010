@@ -119,6 +119,7 @@ public class SceneEntity implements Movable,Persistable
 	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
+		Log.w(LevelActivity.TAG, "writing scene entity " + name);
 		ArrayList<Model> models = this.models;
 		int size = models.size();
 		for(int i=0; i<size; i++)
@@ -130,6 +131,7 @@ public class SceneEntity implements Movable,Persistable
 		{
 			dos.writeBoolean(true);
 			String className = motion.getClass().getName();
+			Log.w(LevelActivity.TAG, "writing motion " + className);
 			dos.writeUTF(className);
 			motion.persist(dos);
 		}
@@ -151,7 +153,9 @@ public class SceneEntity implements Movable,Persistable
 		disabled = dis.readBoolean();
 		if(dis.readBoolean())
 		{
-			motion = Motion.restore(dis, dis.readUTF());
+			String className = dis.readUTF();
+			Log.w(LevelActivity.TAG, "reading motion " + className);
+			motion = Motion.restore(dis, className);
 			if(motion != null)
 				MotionManager.instance.addMotion(motion, this);
 		}
