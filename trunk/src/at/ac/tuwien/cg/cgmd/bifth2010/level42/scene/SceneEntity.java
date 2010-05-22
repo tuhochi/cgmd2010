@@ -7,6 +7,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
@@ -122,6 +124,7 @@ public class SceneEntity implements Movable,Persistable
 		for(int i=0; i<size; i++)
 			models.get(i).persist(dos);
 		transformation.persist(dos);
+		dos.writeBoolean(disabled);
 		
 		if(motion != null)
 		{
@@ -139,11 +142,13 @@ public class SceneEntity implements Movable,Persistable
 	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
+		Log.w(LevelActivity.TAG, "reading scene entity " + name);
 		ArrayList<Model> models = this.models;
 		int size = models.size();
 		for(int i=0; i<size; i++)
 			models.get(i).restore(dis);
 		transformation_temp.restore(dis);
+		disabled = dis.readBoolean();
 		if(dis.readBoolean())
 		{
 			motion = Motion.restore(dis, dis.readUTF());
