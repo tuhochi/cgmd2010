@@ -137,10 +137,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	private void initIntro()
 	{
 		CharSequence introtext = "";
-		for (int i=3; i > 0; i--)
+		for (int i=3; i > 0; i--) {
 			introtext = String.valueOf(i);
-		introToast = Toast.makeText(this.getApplicationContext(), introtext, Toast.LENGTH_SHORT);
-		introToast.show();
+			introToast = Toast.makeText(this.getApplicationContext(), introtext, Toast.LENGTH_SHORT);
+			introToast.show();
+		}
 	}
 
 	/**
