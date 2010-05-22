@@ -16,7 +16,7 @@ public class ModelDrain extends Model {
 	public static final int DIAMOND = 4;
 	
 	/** width of the drain **/
-	private float width = 3.2f;
+	private float width = 3.1f;
 	/** texture for closed drain **/
 	private int textureClosed = R.drawable.l84_drain_closed;
 	/** texture for drain with round hole **/

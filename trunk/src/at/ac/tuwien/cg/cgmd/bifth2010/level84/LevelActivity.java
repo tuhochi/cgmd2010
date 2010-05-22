@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
@@ -50,8 +51,9 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	private float levelWidth;
 	private float levelSpeed;
 	private float streetPosZ;
+	
+	public static final int GEM_BASE_VALUE = 1000;
 	private int moneyToSpend = 0;
-	private int gemWorth = 5000;
 	
 	private TextView tfPoints;
 	private TextView tfPointsShadow;
@@ -66,13 +68,15 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private Vibrator vibrator;
 	
+	private Toast introToast;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l84_level);
 		
 		drains = new HashMap<Integer, ModelDrain>();
 		gems = new LinkedList<Model>();
-		progman = new ProgressManager();
+		progman = new ProgressManager(this);
 		soundManager = new SoundManager(this);
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		
@@ -84,6 +88,8 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 //		animationIntro = (AnimationDrawable) imageview.getBackground();
 //		animationIntro.setOneShot(true); //play the animation only once
 //		animationIntro.start();
+		
+		soundManager.playMusic();
 
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
@@ -92,6 +98,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		openglview.setRenderer(renderManager);
 		
 		initGui();
+		initIntro();
 	}
 
 	/**
@@ -125,35 +132,45 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		else
 			accelBar.setVisibility(View.GONE);
 	}
+	
+
+	private void initIntro()
+	{
+		CharSequence introtext = "";
+		for (int i=3; i > 0; i--)
+			introtext = String.valueOf(i);
+		introToast = Toast.makeText(this.getApplicationContext(), introtext, Toast.LENGTH_SHORT);
+		introToast.show();
+	}
 
 	/**
 	 * create the street and the drains of the level
 	 */
 	private void initLevel() {
 
+		//Create street. levelWidth/2f - 8f ... 8f = half horizontal screen offset.
+		street = new ModelStreet(levelWidth, 15f, levelWidth/2f - 8f, streetPosZ, 
+				levelSpeed, R.drawable.l84_tex_street, drains);
+
 		//Create drains
 		for (int i = 0; i < numDrains;) {
 			
-			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f) / 3f) * 3 + 12; //(/ 3f * 3) to get rounded Results.
+			int drainPos = (int)((Math.random() * levelWidth - levelWidth/2f) / 3f) * 3 + 17; //(/ 3f * 3) to get rounded Results.
 			
 			//4.49 to also get a (int) casting of 4. 4 = gem oct. 
 			//+ 0.5 to reduce the amount of draintype "closed" by 50%.
-			int drainType = ModelDrain.OCT;//(int)(Math.random() * 4.49 + 0.5); 
+			int drainType = (int)(Math.random() * 4.49 + 0.5); 
 			float drainOrientation = (float)Math.random() * 180f - 90f; //reduce to max. of +/-90¡ to improve gameplay.
 			
 			if (!drains.containsKey(drainPos)) {
-				//Log.i("DrainPos","#" + i + ": " + drainPos + " / Orientation: " + drainOrientation);
-				drains.put(drainPos, new ModelDrain(drainType, drainPos, drainOrientation));
+				ModelDrain drain = new ModelDrain(drainType, drainPos, drainOrientation);
+				drains.put(drainPos, drain);
 				i++;
 				
 				if (drainType > 0)
-					moneyToSpend += gemWorth;
+					moneyToSpend += drainType * LevelActivity.GEM_BASE_VALUE;
 			}
 		}
-		
-		//Create street. levelWidth/2f - 8f ... 8f = half horizontal screen offset.
-		street = new ModelStreet(levelWidth, 17f, levelWidth/2f - 8f, streetPosZ, 
-				levelSpeed, R.drawable.l84_tex_street, drains);
 		
 		tfPoints = (TextView) findViewById(R.id.l84_Points);
 		tfPoints.setText("$" + moneyToSpend);
@@ -199,17 +216,22 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	protected void onPause() {
 		super.onPause();
 		openglview.onPause();
+		soundManager.pauseBackground();
+		soundManager.pauseNature();
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		openglview.onResume();
+		soundManager.resumeBackground();
+		soundManager.resumeNature();
 	}
 
 	@Override
 	public void finish() {
-		progman.setProgress(Math.min(Math.max(progman.getPointProgress() + progman.getMoneyProgress(), 0), 100));
+		progman.setProgress(Math.min(Math.max(progman.getProgress(), 0), 100));
+		soundManager.releaseSounds();
 		setResult(Activity.RESULT_OK, progman.asIntent());
 		super.finish();
 	}
@@ -241,6 +263,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 				break;
 				
 			case MotionEvent.ACTION_UP:
+				soundManager.playSound(SoundFX.SWOOSH, 1.0f, 1.0f, 0);
 				switch(v.getId()) {
 					case R.id.l84_ButtonGemRound: gemRound.startFall(); gemRoundShape.setVisible(false); break;
 					case R.id.l84_ButtonGemDiamond: gemDiamond.startFall(); gemDiamondShape.setVisible(false); break;
