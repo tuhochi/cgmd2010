@@ -19,6 +19,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 /**
  * Main part of our level. Contains all relevant objects and (level)parameters. Based on the android 
@@ -230,6 +231,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
+				soundManager.playSound(SoundFX.BUTTON, 1.0f, 1.0f, 0);
 				switch(v.getId()) {
 					case R.id.l84_ButtonGemRound: gemRoundShape.setVisible(true); break;
 					case R.id.l84_ButtonGemDiamond: gemDiamondShape.setVisible(true); break;
