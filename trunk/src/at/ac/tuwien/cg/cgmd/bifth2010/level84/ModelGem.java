@@ -17,6 +17,10 @@ public class ModelGem extends Model {
 
 	private int gemType;
 	
+	public final static int COLISSION_GROUND = 0; 
+	public final static int COLISSION_CLOSED_DRAIN = 1;
+	public final static int COLISSION_FLUSHED = 2;
+	
 	/** width of the gem **/
 	float width = 1.0f;
 	/** starting position where gem begins to fall **/
@@ -25,7 +29,7 @@ public class ModelGem extends Model {
 	/** fall speed of the gem **/
 	private float fallSpeed = 0.0f;
 	
-	private float maxDeltaPos = 1f;
+	private float maxDeltaPos = .5f;
 	private float maxDeltaAngle = 5f; 
 	
 	/** flag, if gem is falling or not **/
@@ -115,56 +119,56 @@ public class ModelGem extends Model {
 	 * check collision of gem and drain
 	 * @return collision: true/false
 	 */
-	public boolean checkFallCollision()	{
+	public boolean isHittingGround()	{
 		return posZ < streetPosZ;
 	}
 
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
 	{
-		boolean drainhit = false;
+		ModelDrain drainToCheck = null;
 		
-		//Invert device rotation because we need the real angle, 
-		//because the content (street) is rotated into the very opposite direction.
+		//Invert device rotation because we need the real angle 
+		//since the content (street) is rotated into the very opposite direction.
 		deviceRotation *= -1;
 		
-		for (Iterator<ModelDrain> i = drains.values().iterator(); !drainhit && i.hasNext();)
-		{
-			ModelDrain drain = i.next();
-			// calculate the position of the drain
+		for (Iterator<ModelDrain> i = drains.values().iterator(); i.hasNext();) {
+			ModelDrain d = i.next();
 			
-			float tempPos = streetPos + drain.getPosition();
-			
-			//if current drain is within range (deltaPos).
-			if (Math.abs(tempPos) < maxDeltaPos) {
-				int drainType = drain.getDrainStyle();
-				
-				if (drainType == ModelDrain.CLOSED)	{
-					this.soundman.playSound(SoundFX.BREAK);
-					progman.loseMoneyByBreak(drainType);
-				}
-				else if (drainType == this.gemType)	{
-					float deltaAngle = Math.abs(drain.getOrientationAngle() - deviceRotation);
-					
-					switch (this.gemType) {
-						case ModelDrain.ROUND: drainhit = true; break;
-						case ModelDrain.OCT: drainhit = (deltaAngle % 45f) < maxDeltaAngle; break;
-						case ModelDrain.RECT: drainhit = (deltaAngle % 180f) < maxDeltaAngle; break;
-						case ModelDrain.DIAMOND: drainhit = deltaAngle < maxDeltaAngle; break;
-					}
-					if (drainhit) {
-						progman.loseMoneyByHit(drainType);
-						
-						long vDuration = 300;
-						if (this.vibrator != null)
-							this.vibrator.vibrate(vDuration);
-						
-						this.soundman.playSound(SoundFX.HIT);
-					}
-					else
-						this.soundman.playSound(SoundFX.MISS);
-				}
-			}			
+			//Calculate the position of the drain. 
+			//Interesting drains should be in the range of e.g. -1 to +1, so right in the middle of the screen.
+			//If current drain is within range (maxDeltaPos), use it.
+			if (Math.abs(streetPos + d.getPosition()) < maxDeltaPos)
+				drainToCheck = d;
 		}
+		
+		if (drainToCheck != null) {
+			boolean drainHit = false;
+			float deltaAngle = Math.abs(drainToCheck.getOrientationAngle() - deviceRotation);
+					
+			switch (drainToCheck.getStyle()) {
+			case ModelDrain.CLOSED:	//this.soundman.playSound(SoundFX.BREAK);
+									progman.loseMoneyByBreak(gemType);
+									break;
+			case ModelDrain.ROUND: drainHit = drainToCheck.getStyle() == this.gemType; break;
+			case ModelDrain.OCT: drainHit = drainToCheck.getStyle() == this.gemType && (deltaAngle % 45f) < maxDeltaAngle; break;
+			case ModelDrain.RECT: drainHit = drainToCheck.getStyle() == this.gemType && (deltaAngle % 180f) < maxDeltaAngle; break;
+			case ModelDrain.DIAMOND: drainHit = drainToCheck.getStyle() == this.gemType && deltaAngle < maxDeltaAngle; break;
+			}
+			
+			if (drainHit) {
+				progman.loseMoneyByHit(gemType);
+					
+				long vDuration = 300;
+				if (this.vibrator != null)
+					this.vibrator.vibrate(vDuration);
+					
+				this.soundman.playSound(SoundFX.HIT, 1f, 1f, 0);
+			}
+			else
+				this.soundman.playSound(SoundFX.MISS, 1f, 1f, 0);
+		}
+		else 
+			this.soundman.playSound(SoundFX.MISS, 1f, 1f, 0);
 	}
 	
 	/**
@@ -174,7 +178,7 @@ public class ModelGem extends Model {
 	public void update(double deltaTime, float streetPos, float deviceRotation, ProgressManager progman) {
 		
 		if (this.isFalling) {
-			if (!checkFallCollision()) {
+			if (!isHittingGround()) {
 				fallSpeed += 5f * deltaTime;
 				posZ -= fallSpeed;
 			}
@@ -200,6 +204,3 @@ public class ModelGem extends Model {
 		}
 	}
 }
-
-	
-
