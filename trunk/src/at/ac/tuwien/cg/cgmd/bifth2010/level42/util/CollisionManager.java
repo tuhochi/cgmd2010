@@ -53,7 +53,7 @@ public class CollisionManager implements Persistable{
 					      toCenterVecA,toCenterVecB;
 	private Motion objAMotion,objBMotion;
 	
-	private Movable objA,objB,goldPlanet;
+	private Movable objA,objB,goldPlanet,skysphere;
 	
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
@@ -80,7 +80,7 @@ public class CollisionManager implements Persistable{
 	public CollisionManager(Scene scene)
 	{
 		this.scene = scene;
-		this.entityList = scene.sceneEntities;
+		this.entityList = new ArrayList<SceneEntity>(scene.sceneEntities);
 		
 		this.p = new Vector3();
 		this.q = new Vector3();
@@ -114,12 +114,15 @@ public class CollisionManager implements Persistable{
 		
 		instance = this;
 		
-		for(int i=0;i<entityList.size();i++)
+		for(int i=entityList.size()-1;i>=0;i--)
 		{
 			if(entityList.get(i).getName().equals(Config.PLANET_NAME)){
 				goldPlanet = entityList.get(i);
 				remainingPlanetParts.addAll(entityList.get(i).models);
-				break;
+			}
+			if(entityList.get(i).getName().equals(Config.SKYSPHERE_NAME)){
+				skysphere = entityList.get(i);
+				entityList.remove(i);
 			}
 		}
 		Collections.sort(remainingPlanetParts, comperator);
@@ -243,13 +246,19 @@ public class CollisionManager implements Persistable{
 			if(objA.isDisabled())
 				continue;
 			
-			objAIsMoveable = (objA == goldPlanet)?false:true;
+			objAIsMoveable = (objA.equals(goldPlanet))?false:true;
+			
 			
 			for(int j = i+1; j<entityListSize; j++)
 			{
 				objB = entityList.get(j);
-				objBIsMoveable = (objB == goldPlanet)?false:true;
 				
+				//only collide with active entities
+				if(objB.isDisabled())
+					continue;
+				
+				objBIsMoveable = (objB.equals(goldPlanet))?false:true;
+
 				//check for contact
 				if(collisionDetected(objA,objB,Config.COLLISION_PENETRATION_DEPTH,centerDistance))
 				{
@@ -270,6 +279,8 @@ public class CollisionManager implements Persistable{
 							planet = (SceneEntity) objB;
 							satellite = (SceneEntity) objA;
 						}
+						
+						//Log.d(LevelActivity.TAG,"planet="+planet.getName()+" sat="+satellite.getName());
 						
 						/**
 						 * SPECIAL CASE
