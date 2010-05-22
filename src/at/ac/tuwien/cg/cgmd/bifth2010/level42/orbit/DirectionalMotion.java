@@ -127,6 +127,10 @@ public class DirectionalMotion extends Motion
 		dos.writeFloat(this.speed);
 		this.basicOrientation.persist(dos);
 		
+		dos.writeBoolean(isInsidePlanet);
+		dos.writeBoolean(filterPlanetColl);
+		dos.writeBoolean(playedCollSound);
+		
 		if(satTrans != null){
 			dos.writeBoolean(true);
 			dos.writeUTF(satTrans.getClass().getName());
@@ -145,6 +149,10 @@ public class DirectionalMotion extends Motion
 		this.position.restore(dis);
 		this.speed = dis.readFloat();
 		this.basicOrientation.restore(dis);
+		
+		this.isInsidePlanet = dis.readBoolean();
+		this.filterPlanetColl = dis.readBoolean();
+		this.playedCollSound = dis.readBoolean();
 		
 		if(dis.readBoolean()){
 			String className = dis.readUTF();

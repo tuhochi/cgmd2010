@@ -39,7 +39,7 @@ public class Config
 
 	/** 0.5f = half the smaller side of the screen */
 	public static final float MAX_FORCE_VIS_SIZE = 0.50f;
-	/** (PI/2)/1000.0f = 180° per second */
+	/** (PI/2)/1000.0f = 180ï¿½ per second */
 	public static final float FORCE_VIS_ROTATION_SPEED = Constants.PIHALF/1000.0f;
 	
 	/** GAMEPLAY */
@@ -62,6 +62,8 @@ public class Config
 	
 	/** entityname for the planet */
 	public static String PLANET_NAME = "GoldPlanet";
+	
+	public static String SKYSPHERE_NAME = "Skysphere";
 	
 	/** prefix for the satellite entities */
 	public static String SATELLITE_PREFIX = "Satellite_";

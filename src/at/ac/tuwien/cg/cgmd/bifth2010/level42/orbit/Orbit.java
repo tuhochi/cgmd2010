@@ -564,6 +564,10 @@ public class Orbit extends Motion
 		directionVec.persist(dos);
 		basicOrientation.persist(dos);
 		
+		dos.writeBoolean(isInsidePlanet);
+		dos.writeBoolean(filterPlanetColl);
+		dos.writeBoolean(playedCollSound);
+		
 		if(satTrans != null){
 			dos.writeBoolean(true);
 			dos.writeUTF(satTrans.getClass().getName());
@@ -608,6 +612,10 @@ public class Orbit extends Motion
 		centerVec.restore(dis);
 		directionVec.restore(dis);
 		basicOrientation.restore(dis);
+		
+		isInsidePlanet = dis.readBoolean();
+		filterPlanetColl = dis.readBoolean();
+		playedCollSound = dis.readBoolean();
 		
 		if(dis.readBoolean()){
 			String className = dis.readUTF();
