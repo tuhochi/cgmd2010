@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -52,7 +54,9 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private TextView tfPoints;
 	private TextView tfPointsShadow;
-	
+	private ImageView imageview;
+	AnimationDrawable animationIntro;
+		
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
 	private Accelerometer accelerometer;
@@ -74,6 +78,12 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		initLevelParams();
 		initLevel();
 		
+		imageview = (ImageView) findViewById(R.id.l84_imageView);
+		//imageview.setBackgroundResource(R.drawable.l84_animation_intro);
+//		animationIntro = (AnimationDrawable) imageview.getBackground();
+//		animationIntro.setOneShot(true); //play the animation only once
+//		animationIntro.start();
+
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);
 		
