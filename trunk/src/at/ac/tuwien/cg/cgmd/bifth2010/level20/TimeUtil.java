@@ -1,8 +1,9 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimingTask;
 
 /**
  * The Class TimeUtil takes care of all tasks belonging to time.
