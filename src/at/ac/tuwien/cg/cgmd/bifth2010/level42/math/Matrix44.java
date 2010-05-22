@@ -19,7 +19,6 @@ public class Matrix44 implements Persistable
 	 */
 	public final float m[] = new float[16];
 	private Matrix44 temp;
-	private Vector3 tempV = new Vector3();
 
 	/**
 	 * Instantiates a new matrix44 as identity
@@ -178,25 +177,10 @@ public class Matrix44 implements Persistable
 	 */
 	public void setIdentity()
 	{
-		m[ 0] = 1;
-		m[ 1] = 0;
-		m[ 2] = 0;
-		m[ 3] = 0;
-		
-		m[ 4] = 0;
-		m[ 5] = 1;
-		m[ 6] = 0;
-		m[ 7] = 0;
-		
-		m[ 8] = 0;
-		m[ 9] = 0;
-		m[10] = 1;
-		m[11] = 0;
-		
-		m[12] = 0;
-		m[13] = 0;
-		m[14] = 0;
-		m[15] = 1;
+		m[ 0] = 1;	m[ 4] = 0;	m[ 8] = 0;	m[12] = 0;
+		m[ 1] = 0;	m[ 5] = 1;	m[ 9] = 0;	m[13] = 0;
+		m[ 2] = 0;	m[ 6] = 0;	m[10] = 1;	m[14] = 0;
+		m[ 3] = 0;	m[ 7] = 0;	m[11] = 0;	m[15] = 1;
 	}
 	
 	/**
@@ -224,6 +208,8 @@ public class Matrix44 implements Persistable
 		return new Matrix44().setFromQuaternion(x, y, z, w);
 	}
 	
+	private native void setFromQuaternion(float[] m16, float x, float y, float z, float w);
+	
 	/**
 	 * Sets this to be a rotation matrix corresponding to a quaternion
 	 * specified by x,y,z,w
@@ -232,30 +218,11 @@ public class Matrix44 implements Persistable
 	 * @param y the y
 	 * @param z the z
 	 * @param w the w
-	 * @return the matrix44
+	 * @return this
 	 */
 	public Matrix44 setFromQuaternion(float x, float y, float z, float w)
 	{
-	    m[ 0] = 1.0f - 2.0f * ( y * y + z * z );
-	    m[ 4] = 2.0f * ( x * y - w * z );	
-	    m[ 8] = 2.0f * ( x * z + w * y );
-	    m[12] = 0.0f;
-
-	    m[ 1] = 2.0f * ( x * y + w * z );
-	    m[ 5] = 1.0f - 2.0f * ( x * x + z * z );
-	    m[ 9] = 2.0f * ( y * z - w * x );
-	    m[13] = 0.0f;
-	    
-	    m[ 2] = 2.0f * ( x * z - w * y );
-	    m[ 6] = 2.0f * ( y * z + w * x );
-	    m[10] = 1.0f - 2.0f * ( x * x + y * y );
-	    m[14] = 0.0f;
-
-	    m[ 3] = 0.0f;
-	    m[ 7] = 0.0f;
-	    m[11] = 0.0f;
-	    m[15] = 1.0f;
-
+		setFromQuaternion(m, x, y, z, w);
 	    return this;
 	}
 
@@ -301,8 +268,9 @@ public class Matrix44 implements Persistable
 	{
 		if(temp == null)
 			temp = new Matrix44();
-		temp.setScale(sx, sy, sz).mult(this);
-		set(temp.m);
+		temp.setScale(sx, sy, sz);
+		
+		mult(temp.m, m, m);
 		return this;
 	}
 	
@@ -347,7 +315,9 @@ public class Matrix44 implements Persistable
 	 */
 	public Matrix44 setRotateX(float alpha)
 	{
-		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
+		float cosa = (float) Math.cos(alpha);
+		float sina = (float) Math.sin(alpha);
+		
 		m[ 0] =     1; m[ 4] =     0; m[ 8] =     0; m[12] = 0;
 		m[ 1] =     0; m[ 5] =  cosa; m[ 9] = -sina; m[13] = 0;
 		m[ 2] =     0; m[ 6] =  sina; m[10] =  cosa; m[14] = 0;
@@ -376,8 +346,9 @@ public class Matrix44 implements Persistable
 	{
 		if(temp == null)
 			temp = new Matrix44();
-		temp.setRotateX(alpha).mult(this);
-		set(temp.m);
+		temp.setRotateX(alpha);
+		
+		mult(temp.m, m, m);
 		return this;
 	}
 
@@ -389,7 +360,9 @@ public class Matrix44 implements Persistable
 	 */
 	public Matrix44 setRotateY(float alpha)
 	{
-		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
+		float cosa = (float) Math.cos(alpha);
+		float sina = (float) Math.sin(alpha);
+		
 		m[ 0] =  cosa; m[ 4] =     0; m[ 8] =  sina; m[12] = 0;
 		m[ 1] =     0; m[ 5] =     1; m[ 9] =     0; m[13] = 0;
 		m[ 2] = -sina; m[ 6] =     0; m[10] =  cosa; m[14] = 0;
@@ -418,8 +391,9 @@ public class Matrix44 implements Persistable
 	{
 		if(temp == null)
 			temp = new Matrix44();
-		temp.setRotateY(alpha).mult(this);
-		set(temp.m);
+		temp.setRotateY(alpha);
+		
+		mult(temp.m, m, m);
 		return this;
 	}
 
@@ -431,7 +405,8 @@ public class Matrix44 implements Persistable
 	 */
 	public Matrix44 setRotateZ(float alpha)
 	{
-		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
+		float cosa = (float) Math.cos(alpha);
+		float sina = (float) Math.sin(alpha);
 		m[ 0] =  cosa; m[ 4] = -sina; m[ 8] =     0; m[12] = 0;
 		m[ 1] =  sina; m[ 5] =  cosa; m[ 9] =     0; m[13] = 0;
 		m[ 2] =     0; m[ 6] =     0; m[10] =     1; m[14] = 0;
@@ -460,10 +435,13 @@ public class Matrix44 implements Persistable
 	{
 		if(temp == null)
 			temp = new Matrix44();
-		temp.setRotateZ(alpha).mult(this);
-		set(temp.m);
+		temp.setRotateZ(alpha);
+		
+		mult(temp.m, m, m);
 		return this;
 	}
+	
+	private native void setRotate(float[] m16, float[] axis, float alpha);
 	
 	/**
 	 * Sets this to a RotateMatrix around axis with angle alpha
@@ -474,24 +452,7 @@ public class Matrix44 implements Persistable
 	 */
 	public Matrix44 setRotate(Vector3 axis, float alpha)
 	{
-		axis.normalize();
-		float cosa = (float) Math.cos(alpha), sina = (float) Math.sin(alpha);
-		m[ 0] = axis.v[0] * axis.v[0] + (1 - axis.v[0] * axis.v[0]) * cosa;
-		m[ 1] = axis.v[0] * axis.v[1] * (1 - cosa) + axis.v[2] * sina;
-		m[ 2] = axis.v[0] * axis.v[2] * (1 - cosa) - axis.v[1] * sina;
-		m[ 3] = 0; 
-		m[ 4] = axis.v[0] * axis.v[1] * (1 - cosa) - axis.v[2] * sina;
-		m[ 5] = axis.v[1] * axis.v[1] + (1 - axis.v[1] * axis.v[1]) * cosa;
-		m[ 6] = axis.v[1] * axis.v[2] * (1 - cosa) + axis.v[0] * sina;
-		m[ 7] = 0; 
-		m[ 8] = axis.v[0] * axis.v[2] * (1 - cosa) + axis.v[1] * sina;
-		m[ 9] = axis.v[1] * axis.v[2] * (1 - cosa) - axis.v[0] * sina;
-		m[10] = axis.v[2] * axis.v[2] + (1 - axis.v[2] * axis.v[2]) * cosa;
-		m[11] = 0;
-		m[12] = 0;
-		m[13] = 0;
-		m[14] = 0;
-		m[15] = 1;
+		setRotate(m, axis.v, alpha);
 		return this;
 	}
 
@@ -518,8 +479,9 @@ public class Matrix44 implements Persistable
 	{
 		if(temp == null)
 			temp = new Matrix44();
-		temp.setRotate(axis, alpha).mult(this);
-		set(temp.m);
+		temp.setRotate(axis, alpha);
+		
+		mult(temp.m, m, m);
 		return this;
 	}
 
@@ -533,10 +495,10 @@ public class Matrix44 implements Persistable
 	 */
 	public Matrix44 setTranslate(float tx, float ty, float tz)
 	{
-		m[ 0] = 1; m[ 4] = 0; m[ 8] = 0; m[12] = tx;
-		m[ 1] = 0; m[ 5] = 1; m[ 9] = 0; m[13] = ty;
-		m[ 2] = 0; m[ 6] = 0; m[10] = 1; m[14] = tz;
-		m[ 3] = 0; m[ 7] = 0; m[11] = 0; m[15] = 1;
+		m[ 0] = 1;	m[ 4] = 0;	m[ 8] = 0;	m[12] = tx;
+		m[ 1] = 0;	m[ 5] = 1;	m[ 9] = 0;	m[13] = ty;
+		m[ 2] = 0;	m[ 6] = 0;	m[10] = 1;	m[14] = tz;
+		m[ 3] = 0;	m[ 7] = 0;	m[11] = 0;	m[15] = 1;
 		return this;
 	}
 
@@ -565,11 +527,14 @@ public class Matrix44 implements Persistable
 	{
 		if(temp == null)
 			temp = new Matrix44();
-		temp.setTranslate(tx, ty, tz).mult(this);
-		set(temp.m);
+		temp.setTranslate(tx, ty, tz);
+		
+		mult(temp.m, m, m);
 		return this;
 	}
 
+	private native void mult(float[] m16left, float[] m16right, float[] m16result);
+	
 	/**
 	 * Sets this = this*right and returns this
 	 *
@@ -578,25 +543,7 @@ public class Matrix44 implements Persistable
 	 */
 	public Matrix44 mult(Matrix44 right)
 	{
-		if(temp == null)
-			temp = new Matrix44();
-		temp.copy(this);
-		m[ 0] = temp.m[ 0]*right.m[ 0] + temp.m[ 4]*right.m[ 1] + temp.m[ 8]*right.m[ 2] + temp.m[12]*right.m[ 3];
-		m[ 1] = temp.m[ 1]*right.m[ 0] + temp.m[ 5]*right.m[ 1] + temp.m[ 9]*right.m[ 2] + temp.m[13]*right.m[ 3];
-		m[ 2] = temp.m[ 2]*right.m[ 0] + temp.m[ 6]*right.m[ 1] + temp.m[10]*right.m[ 2] + temp.m[14]*right.m[ 3];
-		m[ 3] = temp.m[ 3]*right.m[ 0] + temp.m[ 7]*right.m[ 1] + temp.m[11]*right.m[ 2] + temp.m[15]*right.m[ 3];
-		m[ 4] = temp.m[ 0]*right.m[ 4] + temp.m[ 4]*right.m[ 5] + temp.m[ 8]*right.m[ 6] + temp.m[12]*right.m[ 7];
-		m[ 5] = temp.m[ 1]*right.m[ 4] + temp.m[ 5]*right.m[ 5] + temp.m[ 9]*right.m[ 6] + temp.m[13]*right.m[ 7];
-		m[ 6] = temp.m[ 2]*right.m[ 4] + temp.m[ 6]*right.m[ 5] + temp.m[10]*right.m[ 6] + temp.m[14]*right.m[ 7];
-		m[ 7] = temp.m[ 3]*right.m[ 4] + temp.m[ 7]*right.m[ 5] + temp.m[11]*right.m[ 6] + temp.m[15]*right.m[ 7];
-		m[ 8] = temp.m[ 0]*right.m[ 8] + temp.m[ 4]*right.m[ 9] + temp.m[ 8]*right.m[10] + temp.m[12]*right.m[11];
-		m[ 9] = temp.m[ 1]*right.m[ 8] + temp.m[ 5]*right.m[ 9] + temp.m[ 9]*right.m[10] + temp.m[13]*right.m[11];
-		m[10] = temp.m[ 2]*right.m[ 8] + temp.m[ 6]*right.m[ 9] + temp.m[10]*right.m[10] + temp.m[14]*right.m[11];
-		m[11] = temp.m[ 3]*right.m[ 8] + temp.m[ 7]*right.m[ 9] + temp.m[11]*right.m[10] + temp.m[15]*right.m[11];
-		m[12] = temp.m[ 0]*right.m[12] + temp.m[ 4]*right.m[13] + temp.m[ 8]*right.m[14] + temp.m[12]*right.m[15];
-		m[13] = temp.m[ 1]*right.m[12] + temp.m[ 5]*right.m[13] + temp.m[ 9]*right.m[14] + temp.m[13]*right.m[15];
-		m[14] = temp.m[ 2]*right.m[12] + temp.m[ 6]*right.m[13] + temp.m[10]*right.m[14] + temp.m[14]*right.m[15];
-		m[15] = temp.m[ 3]*right.m[12] + temp.m[ 7]*right.m[13] + temp.m[11]*right.m[14] + temp.m[15]*right.m[15];
+		mult(m, right.m, m);
 		return this;
 	}
 	
@@ -612,6 +559,8 @@ public class Matrix44 implements Persistable
 		return new Matrix44(left).mult(right);
 	}
 	
+	private native void transformPoint(float[] m16, float[] vector);
+	
 	/**
 	 * Transforms a point.
 	 *
@@ -619,16 +568,7 @@ public class Matrix44 implements Persistable
 	 */
 	public void transformPoint(Vector3 in)
 	{
-		float x = m[ 0]*in.v[0] + m[ 4]*in.v[1] + m[ 8]*in.v[2] + m[12];
-		float y = m[ 1]*in.v[0] + m[ 5]*in.v[1] + m[ 9]*in.v[2] + m[13];
-		float z = m[ 2]*in.v[0] + m[ 6]*in.v[1] + m[10]*in.v[2] + m[14];
-		float w = m[ 3]*in.v[0] + m[ 7]*in.v[1] + m[11]*in.v[2] + m[15];
-		x /= w;
-		y /= w;
-		z /= w;
-		in.v[0] = x;
-		in.v[1] = y;
-		in.v[2] = z;
+		transformPoint(m, in.v);
 	}
 	
 	/**
@@ -638,15 +578,10 @@ public class Matrix44 implements Persistable
 	 */
 	public void transformPoint(Vector4 in)
 	{
-		float x = m[ 0]*in.v[0] + m[ 4]*in.v[1] + m[ 8]*in.v[2] + m[12]*in.v[3];
-		float y = m[ 1]*in.v[0] + m[ 5]*in.v[1] + m[ 9]*in.v[2] + m[13]*in.v[3];
-		float z = m[ 2]*in.v[0] + m[ 6]*in.v[1] + m[10]*in.v[2] + m[14]*in.v[3];
-		float w = m[ 3]*in.v[0] + m[ 7]*in.v[1] + m[11]*in.v[2] + m[15]*in.v[3];
-		in.v[0] = x;
-		in.v[1] = y;
-		in.v[2] = z;
-		in.v[3] = w;
+		transformPoint(m, in.v);
 	}
+	
+	private native float transformSphere(float[] m16, float[] center, float radius);
 	
 	/**
 	 * Transforms a sphere.
@@ -655,17 +590,7 @@ public class Matrix44 implements Persistable
 	 */
 	public void transformSphere(Sphere inout)
 	{
-		// make tempV a point on the hull
-		tempV.set(1,0,0).multiply(inout.radius).add(inout.center);
-		
-		// transform both points
-		transformPoint(inout.center);
-		transformPoint(tempV);
-		
-		// make tempV a vector from center to hull again
-		tempV.subtract(inout.center);
-
-		inout.radius = tempV.length();
+		inout.radius = transformSphere(m, inout.center.v, inout.radius);
 	}
 	
 	/**

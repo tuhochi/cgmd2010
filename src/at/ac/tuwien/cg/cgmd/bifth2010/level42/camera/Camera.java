@@ -13,7 +13,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 //static imports
 import static android.opengl.GLES10.*;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Camera represents a spherical camera model.
  *
