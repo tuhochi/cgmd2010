@@ -13,8 +13,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class SoundManager {
 
 	/** enumeration of existing sounds **/
-	public enum SoundFX {BUTTON, HIT, MISS, BREAK, BACKGROUND, NATURE};
-	private int soundsamount = 6;
+	public enum SoundFX {BUTTON, HIT, MISS, BREAK, SWOOSH};
+	private int soundsamount = 5;
 	/** soundpool for playing sounds **/
 	private SoundPool soundPool;
 	/** hashmap with all available sounds **/
@@ -51,8 +51,7 @@ public class SoundManager {
 		soundMap.put(SoundFX.BUTTON, soundPool.load(context,R.raw.l84_button,1));
 		soundMap.put(SoundFX.HIT, soundPool.load(context,R.raw.l84_hit,1));
 		soundMap.put(SoundFX.MISS, soundPool.load(context,R.raw.l84_miss,1));
-		soundMap.put(SoundFX.BACKGROUND, soundPool.load(context,R.raw.l00_menu,1));
-		soundMap.put(SoundFX.NATURE, soundPool.load(context,R.raw.l84_nature,1));
+		soundMap.put(SoundFX.SWOOSH, soundPool.load(context,R.raw.l84_swoosh,1));
 	}
 	
 	/**	SoundPool.play  (int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
