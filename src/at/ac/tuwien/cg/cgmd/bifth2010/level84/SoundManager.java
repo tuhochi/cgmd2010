@@ -62,6 +62,7 @@ public class SoundManager {
 	
 		//TODO: sound for drop, hit (watersplash), ev. streetnoise, ...
 		soundMap.put(SoundFX.BUTTON, soundPool.load(context,R.raw.l84_button,1));
+		soundMap.put(SoundFX.BREAK, soundPool.load(context,R.raw.l84_break,1));
 		soundMap.put(SoundFX.HIT, soundPool.load(context,R.raw.l84_hit,1));
 		soundMap.put(SoundFX.MISS, soundPool.load(context,R.raw.l84_miss,1));
 		soundMap.put(SoundFX.SWOOSH, soundPool.load(context,R.raw.l84_swoosh,1));
@@ -111,6 +112,7 @@ public class SoundManager {
 	private void initMusicBG(Context context)
 	{
 		musicPlayerBG = MediaPlayer.create(context, MUSIC_BACKGROUND);
+		musicPlayerBG.setVolume(.2f, .2f);
 		musicPlayerBG.setOnErrorListener(new OnErrorListener(){
 
 			@Override

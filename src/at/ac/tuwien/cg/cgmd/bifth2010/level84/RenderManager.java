@@ -53,7 +53,7 @@ public class RenderManager implements Renderer {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			tfPoints.setText("$" + progman.getActualMoney());
+			tfPoints.setText("$" + progman.getRemainingValue());
 			tfPointsShadow.setText(tfPoints.getText());
 		}
 	};
@@ -110,7 +110,6 @@ public class RenderManager implements Renderer {
 		//UPDATE -------------------------
 		street.update(deltaTime, accelerometer.getOrientation());
 		
-		checkMoney(); //check if there is any money left
 		checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
 		
 		Log.i("streetPos", "position: " + street.getStreetPos());
@@ -128,16 +127,6 @@ public class RenderManager implements Renderer {
 			if (m instanceof ModelGem)
 				((ModelGem)m).update(deltaTime, street.getStreetPos(), accelerometer.getOrientation(), progman);
 			m.draw(gl);
-		}
-	}
-
-	
-	private void checkMoney()
-	{
-		if (progman.getActualMoney() == 0)
-		{
-			progman.updatePointProgress(100);
-			this.activity.finish();
 		}
 	}
 	
@@ -183,13 +172,16 @@ public class RenderManager implements Renderer {
 			i.next().loadGLTexture(gl, (Context)this.activity);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
+		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glClearDepthf(1.0f);
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glShadeModel(GL10.GL_FLAT);
+
+		//Disable Z-Buffer for nice gem-falling-into-the-drains-effect.
+		/*gl.glClearDepthf(1.0f);
 		gl.glEnable(GL10.GL_DEPTH_TEST);
-		gl.glDepthFunc(GL10.GL_LEQUAL);
+		gl.glDepthFunc(GL10.GL_LEQUAL);*/
+		
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	}
 }
