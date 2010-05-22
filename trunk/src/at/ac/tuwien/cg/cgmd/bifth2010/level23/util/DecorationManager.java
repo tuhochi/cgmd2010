@@ -90,6 +90,20 @@ public class DecorationManager
 	/** The vboID for tree. */
 	private int treeVboID;	
 	
+	private int elkVboID;
+	
+	private TexturePart elkTexture;
+	
+	private FloatBuffer elkVertexBuffer;
+	
+	private float elkAnimationTime;
+	
+	private boolean elkTexSwitch = false;
+	
+	private int[] elkAnimationSwitchTimes;
+	
+	private int elkAnimationSteps;
+	
 	/**
 	 * Default Constructor
 	 */
@@ -97,7 +111,7 @@ public class DecorationManager
 	{
 		clouds = new ArrayList<Cloud>(NR_OF_CLOUDS);
 		randomGenerator = new Random(System.currentTimeMillis());
-		
+		elkAnimationSwitchTimes = new int[]{2000,750,750,500};		
 	}
 	
 	/**
@@ -115,11 +129,15 @@ public class DecorationManager
 		treeVertexBuffer = geometryManager.createVertexBufferQuad(RenderView.instance.getRightBounds(), RenderView.instance.getTopBounds()/2f);
 		treeTexture = TextureAtlas.instance.getTreeTextur();
 		
+		elkVertexBuffer = geometryManager.createVertexBufferQuad(RenderView.instance.getTopBounds()*0.15f*0.75f, RenderView.instance.getTopBounds()*0.15f);
+		elkTexture = TextureAtlas.instance.getElkTextur();
+		
 		if(Settings.GLES11Supported) 
 		{
 			cloudVboID = geometryManager.createVBO(cloudVertexBuffer, cloudTexture.texCoords);
 			mountainVboID = geometryManager.createVBO(mountainVertexBuffer, mountainTexture.texCoords);
 			treeVboID = geometryManager.createVBO(treeVertexBuffer, treeTexture.texCoords);
+			elkVboID = geometryManager.createVBO(elkVertexBuffer, elkTexture.texCoords);
 		}
 	}
 	
@@ -254,6 +272,57 @@ public class DecorationManager
 		glPopMatrix();
 	}
 	
+	public void renderElk()
+	{		
+		if(elkAnimationTime >= elkAnimationSwitchTimes[elkAnimationSteps])
+		{
+			elkAnimationTime -= elkAnimationSwitchTimes[elkAnimationSteps];
+			elkAnimationSteps++;
+			elkTexSwitch = !elkTexSwitch;
+			if(elkAnimationSteps == 4)
+				elkAnimationSteps = 0;
+		}
+		
+		if(elkTexSwitch)
+		{
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix();
+		
+			glTranslatef(0, -elkTexture.dimension.y, 0);
+		
+			glMatrixMode(GL_MODELVIEW);
+		}
+		glPushMatrix();
+		
+		glTranslatef(75f, treePositionY+Settings.MAINCHAR_STARTPOSY*RenderView.instance.getAspectRatio(), 0);
+		
+		if (!Settings.GLES11Supported) {
+			glTexCoordPointer(2, GL10.GL_FLOAT, 0,
+					cloudTexture.texCoords);
+			glVertexPointer(3, GL10.GL_FLOAT, 0, elkVertexBuffer);
+			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+
+		} else {
+			geometryManager.bindVBO(elkVboID);
+
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+		}
+		if(elkTexSwitch)
+		{
+			glMatrixMode(GL_TEXTURE);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		}
+		glPopMatrix();
+	}
+	
+	public void renderBackgroundDecoration()
+	{
+		renderMountains();
+		renderTree();
+		renderElk();
+	}
+	
 	/**
 	 * Writing to stream 
 	 * @param dos Stream to write to
@@ -328,6 +397,9 @@ public class DecorationManager
 	
 	public void update(float dt)
 	{
+		elkAnimationTime +=dt;
+		if(RenderView.instance.gameState == RenderView.INGAME)
+		{
 		treePositionY -= dt*Settings.BALLOON_SPEED/8f;
 		if(mountainPositionY >= 0)
 			mountainMoveDir =0;
@@ -337,5 +409,6 @@ public class DecorationManager
 			mountainMoveDir=-1;
 		
 			mountainPositionY += mountainMoveDir*TimeUtil.instance.getDt()*Settings.BALLOON_SPEED/16f;
+		}
 	}
 }

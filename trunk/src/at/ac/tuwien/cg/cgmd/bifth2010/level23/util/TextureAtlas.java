@@ -194,4 +194,13 @@ public class TextureAtlas
 	{
 		return generateTexturePart(new Vector2(384,0), new Vector2(384+128,256));
 	}
+	
+	/**
+	 * Returns the part of the texture for the elk decoration
+	 * @return the texture part for the elk obstacle
+	 */
+	public TexturePart getElkTextur()
+	{
+		return generateTexturePart(new Vector2(768,256), new Vector2(798+96,256+128));
+	}
 }
