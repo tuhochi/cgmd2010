@@ -114,6 +114,24 @@ public class Game {
 	 * Method for the actions if the bunny has been caught by the police
 	 */
 	public void policeCatchesBunny() {
+		if(context.mMusicOn){
+			MediaPlayer soundPlayer = MediaPlayer.create(context, R.raw.l88_police);
+			try{
+				if(soundPlayer!=null){
+					soundPlayer.setOnCompletionListener(new OnCompletionListener() {
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							mp.release();
+							
+						}
+					});
+					soundPlayer.start();
+				}
+			} catch(IllegalStateException e){
+				//Ignore
+			}
+		}
+		
 		/**
 		 * Handler class for a thread to end the level
 		 * @author Asperger, Radax
@@ -136,9 +154,12 @@ public class Game {
 	public void looseGold(int lostGold) {
 		gold -= lostGold;
 		
-		//TODO 
-		//player.play(Sounds.GOLD);
-		/*if(musicOn){
+		//TODO Variante 2, falls es mit dem anderen Probs am Handy gibt!
+		/*if(context.mMusicOn){
+			player.play(Sounds.GOLD);
+		}*/
+		
+		if(context.mMusicOn){
 			MediaPlayer soundPlayer = MediaPlayer.create(context, R.raw.l00_gold01);
 			try{
 				if(soundPlayer!=null){
@@ -154,10 +175,28 @@ public class Game {
 			} catch(IllegalStateException e){
 				//Ignore
 			}
-		}*/
+		}
 		
 		if( gold <= 0 ) {
 			gold = 0;
+			
+			if(context.mMusicOn){
+				MediaPlayer soundPlayer = MediaPlayer.create(context, R.raw.l88_win);
+				try{
+					if(soundPlayer!=null){
+						soundPlayer.setOnCompletionListener(new OnCompletionListener() {
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								mp.release();
+								
+							}
+						});
+						soundPlayer.start();
+					}
+				} catch(IllegalStateException e){
+					//Ignore
+				}
+			}
 			
 			/**
 			 * Handler class for a thread to end the level
