@@ -1,8 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level88;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +24,10 @@ import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.Sound.Sounds;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
@@ -35,6 +44,32 @@ public class LevelActivity extends Activity{
 	private Game game;
 	private Vector2 windowSize;
 	private TextView goldText;
+	//the url of the background music
+	private static final String LOOP_URL = "android.resource://at.ac.tuwien.cg.cgmd.bifth2010/" + R.raw.l88_background;
+	//bolean if the music should be played or not
+	public boolean mMusicOn = false;
+	//media player used for the background loop
+	private MediaPlayer mLoopPlayer = null;
+	
+	//kurze, eingebette Klasse fuer den Player
+	/**
+	 * wait for the MediaManager to prepare the audio loop
+	 */
+	private OnPreparedListener mSoundPrepListener = new OnPreparedListener() {
+		
+		@Override
+		public void onPrepared(MediaPlayer mp) {
+			mLoopPlayer.setLooping(true);
+			if(mMusicOn){
+				//only play the music if sound is allowed
+				mLoopPlayer.start();
+			}
+		}
+	};
+	
+	
+	
+	
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -93,6 +128,25 @@ public class LevelActivity extends Activity{
 			}
         });
 
+        //get the information if sound is to be played or not
+        SharedPreferences settings = this.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
+        mMusicOn = settings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
+        
+        mLoopPlayer = new MediaPlayer();
+        mLoopPlayer.setOnPreparedListener(mSoundPrepListener);
+        mLoopPlayer.setOnErrorListener(new OnErrorListener() {
+			@Override
+			public boolean onError(MediaPlayer mp, int what, int extra) {
+				// on any error create a new media player
+				mLoopPlayer.release();
+				mLoopPlayer = MediaPlayer.create(LevelActivity.this, R.raw.l88_background);
+				mLoopPlayer.setOnPreparedListener(mSoundPrepListener);
+				mLoopPlayer.setOnErrorListener(this);
+				return true;
+			}
+		});
+        mLoopPlayer.setLooping(true);
+        
         updateTexts();
 	}
 	
@@ -106,6 +160,8 @@ public class LevelActivity extends Activity{
 		s.setProgress(100-game.gold);
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
+		//stop the sounds
+		game.player.destroy();
 		LevelActivity.this.finish();
 	}
 	
@@ -127,12 +183,40 @@ public class LevelActivity extends Activity{
 		if( game!=null ) {
 			game.pause();
 		}
+		//stop the music if it is running
+		if(mLoopPlayer != null){
+			if(mLoopPlayer.isPlaying()){
+				mLoopPlayer.pause();
+			}
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onResume()
 	 */
 	public void onResume() {
+		if((mLoopPlayer != null)&&(mMusicOn)){
+			//prepare the mediaplayer for audio replay
+			mLoopPlayer.reset();
+			Uri uri = Uri.parse(LOOP_URL);
+			try {
+				mLoopPlayer.setDataSource(this, uri);
+				mLoopPlayer.prepareAsync();
+			} catch (IllegalArgumentException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			} catch (IOException e) {
+				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			}
+		}
+		
 		super.onResume(); 
 		Log.d(TAG, "onResume()");
 		glSurfaceView.onResume();
@@ -164,6 +248,14 @@ public class LevelActivity extends Activity{
 	@Override
 	protected void onDestroy()
 	{
+		//stop the music if it is running
+		if(mLoopPlayer != null){
+			if(mLoopPlayer.isPlaying()){
+				mLoopPlayer.stop();
+			}
+			mLoopPlayer.release();
+			mLoopPlayer = null;
+		}
 		super.onDestroy();
 		Log.v(TAG, "onDestroy()");
 	}
