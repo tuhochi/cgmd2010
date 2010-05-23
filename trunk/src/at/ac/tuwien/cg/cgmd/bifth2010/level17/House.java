@@ -21,9 +21,9 @@ public class House extends LevelElement{
 	 * @param model The model of the house
 	 * @param pos The initial position of the house
 	 */
-	public House(Renderable model, Vector3 pos)
+	public House(Renderable model, int textureID, Vector3 pos)
 	{
-		super(model, R.drawable.l17_house, pos, 0f);
+		super(model, textureID, pos, 0f);
 	}
 	
 	/**
