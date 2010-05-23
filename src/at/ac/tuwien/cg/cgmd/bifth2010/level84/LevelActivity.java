@@ -83,11 +83,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		initLevelParams();
 		initLevel();
 		
-		imageview = (ImageView) findViewById(R.id.l84_imageView);
-		//imageview.setBackgroundResource(R.drawable.l84_animation_intro);
-//		animationIntro = (AnimationDrawable) imageview.getBackground();
-//		animationIntro.setOneShot(true); //play the animation only once
-//		animationIntro.start();
+		/*imageview = (ImageView) findViewById(R.id.l84_imageView);
+		imageview.setBackgroundResource(R.drawable.l84_animation_intro);
+		animationIntro = (AnimationDrawable) imageview.getBackground();
+		animationIntro.setOneShot(true); //play the animation only once
+		animationIntro.start();*/
 		
 		soundManager.playMusic();
 
@@ -98,7 +98,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		openglview.setRenderer(renderManager);
 		
 		initGui();
-		initIntro();
+		//initIntro();
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	}
 	
 
-	private void initIntro()
+	/*private void initIntro()
 	{
 		CharSequence introtext = "";
 		for (int i=3; i > 0; i--) {
@@ -142,7 +142,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 			introToast = Toast.makeText(this.getApplicationContext(), introtext, Toast.LENGTH_SHORT);
 			introToast.show();
 		}
-	}
+	}*/
 
 	/**
 	 * create the street and the drains of the level
