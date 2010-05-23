@@ -366,6 +366,7 @@ public class GameWorld {
 		}
 		return mEnemies;
 	}
+	
 
 	public static void destroySingleton() {
 		mSingleton = null;	

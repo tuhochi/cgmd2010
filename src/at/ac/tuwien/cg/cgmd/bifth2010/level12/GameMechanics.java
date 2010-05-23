@@ -81,7 +81,7 @@ public class GameMechanics {
 	
 	public void nextRound(){
 		mRound++;
-		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound = -1;
+		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound = Definitions.MAX_ROUND_NUMBER;
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
 	}
