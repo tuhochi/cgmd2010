@@ -216,6 +216,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 			{
 				while(RenderView.this.synchronizer.running)
 					update();
+				synchronizer.logicThreadFinished();
 			}
 		}, "Logic Thread").start();
 	}
@@ -414,7 +415,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 		// sets light and camera
 		pre_render();
 		synchronizer.preRenderDone();
-		
 		render();
 	}
 
