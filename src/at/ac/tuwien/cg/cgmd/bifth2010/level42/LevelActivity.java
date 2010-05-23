@@ -301,6 +301,7 @@ public class LevelActivity extends Activity
 		Scene scene = renderView.scene;
 		Camera cam = renderView.cam;
 		CollisionManager collManager = CollisionManager.instance;
+		GameManager gameManager = GameManager.instance;
 
 		try
 		{
@@ -309,6 +310,7 @@ public class LevelActivity extends Activity
 			cam.persist(dos);
 			scene.persist(dos);
 			collManager.persist(dos);
+			gameManager.persist(dos);
 			dos.close();
 			baos.close();
 			byte[] state = baos.toByteArray();
@@ -343,11 +345,14 @@ public class LevelActivity extends Activity
 				MotionManager.instance.reset();
 				cam.restore(dis);
 				scene.restore(dis);
-				//apply the motion transformation
-				scene.update();
 				
-				CollisionManager collManager = new CollisionManager(scene);
+				
+				CollisionManager collManager = CollisionManager.instance;
+				collManager.init(scene);
 				collManager.restore(dis);
+				
+				GameManager gameManager = GameManager.instance;
+				gameManager.restore(dis);
 				
 				dis.close();
 				bais.close();

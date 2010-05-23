@@ -30,7 +30,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
  */
 public class CollisionManager implements Persistable{
 
-	private final Scene scene;
+	private Scene scene;
 	
 	private ArrayList<SceneEntity> entityList;
 	private SceneEntity entity,nearestEntity;
@@ -58,9 +58,9 @@ public class CollisionManager implements Persistable{
 	private float minDistance;
 	private boolean objAIsMoveable,objBIsMoveable;
 	
-	public final Vector<Model> remainingPlanetParts;
+	public Vector<Model> remainingPlanetParts;
 	
-	public static CollisionManager instance;
+	public static CollisionManager instance = new CollisionManager();
 	public static NearestEntityComperator comperator;
 	
 	public GameManager gameManager;
@@ -71,16 +71,10 @@ public class CollisionManager implements Persistable{
 	private int collOffset;
 	private int collOffsetLimit;
 
-
-	
-	/**
-	 * Instantiates a new collision manager.
-	 * @param scene the scene
-	 */
-	public CollisionManager(Scene scene)
+	public CollisionManager()
 	{
-		this.scene = scene;
-		this.entityList = scene.sceneEntities;
+		this.scene = null;
+		this.entityList = null;
 		
 		this.p = new Vector3();
 		this.q = new Vector3();
@@ -103,16 +97,21 @@ public class CollisionManager implements Persistable{
 		this.toCenterVecB = new Vector3();
 			
 		this.minDistance = 0;
-		
-		
+
 		this.remainingPlanetParts = new Vector<Model>();
 		comperator = new NearestEntityComperator();
-		
+				
 		this.motionManager = MotionManager.instance;
 		this.timeManager = TimeManager.instance;
 		this.soundManager = SoundManager.instance;
+	}
+	
+	public void init(Scene scene)
+	{
+		this.scene = scene;
+		this.entityList = scene.sceneEntities;
 		
-		instance = this;
+		remainingPlanetParts.clear();
 		
 		for(int i=entityList.size()-1;i>=0;i--)
 		{
@@ -125,14 +124,18 @@ public class CollisionManager implements Persistable{
 			}
 		}
 		Collections.sort(remainingPlanetParts, comperator);
-		printRemaingingPlanetParts();
+		//printRemaingingPlanetParts();
 		Log.d(LevelActivity.TAG,"PLANET BSPHERE RADIUS:"+goldPlanet.getBoundingSphereWorld().radius);
 		
 		this.collOffset = (int)(entityList.size()/2);
 		this.collOffsetLimit = entityList.size();
 	}
 	
-	
+	public void initAndSetGameManager(GameManager gameManager)
+	{
+		gameManager.init(remainingPlanetParts.size());
+		this.gameManager = gameManager;
+	}
 	
 	/**
 	 * Shoot a ray through the scene and detect nearest intersection with the 
@@ -262,7 +265,7 @@ public class CollisionManager implements Persistable{
 				if(collisionDetected(objA,objB,Config.COLLISION_PENETRATION_DEPTH,centerDistance))
 				{
 					//collision detected
-					Log.d(LevelActivity.TAG,"COLLISION DETECTED");
+					//Log.d(LevelActivity.TAG,"COLLISION DETECTED");
 					
 					//check for collision between satellite and planet
 					if(!objAIsMoveable||!objBIsMoveable)
@@ -278,8 +281,6 @@ public class CollisionManager implements Persistable{
 							planet = (SceneEntity) objB;
 							satellite = (SceneEntity) objA;
 						}
-						
-						//Log.d(LevelActivity.TAG,"planet="+planet.getName()+" sat="+satellite.getName());
 						
 						/**
 						 * SPECIAL CASE
@@ -334,7 +335,7 @@ public class CollisionManager implements Persistable{
 									motionManager.addMotion(planetPartMotion,planetPart);
 									planetPartMotion.setInsidePlanet(true);
 									
-									Log.d(LevelActivity.TAG,"PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetPart.getMotion().getSpeed());
+									//Log.d(LevelActivity.TAG,"PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetPart.getMotion().getSpeed());
 									
 									//report game manager
 									gameManager.incScore();
@@ -499,6 +500,7 @@ public class CollisionManager implements Persistable{
 
 	@Override
 	public void restore(DataInputStream dis) throws IOException {
+		
 		int size = remainingPlanetParts.size();
 		for(int u = size-1; u >= 0; u--)
 		{
@@ -506,7 +508,6 @@ public class CollisionManager implements Persistable{
 				remainingPlanetParts.remove(u);
 		}
 		Collections.sort(remainingPlanetParts, comperator);
-		
 		printRemaingingPlanetParts();
 	}
 

@@ -149,10 +149,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 		scene = SceneLoader.instance.readScene(Config.LEVELNAME);
 		scene.setHud(hud);
 		motionManager.generateRandomOrbits(scene,Config.UNIVERSE_SPEED_LIMIT/2,Config.UNIVERSE_SPEED_LIMIT,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
-		collManager = new CollisionManager(scene);
-		gameManager = new GameManager(collManager.remainingPlanetParts.size());
-		//TODO: ref setzen
-		collManager.gameManager = gameManager;
+		collManager = CollisionManager.instance;
+		collManager.init(scene);
+		gameManager = GameManager.instance;
+		collManager.initAndSetGameManager(gameManager);
+
 		
 		guiThreadHandler = this.context.handler;
 		fpsUpdateRunnable = this.context.fpsUpdateRunnable;
@@ -446,7 +447,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		float aspect = (float)width / (float)height;
 		float zNear = 0.1f;
 		//float zFar = Float.MAX_VALUE;
-		float zFar = 1000;
+		float zFar = 10000;
 		
 		float top = (float)(Math.tan(fovy*0.0087266463f) * zNear); // top = tan((fovy/2)*(PI/180))*zNear
 		float bottom = -top;
