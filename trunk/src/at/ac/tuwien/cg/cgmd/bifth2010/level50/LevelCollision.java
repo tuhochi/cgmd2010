@@ -44,7 +44,7 @@ public class LevelCollision {
                   int px1=(pix&0xff00ff00) | pr | pb;
                   //correction of rows
                   collisionArray[i*width+j]=px1;
-                  if ((px1&0x00ffffff) == 0x00ff0000) { //blue
+                  if ((px1&0x00ffffff) == 0x00ffff00) { //blue
                 	  float texcoord[] = { //empty coin
                 			  tileCountInv,  2*tileCountInv,
                 			  tileCountInv,  tileCountInv,
@@ -151,7 +151,7 @@ public class LevelCollision {
 					       1.0f,  1.0f
 					};
 				coins.get(i).changeTexture(R.drawable.l00_coin,texcoord);
-				collisionArray[i] = 0x00ffff00; //don't bother with coin anymore
+				collisionArray[i] = 0x00ffffff; //don't bother with coin anymore
 				levelParts.put(i,coins.get(i));
 				coins.remove(i);
 				coinState += (int)Math.ceil(Math.log10(i))+""+i;
@@ -175,7 +175,7 @@ public class LevelCollision {
 	
 	public void reset() {
 		for (int i = 0; i<height*width; i++) {
-			if (levelParts.containsKey(i) && collisionArray[i] == 0x00ffff00) {
+			if (levelParts.containsKey(i) && collisionArray[i] == 0x00ffffff) {
 	 			float texcoord[] = {
 	      			  tileCountInv,  2*tileCountInv,
 	      			  tileCountInv,  tileCountInv,
@@ -185,7 +185,7 @@ public class LevelCollision {
 	 			levelParts.get(i).changeTexture(R.drawable.l50_tiles,texcoord);
 	 			coins.put(i,levelParts.get(i));
 	 			levelParts.remove(i);
-	 			collisionArray[i] = 0x00ff0000;
+	 			collisionArray[i] = 0x00ffff00;
 	 			coinState = "";
 			}
 		}
@@ -219,7 +219,7 @@ public class LevelCollision {
 				       1.0f,  1.0f
 				};
 			coins.get(i).changeTexture(R.drawable.l00_coin,texcoord);
-			collisionArray[i] = 0x00ffff00; //don't bother with coin anymore
+			collisionArray[i] = 0x00ffffff; //don't bother with coin anymore
 			levelParts.put(i,coins.get(i));
 			coins.remove(i);
 		}
