@@ -89,9 +89,7 @@ public class SoundManager {
 		if (soundOn)
 		{
 			soundPool.play(soundMap.get(sound),leftVolume, rightVolume, 1, loop, 1.0f);
-			/**
-			 * resume background sound
-			 */	}
+		}
 	}
 	
 	/**
@@ -132,8 +130,11 @@ public class SoundManager {
 	 */
 	public void playMusic()
 	{
-		startBackground();
-		startNature();
+		if (soundOn)
+		{
+			startBackground();
+			startNature();
+		}
 	}
 	
 	/**
