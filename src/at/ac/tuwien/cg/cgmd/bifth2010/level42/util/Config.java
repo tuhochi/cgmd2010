@@ -125,7 +125,6 @@ public class Config
 	
 	public static final int SOUND_IMPACT = R.raw.l42_impact;
 	public static final int SOUND_HEAVYIMPACT = R.raw.l42_heavyimpact;
-	public static final int SOUND_LOADFORCE = R.raw.l42_loadforce;
 	public static final int SOUND_SHOOT = R.raw.l42_shoot;
 	public static final int SOUND_YEAH = R.raw.l42_yeah;
 
@@ -133,7 +132,6 @@ public class Config
 		new int[] {
 			SOUND_IMPACT,
 			SOUND_HEAVYIMPACT,
-			SOUND_LOADFORCE,
 			SOUND_SHOOT,
 			SOUND_YEAH
 		};

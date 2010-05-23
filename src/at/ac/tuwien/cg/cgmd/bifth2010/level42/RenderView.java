@@ -332,7 +332,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 				Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
 				
 				// vibrate according to the strength
-				context.vibrate(power);
+				context.vibrate(duration/2);
 				
 				// play sound
 				soundManager.playSound(Config.SOUND_SHOOT);
