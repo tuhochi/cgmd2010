@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 import java.nio.ByteBuffer;
@@ -19,6 +20,7 @@ public abstract class MoneyCarrier extends GLObject {
 	protected short mStrength = 1; //how much damage it can do
 	protected int mType = 0; //zombie type
 	protected int mTexture = R.drawable.l12_enemie_lvl0;
+	protected int mSound = R.raw.l12_enemie1_dying;
 	protected short mMoney = 10;
 	protected short mSpeed = 5;
 	
@@ -117,5 +119,9 @@ public abstract class MoneyCarrier extends GLObject {
 	@Override
 	public int getX(){
 		return (int)(mX - mRadius);
+	}
+	
+	public void die(){
+		SoundHandler.play(mSound);
 	}
 }

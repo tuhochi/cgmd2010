@@ -5,7 +5,9 @@ import java.nio.ByteOrder;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 import java.lang.System;
@@ -19,6 +21,7 @@ public abstract class Tower extends GLObject {
 	protected Projectile[] mProjectiles = null;
 	protected int mScreenWidth = 800;
 	protected short mDmg = 10;
+	protected int mSound = R.raw.l12_basic_tower_shooting_sound;
 	
 	
 	
@@ -96,7 +99,8 @@ public abstract class Tower extends GLObject {
 						found = true;
 						mProjectiles[i].setActiveState( true );
 						mProjectiles[i].setXY( this.getX(), mY);
-						mTimeLastProjectileShot = System.currentTimeMillis();		
+						mTimeLastProjectileShot = System.currentTimeMillis();
+						SoundHandler.play(mSound);
 						break;
 					}
 				}

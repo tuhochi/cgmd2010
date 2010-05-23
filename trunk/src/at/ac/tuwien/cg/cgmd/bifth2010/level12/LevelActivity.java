@@ -72,6 +72,7 @@ public class LevelActivity extends Activity{
     	int menuheight = mDisplay.getHeight() - fieldheight;
     	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
+    	SoundHandler.loadSound(this);
 	
  	   	GLSurfaceView glview = new GLSurfaceView(this);
  	   	if( mRenderer == null ) mRenderer = new GLRenderer();
@@ -106,9 +107,12 @@ public class LevelActivity extends Activity{
     
 	@Override
 	public void finish() {	
+		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
+		//we set the progress the user has made (must be between 0-100)
+		s.setProgress(GameMechanics.getSingleton().getMoney());
+		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
-		s.setProgress( GameMechanics.getSingleton().getMoney() );
 		GameWorld.destroySingleton();
     	GameMechanics.destroySingleton();
 		super.finish();
@@ -117,14 +121,6 @@ public class LevelActivity extends Activity{
 	
 	@Override
 	public void onDestroy(){
-	   	//SessionState s = new SessionState();
-    	//we set the progress the user has made (must be between 0-100)
-	   //	System.out.println("Result: "+GameMechanics.getSingleton().getMoney());
-    	//s.setProgress( GameMechanics.getSingleton().getMoney() );
-    	//GameWorld.destroySingleton();
-    	//GameMechanics.destroySingleton();
-		//we call the activity's setResult method 
-		//setResult(Activity.RESULT_OK, s.asIntent());
 	   	super.onDestroy();
 	   	mDisplay = null;
 	}

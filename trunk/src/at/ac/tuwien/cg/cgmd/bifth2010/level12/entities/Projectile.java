@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 

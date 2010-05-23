@@ -70,7 +70,9 @@ public class Gamefield {
 	public int getFieldCount( float xpos, float ypos ){
 		int xf = (int)(Math.floor(xpos / mSegLength));
 		int yf = (int)(Math.floor(ypos / mSegLength)) * mXSegCount;
-		return (xf+yf-1);
+		System.out.println("xpos: "+xpos+" ypos: "+ypos+" xf: "+xf+" yf: "+yf+" f: "+(xf+yf)+" fmax: "+mFields.length);
+		if( (xf + yf)>mFields.length) return mFields.length-1;
+		return (xf+yf);
 	}
 
 

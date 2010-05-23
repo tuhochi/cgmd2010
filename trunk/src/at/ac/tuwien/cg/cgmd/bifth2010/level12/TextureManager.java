@@ -12,8 +12,6 @@ import java.lang.Integer;
 import android.opengl.GLUtils;
 
 public class TextureManager {
-	
-	//private static TextureManager mInstance;// = new TextureManager();
 
 	public static java.util.HashMap <Integer, Integer> textureMap; 
 	private int[] textureFiles;
@@ -46,19 +44,16 @@ public class TextureManager {
 	 * 
 	 * @param resource
 	 */
-	public void add(int resource) {
-		
+	public void add(int resource) {	
 		if(textureFiles==null) {
 			textureFiles = new int[1];
-			textureFiles[0]=resource;
-			
+			textureFiles[0]=resource;		
 		} else {
 			int[] newarray = new int[textureFiles.length+1];
 			
 			for(int i=0;i<textureFiles.length;i++) {
 				newarray[i]=textureFiles[i];
-			}
-			
+			}		
 			newarray[textureFiles.length]=resource;
 			textureFiles = newarray;
 		}

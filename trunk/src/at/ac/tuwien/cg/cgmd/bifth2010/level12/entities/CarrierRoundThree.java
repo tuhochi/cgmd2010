@@ -17,6 +17,7 @@ public class CarrierRoundThree extends MoneyCarrier {
 		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
 		mTexture = R.drawable.l12_enemie_lvl2;
+		mSound = R.raw.l12_enemie3_dying;
 		mType = 3;
 	}
 	

@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 
 public class CarrierRoundFour extends MoneyCarrier {
 
@@ -17,6 +18,8 @@ public class CarrierRoundFour extends MoneyCarrier {
 		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
 		mTexture = R.drawable.l12_enemie_lvl3;
+		mSound = R.raw.l12_enemie4_dying;
+		SoundHandler.addSound(mSound);
 		mType = 4;
 	}
 }

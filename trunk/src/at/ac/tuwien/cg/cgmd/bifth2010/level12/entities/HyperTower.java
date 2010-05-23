@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 
 public class HyperTower extends Tower {
 
@@ -12,6 +13,8 @@ public class HyperTower extends Tower {
 		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
 		mTexture =  R.drawable.l12_hyper_tower;
+		mSound = R.raw.l12_hyper_tower_shooting_sound;
+		SoundHandler.addSound(mSound);
 		initProjectiles();
 	}
 	
