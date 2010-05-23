@@ -1,20 +1,28 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
-public class GameManager {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+public class GameManager implements Persistable{
 
 	private int parts;
 	private int score;
 	private boolean scoreHasChanged;
 	
-	public static GameManager instance;
+	public static GameManager instance = new GameManager();
 	
-	public GameManager(int parts){
+	public GameManager(){
+		this.score = 0;
+		this.parts = 0;
+		this.scoreHasChanged = false;
+	}
+	
+	public void init(int parts){
 		this.score = 0;
 		this.parts = parts;
 	
 		this.scoreHasChanged = false;
-		
-		instance = this;
 	}
 	
 	public synchronized void setScore(float scorePercent){
@@ -43,6 +51,20 @@ public class GameManager {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void persist(DataOutputStream dos) throws IOException {
+		dos.writeInt(parts);
+		dos.writeInt(score);
+		dos.writeBoolean(scoreHasChanged);
+	}
+
+	@Override
+	public void restore(DataInputStream dis) throws IOException {
+		parts = dis.readInt();
+		score = dis.readInt();
+		scoreHasChanged = dis.readBoolean();
 	}
 	
 }
