@@ -1,4 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,6 +19,11 @@ public class Synchronizer
 	
 	/** The logic Condition. */
 	private Condition logic = lock.newCondition();
+	
+	/** The disable Condition */
+	private Condition disableCond = lock.newCondition();
+	
+	private boolean logicFinished = false;
 
 	// init lastLogicFrame one lower than lastPreRenderFrame,
 	// to let the logic frame run once before starting to render
@@ -85,6 +91,7 @@ public class Synchronizer
 	{
 		lock.lock();
 		lastPreRenderFrame++;
+		disableCond.signal();
 		prerender.signal();
 		lock.unlock();
 	}
@@ -96,10 +103,19 @@ public class Synchronizer
 	{
 		lock.lock();
 		lastLogicFrame++;
+		disableCond.signal();
 		logic.signal();
 		lock.unlock();
 	}
 
+	public void logicThreadFinished()
+	{
+		lock.lock();
+		logicFinished = true;
+		disableCond.signal();
+		lock.unlock();
+	}
+	
 	/**
 	 * Toggles this Synchronizer active
 	 *
@@ -109,15 +125,25 @@ public class Synchronizer
 	{
 		if(this.running == running)
 			return;
-		
+
+		lock.lock();
 		this.running = running;
-		
 		if(!running)
 		{
-			lock.lock();
-			prerender.signal();
-			logic.signal();
-			lock.unlock();
+			int targetPreRenderFrame = lastPreRenderFrame;
+			try
+			{
+				while(!logicFinished || lastPreRenderFrame <= targetPreRenderFrame)
+					disableCond.await();
+			}
+			catch(InterruptedException e)
+			{
+			}
 		}
+		else
+		{
+			logicFinished = false;
+		}
+		lock.unlock();
 	}
 }
