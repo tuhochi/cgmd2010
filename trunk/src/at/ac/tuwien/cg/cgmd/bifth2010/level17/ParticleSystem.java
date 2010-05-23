@@ -27,11 +27,11 @@ public class ParticleSystem {
 	 * @param position the initial position of the particle system
 	 * @param textureID the texture that is used for the particles
 	 */
-	public ParticleSystem(Vector3 position, int textureID)
+	public ParticleSystem(Vector3 position, int textureID, Quad quad)
 	{
 		mPosition = position;
 		mTextureID = textureID;
-		mQuad = new Quad(0.2f, 0.2f);
+		mQuad = quad;
 		Random r = new Random();
 		int numParticles = 10 + r.nextInt(5);
 		for (int i=0; i<numParticles; i++)

@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.HouseModel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Util;
 
 /**
  * Represents the level in the game. Holds the player, houses and birds
@@ -33,6 +35,7 @@ public class Level {
 	private float mNextBird = 0;
 	private Player mPlayer;
 	private Quad mBird;
+	private Quad mParticle;
 	private ForceField mForceField1;
 	private ForceField mForceField2;
 	//private NormalModeWorld mWorld;
@@ -73,8 +76,9 @@ public class Level {
         GLManager.getInstance().getTextures().add(R.drawable.l17_coin);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bricks);
         
-        mForceField1 = new ForceField(50f, new Vector3(0,0,0), 200f, 10f);
-        mForceField2 = new ForceField(50f, new Vector3(0,0,0), 200f, -10f);
+        mForceField1 = new ForceField(50f, new Vector3(0,0,0), 200f, 30f);
+        mForceField2 = new ForceField(50f, new Vector3(0,0,0), 200f, -30f);
+		mParticle = new Quad(0.2f, 0.2f);
         
 	}
 	
@@ -92,10 +96,26 @@ public class Level {
     	gl.glEnable(GL10.GL_BLEND);
     	gl.glDepthMask(false);
     	
-    	gl.glDisable(GL10.GL_FOG);
+    	//gl.glDisable(GL10.GL_FOG);
     	mForceField1.draw();
     	mForceField2.draw();
+    	
     	gl.glEnable(GL10.GL_FOG);
+    	/*
+    	//Define GLfloat arrays to hold light data
+    	FloatBuffer light_direction = Util.floatArrayToBuffer(new float[] { -1.0f, 0.0f, 0.0f, 0.0f });
+    	FloatBuffer light_ambient = Util.floatArrayToBuffer(new float[] { 0.3f, 0.3f, 0.3f, 1.0f });
+    	FloatBuffer light_diffuse = Util.floatArrayToBuffer(new float[] { 0.8f, 0.8f, 0.8f, 1.0f });
+    	FloatBuffer light_specular = Util.floatArrayToBuffer(new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
+
+    	//Apply the light properties to LIGHT0
+    	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, light_direction);
+    	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, light_ambient);
+    	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, light_diffuse);
+    	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPECULAR, light_specular); 
+    	gl.glEnable(GL10.GL_LIGHTING);
+    	gl.glEnable(GL10.GL_LIGHT0);
+		*/
 		gl.glPushMatrix();
 
 		for (House house : mFadeHouses) {
@@ -130,6 +150,8 @@ public class Level {
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+    	gl.glDisable(GL10.GL_LIGHTING);
+    	gl.glDisable(GL10.GL_LIGHT0);
 	}
 	
 	/**
@@ -227,7 +249,7 @@ public class Level {
 	{
 		Vector3 newPos = Vector3.add(mPlayer.getPosition(), moveDelta);
 			
-		if(Math.sqrt(newPos.x * newPos.x + newPos.z * newPos.z) + mPlayer.getRadius() * 10.0f > mForceField1.getForceFieldRadius())
+		if(Math.sqrt(newPos.x * newPos.x + newPos.z * newPos.z) + mPlayer.getRadius() * 5.0f > mForceField1.getForceFieldRadius())
 		{
 			newPos.x = mPlayer.getPosition().x;
 			newPos.z = mPlayer.getPosition().z;
@@ -240,7 +262,7 @@ public class Level {
 				if(mPlayer.getPosition().y > house.getPosition().y + house.getSize().y / 2.0f ){
 					mPlayer.hitHouse();
 					remove.add(house);
-					mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_bricks));
+					mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_bricks, mParticle));
 				}
 				else {
 					moveDelta.x = 0;
@@ -255,7 +277,7 @@ public class Level {
 			if(bird.intersect(newPos, mPlayer.getRadius())) {
 				mPlayer.hitBird();
 				removeBirds.add(bird);
-				mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_coin));
+				mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_coin, mParticle));
 			}
 		}
 		mBirds.removeAll(removeBirds);
