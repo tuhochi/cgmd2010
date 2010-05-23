@@ -2,9 +2,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
@@ -54,6 +58,17 @@ public class ModelGem extends Model {
 	/** drainMap used for collision detection **/
 	private HashMap<Integer, ModelDrain> drains;
 	
+	private LevelActivity lvl;
+	
+	/** Handler for gem break animations */
+	private Handler showBreakAni = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			lvl.showBreakAni(gemType);
+		}
+	};
+	
 	/**
 	 * Creates a new gem model.
 	 */
@@ -74,13 +89,14 @@ public class ModelGem extends Model {
 	 * Creates a new gem model with an initial texture resource.
 	 * @param textureResource
 	 */
-	public ModelGem(int gemType, int textureResource, float streetPosZ, HashMap<Integer, ModelDrain> drains) {
+	public ModelGem(int gemType, int textureResource, float streetPosZ, HashMap<Integer, ModelDrain> drains, LevelActivity lvl) {
 		this();
 		
 		this.gemType = gemType;
 		this.textureResource = textureResource;
 		this.streetPosZ = streetPosZ;
 		this.drains = drains;
+		this.lvl = lvl;
 	}
 
 	public void setSoundManager(SoundManager soundManager)
@@ -120,14 +136,6 @@ public class ModelGem extends Model {
 		this.isCollisionChecked = false;
 		resetPosition();
 	}
-	
-	/**
-	 * check collision of gem and drain
-	 * @return collision: true/false
-	 */
-	public boolean isHittingGround()	{
-		return posZ < streetPosZ;
-	}
 
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
 	{
@@ -160,10 +168,7 @@ public class ModelGem extends Model {
 				float deltaAngle = Math.abs(drainToCheck.getOrientationAngle() - deviceRotation);
 						
 				switch (drainToCheck.getStyle()) {
-				case ModelDrain.CLOSED:	this.soundman.playSound(SoundFX.BREAK, 1f, 1f, 0);
-										progman.loseMoneyByBreak(gemType);
-										if (vibrator != null) vibrator.vibrate(vibrationPatternBreak, -1);
-										break;
+				case ModelDrain.CLOSED:	breakApart(progman); break;
 				case ModelDrain.ROUND: drainHit = drainToCheck.getStyle() == this.gemType; break;
 				case ModelDrain.OCT: drainHit = drainToCheck.getStyle() == this.gemType && (deltaAngle % 45f) < maxDeltaAngle; break;
 				case ModelDrain.RECT: drainHit = drainToCheck.getStyle() == this.gemType && (deltaAngle % 180f) < maxDeltaAngle; break;
@@ -176,19 +181,11 @@ public class ModelGem extends Model {
 						
 					if (vibrator != null) vibrator.vibrate(30);
 				}
-				else {
-					this.soundman.playSound(SoundFX.BREAK, 1f, 1f, 0);
-					progman.loseMoneyByBreak(gemType);
-					if (vibrator != null) vibrator.vibrate(vibrationPatternBreak, -1);
-					endFall();
-				}
+				else
+					breakApart(progman);
 			}
-			else {
-				this.soundman.playSound(SoundFX.BREAK, 1f, 1f, 0);
-				progman.loseMoneyByBreak(gemType);
-				if (vibrator != null) vibrator.vibrate(vibrationPatternBreak, -1);
-				endFall();
-			}
+			else
+				breakApart(progman);
 		}
 		else {
 			this.soundman.playSound(SoundFX.MISS, 1f, 1f, 0);
@@ -197,12 +194,22 @@ public class ModelGem extends Model {
 		}
 	}
 	
+	private void breakApart(ProgressManager progman) {
+		this.soundman.playSound(SoundFX.BREAK, 1f, 1f, 0);
+		
+		showBreakAni.sendEmptyMessage(0);
+		
+		progman.loseMoneyByBreak(gemType);
+		if (vibrator != null) 
+			vibrator.vibrate(vibrationPatternBreak, -1);
+		endFall();
+	}
+	
 	/**
 	 *
 	 * Update the model's transformations.
 	 */
 	public void update(double deltaTime, float streetPos, float deviceRotation, ProgressManager progman) {
-		
 		if (this.isFalling) {
 			fallSpeed += 5f * deltaTime;
 			posZ -= fallSpeed;

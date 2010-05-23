@@ -10,6 +10,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -57,8 +58,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private TextView tfPoints;
 	private TextView tfPointsShadow;
-	private ImageView imageview;
-	AnimationDrawable animationIntro;
+	private ImageView breakAniView;
+	/*private AnimationDrawable roundGemBreakAni;
+	private AnimationDrawable octGemBreakAni;
+	private AnimationDrawable rectGemBreakAni;
+	private AnimationDrawable diamondGemBreakAni;*/
 		
 	private GLSurfaceView openglview;
 	private RenderManager renderManager;
@@ -70,8 +74,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private Toast introToast;
 	
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.l84_level);
 		
 		drains = new HashMap<Integer, ModelDrain>();
@@ -83,22 +90,27 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		initLevelParams();
 		initLevel();
 		
-		/*imageview = (ImageView) findViewById(R.id.l84_imageView);
-		imageview.setBackgroundResource(R.drawable.l84_animation_intro);
-		animationIntro = (AnimationDrawable) imageview.getBackground();
-		animationIntro.setOneShot(true); //play the animation only once
-		animationIntro.start();*/
-		
-		soundManager.playMusic();
-
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
-		accelerometer = new Accelerometer(this);
-		
+		accelerometer = new Accelerometer(this);	
 		renderManager = new RenderManager(this, street, gems, accelerometer, progman, soundManager);	
 		openglview.setRenderer(renderManager);
 		
 		initGui();
-		//initIntro();
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		
+		soundManager.playMusic();
+
+		breakAniView = (ImageView) findViewById(R.id.l84_imageView);
+		breakAniView.setBackgroundResource(R.drawable.l84_animation_intro);
+	/*case ModelDrain.ROUND: breakAnimationImageView.setBackgroundResource(R.drawable.l84_animation_intro); break;
+		roundGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
+		octGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
+		rectGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
+		diamondGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();*/
 	}
 
 	/**
@@ -181,16 +193,16 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		progman.setMaxMoney(moneyToSpend);
 		
 		//Create gems
-		gemRound = new ModelGem(ModelDrain.ROUND, R.drawable.l84_tex_gem_round, streetPosZ, drains);
+		gemRound = new ModelGem(ModelDrain.ROUND, R.drawable.l84_tex_gem_round, streetPosZ, drains, this);
 		gemRound.setSoundManager(soundManager);
 		gems.add(gemRound);
-		gemDiamond = new ModelGem(ModelDrain.DIAMOND, R.drawable.l84_tex_gem_diamond, streetPosZ, drains);
+		gemDiamond = new ModelGem(ModelDrain.DIAMOND, R.drawable.l84_tex_gem_diamond, streetPosZ, drains, this);
 		gemDiamond.setSoundManager(soundManager);
 		gems.add(gemDiamond);
-		gemRect = new ModelGem(ModelDrain.RECT, R.drawable.l84_tex_gem_rect, streetPosZ, drains);
+		gemRect = new ModelGem(ModelDrain.RECT, R.drawable.l84_tex_gem_rect, streetPosZ, drains, this);
 		gemRect.setSoundManager(soundManager);
 		gems.add(gemRect);
-		gemOct = new ModelGem(ModelDrain.OCT, R.drawable.l84_tex_gem_oct, streetPosZ, drains);
+		gemOct = new ModelGem(ModelDrain.OCT, R.drawable.l84_tex_gem_oct, streetPosZ, drains, this);
 		gemOct.setSoundManager(soundManager);
 		gems.add(gemOct);
 		
@@ -211,7 +223,21 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 			gemOct.setVibrator(vibrator);
 		}
 	}
-
+	
+	public void showBreakAni(int gemType) {
+		
+		/*switch(gemType) {
+		case ModelDrain.ROUND: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
+		case ModelDrain.OCT: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
+		case ModelDrain.RECT: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
+		case ModelDrain.DIAMOND: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
+		}*/
+		//((AnimationDrawable) breakAniView.getBackground()).stop(); //rewind (?)
+		
+		AnimationDrawable ani = (AnimationDrawable)breakAniView.getBackground();
+		ani.stop();
+		ani.start();
+	}
 	
 	@Override
 	protected void onPause() {
