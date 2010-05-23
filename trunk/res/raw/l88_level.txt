@@ -1,24 +1,25 @@
-XXXXXXXXXXXXXXXXXXXXXXXX
-XP2          1        PX
-X XXXXTXXXXX XXXXXXXXX2X
-X X           1      X X
-X XXXXXXX XXXXXXX XXXX X
-X      XX XXXXX3X    X X
-X XXXX XX1      XXXX2X X
-X XXXX XX XXXXX2X    X X
-X P       XXXXXXX XXXX X
-X Xf tXXX        1     X
-X Xf t    XXXXXFX XXXX X
-X Xf t XX XXXXX3X X    X
-X1Xf t XXB      X X2XX1X
-X Xf t XX XXXXXXX XXXX X
-X Xf t XX        1     X
-X Xf t XX XXfXX XGXXXX X
-X         X         3X X
-X XX XX X X XXX XXXX3X X
-X XX XX X X2XXX XXXXTX X
-X    X1 X X XXX   1    X
-X XX X XX X     XXXXXX X
-X2XX X XX XXtXX XXXXXX X
-XP          1        2PX
-XXXXXXXXXXXXXXXXXXXXXXXX
+P1          2          1P
+1XXXX X XXXX XXXXXXXXX X1
+ X2   X   2X        3X X 
+ X XX XFXX X XX XXXXXX   
+             XX    X2X X 
+ X XXXX XX X XX XX1X X X 
+ X   X G XTX XX    X   T 
+ X XXX X XXX XT2XXXX1X X 
+ X X1     1X XX    XXX X 
+ X X X X X X XXFXX1X1X X 
+ X3X1  X  1X XX    X   X 
+ XFXXX XXXXX XX XXXXX XX 
+2           B           2
+ XXXXXXFXXXX XX XXXXX XX 
+  1    2     X1   F   2X 
+ X XXXX XXXX XX XX XX XX 
+ X XX     XX XX   G   XX 
+ X 1T X X XX XX XX X  XX 
+ XXXX X X XX X1 X3 X1 1X 
+ F 3X X2X XX XX XX XX XX 
+ X XX XXX XX      F      
+ X X1     1X XX XXXXXX X 
+ X X XXTXX X X  T  2   F 
+1X X XXXXX X X XXXXXXXXX1
+P1          2          1P
