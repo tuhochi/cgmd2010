@@ -6,17 +6,9 @@
 	<android.opengl.GLSurfaceView android:id="@+id/l84_openglview"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" />
 
-	<ImageView
-	 	android:layout_below="@+id/l84_openglview"
-	    android:id="@+id/l84_imageView"
-	    android:layout_height="wrap_content"
-	    android:layout_width="wrap_content"
-	    android:adjustViewBounds="true"
-	    android:layout_gravity="center_vertical|center_horizontal"></ImageView>
-
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/l84_TableLayout" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+		android:layout_height="wrap_content" android:padding="7dp">
 		
 		<TextView 
 			android:text="Points" 

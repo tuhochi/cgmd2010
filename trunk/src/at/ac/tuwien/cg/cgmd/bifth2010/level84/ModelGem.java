@@ -48,7 +48,7 @@ public class ModelGem extends Model {
 	/** vibrator for vibrations **/
 	private Vibrator vibrator;
 	
-	private long[] vibrationPatternMiss = {0, 50, 50, 50};
+	private long[] vibrationPatternMiss = {0, 30, 30, 30};
 	private long[] vibrationPatternBreak = {0, 80, 30, 80};
 	
 	/** drainMap used for collision detection **/
