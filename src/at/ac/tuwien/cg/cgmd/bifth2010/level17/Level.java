@@ -69,7 +69,7 @@ public class Level {
 			mHouseModels[i] = new HouseModel(mBlockSize, mBlockSize * ((float)i + 1.0f), mBlockSize, i+1);
 		
 		mBird = new Quad(3.0f,3.0f);
-        GLManager.getInstance().getTextures().add(R.drawable.l17_crate);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_house);
         GLManager.getInstance().getTextures().add(R.drawable.l17_vogel);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
         GLManager.getInstance().getTextures().add(R.drawable.l17_forcefield);
