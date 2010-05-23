@@ -12,7 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import android.media.MediaPlayer;
 
 public class LevelObject {
 	
@@ -28,6 +28,7 @@ public class LevelObject {
 	private boolean alive = true;
 	private float scaleX = 1.0f;
 	private float scaleY = 1.0f;
+	private boolean climbable = false, climbableTop = false;
 	
 	float x, y;
 	int width, height;
@@ -36,6 +37,7 @@ public class LevelObject {
 	int direction = 1;
 	int textureID = -1;
 	GL10 gl;
+	static MediaPlayer mp[] = new MediaPlayer[5];
 	
 	
 	// Our vertices.
@@ -108,11 +110,13 @@ public class LevelObject {
 			textures.put(id, texBuf.get(0));
 			LoadTexture(0,id,gl,context);
 		}
+		revive();
 	}
 	
-	public boolean update(GL10 gl) {
-		float xn = x-(movement[2]-movement[3])*tileSizeX/18;
-		float yn = y-(movement[0]-movement[1])*tileSizeY/18;
+	public boolean update(GL10 gl, float frames) {
+		float fps = Math.max(frames, 20.0f);
+		float xn = x-(movement[2]-movement[3])*20.0f/fps*tileSizeX/16.0f; //16... yeah... of course
+		float yn = y-(movement[0]-movement[1])*20.0f/fps*tileSizeY/16.0f;
         boolean retVal = false;
 		if (collision)
 			if (!testCollision(xn, yn)){
@@ -135,7 +139,7 @@ public class LevelObject {
 				} else x = xn;
 			}
 		
-		if (gravity && movement[0]>0.0f) movement[0]-=1.0f;
+		if (gravity && !climbable && movement[0]>0.0f) movement[0]-=20.0f/fps;
 		
 		if (movement[3]-movement[2] < 0) direction = -1; //change rabbit direction
 		else if (movement[3]-movement[2] > 0) direction = 1;
@@ -181,7 +185,7 @@ public class LevelObject {
 	}
 	
 	public void move(int direction, float amount) {
-		if (direction != 1)
+//		if (direction != 1)
 		movement[direction] = amount;
 	}
 	
@@ -193,29 +197,99 @@ public class LevelObject {
 	public float getPositionX() {return x;}
 	public float getPositionY() {return y;}
 	
+	public void setWidth(int w) { width=w; }
+	public void setHeight(int h) { height=h; }
+	
 	boolean testCollision(float x, float y) {
 		int ul = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y)/tileSizeY));
 		int ur = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y)/tileSizeY));
 		int lr = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY));
 		int ll = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY));
-		if ((ul&0x00ffffff) == 0x00ff0000)
+		if ((ul&0x00ffffff) == 0x00ffff00) {
 			score+=5;
-		if ((ur&0x00ffffff) == 0x00ff0000)
+			for (MediaPlayer a : mp) {
+				if (!a.isPlaying()) {
+					a.start();
+					break;
+				}
+			}
+		}
+		if ((ur&0x00ffffff) == 0x00ffff00) {
 			score+=5;
-		if ((lr&0x00ffffff) == 0x00ff0000)
+			for (MediaPlayer a : mp) {
+				if (!a.isPlaying()) {
+					a.start();
+					break;
+				}
+			}
+		} 
+		if ((lr&0x00ffffff) == 0x00ffff00) {
 			score+=5;
-		if ((ll&0x00ffffff) == 0x00ff0000)
+			for (MediaPlayer a : mp) {
+				if (!a.isPlaying()) {
+					a.start();
+					break;
+				}
+			}
+		}
+		if ((ll&0x00ffffff) == 0x00ffff00) {
 			score+=5;
+			for (MediaPlayer a : mp) {
+				if (!a.isPlaying()) {
+					a.start();
+					break;
+				}
+			}
+		}
 		
 		if (y>level.getHeight()*tileSizeY)
 			alive = false;
-		
-		if ((ul&0x00ff0000) != 0 &&
+				
+		if ((ul&0x00ff0000) != 0 && // whole free
 		    (ur&0x00ff0000) != 0 &&
 			(lr&0x00ff0000) != 0 &&
-			(ll&0x00ff0000) != 0) {
-			return false;
+			(ll&0x00ff0000) != 0
+			) {
+//			return false;
 		} else return true;
+		
+		if ((ul&0x0000ff00) != 0 && //whole not in tree
+		    (ur&0x0000ff00) != 0 &&
+		    (lr&0x0000ff00) != 0 &&
+			(ll&0x0000ff00) != 0) {
+			climbable = false;
+			climbableTop = false;
+			if (gravity) movement[1] = 5.0f;
+			return false;
+			
+		} else if ((ul&0x0000ff00) != 0 && //bottom in tree
+		    (ll&0x0000ff00) == 0 ||
+			(ur&0x0000ff00) != 0 &&
+		    (lr&0x0000ff00) == 0) {
+			if (!climbable) {
+				movement[0] = 0.0f;
+				movement[1] = 0.0f;
+			}
+			climbable = true;
+			climbableTop = true;
+//			if (gravity) movement[1] = 0.0f;
+			return false;
+			
+		} else if ((ul&0x0000ff00) == 0 && //whole in tree
+		    (ll&0x0000ff00) == 0 ||
+		    (ur&0x0000ff00) == 0 &&
+			(lr&0x0000ff00) == 0){		
+			if (!climbable) {
+				movement[0] = 0.0f;
+				movement[1] = 0.0f;
+			}
+			climbable = true;
+			climbableTop = false;
+//			if (gravity) movement[1] = 0.0f;
+			return false;
+		}
+
+		return false;
 	}
 	
 	public void changeTexture(int id, float texcoords[]) {
@@ -312,4 +386,21 @@ public class LevelObject {
 	public void revive() {
 		alive = true;
 	}
+	
+	public static void initMP(Context context, int id) {
+		for (int i = 0; i<mp.length; i++) {
+			mp[i] = MediaPlayer.create(context, id);
+		}
+	}
+	
+	public static void clean() {
+		for (MediaPlayer a : mp) {
+			if (a!=null) {
+				a.release();
+			}
+		}
+	}
+	
+	public boolean getClimbable() {return climbable;}
+	public boolean getClimbableTop() {return climbableTop;}
 }

@@ -2,9 +2,17 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level50;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+/**
+ * Custom SurfaceView to take care of in game keyboard and touch screen input.
+ * Initializes and manages the customized Renderer.
+ * 
+ * @author      Alexander Fritz
+ * @author      Michael Benda
+ */
 public class LevelSurfaceView extends GLSurfaceView {
 	
 	LevelRenderer mRenderer;
@@ -12,6 +20,10 @@ public class LevelSurfaceView extends GLSurfaceView {
 	int score = 0;
 	float x = 0, y = 0;
 
+	/**
+	 * Class constructor specifying the rendering context.
+	 * Initializes the LevelRenderer
+	 */
 	public LevelSurfaceView(Context context) {
 		super(context);
 		mRenderer = new LevelRenderer(context);
@@ -19,11 +31,16 @@ public class LevelSurfaceView extends GLSurfaceView {
         setFocusableInTouchMode(true);
 	}
 	
+	/**
+	 * Handles touch events to pass the event information to the LevelRenderer
+	 * 
+	 *  @param event	the motion event
+	 */
 	public boolean onTouchEvent(final MotionEvent event) {
-        queueEvent(new Runnable(){
-            public void run() {
-                mRenderer.touchScreen(event);
-            }});
+//        queueEvent(new Runnable(){
+//            public void run() {
+                mRenderer.touchScreen(event.getAction(),event.getX(),event.getY());
+//            }});
     	return true;
     }
 	
@@ -84,6 +101,11 @@ public class LevelSurfaceView extends GLSurfaceView {
 	public void setPosition(float x, float y) {mRenderer.setPosition(x, y);}
 	public String getCoinState() {return mRenderer.getCoinState();}
 	public void setCoinState(String state) {mRenderer.setCoinState(state);}
+
+	public void clear() {
+		mRenderer.clear();
+		
+	}
 	
 
 }
