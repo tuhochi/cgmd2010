@@ -80,7 +80,7 @@ public class CollisionManager implements Persistable{
 	public CollisionManager(Scene scene)
 	{
 		this.scene = scene;
-		this.entityList = new ArrayList<SceneEntity>(scene.sceneEntities);
+		this.entityList = scene.sceneEntities;
 		
 		this.p = new Vector3();
 		this.q = new Vector3();
@@ -122,7 +122,6 @@ public class CollisionManager implements Persistable{
 			}
 			if(entityList.get(i).getName().equals(Config.SKYSPHERE_NAME)){
 				skysphere = entityList.get(i);
-				entityList.remove(i);
 			}
 		}
 		Collections.sort(remainingPlanetParts, comperator);
@@ -159,7 +158,7 @@ public class CollisionManager implements Persistable{
 			entity = entityList.get(i);
 			
 			//exclude inactive entities
-			if(entity.isDisabled())
+			if(entity.isDisabled()||entity.equals(skysphere))
 				continue;
 			
 			//get entity bounding sphere position
@@ -243,7 +242,7 @@ public class CollisionManager implements Persistable{
 			objA = entityList.get(i);	
 			
 			//only collide with active entities
-			if(objA.isDisabled())
+			if(objA.isDisabled()||objA.equals(skysphere))
 				continue;
 			
 			objAIsMoveable = (objA.equals(goldPlanet))?false:true;
@@ -254,7 +253,7 @@ public class CollisionManager implements Persistable{
 				objB = entityList.get(j);
 				
 				//only collide with active entities
-				if(objB.isDisabled())
+				if(objB.isDisabled()||objB.equals(skysphere))
 					continue;
 				
 				objBIsMoveable = (objB.equals(goldPlanet))?false:true;
