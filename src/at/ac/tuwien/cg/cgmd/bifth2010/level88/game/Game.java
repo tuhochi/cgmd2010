@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.opengl.GLU;
 import android.os.Handler;
 import android.util.Log;
@@ -48,7 +50,9 @@ public class Game {
 	
 	public int gold;
 	
-	private Sound player = null;
+	public Sound player = null;
+	
+	public boolean musicOn = true;
 
 	
 	/**
@@ -84,6 +88,8 @@ public class Game {
         
         player = Sound.getInstance(context);
         //player.play(Sounds.BACKGROUND);
+        
+        musicOn = context.mMusicOn;
 
 		Vector2 groundYDir = new Vector2(-0.81f, -0.59f);
 		Vector2 groundXDir = new Vector2(1.16f, -0.46f);
@@ -131,7 +137,24 @@ public class Game {
 		gold -= lostGold;
 		
 		//TODO 
-		player.play(Sounds.GOLD);
+		//player.play(Sounds.GOLD);
+		/*if(musicOn){
+			MediaPlayer soundPlayer = MediaPlayer.create(context, R.raw.l00_gold01);
+			try{
+				if(soundPlayer!=null){
+					soundPlayer.setOnCompletionListener(new OnCompletionListener() {
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							mp.release();
+							
+						}
+					});
+					soundPlayer.start();
+				}
+			} catch(IllegalStateException e){
+				//Ignore
+			}
+		}*/
 		
 		if( gold <= 0 ) {
 			gold = 0;
@@ -143,7 +166,7 @@ public class Game {
 			class R implements Runnable{
 	        	@Override
 	            public void run() {
-	        		player.destroy();
+	        		//player.destroy();
 	        		context.endLevel();
 	            }
 	        };
