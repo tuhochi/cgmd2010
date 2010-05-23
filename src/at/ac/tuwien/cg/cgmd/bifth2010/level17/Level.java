@@ -1,7 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Random;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -39,6 +41,8 @@ public class Level {
 	private ForceField mForceField1;
 	private ForceField mForceField2;
 	//private NormalModeWorld mWorld;
+	private Random mRandom = new Random();
+	private List<Integer> mHouseTex = new ArrayList<Integer>();
 	
 	public static final String PLAYER_LIFES = "feelGood";
 	public static final String PLAYER_MONEY = "muney";
@@ -69,12 +73,20 @@ public class Level {
 			mHouseModels[i] = new HouseModel(mBlockSize, mBlockSize * ((float)i + 1.0f), mBlockSize, i+1);
 		
 		mBird = new Quad(3.0f,3.0f);
-        GLManager.getInstance().getTextures().add(R.drawable.l17_house);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_house0);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_house1);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_house2);
+        GLManager.getInstance().getTextures().add(R.drawable.l17_house3);
         GLManager.getInstance().getTextures().add(R.drawable.l17_vogel);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bg);
         GLManager.getInstance().getTextures().add(R.drawable.l17_forcefield);
         GLManager.getInstance().getTextures().add(R.drawable.l17_coin);
         GLManager.getInstance().getTextures().add(R.drawable.l17_bricks);
+
+        mHouseTex.add(R.drawable.l17_house0);
+        mHouseTex.add(R.drawable.l17_house1);
+        mHouseTex.add(R.drawable.l17_house2);
+        mHouseTex.add(R.drawable.l17_house3);
         
         mForceField1 = new ForceField(50f, new Vector3(0,0,0), 200f, 30f);
         mForceField2 = new ForceField(50f, new Vector3(0,0,0), 200f, -30f);
@@ -186,7 +198,7 @@ public class Level {
 			Vector3 newPos = new Vector3(xpos * mBlockSize + playerPos.x, playerPos.y - 130.0f - (size.y / 2.0f), zpos * mBlockSize + playerPos.z);
 			newPos.x -= newPos.x % mBlockSize;
 			newPos.z -= newPos.z % mBlockSize;
-			House newHouse = new House(mHouseModels[houseSize], newPos);
+			House newHouse = new House(mHouseModels[houseSize], mHouseTex.get(mRandom.nextInt(4)), newPos);
 			newHouse.setHouseSize(houseSize, size);
 			mFadeHouses.add(newHouse);
 			mNextHouse = (float)Math.random() * 0.1f;
