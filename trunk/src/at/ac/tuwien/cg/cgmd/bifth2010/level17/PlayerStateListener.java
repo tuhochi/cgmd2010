@@ -15,6 +15,6 @@ public interface PlayerStateListener {
 	 * The money of the player has changed
 	 * @param money The new money of the player
 	 */
-	public void playerMoneyChanged(int money);
+	public void playerMoneyChanged(int money, boolean vibrate);
 
 }
