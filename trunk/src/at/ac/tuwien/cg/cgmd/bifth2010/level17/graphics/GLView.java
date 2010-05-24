@@ -140,7 +140,12 @@ public class GLView extends GLSurfaceView {
 	 */
 	public void onStop() {
 		if(mGame != null && mGame.isAlive())
-			mGame.stop();
+		{
+			// let thread run out, stop() is deprecated
+			GameThread temp = mGame;
+			mGame = null;
+			temp.runOut();
+		}
 	}
     
 }

@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
+import android.util.Log;
+
 
 /**
  * Keeps the time running and updates the world in it's own thread
@@ -9,6 +11,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 public class GameThread extends Thread {
 
 	private World mWorld;
+	private boolean mRunning = true;
 	
 	/**
 	 * Creates a new World
@@ -24,7 +27,7 @@ public class GameThread extends Thread {
 	 */
     public void run() 
     {
-    	while(true)	
+    	while(mRunning)	
     	{
     		mWorld.update(); 
     		try {
@@ -34,6 +37,12 @@ public class GameThread extends Thread {
 			}
 			
     	}
+    	Log.d("GAMETHREAD", "Thread terminated");
     }
+
+    public void runOut()
+	{
+    	mRunning = false;
+	}
 
 }
