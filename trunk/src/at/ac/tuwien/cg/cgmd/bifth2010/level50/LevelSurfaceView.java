@@ -34,7 +34,8 @@ public class LevelSurfaceView extends GLSurfaceView {
 	/**
 	 * Handles touch events to pass the event information to the LevelRenderer
 	 * 
-	 *  @param event	the motion event
+	 * @param event	the motion event
+	 * @return          <code>true</code> since the function processes all touch events
 	 */
 	public boolean onTouchEvent(final MotionEvent event) {
 //        queueEvent(new Runnable(){
@@ -44,6 +45,15 @@ public class LevelSurfaceView extends GLSurfaceView {
     	return true;
     }
 	
+	/**
+	 * Handles key press events to pass the event information to the LevelRenderer
+	 * Processes only directional pad inputs.
+	 * 
+	 * @param keyCode	the motion event action identifier
+	 * @param event		the motion event
+	 * @return          <code>true</code> if the event equals the usage of the directional pad
+     * 					<code>false</code> otherwise. 
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -69,6 +79,15 @@ public class LevelSurfaceView extends GLSurfaceView {
         return super.onKeyDown(keyCode, event);
     }
 	
+	/**
+	 * Handles key release events to pass the event information to the LevelRenderer
+	 * Processes only directional pad inputs.
+	 * 
+	 * @param keyCode	the motion event action identifier
+	 * @param event		the motion event
+	 * @return          <code>true</code> if the event equals the usage of the directional pad
+     * 					<code>false</code> otherwise. 
+	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_UP) {
@@ -94,11 +113,35 @@ public class LevelSurfaceView extends GLSurfaceView {
 		return super.onKeyUp(keyCode, event);
 	}
 	
+	/**
+	 * Returns current game score.
+	 */
 	public int getScore() {return mRenderer.getScore();}
+	
+	/**
+	 * Sets current game score.
+	 */
 	public void setScore(int score) {mRenderer.setScore(score);}
+	
+	/**
+	 * Returns current x position of the player.
+	 */
 	public float getPositionX() {return mRenderer.getPositionX();}
+	
+	/**
+	 * Returns current y position of the player.
+	 */
 	public float getPositionY() {return mRenderer.getPositionY();}
+	
+	/**
+	 * Sets current position of the player.
+	 */
 	public void setPosition(float x, float y) {mRenderer.setPosition(x, y);}
+	
+	/**
+	 * Returns a <code>String</code> containing the coded positions of the coins.
+	 * 
+	 */
 	public String getCoinState() {return mRenderer.getCoinState();}
 	public void setCoinState(String state) {mRenderer.setCoinState(state);}
 
