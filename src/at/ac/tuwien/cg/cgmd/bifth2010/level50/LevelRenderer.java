@@ -23,8 +23,8 @@ public class LevelRenderer implements Renderer {
 						urLine, ulLine, ruLine, rbLine, brLine, blLine, luLine, lbLine;
 	Context context;
 	GL10 gl;
-	float positionX = 0;
-	float positionY = 0;
+	float positionX = -1;
+	float positionY = -1;
 	int width, height;
 	int score;
 	String coinState = "";
@@ -132,10 +132,6 @@ public class LevelRenderer implements Renderer {
 
 			luLine.setPosition(bunny.getPositionX()+tileSizeX/2-width/2, bunny.getPositionY()+tileSizeY/2-height/6-tileSizeY/8);
 			lbLine.setPosition(bunny.getPositionX()+tileSizeX/2-width/2, bunny.getPositionY()+tileSizeY/2+height/6-tileSizeY/8);
-			
-//			arrowRight.setPosition(bunny.getPositionX()+width/2-5*tileSizeX/2, bunny.getPositionY()+height/2-5*tileSizeY/2);
-//			arrowLeft.setPosition(bunny.getPositionX()+width/2-9*tileSizeX/2, bunny.getPositionY()+height/2-5*tileSizeY/2);
-//			arrowUp.setPosition(bunny.getPositionX()-width/2+tileSizeX/2, bunny.getPositionY()+height/2-5*tileSizeY/2);
 		}  else {
 			if (darkness == fadeDuration) {
 				if (mp != null)
@@ -215,7 +211,7 @@ public class LevelRenderer implements Renderer {
 		
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		level.draw(gl, bunny.getPositionX(), bunny.getPositionY());
+		level.draw(gl, fps);
 		bunny.draw(gl);	
 		scorePre.draw(gl);
 		score1.draw(gl);
@@ -265,8 +261,8 @@ public class LevelRenderer implements Renderer {
 			else
 				mult = (float)width/480.0f;
 			
-			float scaleX = mult;//(float)width/480.0f;//*mult;
-			float scaleY = mult;//(float)height/320.0f;//*mult;
+			float scaleX = mult;
+			float scaleY = mult;
 	
 			tileSizeX*=scaleX;
 			tileSizeY*=scaleY;
@@ -277,17 +273,14 @@ public class LevelRenderer implements Renderer {
 			score1.scale(scaleX,scaleY);
 			score2.scale(scaleX,scaleY);
 			score3.scale(scaleX,scaleY);
-//			urLine.scale(scaleX,scaleY);
-//			ulLine.scale(scaleX,scaleY);
-//			ruLine.scale(scaleX,scaleY);
-//			rbLine.scale(scaleX,scaleY);
-//			brLine.scale(scaleX,scaleY);
-//			blLine.scale(scaleX,scaleY);
-//			luLine.scale(scaleX,scaleY);
-//			lbLine.scale(scaleX,scaleY);
-	//		arrowLeft.scale(scaleX,scaleY);
-	//		arrowRight.scale(scaleX,scaleY);
-	//		arrowUp.scale(scaleX,scaleY);
+			
+
+			if (positionX == -1.0f && positionY == -1.0f) {
+				positionX = (level.getWidth()-1.0f)*tileSizeX;
+				positionY = 0.0f;
+				bunny.setPosition(positionX, positionY);
+			}
+			
 			scaled = true;
 		}
 		
@@ -323,9 +316,10 @@ public class LevelRenderer implements Renderer {
 		LevelObject.initMP(context, R.raw.l00_gold01);
 		level = new LevelCollision(gl, context, R.drawable.l50_level01_coll);
 		level.setCoinState(coinState);
-		//load the l00_icon first to get it into memory
 		bunny = new LevelObject(gl, context, level, positionX, positionY, tileSizeX, tileSizeY, R.drawable.l00_coin, null);
 		bunny.setScore(score);
+		bunny.turn();
+		//load all textures to get them into memory
 		bunny.changeTexture(R.drawable.l50_tiles, null);
 		bunny.changeTexture(R.drawable.l50_rabbit_2, null);
 		bunny.changeTexture(R.drawable.l50_rabbit_3, null);
@@ -368,28 +362,9 @@ public class LevelRenderer implements Renderer {
 		lbLine = new LevelObject(gl, context, level, 0, 0, width/4, tileSizeY/4, R.drawable.l50_strip, texcoord3);
 		
 		touchPoint = new LevelObject(gl, context, level, 0, 0, tileSizeX, tileSizeY, R.drawable.l50_arrow, null);
-		
-//		arrowRight = new LevelObject(gl, context, level, 0, 0, tileSizeX*2, tileSizeY*2, R.drawable.l50_arrow, null);
-//		float texcoord2[] = { //mirror arrow
-//				1.0f,  0.0f,
-//				1.0f,  1.0f,
-//				0.0f,  1.0f,
-//				0.0f,  0.0f};
-//		arrowLeft = new LevelObject(gl, context, level, 0, 0, tileSizeX*2, tileSizeY*2, R.drawable.l50_arrow, texcoord2);
-//		float texcoord3[] = { //turn arrow upwards
-//				1.0f,  1.0f,
-//				0.0f,  1.0f,
-//				0.0f,  0.0f,
-//				1.0f,  0.0f};
-//		arrowUp = new LevelObject(gl, context, level, 0, 0, tileSizeX*2, tileSizeY*2, R.drawable.l50_arrow, texcoord3);
 	}
 	
 	public void touchScreen(int eventNo, float x, float y) {
-//		Log.d("actionmove", "Action: "+eventNo+" x: "+x+" y: "+y+" oldX: "+oldX+" oldY: "+oldY);
-		
-//		if(!bunny.getLife()) {
-//			resetGame();
-//		}
 		
 		if (eventNo!=MotionEvent.ACTION_DOWN && eventNo!=MotionEvent.ACTION_MOVE) {
 			bunny.move(2,0.0f);
@@ -607,7 +582,7 @@ public class LevelRenderer implements Renderer {
 	}
 	
 	private void resetGame() {
-		bunny.setPosition(0,0);
+		bunny.setPosition((level.getWidth()-1.0f)*tileSizeX, 0.0f);
 		bunny.revive();
 		level.reset();
 		gl.glClearColor(0.0f, (float)0x99/255, (float)0xCC/255, 1.0f);

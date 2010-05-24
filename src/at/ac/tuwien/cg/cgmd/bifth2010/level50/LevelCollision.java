@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class LevelCollision {
@@ -20,6 +21,7 @@ public class LevelCollision {
 	private String coinState = "";
 	private HashMap<Integer, LevelObject> coins = new HashMap<Integer, LevelObject>();
 	private HashMap<Integer, LevelObject> levelParts = new HashMap<Integer, LevelObject>();
+	private HashMap<Integer, LevelObject> enemies = new HashMap<Integer, LevelObject>();
 	
 	public LevelCollision(GL10 gl, Context context, int id) {
 		LoadTexture(gl, id, context);
@@ -98,7 +100,7 @@ public class LevelCollision {
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
-					} else if ((px1&0x00ffffff) == 0x00330033) {
+					} else if ((px1&0x00ffffff) == 0x00550055) {
 						float texcoord[] = { //left tree
 								2*tileCountInv,  2*tileCountInv,
 								2*tileCountInv,  tileCountInv,
@@ -114,9 +116,10 @@ public class LevelCollision {
 							    4*tileCountInv,  tileCountInv,
 							    4*tileCountInv,  2*tileCountInv
 							};
+							collisionArray[i*width+j] = 0x00550055;
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
-					} else if ((px1&0x00ffffff) == 0x00cc00cc) {
+					} else if ((px1&0x00ffffff) == 0x00dd00dd) {
 						float texcoord[] = { //right tree
 								4*tileCountInv,  2*tileCountInv,
 								4*tileCountInv,  tileCountInv,
@@ -134,14 +137,35 @@ public class LevelCollision {
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
+					} else if ((px1&0x00ffffff) == 0x00ff0000) {
+							LevelObject enemy = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_enemy, null);
+							enemy.awake();
+							enemies.put(i*width+j,enemy);
 					}
              }
         }  
 	}
 	
-	public int TestCollision(int x,int y) {
+	public boolean TestEnemyCollision(float x, float y) {
+		for (LevelObject e : enemies.values()) {
+//			Log.d("hit","e posx: "+e.getPositionX()+" e posy: "+e.getPositionY()+
+//					" x: "+x+" y: "+y+" tileSizeX: "+tileSizeX+" tileSizeY: "+tileSizeY);
+			if (e.getPositionX()<=x &&
+				x<=e.getPositionX()+tileSizeX &&
+				e.getPositionY()<=y &&
+				y<=e.getPositionY()+tileSizeY) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public int TestCollision(int x,int y, boolean enemy) {
 		if (0<=x && x<width && 0<=y && y<height) {
 			int returnVal = collisionArray[y*width+x];
+			if(enemy) return returnVal;
+						
 			if (coins.containsKey(y*width+x)){
 				int i = y*width+x;
 				float texcoord[] = {
@@ -162,14 +186,16 @@ public class LevelCollision {
 		}
 	}
 	
-	public void draw(GL10 gl, float bx, float by) {
+	public void draw(GL10 gl, float frames) {
 		for (LevelObject coin : coins.values()) {
-			//if (Math.abs(coin.getPositionX()-bx)<tileSizeX*10 && Math.abs(coin.getPositionY()-by)<tileSizeY*10)
 				coin.draw(gl);
 		}
 		for (LevelObject part : levelParts.values()) {
-			//if (Math.abs(part.getPositionX()-bx)<tileSizeX*10 && Math.abs(part.getPositionY()-by)<tileSizeY*10)
 				part.draw(gl);
+		}
+		for (LevelObject enemy : enemies.values()) {
+				enemy.update(gl, frames);
+				enemy.draw(gl);
 		}
 	}	
 	
@@ -198,12 +224,15 @@ public class LevelCollision {
 		for (LevelObject part : levelParts.values()) {
 			part.scale(xscale,yscale);
 		}
+		for (LevelObject enemy : enemies.values()) {
+			enemy.scale(xscale,yscale);
+		}
 		tileSizeX*=xscale;
 		tileSizeY*=yscale;
 	}
 	
 	public float getHeight() {return height;}
-	public float getWigth() {return width;}
+	public float getWidth() {return width;}
 	public String getCoinState() {return coinState;}
 	public void setCoinState(String state) {
 		coinState=state;

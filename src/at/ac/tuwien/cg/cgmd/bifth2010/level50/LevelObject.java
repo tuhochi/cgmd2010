@@ -29,6 +29,7 @@ public class LevelObject {
 	private float scaleX = 1.0f;
 	private float scaleY = 1.0f;
 	private boolean climbable = false, climbableTop = false;
+	private boolean enemy = false;
 	
 	float x, y;
 	int width, height;
@@ -115,6 +116,24 @@ public class LevelObject {
 	
 	public boolean update(GL10 gl, float frames) {
 		float fps = Math.max(frames, 20.0f);
+		
+		if (enemy) {
+			float xn = x+direction*2.5f*20.0f/fps*tileSizeX/16.0f;
+			if (testCollision(xn,y)) {
+				turn();
+				return true;
+			} else {
+				if (!testCollision(x+direction*tileSizeX,y+1)) {
+					turn();
+					return true;
+				} else {
+					x = xn;
+					return false;
+				}
+			}
+		}
+		
+				
 		float xn = x-(movement[2]-movement[3])*20.0f/fps*tileSizeX/16.0f; //16... yeah... of course
 		float yn = y-(movement[0]-movement[1])*20.0f/fps*tileSizeY/16.0f;
         boolean retVal = false;
@@ -201,10 +220,20 @@ public class LevelObject {
 	public void setHeight(int h) { height=h; }
 	
 	boolean testCollision(float x, float y) {
-		int ul = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y)/tileSizeY));
-		int ur = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y)/tileSizeY));
-		int lr = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY));
-		int ll = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY));
+		int ul = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y)/tileSizeY), enemy);
+		int ur = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y)/tileSizeY), enemy);
+		int lr = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY), enemy);
+		int ll = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y+height-1)/tileSizeY), enemy);
+		
+		if (enemy)
+			if((ul&0x00ff0000) != 0 && // whole free
+			    (ur&0x00ff0000) != 0 &&
+				(lr&0x00ff0000) != 0 &&
+				(ll&0x00ff0000) != 0
+				) {
+				return false;
+			} else return true;
+		
 		if ((ul&0x00ffffff) == 0x00ffff00) {
 			score+=5;
 			for (MediaPlayer a : mp) {
@@ -245,27 +274,36 @@ public class LevelObject {
 		if (y>level.getHeight()*tileSizeY)
 			alive = false;
 				
-		if ((ul&0x00ff0000) != 0 && // whole free
-		    (ur&0x00ff0000) != 0 &&
-			(lr&0x00ff0000) != 0 &&
-			(ll&0x00ff0000) != 0
-			) {
-//			return false;
-		} else return true;
+		if ((ul&0x00ff0000) == 0 || // whole free
+		    (ur&0x00ff0000) == 0 ||
+			(lr&0x00ff0000) == 0 ||
+			(ll&0x00ff0000) == 0) {
+			return true;
+		}		
+
+		if (level.TestEnemyCollision(x+(float)width/10.0f,y+(float)height/10.0f) ||
+			level.TestEnemyCollision(x+width-(float)width/10.0f,y+(float)height/10.0f) ||
+			level.TestEnemyCollision(x+width-(float)width/10.0f,y+height-(float)height/10.0f) ||
+			level.TestEnemyCollision(x+(float)width/10.0f,y+height-(float)height/10.0f)) {
+			
+			alive = false;
+			move(0,15.0f);
+			return true;
+		}
 		
-		if ((ul&0x0000ff00) != 0 && //whole not in tree
-		    (ur&0x0000ff00) != 0 &&
-		    (lr&0x0000ff00) != 0 &&
-			(ll&0x0000ff00) != 0) {
+		if ((ul&0x00555555) != 0x00550055 && //whole not in tree
+		    (ur&0x00555555) != 0x00550055 &&
+		    (lr&0x00555555) != 0x00550055 &&
+			(ll&0x00555555) != 0x00550055) {
 			climbable = false;
 			climbableTop = false;
 			if (gravity) movement[1] = 5.0f;
 			return false;
 			
-		} else if ((ul&0x0000ff00) != 0 && //bottom in tree
-		    (ll&0x0000ff00) == 0 ||
-			(ur&0x0000ff00) != 0 &&
-		    (lr&0x0000ff00) == 0) {
+		} else if ((ul&0x00555555) != 0x00550055 && //bottom in tree
+		    (ll&0x00555555) == 0x00550055 ||
+			(ur&0x00555555) != 0x00550055 &&
+		    (lr&0x00555555) == 0x00550055) {
 			if (!climbable) {
 				movement[0] = 0.0f;
 				movement[1] = 0.0f;
@@ -275,10 +313,10 @@ public class LevelObject {
 //			if (gravity) movement[1] = 0.0f;
 			return false;
 			
-		} else if ((ul&0x0000ff00) == 0 && //whole in tree
-		    (ll&0x0000ff00) == 0 ||
-		    (ur&0x0000ff00) == 0 &&
-			(lr&0x0000ff00) == 0){		
+		} else if ((ul&0x00555555) == 0x00550055 && //whole in tree
+		    (ll&0x00555555) == 0x00550055 ||
+		    (ur&0x00555555) == 0x00550055 &&
+			(lr&0x00555555) == 0x00550055){
 			if (!climbable) {
 				movement[0] = 0.0f;
 				movement[1] = 0.0f;
@@ -387,6 +425,10 @@ public class LevelObject {
 		alive = true;
 	}
 	
+	public void awake() {
+		enemy=true;
+	}
+	
 	public static void initMP(Context context, int id) {
 		for (int i = 0; i<mp.length; i++) {
 			mp[i] = MediaPlayer.create(context, id);
@@ -403,4 +445,5 @@ public class LevelObject {
 	
 	public boolean getClimbable() {return climbable;}
 	public boolean getClimbableTop() {return climbableTop;}
+	public void turn() {direction*=-1;}
 }

@@ -134,7 +134,7 @@ public class LevelActivity extends Activity {
         
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);        
         mGLView.setScore(mPrefs.getInt("L50_SCORE", 0));
-        mGLView.setPosition(mPrefs.getFloat("L50_POSX", 10.0f), mPrefs.getFloat("L50_POSY", 0.0f));
+        mGLView.setPosition(mPrefs.getFloat("L50_POSX", -1.0f), mPrefs.getFloat("L50_POSY", -1.0f));
         mGLView.setCoinState(mPrefs.getString("L50_COINS", ""));
     }
     
