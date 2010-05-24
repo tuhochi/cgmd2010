@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Random;
@@ -43,6 +44,7 @@ public class Level {
 	//private NormalModeWorld mWorld;
 	private Random mRandom = new Random();
 	private List<Integer> mHouseTex = new ArrayList<Integer>();
+	private long mLastHouseHit = 0;
 	
 	public static final String PLAYER_LIFES = "feelGood";
 	public static final String PLAYER_MONEY = "muney";
@@ -55,7 +57,7 @@ public class Level {
 	public Level(NormalModeWorld world, Bundle savedInstance)
 	{
 		int money = 0;
-		int lifes = 30;
+		int lifes = 5;
 		
 		if(savedInstance != null)
 		{
@@ -133,21 +135,31 @@ public class Level {
     	gl.glEnable(GL10.GL_LIGHT0);
 		*/
 		gl.glPushMatrix();
+		
+		boolean isinvincible = invincible();
+		float invincibleAlpha = 0f;
+		if (isinvincible)
+			invincibleAlpha = 0.7f;
 
 		for (House house : mFadeHouses) {
 			float dist = (float)Math.abs(mPlayer.getPosition().y - house.getPosition().y) - (house.getSize().y / 2.0f);
 			float alpha = (dist - 100.0f) / 30.0f;
-	    	gl.glColor4f(1.0f,1.0f,1.0f, 1.0f - alpha);
+	    	gl.glColor4f(1.0f,1.0f,1.0f, 1.0f - Math.max(alpha, invincibleAlpha));
 			house.draw();
 		}	
-    	gl.glColor4f(1.0f,1.0f,1.0f, 1.0f);
-    	gl.glDisable(GL10.GL_BLEND);
-    	gl.glDepthMask(true);
+		
+    	gl.glColor4f(1.0f,1.0f,1.0f, 1.0f - invincibleAlpha);
+    	if (!isinvincible)
+    	{
+	    	gl.glDisable(GL10.GL_BLEND);
+	    	gl.glDepthMask(true);
+    	}
 		
 		for (House house : mHouses) {
 			house.draw();
 		}		
 		
+		gl.glColor4f(1.0f,1.0f,1.0f, 1.0f);
     	gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
     	gl.glEnable(GL10.GL_BLEND);
     	gl.glDepthMask(false);
@@ -181,8 +193,8 @@ public class Level {
 
 		
 		Vector3 playerPos = mPlayer.getPosition();
-		mSpeed.y -= elapsedSeconds * 1.5f;
-		mSpeed.y = (mSpeed.y < -40f) ? -40f : mSpeed.y;
+		mSpeed.y -= elapsedSeconds * 0.7f;
+		mSpeed.y = (mSpeed.y < -25f) ? -25f : mSpeed.y;
 		moveDelta.y = Vector3.mult(mSpeed, elapsedSeconds).y;
 		updatePlayerPosition(moveDelta);
 		playerPos = mPlayer.getPosition();
@@ -205,7 +217,7 @@ public class Level {
 			House newHouse = new House(mHouseModels[houseSize], mHouseTex.get(mRandom.nextInt(4)), newPos);
 			newHouse.setHouseSize(houseSize, size);
 			mFadeHouses.add(newHouse);
-			mNextHouse = (float)Math.random() * 0.1f;
+			mNextHouse = (float)Math.random() * 0.5f;
 		}
 		if(mNextBird < 0)
 		{	
@@ -217,7 +229,7 @@ public class Level {
 			Bird newbird = new Bird(mBird, newPos, rotation);
 			mBirds.add(newbird);
 			
-			mNextBird = (float)Math.random() * 1.0f;
+			mNextBird = (float)Math.random() * 0.8f;
 		}
 		
 		for(Bird bird: mBirds){
@@ -272,17 +284,31 @@ public class Level {
 			moveDelta.x = 0;
 			moveDelta.z = 0;
 		}
+		
+		boolean isinvincible = invincible();
+		
 		List<House> remove = new ArrayList<House>();
 		for(House house:mHouses){
-			if(house.intersect(newPos, mPlayer.getRadius())) {
-				if(mPlayer.getPosition().y > house.getPosition().y + house.getSize().y / 2.0f ){
-					mPlayer.hitHouse();
-					remove.add(house);
-					mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_bricks, mParticle));
+			if (!isinvincible)
+			{
+				if(house.intersect(newPos, mPlayer.getRadius())) {
+					if(mPlayer.getPosition().y > house.getPosition().y + house.getSize().y / 2.0f ){
+						mPlayer.hitHouse();
+						remove.add(house);
+						mParticleSystems.add(new ParticleSystem(mPlayer.getPosition(), R.drawable.l17_bricks, mParticle));
+						mLastHouseHit = new Date().getTime();
+					}
+					else {
+						moveDelta.x = 0;
+						moveDelta.z = 0;
+					}
 				}
-				else {
-					moveDelta.x = 0;
-					moveDelta.z = 0;
+				else
+				{
+					if(house.intersect(newPos, mPlayer.getRadius()*2f)) {
+						if (mPlayer.getPosition().y < house.getPosition().y + house.getSize().y / 2.0f )
+							mPlayer.streakHouse();
+					}
 				}
 			}
 		}
@@ -300,6 +326,13 @@ public class Level {
 		
 		mPlayer.setPosition(Vector3.add(mPlayer.getPosition(), moveDelta));
 
+	}
+	
+	private boolean invincible()
+	{
+		long timespan = 3000;
+		long currentTime = new Date().getTime();
+		return (currentTime - mLastHouseHit < timespan);
 	}
 	
 	/**

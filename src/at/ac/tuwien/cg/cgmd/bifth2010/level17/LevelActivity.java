@@ -57,7 +57,7 @@ public class LevelActivity extends Activity {
         addContentView(llayout, params);
         
         mHealthText = new TextView(this);
-        mHealthText.setText("3");
+        mHealthText.setText("5");
         mHealthText.setTextSize(25);
         mHealthText.setGravity(Gravity.CENTER);
         mHealthText.setTextColor(Color.BLACK);  
@@ -179,12 +179,13 @@ public class LevelActivity extends Activity {
 	 * Is called when the money of the player changes
 	 * @param hp The new money of the player
 	 */
-    public void playerMoneyChanged(int money)
+    public void playerMoneyChanged(int money, boolean vibrate)
     {
     	mPointsText.setText(Integer.toString(money)); 
     	mCurrentMoney = money; 
     	long milliseconds = 30;  
-    	mVibrator.vibrate(milliseconds); 
+    	if (vibrate)
+    		mVibrator.vibrate(milliseconds); 
     	if (money >= 100)
     		finish();
     }

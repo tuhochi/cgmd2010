@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
+import java.util.Date;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 
 /**
@@ -13,6 +15,7 @@ public class Player {
 	private float mRadius = 1.5f;
 	private int mLives = 0;
 	private int mMoney = 0;
+	private long mLastHouseStreak = 0;
 	
 	private PlayerStateListener mListener;
 
@@ -43,8 +46,22 @@ public class Player {
 	 * is called when the player hits a bird
 	 */
 	public void hitBird() {
-		mMoney += 5;
-		mListener.playerMoneyChanged(mMoney);
+		mMoney += 10;
+		mListener.playerMoneyChanged(mMoney, true);
+	}
+	
+	/**
+	 * is called when the player is very near to a house
+	 */
+	public void streakHouse(){
+        Date date = new Date();
+        long currentTime = date.getTime();
+        if (currentTime - mLastHouseStreak > 300)
+        {
+			mMoney += 3;
+			mListener.playerMoneyChanged(mMoney, false);
+	        mLastHouseStreak = currentTime;
+        }
 	}
 	
 	/**

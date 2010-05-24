@@ -261,21 +261,23 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	}
 	
 	@Override
-	public void playerMoneyChanged(int money) {
+	public void playerMoneyChanged(int money, boolean vibrate) {
 		
 		class MoneyRunnable implements Runnable{
         	private int mMoney;
-        	public MoneyRunnable(int money)
+        	private boolean mVibrate;
+        	public MoneyRunnable(int money, boolean vibrate)
         	{
         		mMoney = money;
+        		mVibrate = vibrate;
         	}
         	@Override
             public void run() {
-                mContext.playerMoneyChanged(mMoney);
+                mContext.playerMoneyChanged(mMoney, mVibrate);
             }
         };
         
-        Runnable moneyrunnable = new MoneyRunnable(money);
+        Runnable moneyrunnable = new MoneyRunnable(money, vibrate);
         mHandler.post(moneyrunnable);
 		
 	}
