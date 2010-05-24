@@ -16,6 +16,7 @@ public class HouseModel implements Renderable {
 
 	private VertexBuffer mVertexBuffer;
 	private VertexBuffer mTexCoordBuffer;
+	//private VertexBuffer mNormalBuffer;
 	private VertexBuffer mIndexBuffer;
     
     /**
@@ -62,6 +63,37 @@ public class HouseModel implements Renderable {
     			new Vector3(width / 2.0f, 0, height / 2.0f),
     			new Vector3(-width / 2.0f, 0,height / 2.0f)*/
     	};
+    	/*Vector3 normals[] = {
+    			new Vector3(0, 0, 1),
+    			new Vector3(0, 0, 1),
+    			new Vector3(0, 0, 1),
+    			new Vector3(0, 0, 1),
+
+    			new Vector3(1, 0, 0),
+    			new Vector3(1, 0, 0),
+    			new Vector3(1, 0, 0),
+    			new Vector3(1, 0, 0),
+
+    			new Vector3(0, 0, -1),
+    			new Vector3(0, 0, -1),
+    			new Vector3(0, 0, -1),
+    			new Vector3(0, 0, -1),
+
+    			new Vector3(-1, 0, 0),
+    			new Vector3(-1, 0, 0),
+    			new Vector3(-1, 0, 0),
+    			new Vector3(-1, 0, 0),
+
+    			new Vector3(0, -1, 0),
+    			new Vector3(0, -1, 0),
+    			new Vector3(0, -1, 0),
+    			new Vector3(0, -1, 0),
+
+    			new Vector3(0, 1, 0),
+    			new Vector3(0, 1, 0),
+    			new Vector3(0, 1, 0),
+    			new Vector3(0, 1, 0),
+    	};*/
     	Vector2 texCoords[] = {
 
     			new Vector2(0.0f, 0.0f), 
@@ -112,6 +144,9 @@ public class HouseModel implements Renderable {
 
     	mVertexBuffer = new VertexBuffer(VertexBufferType.Position);
     	mVertexBuffer.setData(vertices);  
+    	
+    	/*mNormalBuffer = new VertexBuffer(VertexBufferType.Normal);
+    	mNormalBuffer.setData(normals);*/
 
     	mTexCoordBuffer = new VertexBuffer(VertexBufferType.TextureCoordinate);
     	mTexCoordBuffer.setData(texCoords);
@@ -126,6 +161,7 @@ public class HouseModel implements Renderable {
     public void draw(GL10 gl)
     {		
     	mVertexBuffer.set(gl);
+    	//mNormalBuffer.set(gl);
     	mTexCoordBuffer.set(gl);
     	gl.glDrawElements(GL10.GL_TRIANGLES, 36, GL10.GL_UNSIGNED_SHORT, mIndexBuffer.getBuffer());
     }

@@ -115,16 +115,20 @@ public class Level {
     	gl.glEnable(GL10.GL_FOG);
     	/*
     	//Define GLfloat arrays to hold light data
-    	FloatBuffer light_direction = Util.floatArrayToBuffer(new float[] { -1.0f, 0.0f, 0.0f, 0.0f });
+    	FloatBuffer light_direction = Util.floatArrayToBuffer(new float[] { -0.577f, -0.577f, -0.577f, 0.0f });
     	FloatBuffer light_ambient = Util.floatArrayToBuffer(new float[] { 0.3f, 0.3f, 0.3f, 1.0f });
-    	FloatBuffer light_diffuse = Util.floatArrayToBuffer(new float[] { 0.8f, 0.8f, 0.8f, 1.0f });
-    	FloatBuffer light_specular = Util.floatArrayToBuffer(new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
+    	FloatBuffer light_diffuse = Util.floatArrayToBuffer(new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
+    	FloatBuffer light_specular = Util.floatArrayToBuffer(new float[] { 0.0f, 0.0f, 0.0f, 1.0f });
 
     	//Apply the light properties to LIGHT0
     	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, light_direction);
     	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, light_ambient);
     	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, light_diffuse);
     	gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPECULAR, light_specular); 
+    	gl.glMaterialfv(GL10.GL_FRONT, GL10.GL_AMBIENT, light_diffuse);
+    	gl.glMaterialfv(GL10.GL_FRONT, GL10.GL_DIFFUSE, light_diffuse);
+    	gl.glMaterialfv(GL10.GL_FRONT, GL10.GL_SPECULAR, light_specular);
+    	gl.glMaterialfv(GL10.GL_FRONT, GL10.GL_SHININESS, Util.floatArrayToBuffer(new float[] { 0.0f }));
     	gl.glEnable(GL10.GL_LIGHTING);
     	gl.glEnable(GL10.GL_LIGHT0);
 		*/
