@@ -4,4 +4,14 @@
 <string name="l83_help_htp">Anleitung:</string>
 <string name="l83_help_instructions">Auf dem Bildschirm siehst du Lenny, gespielt von Bunny, das versucht das Level zu beenden, ohne zu oft zu sterben. Du hast die Aufgabe, ihn mit Hilfe zahlreicher tödlicher Items, von der Toolbox am rechten Rand des Bildschirms, zu stoppen. Wenn Lenny stirbt, steigt seine Seele in den super ingenius gaming machine Himmel auf, wodurch Bunny gezwungen wird, neue Münzen einzuwerfen.</string>
 <string name="l83_help_apologies">Wir möchten uns bei Lenny, beziehungsweise seinen Eltern, dafür entschuldigen, dass wir Bunny\'s Glückseligkeit über die vom armen Lenny stellen.</string>
+<string name="l83_tut_1">Das ist Lenny, er muss sterben!</string>
+<string name="l83_tut_2">Verwende die Items aus der Liste, um Lenny zu töten. Das oberste Item ist aktiv und kann durch Ziehen platziert werden.</string>
+<string name="l83_tut_3">Verwende die Wand, um ein Feld zu blockieren und somit Lenny\'s Pfad zu beeinflussen.</string>
+<string name="l83_tut_4">Verwende dieses Item, um eine existierende Wand zu entfernen.</string>
+<string name="l83_tut_5">Platziere die Zeitbombe, um Lenny zu töten.</string>
+<string name="l83_tut_6">Jenseits der Grenze, die durch diese Felder markiert wird, kannst Du keine Items platzieren.</string>
+<string name="l83_tut_7">Du solltest Lenny davon abhalten, diese Credits einzusammeln, da er 2 davon gegen 1 Leben eintauschen kann.</string>
+<string name="l83_stats_death">Dieses Symbol zeigt an, wie oft Lenny gestorben ist.</string>
+<string name="l83_stats_credit">Dieses Symbol zeigt an, wie viele Credits Lenny eingesammelt hat.</string>
+<string name="l83_stats_progress">Diese(s) &lt;was?&gt; zeigt Lenny\'s Fortschritt im Level an.</string>
 </resources>
