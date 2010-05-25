@@ -1,7 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
 
 /**
  * 

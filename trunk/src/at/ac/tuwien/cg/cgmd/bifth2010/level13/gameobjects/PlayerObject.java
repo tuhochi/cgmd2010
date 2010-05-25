@@ -65,10 +65,6 @@ public class PlayerObject extends GameObject {
 		//translate to correct position
 		gl.glTranslatef(this.position.x, this.position.y, 0.0f);
 	
-	//	gl.glRotatef(drunkenRotation, 0, 0, 1);
-		//rotate the player if drunk
-	//	gl.glRotatef(drunkenRotation, 0, 0, 1);
-	
 		//draw
 		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 

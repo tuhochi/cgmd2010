@@ -3,7 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHelper;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
@@ -21,30 +20,10 @@ public class BackgroundObject extends GameObject {
 	public BackgroundObject() {
 		//object is 1024*1024 pixels
 		super(1024, 1024);
-		/*
-		//set offset
-		float centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
-		float centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
-		//move starting tile to center
-		float startingTileX = 3 * GameObject.BLOCKSIZE;
-		float startingTileY = 1 * GameObject.BLOCKSIZE;
-		float offsetX = centerX - startingTileX;
-		float offsetY = centerY - startingTileY;
-		GameObject.offset = new Vector2(-offsetX, -offsetY);*/
+		
 		
 	}
-	/*
-	public void setStartTile() {
-		//set offset
-		float centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
-		float centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
-		//move starting tile to center
-		float startingTileX = 3 * GameObject.BLOCKSIZE;
-		float startingTileY = 1 * GameObject.BLOCKSIZE;
-		float offsetX = centerX - startingTileX;
-		float offsetY = centerY - startingTileY;
-		GameObject.offset = new Vector2(-offsetX, -offsetY);
-	}*/
+
 	/**
 	 * @see GameObject#draw(GL10)
 	 */
