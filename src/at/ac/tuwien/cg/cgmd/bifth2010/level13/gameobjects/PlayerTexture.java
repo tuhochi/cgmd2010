@@ -21,7 +21,7 @@ public class PlayerTexture extends Texture {
 	public PlayerTexture(GL10 gl, Context context) {
 		super();
 		this.textureId = new int[1];
-		this.textureId[0] = R.drawable.angora_rabbit;
+		this.textureId[0] = R.drawable.l13_bunny;
 		this.textures = new int[1];
 		this.loadGLTextures(gl, context);
 	}
