@@ -7,9 +7,65 @@
   <ScrollView android:layout_height="fill_parent" android:layout_width="fill_parent" android:background="@drawable/l00_menuebackground"><LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent">
   <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/l83_title" android:gravity="center" android:textSize="30dip" android:textColor="#000000"></TextView>
   <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l83_help_story" android:textColor="#000000" android:paddingTop="10dip"></TextView>
-  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l83_help_htp" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l83_help_htp" android:textColor="#000000" android:paddingTop="15dip" android:textSize="20dip"></TextView>
   <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/l83_help_instructions" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+  <TableLayout android:id="@+id/TableLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" android:paddingTop="15dip">
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_tut_1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_tut_2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_tut_3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_tut_4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_tut_5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_tut_6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_tut_7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <TextView android:layout_span="2" android:text="@string/l83_stats_head" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="15dip" android:textSize="20dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_stats_death" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_stats_credit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+    
+    <TableRow>
+      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l83_hexagon"></ImageView>
+      <TextView android:text="@string/l83_stats_progress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+    </TableRow>
+  </TableLayout>
   <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/l83_help_apologies" android:textColor="#000000" android:paddingTop="10dip"></TextView>
-  </LinearLayout>
+  
+</LinearLayout>
   </ScrollView>
 </LinearLayout>
