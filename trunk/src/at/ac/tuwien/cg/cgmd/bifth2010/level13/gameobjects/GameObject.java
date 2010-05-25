@@ -8,6 +8,7 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
@@ -146,7 +147,10 @@ public abstract class GameObject {
 	 * @param movement
 	 */
 	public static void updateOffset(Vector2 movement) {
-		offset.add(movement);
+		Vector2 temp = movement.clone();
+		temp.x *= (FPSCounter.getInstance().getDt() / 1000f);
+		temp.y *= (FPSCounter.getInstance().getDt() / 1000f);
+		offset.add(temp);
 	}
 	
 	/**
