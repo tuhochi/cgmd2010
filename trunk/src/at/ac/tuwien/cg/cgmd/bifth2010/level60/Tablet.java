@@ -45,14 +45,15 @@ public class Tablet {
 	private float scale_y;
 	private static float mapOffset_x = 0;
 	private static float mapOffset_y = 0;
-	
-//	Bitmap bmp;
-//	ByteBuffer bb;
+	private boolean sticky = false;
 	
 	public Tablet(Context context, int width, int height, int x, int y, int texture, GL10 gl) {
+		this(context, width, height, x, y, texture, false, gl);
+	}
+	
+	public Tablet(Context context, int width, int height, int x, int y, int texture, boolean sticky, GL10 gl) {
 		this.context = context;
-		
-//		mapOffset_x = mapOffset_y = 0;
+		this.sticky = sticky;
 		
 		vertices[1] = height;
 		vertices[6] = width;
@@ -126,7 +127,14 @@ public class Tablet {
 	}
 	
 	public void draw(GL10 gl) {
-
+		float drawtoX, drawtoY;
+		if (this.sticky) {
+			drawtoX = x;
+			drawtoY = y;
+		} else {
+			drawtoX = x + mapOffset_x;
+			drawtoY = y + mapOffset_y;
+		}
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
 
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -136,7 +144,7 @@ public class Tablet {
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		
 		gl.glPushMatrix();
-		gl.glTranslatef(x+mapOffset_x, y+mapOffset_y, 0);
+		gl.glTranslatef(drawtoX, drawtoY, 0);
 		gl.glScalef(scale_x, scale_y, 0);
 		gl.glRotatex(rotation_angle, 0, 0, 1);
 		

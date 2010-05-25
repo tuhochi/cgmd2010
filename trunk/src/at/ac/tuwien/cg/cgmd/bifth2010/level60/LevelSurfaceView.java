@@ -21,9 +21,11 @@ public class LevelSurfaceView extends GLSurfaceView {
 	}
 	
 	public boolean onTouchEvent(MotionEvent event) {
-		score = lr.getScore();
-		s = getState();
-		s.setProgress(score);  //set progress to score!
+		
+		lr.onTouch(event);
+//		score = lr.getScore();
+//		s = getState();
+//		s.setProgress(score);  //set progress to score!
 		//setResult(Activity.RESULT_OK, s.asIntent());
 		//finish();
 		return true;
