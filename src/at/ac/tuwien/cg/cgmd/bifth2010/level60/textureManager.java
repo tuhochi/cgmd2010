@@ -4,7 +4,7 @@ import java.util.Hashtable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+//import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -32,17 +32,20 @@ public class textureManager {
 		textureMap = new Hashtable <String, Integer>();
 		gameObjectMap = new Hashtable <String, Tablet>();
 		
-		createTexture("gold", R.drawable.l00_coin, 20, 20);
-		createTexture("zero", R.drawable.l60_gold_0, 20, 20);
-		createTexture("one", R.drawable.l60_gold_1, 20, 20);
-		createTexture("two", R.drawable.l60_gold_2, 20, 20);
-		createTexture("three", R.drawable.l60_gold_3, 20, 20);
-		createTexture("four", R.drawable.l60_gold_4, 20, 20);
-		createTexture("five", R.drawable.l60_gold_5, 20, 20);
-		createTexture("six", R.drawable.l60_gold_6, 20, 20);
-		createTexture("seven", R.drawable.l60_gold_7, 20, 20);
-		createTexture("eight", R.drawable.l60_gold_8, 20, 20);
-		createTexture("nine", R.drawable.l60_gold_9, 20, 20);
+		createTexture("control", R.drawable.l83_hexagon_blue, 50, 50, true);
+		createTexture("control", R.drawable.l83_hexagon, 100, 100, true);
+		
+		createTexture("gold", R.drawable.l00_coin, 20, 20, true);
+		createTexture("zero", R.drawable.l60_gold_0, 20, 20, true);
+		createTexture("one", R.drawable.l60_gold_1, 20, 20, true);
+		createTexture("two", R.drawable.l60_gold_2, 20, 20, true);
+		createTexture("three", R.drawable.l60_gold_3, 20, 20, true);
+		createTexture("four", R.drawable.l60_gold_4, 20, 20, true);
+		createTexture("five", R.drawable.l60_gold_5, 20, 20, true);
+		createTexture("six", R.drawable.l60_gold_6, 20, 20, true);
+		createTexture("seven", R.drawable.l60_gold_7, 20, 20, true);
+		createTexture("eight", R.drawable.l60_gold_8, 20, 20, true);
+		createTexture("nine", R.drawable.l60_gold_9, 20, 20, true);
 		
 		createTexture("cop", R.drawable.l60_cop_front_l, 50, 50);
 		createTexture("bunny", R.drawable.l60_bunny_front, 60, 60);
@@ -68,13 +71,17 @@ public class textureManager {
 		//add all texture elements
 	}
 	
-	public void createTexture (String name, int texId, int xSize, int ySize) {
+	public void createTexture(String name, int texId, int xSize, int ySize, boolean sticky) {
 		loadTexture (name, texId);
-		Tablet tex = new Tablet(context, xSize, ySize, 0, 0, texture.get(0), gl);
+		Tablet tex = new Tablet(context, xSize, ySize, 0, 0, texture.get(0), sticky, gl);
 		
 		if (!gameObjectMap.containsKey(name)) {
 			gameObjectMap.put(name, tex);
 		}
+	}
+	
+	public void createTexture (String name, int texId, int xSize, int ySize) {
+		createTexture(name, texId, xSize, ySize, false);
 	}
 	
 	
