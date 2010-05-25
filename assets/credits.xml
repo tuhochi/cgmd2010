@@ -14,13 +14,14 @@
 <credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
 	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
 	usage="map texture" license="CC" />
-	
+
+
 <credit type="sound" name="possiblelazer" author="aust_paul"
 	url="http://www.freesound.org/samplesViewSingle.php?id=30935"
 	usage="sound effect" license="CC" />
 	
-<credit type="sound" name="Explosion" author="steveygos93"
-	url="http://www.freesound.org/samplesViewSingle.php?id=80400"
+<credit type="sound" name="Blast" author="Benboncan"
+	url="http://www.freesound.org/samplesViewSingle.php?id=73005"
 	usage="sound effect" license="CC" />
 	
 <credit type="sound" name="yeah" author="totya"
@@ -29,6 +30,10 @@
 	
 <credit type="sound" name="phaser2" author="impactuniversal"
 	url="http://www.freesound.org/samplesViewSingle.php?id=63373"
+	usage="sound effect" license="CC" />
+	
+<credit type="sound" name="Explosion" author="steveygos93"
+	url="http://www.freesound.org/samplesViewSingle.php?id=80400"
 	usage="sound effect" license="CC" />
 		
 </credits>
