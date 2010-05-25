@@ -5,4 +5,16 @@
 <string name="l83_help_instructions">On the screen you see Lenny played by Bunny who is trying to complete the level without being killed too often. You are in charge of stopping him by using several deadly items from the toolbox on the right side of the screen. When Lenny dies, his soul ascends to super ingenious gaming machine heaven which forces Bunny to insert new coins. </string>
 <string name="l83_help_apologies">We would like to apologize to Lenny, respectively to his parents, for choosing Bunny\'s happiness over poor Lenny\'s. </string>
 <string name="l83_title">Lenny Must Die - Arcade</string>
+<string name="l83_tut_1">This is Lenny, he must die!</string>
+<string name="l83_tut_2">Use the items from the queue to kill Lenny. The topmost item is active and can be placed by dragging.</string>
+<string name="l83_tut_3">Use the wall to block a field and thus force Lenny to walk a specific path.</string>
+<string name="l83_tut_4">Use this item to remove an existing wall.</string>
+<string name="l83_tut_5">Place the time bomb to kill Lenny.</string>
+<string name="l83_tut_6">You cannot place items beyond the border which is marked by these fields.</string>
+<string name="l83_tut_7">You should prevent Lenny from collecting these credits, since he can trade 2 of them for 1 life.</string>
+<string name="l83_stats_head">Lenny\'s Stats</string>
+<string name="l83_stats_death">This icon indicates how often Lenny died.</string>
+<string name="l83_stats_credit">This icon indicates how many credits Lenny has collected.</string>
+<string name="l83_stats_progress">This &lt;what?&gt; shows Lenny\'s progress in the level.</string>
+
 </resources>
