@@ -94,7 +94,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	SoundManager sound;
 	private GameControl gameControl;
 	
-	//public PlayerObject player;
+	public PlayerObject player;
+	private float rotate = 0f;
 	
 	public static void reset() {
 		gameObjects = new ArrayList<GameObject>();
@@ -130,22 +131,31 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		
 		if(gameControl.isDrunkState()){
-		
-		if (zoomFactor > 1.1f){
-			zoom = -0.01f;
+			if (zoomFactor > 1.1f){
+				zoom = -0.01f;
+			}
+
+			if (zoomFactor <= 1.0f){
+				zoom = 0.01f;
+			}
+
+			zoomFactor+=zoom;
+			gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
+
+			gl.glTranslatef(player.getRealPosition().x - GameObject.offset.x, player.getRealPosition().y - GameObject.offset.y, 0);
+			gl.glRotatef(rotate, 0, 0, 1);
+			gl.glTranslatef((-1)*(player.getRealPosition().x - GameObject.offset.x), (-1)*(player.getRealPosition().y - GameObject.offset.y), 0);
+			rotate += 3;
 		}
-		
-		if (zoomFactor <= 1.0f){
-			zoom = 0.01f;
-		}
-		
-		zoomFactor+=zoom;
-		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
-		}else{
+		else {
 			gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
-			
 		}
+		 	
 		gl.glViewport(0, 0, width, height);
+		
+		
+		
+		
 		
 		//calculate and update fps
 		counter.update();
@@ -275,8 +285,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 					}
 				}
 			}
-
-			gameObjects.add(new PlayerObject());
+			player = new PlayerObject();
+			gameObjects.add(player);
 			GameObject.setStartTile(new Vector2(3, 1));
 		}
 		else {

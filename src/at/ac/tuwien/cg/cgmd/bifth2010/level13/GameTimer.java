@@ -3,7 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 import android.util.Log;
 
 public class GameTimer {
-	private static final long TOTALGAMETIME = 1 * 60 * 1000;
+	private static final long TOTALGAMETIME = 2 * 60 * 1000;
 	private static GameTimer instance;
 	
 	private long startTime;
