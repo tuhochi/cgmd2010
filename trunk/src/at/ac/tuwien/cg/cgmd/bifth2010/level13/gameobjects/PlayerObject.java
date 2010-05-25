@@ -83,4 +83,10 @@ public class PlayerObject extends GameObject {
 		Log.d("df", "tilex: " + tileX + " tiley: " + tileY);
 		return new Vector2(tileX, tileY);
 	}
+	
+	public Vector2 getRealPosition() {
+		float x = (position.x + GameObject.offset.x);
+		float y = (position.y + GameObject.offset.y);
+		return new Vector2(x, y);
+	}
 }
