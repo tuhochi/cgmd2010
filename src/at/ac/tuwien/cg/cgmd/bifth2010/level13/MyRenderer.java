@@ -179,7 +179,11 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			
 			}
 		}
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
 		
+		gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
+		gl.glViewport(0, 0, width, height);
 			drunkStatusBar.draw(gl);
 			gameControl.updateDrunkStatus(drunkStatusBar);
 			gameControl.updateJailStatus(jailStatusBar);

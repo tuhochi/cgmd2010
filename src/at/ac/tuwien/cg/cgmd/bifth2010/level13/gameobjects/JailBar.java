@@ -4,6 +4,7 @@ public class JailBar extends StatusBar{
 
 	public JailBar(float objectWidth, float objectHeight) {
 		super(objectWidth, objectHeight);
+
 		// TODO Auto-generated constructor stub
 	}
 
