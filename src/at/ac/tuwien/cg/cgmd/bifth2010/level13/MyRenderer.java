@@ -51,10 +51,10 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 }, 
 		{ 1, 2, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1 },
+		{ 1, 0, 1, 1, 0, 0, 0, 0, 2, 4, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2, 0, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 2, 1 },
+		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 2, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
@@ -63,7 +63,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		{ 1, 0, 0, 0, 0, 0, 0, 2, 0, 2, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
 		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
 		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 },
+		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1 },
 		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
 		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 2, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
 		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 2, 0, 0, 1, 1, 1 },
@@ -214,32 +214,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
 		
 		gl.glViewport(0, 0, width, height);
-		/*
-		//init all textures
-		TextureSingletons.initTextures(gl, context);
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		//create all game objects
-		gameObjects.add(new BackgroundObject());
-		for(int i = 0; i < MyRenderer.map.length; i++) {
-			for(int j = 0; j < MyRenderer.map[i].length; j++) {
-				if(MyRenderer.map[i][j] == 2) {
-					gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
-				}
-				else if (MyRenderer.map[i][j] == 3){
-					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
-				}
-				else if (MyRenderer.map[i][j] == 4){
-					gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
-				}
-			}
-		}
-		drunkStatusBar = new DrunkBar(200, 50);
-		jailStatusBar = new JailBar(200, 50);
-	    jailStatusBar.position.y = 50;
 
-		
-		//player = new PlayerObject();
-		gameObjects.add(new PlayerObject());*/
 	}
 
 	/**
@@ -255,7 +230,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		//enable blend capability
 		gl.glEnable(GL10.GL_BLEND);
 		
-		//specify blend function
+		//specify alpha blend function
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		//set shading model
@@ -361,24 +336,22 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			float x = event.getX();
 			float y = event.getY();
 			if(Math.abs(x) > Math.abs(y)) {
-			//	if(Math.abs(x) > 0.6) {
+
 					if(x > 0) {
 						gameControl.movePlayer(MyRenderer.screenWidth, MyRenderer.screenHeight / 2.0f);
 					}
 					else {
 						gameControl.movePlayer(0, MyRenderer.screenHeight / 2.0f);
 					}
-				//}
 			}
 			else {
-				//if(Math.abs(y) > 0.6) {
 					if(y > 0) {
 						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, MyRenderer.screenHeight);
 					}
 					else {
 						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, 0);
 					}
-				//}
+
 			}
 		
 		}

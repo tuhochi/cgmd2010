@@ -32,8 +32,6 @@ public class GameControl {
 	private static final int BUSTTIME = 50;
 	private int currentBustTime = 0;
 	private boolean inJail = false;
-	//private static SoundManager sound;
-	private boolean musicRunning = false;
 	private int money = 0;
 	//movement vector
 	private Vector2 movement = new Vector2(0, 0);
@@ -143,15 +141,8 @@ public class GameControl {
 					movement.y = MyRenderer.SPEED;
 				}
 			}}
-			
-		
-		
-		
-		
-	
 		
 	}
-	
 	
 	
 	
@@ -171,14 +162,7 @@ public class GameControl {
 			consumedBeer = 0;
 			// Set player to drunk state
 			currentDrunkTime = DRUNKTIME;
-			SoundManager.playSound(SoundFX.DRUNK);
-			/*if (musicRunning == false){
-				SoundManager.playSound(SoundFX.MUSIC);
-				
-				musicRunning = true;
-			}*/
-			
-			
+			SoundManager.playSound(SoundFX.DRUNK);	
 			drunkState = true;
 			
 		}
@@ -186,20 +170,10 @@ public class GameControl {
 			
 			if(currentDrunkTime > 0){
 				currentDrunkTime--;
-				
-			//	GameObject.drunkenRotation += 10;
-				
-				/*
-				if(player.rotation > 360)
-				player.rotation = 0;
-				else
-				player.rotation+=3;
-				*/
+
 				
 			}
 			else{
-				//SoundManager.pauseMusic();
-				//musicRunning = false;
 				GameObject.drunkenRotation =0;
 				drunkState = false;
 
@@ -217,7 +191,7 @@ public class GameControl {
 				currentBustTime--;
 			}else{
 
-			//checkJailState when getting clean again dry again
+			//checkJailState when getting dry again
 			inJail = false;
 			
 		}
@@ -233,8 +207,6 @@ public class GameControl {
 	 */
 	
 	public void encounterCop(CopObject cop){
-	//	cop.isActive = false;
-		//TODO: CREATE VARIABLE FOR ESCAPING COP LIKE ADRENALINE SHOTS TO PIC UP WITH A TIMER.
 		if (drunkState & !inJail){
 				SoundManager.playSound(SoundFX.POLICE);
 				currentBustTime = BUSTTIME;

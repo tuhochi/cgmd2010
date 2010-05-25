@@ -1,6 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
-import java.io.Serializable;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
