@@ -14,13 +14,20 @@ import android.util.Log;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * Custom Renderer to take care of the visual output.
+ * Initializes and manages the player object (bunny) as well as HUD objects.
+ * 
+ * @author      Alexander Fritz
+ * @author      Michael Benda
+ */
 public class LevelRenderer implements Renderer {
 	
 	private int tileSizeX = 30;
 	private int tileSizeY = 30;
 	LevelCollision level;
-	LevelObject bunny, coins[], scorePre, score1, score2, score3, arrowRight, arrowLeft, arrowUp, touchPoint, 
-						urLine, ulLine, ruLine, rbLine, brLine, blLine, luLine, lbLine;
+	LevelObject bunny, scorePre, score1, score2, score3, 
+				urLine, ulLine, ruLine, rbLine, brLine, blLine, luLine, lbLine;
 	Context context;
 	GL10 gl;
 	float positionX = -1;
@@ -40,10 +47,19 @@ public class LevelRenderer implements Renderer {
 	boolean scaled = false;
 	MediaPlayer mp;
 	
+	/**
+	 * Class constructor specifying the rendering context.
+	 */
 	public LevelRenderer(Context context) {
 		this.context = context;
 	}
-	
+	/**
+	 * Called automatically to draw the current frame. <br>
+	 * Invokes update functions of the player object and all draw functions.
+	 * Increments the frameCounter variable. 
+	 * 
+	 * @param gl	the GL interface
+	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		
@@ -97,7 +113,6 @@ public class LevelRenderer implements Renderer {
 			} else {
 				((LevelActivity) context).clearPrefs();
 				((LevelActivity) context).saveScore();
-				bunny.setScore(-1000);
 				resetGame();
 				((LevelActivity) context).finish();
 			}
@@ -152,7 +167,6 @@ public class LevelRenderer implements Renderer {
 			else {
 				resetGame();
 				((Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100);
-				bunny.setScore(-1000);
 			}
 		}
 		
@@ -226,8 +240,6 @@ public class LevelRenderer implements Renderer {
 		blLine.draw(gl);
 		luLine.draw(gl);
 		lbLine.draw(gl);
-		if(touching)
-			touchPoint.draw(gl);
 		
 //		arrowLeft.draw(gl);
 //		arrowRight.draw(gl);
@@ -235,7 +247,16 @@ public class LevelRenderer implements Renderer {
 		
 		frameCounter++;
 	}
-
+	
+	/**
+	 * Called when the surface changed size.
+	 * Called after the surface is created and whenever
+	 * the OpenGL ES surface size changes. If called the
+	 * first time all game objects are scaled to the 
+	 * appropriate size for the given resolution
+	 * 
+	 * @param gl	the GL interface
+	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		this.width = width;
@@ -292,6 +313,13 @@ public class LevelRenderer implements Renderer {
 		gl.glLoadIdentity();
 	}
 
+	/**
+	 * Called when the surface is created or recreated.
+	 * Sets OpenGL states and initializes all level objects and textures.
+	 * 
+	 * @param gl		the GL interface
+	 * @param config	the EGLConfig of the created surface. Can be used to create matching pbuffers.  
+	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		
@@ -360,10 +388,20 @@ public class LevelRenderer implements Renderer {
 				0.0f,  1.0f};
 		luLine = new LevelObject(gl, context, level, 0, 0, width/4, tileSizeY/4, R.drawable.l50_strip, texcoord3);
 		lbLine = new LevelObject(gl, context, level, 0, 0, width/4, tileSizeY/4, R.drawable.l50_strip, texcoord3);
-		
-		touchPoint = new LevelObject(gl, context, level, 0, 0, tileSizeX, tileSizeY, R.drawable.l50_arrow, null);
 	}
 	
+	/**
+	 * Method to processes touch screen input.
+	 * <p>
+	 * Invoked by LevelSurfaceView only.
+	 * <p>
+	 * Update the HUD textures (highlighted when touched)
+	 * Update the bunny movement
+	 * 
+	 * @param eventNo	the event type to be processed (see {@link MotionEvent#getAction()}
+	 * @param x			x value of the event in screen coordinates
+	 * @param y			y value of the event in screen coordinates
+	 */
 	public void touchScreen(int eventNo, float x, float y) {
 		
 		if (eventNo!=MotionEvent.ACTION_DOWN && eventNo!=MotionEvent.ACTION_MOVE) {
@@ -395,8 +433,6 @@ public class LevelRenderer implements Renderer {
 		float amountY = 0.0f;
 		
 		touching = true;
-		touchPoint.setPosition(bunny.getPositionX()-width/2+x+tileSizeX/2, bunny.getPositionY()-height/2+y+tileSizeY/2);
-		
 		
 			if (y <= height/3) {
 				newPos = 0*3;
@@ -581,24 +617,71 @@ public class LevelRenderer implements Renderer {
 		
 	}
 	
+	/**
+	 * Resets the player position, and the level objects (coins) and the score.
+	 */
 	private void resetGame() {
 		bunny.setPosition((level.getWidth()-1.0f)*tileSizeX, 0.0f);
 		bunny.revive();
+		bunny.setScore(-1000);
 		level.reset();
 		gl.glClearColor(0.0f, (float)0x99/255, (float)0xCC/255, 1.0f);
 		darkness = fadeDuration;
 	}
 	
+	/**
+	 * Returns the current score.
+	 */
 	public int getScore() {return bunny.getScore();}
+	/**
+	 * Sets the current score to the given parameter.
+	 */
 	public void setScore(int s) {score = s;}
+	/**
+	 * Moves the player object by the given amount if collision test passed.
+	 */
 	public void movePlayer(float x, float y) {bunny.move(x,y);}
+	/**
+	 * Sets the movement values of the player object in the given direction to the given value.
+	 * No collision tested.
+	 * 
+	 * @param direction	pass 0/1/2/3 for direction up/down/left/right
+	 * @param amount	the value the movement should change to
+	 */
 	public void movePlayer(int direction, float amount) {bunny.move(direction,amount);}
+	/**
+	 * Sets current position of the player.
+	 */
 	public void setPosition(float x, float y) {positionX = x; positionY = y;}
+	/**
+	 * Returns current x position of the player.
+	 */
 	public float getPositionX() {return bunny.getPositionX();}
+	/**
+	 * Returns current y position of the player.
+	 */
 	public float getPositionY() {return bunny.getPositionY();}
+	/**
+	 * Returns a <code>String</code> containing the coded positions of the coins.
+	 * 
+	 * @see #setCoinState(String)
+	 */
 	public String getCoinState() {return level.getCoinState();}
+	/**
+	 * Sets the positions of the coins using a <code>String</code> code.
+	 * <p>
+	 * The String contains the indices of the coins which are already replaced.
+	 * To ensure the correctness of the String each index is preceded 
+	 * by the number of digits of the index.
+	 * <p>
+	 * E.g. the coins with the indices
+	 * 123, 42 and 3314 would be coded as "312324243314".
+	 */
 	public void setCoinState(String state) {coinState=state;}
-
+	/** 
+     * Performs cleanup of the LevelRenderer and all LevelObjects.
+     * Releases any {@link MediaPlayer}.
+     */
 	public void clear() {
 		if (mp!=null) {
 			if (mp.isPlaying())

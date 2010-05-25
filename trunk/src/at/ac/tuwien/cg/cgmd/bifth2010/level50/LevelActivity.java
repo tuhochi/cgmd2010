@@ -170,15 +170,20 @@ public class LevelActivity extends Activity {
     }
     
     /** 
+     * Resets the {@link SharedPreferences} of the current Activity.
+     * <p>
+     * L50_SCORE is set to 0<br>
+     * L50_POSX is set to -1<br>
+     * L50_POSY is set to -1<br>
+     * L50_COINS is set to an empty String
      * 
-     * @see SessionState
      */
     public void clearPrefs() {
     	SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = mPrefs.edit();
         ed.putInt("L50_SCORE", 0);
-        ed.putFloat("L50_POSX", 0.0f);
-        ed.putFloat("L50_POSY", 0.0f);        
+        ed.putFloat("L50_POSX", -1.0f);
+        ed.putFloat("L50_POSY", -1.0f);        
         ed.putString("L50_COINS", "");
         ed.commit();
     }

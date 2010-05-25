@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level50;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,8 +35,8 @@ public class LevelSurfaceView extends GLSurfaceView {
 	/**
 	 * Handles touch events to pass the event information to the LevelRenderer
 	 * 
-	 * @param event	the motion event
-	 * @return          <code>true</code> since the function processes all touch events
+	 * @param	event	the motion event
+	 * @return  always <code>true</code> since the function processes all touch events
 	 */
 	public boolean onTouchEvent(final MotionEvent event) {
 //        queueEvent(new Runnable(){
@@ -141,10 +142,24 @@ public class LevelSurfaceView extends GLSurfaceView {
 	/**
 	 * Returns a <code>String</code> containing the coded positions of the coins.
 	 * 
+	 * @see #setCoinState(String)
 	 */
 	public String getCoinState() {return mRenderer.getCoinState();}
+	/**
+	 * Sets the positions of the coins using a <code>String</code> code.
+	 * <p>
+	 * The String contains the indices of the coins which are already replaced.
+	 * To ensure the correctness of the String each index is preceded 
+	 * by the number of digits of the index.
+	 * <p>
+	 * E.g. the coins with the indices
+	 * 123, 42 and 3314 would be coded as "312324243314".
+	 */
 	public void setCoinState(String state) {mRenderer.setCoinState(state);}
-
+	/** 
+     * Performs cleanup of the LevelSufaceView and the LevelRenderer.
+     * Releases any {@link MediaPlayer}.
+     */
 	public void clear() {
 		mRenderer.clear();
 		
