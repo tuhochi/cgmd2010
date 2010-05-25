@@ -14,6 +14,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 
+/**
+ * Object to display a textured rectangle on the screen.
+ * This is used by all level objects including the player objects and enemies.
+ * The class manages the current score.
+ * 
+ * @author      Alexander Fritz
+ * @author      Michael Benda
+ */
 public class LevelObject {
 	
 	private int tileSizeX = 30;
@@ -65,6 +73,21 @@ public class LevelObject {
 	// Our index buffer.
 	private ShortBuffer indexBuffer;
 
+	/**
+	 * Class constructor.
+	 * Initializes vertex buffer, texture buffer and index buffer and the texture.
+	 * 
+	 * @param gl		the GL interface
+	 * @param context	the rendering context
+	 * @param level		the LevelCollision object to be used for
+	 * @param x			the x position of the rectangle in world coordinates
+	 * @param y			the y position of the rectangle in world coordinates
+	 * @param width		the width of the rectangle in world units
+	 * @param height	the height of the rectangle in world units
+	 * @param id		the resource id of the texture to be used
+	 * @param texcoords	the texture coordinates in correct order.
+	 * 					if texcoords = <code>null</code> the default texture coordinates are used.
+	 */
 	public LevelObject(GL10 gl, Context context, LevelCollision level, float x, float y, int width, int height, int id, float texcoords[]) {
 		this.context = context;
 		this.level = level;
@@ -109,11 +132,21 @@ public class LevelObject {
 		} else {
 			gl.glGenTextures(1, texBuf);
 			textures.put(id, texBuf.get(0));
-			LoadTexture(0,id,gl,context);
+			LoadTexture(id,gl,context);
 		}
 		revive();
 	}
 	
+	/**
+	 * Changes the position of the rectangle according to the movement values
+	 * and collision tests
+	 * 
+	 * @param gl		the GL interface
+	 * @param frames	frame rate
+	 * @return			<code>true</code> if a ceiling is hit (player)
+	 * 					or <code>true</code> if object has turned around due to collision (enemy)
+	 * 					<code>false</code> otherwise
+	 */
 	public boolean update(GL10 gl, float frames) {
 		float fps = Math.max(frames, 20.0f);
 		
@@ -167,8 +200,9 @@ public class LevelObject {
 	}
 
 	/**
-	 * This function draws our object on screen.
-	 * @param gl
+	 * This function draws the rectangle on the screen.
+	 * 
+	 * @param gl	the GL interface
 	 */
 	public void draw(GL10 gl) {
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
@@ -196,6 +230,9 @@ public class LevelObject {
 		gl.glDisable(GL10.GL_CULL_FACE);
 	}
 	
+	/**
+	 * Moves the the rectangle by the given amount if collision test passed.
+	 */
 	public void move(float x, float y) {
 		if (!testCollision(this.x+x,this.y+y)) {
 			this.x += x;
@@ -203,22 +240,52 @@ public class LevelObject {
 		}
 	}
 	
+	/**
+	 * Sets the movement values of the rectangle in the given direction to the given value.
+	 * No collision tested.
+	 * 
+	 * @param direction	pass 0/1/2/3 for direction up/down/left/right
+	 * @param amount	the value the movement should change to
+	 */
 	public void move(int direction, float amount) {
 //		if (direction != 1)
 		movement[direction] = amount;
 	}
-	
+	/**
+	 * Sets current position of the rectangle.
+	 */
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+	/**
+	 * Returns current x position of the rectangle.
+	 */
 	public float getPositionX() {return x;}
+	/**
+	 * Returns current y position of the rectangle.
+	 */
 	public float getPositionY() {return y;}
-	
+	/**
+	 * Sets current width of the rectangle.
+	 */
 	public void setWidth(int w) { width=w; }
+	/**
+	 * Sets current height of the rectangle.
+	 */
 	public void setHeight(int h) { height=h; }
 	
+	/**
+	 * Checks if the rectangle is intersecting any level object of the collision map.
+	 * Checks if the rectangle is intersecting with a wall.
+	 * Checks if the rectangle is intersecting with a coin and changes score accordingly.
+	 * Checks if the rectangle is intersecting with a tree and allows climbing. 
+	 * 
+	 * @param x	x value to be checked in world coordinates
+	 * @param y y value to be checked in world coordinates
+	 * @return <code>true</code> if there is a collision with a wall
+	 * 			<code>false</code> otherwise
+	 */
 	boolean testCollision(float x, float y) {
 		int ul = level.TestCollision((int) Math.floor((x)/tileSizeX), (int) Math.floor((y)/tileSizeY), enemy);
 		int ur = level.TestCollision((int) Math.floor((x+width-1)/tileSizeX), (int) Math.floor((y)/tileSizeY), enemy);
@@ -330,6 +397,12 @@ public class LevelObject {
 		return false;
 	}
 	
+	/**
+	 * Changes the texture used for the rectangle
+	 * @param id		resource id of the new rectangle
+	 * @param texcoords	the texture coordinates in correct order.
+	 * 					if texcoords = <code>null</code> the default texture coordinates are used.
+	 */
 	public void changeTexture(int id, float texcoords[]) {
 		if (texcoords != null && texcoords != texcoord) {
 			ByteBuffer tbb = ByteBuffer.allocateDirect(texcoords.length * 4);
@@ -347,11 +420,16 @@ public class LevelObject {
 			} else {
 				gl.glGenTextures(1, texBuf);
 				textures.put(id, texBuf.get(0));
-				LoadTexture(0,id,gl,context);
+				LoadTexture(id,gl,context);
 			}	
 		}
 	}
 	
+	/**
+	 * Deletes all textures from the buffer.
+	 * 
+	 * @param gl	the GL interface
+	 */
 	public static void clearTextures(GL10 gl) {
 		IntBuffer texInts = IntBuffer.allocate(textures.size());
 		for (Integer tex : textures.values()) {
@@ -362,9 +440,16 @@ public class LevelObject {
 		gl.glDeleteTextures(textures.size(),texInts);
 	}
 	
-	private void LoadTexture(int num, int id, GL10 gl, Context context)
+	/**
+	 * Loads texture into the graphical buffer and sets the texture parameters.
+	 * 
+	 * @param id		resource id of the texture
+	 * @param gl		the Gl interface
+	 * @param context	the rendering context
+	 */
+	private void LoadTexture(int id, GL10 gl, Context context)
 	{
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, texBuf.get(num));				
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, texBuf.get(0));				
 		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), id);
 		
 		if (width == 0) width = bmp.getWidth();
@@ -396,16 +481,34 @@ public class LevelObject {
 		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR );											
 	}
 	
+	/**
+	 * Triggers the downward pull of the object.
+	 * 
+	 * @param b	<code>true</code> to turn gravity on
+	 * 			<code>false</code> to turn gravity off
+	 */
 	public void enableGravity(boolean b) {
 		gravity = b;
 		if (b) movement[1] = 5.0f;
 		else movement[1] = 0.0f;
 	}
 	
+	/**
+	 * Triggers testing of collision while moving or updating the object.
+	 * 
+	 * @param b	<code>true</code> to turn collision tests on
+	 * 			<code>false</code> to turn collision tests off
+	 */
 	public void enableCollision(boolean b) {
 		collision = b;
 	}
 	
+	/**
+	 * Scales the object.
+	 * 	
+	 * @param xscale	amount in x direction
+	 * @param yscale	amount in y direction
+	 */
 	public void scale(float xscale, float yscale) {
 		x*=xscale;
 		y*=yscale;
@@ -416,25 +519,47 @@ public class LevelObject {
 		scaleX*=xscale;
 		scaleY*=yscale;
 	}
-	
+	/**
+	 * Returns the current score.
+	 */
 	public int getScore() {return score;}
+	/**
+	 * Sets the current score to the given parameter.
+	 */
 	public void setScore(int s) {score = (score+s>0)?s:0;}
+	/**
+	 * Returns <code>false</code> if object has fallen below the bottom
+	 * edge of the level or has hit an enemy otherwise <code>true</code>.
+	 */
 	public boolean getLife(){return alive;}
-
+	/**
+	 * Sets the alive member <code>true</code>
+	 */
 	public void revive() {
 		alive = true;
 	}
-	
+	/**
+	 * Declares the object an enemy.
+	 * This implies automatic left/right movement as well as the death of the player when hit.
+	 */
 	public void awake() {
 		enemy=true;
 	}
-	
+	/**
+	 * Initializes the static MediaPlayer for all level objects.
+	 * @param context	rendering context
+	 * @param id		the resource id of the soundfile to be used.
+	 */
 	public static void initMP(Context context, int id) {
 		for (int i = 0; i<mp.length; i++) {
 			mp[i] = MediaPlayer.create(context, id);
 		}
 	}
 	
+	/** 
+     * Performs cleanup of the object.
+     * Releases any {@link MediaPlayer}.
+     */
 	public static void clean() {
 		for (MediaPlayer a : mp) {
 			if (a!=null) {
@@ -442,8 +567,10 @@ public class LevelObject {
 			}
 		}
 	}
-	
 	public boolean getClimbable() {return climbable;}
 	public boolean getClimbableTop() {return climbableTop;}
+	/**
+	 * Flips the object horizontally.
+	 */
 	public void turn() {direction*=-1;}
 }
