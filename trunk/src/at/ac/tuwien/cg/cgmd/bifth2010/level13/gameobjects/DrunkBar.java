@@ -4,6 +4,7 @@ public class DrunkBar extends StatusBar{
 
 	public DrunkBar(float objectWidth, float objectHeight) {
 		super(objectWidth, objectHeight);
+
 		// TODO Auto-generated constructor stub
 	}
 	
