@@ -19,7 +19,7 @@ public class EnemyObject extends GameObject {
 	 * constructor calls super with object's dimensions
 	 */
 
-	public float speed = 5.0f;
+	public float speed = 2.0f;
 
 	public Vector2[] directionVectorArray = new Vector2[4];
 	Random random;
