@@ -20,7 +20,7 @@ public class LevelRenderer implements Renderer {
 	private Bundle mSavedInstance;
 	private GL10 gl;
 
-	private boolean[] keystates = new boolean[4];
+	private float[] keystates = new float[4];
 	private int score = 100;
 	private int crime = 0;
 	private int screenWidth;
@@ -134,57 +134,69 @@ public class LevelRenderer implements Renderer {
 		mapOffset_x = mapOffset_y = 0 ;
 		posX = posY = 0;
 		mSavedInstance = msavedinstance;
-		for (int i=0;i<4;i++) keystates[i] = false;
+		for (int i=0;i<4;i++) keystates[i] = 0;
 		actiontextures = new ArrayList<Tablet>();
 	}
 
-	public void setKey(int code) {
-		keystates[code] = true;
+	public void setKey (int code, float amount) {
+		keystates[code] = amount;
 	}
 
 	public void releaseKey(int code) {
-		keystates[code] = false;
+		keystates[code] = 0;
 	}
 
 	public void onTouch(MotionEvent event) {
+//		Log.d("LevelRenderer", "In onTouchEvent");
 		int centerX = CONTROL_X + CONTROL_SIZE/2;
-		int centerY = CONTROL_X + CONTROL_SIZE/2;
+		int centerY = CONTROL_Y + CONTROL_SIZE/2;
 		float radius = CONTROL_SIZE/2;
 		float x = event.getX();
-		float y = event.getY();
+		float y = screenHeight - event.getY();
 		int code;
 
-		if (Math.sqrt(Math.pow(centerX-x,2)+Math.pow(centerY-y,2)) <= radius) { //lies inside
-
-			float dx = centerX - x;
-			float dy = centerY - y;
-
-			//check direction
-			if(Math.abs(dx) > Math.abs(dy)) {
-				if (dx > x) 	//LEFT
-					code = 0;
-				else 			//RIGHT
-					code = 1;
+		Log.d("LevelRenderer", "Position: " + x + ", " + y);
+		Log.d("LevelRenderer", "radius: " + radius);
+		if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
+			float length = (float)Math.sqrt(Math.pow(centerX-x,2)+Math.pow(centerY-y,2));
+			if (length <= radius) { //lies inside
+				Log.d("LevelRenderer", "Inside");
+				float dx = (x - centerX)/length;
+				float dy = (y - centerY)/length;
+//				moveBunny(dx*BUNNY_MOVEMENT_UNIT, dy*BUNNY_MOVEMENT_UNIT);
+				setKey(0, dx*BUNNY_MOVEMENT_UNIT);
+				setKey(2, dy*BUNNY_MOVEMENT_UNIT);
 			}
-			else {
-				if (dx > x) 	//UP
-					code = 2;
-				else		 	//DOWN
-					code = 3;
-			}
+			else if (x >= 0 && x <= BUTTON_SIZE && y >= 0 && y <= BUTTON_SIZE)
+				performAction();
+
+//			//check direction
+//			if(Math.abs(dx) > Math.abs(dy)) {
+//			if (dx > 0) 	//LEFT
+//			code = 0;
+//			else 			//RIGHT
+//			code = 1;
+//			}
+//			else {
+//			if (dx > 0) 	//UP
+//			code = 2;
+//			else		 	//DOWN
+//			code = 3;
+//			}
 
 
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				//set codes..		
-				setKey(code);
-			}
+//			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//			//set codes..		
+//			setKey(code);
+//			}
+		}
 
-
-			if (event.getAction() == MotionEvent.ACTION_UP) {
-				releaseKey(code);
-			}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			releaseKey(0);
+			releaseKey(2);
 		}
 	}
+
 
 	public void performAction() {
 		//see where the bunny is to find out what we can do
@@ -445,10 +457,11 @@ public class LevelRenderer implements Renderer {
 		}
 
 		// update
-		if (keystates[0]) moveBunny(-BUNNY_MOVEMENT_UNIT, 0);
-		if (keystates[1]) moveBunny(BUNNY_MOVEMENT_UNIT, 0);
-		if (keystates[2]) moveBunny(0, BUNNY_MOVEMENT_UNIT);
-		if (keystates[3]) moveBunny(0, -BUNNY_MOVEMENT_UNIT);
+//		if (keystates[0]) moveBunny(-BUNNY_MOVEMENT_UNIT, 0);
+//		if (keystates[1]) moveBunny(BUNNY_MOVEMENT_UNIT, 0);
+//		if (keystates[2]) moveBunny(0, BUNNY_MOVEMENT_UNIT);
+//		if (keystates[3]) moveBunny(0, -BUNNY_MOVEMENT_UNIT);
+		moveBunny(keystates[0], keystates[2]);
 		handleCop();
 
 		//draw action stuff
@@ -491,10 +504,12 @@ public class LevelRenderer implements Renderer {
 		CONTROL_Y = 0;
 		BUTTON_X = 0;
 		BUTTON_Y = 0;
+		Log.d("LevelRenderer", "X From: " + CONTROL_X + " to " + (CONTROL_X+CONTROL_SIZE));
+		Log.d("LevelRenderer", "Y From: " + CONTROL_Y + " to " + (CONTROL_Y+CONTROL_SIZE));
 
 		gold.setXY(5, screenHeight-30);
 		control.setXY(CONTROL_X, CONTROL_Y);
-		control.setXY(BUTTON_X, BUTTON_Y);
+		button.setXY(BUTTON_X, BUTTON_Y);
 
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
