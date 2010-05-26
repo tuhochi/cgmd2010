@@ -43,8 +43,10 @@ public class BackgroundObject extends GameObject {
 			//GameObject.offset.sub(gameControl.getMovement());
 			//check if old movement is possible (only at corners)
 			//if((gameControl.getMovement().x == 0 && gameControl.getOldMovement().x != 0)|| (gameControl.getMovement().y == 0 && gameControl.getOldMovement().y != 0)) {
-				GameObject.offset.x += gameControl.getOldMovement().x * (FPSCounter.getInstance().getDt() / 1000f);
-				GameObject.offset.y += gameControl.getOldMovement().y * (FPSCounter.getInstance().getDt() / 1000f);
+			
+				GameObject.updateOffset(gameControl.getOldMovement());
+				//GameObject.offset.x += gameControl.getOldMovement().x * (FPSCounter.getInstance().getDt() / 1000f);
+				//GameObject.offset.y += gameControl.getOldMovement().y * (FPSCounter.getInstance().getDt() / 1000f);
 				gameControl.setCurrentMovement(gameControl.getOldMovement().clone());
 				//gameControl.setMovement(gameControl.getOldMovement().clone());
 				if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {

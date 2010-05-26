@@ -76,7 +76,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	public static int screenHeight;
 	
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
-	public static final float SPEED = 64f;
+	public static final float SPEED = 128f;
 	
 	private float zoomFactor = 1.0f;
 	private float zoom = 0.0f;

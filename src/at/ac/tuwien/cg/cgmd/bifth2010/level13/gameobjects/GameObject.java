@@ -153,26 +153,36 @@ public abstract class GameObject {
 		temp.y *= (FPSCounter.getInstance().getDt() / 1000f);
 		
 		//-offset = center - tile -> tile = center + offset
-		//float tileXBefore = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.x) / GameObject.BLOCKSIZE;
+		float tileXBefore = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.x) / GameObject.BLOCKSIZE;
+		float tileYBefore = (((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.y) / GameObject.BLOCKSIZE;
 		
 		offset.add(temp);
-		/*
+		
 		float tileXAfter = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.x) / GameObject.BLOCKSIZE;
+		float tileYAfter = (((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.y) / GameObject.BLOCKSIZE;
 		
-		Log.d("df", "before: " + tileXBefore + " after:" + tileXAfter);
+		Log.d("df", "beforex: " + tileXBefore + " afterx:" + tileXAfter);
+		Log.d("df", "beforey: " + tileYBefore + " aftery:" + tileYAfter);
 		
-		if(((int)tileXBefore) != ((int)tileXAfter) && (int)tileXBefore != tileXBefore && (int)tileXAfter != tileXAfter && (GameControl.getInstance().getMovement().y != 0) && GameControl.getInstance().getOldMovement().x != 0) {
+		
+		if(((int)tileXBefore) != ((int)tileXAfter) && (int)tileXBefore != tileXBefore && (int)tileXAfter != tileXAfter) {
 			offset.x = (-1)* (((MyRenderer.screenWidth / GameObject.BLOCKSIZE / 2)) * GameObject.BLOCKSIZE - ((int)Math.max((int)tileXBefore, (int)tileXAfter))*GameObject.BLOCKSIZE);
-		}*/
-		/*
-		//offset = center - tile -> tile = center - offset
-		float tileX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE - offset.x;
-		Log.d("df", "tilex: " + tileX);
-		if(tileX % GameObject.BLOCKSIZE < FPSCounter.getInstance().getDt() / 1000f) {
-			tileX = Math.round((tileX / GameObject.BLOCKSIZE));
-			Log.d("df", "round tileX" + tileX);
-			offset.x = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE - tileX*GameObject.BLOCKSIZE;
-		}*/
+		}
+		if(((int)tileYBefore) != ((int)tileYAfter) && (int)tileYBefore != tileYBefore && (int)tileYAfter != tileYAfter) {
+			offset.y = (-1)* (((MyRenderer.screenHeight / GameObject.BLOCKSIZE / 2)) * GameObject.BLOCKSIZE - ((int)Math.max((int)tileYBefore, (int)tileYAfter))*GameObject.BLOCKSIZE);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 	
