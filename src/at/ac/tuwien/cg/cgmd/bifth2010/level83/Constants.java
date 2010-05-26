@@ -41,8 +41,6 @@ public class Constants {
 	public static final int OVERLAY = R.drawable.l83_overlay70;
 	public static final int ITEM_BOMB = R.drawable.l83_bomb;
 	public static final int ITEM_BOMB_BW = R.drawable.l83_bomb_bw;
-	public static final int ITEM_LASER = R.drawable.l83_laser;
-	public static final int ITEM_LASER_BW = R.drawable.l83_laser_bw;
 	public static final int ITEM_WALL = R.drawable.l83_hexagon_blue;
 	public static final int ITEM_WALL_BW = R.drawable.l83_hexagon_bw;
 	public static final int ITEM_DELETEWALL = R.drawable.l83_item_delete;
@@ -50,6 +48,14 @@ public class Constants {
 	
 	public static final int TEXTURE_DOLLAR = R.drawable.l83_dollar;
 	public static final int TEXTURE_LENNY = R.drawable.l83_lenny;
+	
+	public static final int MUSIC_BACKGROUND = R.raw.l83_background;
+	public static final int SOUND_COUNTDOWN = R.raw.l83_countdown2;
+	public static final int SOUND_BYBY = R.raw.l83_byby;
+	public static final int SOUND_JUMP_UP = R.raw.l83_jumpup;
+	public static final int SOUND_JUMP_DOWN = R.raw.l83_jumpdown;
+	public static final int SOUND_DOLLAR = R.raw.l83_dollar;
+	public static final int SOUND_ITEM = R.raw.l83_item;
 	
 	public static final float SPEED = 0.5f;
 	

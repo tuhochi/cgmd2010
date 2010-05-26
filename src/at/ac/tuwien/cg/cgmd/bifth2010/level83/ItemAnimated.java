@@ -167,6 +167,7 @@ public class ItemAnimated extends Animatable implements Drawable {
 		endTime = time;
 		currentTime = 0;
 		picTime = 0;
+		SoundManager.singleton.play(Constants.SOUND_COUNTDOWN, false, 0.8f, 3.4f/time);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import javax.microedition.khronos.opengles.GL11Ext;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Vibrator;
 import android.util.Log;
 import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
 
@@ -26,7 +27,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	private int textureHandle_blue;
 	private int textureHandle_r;
 	private int textureHandle_dollar;
-	
+	private int textureHanlde_bw;
 	/**
 	 * Stores the dimmension of the laoded map.
 	 */
@@ -41,7 +42,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	private float delta=0;
 	private int xMin=0;
 	private int characterLevel=3;
-	private int direction;
+
 	private char characterMode;
 	private int next=1;
 	private float animLevel;
@@ -52,12 +53,14 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	private float jumpSpeed=0;
 	private float jumpTimeScale=1;
 	private float jumpGrav=12f;
-	private int jumpWidth=1;
+	
 	private ArrayList choices = new ArrayList(12);
 	
 	private ItemAnimated itemBomb;
 	private AnimationManager animatedItemsManager;
 	private ArrayList<ItemAnimated> currentItems;
+
+	private Vibrator vib;
 	
 	private int cashCount = 0;
 	private int deathCount = 0;
@@ -120,7 +123,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		textureHandle_blue = MyTextureManager.singleton.addTextureFromResources(TEXTURE_HEXAGON_B, gl);
 		textureHandle_r = MyTextureManager.singleton.addTextureFromResources(TEXTURE_HEXAGON_R, gl);
 		textureHandle_dollar = MyTextureManager.singleton.addTextureFromResources(TEXTURE_DOLLAR, gl);
-		
+		textureHanlde_bw = MyTextureManager.singleton.addTextureFromResources(ITEM_WALL_BW, gl);
 		
 		animatedItemsManager = new AnimationManager(10);
 		
@@ -131,7 +134,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		readFile(mapResource, context);
 		
 		//Place Money
-		placeDollar(10);
+		placeDollar(30);	//normal 10
 		
 		//Generic field of view
 		width = 5;
@@ -140,6 +143,20 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		Log.d("HexagonGrid","Size: "+width+"x"+height);
 	}
 	
+	/**
+	 * This function starts the animation to either resume or start the game
+	 */
+	public void resumeGame(){
+		stop = false;
+		SoundManager.singleton.playBackGround();
+	}
+	
+	/**
+	 * This function stops the animation to either pause or stop the game
+	 */
+	public void pauseGame(){
+		stop = true;
+	}
 	/**
 	 * Calculates the field of view depending on the viewport. 
 	 * 
@@ -161,7 +178,10 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		LevelActivity.deathsUpdateHandler.sendEmptyMessage(deathCount);
 		LevelActivity.coinsUpdateHandler.sendEmptyMessage(cashCount);
 		//Start animation
-		stop = false;
+		
+		///DEBUG
+		//xMin = mapWidth-2*width;
+		//scroll = mapWidth-2*width;
 	}
 	
 	@Override
@@ -190,10 +210,14 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			for(int y=0;y<height;y++){
 				element = map[x+xMin][y];
 				
+				if((xMin+x >= mapWidth-width-1+CHARACTER_POSITION) )
+					MyTextureManager.singleton.textures[textureHanlde_bw].Bind(gl);
+				
 				switch(element){
 				
-				case GRID_CUSTOM_WALL:
-					MyTextureManager.singleton.textures[textureHandle_blue].Bind(gl);
+				case GRID_CUSTOM_WALL:	
+					
+					MyTextureManager.singleton.textures[textureHandle_blue].Bind(gl);	
 					std = false;
 					break;
 					
@@ -292,6 +316,21 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	}
 	
 	/**
+	 * Calculated the current progress in percent and updated 
+	 * the value in the gui.
+	 */
+	public void UpdateProgress(){
+		
+		double maxSize = mapWidth - width -1 -1;
+		
+		int progress = (int)Math.round((double)xMin/maxSize *100.0);
+		
+		
+		Log.d("Progress",""+progress+" | "+xMin+" | "+maxSize);
+		LevelActivity.progressUpdateHandler.sendEmptyMessage(progress);
+	}
+	
+	/**
 	 * Checks if the character is in the sourounding of the detonated bomb.
 	 * @param x - x position on the map
 	 * @param y - y position on the map
@@ -321,6 +360,8 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			
 			map[CHARACTER_POSITION+xMin][characterLevel+1] = GRID_NULL;
 
+			SoundManager.singleton.play(SOUND_DOLLAR, false, 0.2f, 1f);
+			
 			cashCount++;
 			
 			if(cashCount >= 5){
@@ -353,8 +394,13 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 				//Check if bomb detonated at lenny's position
 				if(itm.itemId == ItemQueue.BOMB)
 					if(checkBombRadius(itm.gridX, itm.gridY)){
+						
+						//Play ByBy Sound
+						
+						SoundManager.singleton.play(SOUND_BYBY, false, 1f, 1f);
 						deathCount++;
 						LevelActivity.deathsUpdateHandler.sendEmptyMessage(deathCount);
+						if (vib != null) vib.vibrate(1000);
 					}
 				animatedItemsManager.removeAnimation(itm);
 				currentItems.remove(i);
@@ -373,15 +419,18 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		int newxMin = (int)Math.floor(scroll);
 		
 		//Detects Grid boarders
-		if(newxMin != xMin)
+		if(newxMin != xMin){
 			next++;
-		
+			//Update progress indicator
+			UpdateProgress();
+		}
 		xMin = newxMin;
 		
 		//Reset level to start
 		if(scroll+width >= mapWidth-1) {
 //			scroll = 0;
 			LevelActivity.finishLevel.sendEmptyMessage(Math.min(100, deathCount*20));
+			stop = true;
 			return;
 		}
 		
@@ -392,6 +441,9 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			//next field
 		if(next > delay){
 			
+			
+			
+			//check if dollar collected
 			checkDollar();
 			
 			jumpTimeScale = 1f;
@@ -427,6 +479,9 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			else
 				wp = (MyWaypoint)choices.get(random.nextInt(choices.size()));
 			
+			//End of jump
+			if(characterMode == 'J')
+				SoundManager.singleton.play(SOUND_JUMP_DOWN, false, 0.4f, 1f);
 			
 			//new characterMode
 			if((wp.x == 1) && (wp.y == 0))
@@ -435,6 +490,9 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 				characterMode = 'J';
 				delay = wp.x-1;
 				characterLevel += wp.y;
+				
+				//play sound
+				SoundManager.singleton.play(SOUND_JUMP_UP, false, 0.4f, 1f);
 				
 				float up = (wp.y < 0)?-1f:1f;
 				
@@ -455,7 +513,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		switch(characterMode){
 		
 		case 'W':
-			direction = 0;
+			//direction = 0;
 			if( delta >= (2f/3f)){
 				
 				
@@ -514,15 +572,6 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		v = (float)Math.sqrt(s*4.0*g);	//s wegen scheitel
 		xEnd = (1f/(2f*g))*(v+(float)Math.sqrt(v*v-4*g*h));
 		
-//		float yLast=0,temp = 0;		//Bogenlänge zeug, brauch ma nicht
-		
-//		for(int i=0;i<20;i++){
-//			x = xEnd/20f * (i+1);
-//			temp = (-g*x*x+v*x);
-//			l += Math.abs(temp-yLast);
-//			yLast = temp;
-//		}
-		
 		this.jumpSpeed = v;
 		this.jumpTimeScale = 1f/xEnd*width;
 		this.jumpGrav = -g;
@@ -540,6 +589,9 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	 * 				False otherwise.
 	 */
 	public boolean useItem(float x, float y, int item) {
+		
+		SoundManager.singleton.play(SOUND_ITEM,false,0.3f,1f);
+		
 		Log.d("HexagonGrid", x+":"+y + " - " + item);
 		
 		y = VIEWPORT_HEIGHT-y;
@@ -609,6 +661,10 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			list.clear();
 		}
 		
+	}
+	
+	public void setVibrator(Vibrator v) {
+		vib = v;
 	}
 
 }

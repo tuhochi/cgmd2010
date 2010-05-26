@@ -13,5 +13,17 @@
 <string name="l83_tut_7">Du solltest Lenny davon abhalten, diese Credits einzusammeln, da er 2 davon gegen 1 Leben eintauschen kann.</string>
 <string name="l83_stats_death">Dieses Symbol zeigt an, wie oft Lenny gestorben ist.</string>
 <string name="l83_stats_credit">Dieses Symbol zeigt an, wie viele Credits Lenny eingesammelt hat.</string>
-<string name="l83_stats_progress">Diese(s) &lt;was?&gt; zeigt Lenny\'s Fortschritt im Level an.</string>
+<string name="l83_stats_progress">Diese Zahl zeigt Lenny\'s Fortschritt im Level an.</string>
+
+<string name="l83_screentut_1">das ist Lenny, er muss sterben!</string>
+<string name="l83_screentut_2">verwende die items aus der liste</string>
+<string name="l83_screentut_3">platziere das aktive item durch ziehen</string>
+<string name="l83_screentut_4">verwende die wand, um ein feld zu blockieren</string>
+<string name="l83_screentut_5">entferne eine existierende wand</string>
+<string name="l83_screentut_6">platziere die zeitbombe, um Lenny zu töten</string>
+<string name="l83_screentut_7">vorischt: jenseits der markierten felder kannst du keine items platzieren</string>
+<string name="l83_screentut_8">eins noch...halte Lenny davon ab, credits einzusammeln</string>
+<string name="l83_screentut_9">er kann 2 gegen 1 leben tauschen</string>
+<string name="l83_screentut_10">schau auf Lenny\'s stats: tode, credits und fortschritt</string>
+<string name="l83_screentut_11">viel spaß beim killen von Lenny! nicht vergessen: mehr kills, mehr punkte</string>
 </resources>

@@ -20,7 +20,7 @@ public class ItemQueue implements Drawable {
 	private MySprite overlay;
 	
 	/** Prototypes for items */
-	private ItemSprite prototypeBomb, prototypeLaser, prototypeDynamite, prototypeWall;
+	private ItemSprite prototypeBomb, prototypeDynamite, prototypeWall;
 	private List<ItemSprite> items;
 	
 	/** Capacity of the Queue and screen dimensions */
@@ -30,8 +30,6 @@ public class ItemQueue implements Drawable {
 	public static final int RANDOM = 0;
 	/** Generates a Bomb item */
 	public static final int BOMB = 1;
-	/** Generates a Laser item */
-//	public static final int LASER = 2;
 	/** Generates an item to delete walls */
 	public static final int DELETEWALL = 2;
 	/** Generates a wall item */
@@ -79,9 +77,6 @@ public class ItemQueue implements Drawable {
 		if (item == BOMB) {
 			if (prototypeBomb != null)
 				items.add(new ItemSprite(prototypeBomb));
-//		} else if (item == LASER) {
-//			if (prototypeLaser != null)
-//				items.add(new ItemSprite(prototypeLaser));
 		} else if (item == DELETEWALL) {
 			if (prototypeDynamite != null)
 				items.add(new ItemSprite(prototypeDynamite));
@@ -218,7 +213,6 @@ public class ItemQueue implements Drawable {
 	@Override
 	public void Init(GL10 gl) {
 		prototypeBomb = new ItemSprite(BOMB, 0, 0, 80, 80, gl);
-//		prototypeLaser = new ItemSprite(LASER, 0, 0, 80, 80, gl);
 		prototypeDynamite = new ItemSprite(DELETEWALL, 0, 0, 80, 80, gl);
 		prototypeWall = new ItemSprite(WALL, 0, 0, 80, 80, gl);
 	}
