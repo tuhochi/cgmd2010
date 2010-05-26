@@ -15,7 +15,7 @@ public class Config
 
 	public static long FPS_UPDATE_INTERVAL = 1000;
 	public static long GAMETIME_UPDATE_INTERVAL = 1000;
-	public static long GAMETIME_WAIT_AFTER_COMPLETE = 2500;
+	public static long GAMETIME_WAIT_AFTER_COMPLETE = 2000;
 	
 	public static String LEVELNAME = "l42_orbit";
 	
