@@ -16,6 +16,9 @@ public class FPSCounter {
 	private FPSCounter()
 	{}
 	
+	public static void reset() {
+		instance = null;
+	}
 	public static FPSCounter getInstance()
 	{
 		if(instance == null)

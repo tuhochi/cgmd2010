@@ -59,6 +59,7 @@ public class LevelActivity extends Activity {
         	GameTimer.reset();
         	GameObject.reset();
         	MyRenderer.reset();
+        	FPSCounter.reset();
     
         }
         

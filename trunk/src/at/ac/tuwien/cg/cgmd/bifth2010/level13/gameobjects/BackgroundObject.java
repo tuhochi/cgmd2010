@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHelper;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
@@ -35,18 +36,23 @@ public class BackgroundObject extends GameObject {
 		gl.glLoadIdentity();
 		
 		//test for collision with solid tiles
+		gameControl.setCurrentMovement(gameControl.getMovement().clone());
 		if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
+			
 			//reset offset
-			GameObject.offset.sub(gameControl.getMovement());
+			//GameObject.offset.sub(gameControl.getMovement());
 			//check if old movement is possible (only at corners)
-			if((gameControl.getMovement().x == 0 && gameControl.getOldMovement().x != 0)|| (gameControl.getMovement().y == 0 && gameControl.getOldMovement().y != 0)) {
-				GameObject.offset.add(gameControl.getOldMovement());
+			//if((gameControl.getMovement().x == 0 && gameControl.getOldMovement().x != 0)|| (gameControl.getMovement().y == 0 && gameControl.getOldMovement().y != 0)) {
+				GameObject.offset.x += gameControl.getOldMovement().x * (FPSCounter.getInstance().getDt() / 1000f);
+				GameObject.offset.y += gameControl.getOldMovement().y * (FPSCounter.getInstance().getDt() / 1000f);
+				gameControl.setCurrentMovement(gameControl.getOldMovement().clone());
+				//gameControl.setMovement(gameControl.getOldMovement().clone());
 				if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
-					GameObject.offset.sub(gameControl.getOldMovement());
+					//GameObject.offset.sub(gameControl.getOldMovement());
 					//stop movement
 					gameControl.setOldMovement(new Vector2(0, 0));
 				}
-			}
+			//}
 		}
 		else {
 			gameControl.setOldMovement(gameControl.getMovement().clone());
