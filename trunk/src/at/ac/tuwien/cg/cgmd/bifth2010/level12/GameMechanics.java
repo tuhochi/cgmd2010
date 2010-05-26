@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public class GameMechanics {
 	private int mMoney = 0;
+	private short mIron = Definitions.STARTING_IRON;
 	private boolean mGameRunning = true;
 	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
 	private long mLastCountdownCheck = -1;
@@ -128,5 +129,17 @@ public class GameMechanics {
 	
 	public void setHyperTowerSelected() {
 		mSelectedTower = Definitions.HYPER_TOWER;
+	}
+
+	public void addIron(int mIronDropped) {
+		mIron += mIronDropped;
+	}
+
+	public short getIron() {
+		return mIron;
+	}
+
+	public void subIron(short price) {
+		mIron -= price;
 	}
 }

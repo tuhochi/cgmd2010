@@ -21,6 +21,7 @@ public class CarrierRoundOne extends MoneyCarrier {
 		mSound = R.raw.l12_enemie1_dying;
 		SoundHandler.addSound(mSound);
 		mType = 1;
+		mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
 	}
 
 }

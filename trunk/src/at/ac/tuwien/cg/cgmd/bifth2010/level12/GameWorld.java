@@ -77,39 +77,48 @@ public class GameWorld {
 		boolean last = false;
 			switch ( GameMechanics.getSingleton().getSelectedTower() ){
 				case Definitions.BASIC_TOWER:
-					for( int i = mBasicTowerCounter; i < Definitions.BASIC_TOWER_POOL && !last; i++){
-						if( mBasicTower[i].getActiveState() == false){
-							mBasicTower[i].setXY(mXPos, mYPos);
-							mBasicTowerCounter++;
-							last = true;
-							mGamefield.setFieldOccupied(mXPos, mYPos);
-							break;
-						}
+					if( mBasicTower[0].getPrice() > GameMechanics.getSingleton().getIron()){
+						for( int i = mBasicTowerCounter; i < Definitions.BASIC_TOWER_POOL && !last; i++){
+							if( mBasicTower[i].getActiveState() == false){
+								mBasicTower[i].setXY(mXPos, mYPos);
+								mBasicTowerCounter++;
+								last = true;
+								mGamefield.setFieldOccupied(mXPos, mYPos);
+								GameMechanics.getSingleton().subIron( mBasicTower[i].getPrice());
+								break;
+							}
 						if ( i == mBasicTower.length -1 ) last = true;
+						}
 					}
 					break;
 				case Definitions.ADVANCED_TOWER:
-					for( int i = mAdvancedTowerCounter; i < Definitions.ADVANCED_TOWER_POOL && !last; i++){
-						if( mAdvancedTower[i].getActiveState() == false){
-							mAdvancedTower[i].setXY(mXPos, mYPos);
-							mAdvancedTowerCounter++;
-							last = true;
-							mGamefield.setFieldOccupied(mXPos, mYPos);
-							break;
+					if( mAdvancedTower[0].getPrice() > GameMechanics.getSingleton().getIron()){
+						for( int i = mAdvancedTowerCounter; i < Definitions.ADVANCED_TOWER_POOL && !last; i++){
+							if( mAdvancedTower[i].getActiveState() == false){
+								mAdvancedTower[i].setXY(mXPos, mYPos);
+								mAdvancedTowerCounter++;
+								last = true;
+								mGamefield.setFieldOccupied(mXPos, mYPos);
+								GameMechanics.getSingleton().subIron(mAdvancedTower[i].getPrice());
+								break;
+							}
+							if ( i == mAdvancedTower.length -1 ) last = true;
 						}
-						if ( i == mAdvancedTower.length -1 ) last = true;
 					}
 					break;
 				case Definitions.HYPER_TOWER:
-					for( int i = mHyperTowerCounter; i < Definitions.HYPER_TOWER_POOL && !last; i++){
-						if( mHyperTower[i].getActiveState() == false){
-							mHyperTower[i].setXY(mXPos, mYPos);
-							mHyperTowerCounter++;
-							last = true;
-							mGamefield.setFieldOccupied(mXPos, mYPos);
-							break;
+					if( mHyperTower[0].getPrice() > GameMechanics.getSingleton().getIron()){
+						for( int i = mHyperTowerCounter; i < Definitions.HYPER_TOWER_POOL && !last; i++){
+							if( mHyperTower[i].getActiveState() == false){
+								mHyperTower[i].setXY(mXPos, mYPos);
+								mHyperTowerCounter++;
+								last = true;
+								mGamefield.setFieldOccupied(mXPos, mYPos);
+								GameMechanics.getSingleton().subIron(mHyperTower[i].getPrice());
+								break;
+							}
+							if ( i == mHyperTower.length -1 ) last = true;
 						}
-						if ( i == mHyperTower.length -1 ) last = true;
 					}
 					break;
 				default:
