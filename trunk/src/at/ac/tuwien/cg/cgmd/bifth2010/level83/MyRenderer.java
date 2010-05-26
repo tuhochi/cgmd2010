@@ -3,12 +3,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level83;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -16,33 +17,36 @@ import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnTouchListener;
 import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
-
+import android.content.DialogInterface.OnDismissListener;
 /**
  * This class implements the {@link Renderer} and the {@link OnTouchListener}.
  * It draws the whole level and responds to user interaction.
  */
-public class MyRenderer implements Renderer, OnTouchListener {
+public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	
 	private static final String CLASS_TAG = MyRenderer.class.getName();
-
+	AlertDialog alertDialog;
+	
 	//Private
 	private int height, width;
 	private long lastTime;
 	private float deltaTime;
 	private boolean scrolling;
 	private MySprite sprite;
-	private MySprite dollar;
-	private MySprite tomb;
+//	private MySprite dollar;
+//	private MySprite tomb;
 //	private MyAnimatedSprite animSprite;
 //	private MyAnimatedSprite animSprite2;
 	private AnimationManager aniManager;
 	private Context context;
 	private MyHexagonGrid hexGrid;
 	private ItemQueue items;
-
+	private boolean firstStart = true;
+	
 	/**Thread for Animation*/
 	private Thread aniThread;
 	
+	private Vibrator vib;
 	private GestureDetector cGestureDetector;
 	private OnGestureListener gestureListener = new OnGestureListener() {
 
@@ -134,7 +138,6 @@ public class MyRenderer implements Renderer, OnTouchListener {
 		cGestureDetector = new GestureDetector(gestureListener);
 	}
 	
-	
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		
@@ -149,15 +152,14 @@ public class MyRenderer implements Renderer, OnTouchListener {
 		synchronized(aniThread){
 			aniThread.notifyAll();
 		}
-		//aniManager.animate(deltaTime);
 		
 		//Draw
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		hexGrid.Draw(gl);
 		sprite.Draw(gl);
-		dollar.Draw(gl);
-		tomb.Draw(gl);
+//		dollar.Draw(gl);
+//		tomb.Draw(gl);
 		items.Draw(gl);
 //		s2.Draw(gl);
 		
@@ -178,15 +180,8 @@ public class MyRenderer implements Renderer, OnTouchListener {
 
 		sprite.width = width/32;
 		sprite.height = height/12;
-		
-		dollar.height = LevelActivity.coins.getTextSize();
-		dollar.width = dollar.height;
-		dollar.x = width/5.5f;
-		dollar.y = height - dollar.height - 3;
-		
-		tomb.height = dollar.height;
-		tomb.width = tomb.height;
-		tomb.y = dollar.y;
+
+		hexGrid.resumeGame();
 		
 		Log.d("Renderer","Element width="+GRID_ELEMENT_WIDTH);
 		
@@ -213,6 +208,8 @@ public class MyRenderer implements Renderer, OnTouchListener {
         gl.glShadeModel(GL10.GL_FLAT);
         
         gl.glClearColor(0.349f, 0f, 0.349f, 1f);
+        
+        Log.d("GL","onSurfaceCreated");
         
         //Reload TextureManager of build level from scratch
         if(MyTextureManager.singleton != null)
@@ -245,9 +242,15 @@ public class MyRenderer implements Renderer, OnTouchListener {
     		);
         
         //Start Animation Thread
-        aniThread.start();
+        if(!firstStart)
+        	aniThread.start();
 	}
 	
+	public void resumeGame(){
+		lastTime = System.nanoTime();
+		
+		aniThread.start();
+	}
 	/**
 	 * This function is called when the level is started for the first time and
 	 * creates all objects which are necessary for rendering the level.
@@ -261,19 +264,16 @@ public class MyRenderer implements Renderer, OnTouchListener {
         new MyTextureManager(context, 30);
 	        
 		sprite = new MySprite(TEXTURE_LENNY, 20f*R_HEX/2f, 2f*RI_HEX-DIF_HEX-RI_HEX, 15, 21, gl);
-        dollar = new MySprite(TEXTURE_DOLLARSIGN, 84, 0, 14, 14, gl);
-        tomb = new MySprite(TEXTURE_TOMB, 4, 0, 14, 14, gl);
+//        dollar = new MySprite(TEXTURE_DOLLARSIGN, 84, 0, 42, 42, gl);
+//        tomb = new MySprite(TEXTURE_TOMB, 4, 0, 42, 42, gl);
 		hexGrid = new MyHexagonGrid( TEXTURE_HEXAGON, gl, context,TEXTURE_MAP);
 		
 		aniManager = new AnimationManager(5);
 		
 		aniManager.addAnimatable(hexGrid);
 		hexGrid.setCharacterControl(sprite);
-//        animSprite = new MyAnimatedSprite(sprite);
-        
-//        animSprite2 = new MyAnimatedSprite(s2);   
-        //aniManager.addAnimatable(animSprite);
-		
+		hexGrid.setVibrator(vib);
+
 		items = new ItemQueue(4, gl);
 		items.put(ItemQueue.WALL);
 		items.put(ItemQueue.BOMB);
@@ -282,8 +282,6 @@ public class MyRenderer implements Renderer, OnTouchListener {
         
         //Init time
 		lastTime = System.nanoTime();
-		
-//      aniManager.addAnimatable(animSprite2);
 	}
 
 	/**
@@ -291,6 +289,9 @@ public class MyRenderer implements Renderer, OnTouchListener {
 	 * stop running threads.
 	 */
 	public void onPause() {
+		
+		hexGrid.pauseGame();
+		
 		if (aniThread != null)
 			aniThread.interrupt();
 	}
@@ -300,7 +301,6 @@ public class MyRenderer implements Renderer, OnTouchListener {
 	 * free resources.
 	 */
 	public void onStop() {
-		
 	}
 	
 	/**
@@ -308,12 +308,25 @@ public class MyRenderer implements Renderer, OnTouchListener {
 	 */
 	public void onResume() {
 //		aniThread.start();
+		
+	}
+	
+	public void onDestroy(){
+		MyTextureManager.singleton = null;
+		aniManager = null;
+		hexGrid = null;
+	}
+	
+	public void setVibrator(Vibrator v) {
+		vib = v;
 	}
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
+		
 		//pass on the touch event to the GestureDetector
     	if (!cGestureDetector.onTouchEvent(event) && event.getAction() == MotionEvent.ACTION_UP) {
+
     		if (scrolling) {
 				Log.d(CLASS_TAG, "! onUp ! - X:" + event.getX() + " / Y:" + event.getY());
 //				LevelActivity.coinsUpdateHandler.sendEmptyMessage(15);
@@ -345,5 +358,11 @@ public class MyRenderer implements Renderer, OnTouchListener {
 			super(r);
 			setDaemon(true);
 		}
+	}
+
+	@Override
+	public void onDismiss(DialogInterface dialog) {
+		firstStart = false;
+		resumeGame();
 	}
 }

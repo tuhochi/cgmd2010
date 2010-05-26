@@ -15,6 +15,17 @@
 <string name="l83_stats_head">Lenny\'s Stats</string>
 <string name="l83_stats_death">This icon indicates how often Lenny died.</string>
 <string name="l83_stats_credit">This icon indicates how many credits Lenny has collected.</string>
-<string name="l83_stats_progress">This &lt;what?&gt; shows Lenny\'s progress in the level.</string>
+<string name="l83_stats_progress">This number shows Lenny\'s progress in the level.</string>
 
+<string name="l83_screentut_1">this is Lenny, he must die!</string>
+<string name="l83_screentut_2">use the items in the queue</string>
+<string name="l83_screentut_3">place the active item by dragging</string>
+<string name="l83_screentut_4">use the wall to block a field</string>
+<string name="l83_screentut_5">remove an existing wall</string>
+<string name="l83_screentut_6">place the time bomb to kill Lenny</string>
+<string name="l83_screentut_7">beware: no dragging beyond the marked fields</string>
+<string name="l83_screentut_8">one more thing...prevent Lenny from collecting credits</string>
+<string name="l83_screentut_9">he can trade 2 for 1 life</string>
+<string name="l83_screentut_10">check Lenny\'s stats: deaths, credits and progress</string>
+<string name="l83_screentut_11">now have fun killing Lenny! and remember: more kills, more points</string>
 </resources>
