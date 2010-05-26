@@ -11,6 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
  * @author Asperger, Radax
  */
 class GLRenderer implements GLSurfaceView.Renderer {
+	/** Game instance of the level*/
 	private Game game;
 	
 	/**

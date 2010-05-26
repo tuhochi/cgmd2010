@@ -35,20 +35,33 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * Class for the general level activity of level 88
  * @author Asperger, Radax
  */
+/**
+ * @author Asperger
+ *
+ */
 public class LevelActivity extends Activity{
+	/** Public Tag of the level activity*/
 	public static final String TAG = "LevelActivity"; 
-	
+	/** Handler for the level*/
 	private final Handler handler = new Handler();
+	/** GLSurfaceView instance of the level*/
 	private GLSurfaceView glSurfaceView;
+	/** GLView instance of the level*/
 	private GLView normalModeView;
+	/** Game instance of the level*/
 	private Game game;
+	/** Vector with the window size*/
 	private Vector2 windowSize;
+	/** Text for display*/
 	private TextView goldText;
 	//the url of the background music
+	/** Url of the background music*/
 	private static final String LOOP_URL = "android.resource://at.ac.tuwien.cg.cgmd.bifth2010/" + R.raw.l88_background;
 	//bolean if the music should be played or not
+	/** Set ture if music should be played*/
 	public boolean mMusicOn = false;
 	//media player used for the background loop
+	/** Media player used for the background loop*/
 	private MediaPlayer mLoopPlayer = null;
 	
 	//kurze, eingebette Klasse fuer den Player
@@ -66,9 +79,6 @@ public class LevelActivity extends Activity{
 			}
 		}
 	};
-	
-	
-	
 	
 	
 	/* (non-Javadoc)
@@ -224,6 +234,7 @@ public class LevelActivity extends Activity{
 		glSurfaceView.onResume();
 	}
 	
+	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
 	 */
@@ -233,21 +244,31 @@ public class LevelActivity extends Activity{
 		Log.v(TAG, "onStart()");
 	}
 	
-	@Override
+
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestart()
+	 */
 	protected void onRestart()
 	{
 		super.onRestart();
 		Log.v(TAG, "onRestart()");
 	}
 	
-	@Override
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
 	protected void onStop()
 	{
 		super.onStop();
 		Log.v(TAG, "onStop()");
 	}
 	
-	@Override
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
 	protected void onDestroy()
 	{
 		//stop the music if it is running
@@ -262,7 +283,10 @@ public class LevelActivity extends Activity{
 		Log.v(TAG, "onDestroy()");
 	}
 
-	@Override
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
 	protected void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
@@ -291,7 +315,10 @@ public class LevelActivity extends Activity{
 		}
 	}
 	
-	@Override
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
 		super.onRestoreInstanceState(savedInstanceState);

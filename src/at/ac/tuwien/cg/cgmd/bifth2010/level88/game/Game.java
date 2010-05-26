@@ -24,34 +24,53 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * @author Asperger, Radax
  */
 public class Game {
+	/** Public tag of the class*/
 	public static final String TAG = "Game"; 
-	
+	/** For time storage*/
 	private long newTime, oldTime;
+	/** Counter of seconds since actions happened*/
 	private float elapsedSeconds;
+	/** Width and height of the screen*/
 	public int screenWidth, screenHeight;
+	/** Scaling of the width and height of the screen*/
 	public float screenWidthScale, screenHeightScale;
+	/** Context of the android application*/
 	public LevelActivity context;
+	/** Textures of the level*/
 	public Textures textures;
+	/** Handler class*/
 	private Handler handler;
+	/** Camera position of the application*/
 	private Vector2 cameraPos;
+	/** Scaling of the world*/
 	private float worldScale;
+	/** Map instance of the level*/
 	public Map map;
+	/** Bunny instance of the level*/
 	public Bunny bunny;
+	/** Array containing all instances of the police*/
 	public ArrayList<Police> police;
+	/** Array containing all instances of the stashes*/
 	public ArrayList<Stash> stashes;
 	
+	/** Quad instance*/
 	public Quad objectQuad;
+	/** Array containing all instances of the stashes with size 1*/
 	public ArrayList<Stash> stashes_size1;
+	/** Array containing all instances of the stashes with size 2*/
 	public ArrayList<Stash> stashes_size2;
+	/** Array containing all instances of the stashes with size 3*/
 	public ArrayList<Stash> stashes_size3;
 	
+	/** Set true if there was a new touch on the touch screen*/
 	public boolean newTouch;
+	/** Position of the touch on the touch screen*/
 	public Vector2 touchPosition;
-	
+	/** Count of gold to loose*/
 	public int gold;
-	
+	/** Sound instance for sound effects*/
 	public Sound player = null;
-	
+	/** Set true if music/sound is enabled*/
 	public boolean musicOn = true;
 
 	

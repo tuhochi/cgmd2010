@@ -13,13 +13,21 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * @author Asperger, Radax
  */
 public class Bunny {
+	/** Game instance of the lavel*/
 	private Game game;
+	/** Current and previous position of the bunny*/
 	public int currentPosX, currentPosY, prevPosX, prevPosY;
+	/** Time for the and the next movement of the bunny*/
 	public float transition, transitionTime;
+	/** Set true if the bunny should not move*/
 	public boolean stopTransition;
+	/** Next movement of the bunny*/
 	public float translateX, translateY;
+	/** Quad of the bunny*/
 	private Quad bunnyQuad;
+	/** Information for flipping the map*/
 	private Vector2 groundYDir, groundXDir;
+	/** remaining time of the speed power up*/
 	private float powerUp_remainingTime_speed;
 
 	/**

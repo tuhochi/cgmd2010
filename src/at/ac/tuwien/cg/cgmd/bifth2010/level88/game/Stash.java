@@ -12,10 +12,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * @author Asperger, Radax
  */
 public class Stash {
+	/** Game instance of the level*/
 	private Game game;
+	/** Current position of the stash on the map*/
 	public int currentPosX, currentPosY;
+	/** Next position of the stash on the map*/
 	public float translateX, translateY;
+	/** size of the stash to hide gold in it*/
 	public int size;
+	/** hidden times for this stash*/
 	public float hideTime, maxHideTime;
 
 

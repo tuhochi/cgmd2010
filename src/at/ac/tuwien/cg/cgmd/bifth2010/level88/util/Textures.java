@@ -19,11 +19,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * @author Asperger, Radax
  */
 public class Textures {
+	/** HashMap with the texture ids of the resources*/
 	private HashMap<Integer,Integer> resources2texIds;
+	/** Arraylist containing the textures*/
 	private ArrayList<Integer> textureFiles;
+	/** Array containing the ids of the textures*/
 	private int[] textureIds;
-	private GL10 gl; 
-	private Context context; 
+	/** OpenGL context of the android application*/
+	private GL10 gl;
+	/** Context of the android application*/
+	private Context context;
+	/** Id containing the texture*/
 	private int lastBound;
 
 	
