@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
@@ -23,6 +24,7 @@ public abstract class MoneyCarrier extends GLObject {
 	protected int mSound = R.raw.l12_enemie1_dying;
 	protected short mMoney = 10;
 	protected short mSpeed = 5;
+	protected int mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
 	
 	
 	public void activate(){
@@ -123,5 +125,6 @@ public abstract class MoneyCarrier extends GLObject {
 	
 	public void die(){
 		SoundHandler.play(mSound);
+		GameMechanics.getSingleton().addIron(mIronToDrop);
 	}
 }

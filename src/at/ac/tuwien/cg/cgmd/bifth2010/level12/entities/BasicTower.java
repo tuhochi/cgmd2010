@@ -15,6 +15,7 @@ public class BasicTower extends Tower {
 		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
 		mTexture =  R.drawable.l12_basic_tower;
+		mPrice = Definitions.BASIC_TOWER_IRON_NEED;
 		mSound = R.raw.l12_basic_tower_shooting_sound;
 		SoundHandler.addSound(mSound);
 		initProjectiles();	

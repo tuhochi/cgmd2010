@@ -14,6 +14,7 @@ public class AdvancedTower extends Tower {
 		mColor[3] = 1.0f;
 		mTexture =  R.drawable.l12_advanced_tower;
 		mSound = R.raw.l12_advanced_tower_shooting_sound;
+		mPrice = Definitions.ADVANCED_TOWER_IRON_NEED;
 		SoundHandler.addSound(mSound);
 		initProjectiles();
 	}

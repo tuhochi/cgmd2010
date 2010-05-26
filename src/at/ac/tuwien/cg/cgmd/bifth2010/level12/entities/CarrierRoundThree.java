@@ -19,6 +19,7 @@ public class CarrierRoundThree extends MoneyCarrier {
 		mTexture = R.drawable.l12_enemie_lvl2;
 		mSound = R.raw.l12_enemie3_dying;
 		mType = 3;
+		mIronToDrop = Definitions.THIRD_ROUND_ENEMIE_IRON;
 	}
 	
 }

@@ -110,6 +110,7 @@ public class GameUI extends LinearLayout implements OnClickListener{
 			mTV.setText( 
 				FPSCounter.getSingleton().getFPS()+" FPS " +
 				"Money: "+GameMechanics.getSingleton().getMoney()+" " +
+				"Iron: "+GameMechanics.getSingleton().getIron()+" "+
 				"Rounds left: "+(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber()) +" " +
 				" Countdown: "+(int)(GameMechanics.getSingleton().getRemainingWaitTime()));
 		}

@@ -6,6 +6,7 @@ import java.nio.ByteOrder;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
@@ -22,6 +23,7 @@ public abstract class Tower extends GLObject {
 	protected int mScreenWidth = 800;
 	protected short mDmg = 10;
 	protected int mSound = R.raw.l12_basic_tower_shooting_sound;
+	protected short mPrice = Definitions.BASIC_TOWER_IRON_NEED;
 	
 	
 	
@@ -142,6 +144,10 @@ public abstract class Tower extends GLObject {
 	@Override
 	public int getX(){
 		return mX + mRadius;
+	}
+	
+	public short getPrice(){
+		return mPrice;
 	}
 }
 
