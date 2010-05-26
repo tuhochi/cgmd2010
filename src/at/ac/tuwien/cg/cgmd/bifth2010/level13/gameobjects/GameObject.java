@@ -8,6 +8,7 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
@@ -150,7 +151,29 @@ public abstract class GameObject {
 		Vector2 temp = movement.clone();
 		temp.x *= (FPSCounter.getInstance().getDt() / 1000f);
 		temp.y *= (FPSCounter.getInstance().getDt() / 1000f);
+		
+		//-offset = center - tile -> tile = center + offset
+		//float tileXBefore = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.x) / GameObject.BLOCKSIZE;
+		
 		offset.add(temp);
+		/*
+		float tileXAfter = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.x) / GameObject.BLOCKSIZE;
+		
+		Log.d("df", "before: " + tileXBefore + " after:" + tileXAfter);
+		
+		if(((int)tileXBefore) != ((int)tileXAfter) && (int)tileXBefore != tileXBefore && (int)tileXAfter != tileXAfter && (GameControl.getInstance().getMovement().y != 0) && GameControl.getInstance().getOldMovement().x != 0) {
+			offset.x = (-1)* (((MyRenderer.screenWidth / GameObject.BLOCKSIZE / 2)) * GameObject.BLOCKSIZE - ((int)Math.max((int)tileXBefore, (int)tileXAfter))*GameObject.BLOCKSIZE);
+		}*/
+		/*
+		//offset = center - tile -> tile = center - offset
+		float tileX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE - offset.x;
+		Log.d("df", "tilex: " + tileX);
+		if(tileX % GameObject.BLOCKSIZE < FPSCounter.getInstance().getDt() / 1000f) {
+			tileX = Math.round((tileX / GameObject.BLOCKSIZE));
+			Log.d("df", "round tileX" + tileX);
+			offset.x = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE - tileX*GameObject.BLOCKSIZE;
+		}*/
+		
 	}
 	
 	/**

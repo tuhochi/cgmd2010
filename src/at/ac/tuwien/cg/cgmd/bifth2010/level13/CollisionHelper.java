@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
+import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
 
 /**
@@ -30,10 +32,10 @@ public class CollisionHelper {
 	 */
 	
 	public static boolean checkBackgroundCollision(int[][] map,GameObject gO) {
-		int gameObjectXMin;
-		int gameObjectYMin;
-		int gameObjectXMax;
-		int gameObjectYMax;
+		float gameObjectXMin;
+		float gameObjectYMin;
+		float gameObjectXMax;
+		float gameObjectYMax;
 		
 		float centerX;
 		float centerY;
@@ -48,22 +50,26 @@ public class CollisionHelper {
 			gameObjectXMax = gameObjectXMin + GameObject.BLOCKSIZE;
 			gameObjectYMax = gameObjectYMin + GameObject.BLOCKSIZE;
 		}else{
-			gameObjectXMin = (int)(gO.position.x );
-			gameObjectYMin = (int)(gO.position.y );
+			gameObjectXMin = gO.position.x;
+			gameObjectYMin = gO.position.y;
 			gameObjectXMax = gameObjectXMin + GameObject.BLOCKSIZE;
 			gameObjectYMax = gameObjectYMin + GameObject.BLOCKSIZE;
 		}
 		
 		//find corresponding tiles
-		int xMin = gameObjectXMin / GameObject.BLOCKSIZE;
-		int xMax = gameObjectXMax / GameObject.BLOCKSIZE;
-		int yMin = gameObjectYMin / GameObject.BLOCKSIZE;
-		int yMax = gameObjectYMax / GameObject.BLOCKSIZE;
-	
+		int xMin = (int)(gameObjectXMin / (float)GameObject.BLOCKSIZE);
+		int xMax = (int)(gameObjectXMax / (float)GameObject.BLOCKSIZE);
+		int yMin = (int)(gameObjectYMin / (float)GameObject.BLOCKSIZE);
+		int yMax = (int)(gameObjectYMax / (float)GameObject.BLOCKSIZE);
+		//Log.d("df", "yMin: " + yMin + " yMax:" + yMax + " xMin: " + xMin + " xMax:" + xMax);
 		//transform to array indices (array starts top left, drawing starts bottom left)
 		yMax = map.length - yMax - 1;
 		yMin = map.length - yMin - 1;
 	
+		//Log.d("df", "yMin: " + yMin + " yMax:" + yMax + " xMin: " + xMin + " xMax:" + xMax);
+		//if(gO != null) {
+			//Log.d("df", "position.x:" + gO.position.x + " position.y:" + gO.position.y);
+		//}
 		//check critical tiles
 		for(int i = yMax; i <= yMin; i++) { 
 			for(int j = xMin; j <= xMax; j++) {
@@ -88,6 +94,47 @@ public class CollisionHelper {
 								gO.position.x =  (j * GameObject.BLOCKSIZE + gO.moveVec.signX() * GameObject.BLOCKSIZE*-1);
 						}
 						
+						//player
+						else {
+							//GameObject.offset.x -= GameControl.getInstance().getMovement().x * (FPSCounter.getInstance().getDt() / 1000f);
+							//GameObject.offset.y -= GameControl.getInstance().getMovement().y * (FPSCounter.getInstance().getDt() / 1000f);
+							
+							
+						
+						
+							
+				
+							if(GameControl.getInstance().getCurrentMovement().x == 0) {
+								Log.d("df", "x: " + j + "y: " + Math.abs(i - map.length + 1));
+								//float tempY = -(Math.abs(i - map.length + 1) * GameObject.BLOCKSIZE + GameControl.getInstance().getMovement().signY() * GameObject.BLOCKSIZE *-1);
+								GameObject.offset.y = (((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE) - (Math.abs(i - map.length + 1) * GameObject.BLOCKSIZE);
+								if(GameControl.getInstance().getCurrentMovement().y > 0) {
+									GameObject.offset.y += GameObject.BLOCKSIZE;
+								}
+								else {
+									GameObject.offset.y -= GameObject.BLOCKSIZE;
+								}
+								GameObject.offset.y = -GameObject.offset.y;
+							}
+							else {
+								Log.d("df", "x: " + j + "y: " + Math.abs(i - map.length + 1));
+								//float tempY = -(Math.abs(i - map.length + 1) * GameObject.BLOCKSIZE + GameControl.getInstance().getMovement().signY() * GameObject.BLOCKSIZE *-1);
+								GameObject.offset.x = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE) - j * GameObject.BLOCKSIZE;
+								if(GameControl.getInstance().getCurrentMovement().x > 0) {
+									GameObject.offset.x += GameObject.BLOCKSIZE;
+								}
+								else {
+									GameObject.offset.x -= GameObject.BLOCKSIZE;
+								}
+								GameObject.offset.x = -GameObject.offset.x;
+							}
+							/*
+							else {
+								float tempX = j * GameObject.BLOCKSIZE + GameControl.getInstance().getMovement().signX() * GameObject.BLOCKSIZE*-1;
+								float diff = GameObject.offset.x - tempX;
+								GameObject.offset.y += diff;
+							}*/
+						}
 						return true;
 					}
 				}

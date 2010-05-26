@@ -21,6 +21,7 @@ public class MistressObject extends EnemyObject{
 	
 	if (CollisionHelper.checkPlayerObjectCollision((int)this.position.x,(int) this.position.y))
 		gameControl.encounterMistress(this);
+	
 	super.draw(gl);
 	}
 }

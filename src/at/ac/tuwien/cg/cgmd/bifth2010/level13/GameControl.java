@@ -37,6 +37,7 @@ public class GameControl {
 	private Vector2 movement = new Vector2(0, 0);
 	//old movement vector
 	private Vector2 oldMovement = new Vector2(0, 0);
+	private Vector2 currentMovement = new Vector2(0, 0);
 	
 	private static GameControl instance;
 	
@@ -257,6 +258,16 @@ public class GameControl {
 	public void setOldMovement(Vector2 oldMovement) {
 		this.oldMovement = oldMovement;
 	}
+
+	public Vector2 getCurrentMovement() {
+		return currentMovement;
+	}
+
+	public void setCurrentMovement(Vector2 currentMovement) {
+		this.currentMovement = currentMovement;
+	}
+	
+	
 	
 	
 }
