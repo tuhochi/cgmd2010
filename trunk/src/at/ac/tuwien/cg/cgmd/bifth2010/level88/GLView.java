@@ -10,7 +10,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
  * @author Asperger, Radax
  */
 public class GLView extends GLSurfaceView {
-	private GLRenderer renderer; 
+	/** Rendering instance of the level*/
+	private GLRenderer renderer;
+	/** Game instance of the level*/
 	private Game game;
 
     /**

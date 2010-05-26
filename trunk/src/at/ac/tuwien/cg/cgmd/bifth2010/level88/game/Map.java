@@ -36,19 +36,31 @@ public class Map {
 			numStreetNeighboursBunny=0;
 		}
 
+		/** Set true, if the police is capable to cross this cell*/
 		public boolean isStreetForPolice;
+		/** Set true, if the bunny is capable to cross this cell*/
 		public boolean isStreetForBunny;
+		/** Set true, if the police is at this cell*/
 		public boolean isPolicePresent;
+		/** Number of neighbourstreets of the police*/
 		public int numStreetNeighboursPolice;
+		/** Number of neighbourstreets of the bunny*/
 		public int numStreetNeighboursBunny;
+		/** Set the type of the cell*/
 		public char type;
 	}
 
+	/** Game class instance of the level*/
 	private Game game;
+	/** map of the level*/
 	public MapCell[][] cells;
+	/** direction of the level for flipping the map*/
 	public Vector2 groundXDir, groundYDir;
+	/** direction of the houses for flipping the map*/
 	public Vector2 houseXDir, houseYDir, houseQuadBase;
+	/** buffer to save the whole map*/
 	public Vertexbuffers vbos;
+	/** counter of vertices*/
 	public int numVertices;
 
 	/**

@@ -8,7 +8,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 /*
- * TODO die Anzal der Sounds muss in amount auch angepasst werden
+ * TODO die Anzahl der Sounds muss in amount auch angepasst werden
  */
 
 /**
@@ -17,16 +17,28 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class Sound {
 
+	/**
+	 * Enum containing all the possible sound effects
+	 * @author Asperger, Radax
+	 */
 	public enum Sounds {BACKGROUND, WIN, LOOSE, GOLD};
-	
+	/** Countor of the sound effects*/
 	private int amount = 3;
+	/** Soundpool of the android application*/
 	private SoundPool soundPool;
+	/** Hashmap containg the sound effects and the id*/
 	private HashMap<Sounds, Integer> soundMap;
+	/** Audiomanager of the android application*/
 	private AudioManager audioManager;
+	/** Context of the android application*/
 	private Context context;
+	/** Set true if the music is enabled*/
 	private boolean musicOn = true;
+	/** Volume of the level sound*/
 	private float volume = 1.0f;
+	/** Sound instance*/
 	private static Sound instance = null;
+	/** Id of the sound effect*/
 	private int iD = 0;
 	
 	
@@ -82,6 +94,9 @@ public class Sound {
 		}
 	}
 	
+	/**
+	 * Destroy the soundpool, release the information
+	 */
 	public void destroy(){
 		if(!musicOn){
 			return;
@@ -90,6 +105,9 @@ public class Sound {
 		}
 	}
 	
+	/**
+	 * Pause the sound effect
+	 */
 	public void pause(){
 		if(!musicOn){
 			return;
@@ -98,6 +116,9 @@ public class Sound {
 		}
 	}
 	
+	/**
+	 *  Resume the sound effect
+	 */
 	public void resume(){
 		if(!musicOn){
 			return;

@@ -14,11 +14,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * @author Asperger, Radax
  */
 public class Police {
+	/** Game instance of the level*/
 	private Game game;
+	/** current and previous position of the police*/
 	public int currentPosX, currentPosY, prevPosX, prevPosY;
+	/** movement of the police - distance and time*/
 	public float transition, transitionTime;
+	/** set true if the police should stop moving in the current frame*/
 	public boolean stopTransition;
+	/** movement of the police - for the mapcells*/
 	public float translateX, translateY;
+	/** true if the police was not able to move in the last frame*/
 	private boolean wasStuckLastFrame;
 
 	/**

@@ -6,9 +6,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level88.util;
  * @author Asperger, Radax
  */
 public class Quad {
+	/** Vector containing the position*/
 	private Vector2 position;
+	/** Vector containing the information for the x-direction*/
 	private Vector2 xDir;
+	/** Vector containing the information for the y-direction*/
 	private Vector2 yDir;
+	/** Vertexbuffer containg the information of the quad*/
 	public Vertexbuffers vbos;
 	
 	

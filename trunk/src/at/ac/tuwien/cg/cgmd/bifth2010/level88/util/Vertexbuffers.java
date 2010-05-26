@@ -22,8 +22,11 @@ public class Vertexbuffers {
 		TEX_COORD
 	}
 	
+	/** Buffer for the positions*/
 	private FloatBuffer posBuffer;
+	/** Buffer for the texture coordinates*/
 	private FloatBuffer texCoordBuffer;
+	/** Buffer for the indizes*/
 	public ShortBuffer indexBuffer;
 
 	/**
