@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.Sound.Sounds;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Game;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
@@ -57,8 +56,8 @@ public class LevelActivity extends Activity{
 	//the url of the background music
 	/** Url of the background music*/
 	private static final String LOOP_URL = "android.resource://at.ac.tuwien.cg.cgmd.bifth2010/" + R.raw.l88_background;
-	//bolean if the music should be played or not
-	/** Set ture if music should be played*/
+	//boolean if the music should be played or not
+	/** Set true if music should be played*/
 	public boolean mMusicOn = false;
 	//media player used for the background loop
 	/** Media player used for the background loop*/

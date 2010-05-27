@@ -15,21 +15,34 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 
 /**
- * Texture class for level 88
+ * Textures class used to manage all textures needed by level 88
  * @author Asperger, Radax
  */
 public class Textures {
-	/** HashMap with the texture ids of the resources*/
+	/**
+	 * Map used to map resource Ids to texture object Ids
+	 */
 	private HashMap<Integer,Integer> resources2texIds;
-	/** Arraylist containing the textures*/
+	/**
+	 * List of all textures needed by level 88
+	 */
 	private ArrayList<Integer> textureFiles;
-	/** Array containing the ids of the textures*/
+	/**
+	 * Array containing ids for the OpenGL texture objects
+	 */
 	private int[] textureIds;
-	/** OpenGL context of the android application*/
+	/**
+	 *  OpenGL context of the android application
+	 */
 	private GL10 gl;
-	/** Context of the android application*/
+	/**
+	 *  Context of the android application
+	 */
 	private Context context;
-	/** Id containing the texture*/
+	/**
+	 * Id of the last bound texture, used to avoid
+	 * rebinding already bound textures.
+	 */
 	private int lastBound;
 
 	

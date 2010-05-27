@@ -13,7 +13,6 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.Sound;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.Sound.Sounds;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Textures;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
@@ -24,56 +23,100 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * @author Asperger, Radax
  */
 public class Game {
-	/** Public tag of the class*/
-	public static final String TAG = "Game"; 
-	/** For time storage*/
+	/**
+	 * Tag used for logging
+	 */
+	private static final String TAG = "Game"; 
+	/**
+	 * Time of the current and the previous frame
+	 */
 	private long newTime, oldTime;
-	/** Counter of seconds since actions happened*/
+	/**
+	 * Elapsed seconds since last frame
+	 */
 	private float elapsedSeconds;
-	/** Width and height of the screen*/
+	/**
+	 * Width and height of the screen
+	 */
 	public int screenWidth, screenHeight;
-	/** Scaling of the width and height of the screen*/
-	public float screenWidthScale, screenHeightScale;
-	/** Context of the android application*/
+	/**
+	 * Context of the android application
+	 */
 	public LevelActivity context;
-	/** Textures of the level*/
+	/**
+	 * Textures of the level
+	 */
 	public Textures textures;
-	/** Handler class*/
+	/**
+	 * Handler class
+	 */
 	private Handler handler;
-	/** Camera position of the application*/
+	/**
+	 * Camera position of the game
+	 */
 	private Vector2 cameraPos;
-	/** Scaling of the world*/
+	/**
+	 * Scaling of the world, used to 'zoom' into the scene
+	 */
 	private float worldScale;
-	/** Map instance of the level*/
+	/**
+	 * Map instance of the level
+	 */
 	public Map map;
-	/** Bunny instance of the level*/
+	/**
+	 * Bunny instance of the level
+	 */
 	public Bunny bunny;
-	/** Array containing all instances of the police*/
+	/**
+	 * Array containing all instances of the police
+	 */
 	public ArrayList<Police> police;
-	/** Array containing all instances of the stashes*/
+	/**
+	 * Array containing all instances of the stashes
+	 */
 	public ArrayList<Stash> stashes;
 	
-	/** Quad instance*/
+	/**
+	 * A single quad, used to render bunny/police/stashes
+	 */
 	public Quad objectQuad;
-	/** Array containing all instances of the stashes with size 1*/
+	/**
+	 * Array containing all instances of the stashes with size 1
+	 * Used for rendering to avoid texture changes
+	 */
 	public ArrayList<Stash> stashes_size1;
-	/** Array containing all instances of the stashes with size 2*/
+	/**
+	 * Array containing all instances of the stashes with size 2
+	 * Used for rendering to avoid texture changes
+	 */
 	public ArrayList<Stash> stashes_size2;
-	/** Array containing all instances of the stashes with size 3*/
+	/**
+	 * Array containing all instances of the stashes with size 3
+	 * Used for rendering to avoid texture changes
+	 */
 	public ArrayList<Stash> stashes_size3;
 	
-	/** Set true if there was a new touch on the touch screen*/
+	/**
+	 * Set true if there was a new touch on the touch screen
+	 */
 	public boolean newTouch;
-	/** Position of the touch on the touch screen*/
+	/**
+	 * Position of the touch on the touch screen
+	 */
 	public Vector2 touchPosition;
-	/** Count of gold to loose*/
+	/**
+	 * Gold left that can be hidden 
+	 */
 	public int gold;
-	/** Sound instance for sound effects*/
+	/**
+	 * Sound instance for sound effects
+	 */
 	public Sound player = null;
-	/** Set true if music/sound is enabled*/
+	/**
+	 * Set true if music/sound is enabled
+	 */
 	public boolean musicOn = true;
 
-	
 	/**
 	 * Constructor
 	 * @param _context Context of the Android application
@@ -341,6 +384,8 @@ public class Game {
 
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
+        float screenWidthScale;
+        float screenHeightScale;
         if( width > height ) {
         	screenWidthScale = (float)width/(float)height;
         	screenHeightScale = 1;
@@ -426,6 +471,7 @@ public class Game {
         	police.get(i).draw(gl);
         }
         
+		textures.bind(R.drawable.l88_bunny);
         bunny.draw(gl);
 	}	
 }

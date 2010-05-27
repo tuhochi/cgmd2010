@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 
 /**
@@ -13,23 +11,42 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
  * @author Asperger, Radax
  */
 public class Bunny {
-	/** Game instance of the lavel*/
+	/**
+	 * Game instance of the level
+	 */
 	private Game game;
-	/** Current and previous position of the bunny*/
+	/**
+	 * Current and previous position of the bunny.
+	 * This position are logical coordinates on the map.
+	 */
 	public int currentPosX, currentPosY, prevPosX, prevPosY;
-	/** Time for the and the next movement of the bunny*/
-	public float transition, transitionTime;
-	/** Set true if the bunny should not move*/
+	/**
+	 * Current transition of the bunny (transition between two
+	 * field of the map).
+	 */
+	public float transition;
+	/**
+	 * Time it takes the bunny to move from one field of the
+	 * map to another.
+	 */
+	public float transitionTime;
+	/**
+	 * True if the bunny just finished transition between two cells.
+	 * Used to avoid 'jumping' of the bunny when bunny reaches a
+	 * t-junction or a dead end.
+	 */
 	public boolean stopTransition;
-	/** Next movement of the bunny*/
+	/**
+	 * Position of the bunny. This position is
+	 * used to translate the bunny for rendering (so
+	 * it is displayed at the right position).
+	 */
 	public float translateX, translateY;
-	/** Quad of the bunny*/
-	private Quad bunnyQuad;
-	/** Information for flipping the map*/
-	private Vector2 groundYDir, groundXDir;
-	/** remaining time of the speed power up*/
+	/**
+	 * Remaining time of the speed power up
+	 */
 	private float powerUp_remainingTime_speed;
-
+	
 	/**
 	 * Moving possibilities of the bunny
 	 * @author Asperger, Radax
@@ -57,23 +74,6 @@ public class Bunny {
 		transitionTime = 0.5f;
 		transition = 0;
 		stopTransition = false;
-
-		groundYDir = new Vector2(-0.81f, -0.59f);
-		groundXDir = new Vector2(1.16f, -0.46f);
-
-        Vector2 xDir = new Vector2(1.41f, 0);
-        Vector2 yDir = new Vector2(0, -1.41f);
-
-        Vector2 quadBase = new Vector2();
-        quadBase.add(groundYDir);
-        quadBase.add(groundXDir);
-        quadBase.mult(-1.0f);
-        quadBase.add(xDir);
-        quadBase.add(yDir);
-        quadBase.mult(-0.5f);
-        quadBase.add(new Vector2(0, -0.28f));       
-
-        bunnyQuad = new Quad(quadBase, xDir, yDir);
 	}
 	
 	
@@ -94,7 +94,7 @@ public class Bunny {
 		{
 			transition += elapsedSeconds;
 		}
-		if( transition >= transitionTime )
+		while( transition >= transitionTime )
 		{
 			transition -= transitionTime;
 			stopTransition = true;
@@ -118,8 +118,8 @@ public class Bunny {
 	           	 * distance of the touch to the center of the screen. 
 	           	 */
 	           	float angle = pos.getAngle();
-	           	float angleX = groundXDir.getAngle();
-	           	float angleY = groundYDir.getAngle();
+	           	float angleX = game.map.groundXDir.getAngle();
+	           	float angleY = game.map.groundYDir.getAngle();
 	           	float distance  = pos.length();
 	           	
 	           	/*
@@ -215,12 +215,9 @@ public class Bunny {
 	 * @param gl OpenGL context of android
 	 */
 	public void draw(GL10 gl) {
-		bunnyQuad.vbos.set(gl);
-
 		gl.glPushMatrix();
 		gl.glTranslatef(translateX, translateY, 0);
-		
-		game.textures.bind(R.drawable.l88_bunny);
+
 		gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, 4);
 		
 		gl.glPopMatrix();

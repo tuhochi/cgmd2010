@@ -8,12 +8,15 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Class for the vertexbuffers
+ * Class representing a group of vertexbuffers.
+ * The vertexbuffers can be used for indices, positions
+ * and texture coordinates.
+ * 
  * @author Asperger, Radax
  */
 public class Vertexbuffers {
 	/**
-	 * Types for a vertex buffer
+	 * Types for a vertexbuffer
 	 * @author Asperger, Radax
 	 */
 	public enum Type {
@@ -26,11 +29,11 @@ public class Vertexbuffers {
 	private FloatBuffer posBuffer;
 	/** Buffer for the texture coordinates*/
 	private FloatBuffer texCoordBuffer;
-	/** Buffer for the indizes*/
-	public ShortBuffer indexBuffer;
+	/** Buffer for the indices*/
+	private ShortBuffer indexBuffer;
 
 	/**
-	 * Set the data of the vertex buffer
+	 * Set the data of a vertexbuffer (position of tex coord)
 	 * @param type type of the vertices
 	 * @param vertices array of vertices
 	 */
@@ -58,7 +61,7 @@ public class Vertexbuffers {
 	
 	
 	/**
-	 * Set the data of the vertex buffer
+	 * Set the data of the vertex buffer (indices)
 	 * @param vertices Array of vertices for the buffer
 	 */
 	public void setData(Short[] vertices)
@@ -76,7 +79,9 @@ public class Vertexbuffers {
 	
 	
 	/**
-	 * Set the pointer of the buffer
+	 * Set the pointer of the buffers, so they can be used for
+	 * rendering.
+	 * 
 	 * @param gl OpenGL context of android
 	 */
 	public void set(GL10 gl)

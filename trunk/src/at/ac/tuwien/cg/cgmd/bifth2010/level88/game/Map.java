@@ -10,7 +10,6 @@ import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vertexbuffers;
 
@@ -36,31 +35,51 @@ public class Map {
 			numStreetNeighboursBunny=0;
 		}
 
-		/** Set true, if the police is capable to cross this cell*/
+		/**
+		 * Set true, if the police is capable to cross this cell
+		 */
 		public boolean isStreetForPolice;
-		/** Set true, if the bunny is capable to cross this cell*/
+		/**
+		 * Set true, if the bunny is capable to cross this cell
+		 */
 		public boolean isStreetForBunny;
-		/** Set true, if the police is at this cell*/
+		/**
+		 * True if there is currently a police at this cell
+		 */
 		public boolean isPolicePresent;
-		/** Number of neighbourstreets of the police*/
+		/**
+		 * Number of neighbour cells the police can use as a street
+		 */
 		public int numStreetNeighboursPolice;
-		/** Number of neighbourstreets of the bunny*/
+		/**
+		 * Number of neighbour cells the bunny can use as a street
+		 */
 		public int numStreetNeighboursBunny;
-		/** Set the type of the cell*/
+		/**
+		 * Type of the cell
+		 */
 		public char type;
 	}
 
-	/** Game class instance of the level*/
+	/**
+	 * Game class instance of the level
+	 */
 	private Game game;
-	/** map of the level*/
+	/**
+	 * Map of the level
+	 */
 	public MapCell[][] cells;
-	/** direction of the level for flipping the map*/
+	/**
+	 * Base vectors of the map (the map consists of parallelograms)
+	 */
 	public Vector2 groundXDir, groundYDir;
-	/** direction of the houses for flipping the map*/
-	public Vector2 houseXDir, houseYDir, houseQuadBase;
-	/** buffer to save the whole map*/
+	/**
+	 * Buffer used to render the whole map
+	 */
 	public Vertexbuffers vbos;
-	/** counter of vertices*/
+	/**
+	 * Number of vertices stored in the vertexbuffers
+	 */
 	public int numVertices;
 
 	/**
@@ -71,15 +90,8 @@ public class Map {
 	public Map(Game _game) {
 		game = _game;
 
-		float norm;
 		groundYDir = new Vector2(-0.81f, -0.59f);
 		groundXDir = new Vector2(1.16f, -0.46f);
-
-		houseXDir = new Vector2(2.23f, 0);
-		//houseYDir = new Vector2(0, -1.89f);
-		houseYDir = new Vector2(0, -2.23f);
-		houseQuadBase = new Vector2();
-		houseQuadBase.x = -groundXDir.x;
 	}
 
 	/**
@@ -119,6 +131,9 @@ public class Map {
 	 * Loading of the level information of a txt-file
 	 */
 	public void load(){
+		/*
+		 * First read the level file and parse through all lines
+		 */
 		InputStream is = game.context.getResources().openRawResource(R.raw.l88_level);
 		InputStreamReader irs = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(irs);
@@ -142,7 +157,6 @@ public class Map {
 		int h,w;
 		h = values.size() + 2;
 		w = values.get(0).length() + 2;
-
 		cells = new MapCell[w][h];
 		for(int x=0; x<cells.length; x++) {
 			for(int y=0; y<cells[0].length; y++) {
@@ -157,64 +171,63 @@ public class Map {
 
 				switch(zeichen[x]){
 				case 'X':
-				case 'x':
+				case 'x': // Houses
 					cells[x+1][values.size()-y].type = 'x';
 					numHouses++;
 					break;
-				case ' ':
-					//Straße
+				case ' ': // Street
 					cells[x+1][values.size()-y].type = 's';
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
-				case '1':
+				case '1': // Stash, size 1
 					cells[x+1][values.size()-y].type = 's';
 					game.addStash(x+1, values.size()-y, 1);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
-				case '2':
+				case '2': // Stash, size 2
 					cells[x+1][values.size()-y].type = 's';
 					game.addStash(x+1, values.size()-y, 2);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
-				case '3':
+				case '3': // Stash, size 3
 					cells[x+1][values.size()-y].type = 's';
 					game.addStash(x+1, values.size()-y, 3);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
 				case 'B':
-				case 'b':
+				case 'b': // Startposition of the bunny
 					cells[x+1][values.size()-y].type = 's';
 					game.bunny.initPosition(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					break;
-				case 'F':
-				case 'f':
+				case 'F': // Fortress (or church)
+				case 'f': // Is a street for the police, but not for the bunny
 					cells[x+1][values.size()-y].type = 'f';
 					cells[x+1][values.size()-y].isStreetForBunny = false;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					numHouses++;
 					break;
-				case 'T':
-				case 't':
+				case 'T': // Tavern (or University)
+				case 't': // Is a street for the bunny, but not for the police
 					cells[x+1][values.size()-y].type = 't';
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = false;
 					numHouses++;
 					break;
 				case 'G':
-				case 'g':
+				case 'g': // Gallows, speed power up for the bunny
 					cells[x+1][values.size()-y].type = 'g';
 					cells[x+1][values.size()-y].isStreetForBunny = true;
 					cells[x+1][values.size()-y].isStreetForPolice = true;
 					numHouses++;
 					break;
 				case 'P':
-				case 'p':
+				case 'p': // Startposition of the police
 					cells[x+1][values.size()-y].type = 's';
 					game.addPolice(x+1, values.size()-y);
 					cells[x+1][values.size()-y].isStreetForBunny = true;
@@ -225,15 +238,22 @@ public class Map {
 			}//end for
 		}//end for
 
+		/*
+		 * Now create array for vertices and tex coords, and create
+		 * those. They have to be in the right order so the map can
+		 * be drawn with right visibility
+		 */
 		numVertices = (w*h + numHouses)*6;
 		Vector2[] vertices = new Vector2[numVertices];
 		Vector2[] texCoords = new Vector2[numVertices];
-
-		int i=0;
+		int i=0; // Counter for the current vertex/textoord
 		float tx, ty, dt, mt;
 		dt = 1.0f/8.0f;
 		mt = 1.0f/512.0f;
 
+		/*
+		 * We start with the ground of the map ... 
+		 */
 		for(int x=0; x<w; x++)
 		{
 			for(int y=0; y<h; y++)
@@ -355,7 +375,15 @@ public class Map {
 				i++;
 			}
 		}
-		
+
+		/*
+		 * ... and continue with the houses 
+		 */
+		Vector2 houseXDir = new Vector2(2.23f, 0);
+		//houseYDir = new Vector2(0, -1.89f);
+		Vector2 houseYDir = new Vector2(0, -2.23f);
+		Vector2 houseQuadBase = new Vector2();
+		houseQuadBase.x = -groundXDir.x;
 		for(int x=cells.length-1; x>=0; x--)
 		{
 			for(int y=cells[0].length-1; y>=0; y--)
@@ -436,6 +464,9 @@ public class Map {
 			}
 		}
 
+		/*
+		 * Store vertices and texCoords in the vbos
+		 */
 		vbos = new Vertexbuffers();
 		vbos.setData(Vertexbuffers.Type.POSITION, vertices);
 		vbos.setData(Vertexbuffers.Type.TEX_COORD, texCoords);
