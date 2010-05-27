@@ -26,11 +26,19 @@ public class GameActivity extends Activity {
     public Level _level;
 	private TextView _textTimeLeft;
 	private TextView _textTreasureLeft;
+	public TextView _textIntro;
 	private int _result = 0;
-	
+	private int textUpdateTime = 100;
 	private Vector2 _displayResolution;
-    
-	
+
+	private Handler handler = new Handler();
+
+	private Runnable updateTimeTask = new Runnable() {
+	public void run() {
+		updateText();
+		handler.postDelayed(this, textUpdateTime);
+	}
+	};
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +70,23 @@ public class GameActivity extends Activity {
        
     	
         _textTimeLeft = new TextView(this);
-        _textTimeLeft.setText("2:00");
+        _textTimeLeft.setText("");
         _textTimeLeft.setTextSize(25);
         _textTimeLeft.setGravity(Gravity.LEFT);
         _textTimeLeft.setTextColor(Color.BLACK);  
          
          
         _textTreasureLeft = new TextView(this);
-        _textTreasureLeft.setText("0");
+        _textTreasureLeft.setText("");
         _textTreasureLeft.setTextSize(25);
         _textTreasureLeft.setGravity(Gravity.CENTER);
         _textTreasureLeft.setTextColor(Color.BLACK);
+        
+        _textIntro = new TextView(this);
+        _textIntro.setText("");
+        _textIntro.setTextSize(25);
+        _textIntro.setGravity(Gravity.CENTER);
+        _textIntro.setTextColor(Color.BLACK);
          
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams.setMargins(10, 10, 10, 10);
@@ -81,9 +95,15 @@ public class GameActivity extends Activity {
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams2.setMargins(10, 10, 10, 10);
         llayout.addView(_textTreasureLeft, layoutParams2); 
+        
+        LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        layoutParams3.setMargins(10, 10, 10, 10);
+        llayout.addView(_textIntro, layoutParams3);
         /*if(savedInstanceState.containsKey("isLoadable"))
         	this.onRestoreInstanceState(savedInstanceState);*/
-        _level.start();
+        //_level.start();
+        handler.removeCallbacks(updateTimeTask);
+        handler.postDelayed(updateTimeTask, textUpdateTime); 
     }
     
     @Override
@@ -92,6 +112,8 @@ public class GameActivity extends Activity {
 		_level.resume_level();
         _gameView.onResume();
 		super.onResume();
+		handler.removeCallbacks(updateTimeTask);
+		handler.postDelayed(updateTimeTask, textUpdateTime);
     }
 
     @Override
@@ -112,12 +134,16 @@ public class GameActivity extends Activity {
 	protected void onStop() {
 		//System.out.println("Stop");
 		super.onStop();
+		handler.removeCallbacks(updateTimeTask);
 	}
 
 	@Override
 	protected void onDestroy() {
 		//System.out.println("Destroy");
 		super.onDestroy();
+		if ( handler != null )
+			handler.removeCallbacks(updateTimeTask);
+			handler = null; 
 	}
 	@Override
 	public void finish() {
@@ -208,7 +234,7 @@ public class GameActivity extends Activity {
      * updates text to show how much time in the level is left
      * @param f
      */
-	public void setTextTimeLeft(float f) {
+	/*public void setTextTimeLeft(float f) {
 		
 		float minutes = f % 60;
 		
@@ -218,14 +244,14 @@ public class GameActivity extends Activity {
 		if (f <= 0.0f) {
 			finish();
 		} 
-	}
+	}*/
 	
 	
 	/**
 	 * updates treasure grabbed text
 	 * @param f
 	 */
-	public void setTextTreasureGrabbed(float f) {
+	/*public void setTextTreasureGrabbed(float f) {
 		_textTreasureLeft.setText(Float.toString(f));
 		
 		_result+=f;
@@ -233,13 +259,31 @@ public class GameActivity extends Activity {
 		{
 			_result = 100;
 		}
-	}
+	}*/
 
 	/**
 	 * sets result (grabbed treasure) 
 	 * @param f
 	 */
 	public void setResult(float f) {
-		//_result = (int)f;
+		_result = Math.min(100, (int)f);
+	}
+	public void updateText(){
+		if(_level._isStarted){
+			if(!_level._isFinished){
+				_textTreasureLeft.setText(Integer.toString(Math.round(_level.getGrabbedTreasureValue())));
+				_textTimeLeft.setText(Integer.toString(Math.round(_level.getRemainigTime())));
+				_textIntro.setText("");
+			}else{
+				_textTreasureLeft.setText("");
+				_textTimeLeft.setText("");
+				if(_level.getGrabbedTreasureValue()>100)
+					_textIntro.setText("Congratulations, you distributed all treasure among the people!");
+				else if(_level.getRemainigTime()<=0)
+					_textIntro.setText("Time Up!");
+			}
+		}else{
+			_textIntro.setText("You have to distribute your money on the ground without letting the pedestrians fight.");
+		}
 	}
 }

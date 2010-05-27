@@ -94,12 +94,13 @@ public class GameRenderer implements Renderer {
 		//Clear Screen And Depth Buffer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
 		gl.glLoadIdentity();					//Reset The Current Modelview Matrix
-		
-		if (this.level._isRunning) {
-
-			//((GameActivity)this.context).setTextTimeLeft(this.level.getRemainigTime());
-			this.level.draw(gl);
-		
+		if(this.level._isStarted){
+			if (this.level._isRunning) {
+	
+				//((GameActivity)this.context).setTextTimeLeft(this.level.getRemainigTime());
+				this.level.draw(gl);
+			
+			}
 		}
     }
 }

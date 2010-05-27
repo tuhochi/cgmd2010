@@ -286,6 +286,6 @@ public class Pedestrian implements Target{
 		if(this.bounceVector.length() > this.maxBounceVectorLength)
 			this.bounceVector.normalize().mult(this.maxBounceVectorLength);
 		target = null;
-		System.out.println("bounceVector: "+bounceVector);
+		//System.out.println("bounceVector: "+bounceVector);
 	}
 }
