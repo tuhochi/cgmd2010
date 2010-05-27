@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -8,8 +7,7 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHelper;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
@@ -133,8 +131,8 @@ public abstract class GameObject {
 		//translate to correct position
 		
 		gl.glTranslatef(this.position.x, this.position.y, 0.0f);
-
-	
+		
+		gl.glRotatef(drunkenRotation, 0, 0, 1);
 		//draw
 		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 		
@@ -148,42 +146,26 @@ public abstract class GameObject {
 	 * @param movement
 	 */
 	public static void updateOffset(Vector2 movement) {
-		Vector2 temp = movement.clone();
-		temp.x *= (FPSCounter.getInstance().getDt() / 1000f);
-		temp.y *= (FPSCounter.getInstance().getDt() / 1000f);
+		//offset.add(new Vector2(movement.x * MyRenderer.STEP / 1000, movement.y * MyRenderer.STEP / 1000));
+		offset.add(movement);
 		
-		//-offset = center - tile -> tile = center + offset
-		float tileXBefore = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.x) / GameObject.BLOCKSIZE;
-		float tileYBefore = (((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.y) / GameObject.BLOCKSIZE;
-		
-		offset.add(temp);
-		
-		float tileXAfter = (((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.x) / GameObject.BLOCKSIZE;
-		float tileYAfter = (((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE + offset.y) / GameObject.BLOCKSIZE;
-		
-		Log.d("df", "beforex: " + tileXBefore + " afterx:" + tileXAfter);
-		Log.d("df", "beforey: " + tileYBefore + " aftery:" + tileYAfter);
-		
-		
-		if(((int)tileXBefore) != ((int)tileXAfter) && (int)tileXBefore != tileXBefore && (int)tileXAfter != tileXAfter) {
-			offset.x = (-1)* (((MyRenderer.screenWidth / GameObject.BLOCKSIZE / 2)) * GameObject.BLOCKSIZE - ((int)Math.max((int)tileXBefore, (int)tileXAfter))*GameObject.BLOCKSIZE);
+		//test for collision with solid tiles
+		if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
+			//reset offset
+			GameObject.offset.sub(GameControl.getInstance().getMovement());
+			//check if old movement is possible (only at corners)
+			if((GameControl.getInstance().getMovement().x == 0 && GameControl.getInstance().getOldMovement().x != 0)|| (GameControl.getInstance().getMovement().y == 0 && GameControl.getInstance().getOldMovement().y != 0)) {
+				GameObject.offset.add(GameControl.getInstance().getOldMovement());
+				if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
+					GameObject.offset.sub(GameControl.getInstance().getOldMovement());
+					//stop movement
+					GameControl.getInstance().setOldMovement(new Vector2(0, 0));
+				}
+			}
 		}
-		if(((int)tileYBefore) != ((int)tileYAfter) && (int)tileYBefore != tileYBefore && (int)tileYAfter != tileYAfter) {
-			offset.y = (-1)* (((MyRenderer.screenHeight / GameObject.BLOCKSIZE / 2)) * GameObject.BLOCKSIZE - ((int)Math.max((int)tileYBefore, (int)tileYAfter))*GameObject.BLOCKSIZE);
+		else {
+			GameControl.getInstance().setOldMovement(GameControl.getInstance().getMovement().clone());
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 	
 	/**

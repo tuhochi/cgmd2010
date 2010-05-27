@@ -37,38 +37,41 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	//public static int controlDelay = 0;
 	public static int map[][] = {
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 0, 2, 0, 0, 0, 0, 2, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, 
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 2, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 0, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
+		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+		{ 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 2, 1, 1, 1, 1 }, 
+		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
+		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, 
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1 }, 
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 2, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 0, 0, 0, 2, 4, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2, 0, 0, 1, 1, 1, 1 },
+		{ 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 2, 1 },
+		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 2, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 1 },
+		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 },
 		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 0, 0, 0, 2, 0, 2, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
+		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
 		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 4, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 2, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 2, 0, 0, 1, 1, 1 },
+		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 },
+		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
+		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
+		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
 		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 	};
+	
+	public static final long STEP = 50;
+	private long lastTime = System.currentTimeMillis();
 	
 	
 	//dimensions of screen
@@ -76,7 +79,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	public static int screenHeight;
 	
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
-	public static final float SPEED = 128f;
+	public static final int SPEED = 4;
 	
 	private float zoomFactor = 1.0f;
 	private float zoom = 0.0f;
@@ -126,6 +129,49 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		int width = MyRenderer.screenWidth;
 		int height = MyRenderer.screenHeight;
 		
+		//calculate and update fps
+		counter.update();
+		float dt = counter.getDt();
+		accTime += dt/1000;
+		if(accTime > 5)
+		{
+			accTime = 0;
+		}
+		
+		long now = System.currentTimeMillis();
+		while(lastTime + STEP <= now) {
+
+
+			gameControl.update();
+
+			//draw all game objects
+			for(GameObject gameObject : gameObjects) {
+				if (gameObject.isActive){
+					gameObject.update();
+				}
+			}
+
+			gameControl.updateDrunkStatus(drunkStatusBar);
+			gameControl.updateJailStatus(jailStatusBar);
+
+			//update game time
+			GameTimer.getInstance().update();
+
+			lastTime += STEP;
+
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		
@@ -154,44 +200,21 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glViewport(0, 0, width, height);
 		
 		
-		
-		
-		
-		//calculate and update fps
-		counter.update();
-		float dt = counter.getDt();
-		accTime += dt/1000;
-		if(accTime > 5)
-		{
-			accTime = 0;
-		}
-		
 		//clear color
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		gameControl.update();
 		
 		//draw all game objects
 		for(GameObject gameObject : gameObjects) {
 			if (gameObject.isActive){
-			gameObject.update();
 			gameObject.draw(gl);
 			
 			}
 		}
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
 		
-		gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
-		gl.glViewport(0, 0, width, height);
 			drunkStatusBar.draw(gl);
-			gameControl.updateDrunkStatus(drunkStatusBar);
-			gameControl.updateJailStatus(jailStatusBar);
 			jailStatusBar.draw(gl);
-			
-			
-			//update game time
-			GameTimer.getInstance().update();
+		
 			
 	}
 
@@ -214,7 +237,32 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
 		
 		gl.glViewport(0, 0, width, height);
+		/*
+		//init all textures
+		TextureSingletons.initTextures(gl, context);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		//create all game objects
+		gameObjects.add(new BackgroundObject());
+		for(int i = 0; i < MyRenderer.map.length; i++) {
+			for(int j = 0; j < MyRenderer.map[i].length; j++) {
+				if(MyRenderer.map[i][j] == 2) {
+					gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
+				}
+				else if (MyRenderer.map[i][j] == 3){
+					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
+				}
+				else if (MyRenderer.map[i][j] == 4){
+					gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
+				}
+			}
+		}
+		drunkStatusBar = new DrunkBar(200, 50);
+		jailStatusBar = new JailBar(200, 50);
+	    jailStatusBar.position.y = 50;
 
+		
+		//player = new PlayerObject();
+		gameObjects.add(new PlayerObject());*/
 	}
 
 	/**
@@ -230,7 +278,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		//enable blend capability
 		gl.glEnable(GL10.GL_BLEND);
 		
-		//specify alpha blend function
+		//specify blend function
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		//set shading model
@@ -336,22 +384,24 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			float x = event.getX();
 			float y = event.getY();
 			if(Math.abs(x) > Math.abs(y)) {
-
+			//	if(Math.abs(x) > 0.6) {
 					if(x > 0) {
 						gameControl.movePlayer(MyRenderer.screenWidth, MyRenderer.screenHeight / 2.0f);
 					}
 					else {
 						gameControl.movePlayer(0, MyRenderer.screenHeight / 2.0f);
 					}
+				//}
 			}
 			else {
+				//if(Math.abs(y) > 0.6) {
 					if(y > 0) {
 						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, MyRenderer.screenHeight);
 					}
 					else {
 						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, 0);
 					}
-
+				//}
 			}
 		
 		}

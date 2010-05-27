@@ -3,7 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.CollisionHelper;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
@@ -21,10 +21,30 @@ public class BackgroundObject extends GameObject {
 	public BackgroundObject() {
 		//object is 1024*1024 pixels
 		super(1024, 1024);
-		
+		/*
+		//set offset
+		float centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		float centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		//move starting tile to center
+		float startingTileX = 3 * GameObject.BLOCKSIZE;
+		float startingTileY = 1 * GameObject.BLOCKSIZE;
+		float offsetX = centerX - startingTileX;
+		float offsetY = centerY - startingTileY;
+		GameObject.offset = new Vector2(-offsetX, -offsetY);*/
 		
 	}
-
+	/*
+	public void setStartTile() {
+		//set offset
+		float centerX = ((MyRenderer.screenWidth / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		float centerY = ((MyRenderer.screenHeight / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		//move starting tile to center
+		float startingTileX = 3 * GameObject.BLOCKSIZE;
+		float startingTileY = 1 * GameObject.BLOCKSIZE;
+		float offsetX = centerX - startingTileX;
+		float offsetY = centerY - startingTileY;
+		GameObject.offset = new Vector2(-offsetX, -offsetY);
+	}*/
 	/**
 	 * @see GameObject#draw(GL10)
 	 */
@@ -34,31 +54,24 @@ public class BackgroundObject extends GameObject {
 		//Reset modelview matrix
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		
+		/*
 		//test for collision with solid tiles
-		gameControl.setCurrentMovement(gameControl.getMovement().clone());
 		if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
-			
 			//reset offset
-			//GameObject.offset.sub(gameControl.getMovement());
+			GameObject.offset.sub(gameControl.getMovement());
 			//check if old movement is possible (only at corners)
-			//if((gameControl.getMovement().x == 0 && gameControl.getOldMovement().x != 0)|| (gameControl.getMovement().y == 0 && gameControl.getOldMovement().y != 0)) {
-			
-				GameObject.updateOffset(gameControl.getOldMovement());
-				//GameObject.offset.x += gameControl.getOldMovement().x * (FPSCounter.getInstance().getDt() / 1000f);
-				//GameObject.offset.y += gameControl.getOldMovement().y * (FPSCounter.getInstance().getDt() / 1000f);
-				gameControl.setCurrentMovement(gameControl.getOldMovement().clone());
-				//gameControl.setMovement(gameControl.getOldMovement().clone());
+			if((gameControl.getMovement().x == 0 && gameControl.getOldMovement().x != 0)|| (gameControl.getMovement().y == 0 && gameControl.getOldMovement().y != 0)) {
+				GameObject.offset.add(gameControl.getOldMovement());
 				if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
-					//GameObject.offset.sub(gameControl.getOldMovement());
+					GameObject.offset.sub(gameControl.getOldMovement());
 					//stop movement
 					gameControl.setOldMovement(new Vector2(0, 0));
 				}
-			//}
+			}
 		}
 		else {
 			gameControl.setOldMovement(gameControl.getMovement().clone());
-		}
+		}*/
 		//enable client state
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
@@ -71,7 +84,7 @@ public class BackgroundObject extends GameObject {
 		
 		//bind texture
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, this.texture.textures[0]);
-
+	//	gl.glRotatef(40, 0, 0, 1);
 		//translate whole background (instead of moving player)
 		gl.glTranslatef(-GameObject.offset.x, -GameObject.offset.y, 0f);
 		
