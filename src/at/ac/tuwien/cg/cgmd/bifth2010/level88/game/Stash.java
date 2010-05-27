@@ -2,26 +2,43 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level88.game;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
-
 
 /**
  * Class for the stashes
  * @author Asperger, Radax
  */
 public class Stash {
-	/** Game instance of the level*/
+	/**
+	 * Game instance of the level
+	 */
 	private Game game;
-	/** Current position of the stash on the map*/
+	/**
+	 * Position of the stash. This position is
+	 * a logical coordinate on the map.
+	 */
 	public int currentPosX, currentPosY;
-	/** Next position of the stash on the map*/
+	/**
+	 * Position of the stash. This position is
+	 * used to translate the stash for rendering (so
+	 * it is displayed at the right position).
+	 */
 	public float translateX, translateY;
-	/** size of the stash to hide gold in it*/
+	/**
+	 * Size of the stash. Ranges from 1 (small)
+	 * to 3 (large)
+	 */
 	public int size;
-	/** hidden times for this stash*/
-	public float hideTime, maxHideTime;
+	/**
+	 * Time the stash has to be hidden. If >0
+	 * the stash is hidden and gold can't be
+	 * hidden in the stash. The stash also won't be
+	 * rendered if it is hidden.
+	 */
+	public float hideTime;
+	/**
+	 * Maximum hide time.
+	 */
+	public float maxHideTime;
 
 
 	/**
@@ -36,11 +53,10 @@ public class Stash {
 		setPosition(x, y);
 		size = _size;
 
-		maxHideTime = 120;
+		maxHideTime = 120; // 2 minutes hide time after stash is used
 		hideTime = 0;
 	}
-	
-	
+
 	/**
 	 * Update the stash: check if stash is active and check if bunny has reached the stash
 	 * @param elapsedSeconds time between the last update and now
@@ -52,7 +68,7 @@ public class Stash {
 		}
 
 		if( currentPosX==game.bunny.currentPosX && currentPosY==game.bunny.currentPosY ) {
-			game.looseGold(5*size);
+			game.looseGold(3*size);
 			hideTime = maxHideTime;
 		}
 	}

@@ -3,7 +3,7 @@ P1          2          1P
  X2   X   2X        3X X 
  X XX XFXX X XX XXXXXX   
              XX    X2X X 
- X XXXX XX X XX XX1X X X 
+ X XXXX XX X XXFXX1X X X 
  X   X G XTX XX    X   T 
  X XXX X XXX XT2XXXX1X X 
  X X1     1X XX    XXX X 
@@ -15,7 +15,7 @@ P1          2          1P
   1    2     X1   F   2X 
  X XXXX XXXX XX XX XX XX 
  X XX     XX XX   G   XX 
- X 1T X X XX XX XX X  XX 
+ X 1T X X XX XX XX XX XX 
  XXXX X X XX X1 X3 X1 1X 
  F 3X X2X XX XX XX XX XX 
  X XX XXX XX      F      

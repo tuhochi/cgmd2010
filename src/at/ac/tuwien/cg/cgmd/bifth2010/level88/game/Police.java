@@ -5,26 +5,46 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Quad;
-import at.ac.tuwien.cg.cgmd.bifth2010.level88.util.Vector2;
-
 /**
  * Class for the police
  * @author Asperger, Radax
  */
 public class Police {
-	/** Game instance of the level*/
+	/**
+	 * Game instance of the level
+	 */
 	private Game game;
-	/** current and previous position of the police*/
+	/**
+	 * Current and previous position of the police.
+	 * This position are logical coordinates on the map.
+	 */
 	public int currentPosX, currentPosY, prevPosX, prevPosY;
-	/** movement of the police - distance and time*/
-	public float transition, transitionTime;
-	/** set true if the police should stop moving in the current frame*/
+	/**
+	 * Current transition of the police (transition between two
+	 * field of the map).
+	 */
+	public float transition;
+	/**
+	 * Time it takes the police to move from one field of the
+	 * map to another.
+	 */
+	public float transitionTime;
+	/**
+	 * True if the police just finished transition between two cells.
+	 * Used to avoid 'jumping' of the police when police reaches a
+	 * t-junction or a dead end.
+	 */
 	public boolean stopTransition;
-	/** movement of the police - for the mapcells*/
+	/**
+	 * Position of the police. This position is
+	 * used to translate the police for rendering (so
+	 * it is displayed at the right position).
+	 */
 	public float translateX, translateY;
-	/** true if the police was not able to move in the last frame*/
+	/**
+	 * True if the police was not able to move in the last frame.
+	 * Used to avoid dead-lock situations.
+	 */
 	private boolean wasStuckLastFrame;
 
 	/**
@@ -116,7 +136,7 @@ public class Police {
 	 */
 	public void update(float elapsedSeconds) {
 		transition += elapsedSeconds;
-		if( transition >= transitionTime )
+		while( transition >= transitionTime )
 		{
 			transition -= transitionTime;
 			stopTransition=true;

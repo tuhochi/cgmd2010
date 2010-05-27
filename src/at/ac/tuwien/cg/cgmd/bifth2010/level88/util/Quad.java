@@ -2,17 +2,30 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level88.util;
 
 
 /**
- * Class for representing a quad
+ * Class for representing a Quad
+ * 
+ * The Quad consists of a position and two base vectors (so
+ * the Quad is not axis aligned). The base vectors don't have
+ * to be orthogonal, so the Quad represents parallelograms.
+ * 
  * @author Asperger, Radax
  */
 public class Quad {
-	/** Vector containing the position*/
+	/**
+	 * Position of the Quad 
+	 */
 	private Vector2 position;
-	/** Vector containing the information for the x-direction*/
+	/**
+	 * X-Base Vector of the Quad
+	 */
 	private Vector2 xDir;
-	/** Vector containing the information for the y-direction*/
+	/**
+	 * Y-Base Vector of the Quad
+	 */
 	private Vector2 yDir;
-	/** Vertexbuffer containg the information of the quad*/
+	/** 
+	 * Vertexbuffer, used to render the Quad
+	 */
 	public Vertexbuffers vbos;
 	
 	
