@@ -5,7 +5,7 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.FPSCounter;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
 /**
@@ -20,7 +20,7 @@ public class EnemyObject extends GameObject {
 	 * constructor calls super with object's dimensions
 	 */
 
-	public float speed = 16.0f;
+	public float speed = 1.0f;
 
 	public Vector2[] directionVectorArray = new Vector2[4];
 	Random random;
@@ -66,10 +66,8 @@ public class EnemyObject extends GameObject {
 	
 	@Override
 	public void update(){
-		Vector2 temp = moveVec.clone();
-		temp.x *= (FPSCounter.getInstance().getDt() / 1000f);
-		temp.y *= (FPSCounter.getInstance().getDt() / 1000f);
-		this.position.add(temp);
+		//this.position.add(new Vector2(moveVec.x * MyRenderer.STEP / 1000, moveVec.y * MyRenderer.STEP / 1000));
+		this.position.add(moveVec);
 		}
 	
 	/**
