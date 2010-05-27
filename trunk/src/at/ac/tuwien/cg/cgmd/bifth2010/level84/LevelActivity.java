@@ -31,6 +31,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
  */
 public class LevelActivity extends Activity implements OnTouchListener, OnSeekBarChangeListener {
 
+	public static enum AnimationType {SPLASH, DUST};
+	
 	/** The main part of the level */
 	private ModelStreet street;
 	/** Contains the different types of Gems */
@@ -58,7 +60,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private TextView tfPoints;
 	private TextView tfPointsShadow;
-	private ImageView breakAniView;
+	private ImageView aniView;
 	/*private AnimationDrawable roundGemBreakAni;
 	private AnimationDrawable octGemBreakAni;
 	private AnimationDrawable rectGemBreakAni;
@@ -104,8 +106,8 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		
 		soundManager.playMusic();
 
-		breakAniView = (ImageView) findViewById(R.id.l84_imageView);
-		breakAniView.setBackgroundResource(R.drawable.l84_animation_intro);
+		aniView = (ImageView) findViewById(R.id.l84_imageView);
+		
 	/*case ModelDrain.ROUND: breakAnimationImageView.setBackgroundResource(R.drawable.l84_animation_intro); break;
 		roundGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
 		octGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
@@ -224,17 +226,27 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		}
 	}
 	
-	public void showBreakAni(int gemType) {
+	public void showBreakAni(int type) {
 		
-		/*switch(gemType) {
-		case ModelDrain.ROUND: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
-		case ModelDrain.OCT: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
-		case ModelDrain.RECT: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
-		case ModelDrain.DIAMOND: breakAniView.setBackgroundResource(R.drawable.l84_animation_intro); break;
-		}*/
-		//((AnimationDrawable) breakAniView.getBackground()).stop(); //rewind (?)
+		switch(type) {
+		case ModelDrain.ROUND: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_round); break;
+		case ModelDrain.OCT: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_oct); break;
+		case ModelDrain.RECT: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_rect); break;
+		case ModelDrain.DIAMOND: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_diamond); break;
+		}
 		
-		AnimationDrawable ani = (AnimationDrawable)breakAniView.getBackground();
+		AnimationDrawable ani = (AnimationDrawable)aniView.getBackground();
+		ani.stop();
+		ani.start();
+	}
+	
+	public void showAni(AnimationType type) {
+		switch(type) {
+		case SPLASH: aniView.setBackgroundResource(R.drawable.l84_ani_watersplash); break;
+		//case DUST: aniView.setBackgroundResource(R.drawable.l84_ani_dust); break;
+		}
+		
+		AnimationDrawable ani = (AnimationDrawable)aniView.getBackground();
 		ani.stop();
 		ani.start();
 	}
