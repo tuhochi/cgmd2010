@@ -13,7 +13,7 @@
                android:layout_marginRight="10dp"
                />
     <TextView android:id="@+id/l83_tutorial_text"
-              android:layout_width="180sp"
+              android:layout_width="200sp"
               android:layout_height="70sp"
               android:textColor="#FFF"
               android:textSize="16dp"
