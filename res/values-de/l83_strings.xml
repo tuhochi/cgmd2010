@@ -6,7 +6,7 @@
 <string name="l83_help_apologies">Wir möchten uns bei Lenny, beziehungsweise seinen Eltern, dafür entschuldigen, dass wir Bunny\'s Glückseligkeit über die vom armen Lenny stellen.</string>
 <string name="l83_tut_1">Das ist Lenny, er muss sterben!</string>
 <string name="l83_tut_2">Verwende die Items aus der Liste, um Lenny zu töten. Das oberste Item ist aktiv und kann durch Ziehen platziert werden.</string>
-<string name="l83_tut_3">Verwende die Wand, um ein Feld zu blockieren und somit Lenny\'s Pfad zu beeinflussen.</string>
+<string name="l83_tut_3">Verwende die Wand, um ein Feld zu blockieren und somit Lenny\'s Pfad zu beeinflussen. Wenn Du Lenny den Weg versperrst, beamt er sich zum nächsten freien Feld.</string>
 <string name="l83_tut_4">Verwende dieses Item, um eine existierende Wand zu entfernen.</string>
 <string name="l83_tut_5">Platziere die Zeitbombe, um Lenny zu töten.</string>
 <string name="l83_tut_6">Jenseits der Grenze, die durch diese Felder markiert wird, kannst Du keine Items platzieren.</string>
