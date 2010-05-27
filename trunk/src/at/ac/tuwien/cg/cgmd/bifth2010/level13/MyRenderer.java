@@ -80,6 +80,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
 	public static final int SPEED = 4;
+	private static final float ROTATIONINC = 5.4f;
+	private float rotation = 0;
 	
 	private float zoomFactor = 1.0f;
 	private float zoom = 0.0f;
@@ -98,7 +100,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	private GameControl gameControl;
 	
 	public PlayerObject player;
-	private float rotate = 0f;
 	
 	public static void reset() {
 		gameObjects = new ArrayList<GameObject>();
@@ -157,9 +158,16 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			//update game time
 			GameTimer.getInstance().update();
 
+		
+			
+			if(gameControl.isDrunkState()) {
+				rotation += ROTATIONINC;
+			}
+			
 			lastTime += STEP;
 
 		}
+
 		
 		
 		
@@ -170,7 +178,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		
 		
-		
+		Log.d("df", "zoom: " + zoomFactor);
 		
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
@@ -186,16 +194,24 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			}
 
 			zoomFactor+=zoom;
-			gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
-
-			gl.glTranslatef(player.getRealPosition().x - GameObject.offset.x, player.getRealPosition().y - GameObject.offset.y, 0);
-			gl.glRotatef(rotate, 0, 0, 1);
-			gl.glTranslatef((-1)*(player.getRealPosition().x - GameObject.offset.x), (-1)*(player.getRealPosition().y - GameObject.offset.y), 0);
-			rotate += 3;
 		}
 		else {
-			gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
+			zoomFactor = 1.0f;
 		}
+		
+	
+			gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
+
+	
+			//gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
+			gl.glTranslatef(player.getRealPosition().x - GameObject.offset.x, player.getRealPosition().y - GameObject.offset.y, 0);
+			gl.glRotatef(rotation, 0, 0, 1);
+			gl.glTranslatef((-1)*(player.getRealPosition().x - GameObject.offset.x), (-1)*(player.getRealPosition().y - GameObject.offset.y), 0);
+		
+		/*}
+		else {
+			gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
+		}*/
 		 	
 		gl.glViewport(0, 0, width, height);
 		

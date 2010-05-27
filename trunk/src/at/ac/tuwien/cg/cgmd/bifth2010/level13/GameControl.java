@@ -27,7 +27,7 @@ public class GameControl {
         private int consumedBeer = 0;
         private int mistressCounter = 0;
         private boolean drunkState = false;
-        private static final int DRUNKTIME = 150;
+        private static final int DRUNKTIME = 200;
         private int currentDrunkTime = 0;
         private static final int BUSTTIME = 50;
         private int currentBustTime = 0;
@@ -80,7 +80,7 @@ public class GameControl {
                 //remember old movement
                 oldMovement = movement.clone();
                
-                if (!inJail && !drunkState){
+                if (!inJail){
                 float deltaX = Math.abs( x - MyRenderer.screenWidth / 2.0f);
                 float deltaY = Math.abs( y - MyRenderer.screenHeight / 2.0f);
        
@@ -111,36 +111,7 @@ public class GameControl {
                                 movement.x = 0.0f;
                                 movement.y = -MyRenderer.SPEED;
                         }
-                }} else if(!inJail && drunkState){
-                        float deltaX = Math.abs( x - MyRenderer.screenWidth / 2.0f);
-                        float deltaY = Math.abs( y - MyRenderer.screenHeight / 2.0f);
-                       
-                        if(deltaX >= deltaY) {
-                                if(x < MyRenderer.screenWidth / 2.0f) {
-                                        //move left
-                               
-                                        movement.x = MyRenderer.SPEED;
-                                        movement.y = 0.0f;
-                                }
-                                else if(x > MyRenderer.screenWidth / 2.0f) {
-                                        //move right
-                                        movement.x =  -MyRenderer.SPEED;
-                                        movement.y = 0.0f;
-                                }
-                        }
-                        else {
-                                //event starts at top left
-                                if(y < MyRenderer.screenHeight / 2.0f) {
-                                        //move up
-                                        movement.x = 0.0f;
-                                        movement.y = -MyRenderer.SPEED;
-                                }
-                                else if(y > MyRenderer.screenHeight / 2.0f) {
-                                        //move up
-                                        movement.x = 0.0f;
-                                        movement.y = MyRenderer.SPEED;
-                                }
-                        }}
+                }}
                
         }
        

@@ -65,7 +65,7 @@ public class CollisionHelper {
 		yMax = map.length - yMax - 1;
 		yMin = map.length - yMin - 1;
 	
-		Log.d("df", "xMin: " + xMin + " xMax: " + xMax + " yMin: " + yMin + " yMax: " + yMax);
+		//Log.d("df", "xMin: " + xMin + " xMax: " + xMax + " yMin: " + yMin + " yMax: " + yMax);
 		//check critical tiles
 		for(int i = yMax; i <= yMin; i++) { 
 			for(int j = xMin; j <= xMax; j++) {
