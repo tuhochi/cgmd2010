@@ -225,7 +225,6 @@ public class MailDataBase {
 		for ( int index = 0; index < target.getInt( "mailcount"); index++ )
 		{
 			
-			MailSceneObject loadedObj = new MailSceneObject( new Mail( "invalid", "invalid", false ), 0, null );
 			String mailName = target.getStringArray( "mailnames" )[ index ];
 			Mail targetMail = null;
 
@@ -233,6 +232,7 @@ public class MailDataBase {
 				if ( mailRepository.get( mailIndex ).getDisplayName().equals( mailName ) )
 					targetMail = mailRepository.get( mailIndex );
 			
+			MailSceneObject loadedObj = new MailSceneObject( targetMail, 0, null );
 			loadedObj.loadPersistentState( target, targetMail, index );
 			
 			mailMeshes.set( index, loadedObj );

@@ -94,27 +94,67 @@ public class MailSceneObject
 		
 		position = new Vector3f( 0, 0, -100.0f );
 		
-		float[] vertexPos = {
-								-1, -0.6f, 0,
-								-1, 0.6f, 0,
-								1, 0.6f, 0,
-								1, -0.6f, 0,
-								0, 1, 0
-							};
-		float[] vertexNorm =	{
-								0, 0, -1,
-								0, 0, -1,
-								0, 0, -1,
-								0, 0, -1,
-								0, 0, -1
-								};
-		float[] uvCoords = {
-								0.0f, 1.0f,
-								0.0f, 0.37f,
-								1.0f, 0.37f,
-								1.0f, 1.0f,
-								0.5f, 0.0f
-							};
+		characterRefs = new MailCharacter[ myMail.getDisplayName().length() ];
+		
+		int subDivisionCount = 4 * myMail.getDisplayName().length() + 1;
+		
+		float[] vertexPos = new float[ subDivisionCount * subDivisionCount * 3 + 3 ];
+		float[] vertexNorm = new float[ subDivisionCount * subDivisionCount * 3 + 3 ];
+		float[] uvCoords = new float[ subDivisionCount * subDivisionCount * 2 + 2 ];
+		float[] uvCoordsCharacter = new float[ subDivisionCount * subDivisionCount * 2 + 2 ];
+		
+		for ( int subDivIndexHor = 0; subDivIndexHor < subDivisionCount; subDivIndexHor++ )
+		{
+			
+			for ( int subDivIndexVer = 0; subDivIndexVer < subDivisionCount; subDivIndexVer++ )
+			{
+				
+				vertexPos[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 ] = 
+					2.0f * subDivIndexHor / ( float ) ( subDivisionCount - 1 ) - 1.0f;
+				vertexPos[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 1 ] =
+					1.2f * subDivIndexVer / ( float ) ( subDivisionCount - 1 ) - 0.6f;
+				vertexPos[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 2 ] = 0;
+				
+				vertexNorm[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 ] = 0;
+				vertexNorm[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 1 ] = 0;
+				vertexNorm[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 2 ] = - 1.0f;
+				
+				uvCoords[ subDivIndexHor * subDivisionCount * 2 + subDivIndexVer * 2 ] = 
+					subDivIndexHor / ( float ) ( subDivisionCount - 1 );
+				uvCoords[ subDivIndexHor * subDivisionCount * 2 + subDivIndexVer * 2 + 1 ] =
+					1.0f - 0.63f * subDivIndexVer / ( float ) ( subDivisionCount - 1 );
+			}
+		}
+		
+		vertexPos[ subDivisionCount * subDivisionCount * 3 ] = 0;
+		vertexPos[ subDivisionCount * subDivisionCount * 3 + 1 ] = 1;
+		vertexPos[ subDivisionCount * subDivisionCount * 3 + 2 ] = 0;
+		
+		vertexNorm[ subDivisionCount * subDivisionCount * 3 ] = 0;
+		vertexNorm[ subDivisionCount * subDivisionCount * 3 + 1 ] = 0;
+		vertexNorm[ subDivisionCount * subDivisionCount * 3 + 2 ] = -1.0f;
+		
+		uvCoords[ subDivisionCount * subDivisionCount * 2 ] = 0.5f;
+		uvCoords[ subDivisionCount * subDivisionCount * 2 + 1 ] = 0.0f;
+		
+		for ( int charIndex = 0; charIndex < myMail.getDisplayName().length(); charIndex++ )
+		{
+			
+			int meshIndex = charIndex * 4 + 1;
+			
+			for ( int subDivIndexHor = 0; subDivIndexHor < 3; subDivIndexHor++ )
+			{
+				
+				for ( int subDivIndexVer = 0; subDivIndexVer < 3; subDivIndexVer++ )
+				{
+				
+					uvCoordsCharacter[ ( meshIndex + subDivIndexHor ) * subDivisionCount * 2 + ( meshIndex + subDivIndexVer ) * 2 ] = 
+						subDivIndexHor / 2.0f;
+					uvCoordsCharacter[ ( meshIndex + subDivIndexHor ) * subDivisionCount * 2 + ( meshIndex + subDivIndexVer ) * 2 ] =
+						subDivIndexVer / 2.0f;
+				}
+			}
+		}
 		
 		byte[] ind = 	{
 							0, 1, 2, 
@@ -139,6 +179,12 @@ public class MailSceneObject
 		uvCoordinates = byteBuf.asFloatBuffer();
 		uvCoordinates.put( uvCoords );
 		uvCoordinates.position( 0 );
+		
+		byteBuf = ByteBuffer.allocateDirect( uvCoordsCharacter.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		uvCoordinatesCharacter = byteBuf.asFloatBuffer();
+		uvCoordinatesCharacter.put( uvCoords );
+		uvCoordinatesCharacter.position( 0 );
 		
 		indices = ByteBuffer.wrap( ind );
 		indices.position( 0 );
@@ -213,16 +259,19 @@ public class MailSceneObject
 		renderContext.glTranslatef( position.x, position.y, position.z );
 		
 		renderContext.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		renderContext.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		renderContext.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 
 		renderContext.glFrontFace(GL10.GL_CW );
 		
 		renderContext.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexPositions );
-		renderContext.glTexCoordPointer(2, GL10.GL_FLOAT, 0, uvCoordinates );
 		renderContext.glNormalPointer(GL10.GL_FLOAT, 0, vertexNormals);
 		
+		renderContext.glActiveTexture( GL10.GL_TEXTURE0 );
+		renderContext.glClientActiveTexture( GL10.GL_TEXTURE0 );
+		renderContext.glEnable( GL10.GL_TEXTURE_2D );
+		renderContext.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		glBindTexture( GL10.GL_TEXTURE_2D, texture[ texIndex ] );
+		renderContext.glTexCoordPointer(2, GL10.GL_FLOAT, 0, uvCoordinates );
 		
 		renderContext.glDrawElements(GL10.GL_TRIANGLES, indices.capacity(), GL10.GL_UNSIGNED_BYTE, indices );
 		
@@ -359,8 +408,10 @@ public class MailSceneObject
 	private FloatBuffer vertexPositions;
 	private FloatBuffer vertexNormals;
 	private FloatBuffer uvCoordinates;
+	private FloatBuffer uvCoordinatesCharacter;
 	private ByteBuffer indices;
 	private Mail myMail;
+	private MailCharacter[] characterRefs;
 	private float accTime;
 	private float scaleFactor;
 	private boolean isAlive;
