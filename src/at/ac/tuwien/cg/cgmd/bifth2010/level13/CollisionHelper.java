@@ -81,7 +81,7 @@ public class CollisionHelper {
 					}
 					
 					else {//collision detected
-						
+						/*
 						if (gO != null){
 							//Set object back to the last tile it was on before
 							if (gO.moveVec.x == 0)
@@ -91,7 +91,7 @@ public class CollisionHelper {
 						}
 						
 						Log.d("df", "coll width x:" + j + " y:" + i);
-						
+						*/
 						return true;
 					}
 				}
