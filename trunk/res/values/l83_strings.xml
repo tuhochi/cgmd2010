@@ -7,7 +7,7 @@
 <string name="l83_title">Lenny Must Die - Arcade</string>
 <string name="l83_tut_1">This is Lenny, he must die!</string>
 <string name="l83_tut_2">Use the items from the queue to kill Lenny. The topmost item is active and can be placed by dragging.</string>
-<string name="l83_tut_3">Use the wall to block a field and thus force Lenny to walk a specific path.</string>
+<string name="l83_tut_3">Use the wall to block a field and thus force Lenny to walk a specific path. If you block Lenny\'s way, he will teleport to the next free field.</string>
 <string name="l83_tut_4">Use this item to remove an existing wall.</string>
 <string name="l83_tut_5">Place the time bomb to kill Lenny.</string>
 <string name="l83_tut_6">You cannot place items beyond the border which is marked by these fields.</string>
