@@ -123,8 +123,18 @@ public class TrainGame {
 
 		// -- Read level data from file --
 		try {
+			
+			ArrayList<Integer> levels = new ArrayList<Integer>();
+			levels.add(R.raw.l70_level1);
+			levels.add(R.raw.l70_level2);
+			levels.add(R.raw.l70_level3);
+			levels.add(R.raw.l70_level4);
+			levels.add(R.raw.l70_level5);
+			Collections.shuffle(levels);
+			
 			Context     ctx = LevelActivity.getInstance();
-			InputStream is  = ctx.getResources().openRawResource(R.raw.l70_level1);
+			InputStream is  = ctx.getResources().openRawResource(levels.get(0));
+			//InputStream is  = ctx.getResources().openRawResource(R.raw.l70_level4);
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
 			
 			// Level configuration
@@ -396,6 +406,9 @@ public class TrainGame {
 	
 	
 	public void onGameCompleted() {
+	    if (isGameCompleted) {
+	        return;
+	    }
 	    LevelActivity.getInstance().handler.post(LevelActivity
 	                .getInstance().displayGameComplete);
 		isGameCompleted = true;
@@ -403,6 +416,9 @@ public class TrainGame {
 	}
 	
 	public void onGameOver() {
+	    if (isGameOver) {
+	        return;
+	    }
 	    LevelActivity.getInstance().handler.post(LevelActivity
                 .getInstance().displayGameOver);
 	    isGameOver = true;
