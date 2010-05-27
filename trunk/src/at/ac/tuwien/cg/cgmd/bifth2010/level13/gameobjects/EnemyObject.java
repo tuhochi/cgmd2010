@@ -64,11 +64,6 @@ public class EnemyObject extends GameObject {
 	}
 	
 	
-	@Override
-	public void update(){
-		//this.position.add(new Vector2(moveVec.x * MyRenderer.STEP / 1000, moveVec.y * MyRenderer.STEP / 1000));
-		this.position.add(moveVec);
-		}
 	
 	/**
 	 * @see GameObject#draw(GL10) 
