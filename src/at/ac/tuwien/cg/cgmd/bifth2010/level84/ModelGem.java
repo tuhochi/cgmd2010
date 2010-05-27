@@ -69,6 +69,15 @@ public class ModelGem extends Model {
 		}
 	};
 	
+	/** Handler for water splash animations */
+	private Handler showSplashAni = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			lvl.showAni(LevelActivity.AnimationType.SPLASH);
+		}
+	};
+	
 	/**
 	 * Creates a new gem model.
 	 */
@@ -176,9 +185,8 @@ public class ModelGem extends Model {
 				}
 				
 				if (drainHit) {
-					Log.i("checking", "hit!!! type: " + gemType);
 					progman.loseMoneyByHit(gemType);
-						
+					showSplashAni.sendEmptyMessage(0);	
 					if (vibrator != null) vibrator.vibrate(30);
 				}
 				else
