@@ -67,22 +67,22 @@ public class LevelActivity extends Activity {
 //        fl.addView(surfaceView);
         
 //        LinearLayout textl = new LinearLayout(this);
-        fps = (TextView) findViewById(R.id.TextFPS);
+        fps = (TextView) findViewById(R.id.l83_TextFPS);
 //        fps.setText("FPS: ");
 //        fps.setTextColor(0xFF4DA3B7);
-        deaths = (TextView) findViewById(R.id.TextDeaths);
+        deaths = (TextView) findViewById(R.id.l83_TextDeaths);
 //        deaths.setText(" x ");
 //        deaths.setTextSize(deaths.getTextSize() * 2);
 //        deaths.setTextColor(0xFFFFFFFF);
 //        deaths.setWidth(60 + ((deaths.getTextSize() > 30) ? hdextension : 0));
-        coins = (TextView) findViewById(R.id.TextCoins);
+        coins = (TextView) findViewById(R.id.l83_TextCoins);
 //        coins.setText(" x ");
 //        coins.setTextSize(deaths.getTextSize());
 //        coins.setTextColor(0xFFFFFFFF);
 //        coins.setWidth(70 + ((coins.getTextSize() > 30) ? hdextension : 0));
 //        fps.setTextSize(deaths.getTextSize()*0.7f);
         
-        progress = (TextView) findViewById(R.id.TextProgress);
+        progress = (TextView) findViewById(R.id.l83_TextProgress);
         
 //        textl.addView(deaths);
 //        textl.addView(coins);

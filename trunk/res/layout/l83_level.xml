@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout 
-    android:id="@+id/FrameLayout01" 
+    android:id="@+id/l83_FrameLayout01" 
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent" 
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -12,13 +12,13 @@
         android:layout_height="fill_parent"/>
         
     <RelativeLayout 
-        android:id="@+id/LinearLayout01" 
+        android:id="@+id/l83_RelativeLayout01" 
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content"
         android:padding="5dp">
         
         <ImageView
-            android:id="@+id/ImageDeaths"
+            android:id="@+id/l83_ImageDeaths"
             android:src="@drawable/l83_tomb"
             android:layout_width="25dp"
             android:layout_height="25dp">
@@ -26,45 +26,45 @@
         
         <TextView 
             android:text=" x 0" 
-            android:id="@+id/TextDeaths" 
+            android:id="@+id/l83_TextDeaths" 
             android:layout_width="60dp" 
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/ImageDeaths"
+            android:layout_toRightOf="@+id/l83_ImageDeaths"
             android:textColor="#FFF"
             android:textSize="21dp">
         </TextView>
         
         <ImageView
-            android:id="@+id/ImageCoins"
+            android:id="@+id/l83_ImageCoins"
             android:src="@drawable/l83_dollarsign"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_toRightOf="@+id/TextDeaths">
+            android:layout_toRightOf="@+id/l83_TextDeaths">
         </ImageView>
         
         <TextView 
             android:text=" x 0" 
-            android:id="@+id/TextCoins" 
+            android:id="@+id/l83_TextCoins" 
             android:layout_width="60dp" 
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/ImageCoins"
+            android:layout_toRightOf="@+id/l83_ImageCoins"
             android:textColor="#FFF"
             android:textSize="21dp">
         </TextView>
         
         <TextView 
             android:text="FPS: " 
-            android:id="@+id/TextFPS" 
+            android:id="@+id/l83_TextFPS" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/TextCoins"
+            android:layout_toRightOf="@+id/l83_TextCoins"
             android:textColor="#4DA3B7"
             android:textSize="15dp">
         </TextView>
         
         <TextView 
             android:text="0 %" 
-            android:id="@+id/TextProgress" 
+            android:id="@+id/l83_TextProgress" 
             android:layout_alignParentRight="true"
             android:layout_marginRight="80dp" 
             android:layout_width="wrap_content" 
