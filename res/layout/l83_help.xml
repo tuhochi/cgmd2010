@@ -21,16 +21,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"  
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
-            android:src="@drawable/l83_lenny">
+            android:src="@drawable/l83_help_lenny">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextTut1"
             android:text="@string/l83_tut_1" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
-            android:layout_toRightOf="@+id/l83_ImageTut1"
+            android:layout_toRightOf="@+id/l83_ImageTut3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
       </TextView>
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
             android:layout_below="@+id/l83_ImageTut1"
             android:src="@drawable/l83_hexagon">
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
             android:layout_below="@+id/l83_ImageTut1"
-            android:layout_toRightOf="@+id/l83_ImageTut2"
+            android:layout_toRightOf="@+id/l83_ImageTut3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
       </TextView>
@@ -63,10 +63,10 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
             android:layout_below="@+id/l83_TextTut2"
-            android:src="@drawable/l83_hexagon">
+            android:src="@drawable/l83_help_hexagon_b">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextTut3"
@@ -85,18 +85,18 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
-            android:layout_below="@+id/l83_TextTut3"
-            android:src="@drawable/l83_item_delete">
+            android:layout_below="@+id/l83_ImageTut3"
+            android:src="@drawable/l83_help_hexagon_delete">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextTut4"
             android:text="@string/l83_tut_4" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
-            android:layout_below="@+id/l83_TextTut3"
-            android:layout_toRightOf="@+id/l83_ImageTut4"
+            android:layout_below="@+id/l83_ImageTut3"
+            android:layout_toRightOf="@+id/l83_ImageTut3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
       </TextView>
@@ -107,9 +107,9 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
-            android:layout_below="@+id/l83_TextTut4"
+            android:layout_below="@+id/l83_ImageTut4"
             android:src="@drawable/l83_bomb">
       </ImageView>
       <TextView 
@@ -117,8 +117,8 @@
             android:text="@string/l83_tut_5" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
-            android:layout_below="@+id/l83_TextTut4"
-            android:layout_toRightOf="@+id/l83_ImageTut5"
+            android:layout_below="@+id/l83_ImageTut4"
+            android:layout_toRightOf="@+id/l83_ImageTut3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
       </TextView>
@@ -129,18 +129,18 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
-            android:layout_below="@+id/l83_TextTut5"
-            android:src="@drawable/l83_hexagon_r">
+            android:layout_below="@+id/l83_ImageTut5"
+            android:src="@drawable/l83_help_hexagon_r">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextTut6"
             android:text="@string/l83_tut_6" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
-            android:layout_below="@+id/l83_TextTut5"
-            android:layout_toRightOf="@+id/l83_ImageTut6"
+            android:layout_below="@+id/l83_ImageTut5"
+            android:layout_toRightOf="@+id/l83_ImageTut3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
       </TextView>
@@ -151,9 +151,9 @@
 	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
-            android:layout_below="@+id/l83_TextTut6"
+            android:layout_below="@+id/l83_ImageTut6"
 			android:src="@drawable/l83_dollarsign">
 	  </ImageView>
 	  <TextView 
@@ -161,8 +161,8 @@
 	        android:text="@string/l83_tut_7"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
-            android:layout_below="@+id/l83_TextTut6"
-            android:layout_toRightOf="@+id/l83_ImageTut7"
+            android:layout_below="@+id/l83_ImageTut6"
+            android:layout_toRightOf="@+id/l83_ImageTut3"
 			android:textColor="#000000" 
 			android:paddingTop="10dip">
 	  </TextView>
@@ -185,7 +185,7 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
             android:layout_below="@+id/l83_TextStatsHead"
             android:src="@drawable/l83_tomb">
@@ -196,7 +196,7 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
             android:layout_below="@+id/l83_TextStatsHead"
-            android:layout_toRightOf="@+id/l83_ImageStats1"
+            android:layout_toRightOf="@+id/l83_ImageStats3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
       </TextView>
@@ -207,7 +207,7 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
             android:layout_below="@+id/l83_TextStats1"
             android:src="@drawable/l83_dollarsign">
@@ -218,22 +218,25 @@
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
             android:layout_below="@+id/l83_TextStats1"
-            android:layout_toRightOf="@+id/l83_ImageStats2"
+            android:layout_toRightOf="@+id/l83_ImageStats3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
       </TextView>
     
     
-      <ImageView 
+      <TextView 
             android:id="@+id/l83_ImageStats3"
+            android:text="42 %" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
             android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
             android:layout_below="@+id/l83_TextStats2"
-            android:src="@drawable/l83_hexagon">
-      </ImageView>
+            android:textColor="#FFF" 
+            android:textSize="21dp"
+            android:paddingTop="10dip">
+      </TextView>
       <TextView 
             android:id="@+id/l83_TextStats3"
             android:text="@string/l83_stats_progress" 
