@@ -27,19 +27,30 @@ public class GameView extends GLSurfaceView {
      * the value of the treasure is proportional to the time the display is touched.
      */
     public boolean onTouchEvent(final MotionEvent event) {
+    	if(!((GameActivity)_renderer.context)._level._isStarted){
+    		if (event.getAction() == MotionEvent.ACTION_UP){
+    			((GameActivity)_renderer.context)._level.start();
+    		}
+    		return true;
+    	}
+    	if(((GameActivity)_renderer.context)._level._isFinished){
+    		if (event.getAction() == MotionEvent.ACTION_UP){
+    			((GameActivity)_renderer.context).finish();
+    		}
+    	}
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             _x = event.getX();
             _y = event.getY();
             this.touchedTime = System.currentTimeMillis();
-
+            
         }
         
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
         	float x = event.getX();
         	float y = event.getY();
         	float time = (System.currentTimeMillis()-this.touchedTime)/1000.0f;
-        	System.out.println("time: "+time);
-        	System.out.println("deltaX: "+Math.abs(_x-x));
+        	//System.out.println("time: "+time);
+        	//System.out.println("deltaX: "+Math.abs(_x-x));
         	if(Math.abs(_x-x)>time*100 || Math.abs(_y-y)>time*100){
         		//System.out.println("in");
         		isBouncing = true;
@@ -68,7 +79,7 @@ public class GameView extends GLSurfaceView {
 	        			Level.sizeY-(_y/_renderer._height*Level.sizeY))));
 	
 	
-	        	((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
+	        	//((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
         	}else{
         		isBouncing = false;
         	}

@@ -18,6 +18,8 @@ public class Level extends Thread {
 	public boolean _isRunning;
 	private boolean isPaused; 
     public boolean _isActive;
+    public boolean _isStarted;
+    public boolean _isFinished;
     
 	private Textures textures;
 	
@@ -57,10 +59,12 @@ public class Level extends Thread {
 		this._isRunning = false;
 		this.isPaused = false;
 		this._isActive = true;
+		this._isStarted = false;
 		
 		this.maxPlayTime = 60;
 		timing = new Timing();
 		timing.start();
+		timing.pause();
 
 	}
 	
@@ -120,6 +124,8 @@ public class Level extends Thread {
 	 * runs level main loop
 	 */
 	public void run() {
+		this._isStarted = true;
+		this.timing.resume();
 		while (_isActive) {
 			while (_isRunning) {
 				while (isPaused) {
@@ -153,7 +159,7 @@ public class Level extends Thread {
 	 * @param pause
 	 */
 	public void resume_level() {
-		this.timing.resume();
+		//this.timing.resume();
 		this.isPaused = false;	
 	}
 	
@@ -245,11 +251,11 @@ public class Level extends Thread {
 			this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
 		}
 		//}
-		if(this.timing.getCurrTime() > this.maxPlayTime) {
-			((GameActivity)context).setResult(this.grabbedTreasureValue);
+		if(this.timing.getCurrTime() > this.maxPlayTime || this.grabbedTreasureValue>100) {
+			((GameActivity)context).setResult(this.getGrabbedTreasureValue());
 			this._isRunning = false;
 			this._isActive = false;
-			((GameActivity)context).finish();
+			this._isFinished = true;
 		}
 		
 	}
