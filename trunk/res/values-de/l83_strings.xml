@@ -26,4 +26,7 @@
 <string name="l83_screentut_9">er kann 2 gegen 1 leben tauschen</string>
 <string name="l83_screentut_10">schau auf Lenny\'s stats: tode, credits und fortschritt</string>
 <string name="l83_screentut_11">viel spaß beim killen von Lenny! nicht vergessen: mehr kills, mehr punkte</string>
+<string name="l83_starttext">Willkommen bei Lenny Must Die - Arcade!</string>
+<string name="l83_finish_head">Spielende</string>
+<string name="l83_finsh_text">Gratulation! Du hast ? / 100 Münzen verloren.</string>
 </resources>

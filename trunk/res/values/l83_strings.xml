@@ -9,7 +9,7 @@
 <string name="l83_tut_2">Use the items from the queue to kill Lenny. The topmost item is active and can be placed by dragging.</string>
 <string name="l83_tut_3">Use the wall to block a field and thus force Lenny to walk a specific path. If you block Lenny\'s way, he will teleport to the next free field.</string>
 <string name="l83_tut_4">Use this item to remove an existing wall.</string>
-<string name="l83_tut_5">Place the time bomb to kill Lenny.</string>
+<string name="l83_tut_5">Place the time bomb to kill Lenny. The bomb has to be placed on top of a wall.</string>
 <string name="l83_tut_6">You cannot place items beyond the border which is marked by these fields.</string>
 <string name="l83_tut_7">You should prevent Lenny from collecting these credits, since he can trade 2 of them for 1 life.</string>
 <string name="l83_stats_head">Lenny\'s Stats</string>
@@ -18,14 +18,17 @@
 <string name="l83_stats_progress">This number shows Lenny\'s progress in the level.</string>
 
 <string name="l83_screentut_1">this is Lenny, he must die!</string>
-<string name="l83_screentut_2">use the items in the queue</string>
+<string name="l83_screentut_2">use the items in the queue on the right</string>
 <string name="l83_screentut_3">place the active item by dragging</string>
 <string name="l83_screentut_4">use the wall to block a field</string>
 <string name="l83_screentut_5">remove an existing wall</string>
-<string name="l83_screentut_6">place the time bomb to kill Lenny</string>
+<string name="l83_screentut_6">place the time bomb on top of a wall to kill Lenny</string>
 <string name="l83_screentut_7">beware: no dragging beyond the marked fields</string>
 <string name="l83_screentut_8">one more thing...prevent Lenny from collecting credits</string>
 <string name="l83_screentut_9">he can trade 2 for 1 life</string>
 <string name="l83_screentut_10">check Lenny\'s stats: deaths, credits and progress</string>
 <string name="l83_screentut_11">now have fun killing Lenny! and remember: more kills, more points</string>
+<string name="l83_starttext">Welcome to Lenny Must Die - Arcade!</string>
+<string name="l83_finish_head">End of Game</string>
+<string name="l83_finsh_text">Congratulations! You lost ? / 100 coins.</string>
 </resources>
