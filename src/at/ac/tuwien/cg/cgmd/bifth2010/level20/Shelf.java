@@ -209,11 +209,12 @@ public class Shelf extends RenderEntity {
 			// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
 			float productSize = 64 * height / 480;
 
-			
-			int texId = RenderView.TEXTURE_PRODUCTS[(int)(Math.random() * RenderView.TEXTURE_PRODUCTS.length)];
+			// TODO: Spawn rare products more often
+			int productType = (int)(Math.random() * ProductInfo.length);
 
-			ProductEntity pe = new ProductEntity(x, y, 1, productSize);	
-			pe.texture = LevelActivity.renderView.getTexture(texId);
+			ProductEntity pe = ProductInfo.createEntity(productType, x, y, 1, productSize);
+			
+//			pe.texture = LevelActivity.renderView.getTexture(ProductInfo.p[productType].texture);
 			
 			
 			// Declaring neighbors
