@@ -32,8 +32,8 @@ public class textureManager {
 		textureMap = new Hashtable <String, Integer>();
 		gameObjectMap = new Hashtable <String, Tablet>();
 		
-		createTexture("button", R.drawable.l83_hexagon_blue, 50, 50, true);
-		createTexture("control", R.drawable.l83_hexagon, 100, 100, true);
+		createTexture("button", R.drawable.l00_red, 50, 50, true);
+		createTexture("control", R.drawable.l00_red, 100, 100, true);
 		
 		createTexture("gold", R.drawable.l00_coin, 20, 20, true);
 		createTexture("zero", R.drawable.l60_gold_0, 20, 20, true);
@@ -47,7 +47,11 @@ public class textureManager {
 		createTexture("eight", R.drawable.l60_gold_8, 20, 20, true);
 		createTexture("nine", R.drawable.l60_gold_9, 20, 20, true);
 		
-		createTexture("cop", R.drawable.l60_cop_front_l, 50, 50);
+		createTexture("cop_front_l", R.drawable.l60_cop_front_l, 50, 50);
+		createTexture("cop_front_r", R.drawable.l60_cop_front_r, 50, 50);
+		createTexture("cop_back_l", R.drawable.l60_cop_back_l, 50, 50);
+		createTexture("cop_back_r", R.drawable.l60_cop_back_r, 50, 50);
+		
 		createTexture("bunny", R.drawable.l60_bunny_front, 60, 60);
 		createTexture("streetHor", R.drawable.l60_street_hor, 100, 100);
 		createTexture("streetVer", R.drawable.l60_street_ver, 100, 100);
