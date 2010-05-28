@@ -18,7 +18,7 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut1"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"  
             android:layout_marginTop="5dp"
             android:layout_marginRight="15dp"
@@ -38,7 +38,7 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut2"
-            android:layout_width="wrap_content" 
+            android:layout_width="60dp" 
             android:layout_height="wrap_content" 
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
@@ -60,7 +60,7 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut3"
-            android:layout_width="wrap_content" 
+            android:layout_width="60dp" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
@@ -82,7 +82,7 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut4"
-            android:layout_width="wrap_content" 
+            android:layout_width="60dp" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
@@ -104,7 +104,7 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut5"
-            android:layout_width="wrap_content" 
+            android:layout_width="60dp" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
@@ -126,7 +126,7 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut6"
-            android:layout_width="wrap_content" 
+            android:layout_width="60dp" 
             android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
@@ -148,7 +148,7 @@
 
 	  <ImageView 
             android:id="@+id/l83_ImageTut7"
-	        android:layout_width="wrap_content"
+	        android:layout_width="60dp"
 			android:layout_height="wrap_content"  
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
