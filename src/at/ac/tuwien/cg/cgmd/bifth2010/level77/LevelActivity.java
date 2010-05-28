@@ -13,6 +13,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 import android.content.Context;
+import android.content.Intent;
 
 /**
  * Entry point for the Level 77 BunnyBlock
@@ -33,6 +34,10 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
+	
+		Intent i = new Intent("at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_INTRO");
+		this.startActivity(i);
+		
 		Log.d(TAG, "Starting LevelActivity 77");
 
 		setResult(RESULT_CANCELED);
@@ -58,7 +63,10 @@ public class LevelActivity extends Activity
 		};
 		
 		gameView = new GameView(this, gameEnded);
+		
+
 		setContentView( gameView );		
+		
 	}
 	
 
