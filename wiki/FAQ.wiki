@@ -44,3 +44,9 @@ Extremely fast! And much faster than the first Android phone G1. Remember that w
 == We tried to test our level on the Nexus One, but got an "Re-installation failed due to different application signatures" - error. ==
 
 You have to uninstall BIFTH. "Click" on the menu button when you can see the home screen: Settings > Applications > Manage Applications > The Big Incredible and Funny ... > Uninstall. Of course you can enter 'adb uninstall at.ac.tuwien.cg.cgmd.bifth2010' in the shell as suggested in the console. Launch BIFTH via Eclipse once more.
+
+== How do I solve the Install_failed_insufficient_storage error when trying to run the project in the emulator? ==
+
+Open a Command Window and enter:
+'emulator -avd #AVD_NAME# -partition-size 1024 -memory 1024'
+where #AVD_NAME# is the name of your emulator. 
