@@ -55,10 +55,21 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	static final int TEXTURE_CART = 	R.drawable.l20_shopping_cart;
 	
 	static final int[] TEXTURE_PRODUCTS = new int[]{
+										R.drawable.l20_bananamilk,
+										R.drawable.l20_beer,
 										R.drawable.l20_broccoli,
-										R.drawable.l20_lollipop,
+										R.drawable.l20_cereal,
 										R.drawable.l20_drink,
-										R.drawable.l20_beer};
+										R.drawable.l20_icecream,
+										R.drawable.l20_lollipop,
+										R.drawable.l20_penne,
+										R.drawable.l20_pizza,
+										R.drawable.l20_playboy,
+										R.drawable.l20_probio,
+										R.drawable.l20_soup,
+										R.drawable.l20_yoghurt
+										
+										};
 	
 
 	/**

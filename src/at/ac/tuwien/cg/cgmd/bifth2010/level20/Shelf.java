@@ -32,7 +32,7 @@ public class Shelf extends RenderEntity {
 	protected Hashtable<Integer, ProductEntity> products;
 	
 	/** 
-	 *  ProductEntities are enqueud in this List and are removed each frame from the products Hashtable
+	 *  ProductEntities are enqueued in this List and are removed each frame from the products Hashtable
 	 */
 	protected LinkedList<ProductEntity> removeFromProducts;
 	
@@ -203,7 +203,7 @@ public class Shelf extends RenderEntity {
 		for (int i = 0; i < NUMBER_PRODUCTS; i++) {
 			// Spawn outside the screen and subtract the amount of d already passed.
 			float offsetX = 75;
-			float x = width + offsetX + jitterX;			
+			float x = width + offsetX;// + jitterX;			
 			float y = productSpawnY[i];
 			
 			// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different. 
