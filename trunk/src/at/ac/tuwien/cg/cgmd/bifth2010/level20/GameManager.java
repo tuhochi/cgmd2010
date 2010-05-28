@@ -81,7 +81,7 @@ public class GameManager implements EventListener, OnTouchListener {
 		firstRun = true;
 		
 		activity = LevelActivity.instance;
-		renderView = activity.renderView;
+		renderView = LevelActivity.renderView;
 		
 		time = TimeUtil.instance;
 		
@@ -117,9 +117,10 @@ public class GameManager implements EventListener, OnTouchListener {
 		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
 		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);			
 
-		for (int i = 0; i < RenderView.TEXTURE_PRODUCTS.length; i++) {
-			renderView.getTexture(RenderView.TEXTURE_PRODUCTS[i], gl);
-		}	
+		// Preload textures
+		for (int i = 0; i < ProductInfo.length; i++) {
+			renderView.getTexture(ProductInfo.texture(i), gl);
+		}
 		
 		// Create shopping cart.
 		shoppingCart = new ShoppingCart(125, 60, 2, 200, 110);
@@ -156,11 +157,19 @@ public class GameManager implements EventListener, OnTouchListener {
 //		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
 		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);			
 
-		for (int i = 0; i < RenderView.TEXTURE_PRODUCTS.length; i++) {
-			renderView.getTexture(RenderView.TEXTURE_PRODUCTS[i], gl);
+		// Preload textures
+		for (int i = 0; i < ProductInfo.length; i++) {
+			renderView.getTexture(ProductInfo.texture(i), gl);
 		}	
 		
-		// TODO: Assign each product the same texture again
+		// Assign each product the same texture again
+		Enumeration<Integer> keys = shelf.products.keys();		
+		while(keys.hasMoreElements()) {
+			
+			ProductEntity pe = shelf.products.get(keys.nextElement());
+			pe.texture = renderView.getTexture(ProductInfo.texture(pe.type), gl);
+			
+		}
 		
 		// Create shopping cart.
 //		shoppingCart = new ShoppingCart(125, 60, 2, 200, 110);
@@ -294,7 +303,7 @@ public class GameManager implements EventListener, OnTouchListener {
 		case EventManager.PRODUCT_COLLECTED:
 		{
 			ProductEntity pe = (ProductEntity)eventData;
-			totalMoney -= pe.price;			
+			totalMoney -= ProductInfo.price(pe.type);
 			// This prevents displaying a negative money count.
 //			if(totalMoney < 0) totalMoney = 0;
 //			moneyText.setText("Money:" + totalMoney + "$");

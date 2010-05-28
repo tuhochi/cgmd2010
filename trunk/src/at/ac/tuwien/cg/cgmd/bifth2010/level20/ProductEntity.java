@@ -22,9 +22,9 @@ public class ProductEntity extends RenderEntity implements Clickable {
 	protected boolean animated;
 	
 	/**
-	 * The price of the product.
+	 * The type of the product.
 	 */
-	protected int price;
+	protected int type;
 		
 	/**
 	 * The neighbors of the product in the same row. We need to know this because they get deactivated once this product has been clicked
@@ -39,11 +39,12 @@ public class ProductEntity extends RenderEntity implements Clickable {
 	 * @param size The side length of the quadratic product entity.
 	 * FERDI: Alle products sind im Moment quadratisch? Soll ma das so lassen oder auch rechtwinkelige zulassen?
 	 */
-	public ProductEntity(float x, float y, float z, float size) {
+	public ProductEntity(int type, float x, float y, float z, float size) {
 		super(x, y, z, size, size);
-		clickable = true;
-		price = (int)(Math.random() * 10) + 1;
+		this.type = type;
 		
+		clickable = true;
+		animated = false;
 		neighbors = new int[Shelf.NUMBER_PRODUCTS - 1];
 	}
 
