@@ -115,6 +115,10 @@ public class Tablet {
 		y = newY;
 	}
 	
+	public void changeTexture(int texture) {
+		this.texture = texture;
+	}
+	
 	
 	
 	public void scale(int scale_x, int scale_y) {
