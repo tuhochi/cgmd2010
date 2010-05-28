@@ -24,8 +24,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
 
 public class GameControl {
 
+		static int MIN_DRUNK_LEVEL = 2; 
+		static int MAX_DRUNK_LEVEL = 3;
+		
         private int consumedBeer = 0;
         private int mistressCounter = 0;
+        private boolean ratArsedState = false;
         private boolean drunkState = false;
         private static final int DRUNKTIME = 200;
         private int currentDrunkTime = 0;
@@ -123,34 +127,54 @@ public class GameControl {
                 money--;
         }
        
+        
+        
+        
+       
+        
         /**
          * Function that handles the drunk state of the Player.
          * Called every frame within the update loop.
          */
        
         private void handleDrunkState(){
-                if (consumedBeer >= 5){
-                        consumedBeer = 0;
+                if (consumedBeer >= MIN_DRUNK_LEVEL && !drunkState){
+                        //consumedBeer = 0;
                         // Set player to drunk state
                         currentDrunkTime = DRUNKTIME;
                         SoundManager.playSound(SoundFX.DRUNK);  
                         drunkState = true;
                        
                 }
-                if(drunkState){
-                       
-                        if(currentDrunkTime > 0){
-                                currentDrunkTime--;
+                
+                if (consumedBeer >= MAX_DRUNK_LEVEL && !ratArsedState){
+                	ratArsedState = true;
+                }	
+                	
+                
+                if (drunkState){
+                	
+                     	if(currentDrunkTime > 0){
+                             currentDrunkTime--;
 
-                               
-                        }
-                        else{
-                                GameObject.drunkenRotation =0;
-                                drunkState = false;
+                            
+                     }
+                     else{
+                             drunkState = false;
+                             ratArsedState = false;
+                             consumedBeer = 0;
 
-                       
-                        }
+                    
+                     }
+                     	
+                     
+                        
                 }
+                
+                
+                
+                
+                
                
                        
                
@@ -182,6 +206,7 @@ public class GameControl {
                                 SoundManager.playSound(SoundFX.POLICE);
                                 currentBustTime = BUSTTIME;
                                 inJail = true;
+                                consumedBeer = 0;
                                 //stop player movement
                                 movement = new Vector2(0, 0);
                                 oldMovement = new Vector2(0, 0);
@@ -213,7 +238,11 @@ public class GameControl {
         public boolean isDrunkState() {
                 return drunkState;
         }
-
+        
+        public boolean isRatArsedState(){
+        	return ratArsedState;
+        }
+        
         public Vector2 getMovement() {
                 return movement;
         }

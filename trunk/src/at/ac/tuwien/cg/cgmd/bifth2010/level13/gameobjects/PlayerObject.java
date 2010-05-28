@@ -65,6 +65,7 @@ public class PlayerObject extends GameObject {
 		//translate to correct position
 		gl.glTranslatef(this.position.x, this.position.y, 0.0f);
 	
+
 		//draw
 		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 

@@ -57,17 +57,21 @@ public class BackgroundObject extends GameObject {
 		/*
 		//test for collision with solid tiles
 		if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
+			
 			//reset offset
 			GameObject.offset.sub(gameControl.getMovement());
+			
 			//check if old movement is possible (only at corners)
 			if((gameControl.getMovement().x == 0 && gameControl.getOldMovement().x != 0)|| (gameControl.getMovement().y == 0 && gameControl.getOldMovement().y != 0)) {
 				GameObject.offset.add(gameControl.getOldMovement());
 				if(CollisionHelper.checkBackgroundCollision(MyRenderer.map)) {
 					GameObject.offset.sub(gameControl.getOldMovement());
 					//stop movement
+				//	gameControl.setMovement(new Vector2(0,0));
 					gameControl.setOldMovement(new Vector2(0, 0));
 				}
 			}
+			//gameControl.setMovement(new Vector2(0,0));
 		}
 		else {
 			gameControl.setOldMovement(gameControl.getMovement().clone());

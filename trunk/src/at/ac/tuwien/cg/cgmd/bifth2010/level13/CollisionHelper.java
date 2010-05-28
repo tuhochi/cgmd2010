@@ -89,7 +89,7 @@ public class CollisionHelper {
 							else
 								gO.position.x =  (j * GameObject.BLOCKSIZE + gO.moveVec.signX() * GameObject.BLOCKSIZE*-1);
 						}
-						
+
 						Log.d("df", "coll width x:" + j + " y:" + i);
 						*/
 						return true;

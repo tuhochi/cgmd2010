@@ -122,6 +122,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 	}
 	
+
+	
 	/**
 	 * @see Renderer#onDrawFrame(GL10)
 	 */
@@ -160,58 +162,45 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 
 		
 			
-			if(gameControl.isDrunkState()) {
+			if(gameControl.isRatArsedState()) {
 				rotation += ROTATIONINC;
 			}
+
+			if(gameControl.isDrunkState()){
+				if (zoomFactor > 1.1f){
+					zoom = -0.01f;
+				}
+
+				if (zoomFactor <= 1.0f){
+					zoom = 0.01f;
+				}
+
+				zoomFactor+=zoom;
+			}
+			else {
+				rotation = 0;
+				zoomFactor = 1.0f;
+			}
+			
 			
 			lastTime += STEP;
 
 		}
 
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		Log.d("df", "zoom: " + zoomFactor);
 		
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		
-		
-		if(gameControl.isDrunkState()){
-			if (zoomFactor > 1.1f){
-				zoom = -0.01f;
-			}
-
-			if (zoomFactor <= 1.0f){
-				zoom = 0.01f;
-			}
-
-			zoomFactor+=zoom;
-		}
-		else {
-			zoomFactor = 1.0f;
-		}
-		
 	
 			gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
 
-	
-			//gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
 			gl.glTranslatef(player.getRealPosition().x - GameObject.offset.x, player.getRealPosition().y - GameObject.offset.y, 0);
 			gl.glRotatef(rotation, 0, 0, 1);
 			gl.glTranslatef((-1)*(player.getRealPosition().x - GameObject.offset.x), (-1)*(player.getRealPosition().y - GameObject.offset.y), 0);
 		
-		/*}
-		else {
-			gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
-		}*/
+
 		 	
 		gl.glViewport(0, 0, width, height);
 		
@@ -259,32 +248,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
 		
 		gl.glViewport(0, 0, width, height);
-		/*
-		//init all textures
-		TextureSingletons.initTextures(gl, context);
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		//create all game objects
-		gameObjects.add(new BackgroundObject());
-		for(int i = 0; i < MyRenderer.map.length; i++) {
-			for(int j = 0; j < MyRenderer.map[i].length; j++) {
-				if(MyRenderer.map[i][j] == 2) {
-					gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
-				}
-				else if (MyRenderer.map[i][j] == 3){
-					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
-				}
-				else if (MyRenderer.map[i][j] == 4){
-					gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
-				}
-			}
-		}
-		drunkStatusBar = new DrunkBar(200, 50);
-		jailStatusBar = new JailBar(200, 50);
-	    jailStatusBar.position.y = 50;
-
-		
-		//player = new PlayerObject();
-		gameObjects.add(new PlayerObject());*/
+	
 	}
 
 	/**
