@@ -458,7 +458,11 @@
 			</intent-filter>
 		</activity>
 	
-	</application>
+	<activity android:name=".level77.IntroActivity"><intent-filter><action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_INTRO"></action>
+<category android:name="android.intent.category.DEFAULT"></category>
+</intent-filter>
+</activity>
+</application>
 	
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<supports-screens
