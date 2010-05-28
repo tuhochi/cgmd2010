@@ -417,13 +417,13 @@ public class LevelRenderer implements Renderer {
 			dx /= d_len;
 			dy /= d_len;
 			
-			if (oldFrameTime%1000==0) {
+			if (frameCounter%10==0) {
 				if (dy<0) {
 					cop.changeTexture(manager.getTexture("cop_front_l"));
 				} else {
 					cop.changeTexture(manager.getTexture("cop_back_l"));
 				}
-			} else if (oldFrameTime%1000==500) {
+			} else if (frameCounter%10==5) {
 				if (dy<0) {
 					cop.changeTexture(manager.getTexture("cop_front_r"));
 				} else {
@@ -516,6 +516,8 @@ public class LevelRenderer implements Renderer {
 
 		control.draw(gl);
 		button.draw(gl);
+		
+		frameCounter++;
 	}
 
 	@Override
