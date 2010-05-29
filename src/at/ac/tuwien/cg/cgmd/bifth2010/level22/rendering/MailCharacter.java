@@ -5,6 +5,7 @@ import static android.opengl.GLES10.glBindTexture;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ShortBuffer;
 import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -17,7 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class MailCharacter {
 
-	public MailCharacter( Context mainContext, GL10 renderContext, char myChar, byte[] indices )
+	public MailCharacter( Context mainContext, GL10 renderContext, char myChar, ShortBuffer indices )
 	{
 		
 		textureID = new int[ 1 ];
@@ -46,7 +47,7 @@ public class MailCharacter {
 		pending = true;
 	}
 	
-	public MailCharacter( Context mainContext, GL10 renderContext, int texID, byte[] indices )
+	public MailCharacter( Context mainContext, GL10 renderContext, int texID, ShortBuffer indices )
 	{
 		
 		textureID = new int[ 1 ];
@@ -58,10 +59,10 @@ public class MailCharacter {
 		pending = true;
 	}
 	
-	private void createIndexBuffer( byte[] indexRaw )
+	private void createIndexBuffer( ShortBuffer indexRaw )
 	{
 		
-		indices = ByteBuffer.wrap( indexRaw );
+		indices = indexRaw;
 		indices.position( 0 );
 	}
 	
@@ -87,10 +88,10 @@ public class MailCharacter {
 		
 		glBindTexture( GL10.GL_TEXTURE_2D, textureID[ 0 ] );
 		
-		renderContext.glDrawElements(GL10.GL_TRIANGLES, indices.capacity(), GL10.GL_UNSIGNED_BYTE, indices );
+		renderContext.glDrawElements(GL10.GL_TRIANGLES, indices.capacity(), GL10.GL_UNSIGNED_SHORT, indices );
 	}
 	
-	public static MailCharacter getMailCharacter( char requ, Context refContext, GL10 renderContext, byte[] indices )
+	public static MailCharacter getMailCharacter( char requ, Context refContext, GL10 renderContext, ShortBuffer indices )
 	{
 		
 		int texID = characterRepository.get( String.valueOf( requ ) ).intValue();
@@ -121,6 +122,6 @@ public class MailCharacter {
 	private int textureID[];
 	private static HashMap< String, Integer > characterRepository = new HashMap< String, Integer >();
 	
-	private ByteBuffer indices;
+	private ShortBuffer indices;
 	private boolean pending;
 }
