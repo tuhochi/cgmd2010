@@ -368,6 +368,7 @@ public class GameWorld {
 				}
 				if( mEnemies.get(i).getHP() <= 0 ){
 					mEnemies.get(i).deactivate();
+					mEnemies.get(i).die();
 					remove = true;
 				}
 				if( remove ) mEnemies.remove(i);
