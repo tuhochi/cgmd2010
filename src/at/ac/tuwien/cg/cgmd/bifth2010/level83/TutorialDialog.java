@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level83;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.GestureDetector;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 
-public class TutorialDialog extends AlertDialog implements OnGestureListener{
+public class TutorialDialog extends AlertDialog implements OnGestureListener {
 
 	AlertDialog.Builder builder;
 	private int stage = 2;
@@ -59,47 +58,47 @@ public class TutorialDialog extends AlertDialog implements OnGestureListener{
 			
 		case 3:
 			text.setText(context.getString(R.string.l83_screentut_3));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.HELP_HEXAGON_R);
 			break;
 			
 		case 4:
 			text.setText(context.getString(R.string.l83_screentut_4));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.HELP_HEXAGON_B);
 			break;
 			
 		case 5:
 			text.setText(context.getString(R.string.l83_screentut_5));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.HELP_HEXAGON_DELETE);
 			break;
 			
 		case 6:
 			text.setText(context.getString(R.string.l83_screentut_6));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.ITEM_BOMB);
 			break;
 			
 		case 7:
 			text.setText(context.getString(R.string.l83_screentut_7));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.HELP_HEXAGON_R);
 			break;
 			
 		case 8:
 			text.setText(context.getString(R.string.l83_screentut_8));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.TEXTURE_DOLLARSIGN);
 			break;
 			
 		case 9:
 			text.setText(context.getString(R.string.l83_screentut_9));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.TEXTURE_DOLLARSIGN);
 			break;
 		
 		case 10:
 			text.setText(context.getString(R.string.l83_screentut_10));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.HELP_HEXAGON_R);
 			break;
 			
 		case 11:
 			text.setText(context.getString(R.string.l83_screentut_11));
-			image.setImageResource(Constants.TEXTURE_HEXAGON_R);
+			image.setImageResource(Constants.HELP_HEXAGON_R);
 			break;
 			
 		default:

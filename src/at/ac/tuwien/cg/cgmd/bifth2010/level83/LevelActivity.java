@@ -15,8 +15,6 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
@@ -26,7 +24,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  */
 public class LevelActivity extends Activity {
 	
-	TutorialDialog tutorial;
+	StartDialog tutorial;
 	GLSurfaceView surfaceView;
 	MyRenderer renderer;
 	Vibrator vibrator;
@@ -35,11 +33,11 @@ public class LevelActivity extends Activity {
 	public static TextView deaths;
 	/** Text for the money counter */
 	public static TextView coins;
+	/** Text for the progress indicator */
 	public static TextView progress;
 	String fpsString = "";
 	Timer fpsUpdate;
 	
-	private int hdextension = 60;
 	protected static Activity level;
 	
     /** Called when the activity is first created. */
@@ -63,33 +61,11 @@ public class LevelActivity extends Activity {
 		
 		renderer.setVibrator(vibrator);
         
-//        FrameLayout fl = new FrameLayout(this);	//SurfaceView anzeigen
-//        fl.addView(surfaceView);
-        
-//        LinearLayout textl = new LinearLayout(this);
         fps = (TextView) findViewById(R.id.l83_TextFPS);
-//        fps.setText("FPS: ");
-//        fps.setTextColor(0xFF4DA3B7);
         deaths = (TextView) findViewById(R.id.l83_TextDeaths);
-//        deaths.setText(" x ");
-//        deaths.setTextSize(deaths.getTextSize() * 2);
-//        deaths.setTextColor(0xFFFFFFFF);
-//        deaths.setWidth(60 + ((deaths.getTextSize() > 30) ? hdextension : 0));
         coins = (TextView) findViewById(R.id.l83_TextCoins);
-//        coins.setText(" x ");
-//        coins.setTextSize(deaths.getTextSize());
-//        coins.setTextColor(0xFFFFFFFF);
-//        coins.setWidth(70 + ((coins.getTextSize() > 30) ? hdextension : 0));
-//        fps.setTextSize(deaths.getTextSize()*0.7f);
         
         progress = (TextView) findViewById(R.id.l83_TextProgress);
-        
-//        textl.addView(deaths);
-//        textl.addView(coins);
-//        textl.addView(fps);
-//        Log.d("LevelActivity", "Textsize: " + coins.getTextSize());
-       
-//        fl.addView(textl);	
         
         fpsUpdate = new Timer(true);
         
@@ -104,10 +80,9 @@ public class LevelActivity extends Activity {
         
         level = this;
         
-        tutorial = new TutorialDialog(this);
+        tutorial = new StartDialog(this);
         tutorial.setOnDismissListener(renderer);
         tutorial.show();
-
     }
       
     /**
@@ -155,24 +130,28 @@ public class LevelActivity extends Activity {
     	}
     };
    
+    /**
+     * Handler to pass the user's points to the framework and finish the level.
+     */
     public static Handler finishLevel = new Handler() {
     	@Override
     	public void handleMessage(Message msg) {
-    		
-    		//the SessionState is a convenience class to set a result
 			final SessionState s = new SessionState();
-			//we set the progress the user has made (must be between 0-100)
-			s.setProgress(msg.what);
-			
-			//we call the activity's setResult method 
-			FinishDialog dialog = new FinishDialog(level, new GameStats());
+			int progress = Math.min(Math
+					.max(msg.arg1 * 20
+							- ((msg.arg2 % 2 == 0) ? msg.arg2 : (msg.arg2 - 1))
+							* 10, 0), 100);
+			s.setProgress(progress);
+			FinishDialog dialog = new FinishDialog(level, msg.arg1, msg.arg2, progress);
 			//dialog.setMessage("END");
 			
-			dialog.setOnDismissListener(new OnDismissListener(){
-				public void onDismiss(DialogInterface dialog){
-				level.setResult(Activity.RESULT_OK, s.asIntent());
-				//we finish this activity
-				level.finish();
+			dialog.setOnDismissListener(new OnDismissListener() {
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					//we call the activity's setResult method 
+					level.setResult(Activity.RESULT_OK, s.asIntent());
+					//we finish this activity
+					level.finish();
 				}
 			});
 			dialog.show();	

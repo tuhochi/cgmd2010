@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.GestureDetector.OnGestureListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -16,9 +15,8 @@ public class FinishDialog extends AlertDialog implements OnGestureListener {
 	private GestureDetector detector;
 	private View view;
 	private TextView text;
-	private ImageView image;
 	
-	public FinishDialog(Context context, GameStats stats) {
+	public FinishDialog(Context context, int deaths, int credits, int sum) {
 		super(context);
 		
 		detector = new GestureDetector(context,this);
@@ -28,10 +26,17 @@ public class FinishDialog extends AlertDialog implements OnGestureListener {
 		view = inflater.inflate(R.layout.l83_finshdialog,null);
 		
 		text = (TextView)view.findViewById(R.id.l83_finishdialog_text);
-		text.setText("This is the End");
+		String s = String.valueOf(text.getText());
+		text.setText(s.replace("?", ""+(sum)));
 		
-		image = (ImageView)view.findViewById(R.id.l83_finishdialog_image);
-		image.setImageResource(Constants.TEXTURE_LENNY);
+		text = (TextView)view.findViewById(R.id.l83_finish_TextDeaths);
+		text.setText(" x " + deaths);
+		
+		text = (TextView)view.findViewById(R.id.l83_finish_TextCoins);
+		text.setText(" x " + credits);
+		
+		setTitle(R.string.l83_finish_head);
+		setIcon(R.drawable.l83_lenny);
 		
 		setView(view);
 	}

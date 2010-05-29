@@ -13,6 +13,7 @@ public class MySprite implements Drawable {
 
 	public float x,y,z,width,height;
 	protected int textureNum;
+	private Animator animator;
 	
 	public MySprite(int resourceId, float x, float y, float width, float height, GL10 gl) {
 		this.x = x;
@@ -34,6 +35,13 @@ public class MySprite implements Drawable {
 		Log.d("Spirte","texturenum ="+textureNum);	 
 	}
 	
+	public void setAnimator(Animator animator){
+		this.animator = animator; 
+	}
+	
+	public Animator getAnimator(){
+		return animator;
+	}
 	/**
 	 * Creates a copy of the MySprite <code>sprite</code>.
 	 * 
@@ -72,7 +80,11 @@ public class MySprite implements Drawable {
 	@Override
 	public void Draw(GL10 gl) {
 		MyTextureManager.singleton.textures[textureNum].Bind(gl);
-		((GL11Ext) gl).glDrawTexfOES(x,y,0,width, height);
+		
+		if((animator != null) && (animator.animationRunning() != Animator.NO_ANIMATION))
+				animator.drawAnimated(this, gl);
+		else
+			((GL11Ext) gl).glDrawTexfOES(x,y,0,width, height);
 	}
 
 	@Override

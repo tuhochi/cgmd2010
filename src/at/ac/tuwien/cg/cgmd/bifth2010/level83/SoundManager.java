@@ -43,6 +43,8 @@ public class SoundManager {
 		sounds.put(Constants.SOUND_JUMP_UP, soundPool.load(context, Constants.SOUND_JUMP_UP, 1));
 		sounds.put(Constants.SOUND_DOLLAR, soundPool.load(context,Constants.SOUND_DOLLAR,1));
 		sounds.put(Constants.SOUND_ITEM,soundPool.load(context, Constants.SOUND_ITEM, 1));
+		sounds.put(Constants.SOUND_BEAM_IN, soundPool.load(context, Constants.SOUND_BEAM_IN, 1));
+		sounds.put(Constants.SOUND_BEAM_OUT, soundPool.load(context, Constants.SOUND_BEAM_OUT, 1));
 		
 		this.context = context;
 	}
@@ -63,7 +65,7 @@ public class SoundManager {
 	}
 	
 	public void playBackGround(){	
-		play(Constants.MUSIC_BACKGROUND,true,0.2f,1.0f);
+		play(Constants.MUSIC_BACKGROUND,true,0.4f,1.0f);
 	}
 	
 //	public void pauseAll(){

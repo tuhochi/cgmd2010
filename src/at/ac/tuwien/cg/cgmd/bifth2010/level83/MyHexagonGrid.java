@@ -11,6 +11,7 @@ import javax.microedition.khronos.opengles.GL11Ext;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Message;
 import android.os.Vibrator;
 import android.util.Log;
 import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
@@ -22,12 +23,15 @@ import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
 public class MyHexagonGrid extends Animatable implements Drawable{
 
 	private int width, height;
+	private int viewportWidth, viewportHeight;
 	
 	private int textureHandle;
 	private int textureHandle_blue;
 	private int textureHandle_r;
 	private int textureHandle_dollar;
 	private int textureHanlde_bw;
+	private int textureHandle_deadLenny;
+	private int textureHandle_background;
 	/**
 	 * Stores the dimmension of the laoded map.
 	 */
@@ -42,7 +46,8 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	private float delta=0;
 	private int xMin=0;
 	private int characterLevel=3;
-
+	private float beamAnimationScroll;
+	private int nextLvlAnimation =0;
 	private char characterMode;
 	private int next=1;
 	private float animLevel;
@@ -56,6 +61,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	
 	private ArrayList choices = new ArrayList(12);
 	
+	private ItemAnimated deadLenny;
 	private ItemAnimated itemBomb;
 	private AnimationManager animatedItemsManager;
 	private ArrayList<ItemAnimated> currentItems;
@@ -124,17 +130,21 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		textureHandle_r = MyTextureManager.singleton.addTextureFromResources(TEXTURE_HEXAGON_R, gl);
 		textureHandle_dollar = MyTextureManager.singleton.addTextureFromResources(TEXTURE_DOLLAR, gl);
 		textureHanlde_bw = MyTextureManager.singleton.addTextureFromResources(ITEM_WALL_BW, gl);
+		textureHandle_background = MyTextureManager.singleton.addTextureFromResources(TEXTURE_BACKGROUND,gl);
 		
 		animatedItemsManager = new AnimationManager(10);
 		
 		itemBomb = new ItemAnimated(new int[]{ITEM_BOMB,ITEM_BOMB_BW},gl,GRID_ELEMENT_WIDTH, GRID_ELEMENT_HEIGHT,ItemQueue.BOMB);
 		currentItems = new ArrayList<ItemAnimated>(10);
 		
+		textureHandle_deadLenny = MyTextureManager.singleton.addTextureFromResources(TEXTURE_LENNY_DEAD, gl);
+		
+		
 		//Read map file
 		readFile(mapResource, context);
 		
 		//Place Money
-		placeDollar(30);	//normal 10
+		placeDollar(15);	//normal 10
 		
 		//Generic field of view
 		width = 5;
@@ -162,9 +172,13 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	 * 
 	 * @param viewportWidth	Width of the viewport.
 	 */
-	public void setWidth(float viewportWidth) {
+	public void setWidth(int viewportWidth, int viewportHeight) {
+		
+		this.viewportHeight = viewportHeight; 
+		this.viewportWidth = viewportWidth;
+		
 		//Calculate grid size
-		width = (int)Math.ceil(viewportWidth / (3f*R_HEX/2f))+2;
+		width = (int)Math.ceil((float)viewportWidth / (3f*R_HEX/2f))+2;
 		
 		//DEBUG: Resets the Level
 		//scroll =0;
@@ -179,6 +193,10 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		LevelActivity.coinsUpdateHandler.sendEmptyMessage(cashCount);
 		//Start animation
 		
+		deadLenny = new ItemAnimated(new int[]{textureHandle_deadLenny}, character.width, character.height, TEXTURE_LENNY_DEAD);
+		
+		itemBomb.width = GRID_ELEMENT_WIDTH;
+		itemBomb.height = GRID_ELEMENT_HEIGHT;
 		///DEBUG
 		//xMin = mapWidth-2*width;
 		//scroll = mapWidth-2*width;
@@ -195,9 +213,13 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	 */
 	@Override
 	public void Draw(GL10 gl) {	
+		//Draw background (static)
+		MyTextureManager.singleton.textures[textureHandle_background].Bind(gl);
+		((GL11Ext) gl).glDrawTexfOES(0f,0f,0f,viewportWidth,viewportHeight);
 		
 		//Bind texture for hexagonal elements
 		MyTextureManager.singleton.textures[textureHandle].Bind(gl);
+		
 		
 		//Log.d("HexagonGrid","Draw "+scroll);
 		//Render grid
@@ -254,8 +276,8 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 
 				item.x = 3f*R_HEX/2*(x-delta)-0.5f*R_HEX;
 				item.y = item.gridY*2*RI_HEX-DIF_HEX-(RI_HEX*((x+xMin)%2));
-				item.width = GRID_ELEMENT_WIDTH;
-				item.height = GRID_ELEMENT_HEIGHT;
+				//item.width = GRID_ELEMENT_WIDTH;
+				//item.height = GRID_ELEMENT_HEIGHT;
 				
 				item.Draw(gl);
 			}
@@ -280,7 +302,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	/**
 	 * Calculates a list of accessible waypoints.
 	 */
-	public void calculateChoices() {
+	public boolean calculateChoices() {
 	
 		int x = xMin+CHARACTER_POSITION;
 		int y = characterLevel;
@@ -313,7 +335,18 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			}
 		}
 		
+		//sry, no choice must beam
+		if(choices.size() == 0){
+			for(int i=0; i<height; i++){
+				if((map[x+2][i] & GRID_NULL) == 0 && (map[x+2][i+1] & GRID_NULL) != 0)
+					choices.add(new MyWaypoint(x+2, i,true));
+			}
+			return false;
+		}else
+			return true;
+		
 	}
+	
 	
 	/**
 	 * Calculated the current progress in percent and updated 
@@ -360,19 +393,10 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			
 			map[CHARACTER_POSITION+xMin][characterLevel+1] = GRID_NULL;
 
-			SoundManager.singleton.play(SOUND_DOLLAR, false, 0.2f, 1f);
+			SoundManager.singleton.play(SOUND_DOLLAR, false, 0.1f, 1f);
 			
 			cashCount++;
 			
-			if(cashCount >= 5){
-				deathCount--;
-				
-				if(deathCount < 0)
-					deathCount = 0;
-				
-				cashCount = 0;
-				LevelActivity.deathsUpdateHandler.sendEmptyMessage(deathCount);
-			}
 			LevelActivity.coinsUpdateHandler.sendEmptyMessage(cashCount);	
 		}
 	}
@@ -384,7 +408,9 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		//
 		if(stop)
 			return;
+	
 		
+			
 		ItemAnimated itm;
 		///
 		for(int i=0; i<currentItems.size(); i++){
@@ -401,14 +427,24 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 						deathCount++;
 						LevelActivity.deathsUpdateHandler.sendEmptyMessage(deathCount);
 						if (vib != null) vib.vibrate(1000);
+						
+						ItemAnimated b = deadLenny.addCloneToGrid(animatedItemsManager, xMin+CHARACTER_POSITION, characterLevel+1);
+						currentItems.add(b);
+						b.startDeadLennyAnimation(Constants.VIEWPORT_HEIGHT,(scroll-(float)Math.floor(scroll))*1.5f*R_HEX);
 					}
 				animatedItemsManager.removeAnimation(itm);
 				currentItems.remove(i);
 			}
 		}
 		//
-		
 		animatedItemsManager.animate(deltaTime);
+		
+		int lani = character.getAnimator().animationRunning();
+		
+		//move grid according to beam animation
+		if( lani == LennyAnimator.BEAM_ANIMATION_IN ||
+				lani == LennyAnimator.BEAM_ANIMATION_OUT )
+			return;
 		
 		//Calculated new scroll value
 		scroll += deltaTime*jumpTimeScale*SPEED;
@@ -426,17 +462,33 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		}
 		xMin = newxMin;
 		
-		//Reset level to start
-		if(scroll+width >= mapWidth-1) {
-//			scroll = 0;
-			LevelActivity.finishLevel.sendEmptyMessage(Math.min(100, deathCount*20));
-			stop = true;
+		int deltaH = ((xMin+CHARACTER_POSITION)%2 == 0)?2:1;
+		
+		character.x = CHARACTER_POSITION*3f*R_HEX/2f-character.width/2f;
+		
+		if( lani == LennyAnimator.BEAM_ANIMATION_INVISIBLE){
+			jumpTimeScale = 2.5f;
+			if(scroll >= beamAnimationScroll + 2f){
+				jumpTimeScale = 1f;
+				characterLevel = nextLvlAnimation;
+				character.y = RI_HEX*deltaH+characterLevel*2f*RI_HEX;
+				UpdateProgress();
+				
+				character.getAnimator().startAnimation(LennyAnimator.BEAM_ANIMATION_IN, 0.7f);
+			}
 			return;
 		}
 		
-		int deltaH = ((xMin+CHARACTER_POSITION)%2 == 0)?2:1;
-	
-		character.x = CHARACTER_POSITION*3f*R_HEX/2f-7.5f;
+		//Reset level to start - end game
+		if(scroll+width >= mapWidth-1) {
+//			scroll = 0;
+			Message msg = new Message();
+			msg.arg1 = deathCount;
+			msg.arg2 = cashCount;
+			LevelActivity.finishLevel.sendMessage(msg);
+			stop = true;
+			return;
+		}	
 		
 			//next field
 		if(next > delay){
@@ -466,7 +518,8 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			
 			/// NEW CHOICES
 			
-			calculateChoices();
+			boolean nobeam = calculateChoices();	//false if beam is necessary
+			
 			for(int i=0; i<choices.size(); i++)
 				Log.d("Choices",((MyWaypoint)choices.get(i)).toString());
 			
@@ -474,35 +527,38 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 			
 			MyWaypoint wp = new MyWaypoint(1, 0, true);
 			
-			if(choices.size() == 0)
-				Log.d("HexagonGrid","UPS... no CHOICE found... check level");
-			else
-				wp = (MyWaypoint)choices.get(random.nextInt(choices.size()));
+			
+			wp = (MyWaypoint)choices.get(random.nextInt(choices.size()));
 			
 			//End of jump
 			if(characterMode == 'J')
-				SoundManager.singleton.play(SOUND_JUMP_DOWN, false, 0.4f, 1f);
+				SoundManager.singleton.play(SOUND_JUMP_DOWN, false, 0.3f, 1f);
 			
-			//new characterMode
-			if((wp.x == 1) && (wp.y == 0))
-				characterMode = 'W';
-			else{
-				characterMode = 'J';
-				delay = wp.x-1;
-				characterLevel += wp.y;
-				
-				//play sound
-				SoundManager.singleton.play(SOUND_JUMP_UP, false, 0.4f, 1f);
-				
-				float up = (wp.y < 0)?-1f:1f;
-				
-				if(wp.x%2 == 0)
-					jump(wp.y*2f,1f,wp.x);
-				else
-					jump(wp.y*2f+sign, 1f, wp.x);
-				
+			if(nobeam == false){
+				nextLvlAnimation = wp.y;
+				character.getAnimator().startAnimation(LennyAnimator.BEAM_ANIMATION_OUT, 0.7f);
+				beamAnimationScroll = scroll;
+			}else{
+				//new characterMode
+				if((wp.x == 1) && (wp.y == 0))
+					characterMode = 'W';
+				else{
+					characterMode = 'J';
+					delay = wp.x-1;
+					characterLevel += wp.y;
+					
+					//play sound
+					SoundManager.singleton.play(SOUND_JUMP_UP, false, 0.3f, 1f);
+					
+					float up = (wp.y < 0)?-1f:1f;
+					
+					if(wp.x%2 == 0)
+						jump(wp.y*2f,1f,wp.x);
+					else
+						jump(wp.y*2f+sign, 1f, wp.x);
+					
+				}
 			}
-			
 			Log.d("Character","Choice="+characterMode);
 		}
 		float a,v,y,t;
@@ -590,7 +646,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	 */
 	public boolean useItem(float x, float y, int item) {
 		
-		SoundManager.singleton.play(SOUND_ITEM,false,0.3f,1f);
+		SoundManager.singleton.play(SOUND_ITEM,false,0.2f,1f);
 		
 		Log.d("HexagonGrid", x+":"+y + " - " + item);
 		
@@ -618,7 +674,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 					if((map[xGrid][yGrid] == GRID_NULL) && ((map[xGrid][yGrid-1] & GRID_NULL) == 0)){
 						ItemAnimated b = itemBomb.addCloneToGrid(animatedItemsManager, xGrid, yGrid);
 						currentItems.add(b);
-						b.startAnimation(10f);
+						b.startBombAnimation(7f);
 						return true;
 					}break;
 				
