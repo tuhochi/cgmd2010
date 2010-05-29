@@ -9,7 +9,7 @@ public final class Definitions {
 	
 	//Game Mechanics:
 	public static final int STARTING_MONEY = 90;
-	public static final int STARTING_IRON = 10;
+	public static final int STARTING_IRON = 15;
 	public static final int GAME_ROUND_WAIT_TIME = 20000;
 	public static final short MAX_ROUND_NUMBER = 7;
 	
