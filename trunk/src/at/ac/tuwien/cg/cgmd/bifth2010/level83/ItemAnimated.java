@@ -10,14 +10,17 @@ import javax.microedition.khronos.opengles.GL11Ext;
  */
 public class ItemAnimated extends Animatable implements Drawable {
 
-	private final int BOMB_ANIMATION = 0;
-	private final int NO_ANIMATION = -1;
+	public static final int BOMB_ANIMATION = 0;
+	public static final int NO_ANIMATION = -1;
+	public static final int LENNY_DEAD_ANIMATION = 1;
 	
 	private int animation = NO_ANIMATION;
 	private float endTime;
+	private float animationDistance;
 	private float currentTime;
 	private float picTime;
 	private boolean detonated = false;
+	private float xOffset=0,yOffset=0;
 	
 	public int gridX,gridY;
 	public float x,y,width,height;
@@ -26,6 +29,8 @@ public class ItemAnimated extends Animatable implements Drawable {
 	public int[] textures;
 	public int numofTextures;
 	private int currentTexture = 0;
+	
+	private AnimationManager manager;
 	
 	public int itemId;
 	
@@ -86,6 +91,7 @@ public class ItemAnimated extends Animatable implements Drawable {
 	public void addToGrid(AnimationManager manager, int x, int y) {
 		this.gridX = x;
 		this.gridY = y;
+		this.manager = manager;
 		manager.addAnimatable(this);
 	}
 	
@@ -100,6 +106,7 @@ public class ItemAnimated extends Animatable implements Drawable {
 		ItemAnimated item = this.clone();
 		item.gridX = x;
 		item.gridY = y;
+		item.manager = manager;
 		manager.addAnimatable(item);
 		return item;
 	}
@@ -112,6 +119,9 @@ public class ItemAnimated extends Animatable implements Drawable {
 		manager.removeAnimation(this);
 	}
 	
+	public void removeFromKnownAnimationManager(){
+		manager.removeAnimation(this);
+	}
 	@Override
 	public void animate(float deltaTime) {
 		switch(animation){
@@ -133,6 +143,13 @@ public class ItemAnimated extends Animatable implements Drawable {
 			picTime += deltaTime;
 			break;
 			
+		case LENNY_DEAD_ANIMATION:
+			float delta = animationDistance/5f;
+			yOffset = delta*currentTime+height/2;
+			currentTime += deltaTime;
+			if(yOffset >= animationDistance)
+				removeFromKnownAnimationManager();
+			break;
 		default:
 			currentTexture = 0;
 			break;
@@ -161,13 +178,22 @@ public class ItemAnimated extends Animatable implements Drawable {
 	 * 
 	 * @param time	Animation time in seconds.
 	 */
-	public void startAnimation(float time){
+	public void startBombAnimation(float time){
 		
 		animation = BOMB_ANIMATION;
 		endTime = time;
 		currentTime = 0;
 		picTime = 0;
+		
 		SoundManager.singleton.play(Constants.SOUND_COUNTDOWN, false, 0.8f, 3.4f/time);
+	}
+	
+	public void startDeadLennyAnimation(float height,float xDiff){
+		animation = LENNY_DEAD_ANIMATION;
+		xOffset = xDiff;
+		animationDistance = height;
+		currentTime = 0;
+		picTime = 0;
 	}
 
 	@Override
@@ -179,7 +205,7 @@ public class ItemAnimated extends Animatable implements Drawable {
 	@Override
 	public void Draw(GL10 gl) {
 		MyTextureManager.singleton.textures[textures[currentTexture]].Bind(gl);
-		((GL11Ext) gl).glDrawTexfOES(x,y,0,width, height);
+		((GL11Ext) gl).glDrawTexfOES(x+xOffset,y+yOffset,0,width, height);
 	}
 
 	@Override

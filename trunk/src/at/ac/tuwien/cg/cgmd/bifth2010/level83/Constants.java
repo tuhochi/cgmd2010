@@ -30,6 +30,11 @@ public class Constants {
 	public static final int TEXTURE_HEXAGON_R = R.drawable.l83_hexagon_r;
 	public static final int TEXTURE_TOMB = R.drawable.l83_tomb;
 	public static final int TEXTURE_DOLLARSIGN = R.drawable.l83_dollarsign;
+	public static final int TEXTURE_BACKGROUND = R.drawable.l83_background;
+	
+	public static final int HELP_HEXAGON_B = R.drawable.l83_help_hexagon_b;
+	public static final int HELP_HEXAGON_R = R.drawable.l83_help_hexagon_r;
+	public static final int HELP_HEXAGON_DELETE = R.drawable.l83_help_hexagon_delete;
 	
 	public static final int TEXTURE_MAP = R.drawable.l83_map4;
 	
@@ -48,7 +53,7 @@ public class Constants {
 	
 	public static final int TEXTURE_DOLLAR = R.drawable.l83_dollar;
 	public static final int TEXTURE_LENNY = R.drawable.l83_lenny;
-	
+	public static final int TEXTURE_LENNY_DEAD = R.drawable.l83_lenny_w90;
 	public static final int MUSIC_BACKGROUND = R.raw.l83_background;
 	public static final int SOUND_COUNTDOWN = R.raw.l83_countdown2;
 	public static final int SOUND_BYBY = R.raw.l83_byby;
@@ -56,8 +61,10 @@ public class Constants {
 	public static final int SOUND_JUMP_DOWN = R.raw.l83_jumpdown;
 	public static final int SOUND_DOLLAR = R.raw.l83_dollar;
 	public static final int SOUND_ITEM = R.raw.l83_item;
+	public static final int SOUND_BEAM_IN = R.raw.l83_beam_in;
+	public static final int SOUND_BEAM_OUT = R.raw.l83_beam_out;
 	
-	public static final float SPEED = 0.5f;
+	public static final float SPEED = 0.8f;
 	
 	public static final float ASP_HEX = 1;
 	

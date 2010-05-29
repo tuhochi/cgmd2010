@@ -32,7 +32,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	private long lastTime;
 	private float deltaTime;
 	private boolean scrolling;
-	private MySprite sprite;
+	private MySprite lenny;
 //	private MySprite dollar;
 //	private MySprite tomb;
 //	private MyAnimatedSprite animSprite;
@@ -45,7 +45,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	
 	/**Thread for Animation*/
 	private Thread aniThread;
-	
+	private boolean startAnithread = false;
 	private Vibrator vib;
 	private GestureDetector cGestureDetector;
 	private OnGestureListener gestureListener = new OnGestureListener() {
@@ -140,6 +140,10 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	
 	@Override
 	public void onDrawFrame(GL10 gl) {
+		if(startAnithread){
+			aniThread.start();
+			startAnithread = false;
+		}
 		
 		//Calculate Time
 		long time = System.nanoTime();
@@ -157,7 +161,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		hexGrid.Draw(gl);
-		sprite.Draw(gl);
+		lenny.Draw(gl);
 //		dollar.Draw(gl);
 //		tomb.Draw(gl);
 		items.Draw(gl);
@@ -174,13 +178,19 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		gl.glViewport(0, 0, width, height);
 		
 		Constants.setViewPort(height, 9);
-		hexGrid.setWidth(width);
+		
+		lenny.width = height/18;
+		lenny.height = height/12;
+		
+		hexGrid.setWidth(width,height);
 		
 		items.updateViewport(width, height);
 
-		sprite.width = width/32;
-		sprite.height = height/12;
-
+		//Create Animator for Lenny and add it to the animation manager
+		LennyAnimator lennyAnimator = new LennyAnimator();
+		lenny.setAnimator(lennyAnimator);
+		aniManager.addAnimatable(lennyAnimator);
+		
 		hexGrid.resumeGame();
 		
 		Log.d("Renderer","Element width="+GRID_ELEMENT_WIDTH);
@@ -243,13 +253,14 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
         
         //Start Animation Thread
         if(!firstStart)
-        	aniThread.start();
+        	startAnithread = true;
 	}
 	
 	public void resumeGame(){
 		lastTime = System.nanoTime();
 		
-		aniThread.start();
+		startAnithread = true;
+		//aniThread.start();
 	}
 	/**
 	 * This function is called when the level is started for the first time and
@@ -263,7 +274,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		//Initialize TextureManager
         new MyTextureManager(context, 30);
 	        
-		sprite = new MySprite(TEXTURE_LENNY, 20f*R_HEX/2f, 2f*RI_HEX-DIF_HEX-RI_HEX, 15, 21, gl);
+		lenny = new MySprite(TEXTURE_LENNY, 20f*R_HEX/2f, 2f*RI_HEX-DIF_HEX-RI_HEX, 15, 21, gl);
 //        dollar = new MySprite(TEXTURE_DOLLARSIGN, 84, 0, 42, 42, gl);
 //        tomb = new MySprite(TEXTURE_TOMB, 4, 0, 42, 42, gl);
 		hexGrid = new MyHexagonGrid( TEXTURE_HEXAGON, gl, context,TEXTURE_MAP);
@@ -271,7 +282,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		aniManager = new AnimationManager(5);
 		
 		aniManager.addAnimatable(hexGrid);
-		hexGrid.setCharacterControl(sprite);
+		hexGrid.setCharacterControl(lenny);
 		hexGrid.setVibrator(vib);
 
 		items = new ItemQueue(4, gl);
@@ -289,8 +300,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	 * stop running threads.
 	 */
 	public void onPause() {
-		
-		hexGrid.pauseGame();
+		if (hexGrid != null) hexGrid.pauseGame();
 		
 		if (aniThread != null)
 			aniThread.interrupt();
