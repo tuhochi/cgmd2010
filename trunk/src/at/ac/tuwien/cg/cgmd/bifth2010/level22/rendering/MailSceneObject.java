@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -96,71 +97,162 @@ public class MailSceneObject
 		
 		characterRefs = new MailCharacter[ myMail.getDisplayName().length() ];
 		
-		int subDivisionCount = 4 * myMail.getDisplayName().length() + 1;
+		int charSubdivisionCount = 3;
+		int verResolution = charSubdivisionCount + 2;
+		int subDivisionCount = ( charSubdivisionCount + 1 ) * myMail.getDisplayName().length() + 1;
 		
-		float[] vertexPos = new float[ subDivisionCount * subDivisionCount * 3 + 3 ];
-		float[] vertexNorm = new float[ subDivisionCount * subDivisionCount * 3 + 3 ];
-		float[] uvCoords = new float[ subDivisionCount * subDivisionCount * 2 + 2 ];
-		float[] uvCoordsCharacter = new float[ subDivisionCount * subDivisionCount * 2 + 2 ];
+		float[] vertexPos = new float[ subDivisionCount * verResolution * 3 + 3 ];
+		float[] vertexNorm = new float[ subDivisionCount * verResolution * 3 + 3 ];
+		float[] uvCoords = new float[ subDivisionCount * verResolution * 2 + 2 ];
+		float[] uvCoordsCharacter = new float[ subDivisionCount * verResolution * 2 + 2 ];
 		
-		for ( int subDivIndexHor = 0; subDivIndexHor < subDivisionCount; subDivIndexHor++ )
+		for ( int subDivIndexVer = 0; subDivIndexVer < verResolution; subDivIndexVer++ )
 		{
 			
-			for ( int subDivIndexVer = 0; subDivIndexVer < subDivisionCount; subDivIndexVer++ )
+			for ( int subDivIndexHor = 0; subDivIndexHor < subDivisionCount; subDivIndexHor++ )
 			{
 				
-				vertexPos[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 ] = 
-					2.0f * subDivIndexHor / ( float ) ( subDivisionCount - 1 ) - 1.0f;
-				vertexPos[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 1 ] =
-					1.2f * subDivIndexVer / ( float ) ( subDivisionCount - 1 ) - 0.6f;
-				vertexPos[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 2 ] = 0;
+				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 ] = 
+					2.0f * ( float ) subDivIndexHor / ( float ) ( subDivisionCount - 1 ) - 1.0f;
+				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 1 ] =
+					1.2f * ( float ) subDivIndexVer / ( float ) ( verResolution - 1 ) - 0.6f;
+				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 2 ] = 0;
 				
-				vertexNorm[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 ] = 0;
-				vertexNorm[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 1 ] = 0;
-				vertexNorm[ subDivIndexHor * subDivisionCount * 3 + subDivIndexVer * 3 + 2 ] = - 1.0f;
+				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 ] = 0;
+				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 1 ] = 0;
+				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 2 ] = - 1.0f;
 				
-				uvCoords[ subDivIndexHor * subDivisionCount * 2 + subDivIndexVer * 2 ] = 
-					subDivIndexHor / ( float ) ( subDivisionCount - 1 );
-				uvCoords[ subDivIndexHor * subDivisionCount * 2 + subDivIndexVer * 2 + 1 ] =
-					1.0f - 0.63f * subDivIndexVer / ( float ) ( subDivisionCount - 1 );
+				uvCoords[ subDivIndexVer * subDivisionCount * 2 + subDivIndexHor * 2 ] = 
+					( float ) subDivIndexHor / ( float ) ( subDivisionCount - 1 );
+				uvCoords[ subDivIndexVer * subDivisionCount * 2 + subDivIndexHor * 2 + 1 ] =
+					1.0f - 0.63f * ( float ) subDivIndexVer / ( float ) ( verResolution - 1 );
 			}
 		}
 		
-		vertexPos[ subDivisionCount * subDivisionCount * 3 ] = 0;
-		vertexPos[ subDivisionCount * subDivisionCount * 3 + 1 ] = 1;
-		vertexPos[ subDivisionCount * subDivisionCount * 3 + 2 ] = 0;
+		vertexPos[ subDivisionCount * verResolution * 3 ] = 0;
+		vertexPos[ subDivisionCount * verResolution * 3 + 1 ] = 1;
+		vertexPos[ subDivisionCount * verResolution * 3 + 2 ] = 0;
 		
-		vertexNorm[ subDivisionCount * subDivisionCount * 3 ] = 0;
-		vertexNorm[ subDivisionCount * subDivisionCount * 3 + 1 ] = 0;
-		vertexNorm[ subDivisionCount * subDivisionCount * 3 + 2 ] = -1.0f;
+		vertexNorm[ subDivisionCount * verResolution * 3 ] = 0;
+		vertexNorm[ subDivisionCount * verResolution * 3 + 1 ] = 0;
+		vertexNorm[ subDivisionCount * verResolution * 3 + 2 ] = -1.0f;
 		
-		uvCoords[ subDivisionCount * subDivisionCount * 2 ] = 0.5f;
-		uvCoords[ subDivisionCount * subDivisionCount * 2 + 1 ] = 0.0f;
+		uvCoords[ subDivisionCount * verResolution * 2 ] = 0.5f;
+		uvCoords[ subDivisionCount * verResolution * 2 + 1 ] = 0.0f;
 		
 		for ( int charIndex = 0; charIndex < myMail.getDisplayName().length(); charIndex++ )
 		{
 			
-			int meshIndex = charIndex * 4 + 1;
+			int meshIndex = subDivisionCount + charIndex * charSubdivisionCount + 1;
 			
-			for ( int subDivIndexHor = 0; subDivIndexHor < 3; subDivIndexHor++ )
+			for ( int subDivIndexVer = 0; subDivIndexVer < charSubdivisionCount; subDivIndexVer++ )
 			{
 				
-				for ( int subDivIndexVer = 0; subDivIndexVer < 3; subDivIndexVer++ )
+				for ( int subDivIndexHor = 0; subDivIndexHor < charSubdivisionCount; subDivIndexHor++ )
 				{
 				
-					uvCoordsCharacter[ ( meshIndex + subDivIndexHor ) * subDivisionCount * 2 + ( meshIndex + subDivIndexVer ) * 2 ] = 
-						subDivIndexHor / 2.0f;
-					uvCoordsCharacter[ ( meshIndex + subDivIndexHor ) * subDivisionCount * 2 + ( meshIndex + subDivIndexVer ) * 2 ] =
-						subDivIndexVer / 2.0f;
+					uvCoordsCharacter[ ( meshIndex + subDivIndexVer * subDivisionCount + subDivIndexHor ) * 2 ] = 
+						subDivIndexHor / ( charSubdivisionCount - 1 );
+					uvCoordsCharacter[ ( meshIndex + subDivIndexVer * subDivisionCount + subDivIndexHor ) * 2 + 1 ] =
+						subDivIndexVer / ( charSubdivisionCount - 1 );
+				}
+			}
+			
+			int actCpyIndex = 0;
+			// quadcount * triangles per quad * vertices per triangle
+			short[] localIndexSrc = new short[ ( charSubdivisionCount - 1 ) * ( charSubdivisionCount - 1 ) * 2 * 3 ];
+			
+			for ( int subDivIndexVer = 0; subDivIndexVer < charSubdivisionCount - 1; subDivIndexVer++ )
+			{
+				
+				for ( int subDivIndexHor = 0; subDivIndexHor < charSubdivisionCount - 1; subDivIndexHor++ )
+				{
+					
+					int actIndex = meshIndex + subDivIndexVer * subDivisionCount + subDivIndexHor;
+					
+					localIndexSrc[ actCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount );
+					localIndexSrc[ actCpyIndex++ ] = ( short ) ( actIndex );
+					localIndexSrc[ actCpyIndex++ ] = ( short ) ( actIndex + 1 );
+					
+					localIndexSrc[ actCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount + 1 );
+					localIndexSrc[ actCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount );
+					localIndexSrc[ actCpyIndex++ ] = ( short ) ( actIndex + 1 );
+				}
+			}
+			
+			ByteBuffer ind_ = ByteBuffer.allocateDirect( localIndexSrc.length * 2 );
+			ind_.order( ByteOrder.nativeOrder() );
+			ShortBuffer indices = ind_.asShortBuffer();
+			indices.put( localIndexSrc );
+			indices.position( 0 );
+			
+			characterRefs[ charIndex ] = null;
+// TODO : fix this				//MailCharacter.getMailCharacter( myMail.getDisplayName().charAt( charIndex ), context, renderContext, indices );
+		}
+		
+		int letterTriangleCount = ( ( subDivisionCount - 1 ) * ( verResolution - 1 ) - 
+									( charSubdivisionCount - 1 ) * ( charSubdivisionCount - 1 ) * 
+									myMail.getDisplayName().length() ) * 2 + subDivisionCount;
+
+		short[] indexSrc = new short[ letterTriangleCount * 3 ];
+		int actIndexCpyIndex = 0;
+		
+		for ( int subDivIndexHor = 0; subDivIndexHor < subDivisionCount - 1; subDivIndexHor++ )
+		{
+			
+			int actIndex = subDivIndexHor;
+			
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + 1 );
+			
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount + 1 );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + 1 );
+		}
+		
+		for ( int subDivIndexHor = 0; subDivIndexHor < subDivisionCount - 1; subDivIndexHor++ )
+		{
+			
+			int actIndex = ( verResolution - 1 ) * subDivisionCount + subDivIndexHor;
+			
+			// First Quadhalf
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex - subDivisionCount );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex - subDivisionCount + 1 );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex );
+			
+			// Second Quadhalf
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex - subDivisionCount + 1 );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + 1 );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex );
+			
+			// Envelope top
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + 1 );
+			indexSrc[ actIndexCpyIndex++ ] = ( short ) ( subDivisionCount * verResolution );
+		}
+		
+		for ( int subDivIndexVer = 1; subDivIndexVer < verResolution - 2; subDivIndexVer++ )
+		{
+			
+			for ( int subDivIndexHor = 0; subDivIndexHor < subDivisionCount - 1; subDivIndexHor++ )
+			{
+			
+				if ( subDivIndexHor % charSubdivisionCount == 0 )
+				{
+					
+					int actIndex = subDivIndexVer * subDivisionCount + subDivIndexHor;
+					
+					indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount );
+					indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex );
+					indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + 1 );
+					
+					indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount + 1 );
+					indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + subDivisionCount );
+					indexSrc[ actIndexCpyIndex++ ] = ( short ) ( actIndex + 1 );
 				}
 			}
 		}
-		
-		byte[] ind = 	{
-							0, 1, 2, 
-							2, 3, 0,
-							1, 4, 2
-						};
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect( vertexPos.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
@@ -185,8 +277,11 @@ public class MailSceneObject
 		uvCoordinatesCharacter = byteBuf.asFloatBuffer();
 		uvCoordinatesCharacter.put( uvCoords );
 		uvCoordinatesCharacter.position( 0 );
-		
-		indices = ByteBuffer.wrap( ind );
+
+		byteBuf = ByteBuffer.allocateDirect( indexSrc.length * 2 );
+		byteBuf.order( ByteOrder.nativeOrder() );
+		indices = byteBuf.asShortBuffer();
+		indices.put( indexSrc );
 		indices.position( 0 );
 		
 		this.myMail = myMail;
@@ -261,7 +356,7 @@ public class MailSceneObject
 		renderContext.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		renderContext.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 
-		renderContext.glFrontFace(GL10.GL_CW );
+		renderContext.glFrontFace(GL10.GL_CCW );
 		
 		renderContext.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexPositions );
 		renderContext.glNormalPointer(GL10.GL_FLOAT, 0, vertexNormals);
@@ -273,7 +368,7 @@ public class MailSceneObject
 		glBindTexture( GL10.GL_TEXTURE_2D, texture[ texIndex ] );
 		renderContext.glTexCoordPointer(2, GL10.GL_FLOAT, 0, uvCoordinates );
 		
-		renderContext.glDrawElements(GL10.GL_TRIANGLES, indices.capacity(), GL10.GL_UNSIGNED_BYTE, indices );
+		renderContext.glDrawElements(GL10.GL_TRIANGLES, indices.capacity(), GL10.GL_UNSIGNED_SHORT, indices );
 		
 		renderContext.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		renderContext.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -409,7 +504,7 @@ public class MailSceneObject
 	private FloatBuffer vertexNormals;
 	private FloatBuffer uvCoordinates;
 	private FloatBuffer uvCoordinatesCharacter;
-	private ByteBuffer indices;
+	private ShortBuffer indices;
 	private Mail myMail;
 	private MailCharacter[] characterRefs;
 	private float accTime;
