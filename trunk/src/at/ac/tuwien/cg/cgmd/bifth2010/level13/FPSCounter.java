@@ -71,7 +71,7 @@ public class FPSCounter {
         }
                 
         public float getFPS()
-        {
+        {	
                 return fps;
         }
         

@@ -188,7 +188,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		}
 
 		
-		Log.d("df", "zoom: " + zoomFactor);
 		
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
@@ -357,7 +356,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 				gameControl.movePlayer(MyRenderer.screenWidth, MyRenderer.screenHeight / 2.0f);
 				break;
 			default:
-				break;
+				return false;
 		}
 		return true;
 	}
