@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -36,6 +38,8 @@ public class LevelActivity extends Activity {
         private Timer fpsUpdateTimer;
         private Timer gameTimeUpdateTimer;
         private Timer moneyUpdateTimer;
+        
+        private boolean fpsEnabled = false;
         
         
     /**
@@ -81,8 +85,14 @@ public class LevelActivity extends Activity {
                 
                         @Override
                         public void run() {
+                        		if(fpsEnabled) {
+                        			fpsTextView.setVisibility(View.VISIBLE);
+                        		}
+                        		else {
+                        			fpsTextView.setVisibility(View.INVISIBLE);
+                        		}
                                 FPSCounter counter = FPSCounter.getInstance();
-                                fpsString = "fps: " + counter.getFPS();
+                                fpsString = "fps: " + Math.round(counter.getFPS());
                         
                                 handleUIChanges.sendEmptyMessage(0);
                         }
@@ -203,5 +213,13 @@ public class LevelActivity extends Activity {
                 return true;
         }
         
+       @Override
+       public boolean onKeyUp(int keyCode, KeyEvent event) {
+    	   if(keyCode == KeyEvent.KEYCODE_MENU) {
+    		   fpsEnabled = !fpsEnabled;
+    		   return true;
+    	   }
+    	   return false;
+       }
         
 }
