@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="l70_GameName">Careful Buddys</string>
-	<string name="l70_GameDescription_01">Puh, das war keine gute Idee den Großeil meines Vermögens auf diesem Schweizer Bankkonto zu deponieren. Diese hohen Zinsen bereiten mir allmählich Kopfschmerzen. Ganz klar ich muss das Geld hier wegschaffen. Am besten umweltschonend per Zugtransport und bei dieser Gelegenheit gleich ein paar Wagoons mit Münzen loswerden.. Die Jungs von der Zugeskorte könnten mir allerdings einen Strich durch die Rechnung machen, aber die werde ich schon irgendwie austricksen...</string>
-	<string name="l70_GameDescription_02">Deine Aufgabe ist es während der Zugfahrt unbemerkt Wagoons mit Münzen erfolgreich abzukoppeln. Dazu ist es nötig die Jungs von der folgenden Zugeskorte umzuleiten, die natürlich stets bemüht sind alle verlorenen Wagoons wieder anzuhängen. Eine gute Gelegenheit dafür sind die immer wieder auftauchenden Weichen. Mit Geschick und Aufmerksamkeit kannst du hier viel Geld verlieren.</string>
+	<string name="l70_GameName">Train your Brain</string>
+	<string name="l70_GameDescription_01">Phew, that was not a good idea to deposit the bulk of my fortune in this Swiss bank account. These high interest rates gradually give me headaches. Clearly I need to get rid of the money here. The best environmentally friendly by railway transport and get rid of this opportunity just a few coins .. </string>
+	<string name="l70_GameDescription_02">Find a route for Bunny's train by the use of switching the rail fields. You loose one coin for each used rail field.</string>
 
-<string name="l70_GameComplete">Game Complete</string>
-<string name="l70_GameOver">Game Over</string>
+<string name="l70_GameComplete">&gt;&gt; Game Complete &lt;&lt;</string>
+<string name="l70_GameOver">&gt;&gt; Game Over &lt;&lt;</string>
 
+<string name="l70_help_select">At game start the fields are hidden by clouds. To select press on the cloud field, and with another touch you flip the selected field.</string>
+<string name="l70_help_switch">Under the clouds hide rails fields. Swap this, so that the train can move from start to finish. Choose two rail fields and touch one of the two fields (Field A or Field B) again to switch them. The train starts from the left side of the playfield.</string>
+<string name="l70_help_obstacle">Under the clouds there can also be obstacles. It is not possible to switch an obstacle field, so drive around them.</string>
 </resources>

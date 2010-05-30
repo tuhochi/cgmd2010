@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry;
+package at.ac.tuwien.cg.cgmd.bifth2010.level70.util;
 
 import static android.opengl.GLES10.GL_LINEAR;
 import static android.opengl.GLES10.GL_LINEAR_MIPMAP_NEAREST;
@@ -23,15 +23,21 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
 
 /**
  * OpenGL Texture Wrapper
+ * @author Christoph Winklhofer
  */
 public class GlTexture {
 
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
-	private int[] texId;   //< Texture handle
-	private int   width;   //< Width of the texture
-	private int   height;  //< Height of the texture
+    /** The OpenGL texture handle */
+	private int[] texId;
+	
+	/** Width of the texture */
+	private int   width;
+	
+	/** Height of the texture */
+	private int   height;
 	
 	
 	// ----------------------------------------------------------------------------------
@@ -88,7 +94,7 @@ public class GlTexture {
 	// -- Private methods ----
 	
 	/**
-	 * Create texture
+	 * Create texture.
 	 * @param resid Resource-ID
 	 */
 	private void create(int resid) {

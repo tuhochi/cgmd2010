@@ -5,17 +5,20 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.traingame.TrainGame;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.game.TrainGame;
 
 /**
- * RenderTask.
+ * RenderTask to display the game.
+ * 
+ * @author Christoph Winklhofer
  */
 public class RenderTask implements Renderer {
 
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
-	TrainGame game; //< Game scene
+    /** Instance to the train game */
+	TrainGame game;
 	
 	
 	// ----------------------------------------------------------------------------------
@@ -23,7 +26,7 @@ public class RenderTask implements Renderer {
 	
 	/**
 	 * Create render task.
-	 * @param The game scene.
+	 * @param game The game scene.
 	 */
 	public RenderTask(TrainGame game) {
 		this.game = game;
@@ -34,12 +37,10 @@ public class RenderTask implements Renderer {
 	// -- Public methods ----
 	
 	/**
-	 * OpenGL initialization.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		
-		Log.i("RenderTask", "onSurfaceCreated");
 		
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		gl.glFrontFace(GL10.GL_CCW);
@@ -53,19 +54,18 @@ public class RenderTask implements Renderer {
 	
 	
 	/**
-	 * Surface changed.
-	 */
+     * {@inheritDoc}
+     */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		
-		Log.i("RenderTask", "onSurfaceChanged");
 		game.setScreen(gl, width, height);
 	}
 	
 	
 	/**
-	 * Draw.
-	 */
+     * {@inheritDoc}
+     */
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		

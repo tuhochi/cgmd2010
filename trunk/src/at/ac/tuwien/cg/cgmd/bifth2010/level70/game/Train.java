@@ -1,14 +1,14 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level70.traingame;
+package at.ac.tuwien.cg.cgmd.bifth2010.level70.game;
 
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.os.Bundle;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.Geometry;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.GeometryFactory;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.SpriteTexture;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.util.Geometry;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.util.GeometryFactory;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.util.SoundManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.util.SpriteTexture;
 
 /**
  * This class manages the train including it's wagons moving along the rails.
@@ -19,16 +19,36 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.SpriteTexture;
  */
 public class Train {
 
+    // ----------------------------------------------------------------------------------
+    // -- Static Members ----
+    
+    /** State to save the train tile x- and y-index */
     private static String STATE_TRAIN_INDEX = "StateTrainIndex";
+    
+    /** State to save the train position */
     private static String STATE_TRAIN_POS = "StateTrainPos";
+    
+    /** State to save the train orientation */
     private static String STATE_TRAIN_ANGLE = "StateTrainAngle";
+    
+    /** State to save the train direction */
     private static String STATE_TRAIN_DIR = "StateTrainDir";
+    
+    /** State to save the train time */
     private static String STATE_TRAIN_TIME = "StateTrainTime";
-    public static final float TILE_SIZE = 1.0f;
+    
+    /** Tile size */
+    private static final float TILE_SIZE = 1.0f;
+    
+    /** Time for the train smoke animation */
     private static float SPRITE_ANIM_TIME = 0.5f;
 
+    
+    // ----------------------------------------------------------------------------------
+    // -- Ctor ----
+    
     /**
-     * Wagon data.
+     * Wagon data. The train has 3 wagoons.
      */
     private class Wagon {
         Wagon(int ixOff) {
@@ -40,9 +60,9 @@ public class Train {
             angleOrient = angleOffset = 0.0f;
             totalDt = 0.0f;
             type = TileEnum.TILE_HORIZONTAL;
+            tile = null;
             dir = 1;
         }
-        
                 
         Geometry geom;
         float posX, posY;
@@ -51,34 +71,62 @@ public class Train {
         float angleOffset;
         float totalDt;
         int ix, iy;
+        Tile     tile;
         TileEnum type;
         int dir;
     };
     
+    
     // ----------------------------------------------------------------------------------
     // -- Members ----
 
-    private TrainGame game;  //< Reference to the game
+    /** Train game instance to inform about game over / game complete state */
+    private TrainGame game;
 
-    private SpriteTexture tex;   //< The train sprite texture
-    private Geometry      geom;  //< Train quad-geometry
+    /** The train sprite texture */
+    private SpriteTexture tex;
+    
+    /** The quad geometry of the train */
+    private Geometry geom;
+    
+    /** List of the wagons */
     private ArrayList<Wagon> wagons;
 
-    private Tile     tile;  //< Current tile
-    private TileEnum type;  //< Current type of the tile
+    /** Current tile */
+    private Tile tile;
+    
+    /** Current type of the tile */
+    private TileEnum type;
 
-    private int   dir;             //< Moving direction of the train
-    private int   ixTile, iyTile;  //< X and Y index of the current tile
-    private float posX, posY;      //< World position of the train
-    private float offX, offY;      //< Offset position of the train
-    private float angleOrient;     //< World orientation of the train
-    private float angleOffset;     //< Offset orientation of the train
+    /** Moving direction of the train */
+    private int   dir;
+    
+    /** X and Y index of the current tile */
+    private int   ixTile, iyTile;
+    
+    /** World position of the train */
+    private float posX, posY;
+    
+    /** Offset position of the train */
+    private float offX, offY;
+    
+    /** World orientation of the train */
+    private float angleOrient;
+    
+    /** Offset orientation of the train */
+    private float angleOffset;
 
+    /** Index of the sprite smoke animation */
     private int iSprite;
+    
+    /** Current time for the sprite smoke animation */
     private float spriteTime;
 
-    private float tileTime;  //< Time the train needs to move along one tile
-    private float totalDt;   //< Total time inside one tile.
+    /** Time the train needs to move along one tile */
+    private float tileTime;
+    
+    /** Total time inside one tile. */
+    private float totalDt;
     
     
     // ----------------------------------------------------------------------------------
@@ -146,12 +194,20 @@ public class Train {
     }
     
 
+    /** 
+     * Set the tile time. The time the train needs to move along one tile.
+     * @param time The tile time.
+     */
     public void setTileTime(float time) {
         tileTime = time;
         //update(0);
     }
 
 
+    /**
+     * Save the train states.
+     * @param state The bundle where the states are stored.
+     */
     public void onSaveState(Bundle state) {
         int[] inds = new int[4 * 2];
         int[] dirs = new int[4];
@@ -186,6 +242,11 @@ public class Train {
         state.putFloatArray(STATE_TRAIN_TIME, times);
     }
     
+    
+    /**
+     * Restore the train state.
+     * @param state The bundle to restore the state.
+     */
     public void onRestoreState(Bundle state) {
         int[]   stateInds  = state.getIntArray(STATE_TRAIN_INDEX);
         int[]   stateDirs  = state.getIntArray(STATE_TRAIN_DIR);
@@ -230,6 +291,7 @@ public class Train {
 
         // Save current train data, because the update-methods alter these values.
         Tile saveTile = tile;
+        TileEnum saveType = type;
         int saveIxTile = ixTile;
         int saveIyTile = iyTile;
         int saveDir = dir;
@@ -264,10 +326,8 @@ public class Train {
         }
 
         // Restore the original tile data
-        if (saveTile != null) {
-            tile = saveTile;
-            type = saveTile.getType();
-        }
+        tile = saveTile;
+        type = saveType;
         ixTile = saveIxTile;
         iyTile = saveIyTile;
         dir = saveDir;
@@ -371,17 +431,20 @@ public class Train {
                 
         // Train moves outside the playfield - game over
         if (ixTile < 0 || iyTile < 0 || ixTile > 9 || iyTile > 5) {
-            if (!game.isGameCompleted()) {
+            if (game.isGameCompleted()) {
+                return;
+            }
+            else {
                 geom.setTexBuffer(tex.getTexBuffer(iSprite));
                 game.onGameOver();
                 return;
             }
         }
         
-        // Get next tile and update its state (Tile could be an Switch-state)
+        // Get next tile and update its state (Tile could be in Switch-state)
         Tile ntile = game.getTile(ixTile, iyTile);
         ntile.setStateTrain();
-
+        
         // Update direction and set next tile.
         boolean isOk = updateDirection(ntile);
         if (isOk) {           
@@ -484,7 +547,7 @@ public class Train {
      * @return Tile The next valid tile or null if the train can not move to the
      *         next tile.
      */
-    public boolean updateDirection(Tile ntile) {
+    private boolean updateDirection(Tile ntile) {
 
         TileEnum ntype = ntile.getType();
 
@@ -692,10 +755,16 @@ public class Train {
                     wag.posY = posY;
                     wag.angleOrient = angleOrient;
                     wag.type = type;
+                    wag.tile = tile;
                     wag.dir  = dir;
                 }
                 else {
                     Wagon last = wagons.get(i - 1);
+                    if (i == 2 && wag.tile != null) {
+                        wag.tile.setStateCoin();
+                        wag.tile.setTexBuffer();
+                        SoundManager.getInstance().play(3);
+                    }
                     wag.totalDt = 0;
                     wag.ix   = last.ix;
                     wag.iy   = last.iy;
@@ -703,6 +772,7 @@ public class Train {
                     wag.posY = last.posY;
                     wag.angleOrient = last.angleOrient;
                     wag.type = last.type;
+                    wag.tile = last.tile;
                     wag.dir  = last.dir;
                 }
             }

@@ -1,8 +1,10 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level70.traingame;
+package at.ac.tuwien.cg.cgmd.bifth2010.level70.game;
 
 /**
  * All possible tiles on the playing field. The order must correspond to the 
  * sprite index (order of the tiles in the texture image file).
+ * 
+ * @author Christoph Winklhofer
  */
 public enum TileEnum {
 
@@ -20,7 +22,8 @@ public enum TileEnum {
 	TILE_RIGHT_DOWN,
 	
 	TILE_HIGHLIGHT,
-	TILE_HIGHLIGHT_CLOUD;
+	TILE_HIGHLIGHT_CLOUD,
+	TILE_COIN;
 	
 	
 	/**

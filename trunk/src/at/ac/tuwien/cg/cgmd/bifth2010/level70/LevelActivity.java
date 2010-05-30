@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -17,23 +16,35 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer.RendererView;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.util.SoundManager;
 
 /**
  * Level Activity.
+ * 
+ * @author Christoph Winklhofer
  */
 public class LevelActivity extends Activity {
 
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
-	private static LevelActivity instance; //< Level activity instance for global access
-	private RendererView rendererView;     //< Renderer view
-	public TextView tv;	
+    /** Instance for global access */
+	private static LevelActivity instance;
+	
+	/** Renderer view */
+	private RendererView rendererView;
+	
+	/** TextView to display the game complete and game over text */
+	public TextView textview;	
+	
+	/** Handler needed to display the text */
 	public Handler handler;
 	
+	/** Display game over text */
 	public Runnable displayGameOver;
+	
+	/** Display game complete text */
 	public Runnable displayGameComplete;
 	
 	
@@ -60,15 +71,15 @@ public class LevelActivity extends Activity {
 		
 	    displayGameOver = new Runnable() {
 			public void run() {
-				tv.setText(R.string.l70_GameOver);
-				tv.setVisibility(View.VISIBLE);
+			    textview.setText(R.string.l70_GameOver);
+			    textview.setVisibility(View.VISIBLE);
 			}
 		};
 		
 		displayGameComplete = new Runnable() {
             public void run() {
-                tv.setText(R.string.l70_GameComplete);
-                tv.setVisibility(View.VISIBLE);
+                textview.setText(R.string.l70_GameComplete);
+                textview.setVisibility(View.VISIBLE);
             }
         };
 		
@@ -90,7 +101,7 @@ public class LevelActivity extends Activity {
    		rendererView = new RendererView(this, savedInstanceState, d.getWidth(), d.getHeight());
    		setContentView(rendererView);
    		
-   		setTextLayout();
+   		createTextLayout();
    		
    		// Create sound manager
    		SoundManager.initialize();
@@ -98,104 +109,112 @@ public class LevelActivity extends Activity {
 	
 	
 	/**
-	 * Start the game.
+	 * Set the game progress after the level is finished.
+	 * @param progress The progress must be between 0 and 100.
+	 */
+	public void setStateProgress(int progress) {
+        SessionState s = new SessionState();
+        s.setProgress(progress);
+        setResult(Activity.RESULT_OK, s.asIntent());
+        finish();
+    }
+	
+	
+	// ----------------------------------------------------------------------------------
+    // -- Protected methods ----
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
     protected void onStart() {
-        Log.i("LevelActivity70", "onStart");
         super.onStart();
         rendererView.onStart();
     }
 	
 	/**
-	 * Resume the game.
-	 */
+     * {@inheritDoc}
+     */
 	@Override
-    protected void onResume() {
-        Log.i("LevelActivity70", "onResume");
+	protected void onResume() {
         super.onResume();
         rendererView.onResume();
     }
 
 	
 	/**
-	 * Pause the game.
-	 */
+     * {@inheritDoc}
+     */
     @Override
     protected void onPause() {
-    	Log.i("LevelActivity70", "onPause");
-        super.onPause();
+    	super.onPause();
         rendererView.onPause();
     }
     
 
-    /** 
-     * Stop the game.
+    /**
+     * {@inheritDoc}
      */
     @Override
-	protected void onStop() {
-    	Log.i("LevelActivity70", "onStop");
-		super.onStop();
+    protected void onStop() {
+    	super.onStop();
 		rendererView.onStop();
     }
 
 	
     /**
-     * Destroy the game.
+     * {@inheritDoc}
      */
     @Override
-	public void onDestroy() {
-		Log.i("LevelActivity70", "onDestroy");
+    protected void onDestroy() {
 		super.onDestroy();
 		rendererView.onDestroy();
 	}
     
     
     /**
-     * Save game states.
+     * {@inheritDoc}
      */
     @Override
 	protected void onSaveInstanceState(Bundle outState) {
-        Log.i("LevelActivity70", "onSaveInstanceState");
         rendererView.onPause();
     	rendererView.onSaveState(outState);
     }
     
     
     /**
-     * Restore game states.
+     * {@inheritDoc}
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
     	rendererView.onRestoreState(savedInstanceState);
     }
     
-   
-    private void setTextLayout() {
+    
+    // ----------------------------------------------------------------------------------
+    // -- Protected methods ----
+    
+    /**
+     * Create the text layout to display the game complete /
+     * game over text.
+     */
+    private void createTextLayout() {
         LinearLayout llayout = new LinearLayout(this);
         llayout.setGravity(Gravity.CENTER);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
         addContentView(llayout, params);
         
-        tv = new TextView(this);
-        tv.setTextSize(25);
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextColor(Color.BLACK);
-        tv.setTypeface(Typeface.DEFAULT_BOLD);
+        textview = new TextView(this);
+        textview.setTextSize(30);
+        textview.setGravity(Gravity.CENTER);
+        textview.setTextColor(Color.BLACK);
+        textview.setTypeface(Typeface.DEFAULT_BOLD);
         
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         
         llparams.weight = 0;
         llparams.setMargins(10, 10, 10, 10);
-        llayout.addView(tv, llparams);
-        tv.setVisibility(View.INVISIBLE);
-    }
-    
-    
-    public void setStateProgress(int progress) {
-    	SessionState s = new SessionState();
-		s.setProgress(progress);
-		setResult(Activity.RESULT_OK, s.asIntent());
-		finish();
+        llayout.addView(textview, llparams);
+        textview.setVisibility(View.INVISIBLE);
     }
 }

@@ -6,6 +6,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * Help activity.
+ * 
+ * @author Christoph Winklhofer
  */
 public class HelpActivity extends Activity {
 
@@ -13,7 +15,7 @@ public class HelpActivity extends Activity {
 	// -- Public methods ----
 	
 	/**
-	 * Create help activity.
+	 * Create the help activity..
 	 * @param Bundle
 	 */
 	public void onCreate(Bundle savedInstanceState) {

@@ -1,53 +1,49 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level70.traingame;
+package at.ac.tuwien.cg.cgmd.bifth2010.level70.util;
 
 import java.nio.ByteBuffer;
-
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry.GlTexture;
-
 /**
- * TrainTexture. Manages the sprite textures for the train. It holds an OpenGL 
- * texture handle and the texture coordinate buffer for each train sprite.
+ * Sprite texture - Load sprite texture coordinates.
  * 
- * @author herrjohann
+ * @author Christoph Winklhofer
  */
 
-public class TrainTexture {
-	
-	// ----------------------------------------------------------------------------------
-	// -- Static members ----
-	
-	private static int SPRITE_SIZE = 64; //< Size of a train sprite
+public class SpriteTexture {
 	
 	
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
-	private GlTexture tex;                  //< OpenGl texture handle
-	private ArrayList<FloatBuffer> texBufs; //< Texture coordinates
+    /** The sprite texture */
+	private GlTexture tex;
+	
+	/** List with all possible sprite texture coordinates */
+	private ArrayList<FloatBuffer> texBufs;
 	
 	
 	// ----------------------------------------------------------------------------------
 	// -- Ctor ----
 	
 	/**
-	 * Create tile texture.
+	 * Create sprite texture. Load all possible sprite texture coordinates.
+	 * @param resid resid The resource id of the texture.
+	 * @param spriteSize The dimension of the size. Width and height of a sprite must be equal
+	 *             in the texture.
+	 * @param spriteCnt The number of sprites to load.            
 	 */
-	public TrainTexture() {
+	public SpriteTexture(int resid, int spriteSize, int spriteCnt) {
 		
-		tex = new GlTexture(R.drawable.l70_train);
-		
+		tex = new GlTexture(resid);
 		texBufs = new ArrayList<FloatBuffer>();
 		
-		float tw = (float)SPRITE_SIZE / tex.getWidth();
-		float th = (float)SPRITE_SIZE / tex.getHeight();
+		float tw = (float)spriteSize / tex.getWidth();
+		float th = (float)spriteSize / tex.getHeight();
 		
 		// Create texcoord buffers and store them in an array
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < spriteCnt; i++) {
 			float[] texcoords = getTexcoords(i, tw, th);
 			ByteBuffer tbb = ByteBuffer.allocateDirect(texcoords.length * 4);
 			tbb.order(ByteOrder.nativeOrder());
@@ -80,7 +76,7 @@ public class TrainTexture {
 	
 	
 	/**
-	 * Return texture coordinate buffer for the specified tile.
+	 * Return texture coordinate buffer for the specified sprite.
 	 * @param index Sprite index.
 	 * @return Texture coordinate buffer.
 	 */
