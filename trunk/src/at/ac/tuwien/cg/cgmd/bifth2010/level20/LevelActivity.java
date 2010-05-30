@@ -7,6 +7,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,9 +26,9 @@ public class LevelActivity extends Activity {
 
 	protected static RenderView renderView;
 	protected static GameManager gameManager;
-//	protected TouchListener touchListener;
 	
 	protected static LevelActivity instance;
+//	protected static Handler handler; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +42,16 @@ public class LevelActivity extends Activity {
         setContentView(R.layout.l20_level);
         renderView = (RenderView)findViewById(R.id.l20_RenderView);
         
-		gameManager = new GameManager();
+        // Create text view for display of money count.
+        renderView.moneyText = (TextView)findViewById(R.id.l20_MoneyText);
+		// Create text view for display of time left.		
+        renderView.timeText = (TextView)findViewById(R.id.l20_TimeText);
+
+        gameManager = new GameManager();
 		renderView.setOnTouchListener(gameManager);
-                
-        // Register our own TouchListener
-//		touchListener = new TouchListener();
 		
+//		handler = new Handler();
+                		
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());

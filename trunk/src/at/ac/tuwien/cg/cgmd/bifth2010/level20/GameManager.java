@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
@@ -23,15 +22,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  */
 public class GameManager implements EventListener, OnTouchListener {
 	
-	// TODO: Not used yet
-//	 /** TestHandle Class */
-//	class TestThread implements Runnable{
-//		  
-//    	@Override
-//        public void run() {
-//    		moneyText.setText(Math.round(renderView.timer.getFPS()));
-//        }    	
-//    };
+	
 	
 	
 	
@@ -50,19 +41,20 @@ public class GameManager implements EventListener, OnTouchListener {
 	/** The moving speed of the background and the products */ 
 	protected float scrollSpeed;
 	
-	protected int totalMoney;
+	/** The amount of all money spent on products */
+	protected float totalMoney;
+	
+	/** The time left in the game */
+	protected float remainingTime;
+	/** The initial time left at the beginning of the level */ // We need to store both of them because of the TimeUtil class - or do we?
+	protected float levelTime;
+	protected float remainingTime2; //TODO: No we don't. probably change it
+	
+	
 	protected ShoppingCart shoppingCart;
 	protected SpriteAnimationEntity bunny;
 	
-//	public Handler handler;
-//	public TestThread testThread;
 	
-	/** The TextView to show the money count. */
-	private TextView moneyText;
-	/** The run time of the game in seconds. */
-	private float gameTime;
-	/** The TextView to show the time left. */
-	private TextView timeText;
 
 	/** If there's a touch on the screen */
 	protected boolean touchDown;
@@ -83,25 +75,23 @@ public class GameManager implements EventListener, OnTouchListener {
 		activity = LevelActivity.instance;
 		renderView = LevelActivity.renderView;
 		
-		time = TimeUtil.instance;
-		
+		time = TimeUtil.instance;		
 		
 		animators = new Hashtable<Integer, Animator>();		
 		EventManager.getInstance().addListener(this);		
+		
+		// Pixel per second
+		scrollSpeed = activity.getResources().getInteger(R.integer.l20_scroll_speed) * 0.001f;
+		
+		// Time in milliseconds
+		levelTime = activity.getResources().getInteger(R.integer.l20_level_time) * 1000;
+		remainingTime = levelTime;
+		totalMoney = 100;
+		remainingTime2 = remainingTime;
 
-		
-		// TODO: They have to be started in the other thread
-//		handler = new Handler();
-//		testThread = new TestThread();
-		
 		touchDown = false;
 		touchX = 0;
 		touchY = 0;
-		
-		scrollSpeed = 100f * 0.001f; // Pixel per second
-		totalMoney = 100;
-		gameTime = 60.f;
-//		createEntities(gl);
 	}
 	
 	
@@ -136,11 +126,7 @@ public class GameManager implements EventListener, OnTouchListener {
 		bunny = new SpriteAnimationEntity(45, 40, 2, 64, 64);
 		bunny.setFps(10);
 		bunny.setAnimationSequence(bunnySequence);
-				
-		// Create text view for display of money count.
-		moneyText = (TextView)activity.findViewById(R.id.l20_MoneyText);
-		// Create text view for display of time left.		
-		timeText = (TextView)activity.findViewById(R.id.l20_TimeText);
+		
 		
 		firstRun = false;
 	}
@@ -153,8 +139,7 @@ public class GameManager implements EventListener, OnTouchListener {
 		// Clear all textures. If this method is called, existing textures are invalid
 		renderView.textures.clear();
 		
-		// Create background shelf.
-//		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
+		// Create background shelf
 		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);			
 
 		// Preload textures
@@ -171,25 +156,16 @@ public class GameManager implements EventListener, OnTouchListener {
 			
 		}
 		
-		// Create shopping cart.
-//		shoppingCart = new ShoppingCart(125, 60, 2, 200, 110);
+		// ReCreate shopping cart texture.
 		shoppingCart.texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
 		
-		// Create bunny.
+		// ReCreate bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
-		for (int i = 0; i < RenderView.TEXTURE_BUNNY.length; i++)
-		{
+		for (int i = 0; i < RenderView.TEXTURE_BUNNY.length; i++) {
 			bunnySequence[i] = renderView.getTexture(RenderView.TEXTURE_BUNNY[i], gl);
 		}
 				
-//		bunny = new SpriteAnimationEntity(45, 40, 2, 64, 64);
-//		bunny.setFps(10);
 		bunny.setAnimationSequence(bunnySequence);
-				
-		// Create text view for display of money count.
-//		moneyText = (TextView)activity.findViewById(R.id.l20_MoneyText);
-		// Create text view for display of time left.		
-//		timeText = (TextView)activity.findViewById(R.id.l20_TimeText);
 		
 	}
 
@@ -200,9 +176,18 @@ public class GameManager implements EventListener, OnTouchListener {
 	public void update() {
 		
 		// Advance in time
-		time.update();		
-		float dt = time.getDt();
+		time.update();
 		
+		remainingTime = levelTime - time.getTotalTime();
+		
+		// End the game if the time's up
+		if (remainingTime <= 0) {			
+			gameOver();
+			return;
+		}
+		
+		float dt = time.getDt();
+		remainingTime2 -= dt;
 		
 		// Difference in x since last frame 
 		shelf.update(scrollSpeed * dt);
@@ -212,41 +197,20 @@ public class GameManager implements EventListener, OnTouchListener {
 		Enumeration<Integer> keys = animators.keys();		
 		while(keys.hasMoreElements()) {
 			animators.get(keys.nextElement()).update(dt);
-		}
-		
-//		handler.post(testThread);
-		
-		// TODO: Move gameTime to TimeUtil
-		gameTime -= (dt/1000.f);
-		// TODO Somehow this doesn't work here (and at many more places :( )
-		//timeText.setText("Time:"+(int)gameTime);
-		if(gameTime <= 0.f)
-		{
-			// TODO: Enable this again
-//			gameOver();
 		}						
 	}
 
 	
+	/**
+	 * If called, the activity finishes and returns the result.
+	 */
 	private void gameOver() {
 		SessionState s = new SessionState();
-		s.setProgress(100-totalMoney); 
+		s.setProgress(100 - (int)totalMoney); 
 		activity.setResult(Activity.RESULT_OK, s.asIntent());
 		activity.finish();
 	}
 
-
-//	@Override
-//	public void render(GL10 gl) {
-//		
-//		shelf.render(gl);
-//		shoppingCart.render(gl);
-//		bunny.render(gl);
-//
-//		int seconds = (int) (gameTime);		
-//		
-//
-//	}
 	
 	
 	
@@ -304,14 +268,14 @@ public class GameManager implements EventListener, OnTouchListener {
 		{
 			ProductEntity pe = (ProductEntity)eventData;
 			totalMoney -= ProductInfo.price(pe.type);
-			// This prevents displaying a negative money count.
-//			if(totalMoney < 0) totalMoney = 0;
-//			moneyText.setText("Money:" + totalMoney + "$");
-//			if (totalMoney == 0) {
-//				// TODO Enable this again
-////				gameOver();
-//			}
 			
+			// This prevents displaying a negative money count.
+			if (totalMoney <= 0) {
+				totalMoney = 0;
+				
+				gameOver();
+				return;
+			}			
 			
 			// Move it to the basket.
 			pe.animated = true;
@@ -327,15 +291,5 @@ public class GameManager implements EventListener, OnTouchListener {
 		}
 		
 	}
-	
-	
-//	public void testTextView() {
-//		moneyText.setText(Math.round(renderView.timer.getFPS()));
-//	}
-
-
-	
-
-
 	
 }

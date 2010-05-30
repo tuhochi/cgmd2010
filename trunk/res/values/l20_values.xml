@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<integer name="l20_level_time">61</integer>
+	<integer name="l20_scroll_speed">100</integer>
+
+</resources>

@@ -13,21 +13,17 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.widget.TextView;
-import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
  * The standard RenderView enabling OpenGLES 10. Handles all Render related tasks. 
@@ -36,14 +32,38 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  * @author Reinhard Sprung
  */
 public class RenderView extends GLSurfaceView implements Renderer {
+	
+	/** Updates the TextViews each frame */
+	class TextViewUpdater implements Runnable{
+		  
+   	@Override
+       public void run() {
+   			// TODO: Somehow,the rounding doesn't work 
+   			float money = ((int)(LevelActivity.gameManager.totalMoney * 100)) * 0.01f;
+	   		moneyText.setText("Money: " + money + "$");
+	   		int time = (int)(LevelActivity.gameManager.remainingTime * 0.001f);
+	   		timeText.setText("Time: " + time);
+       }
+	};
+	
 
 
-//	protected GameManager gameManager;
-
-	protected float gameTime;
+	/** The run time of the game in seconds. */
+//	protected float gameTime;
 	
 	/** The texture collection. (The ids increase themselves) */	 
 	protected Hashtable<Integer, Integer> textures;
+	
+	/** Used to enqueue tasks */
+	protected Handler handler;
+	
+	/** The task to be enqueued */
+	protected TextViewUpdater textViewUpdater;
+	
+	/** The TextView to show the money count. */
+	protected TextView moneyText;
+	/** The TextView to show the time left. */
+	protected TextView timeText;
 	
 	// Textures.
 	static final int[] TEXTURE_BUNNY = {R.drawable.l20_bunny1, 
@@ -86,7 +106,12 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		setFocusableInTouchMode(true);
 		
 		textures = new Hashtable<Integer, Integer>();
-		gameTime = 60.f;
+
+		// Creating it outside the Rendering Thread
+		handler = new Handler();
+		
+		// 
+		textViewUpdater = new TextViewUpdater();		
 	}
 	
 	
@@ -183,8 +208,11 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		}	
 		
 		gameManager.shoppingCart.render(gl);
-		gameManager.bunny.render(gl);
+		gameManager.bunny.render(gl);		
 
+		
+		// After all rendering is complete, update the UI TextViews
+		handler.post(textViewUpdater);
 	}
 
 	
