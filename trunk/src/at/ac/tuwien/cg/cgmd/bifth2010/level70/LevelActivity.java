@@ -65,52 +65,6 @@ public class LevelActivity extends Activity {
 	// -- Public methods ----
 	
 	/**
-	 * Create level activity.
-	 * @param Bundle.
-	 */
-	public void onCreate(Bundle savedInstanceState) {
-		
-	    displayGameOver = new Runnable() {
-			public void run() {
-			    textview.setText(R.string.l70_GameOver);
-			    textview.setVisibility(View.VISIBLE);
-			}
-		};
-		
-		displayGameComplete = new Runnable() {
-            public void run() {
-                textview.setText(R.string.l70_GameComplete);
-                textview.setVisibility(View.VISIBLE);
-            }
-        };
-		
-		// Set instance for global access
-   		instance = this;
-   		handler = new Handler();
-   		
-		super.onCreate(savedInstanceState);
-		
-		// Set fullscreen
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
-        
-        // Get display
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display d = wm.getDefaultDisplay();
-        
-        // Create renderer view
-   		rendererView = new RendererView(this, savedInstanceState, d.getWidth(), d.getHeight());
-   		setContentView(rendererView);
-   		
-   		createTextLayout();
-   		
-   		// Create sound manager
-   		SoundManager.initialize();
-	}
-	
-	
-	/**
 	 * Set the game progress after the level is finished.
 	 * @param progress The progress must be between 0 and 100.
 	 */
@@ -124,6 +78,46 @@ public class LevelActivity extends Activity {
 	
 	// ----------------------------------------------------------------------------------
     // -- Protected methods ----
+	
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+        displayGameOver = new Runnable() {
+            public void run() {
+                textview.setText(R.string.l70_GameOver);
+                textview.setVisibility(View.VISIBLE);
+            }
+        };
+        
+        displayGameComplete = new Runnable() {
+            public void run() {
+                textview.setText(R.string.l70_GameComplete);
+                textview.setVisibility(View.VISIBLE);
+            }
+        };
+        
+        // Set instance for global access
+        instance = this;
+        handler = new Handler();
+        
+        // Set fullscreen
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
+        // Get display
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display d = wm.getDefaultDisplay();
+        
+        // Create renderer view
+        rendererView = new RendererView(this, savedInstanceState, d.getWidth(), d.getHeight());
+        setContentView(rendererView);
+        
+        createTextLayout();
+        
+        // Create sound manager
+        SoundManager.initialize();
+    }
+	
 	
 	/**
 	 * {@inheritDoc}
@@ -179,6 +173,7 @@ public class LevelActivity extends Activity {
      */
     @Override
 	protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         rendererView.onPause();
     	rendererView.onSaveState(outState);
     }
@@ -189,7 +184,8 @@ public class LevelActivity extends Activity {
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	rendererView.onRestoreState(savedInstanceState);
+    	super.onRestoreInstanceState(savedInstanceState);
+        rendererView.onRestoreState(savedInstanceState);
     }
     
     

@@ -273,7 +273,9 @@
   		</activity>
   		
   		<activity
-   			android:name=".level70.LevelActivity">
+   			android:name=".level70.LevelActivity"
+   			android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape">
    			<intent-filter>
     			<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level70.LAUNCH_LEVEL"/>
     			<category android:name="android.intent.category.DEFAULT"/>
