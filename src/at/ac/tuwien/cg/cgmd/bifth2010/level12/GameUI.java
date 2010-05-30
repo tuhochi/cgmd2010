@@ -34,7 +34,7 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mBasicTowerButton.setMaxHeight(height);
 	    mBasicTowerButton.setMinimumWidth( elementWidth );
 	    mBasicTowerButton.setMaxWidth( elementWidth );
-	    mBasicTowerButton.setImageResource(R.drawable.l12_basic_tower);
+	    mBasicTowerButton.setImageResource(R.drawable.l12_bunny1_icon);
 	    mBasicTowerButton.setId( 1 );
 	    mBasicTowerButton.setOnClickListener(this);
 	    this.addView( mBasicTowerButton );
@@ -44,7 +44,7 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mAdvancedTowerButton.setMaxHeight(height);
 	    mAdvancedTowerButton.setMinimumWidth( elementWidth );
 	    mAdvancedTowerButton.setMaxWidth( elementWidth );
-	    mAdvancedTowerButton.setImageResource(R.drawable.l12_advanced_tower);
+	    mAdvancedTowerButton.setImageResource(R.drawable.l12_bunny3_icon);
 	    mAdvancedTowerButton.setId( 2 );
 	    mAdvancedTowerButton.setOnClickListener(this);
 	    this.addView( mAdvancedTowerButton );
@@ -54,7 +54,7 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mHyperTowerButton.setMaxHeight(height);
 	    mHyperTowerButton.setMinimumWidth( elementWidth );
 	    mHyperTowerButton.setMaxWidth( elementWidth );
-	    mHyperTowerButton.setImageResource(R.drawable.l12_hyper_tower);
+	    mHyperTowerButton.setImageResource(R.drawable.l12_bunny2_icon);
 	    mHyperTowerButton.setId( 3 );
 	    mHyperTowerButton.setOnClickListener(this);
 	    this.addView( mHyperTowerButton );
