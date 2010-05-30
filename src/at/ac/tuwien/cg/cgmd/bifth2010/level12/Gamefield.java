@@ -1,15 +1,66 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.GLObject;
 
-public class Gamefield {
+
+public class Gamefield extends GLObject{
 	private Field[] mFields = null;
 	private int mXSegCount = -1;
 	private int mYSegCount = -1;
 	private float mSegLength = 1;
 	private float[] mSegCol1  = {1.0f, 1.0f, 1.0f };
 	private float[] mSegCol2  = {1.0f, 1.0f, 1.0f };
+	
+	public void initVBOs(){
+		float[] vertices = {
+				-0.5f, -0.5f, 0.5f,  //Vertex 0
+				 0.5f, -0.5f, 0.5f,  //v1
+				-0.5f,  0.5f, 0.5f,  //v2
+				 0.5f,  0.5f, 0.5f,  //v3			
+		};
+		
+		ByteBuffer vertbuf = ByteBuffer.allocateDirect(vertices.length * 4);
+		vertbuf.order( ByteOrder.nativeOrder() );
+		mVerticesBuffer = vertbuf.asFloatBuffer();
+		mVerticesBuffer.put( vertices );
+		mVerticesBuffer.position( 0 );
+		
+		short[] points = {
+				0,1,3,
+				0,3,2,
+		};
+
+		
+		ByteBuffer indbuf = ByteBuffer.allocateDirect(points.length * 2);
+		mIndicesCounter = points.length;
+		indbuf.order( ByteOrder.nativeOrder());
+		mIndicesBuffer = indbuf.asShortBuffer();
+		mIndicesBuffer.put(  points );
+		mIndicesBuffer.position(0);
+		
+		float[] colors = { mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3],
+				mColor[0], mColor[1], mColor[2], mColor[3]};
+
+		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
+		cbb.order( ByteOrder.nativeOrder() );
+		mColorBuffer = cbb.asFloatBuffer();
+		mColorBuffer.put( colors );
+		mColorBuffer.position( 0 );
+		
+		ByteBuffer tbb = ByteBuffer.allocateDirect(mTexturePoints.length * 4);
+		tbb.order(ByteOrder.nativeOrder());
+		mTextureBuffer = tbb.asFloatBuffer();
+		mTextureBuffer.put( mTexturePoints );
+		mTextureBuffer.position(0);
+	}
 	
 	
 	public Gamefield( int xSegCount, int ySegCount, float segLength){		
@@ -46,6 +97,7 @@ public class Gamefield {
 	
 	public void onResume(){
 		for( int i = 0; i < mFields.length; i++) mFields[i].initVBOs();
+		this.initVBOs();
 	}
 	
 	
@@ -53,6 +105,19 @@ public class Gamefield {
 		for( int i = 0; i < mFields.length; i++){
 			mFields[i].draw(gl);
 		}
+		int[] res = GameWorld.getSingleton().getRes();
+		//gl.glTranslatef(res[0]*0.5f, res[1]*0.5f, 0.0f);
+		//gl.glScalef(res[0], res[1], 1.0f);
+		gl.glTranslatef(res[0]-res[0]*0.1f*0.5f, res[1]*0.5f, 0.0f);
+		gl.glScalef(res[0]*0.1f, res[1], 1.0f);
+		TextureManager.getSingletonObject().setTexture(R.drawable.l12_road);
+		super.draw(gl);
+		gl.glLoadIdentity();
+		gl.glTranslatef(res[0]*0.135f*0.5f, res[1]*0.5f, 0.0f);
+		gl.glScalef(res[0]*0.135f, res[1], 1.0f);
+		TextureManager.getSingletonObject().setTexture(R.drawable.l12_house);
+		super.draw(gl);
+		gl.glLoadIdentity();
 	}
 
 
