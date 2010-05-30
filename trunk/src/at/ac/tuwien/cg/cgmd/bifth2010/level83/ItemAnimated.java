@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL11Ext;
  * This class is used for to animate items in the {@link MyHexagonGrid}. It is 
  * an implementation of the {@link Animatable} and the {@link Drawable} 
  * interface.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class ItemAnimated extends Animatable implements Drawable {
 
@@ -122,7 +123,11 @@ public class ItemAnimated extends Animatable implements Drawable {
 	public void removeFromKnownAnimationManager(){
 		manager.removeAnimation(this);
 	}
+	
 	@Override
+	/**
+	 * Animate funktion used to animate the timer bomb and lenny's souls.
+	 */
 	public void animate(float deltaTime) {
 		switch(animation){
 		case BOMB_ANIMATION:

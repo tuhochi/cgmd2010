@@ -9,7 +9,7 @@
         
     <ImageView android:id="@+id/l83_tutorial_image"
                android:layout_width="60dp" 
-               android:layout_height="60dp"
+               android:layout_height="100dp"
                android:layout_marginRight="10dp"
                />
     <TextView android:id="@+id/l83_tutorial_text"

@@ -8,6 +8,7 @@ import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
 /**
  * A Sprite with an item-type and two textures. One black/white and one in 
  * color.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class ItemSprite {
 	

@@ -12,6 +12,7 @@ import android.util.Log;
 
 /**
  * This class is used to load and manage textures.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class MyTextureManager {
 	
@@ -38,6 +39,10 @@ public class MyTextureManager {
 		singleton = this;
 	}
 	
+	/**
+	 * Reload textures. 
+	 * @param gl
+	 */
 	public void reload(GL10 gl){
 		
 		int id;
@@ -93,6 +98,12 @@ public class MyTextureManager {
 			
 	}
 	
+	/**
+	 * Adds textures from resources.
+	 * @param id resource id
+	 * @param gl 
+	 * @return texture id
+	 */
 	public int addTextureFromResources(int id, GL10 gl) {
 		
 		if (count >= size){
@@ -128,6 +139,12 @@ public class MyTextureManager {
         return count-1;
 	}
 	
+	/**
+	 * Adds texture from assets.
+	 * @param file filename
+	 * @param gl
+	 * @return texture id
+	 */
 	public int addTextureFromAssets(String file, GL10 gl) {
 		
 		if (count >= size){

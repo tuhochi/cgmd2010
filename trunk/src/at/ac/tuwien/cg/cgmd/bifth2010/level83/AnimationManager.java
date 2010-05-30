@@ -6,6 +6,8 @@ import java.util.ArrayList;
  * This class is an implementation of the {@link Animatable} interface. When 
  * its {@link #animate(float)} method is called, it animates all 
  * <code>Animatable</code>s which have been added.
+ * 
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class AnimationManager extends Animatable {
 	

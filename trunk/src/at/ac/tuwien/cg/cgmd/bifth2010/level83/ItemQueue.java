@@ -14,6 +14,7 @@ import static at.ac.tuwien.cg.cgmd.bifth2010.level83.Constants.*;
 /**
  * A Queue of items which are shown in the toolbox and can be used by the 
  * player. This class is an implementation of the {@link Drawable} interface.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class ItemQueue implements Drawable {
 

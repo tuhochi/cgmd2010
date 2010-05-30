@@ -21,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
  * This class is the entry point for Level 83 - Lenny Must Die - Arcade.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class LevelActivity extends Activity {
 	
@@ -131,7 +132,8 @@ public class LevelActivity extends Activity {
     };
    
     /**
-     * Handler to pass the user's points to the framework and finish the level.
+     * Handler to pass the user's points to the framework and finish the level by showing a
+     * {@link FinishDialog}.
      */
     public static Handler finishLevel = new Handler() {
     	@Override

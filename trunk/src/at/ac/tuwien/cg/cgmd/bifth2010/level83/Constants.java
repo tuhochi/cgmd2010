@@ -4,6 +4,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * A convenience class that provides several common constants.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class Constants {
 	
@@ -28,23 +29,26 @@ public class Constants {
 	public static final int TEXTURE_HEXAGON = R.drawable.l83_hexagon;
 	public static final int TEXTURE_HEXAGON_B = R.drawable.l83_hexagon_blue;
 	public static final int TEXTURE_HEXAGON_R = R.drawable.l83_hexagon_r;
-	public static final int TEXTURE_TOMB = R.drawable.l83_tomb;
+	//public static final int TEXTURE_TOMB = R.drawable.l83_tomb;
+	public static final int TEXTURE_TOMB = R.drawable.l83_lenny_w90;
 	public static final int TEXTURE_DOLLARSIGN = R.drawable.l83_dollarsign;
 	public static final int TEXTURE_BACKGROUND = R.drawable.l83_background;
 	
+	public static final int HELP_LENNY = R.drawable.l83_help_lenny;
 	public static final int HELP_HEXAGON_B = R.drawable.l83_help_hexagon_b;
 	public static final int HELP_HEXAGON_R = R.drawable.l83_help_hexagon_r;
 	public static final int HELP_HEXAGON_DELETE = R.drawable.l83_help_hexagon_delete;
+	public static final int HELP_DOLLAR = R.drawable.l83_help_dollar;
+	public static final int HELP_DOLLARSIGN = R.drawable.l83_help_dollarsign;
+	public static final int HELP_BOMB = R.drawable.l83_help_bomb;
+	public static final int HELP_OVERLAY = R.drawable.l83_help_overlay;
+	public static final int HELP_STATS = R.drawable.l83_help_stats;
 	
 	public static final int TEXTURE_MAP = R.drawable.l83_map4;
 	
-	public static final int ANIM_BOMB_1 = R.drawable.l83_anim_bomb_4;
-	public static final int ANIM_BOMB_2 = R.drawable.l83_anim_bomb_3;
-	public static final int ANIM_BOMB_3 = R.drawable.l83_anim_bomb_2;
-	public static final int ANIM_BOMB_4 = R.drawable.l83_anim_bomb_1;
-	
 	public static final int OVERLAY = R.drawable.l83_overlay70;
 	public static final int ITEM_BOMB = R.drawable.l83_bomb;
+	public static final int ITEM_BOMB_BLINK = R.drawable.l83_bomb_blink;
 	public static final int ITEM_BOMB_BW = R.drawable.l83_bomb_bw;
 	public static final int ITEM_WALL = R.drawable.l83_hexagon_blue;
 	public static final int ITEM_WALL_BW = R.drawable.l83_hexagon_bw;

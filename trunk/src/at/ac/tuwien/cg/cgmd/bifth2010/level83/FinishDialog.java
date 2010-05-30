@@ -10,12 +10,24 @@ import android.view.GestureDetector.OnGestureListener;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * This dialog is used to present the results of the level. It is dismissed onTouchDown.
+ * @author Manuel Keglevic, Thomas Schulz
+ *
+ */
 public class FinishDialog extends AlertDialog implements OnGestureListener {
 
 	private GestureDetector detector;
 	private View view;
 	private TextView text;
 	
+	/**
+	 * Creates a new FinishDialog.
+	 * @param context Activity Context
+	 * @param deaths number of lenny's deaths 
+	 * @param credits number of credits collected by lenny
+	 * @param sum calculated final points
+	 */
 	public FinishDialog(Context context, int deaths, int credits, int sum) {
 		super(context);
 		

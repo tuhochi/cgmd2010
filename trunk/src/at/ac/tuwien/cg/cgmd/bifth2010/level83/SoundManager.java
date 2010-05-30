@@ -8,6 +8,11 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
 
+/**
+ * This class provides access to the sound files needed for the game. 
+ * @author Manuel Keglevic, Thomas Schulz
+ *
+ */
 public class SoundManager {
 
 	private static int maxStreams = 10;
@@ -19,8 +24,8 @@ public class SoundManager {
 	private ArrayList<Integer> playing = new ArrayList<Integer>();
 	
 	/**
-	 * Creates a new SoundManager 
-	 * @param context
+	 * Creates a new SoundManager. I.e. creates a new SoundPool and loads the sound files.
+	 * @param context - context of the activity, needed for accessing the resource files
 	 */
 	public SoundManager(Context context){
 		if(singleton != null)
@@ -49,6 +54,13 @@ public class SoundManager {
 		this.context = context;
 	}
 	
+	/**
+	 * Starts the playback of a sound file.
+	 * @param id - resource id of the file
+	 * @param loop - if true, infinite loop
+	 * @param volume - volume from 0..1
+	 * @param rate - playback rate, 1 is standard playback
+	 */
 	public void play(int id,boolean loop, float volume, float rate){
 		AudioManager mgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		
@@ -56,27 +68,17 @@ public class SoundManager {
 		
 		int streamID = soundPool.play(sounds.get(id), volume*vmax, volume*vmax, 1, (loop)?-1:0, rate);
 		
-//		if(streamID != 0)
-//			playing.add(streamID);
-//		
-	
 		Log.d("SoundManager", "Play");
 		
 	}
 	
+	/**
+	 * Plays the background sound rescource as defined in the {@link Constants} class.
+	 */
 	public void playBackGround(){	
 		play(Constants.MUSIC_BACKGROUND,true,0.4f,1.0f);
 	}
 	
-//	public void pauseAll(){
-//		for(Integer id : playing)
-//			soundPool.pause(id);	
-//	}
-//	
-//	public void resumeAll(){
-//		for(Integer id:playing)
-//			soundPool.resume(id);
-//	}
 	public void dispose(){
 		singleton = null;
 		soundPool.release();

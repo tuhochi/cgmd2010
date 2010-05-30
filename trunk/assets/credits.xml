@@ -35,7 +35,7 @@
 <credit type="sound" name="Explosion" author="steveygos93"
 	url="http://www.freesound.org/samplesViewSingle.php?id=80400"
 	usage="sound effect" license="CC" />
-
+	
 <!-- Level 70 - credits -->
 <credit type="sound" name="Short swish button sound." author="junggle"
 	url="http://www.freesound.org/download/28819/28819_junggle_btn009.wav"
@@ -46,6 +46,23 @@
 <credit type="sound" name="Quick air horn with echo." author="guitarguy1985"
 	url="http://www.freesound.org/download/68999/68999_guitarguy1985_airhorn_short.wav"
 	usage="level 70 - Train horn." license="CC" />
+	
+<!-- Level 83 -->	
+<credit type="sound" name="if you see kat...120bpm" author="hello_flowers"
+	url="http://www.freesound.org/samplesViewSingle.php?id=41021" usage="Lenny Must Die: background loop"
+	license="CC" />
+<credit type="sound" name="Chip013" author="HardPCM"
+	url="http://www.freesound.org/samplesViewSingle.php?id=31853" usage="Lenny Must Die: money pickup"
+	license="CC" />
+<credit type="sound" name="Chip077" author="HardPCM"
+	url="http://www.freesound.org/samplesViewSingle.php?id=33217" usage="Lenny Must Die: item drop"
+	license="CC" />
+<credit type="sound" name="countdown" author="meatball4u"
+	url="http://www.freesound.org/samplesViewSingle.php?id=17216" usage="Lenny Must Die: bomb countdown"
+	license="CC" />
+<credit type="sound" name="Voices bie bie I'll be off then"
+	author="ingsey101" url="http://www.freesound.org/samplesViewSingle.php?id=49981"
+	usage="Lenny Must Die: by by lenny" license="CC" />
 		
 </credits>
 

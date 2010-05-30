@@ -19,7 +19,7 @@
         
         <ImageView
             android:id="@+id/l83_ImageDeaths"
-            android:src="@drawable/l83_tomb"
+            android:src="@drawable/l83_lenny_w90"
             android:layout_width="25dp"
             android:layout_height="25dp">
         </ImageView>
