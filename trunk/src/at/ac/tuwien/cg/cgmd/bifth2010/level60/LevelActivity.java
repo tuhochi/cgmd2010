@@ -30,10 +30,10 @@ public class LevelActivity extends Activity {
 		setContentView(glv);
 		
 		myState = savedInstanceState;
-		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
-		txtView = new TextView(this);
-		this.addContentView(txtView,params);
-		txtView.setText("juggling snowballs through hell....");
+//		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
+//		txtView = new TextView(this);
+//		this.addContentView(txtView,params);
+//		txtView.setText("juggling snowballs through hell....");
 		return;
 	}
 	

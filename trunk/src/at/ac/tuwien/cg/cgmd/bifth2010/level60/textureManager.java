@@ -32,8 +32,8 @@ public class textureManager {
 		textureMap = new Hashtable <String, Integer>();
 		gameObjectMap = new Hashtable <String, Tablet>();
 		
-		createTexture("button", R.drawable.l00_red, 50, 50, true);
-		createTexture("control", R.drawable.l00_red, 100, 100, true);
+		//createTexture("button", R.drawable.l00_red, 50, 50, true);
+		createTexture("control", R.drawable.l60_arrows, 100, 100, true);
 		
 		createTexture("gold", R.drawable.l00_coin, 20, 20, true);
 		createTexture("zero", R.drawable.l60_gold_0, 20, 20, true);

@@ -41,11 +41,12 @@ public class Tablet {
 	private float y;
 	private int texture;
 	private int rotation_angle;
-	private float scale_x;
-	private float scale_y;
+	private static float scale = 1.0f;
 	private static float mapOffset_x = 0;
 	private static float mapOffset_y = 0;
 	private boolean sticky = false;
+	public static final int INTENDED_RES_X = 480;
+	public static final int INTENDED_RES_Y = 320;
 	
 	public Tablet(Context context, int width, int height, int x, int y, int texture, GL10 gl) {
 		this(context, width, height, x, y, texture, false, gl);
@@ -65,8 +66,6 @@ public class Tablet {
 		this.x = x;
 		this.y = y;
 		this.texture = texture;
-		scale_x = 1;
-		scale_y = 1;
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
@@ -97,6 +96,11 @@ public class Tablet {
 		mapOffset_y = y;
 	}
 	
+	public static void setResolution(int width, int height) {
+		if (width > height) Tablet.scale = (float)width/(float)INTENDED_RES_X;
+		else Tablet.scale = (float)height/(float)INTENDED_RES_Y;
+	}
+	
 	public float getX() {
 		return x;
 	}
@@ -120,12 +124,6 @@ public class Tablet {
 	}
 	
 	
-	
-	public void scale(int scale_x, int scale_y) {
-		this.scale_x = scale_x;
-		this.scale_y = scale_y;
-	}
-	
 	public void rotate(int angle) {
 		this.rotation_angle = angle;
 	}
@@ -136,8 +134,8 @@ public class Tablet {
 			drawtoX = x;
 			drawtoY = y;
 		} else {
-			drawtoX = x + mapOffset_x;
-			drawtoY = y + mapOffset_y;
+			drawtoX = (x + mapOffset_x)*Tablet.scale;
+			drawtoY = (y + mapOffset_y)*Tablet.scale;
 		}
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
 
@@ -149,7 +147,7 @@ public class Tablet {
 		
 		gl.glPushMatrix();
 		gl.glTranslatef(drawtoX, drawtoY, 0);
-		gl.glScalef(scale_x, scale_y, 0);
+		gl.glScalef(Tablet.scale, Tablet.scale, 0);
 		gl.glRotatex(rotation_angle, 0, 0, 1);
 		
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_SHORT, indexBuffer);
