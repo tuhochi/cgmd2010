@@ -70,7 +70,10 @@ public class LevelActivity extends Activity{
     	TextureManager.getSingletonObject().add(R.drawable.l12_house);	
     	TextureManager.getSingletonObject().add(R.drawable.l12_bunny1);	
     	TextureManager.getSingletonObject().add(R.drawable.l12_bunny2);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny3);	
+    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny3);		
+    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny1_icon);	
+    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny2_icon);	
+    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny3_icon);	
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass);
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
     	
