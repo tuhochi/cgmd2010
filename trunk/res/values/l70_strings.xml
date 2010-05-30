@@ -2,7 +2,7 @@
 <resources>
 	<string name="l70_GameName">Train your Brain</string>
 	<string name="l70_GameDescription_01">Phew, that was not a good idea to deposit the bulk of my fortune in this Swiss bank account. These high interest rates gradually give me headaches. Clearly I need to get rid of the money here. The best environmentally friendly by railway transport and get rid of this opportunity just a few coins .. </string>
-	<string name="l70_GameDescription_02">Find a route for Bunny's train by the use of switching the rail fields. You loose one coin for each used rail field.</string>
+	<string name="l70_GameDescription_02">Find a route for Bunny\'s train by the use of switching the rail fields. You loose one coin for each used rail field.</string>
 
 <string name="l70_GameComplete">&gt;&gt; Game Complete &lt;&lt;</string>
 <string name="l70_GameOver">&gt;&gt; Game Over &lt;&lt;</string>
