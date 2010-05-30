@@ -156,9 +156,9 @@ public class TrainGame {
 	// -- Public methods ----
 	
 	/**
-	 * Create a new game. Load the base arrengement of the tiles from a level file and 
+	 * Create a new game. Load the base arrangement of the tiles from a level file and 
 	 * place the different tile types randomly on the playfield.
-	 * There are currently 5 different base arrengements. 
+	 * There are currently 5 different base arrangements. 
 	 * The startTime and the time the train needs to move along one tile are also stored
 	 * in the level files.
 	 */
