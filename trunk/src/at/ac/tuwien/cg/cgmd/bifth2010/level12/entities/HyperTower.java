@@ -12,7 +12,8 @@ public class HyperTower extends Tower {
 		mColor[1] = 1.0f;
 		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
-		mTexture =  R.drawable.l12_hyper_tower;
+		//mTexture =  R.drawable.l12_hyper_tower;
+		mTexture =  R.drawable.l12_bunny2;
 		mPrice = Definitions.HYPER_TOWER_IRON_NEED;
 		mSound = R.raw.l12_hyper_tower_shooting_sound;
 		SoundHandler.addSound(mSound);
