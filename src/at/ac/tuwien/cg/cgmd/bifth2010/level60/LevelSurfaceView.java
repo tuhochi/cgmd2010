@@ -16,7 +16,7 @@ public class LevelSurfaceView extends GLSurfaceView {
 	
 	public LevelSurfaceView(Context context, Bundle msavedstate) {
 		super(context);
-		lr = new LevelRenderer(context, msavedstate);
+		lr = new LevelRenderer(context, msavedstate, this);
         setRenderer(lr);
         setFocusableInTouchMode(true);
 	}

@@ -11,8 +11,10 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 
 public class LevelRenderer implements Renderer {
@@ -20,21 +22,25 @@ public class LevelRenderer implements Renderer {
 	private Bundle mSavedInstance;
 	private GL10 gl;
 
+	private boolean drawLock = false;
 	private float[] keystates = new float[4];
 	private int score = 100;
 	private int crime = 0;
 	private int screenWidth;
 	private int screenHeight; 
 	private long oldFrameTime = 0;
+	private long startFrameTime = 0;
 	private int frameCounter = 0;
 	private float fps = 20.0f;
+	private float scale = 1.0f;
 
+	private LevelSurfaceView glv;
 	private textureManager manager;
 	private Tablet bunny;
 	private Tablet cop;
 	private Tablet gold;
 	private Tablet control;
-	private Tablet button;
+	//private Tablet button;
 	private int gold_000;
 	private int gold_00;
 	private int gold_0;
@@ -55,14 +61,17 @@ public class LevelRenderer implements Renderer {
 	private final static int ACTION_HEIGHT = 6;
 	private final static int ACTION_TILESIZE = 100;
 	private final static int CONTROL_SIZE = 100;
-	private final static int BUTTON_SIZE = 50;
+	//private final static int BUTTON_SIZE = 50;
 
-	private final float BUNNY_MOVEMENT_UNIT = 9.0f; 
-	private final float COP_MOVEMENT_UNIT = 6.0f;
+	private float BUNNY_MOVEMENT_UNIT = 9.0f; 
+	private float COP_MOVEMENT_UNIT = 6.0f;
+	private final float BUNNY_DEFAULT_MOVEMENT_UNIT = 6.0f;
+	private final float COP_DEFAULT_MOVEMENT_UNIT = 4.0f;
+	private final float DEFAULT_FPS = 12.0f;
 	private int CONTROL_X;
 	private int CONTROL_Y;
-	private int BUTTON_X;
-	private int BUTTON_Y;
+	//private int BUTTON_X;
+	//private int BUTTON_Y;
 
 	private final static String BUNNY_X = "BUNNY_X";
 	private final static String BUNNY_Y = "BUNNY_Y";
@@ -132,8 +141,9 @@ public class LevelRenderer implements Renderer {
 		}
 	};
 
-	public LevelRenderer(Context context, Bundle msavedinstance) {
+	public LevelRenderer(Context context, Bundle msavedinstance, LevelSurfaceView glv) {
 		this.context = context;
+		this.glv = glv;
 		mapOffset_x = mapOffset_y = 0 ;
 		posX = posY = 0;
 		mSavedInstance = msavedinstance;
@@ -150,25 +160,30 @@ public class LevelRenderer implements Renderer {
 	}
 
 	public void onTouch(MotionEvent event) {
-		int centerX = CONTROL_X + CONTROL_SIZE/2;
-		int centerY = CONTROL_Y + CONTROL_SIZE/2;
-		float radius = CONTROL_SIZE/2;
-		float x = event.getX();
-		float y = screenHeight - event.getY();
+		int centerX = CONTROL_X + (int)((float)CONTROL_SIZE*scale)/2;
+		int centerY = CONTROL_Y + (int)((float)CONTROL_SIZE*scale)/2;
+
+		float x = event.getX()-CONTROL_X;
+		float y = screenHeight - event.getY()-CONTROL_Y;
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
-			float length = (float)Math.sqrt(Math.pow(centerX-x,2)+Math.pow(centerY-y,2));
-			if (length <= radius) { //lies inside
+			float length = (float)Math.sqrt(Math.pow(centerX-x-CONTROL_X,2)+Math.pow(centerY-y-CONTROL_Y,2));
+			if (x > 0 && x < CONTROL_SIZE*scale && y > 0 && y < CONTROL_SIZE*scale) { //lies inside
 //				Log.d("LevelRenderer", "Inside");
 				
-				float dx = (x - centerX)/length;
-				float dy = (y - centerY)/length;
-				
-				setKey(0, dx*BUNNY_MOVEMENT_UNIT);
-				setKey(2, dy*BUNNY_MOVEMENT_UNIT);
+				//movement or action?
+				if (x >= CONTROL_SIZE*scale/3 && x <= 2*CONTROL_SIZE*scale/3 && 
+						y >= CONTROL_SIZE*scale/3 && y <= 2*CONTROL_SIZE*scale/3) 
+					performAction();
+				else {
+					float dx = (x + CONTROL_X - centerX)/length;
+					float dy = (y + CONTROL_Y - centerY)/length;
+					if (dx > 1.0f) dx = 1.0f;
+					if (dy > 1.0f) dy = 1.0f;
+					setKey(0, dx*BUNNY_MOVEMENT_UNIT);
+					setKey(2, dy*BUNNY_MOVEMENT_UNIT);
+				}
 			}
-			else if (x >= 0 && x <= BUTTON_SIZE && y >= 0 && y <= BUTTON_SIZE)
-				performAction();
 		}
 
 		if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -189,14 +204,14 @@ public class LevelRenderer implements Renderer {
 		boolean proximity = false;
 		while(it.hasNext()) {
 			Tablet t = it.next();
-			if (Math.abs(t.getX() - xPos) < 26 && Math.abs(t.getY() - yPos) < 26) proximity = true; 
+			if (Math.abs(t.getX() - xPos) < ACTION_TILESIZE && Math.abs(t.getY() - yPos) < ACTION_TILESIZE) proximity = true; 
 		}
 
 		if (!proximity) {
 			switch (actionMap[tile_y][tile_x]) {
 			case 1:	//spraytag action
 				// 	put spraytag tablet here
-				actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
+				if (!drawLock) actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
 				crime++;
 				break;
 			}
@@ -255,10 +270,10 @@ public class LevelRenderer implements Renderer {
 		}
 		
 		//move map
-		if (xPos > screenWidth/2 && xPos < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/2)
+		if (xPos*scale > screenWidth/2 && xPos < (LEVEL_WIDTH*LEVEL_TILESIZE*scale)-screenWidth/2)
 			moveMap(myX, 0);
 
-		if (yPos > screenHeight/2 && yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/2)
+		if (yPos*scale > screenHeight/2 && yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE*scale)-screenHeight/2)
 			moveMap(0, myY);
 	}
 
@@ -399,7 +414,8 @@ public class LevelRenderer implements Renderer {
 	}
 
 	private void bunnyWasCaught () {
-		score -= crime * 10;
+		score -= crime*2;
+		if (score <= 0) endGame();
 		updateScore();
 	}
 
@@ -417,13 +433,13 @@ public class LevelRenderer implements Renderer {
 			dx /= d_len;
 			dy /= d_len;
 			
-			if (frameCounter%10==0) {
+			if (oldFrameTime%1000==0) {
 				if (dy<0) {
 					cop.changeTexture(manager.getTexture("cop_front_l"));
 				} else {
 					cop.changeTexture(manager.getTexture("cop_back_l"));
 				}
-			} else if (frameCounter%10==5) {
+			} else if (oldFrameTime%1000==500) {
 				if (dy<0) {
 					cop.changeTexture(manager.getTexture("cop_front_r"));
 				} else {
@@ -445,18 +461,53 @@ public class LevelRenderer implements Renderer {
 	}
 
 	private void drawDigit(GL10 gl, int position, int offset) {
-		manager.getGameObject(goldLUT.get(position)).setXY(offset,screenHeight-30);		
+		manager.getGameObject(goldLUT.get(position)).setXY(offset*scale,screenHeight-(int)(30.0f*scale));		
 		manager.getGameObject(goldLUT.get(position)).draw(gl);
 	}
+	
+	private void drawTime(int minutes, int seconds) {
+		int seconds_0 = seconds % 10;
+		int seconds_00 = (int)((float)seconds/10.0f);
+		manager.getGameObject(goldLUT.get(minutes)).setXY(20*scale, screenHeight-(int)(60.0f*scale));
+		manager.getGameObject(goldLUT.get(minutes)).draw(gl);
+		manager.getGameObject(goldLUT.get(seconds_00)).setXY(40*scale, screenHeight-(int)(60.0f*scale));
+		manager.getGameObject(goldLUT.get(seconds_00)).draw(gl);
+		manager.getGameObject(goldLUT.get(seconds_0)).setXY(50*scale, screenHeight-(int)(60.0f*scale));
+		manager.getGameObject(goldLUT.get(seconds_0)).draw(gl);
+	}
 
+	private void endGame() {
+		SessionState sessionState = glv.getState();
+		((LevelActivity)context).setResult(Activity.RESULT_OK, sessionState.asIntent());
+		((LevelActivity)context).finish();
+	}
+	
 	@Override
 	public void onDrawFrame(GL10 gl) {
+		int seconds = 0;
+		int minutes = 0;
+		int currentTime;
+		
+		if (startFrameTime == 0) startFrameTime = System.currentTimeMillis();
+		currentTime = (int)(System.currentTimeMillis()-startFrameTime) / 1000;
+		if (currentTime < 60) {
+			minutes = 1;
+			seconds = 59 - currentTime;
+		} else if (currentTime < 120) {
+			minutes = 0;
+			seconds = 120 - currentTime;
+		} else {
+			endGame();
+		}
 		
 		if (frameCounter%10==9) {
 			if (oldFrameTime!=0)
 			fps = 10.0f/(float)(System.currentTimeMillis()-oldFrameTime)*1000.0f;
 			oldFrameTime = System.currentTimeMillis();
 		}
+		COP_MOVEMENT_UNIT = COP_DEFAULT_MOVEMENT_UNIT * DEFAULT_FPS/fps;
+		BUNNY_MOVEMENT_UNIT = BUNNY_DEFAULT_MOVEMENT_UNIT * DEFAULT_FPS/fps;
+		
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		gl.glLoadIdentity();
@@ -488,14 +539,21 @@ public class LevelRenderer implements Renderer {
 
 
 		//draw action stuff
+		drawLock = true;
 		Iterator<Tablet> it = actiontextures.iterator();
 		while (it.hasNext()) {
 			it.next().draw(gl);
 		}
+		drawLock = false;
 
 		// render
-		cop.draw(gl);
-		bunny.draw(gl);
+		if (cop.getY() > bunny.getY()) {
+			cop.draw(gl);
+			bunny.draw(gl);
+		} else {
+			bunny.draw(gl);
+			cop.draw(gl);
+		}
 
 		//write score
 		gold.draw(gl);
@@ -503,21 +561,20 @@ public class LevelRenderer implements Renderer {
 		for (int i = 1; i<4; i++) {
 			switch (i) {
 			case 1:
-				offset = 20;
+				offset = 25;
 				drawDigit(gl,gold_000, offset);
 			case 2:
-				offset = 30;
+				offset = 35;
 				drawDigit(gl,gold_00, offset);
-			case 3:;
-			offset = 40;
-			drawDigit(gl,gold_0, offset);
+			case 3:
+				offset = 45;
+				drawDigit(gl,gold_0, offset);
 			}
 		}
 
+		drawTime(minutes, seconds);
 		control.draw(gl);
-		button.draw(gl);
-		
-		frameCounter++;
+		//button.draw(gl);
 	}
 
 	@Override
@@ -525,16 +582,19 @@ public class LevelRenderer implements Renderer {
 		this.gl = gl;
 		screenWidth = width;
 		screenHeight = height;
-		CONTROL_X = screenWidth - CONTROL_SIZE;
+		Tablet.setResolution(width, height);
+		if (width > height) scale = (float)width/(float)Tablet.INTENDED_RES_X;
+		else scale = (float)height/(float)Tablet.INTENDED_RES_Y;
+		CONTROL_X = screenWidth - (int)((float)CONTROL_SIZE*scale);
 		CONTROL_Y = 0;
-		BUTTON_X = 0;
-		BUTTON_Y = 0;
+		//BUTTON_X = 0;
+		//BUTTON_Y = 0;
 		Log.d("LevelRenderer", "X From: " + CONTROL_X + " to " + (CONTROL_X+CONTROL_SIZE));
 		Log.d("LevelRenderer", "Y From: " + CONTROL_Y + " to " + (CONTROL_Y+CONTROL_SIZE));
 
-		gold.setXY(5, screenHeight-30);
+		gold.setXY(5, screenHeight-(int)(30.0f*scale));
 		control.setXY(CONTROL_X, CONTROL_Y);
-		button.setXY(BUTTON_X, BUTTON_Y);
+		//button.setXY(BUTTON_X, BUTTON_Y);
 
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -571,7 +631,7 @@ public class LevelRenderer implements Renderer {
 		gold_0 = 0;
 
 		control = manager.getGameObject("control");
-		button = manager.getGameObject("button");
+		//button = manager.getGameObject("button");
 
 		if(mSavedInstance != null)
 		{
@@ -607,7 +667,7 @@ public class LevelRenderer implements Renderer {
 			score = 100;
 			mapOffset_x = mapOffset_y = 0;
 			bunny.setXY(100, 20);
-			cop.setXY(20, 60);
+			cop.setXY(20, 30);
 			Tablet.setMapOffset(mapOffset_x, mapOffset_y);
 		}
 	}
