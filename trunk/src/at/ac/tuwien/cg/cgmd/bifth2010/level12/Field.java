@@ -98,8 +98,8 @@ public class Field extends GLObject{
 				mColor[0], mColor[1], mColor[2], 1.0f,
 				mColor[0], mColor[1], mColor[2], 1.0f};
 		mColor = colors;
-		if( texture == 0 ) mTexture = R.drawable.l12_grass1;
-		if( texture == 1 ) mTexture = R.drawable.l12_grass2;
+		if( texture == 0 ) mTexture = R.drawable.l12_grass;
+		if( texture == 1 ) mTexture = R.drawable.l12_grass;
 	}
 	
 	public void draw( GL10 gl){
