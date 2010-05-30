@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level70;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -92,7 +93,8 @@ public class LevelActivity extends Activity {
 		// Set fullscreen
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-       
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
+        
         // Get display
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
