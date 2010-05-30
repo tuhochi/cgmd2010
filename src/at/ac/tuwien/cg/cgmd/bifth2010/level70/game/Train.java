@@ -354,7 +354,7 @@ public class Train {
                 updateOffset(dt);
             }
             
-            if (isGoalReached()) {
+            if (!game.isGameOver() && isGoalReached()) {
                 game.onGameCompleted();
             }
         }
