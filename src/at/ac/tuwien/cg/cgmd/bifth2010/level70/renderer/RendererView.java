@@ -121,6 +121,7 @@ public class RendererView extends GLSurfaceView {
      * @param outState Game state
      */
     public void onSaveState(Bundle outState) {
+        updateTask.setPauseFlag(true);
     	game.onSaveState(outState);
     }
     
