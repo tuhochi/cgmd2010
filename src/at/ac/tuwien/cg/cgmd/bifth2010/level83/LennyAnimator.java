@@ -4,8 +4,10 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11Ext;
 
 /**
- * A convenience class for adding animation to {@link MySprite}. This class is an implementation of
- * the {@link Animatable} and the {@link Animator} interface.
+ * A convenience class for adding animation to Lenny. This class is an implementation of
+ * the {@link Animatable} and the {@link Animator} interface. This class adds the beam animation
+ * to the character sprite.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class LennyAnimator extends Animatable implements Animator {
 
@@ -22,6 +24,10 @@ public class LennyAnimator extends Animatable implements Animator {
 		return animate;
 	}
 	
+	/**
+	 * Initializes the beam animation.
+	 * @param time
+	 */
 	public void initBeamAnimation(float time){
 		endTime = time;
 		currentTime = 0;
@@ -30,6 +36,9 @@ public class LennyAnimator extends Animatable implements Animator {
 		size = 1;
 	}
 	
+	/**
+	 * Beam animation
+	 */
 	@Override
 	public void animate(float deltaTime) {
 		

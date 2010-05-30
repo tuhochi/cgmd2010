@@ -4,6 +4,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level83;
  * An interface for objects which can be animated. Implementations have to 
  * provide an {@link #animate(float)} method that performs the animation of the
  * object.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public abstract class Animatable implements Comparable<Animatable>{
 

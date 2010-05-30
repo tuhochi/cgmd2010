@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level83;
 
 /**
  * A convenience class to generate unique IDs.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class IDGenerator {
 

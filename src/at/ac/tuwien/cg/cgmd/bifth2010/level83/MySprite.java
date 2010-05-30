@@ -8,6 +8,7 @@ import android.util.Log;
 /**
  * A Sprite class. This class is an implementation of the {@link Drawable} 
  * interface.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class MySprite implements Drawable {
 
@@ -81,6 +82,7 @@ public class MySprite implements Drawable {
 	public void Draw(GL10 gl) {
 		MyTextureManager.singleton.textures[textureNum].Bind(gl);
 		
+		//If animator is attached and animation is running, animator class draws the sprite
 		if((animator != null) && (animator.animationRunning() != Animator.NO_ANIMATION))
 				animator.drawAnimated(this, gl);
 		else

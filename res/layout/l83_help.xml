@@ -18,11 +18,12 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut1"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"  
             android:layout_marginTop="5dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:src="@drawable/l83_help_lenny">
       </ImageView>
       <TextView 
@@ -38,13 +39,13 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut2"
-            android:layout_width="60dp" 
+            android:layout_width="50dp" 
             android:layout_height="wrap_content" 
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_ImageTut1"
-            android:src="@drawable/l83_hexagon">
+            android:src="@drawable/l83_help_overlay">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextTut2"
@@ -60,12 +61,12 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut3"
-            android:layout_width="60dp" 
+            android:layout_width="50dp" 
             android:layout_height="wrap_content"  
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
-            android:layout_below="@+id/l83_TextTut2"
+            android:layout_marginLeft="3dp"
+            android:layout_below="@+id/l83_ImageTut2"
             android:src="@drawable/l83_help_hexagon_b">
       </ImageView>
       <TextView 
@@ -73,7 +74,7 @@
             android:text="@string/l83_tut_3" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
-            android:layout_below="@+id/l83_TextTut2"
+            android:layout_below="@+id/l83_ImageTut2"
             android:layout_toRightOf="@+id/l83_ImageTut3"
             android:textColor="#000000" 
             android:paddingTop="10dip">
@@ -82,11 +83,11 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut4"
-            android:layout_width="60dp" 
+            android:layout_width="50dp" 
             android:layout_height="wrap_content"  
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_ImageTut3"
             android:src="@drawable/l83_help_hexagon_delete">
       </ImageView>
@@ -98,19 +99,19 @@
             android:layout_below="@+id/l83_ImageTut3"
             android:layout_toRightOf="@+id/l83_ImageTut3"
             android:textColor="#000000" 
-            android:paddingTop="10dip">
+            android:paddingTop="15dip">
       </TextView>
     
     
       <ImageView 
             android:id="@+id/l83_ImageTut5"
-            android:layout_width="60dp" 
+            android:layout_width="50dp" 
             android:layout_height="wrap_content"  
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_ImageTut4"
-            android:src="@drawable/l83_bomb">
+            android:src="@drawable/l83_help_bomb">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextTut5"
@@ -126,11 +127,11 @@
     
       <ImageView 
             android:id="@+id/l83_ImageTut6"
-            android:layout_width="60dp" 
+            android:layout_width="50dp" 
             android:layout_height="wrap_content"  
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_ImageTut5"
             android:src="@drawable/l83_help_hexagon_r">
       </ImageView>
@@ -148,13 +149,13 @@
 
 	  <ImageView 
             android:id="@+id/l83_ImageTut7"
-	        android:layout_width="60dp"
+	        android:layout_width="50dp"
 			android:layout_height="wrap_content"  
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_ImageTut6"
-			android:src="@drawable/l83_dollarsign">
+			android:src="@drawable/l83_help_dollar">
 	  </ImageView>
 	  <TextView 
             android:id="@+id/l83_TextTut7"
@@ -182,13 +183,13 @@
     
       <ImageView 
             android:id="@+id/l83_ImageStats1"
-            android:layout_width="wrap_content" 
+            android:layout_width="20dp" 
             android:layout_height="wrap_content"  
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_TextStatsHead"
-            android:src="@drawable/l83_tomb">
+            android:src="@drawable/l83_lenny_w90">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextStats1"
@@ -204,13 +205,13 @@
     
       <ImageView 
             android:id="@+id/l83_ImageStats2"
-            android:layout_width="wrap_content" 
+            android:layout_width="20dp" 
             android:layout_height="wrap_content"  
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_TextStats1"
-            android:src="@drawable/l83_dollarsign">
+            android:src="@drawable/l83_help_dollarsign">
       </ImageView>
       <TextView 
             android:id="@+id/l83_TextStats2"
@@ -229,9 +230,9 @@
             android:text="42 %" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content" 
-            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginLeft="3dp"
             android:layout_below="@+id/l83_TextStats2"
             android:textColor="#FFF" 
             android:textSize="21dp"
@@ -248,7 +249,10 @@
             android:paddingTop="10dip">
       </TextView>
   </RelativeLayout>
-  <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/l83_help_apologies" android:textColor="#000000" android:paddingTop="10dip"></TextView>
+  <TextView android:layout_height="wrap_content"
+	android:layout_width="fill_parent" android:text="@string/l83_help_apologies"
+	android:textColor="#000000" android:paddingTop="10dip"
+    android:layout_marginBottom="80dp"></TextView>
   
 </LinearLayout>
   </ScrollView>

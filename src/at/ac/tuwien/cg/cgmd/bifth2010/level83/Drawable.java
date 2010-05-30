@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
  * An interface for objects which can be drawn. Implementations have to 
  * provide {@link #Init(GL10)}, {@link #Draw(GL10)} and {@link #Dispose(GL10)} 
  * methods.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public interface Drawable {
 	

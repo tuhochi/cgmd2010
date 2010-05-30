@@ -11,7 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-
+/**
+ * This dialog is used to guide the player through the tutorial.
+ * @author Manuel Keglevic, Thomas Schulz
+ *
+ */
 public class TutorialDialog extends AlertDialog implements OnGestureListener {
 
 	AlertDialog.Builder builder;
@@ -22,6 +26,10 @@ public class TutorialDialog extends AlertDialog implements OnGestureListener {
 	private View layout;
 	private Context context;
 	
+	/**
+	 * Create new TutorialDialog
+	 * @param context Activity context
+	 */
 	public TutorialDialog(Context context) {
 		super(context);
 		
@@ -37,7 +45,7 @@ public class TutorialDialog extends AlertDialog implements OnGestureListener {
 		text.setText(context.getString(R.string.l83_screentut_1));
 		
 		image = (ImageView)layout.findViewById(R.id.l83_tutorial_image);
-		image.setImageResource(Constants.TEXTURE_LENNY);
+		image.setImageResource(Constants.HELP_LENNY);
 		
 		setView(layout);
 	}
@@ -49,16 +57,17 @@ public class TutorialDialog extends AlertDialog implements OnGestureListener {
 	
 	@Override
 	public boolean onDown(MotionEvent e) {
+		//Change image and text according to the present stage of the dialog
 		switch(stage){
 		
 		case 2:
 			text.setText(context.getString(R.string.l83_screentut_2));
-			image.setImageResource(Constants.TEXTURE_HEXAGON);
+			image.setImageResource(Constants.HELP_OVERLAY);
 			break;
 			
 		case 3:
 			text.setText(context.getString(R.string.l83_screentut_3));
-			image.setImageResource(Constants.HELP_HEXAGON_R);
+			image.setImageResource(Constants.HELP_OVERLAY);
 			break;
 			
 		case 4:
@@ -73,7 +82,7 @@ public class TutorialDialog extends AlertDialog implements OnGestureListener {
 			
 		case 6:
 			text.setText(context.getString(R.string.l83_screentut_6));
-			image.setImageResource(Constants.ITEM_BOMB);
+			image.setImageResource(Constants.HELP_BOMB);
 			break;
 			
 		case 7:
@@ -83,22 +92,22 @@ public class TutorialDialog extends AlertDialog implements OnGestureListener {
 			
 		case 8:
 			text.setText(context.getString(R.string.l83_screentut_8));
-			image.setImageResource(Constants.TEXTURE_DOLLARSIGN);
+			image.setImageResource(Constants.HELP_DOLLAR);
 			break;
 			
 		case 9:
 			text.setText(context.getString(R.string.l83_screentut_9));
-			image.setImageResource(Constants.TEXTURE_DOLLARSIGN);
+			image.setImageResource(Constants.HELP_DOLLAR);
 			break;
 		
 		case 10:
 			text.setText(context.getString(R.string.l83_screentut_10));
-			image.setImageResource(Constants.HELP_HEXAGON_R);
+			image.setImageResource(Constants.HELP_STATS);
 			break;
 			
 		case 11:
 			text.setText(context.getString(R.string.l83_screentut_11));
-			image.setImageResource(Constants.HELP_HEXAGON_R);
+			image.setImageResource(Constants.HELP_LENNY);
 			break;
 			
 		default:

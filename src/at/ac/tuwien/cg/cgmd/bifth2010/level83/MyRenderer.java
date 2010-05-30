@@ -21,6 +21,7 @@ import android.content.DialogInterface.OnDismissListener;
 /**
  * This class implements the {@link Renderer} and the {@link OnTouchListener}.
  * It draws the whole level and responds to user interaction.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	
@@ -33,10 +34,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	private float deltaTime;
 	private boolean scrolling;
 	private MySprite lenny;
-//	private MySprite dollar;
-//	private MySprite tomb;
-//	private MyAnimatedSprite animSprite;
-//	private MyAnimatedSprite animSprite2;
+
 	private AnimationManager aniManager;
 	private Context context;
 	private MyHexagonGrid hexGrid;
@@ -52,26 +50,20 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 
 		@Override
 		public boolean onDown(MotionEvent e) {
-			// TODO Auto-generated method stub
-			Log.d(CLASS_TAG, "onDown");
+			//Log.d(CLASS_TAG, "onDown");
 			return true;
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			// TODO Auto-generated method stub
-			Log.d(CLASS_TAG, "onFling");
-//			LevelActivity.deathsUpdateHandler.sendEmptyMessage(100);
+//			Log.d(CLASS_TAG, "onFling");
 			return false;
 		}
 
 		@Override
 		public void onLongPress(MotionEvent e) {
-			// TODO Auto-generated method stub
-			Log.d(CLASS_TAG, "onLongPress");
-//			LevelActivity.deathsUpdateHandler.sendEmptyMessage(7);
-//			LevelActivity.finishLevel.sendEmptyMessage(15);
+//			Log.d(CLASS_TAG, "onLongPress");
 		}
 
 		@Override
@@ -83,24 +75,19 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 //				Log.d(CLASS_TAG, "X:" + e1.getX() + " - Y:" + e1.getY());
 				return true;
 			}
-//			LevelActivity.deathsUpdateHandler.sendEmptyMessage(72);
 			scrollingHandler.sendEmptyMessage(1);
 			items.centerItem(e2.getX(), e2.getY());
-//			items.moveItem(distanceX, distanceY);
 			return true;
 		}
 
 		@Override
 		public void onShowPress(MotionEvent e) {
-			// TODO Auto-generated method stub
-			Log.d(CLASS_TAG, "onShowPress");
-			// item hervorheben/markieren?
+//			Log.d(CLASS_TAG, "onShowPress");
 		}
 
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
-			// TODO Auto-generated method stub
-			Log.d(CLASS_TAG, "onSingleTapUp");
+//			Log.d(CLASS_TAG, "onSingleTapUp");
 			return true;
 		}
 	};
@@ -138,8 +125,12 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		cGestureDetector = new GestureDetector(gestureListener);
 	}
 	
+	/**
+	 * Renders the level and everything else.
+	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
+		//Start anithread if boolean is set
 		if(startAnithread){
 			aniThread.start();
 			startAnithread = false;
@@ -162,17 +153,16 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		
 		hexGrid.Draw(gl);
 		lenny.Draw(gl);
-//		dollar.Draw(gl);
-//		tomb.Draw(gl);
 		items.Draw(gl);
-//		s2.Draw(gl);
-		
 		gl.glFlush();
 	}
 
+	/**
+	 * Initializes viewport dependent classes and objects like {@link MyHexagonGrid}.
+	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		Log.d("Renderer", "OnSurfaceChanged");
+//		Log.d("Renderer", "OnSurfaceChanged");
 		this.width = width;
 		this.height = height;
 		gl.glViewport(0, 0, width, height);
@@ -193,15 +183,14 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		
 		hexGrid.resumeGame();
 		
-		Log.d("Renderer","Element width="+GRID_ELEMENT_WIDTH);
-		
-		Log.d("Viewport-SurfaceChanged","Size: "+width+"x"+height);
+//		Log.d("Renderer","Element width="+GRID_ELEMENT_WIDTH);
+//		Log.d("Viewport-SurfaceChanged","Size: "+width+"x"+height);
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		
-		Log.d("Renderer", "OnSurfaceCreated");
+//		Log.d("Renderer", "OnSurfaceCreated");
 		//OpenGL initializations
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glDisable(GL10.GL_DITHER);
@@ -219,7 +208,7 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
         
         gl.glClearColor(0.349f, 0f, 0.349f, 1f);
         
-        Log.d("GL","onSurfaceCreated");
+//        Log.d("GL","onSurfaceCreated");
         
         //Reload TextureManager of build level from scratch
         if(MyTextureManager.singleton != null)
@@ -256,12 +245,15 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
         	startAnithread = true;
 	}
 	
+	/**
+	 * Resumes the game by setting the required boolean. The game is resumed
+	 * in the next {@link MyRenderer#onDrawFrame(GL10)}.
+	 */
 	public void resumeGame(){
 		lastTime = System.nanoTime();
-		
 		startAnithread = true;
-		//aniThread.start();
 	}
+	
 	/**
 	 * This function is called when the level is started for the first time and
 	 * creates all objects which are necessary for rendering the level.
@@ -275,8 +267,6 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
         new MyTextureManager(context, 30);
 	        
 		lenny = new MySprite(TEXTURE_LENNY, 20f*R_HEX/2f, 2f*RI_HEX-DIF_HEX-RI_HEX, 15, 21, gl);
-//        dollar = new MySprite(TEXTURE_DOLLARSIGN, 84, 0, 42, 42, gl);
-//        tomb = new MySprite(TEXTURE_TOMB, 4, 0, 42, 42, gl);
 		hexGrid = new MyHexagonGrid( TEXTURE_HEXAGON, gl, context,TEXTURE_MAP);
 		
 		aniManager = new AnimationManager(5);
@@ -321,12 +311,19 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 		
 	}
 	
+	/**
+	 * Destroys the {@link MyTextureManager}, {@link MyHexagonGrid} and {@link AnimationManager}.
+	 */
 	public void onDestroy(){
 		MyTextureManager.singleton = null;
 		aniManager = null;
 		hexGrid = null;
 	}
 	
+	/**
+	 * Sets the vibrator
+	 * @param v Vibrator
+	 */
 	public void setVibrator(Vibrator v) {
 		vib = v;
 	}
@@ -338,9 +335,9 @@ public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
     	if (!cGestureDetector.onTouchEvent(event) && event.getAction() == MotionEvent.ACTION_UP) {
 
     		if (scrolling) {
-				Log.d(CLASS_TAG, "! onUp ! - X:" + event.getX() + " / Y:" + event.getY());
-//				LevelActivity.coinsUpdateHandler.sendEmptyMessage(15);
-				//set scrolling to false
+//				Log.d(CLASS_TAG, "! onUp ! - X:" + event.getX() + " / Y:" + event.getY());
+				
+    			//set scrolling to false
 				scrollingHandler.sendEmptyMessage(0);
 				if (!hexGrid.useItem(event.getX(), event.getY(), items.getItemType()))
 					items.resetItem();

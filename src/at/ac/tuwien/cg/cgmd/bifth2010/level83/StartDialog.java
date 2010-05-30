@@ -9,14 +9,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * This class is used to show the start dialog of the level.
+ * @author Manuel Keglevic, Thomas Schulz
+ *
+ */
 public class StartDialog extends AlertDialog implements OnTouchListener, OnDismissListener {
 	
 	private Context context;
 
+	/**
+	 * Creates a new StartDialog
+	 * @param context Activity context
+	 */
 	protected StartDialog(Context context) {
 		super(context);
 		
@@ -25,12 +32,6 @@ public class StartDialog extends AlertDialog implements OnTouchListener, OnDismi
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		View layout = inflater.inflate(R.layout.l83_startdialog, null);
-		
-//		TextView text = (TextView)layout.findViewById(R.id.l83_startdialog_text);
-//		text.setText(context.getString(R.string.l83_screentut_1));
-		
-//		ImageView image = (ImageView)layout.findViewById(R.id.l83_startdialog_image);
-//		image.setImageResource(R.drawable.l83_icon);
 		
 		((Button) layout.findViewById(R.id.l83_Button_start)).setOnTouchListener(this);
 		((Button) layout.findViewById(R.id.l83_Button_tutorial)).setOnTouchListener(this);

@@ -6,7 +6,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * Help Activity for Level 83
- * @author Thomas, Manuel
+ * @author Thomas Schulz, Manuel Keglevic
  *
  */
 public class HelpActivity extends Activity {

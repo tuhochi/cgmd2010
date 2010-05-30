@@ -9,6 +9,7 @@ import android.opengl.GLUtils;
 
 /**
  * A texture class.
+ * @author Manuel Keglevic, Thomas Schulz
  */
 public class MyTexture {
 
@@ -81,7 +82,11 @@ public class MyTexture {
 		
 		gl.glDeleteTextures(1, num, 0);
 	}
-		//Nur textur binden
+	
+	/**
+	 * Bind texture
+	 * @param gl
+	 */
 	public void Bind(GL10 gl) {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, handle);
 	}
