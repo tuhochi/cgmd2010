@@ -44,6 +44,13 @@ public class GameWorld {
 		mHeight = height;
 	}
 	
+	public static int[] getRes(){
+		int res[] = new int[2];
+		res[0] = mWidth;
+		res[1] = mHeight;
+		return res;
+	}
+	
 	public static GameWorld getSingleton(){
 		if( mSingleton == null && mHeight > 0) mSingleton = new GameWorld();
 		return mSingleton;
