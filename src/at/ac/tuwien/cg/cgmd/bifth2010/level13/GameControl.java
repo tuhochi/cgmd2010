@@ -24,10 +24,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.StatusBar;
 
 public class GameControl {
 
-		static int MIN_DRUNK_LEVEL = 2; 
-		static int MAX_DRUNK_LEVEL = 3;
+		public static int MIN_DRUNK_LEVEL = 3; 
+		public static int MAX_DRUNK_LEVEL = 6;
 		
-        private int consumedBeer = 0;
+        public static  int consumedBeer = 0;
         private int mistressCounter = 0;
         private boolean ratArsedState = false;
         private boolean drunkState = false;
@@ -138,48 +138,41 @@ public class GameControl {
          */
        
         private void handleDrunkState(){
-                if (consumedBeer >= MIN_DRUNK_LEVEL && !drunkState){
-                        //consumedBeer = 0;
-                        // Set player to drunk state
-                        currentDrunkTime = DRUNKTIME;
-                        SoundManager.playSound(SoundFX.DRUNK);  
-                        drunkState = true;
-                       
-                }
+        	  if (consumedBeer >= MIN_DRUNK_LEVEL && !drunkState){
+                  // Set player to drunk state
+                  drunkState = true;
+                 
+          }
+        	
+
                 
                 if (consumedBeer >= MAX_DRUNK_LEVEL && !ratArsedState){
-                	ratArsedState = true;
+                	  ratArsedState = true;
+                	  currentDrunkTime = DRUNKTIME;
+                      SoundManager.playSound(SoundFX.DRUNK);
+                      consumedBeer = 0;
                 }	
-                	
                 
-                if (drunkState){
-                	
-                     	if(currentDrunkTime > 0){
-                             currentDrunkTime--;
+                if (ratArsedState){
+                	if(currentDrunkTime > 0  ){
+                        currentDrunkTime--;
 
-                            
-                     }
-                     else{
-                             drunkState = false;
-                             ratArsedState = false;
-                             consumedBeer = 0;
-
-                    
-                     }
-                     	
-                     
-                        
-                }
-                
-                
-                
-                
-                
-               
+                	}
+                	else{
+                		
+                        drunkState = false;
+                        ratArsedState = false;
                        
                
+                }
+                }
+                	
+                
+
+
         }
        
+        
         private void handleJailState(){
                 if(inJail){
                         if(currentBustTime > 0){
@@ -202,7 +195,7 @@ public class GameControl {
          */
        
         public void encounterCop(CopObject cop){
-                if (drunkState & !inJail){
+                if (ratArsedState & !inJail){
                                 SoundManager.playSound(SoundFX.POLICE);
                                 currentBustTime = BUSTTIME;
                                 inJail = true;
