@@ -60,7 +60,7 @@ public class LevelRenderer implements Renderer {
 	private final static int ACTION_WIDTH = 5;
 	private final static int ACTION_HEIGHT = 6;
 	private final static int ACTION_TILESIZE = 100;
-	private final static int CONTROL_SIZE = 100;
+	public final static int CONTROL_SIZE = 150;
 	//private final static int BUTTON_SIZE = 50;
 
 	private float BUNNY_MOVEMENT_UNIT = 9.0f; 
