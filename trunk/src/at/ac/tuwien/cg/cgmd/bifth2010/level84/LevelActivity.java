@@ -243,7 +243,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	public void showAni(AnimationType type) {
 		switch(type) {
 		case SPLASH: aniView.setBackgroundResource(R.drawable.l84_ani_watersplash); break;
-		//case DUST: aniView.setBackgroundResource(R.drawable.l84_ani_dust); break;
+		case DUST: aniView.setBackgroundResource(R.drawable.l84_ani_dust); break;
 		}
 		
 		AnimationDrawable ani = (AnimationDrawable)aniView.getBackground();

@@ -69,12 +69,21 @@ public class ModelGem extends Model {
 		}
 	};
 	
-	/** Handler for water splash animations */
+	/** Handler for water splash animation */
 	private Handler showSplashAni = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			lvl.showAni(LevelActivity.AnimationType.SPLASH);
+		}
+	};
+	
+	/** Handler for dust/miss animation */
+	private Handler showDustAni = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			lvl.showAni(LevelActivity.AnimationType.DUST);
 		}
 	};
 	
@@ -197,6 +206,7 @@ public class ModelGem extends Model {
 		}
 		else {
 			this.soundman.playSound(SoundFX.MISS, 1f, 1f, 0);
+			showDustAni.sendEmptyMessage(0);
 			if (vibrator != null) vibrator.vibrate(vibrationPatternMiss, -1);
 			endFall();
 		}
