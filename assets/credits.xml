@@ -35,6 +35,19 @@
 <credit type="sound" name="Explosion" author="steveygos93"
 	url="http://www.freesound.org/samplesViewSingle.php?id=80400"
 	usage="sound effect" license="CC" />
+
+<!-- Level 70 - credits -->
+<credit type="sound" name="Short swish button sound." author="junggle"
+	url="http://www.freesound.org/download/28819/28819_junggle_btn009.wav"
+	usage="level 70 - Switching rail fields." license="CC" />
+<credit type="sound" name="Short button click sound." author="junggle"
+	url="http://www.freesound.org/download/29304/29304_junggle_btn124.wav"
+	usage="level 70 - Selecting cloud or train field." license="CC" />	
+<credit type="sound" name="Quick air horn with echo." author="guitarguy1985"
+	url="http://www.freesound.org/download/68999/68999_guitarguy1985_airhorn_short.wav"
+	usage="level 70 - Train horn." license="CC" />
 		
 </credits>
+
+
 	

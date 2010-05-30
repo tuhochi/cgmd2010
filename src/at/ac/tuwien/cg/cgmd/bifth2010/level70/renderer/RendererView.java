@@ -3,34 +3,30 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level70.renderer;
 import java.util.LinkedList;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.LevelActivity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level70.traingame.TrainGame;
+import at.ac.tuwien.cg.cgmd.bifth2010.level70.game.TrainGame;
 
 /**
- * RendererView.
+ * RendererView - Manages the user input and displays the game.
  * 
- * @author herrjohann
+ * @author Christoph Winklhofer
  */
 public class RendererView extends GLSurfaceView {
 
 	// ----------------------------------------------------------------------------------
 	// -- Members ----
 	
-	private TrainGame  game;   	   //< Train game
-	private RenderTask renderTask; //< Renderer
-	private UpdateTask updateTask; //< Renderer
+    /** Instance to the train game */
+	private TrainGame  game;
+	
+	/** RenderTask to display the game */
+	private RenderTask renderTask;
+	
+	/** UpdateTask to update the game states */
+	private UpdateTask updateTask;
 	
 	
 	// ----------------------------------------------------------------------------------
@@ -47,6 +43,7 @@ public class RendererView extends GLSurfaceView {
 		super(context);
         setFocusable(true);
                 
+        // Enable alpha channel 
         setEGLConfigChooser(8, 8, 8, 8, 0, 0);
         getHolder().setFormat(PixelFormat.RGBA_8888); 
         
@@ -62,20 +59,6 @@ public class RendererView extends GLSurfaceView {
 	// ----------------------------------------------------------------------------------
 	// -- Public methods ----
 	
-	/**
-	 * Add key down event to UpdateTask input queue.
-	 * @param keyCode The key code
-	 * @param event The key event
-	 */
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		LinkedList<KeyEvent> inputs = updateTask.getInputKeys();
-		synchronized(inputs) {
-			inputs.add(event);
-		}
-        return false;
-    }
-	
-
 	/**
 	 * Add touch event to UpdateTask input queue.
 	 * @param event The event.
@@ -93,7 +76,6 @@ public class RendererView extends GLSurfaceView {
 	 * On start event.
 	 */
 	public void onStart() {
-        Log.i("RendererView", "onStart");
         if (!updateTask.isAlive()) {
         	updateTask.start();
         }
@@ -104,7 +86,6 @@ public class RendererView extends GLSurfaceView {
 	 * On start event.
 	 */
 	public void onPause() {
-        Log.i("RendererView", "onPause");
         super.onPause();
         updateTask.setPauseFlag(true);
     }
@@ -114,7 +95,6 @@ public class RendererView extends GLSurfaceView {
 	 * On resume event.
 	 */
 	public void onResume() {
-        Log.i("RendererView", "onResume");
         super.onResume();
         updateTask.setPauseFlag(false);
     }
@@ -124,7 +104,7 @@ public class RendererView extends GLSurfaceView {
 	 * On stop event.
 	 */
     public void onStop() {
-    	Log.i("RendererView", "onStop");
+    	
     }
     
    
@@ -132,7 +112,6 @@ public class RendererView extends GLSurfaceView {
 	 * On destroy event.
 	 */
     public void onDestroy() {
-		Log.i("RendererView", "onDestroy");
 		updateTask.setRunningFlag(false);
 	}
     

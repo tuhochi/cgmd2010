@@ -46,8 +46,17 @@
 				android:textColor="#000000" 
 				android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"
 				android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight"
-				android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop" />
+				android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop" /><TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft" android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight" android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop"><ImageView android:id="@+id/ImageView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l70_help_select"></ImageView><TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l70_help_select" android:textColor="#000000" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"></TextView></TableRow>
 			
-		</LinearLayout>
-	</ScrollView>
+		
+
+
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft" android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight" android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop">
+<ImageView android:id="@+id/ImageView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l70_help_switch"></ImageView><TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l70_help_switch" android:textColor="#000000" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"></TextView></TableRow><TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft" android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight" android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop"><ImageView android:id="@+id/ImageView03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l70_help_obstacle"></ImageView><TextView android:id="@+id/TextView06" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l70_help_obstacle" android:textColor="#000000" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"></TextView>
+</TableRow>
+</LinearLayout>
+	
+
+
+</ScrollView>
 </LinearLayout>

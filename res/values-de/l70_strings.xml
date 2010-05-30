@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="l70_GameName">Train your Brain</string>
+	<string name="l70_GameDescription_01">Puh, das war keine gute Idee den Großteil meines Vermögens auf diesem Schweizer Bankkonto zu deponieren. Diese hohen Zinsen bereiten mir allmählich Kopfschmerzen. Ganz klar ich muss das Geld hier wegschaffen. Am besten umweltschonend per Zugtransport und bei dieser Gelegenheit gleich ein paar Münzen loswerden .. </string>
+	<string name="l70_GameDescription_02">Finde eine Route für Bunny's Zug durch das Umstellen von Schienen-Felder. Für jedes benützte Schienen-Feld verlierst du eine Münze.</string>
+
+<string name="l70_GameComplete">&gt;&gt; Spiel geschafft &lt;&lt;</string>
+<string name="l70_GameOver">&gt;&gt; Spielende &lt;&lt;</string>
+
+<string name="l70_help_select">Zu Spielbeginn sind die Felder durch Wolken verdeckt. Zum Auswählen drücke auf das Wolken-Feld und mit einer weiteren Berührung deckst du das ausgewählte Feld auf.</string>
+<string name="l70_help_switch">Unter den Wolken verbergen sich Schienen-Felder. Vertausche diese, so dass der Zug vom Start ins Ziel fahren kann. Wähle dazu zwei Schienen-Felder  aus und berühre eines der beiden Felder (Feld A oder Feld B) erneut um die beiden zu tauschen. Der Zug startet von der linken Spielhälfte.</string>
+<string name="l70_help_obstacle">Unter den Wolken können jedoch auch Hindernisse versteckt sein. Hindernisse können nicht vertauscht werden, umfahre diese.</string>
+</resources>

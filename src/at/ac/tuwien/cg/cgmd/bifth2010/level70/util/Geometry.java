@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level70.geometry;
+package at.ac.tuwien.cg.cgmd.bifth2010.level70.util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -7,12 +7,36 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * Geometry - Stores the position, the texcoords and the index buffer
+ * of the geometry.
+ * 
+ * @author Christoph Winklhofer
+ */
 public class Geometry {
 
+    // ----------------------------------------------------------------------------------
+    // -- Members ----
+    
+    /** Position vertex buffer */
 	private FloatBuffer posBuf;
+	
+	/** Texture coordinate buffer */
 	private FloatBuffer texBuf;
+	
+	/** Index buffer */
 	private ShortBuffer indexBuf;
 
+	
+	// ----------------------------------------------------------------------------------
+    // -- Ctor ----
+	
+	/**
+	 * Create a geometry - The geometry is drawn with triangles.
+	 * @param positions Array with the vertex positions.
+	 * @param texcoords Array with the texture coordinates.
+	 * @param indices Array with indices.
+	 */
 	public Geometry(float[] positions, float[] texcoords, short[] indices) {
 		
 		// Create positions buffer 
@@ -38,6 +62,9 @@ public class Geometry {
 	}
 	
 	
+	// ----------------------------------------------------------------------------------
+    // -- Public methods ----
+	
 	/**
 	 * Set texture coordinate buffer.
 	 * @param buf The texture coordinate buffer
@@ -48,7 +75,7 @@ public class Geometry {
 	
 	
 	/**
-	 * Draw the quad.
+	 * Draw the geometry.
 	 * @param gl OpenGl context.
 	 */
 	public void draw(GL10 gl) {
