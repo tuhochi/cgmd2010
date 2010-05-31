@@ -6,12 +6,14 @@ import java.util.Hashtable;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level20.SoundManager.SOUNDS;
 
 
 /**
@@ -21,11 +23,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  * @author Reinhard Sprung
  */
 public class GameManager implements EventListener, OnTouchListener {
-	
-	
-	
-	
-	
+
 	protected LevelActivity activity;
 	protected RenderView renderView;
 	
@@ -37,6 +35,9 @@ public class GameManager implements EventListener, OnTouchListener {
 	
 	/** Manages products and interactions */		 
 	protected ProductManager productManager;
+	
+	/** Manager audio resources and playback. */
+	SoundManager soundManager;
 	
 	/** The animator collection */
 	protected Hashtable<Integer, Animator> animators;
@@ -78,6 +79,9 @@ public class GameManager implements EventListener, OnTouchListener {
 		time = TimeUtil.instance;
 		
 		productManager = new ProductManager();	
+		
+		soundManager = new SoundManager((Context)LevelActivity.instance);
+		soundManager.playSound(SOUNDS.RUN);
 		
 		animators = new Hashtable<Integer, Animator>();
 		
@@ -248,10 +252,6 @@ public class GameManager implements EventListener, OnTouchListener {
 	}
 	
 
-	
-	
-
-
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level20.EventListener#handleEvent(int, java.lang.Object)
 	 */
@@ -272,6 +272,11 @@ public class GameManager implements EventListener, OnTouchListener {
 		{
 			ProductEntity pe = (ProductEntity)eventData;
 			totalMoney -= ProductInfo.price(pe.type);
+			
+			// Just for fun.
+			if (9 == pe.type) {
+				soundManager.laugh();
+			}
 			
 			// This prevents displaying a negative money count.
 			if (totalMoney <= 0) {

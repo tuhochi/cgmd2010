@@ -27,7 +27,7 @@ public class ProductInfo {
 		new ProductInfo(6, 	R.drawable.l20_lollipop, 	0.49f),
 		new ProductInfo(7, 	R.drawable.l20_penne, 		0.99f),
 		new ProductInfo(8, 	R.drawable.l20_pizza, 		2.45f),
-		new ProductInfo(9, 	R.drawable.l20_playboy, 	6.60f),
+		new ProductInfo(9, 	R.drawable.l20_playbunny, 	6.60f),
 		new ProductInfo(10,	R.drawable.l20_probio, 		1.1f),
 		new ProductInfo(11,	R.drawable.l20_soup, 		0.89f),
 		new ProductInfo(12,	R.drawable.l20_yoghurt, 	1.35f),
