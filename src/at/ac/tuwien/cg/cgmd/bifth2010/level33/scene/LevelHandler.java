@@ -55,10 +55,22 @@ public class LevelHandler {
 	 */
 	private void generateLevel() {
 
+		//reset all variables
+		mapCalculationThread = null;
+		isFirstMap = false;
+		mapIsActiveTimer = 0;
+		mapIsActive = false;
+		isMapThreadStarted = false;
+		numberOfGoodGoodies=0;
+		collectedMap=-1;
+		collectedMapText="";
+		
+		
 		
 		// HARDCODED WORLD
 		
-		LevelGenration levelGenration = new LevelGenration(44);
+		//LevelGenration levelGenration = new LevelGenration(44);
+		LevelGenration levelGenration = new LevelGenration(25, 3, 0.6, 5, 22, 8, 8, 6);
 		worldDim = new Vector2i(levelGenration.rows,levelGenration.columns);
 		
 //		world = new int[worldDim.area()];

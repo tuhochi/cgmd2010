@@ -30,8 +30,13 @@
 			
 			<!--entry1_head-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
-				android:text="@string/l33_help_entry1_head" android:gravity="center">
+				android:text="@string/l33_help_entry1_head" android:gravity="center" android:textStyle="bold">
 			</TextView>
+			
+			<!--entry1_icon-->
+			<ImageView android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center"
+				android:src="@drawable/l33_trash_small">
+			</ImageView>
 			
 			<!--entry1-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
@@ -43,7 +48,7 @@
 			
 			<!--entry2_head-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
-				android:text="@string/l33_help_entry2_head" android:gravity="center">
+				android:text="@string/l33_help_entry2_head" android:gravity="center" android:textStyle="bold">
 			</TextView>
 			
 			<!--entry2_icon-->
@@ -61,8 +66,13 @@
 			
 			<!--entry3_head-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
-				android:text="@string/l33_help_entry3_head" android:gravity="center">
+				android:text="@string/l33_help_entry3_head" android:gravity="center" android:textStyle="bold">
 			</TextView>
+			
+			<!--entry3_icon-->
+			<ImageView android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center"
+				android:src="@drawable/l33_stone_small">
+			</ImageView>
 			
 			<!--entry3-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
@@ -74,8 +84,13 @@
 			
 			<!--entry4_head-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
-				android:text="@string/l33_help_entry4_head" android:gravity="center">
+				android:text="@string/l33_help_entry4_head" android:gravity="center" android:textStyle="bold">
 			</TextView>
+			
+			<!--entry4_icon-->
+			<ImageView android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center"
+				android:src="@drawable/l33_barrel_small">
+			</ImageView>
 			
 			<!--entry4-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
@@ -87,8 +102,13 @@
 			
 			<!--entry5_head-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
-				android:text="@string/l33_help_entry5_head" android:gravity="center">
+				android:text="@string/l33_help_entry5_head" android:gravity="center" android:textStyle="bold">
 			</TextView>
+			
+			<!--entry5_icon-->
+			<ImageView android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center"
+				android:src="@drawable/l33_spring_small">
+			</ImageView>
 			
 			<!--entry5-->
 			<TextView android:layout_height="wrap_content" android:textColor="@color/l33_help_black" android:layout_width="fill_parent"
