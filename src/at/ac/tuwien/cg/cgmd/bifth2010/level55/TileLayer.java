@@ -31,6 +31,9 @@ public class TileLayer {
 	static final int activeCoin_typeId=11;
 	static final int inactiveCoin_typeId=10;
 	
+	static final int activeDiamond_typeId=13;
+	static final int inactiveDiamond_typeId=12;
+	
 	private final static int VBO_WIDTH=5;
 	private final static int VBO_HEIGHT=5;
 	
@@ -74,7 +77,8 @@ public class TileLayer {
 	 */
 	public int changeCoinState(int x, int y) {
 		int result=0;
-		if (tiles_vector[x][y]==activeCoin_typeId || tiles_vector[x][y]==inactiveCoin_typeId) {
+		if (tiles_vector[x][y]==activeCoin_typeId || tiles_vector[x][y]==inactiveCoin_typeId ||
+				tiles_vector[x][y]==activeDiamond_typeId || tiles_vector[x][y]==inactiveDiamond_typeId) {
 			Coin[] coins=vbo_vector[x/VBO_WIDTH][y/VBO_HEIGHT].coins;
 			
 			for (int i=0; i<coins.length; i++) {

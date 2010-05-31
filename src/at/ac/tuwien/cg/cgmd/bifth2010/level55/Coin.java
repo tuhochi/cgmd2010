@@ -143,12 +143,16 @@ public class Coin {
 	 * @return The contribution of the coin to the current game-points
 	 */
 	public int changeActiveState() {
-		active=!active;
+		if (!active) {
+			active=true;//!active;
 		
-		if (active) {
+			/*if (active) {
+				return -1;
+			}*/
 			return -1;
+		} else {
+			return 0;
 		}
-		return 1;
 	}
 
 }

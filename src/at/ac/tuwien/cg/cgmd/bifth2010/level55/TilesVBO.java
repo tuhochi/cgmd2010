@@ -61,7 +61,8 @@ public class TilesVBO extends Mesh {
 	
 				if (type!=-1) {
 					tilesCount++;
-					if (type==TileLayer.activeCoin_typeId || type==TileLayer.inactiveCoin_typeId) {
+					if (type==TileLayer.activeCoin_typeId || type==TileLayer.inactiveCoin_typeId ||
+							type==TileLayer.activeDiamond_typeId || type==TileLayer.inactiveDiamond_typeId) {
 						coinCount++;
 					}
 				}
@@ -82,9 +83,16 @@ public class TilesVBO extends Mesh {
 				int type=tiles_vector[i][j];
 	
 				if (type!=-1) {
-					if (type==TileLayer.activeCoin_typeId || type==TileLayer.inactiveCoin_typeId) {
+					if (type==TileLayer.activeCoin_typeId || type==TileLayer.inactiveCoin_typeId ||
+							type==TileLayer.activeDiamond_typeId || type==TileLayer.inactiveDiamond_typeId) {
+						
 						int rowInTileSet=TileLayer.activeCoin_typeId/texCols;
 						int colInTileSet=TileLayer.activeCoin_typeId-rowInTileSet*texCols;
+						
+						if (type==TileLayer.activeDiamond_typeId || type==TileLayer.inactiveDiamond_typeId) {
+							rowInTileSet=TileLayer.activeDiamond_typeId/texCols;
+							colInTileSet=TileLayer.activeDiamond_typeId-rowInTileSet*texCols;
+						}
 						
 						float texX1_A=tileWidth*colInTileSet+halfTexelWidth;
 						float texX2_A=tileWidth+tileWidth*colInTileSet-halfTexelWidth;
@@ -95,16 +103,28 @@ public class TilesVBO extends Mesh {
 						rowInTileSet=TileLayer.inactiveCoin_typeId/texCols;
 						colInTileSet=TileLayer.inactiveCoin_typeId-rowInTileSet*texCols;
 						
+						if (type==TileLayer.activeDiamond_typeId || type==TileLayer.inactiveDiamond_typeId) {
+							rowInTileSet=TileLayer.inactiveDiamond_typeId/texCols;
+							colInTileSet=TileLayer.inactiveDiamond_typeId-rowInTileSet*texCols;
+						}
+						
 						float texX1_I=tileWidth*colInTileSet+halfTexelWidth;
 						float texX2_I=tileWidth+tileWidth*colInTileSet-halfTexelWidth;
 						
 						float texY1_I=tileHeight*rowInTileSet+halfTexelHeight;
 						float texY2_I=tileHeight+tileHeight*rowInTileSet-halfTexelHeight;
 						
-						coins[coinCount]=new Coin(gl, i, j, type==TileLayer.activeCoin_typeId,
-								i*sizeFactor, j*sizeFactor, (i+1.0f)*sizeFactor, (j+1.0f)*sizeFactor,
-								texX1_A, texY1_A, texX2_A, texY2_A,
-								texX1_I, texY1_I, texX2_I, texY2_I);
+						if (type==TileLayer.activeDiamond_typeId || type==TileLayer.inactiveDiamond_typeId) {
+							coins[coinCount]=new Diamond(gl, i, j, type==TileLayer.activeDiamond_typeId,
+									i*sizeFactor, j*sizeFactor, (i+1.0f)*sizeFactor, (j+1.0f)*sizeFactor,
+									texX1_A, texY1_A, texX2_A, texY2_A,
+									texX1_I, texY1_I, texX2_I, texY2_I);
+						} else {
+							coins[coinCount]=new Coin(gl, i, j, type==TileLayer.activeCoin_typeId,
+									i*sizeFactor, j*sizeFactor, (i+1.0f)*sizeFactor, (j+1.0f)*sizeFactor,
+									texX1_A, texY1_A, texX2_A, texY2_A,
+									texX1_I, texY1_I, texX2_I, texY2_I);
+						}
 						coinCount++;
 					} else {
 						

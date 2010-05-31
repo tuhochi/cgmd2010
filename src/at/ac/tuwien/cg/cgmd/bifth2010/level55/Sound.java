@@ -17,6 +17,15 @@ public class Sound {
 		sound=MediaPlayer.create(context, resourceID);
 		
 		if (sound!=null) {
+			try {
+				sound.prepare();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return true;
 		} else {
 			return false;
@@ -24,14 +33,16 @@ public class Sound {
 	}
 	
 	void start() {
-		try {
-			sound.prepare();
+		/*try {
+			sound.prepareAsync();
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		}*/
+		if (sound.isPlaying()) {
+			sound.seekTo(0);
+		} else {
+			sound.start();
 		}
-		sound.start();
 	}
 	
 	void pause() {
