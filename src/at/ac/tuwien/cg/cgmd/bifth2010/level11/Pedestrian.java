@@ -37,15 +37,15 @@ public class Pedestrian implements Target{
 	private Vector2 bounceVector;
 	private Random rand;
 	private float bounceRadius;
-	private float bounceStrength = 0.001f;
-	private float maxBounceVectorLength = 1.0f;
+	private float bounceStrength = 0.0002f;
+	private float maxBounceVectorLength = 0.2f;
 	/**
 	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
 	 * @param gl
 	 * @param context
 	 */
 	public Pedestrian(GL10 gl, Context context) {
-		this( 30.0f,10.0f,10.0f,0.01f, 2.0f, gl, context);
+		this( 30.0f,10.0f,20.0f,0.01f, 0.3f, gl, context);
 	}
 	public float getBounceRadius() {
 		return bounceRadius;
@@ -159,7 +159,8 @@ public class Pedestrian implements Target{
 	 * @param time
 	 */
 	public void update(float time, float deltaTime) {
-		if(bounceVector.length()>0.01){
+		if(bounceVector.length()>0.0000001){
+			//System.out.println("bounce");
 			bounceVector.mult((float)(1/Math.pow((1+deltaTime),2)));
 			position.add(bounceVector);
 			legs.update(position, angle, 0.0f);
@@ -286,6 +287,6 @@ public class Pedestrian implements Target{
 		if(this.bounceVector.length() > this.maxBounceVectorLength)
 			this.bounceVector.normalize().mult(this.maxBounceVectorLength);
 		target = null;
-		//System.out.println("bounceVector: "+bounceVector);
+		System.out.println("bounceVector: "+bounceVector);
 	}
 }

@@ -51,10 +51,10 @@ public class GameView extends GLSurfaceView {
         	float time = (System.currentTimeMillis()-this.touchedTime)/1000.0f;
         	//System.out.println("time: "+time);
         	//System.out.println("deltaX: "+Math.abs(_x-x));
-        	if(Math.abs(_x-x)>time*100 || Math.abs(_y-y)>time*100){
+        	if(Math.abs(_x-x)>time*500 || Math.abs(_y-y)>time*500){
         		//System.out.println("in");
         		isBouncing = true;
-        		((GameActivity)_renderer.context)._level.bouncePedestrians(x, Level.sizeY-y, _x, Level.sizeY-_y, time);
+        		((GameActivity)_renderer.context)._level.bouncePedestrians(x/_renderer._width*Level.sizeX, Level.sizeY-(y/_renderer._height*Level.sizeY), _x/_renderer._width*Level.sizeX, Level.sizeY-(_y/_renderer._height*Level.sizeY), time);
                 _x = x;
                 _y = y;
                 this.touchedTime = System.currentTimeMillis();
@@ -69,6 +69,7 @@ public class GameView extends GLSurfaceView {
         if (event.getAction() == MotionEvent.ACTION_UP) {
         	//System.out.println("time: "+time);
         	//System.out.println("deltaX: "+Math.abs(_x-x));
+    		//System.out.println("out");
         	if(!isBouncing){
                 _x = event.getX();
                 _y = event.getY();
