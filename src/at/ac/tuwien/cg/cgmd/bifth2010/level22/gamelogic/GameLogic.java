@@ -10,6 +10,7 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.MainThread;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.MailSceneObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level22.sound.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.MailSceneObject.SuccessState;
 
 /**
@@ -141,6 +142,7 @@ public class GameLogic extends Thread {
 			
 			passedMails++;
 			uiThread.setVibration();
+			SoundManager.playLoseSound();
 		} else if ( !bufferedInput.isEmpty() )
 		{
 			
@@ -150,8 +152,18 @@ public class GameLogic extends Thread {
 				
 				actMail.kill();
 				actMail = MailDataBase.nextMail();
-				if ( success == SuccessState.Win )		money -= 1;
-				if ( success == SuccessState.Loose )	money += 1;
+				if ( success == SuccessState.Win )
+				{
+					
+					money -= 1;
+					SoundManager.playWinSound();
+				}
+				if ( success == SuccessState.Loose )
+				{
+				
+					money += 1;
+					SoundManager.playLoseSound();
+				}
 				
 				passedMails++;
 			}
