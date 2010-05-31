@@ -19,6 +19,8 @@ public class MainThread extends Thread {
 	{
 		
 		vibration = false;
+		typedIn = "Good ";
+		remaining = "luck!";
 	}
 
 	/* (non-Javadoc)
@@ -28,6 +30,7 @@ public class MainThread extends Thread {
 	public void run() 
 	{
 		
+		if ( finalizeTextBoxes )	GameLogic.finalizeTextBoxes();
 		GameLogic.updateTextBoxes( typedIn, remaining, money );
 		if ( vibration )	vibratorService.vibrate( 100 );
 	}
@@ -39,11 +42,16 @@ public class MainThread extends Thread {
 	 * @param remaining the remaining mail letters
 	 * @param money the players current money
 	 */
-	public void setStrings( String typedIn, String remaining, String money )
+	public void setStrings( String typedIn, String remaining )
 	{
 		
 		this.typedIn = typedIn;
 		this.remaining = remaining;
+	}
+	
+	public void setMoney( String money )
+	{
+		
 		this.money = money;
 	}
 	
@@ -54,6 +62,12 @@ public class MainThread extends Thread {
 	{
 		
 		vibration = true;
+	}
+	
+	public void finalizeTextBoxes ()
+	{
+		
+		finalizeTextBoxes = true;
 	}
 	
 	/**
@@ -71,6 +85,7 @@ public class MainThread extends Thread {
 	private String remaining;
 	private String money;
 	private boolean vibration;
+	private boolean finalizeTextBoxes;
 	
 	private static Vibrator vibratorService;
 }

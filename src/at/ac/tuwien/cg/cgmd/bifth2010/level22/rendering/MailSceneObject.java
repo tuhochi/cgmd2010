@@ -335,7 +335,9 @@ public class MailSceneObject
 		position.y = (float) Math.cos( relativeTime * 50.0f + 13.0f ) / 3.0f + 0.35f;
 		position.z = relativeTime * 20 - 30;
 		
-		// TODO : Use kubic spline interpolation for the animation
+		alpha = (float) Math.sin( relativeTime * 100.0f ) / ( float ) Math.PI;
+		scale = 1.0f + alpha / 8.0f;
+		alpha /= 4.0f;
 		
 		return true;
 	}
@@ -359,6 +361,8 @@ public class MailSceneObject
 		
 		renderContext.glPushMatrix();
 		renderContext.glTranslatef( position.x, position.y, position.z );
+		renderContext.glRotatef( alpha * 180, 0.0f, 1.0f, 0.0f );
+		renderContext.glScalef( scale, scale, scale );
 		
 		renderContext.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		renderContext.glEnableClientState(GL10.GL_NORMAL_ARRAY);
@@ -526,6 +530,9 @@ public class MailSceneObject
 	}
 	
 	private Vector3f position;
+	private float scale;
+	private float alpha;
+	
 	private FloatBuffer vertexPositions;
 	private FloatBuffer vertexNormals;
 	private FloatBuffer uvCoordinates;

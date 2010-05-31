@@ -11,6 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.gamelogic.MailDataBase;
 
 
@@ -40,7 +41,8 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 		setRenderer( this );
 		SpamRenderer.context = context;
 		SpamRenderer.activate();
-		bg = new Background();
+		bg = new Sprite( 100.0f, R.drawable.l22_background );
+		menu = new Sprite( 0.0f, R.drawable.l22_menubar );
 	}
 	@Override
 	public void onDrawFrame(GL10 arg0) 
@@ -66,7 +68,10 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 			glMatrixMode( GL_PROJECTION );
 			glLoadIdentity();
 			GLU.gluOrtho2D( arg0, 0, width, 0, height );
+			
 			bg.draw( context, arg0 );
+			menu.draw( context, arg0 );
+			
 			glLoadIdentity();
 			GLU.gluPerspective( arg0, fov, (float) width / (float) height, np, fp );
 			glMatrixMode( GL_MODELVIEW );
@@ -87,7 +92,8 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 		GLU.gluPerspective( gl, 30.0f, ( float ) width / height, 1.0f, 100.0f );
 		glMatrixMode(GL_MODELVIEW);
 		
-		bg.changeSize( width, height );
+		bg.changeSize( 0, width, 0, height - 45 );
+		menu.changeSize( 0, width, height - 45, height );
 		
 		cachedRenderContext = gl;
 	}
@@ -130,7 +136,8 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 	private static GL10 cachedRenderContext;
 	private static Context context;
 	private static boolean isActive;
-	private static Background bg;
+	private static Sprite bg;
+	private static Sprite menu;
 	
 	private float width;
 	private float height;
