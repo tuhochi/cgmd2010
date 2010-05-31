@@ -55,7 +55,7 @@ public class DrunkBar extends StatusBar{
 			gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 			
 			
-			for (int i = 0; i < GameControl.consumedBeer;i++){
+			for (int i = 0; i < GameControl.getInstance().consumedBeer;i++){
 				beerBlocks[i].draw(gl);
 				
 			}

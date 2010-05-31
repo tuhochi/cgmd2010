@@ -27,7 +27,7 @@ public class GameControl {
 		public static int MIN_DRUNK_LEVEL = 3; 
 		public static int MAX_DRUNK_LEVEL = 6;
 		
-        public static  int consumedBeer = 0;
+        public int consumedBeer = 0;
         private int mistressCounter = 0;
         private boolean ratArsedState = false;
         private boolean drunkState = false;
