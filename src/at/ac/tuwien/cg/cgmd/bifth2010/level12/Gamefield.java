@@ -16,6 +16,7 @@ public class Gamefield extends GLObject{
 	private float mSegLength = 1;
 	private float[] mSegCol1  = {1.0f, 1.0f, 1.0f };
 	private float[] mSegCol2  = {1.0f, 1.0f, 1.0f };
+	int[] res;
 	
 	public void initVBOs(){
 		float[] vertices = {
@@ -105,7 +106,7 @@ public class Gamefield extends GLObject{
 		for( int i = 0; i < mFields.length; i++){
 			mFields[i].draw(gl);
 		}
-		int[] res = GameWorld.getSingleton().getRes();
+		res = GameWorld.getSingleton().getRes();
 		//gl.glTranslatef(res[0]*0.5f, res[1]*0.5f, 0.0f);
 		//gl.glScalef(res[0], res[1], 1.0f);
 		gl.glTranslatef(res[0]-res[0]*0.1f*0.5f, res[1]*0.5f, 0.0f);

@@ -19,6 +19,7 @@ public class TextureManager {
 	private Context context;
 	private int[] textures;
 	private static TextureManager singletonObject;
+	int textureid;
 	
 	public void initializeGL(GL10 gl){		
 		this.gl = gl;
@@ -108,7 +109,7 @@ public class TextureManager {
 	public void setTexture(int id) {
 		
 		try {
-			int textureid = this.textureMap.get((Integer)id).intValue();
+			textureid = this.textureMap.get((Integer)id).intValue();
 	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, this.textures[textureid]);
 		
 		}

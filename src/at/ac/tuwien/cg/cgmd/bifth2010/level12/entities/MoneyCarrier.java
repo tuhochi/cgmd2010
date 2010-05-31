@@ -26,7 +26,9 @@ public abstract class MoneyCarrier extends GLObject {
 	protected short mMoney = 10;
 	protected short mSpeed = 5;
 	protected int mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
-	
+	long ms;
+	double dt;
+	double distance;
 	
 	public void activate(){
 		super.setActiveState(true);
@@ -91,11 +93,11 @@ public abstract class MoneyCarrier extends GLObject {
 	
 	@Override
 	public void draw(GL10 gl){	
-		long ms = System.currentTimeMillis();
-		double dt = (ms - mLastFrametime) * 0.001;
+		ms = System.currentTimeMillis();
+		dt = (ms - mLastFrametime) * 0.001;
 		if( GameMechanics.getSingleton().running() == false ) dt = 0;
 		mLastFrametime = ms;
-		double distance = mSpeed * dt;
+		distance = mSpeed * dt;
 		mMovePos -= distance;
 		//calculate actual position
 		mX = (int)(mStartPos + mMovePos);

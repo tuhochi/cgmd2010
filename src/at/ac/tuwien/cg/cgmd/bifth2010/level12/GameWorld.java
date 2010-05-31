@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.AdvancedTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundFour;
@@ -26,6 +28,9 @@ public class GameWorld {
 	private int mXPos, mYPos; //picking	
 	private static int mWidth = -1;
 	private static int mHeight = -1; //viewport
+	static int res[];
+	        
+	boolean remove;
 	//private long mLastCollDetDone = 0;
 	
 	//private static LevelActivity mGameContext = null;
@@ -42,7 +47,7 @@ public class GameWorld {
 	}
 	
 	public static int[] getRes(){
-		int res[] = new int[2];
+		res = new int[2];
 		res[0] = mWidth;
 		res[1] = mHeight;
 		return res;
@@ -369,26 +374,44 @@ public class GameWorld {
 	}
 	
 	
-	public Vector<MoneyCarrier> getEnemies(){
-		if( mEnemies == null ) return null;
-		synchronized( mEnemies ){
-			for ( int i = 0; i < mEnemies.size(); i++){
-				boolean remove = false;
-				if( mEnemies.get(i).getX() <= 1.0f) {
-					GameMechanics.getSingleton().addMoney( mEnemies.get(i).getMoney() );
-					mEnemies.get(i).deactivate();
-					remove = true;
-				}
-				if( mEnemies.get(i).getHP() <= 0 ){
-					mEnemies.get(i).deactivate();
-					mEnemies.get(i).die();
-					remove = true;
-				}
-				if( remove ) mEnemies.remove(i);
-			}
-		}
-		return mEnemies;
+	
+	public int getEnemies(){
+        return mEnemies.size();
 	}
+
+ 	public void drawEnemies(GL10 gl){
+        if( mEnemies == null ) return;
+        synchronized( mEnemies ){
+            for ( int i = 0; i < mEnemies.size(); i++){
+                remove = false;
+                mEnemies.get(i).draw(gl);
+                if( mEnemies.get(i).getX() <= 1.0f) {
+                    GameMechanics.getSingleton().addMoney( mEnemies.get(i).getMoney() );
+                    mEnemies.get(i).deactivate();
+                    remove = true;
+                }
+                if( mEnemies.get(i).getHP() <= 0 ){
+                    mEnemies.get(i).deactivate();
+                    mEnemies.get(i).die();
+                    remove = true;
+                }
+                if( remove ) mEnemies.remove(i);
+            }
+        }
+}
+
+   public void drawTowers(GL10 gl){
+        for ( int i = 0; i < mBasicTower.length; i++){
+            if( mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl);
+        }
+        for ( int i = 0; i < mAdvancedTower.length; i++){
+            if( mAdvancedTower[i].getActiveState() )mAdvancedTower[i].draw(gl);
+        }
+        for ( int i = 0; i < mHyperTower.length; i++){
+            if( mHyperTower[i].getActiveState()) mHyperTower[i].draw(gl);
+        }
+    }
+
 	
 
 	public static void destroySingleton() {
