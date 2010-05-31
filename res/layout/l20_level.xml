@@ -32,4 +32,30 @@
         android:textColor="#ffffffff"        
         android:text="Time: 1:00" />
         
+    <TextView 
+        android:id="@+id/l20_DescriptionText"
+        android:text="@string/l20_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:background="#AA000000"
+        android:textColor="#ffffffff"
+        
+    android:singleLine="false" android:layout_gravity="center" android:maxWidth="400dip" android:paddingBottom="10dip" android:paddingLeft="10dip" android:paddingRight="10dip" android:paddingTop="10dip"></TextView>
+        
+	<Button 
+		android:id="@+id/l20_ButtonStart" 
+		android:text="@string/l20_button_start_text" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:layout_gravity="center|bottom" 
+        android:layout_marginBottom="20dip"
+        android:paddingLeft="30dip"
+        android:paddingRight="30dip"
+		android:clickable="true"
+        
+	></Button>
+	
+
+
+
 </FrameLayout>
