@@ -462,7 +462,7 @@ public class MailSceneObject
 	public String getRemaining ()
 	{
 		
-		return myMail.getDisplayName().substring( actCheckingIndex );
+		return myMail.getRequiredInput().substring( actCheckingIndex );
 	}
 
 	/**

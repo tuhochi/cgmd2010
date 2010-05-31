@@ -46,6 +46,7 @@ public class GameLogic extends Thread {
 		myContext = context;
 		passedMails = 0;
 		active = false;
+		tutorialCounter = 0;
 		
 		bufferedInput = new ArrayBlockingQueue< Character >( 100 );
 		
@@ -143,6 +144,7 @@ public class GameLogic extends Thread {
 			passedMails++;
 			uiThread.setVibration();
 			SoundManager.playLoseSound();
+			tutorialCounter++;
 		} else if ( !bufferedInput.isEmpty() )
 		{
 			
@@ -157,19 +159,22 @@ public class GameLogic extends Thread {
 					
 					money -= 1;
 					SoundManager.playWinSound();
+					tutorialCounter++;
 				}
 				if ( success == SuccessState.Loose )
 				{
 				
 					money += 1;
 					SoundManager.playLoseSound();
+					tutorialCounter++;
 				}
 				
 				passedMails++;
 			}
 		}
 		
-		uiThread.setStrings( getTypedIn(), getRemaining(), getMoney() );
+		uiThread.setStrings( "", "", getMoney() );
+		if ( tutorialCounter < 5 )	uiThread.setStrings( getTypedIn(), getRemaining(), getMoney() );
 		mainThread.post( uiThread );
 	}
 	
@@ -266,6 +271,7 @@ public class GameLogic extends Thread {
 		target.putCharArray( "bufferedKeys", charArray );
 		target.putLong( "money", money );
 		target.putInt( "passedMails", passedMails );
+		target.putInt( "tutorialCounter", tutorialCounter );
 		
 		MailDataBase.makePersistentState( target );
 	}
@@ -283,6 +289,7 @@ public class GameLogic extends Thread {
 		for ( int index = 0; index < inputs.length; index++ )	bufferedInput.add( inputs[ index ] );
 		money = target.getLong( "money" );
 		passedMails = target.getInt( "passedmails" );
+		tutorialCounter = target.getInt( "tutorialCounter" );
 		
 		MailDataBase.loadPersistentState( target );
 		
@@ -316,4 +323,5 @@ public class GameLogic extends Thread {
 	
 	private static Handler mainThread;
 	private static LevelActivity sourceActivity;
+	private static int tutorialCounter = 0;
 }
