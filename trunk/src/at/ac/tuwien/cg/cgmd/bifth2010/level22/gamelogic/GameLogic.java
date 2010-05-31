@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
@@ -173,8 +174,10 @@ public class GameLogic extends Thread {
 			}
 		}
 		
-		uiThread.setStrings( "", "", getMoney() );
-		if ( tutorialCounter < 5 )	uiThread.setStrings( getTypedIn(), getRemaining(), getMoney() );
+		if ( tutorialCounter == 5 )	uiThread.finalizeTextBoxes();
+		
+		uiThread.setMoney( getMoney() );
+		if ( tutorialCounter < 5 )	uiThread.setStrings( getTypedIn(), getRemaining() );
 		mainThread.post( uiThread );
 	}
 	
@@ -243,6 +246,16 @@ public class GameLogic extends Thread {
 		typedIn.setText( tI );
 		remaining.setText( rem );
 		currentMoney.setText( mon );
+	}
+	
+	public static void finalizeTextBoxes ()
+	{
+		
+		typedIn.setText( "Good " );
+		remaining.setText( "Luck!" );
+		
+		typedIn.setTextColor( Color.GRAY );
+		remaining.setTextColor( Color.GRAY );
 	}
 	
 	/**

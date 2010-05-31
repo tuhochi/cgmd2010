@@ -63,7 +63,7 @@ public class LevelActivity extends Activity {
         remaining.setText( "remaining" );
         remaining.setTextSize( 25 );
         remaining.setGravity( Gravity.LEFT );
-        remaining.setTextColor( Color.BLUE );
+        remaining.setTextColor( Color.YELLOW );
         
         TextView money = new TextView(this);
         money.setText("money");
@@ -73,13 +73,18 @@ public class LevelActivity extends Activity {
         
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         llparams.weight = 0;
-        llparams.setMargins( 0, 0, 0, 0);
+        llparams.setMargins( 5, 3, 0, 0);
         llayout.addView( typedIn, llparams);
-        LinearLayout.LayoutParams llparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        llparams2.weight = 1;
-        llparams2.setMargins( 10, 10, 0, 10);
+        
+        llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        llparams.weight = 0;
+        llparams.setMargins( 0, 3, 0, 0);
         llayout.addView( remaining, llparams );
-        llayout.addView( money, llparams2 );
+        
+        llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        llparams.weight = 1;
+        llparams.setMargins( 0, 3, 5, 0);
+        llayout.addView( money, llparams );
 		
         GameLogic.setTextViews( typedIn, remaining, money );
         GameLogic.setThread( myThread );
