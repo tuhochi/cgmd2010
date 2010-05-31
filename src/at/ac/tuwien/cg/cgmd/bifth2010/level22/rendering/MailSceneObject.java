@@ -70,6 +70,8 @@ public class MailSceneObject
 			imagestream = null;
 		} catch (IOException e) {
 		}
+		
+		MailCharacter.init( renderContext, context );
 	}
 	
 	/**
@@ -81,6 +83,8 @@ public class MailSceneObject
 		initialized = false;
 		
 		SpamRenderer.getActContext().glDeleteTextures( 2, texture, 0 );
+		
+		MailCharacter.uninit( SpamRenderer.getActContext() );
 	}
 
 	/**
@@ -93,18 +97,20 @@ public class MailSceneObject
 	public MailSceneObject ( Mail myMail, float lifeTime, Context context )
 	{
 		
-		position = new Vector3f( 0, 0, -100.0f );
+		position = new Vector3f( 0, 0, -30.0f );
 		
 		characterRefs = new MailCharacter[ myMail.getDisplayName().length() ];
 		
 		int charSubdivisionCount = 3;
 		int verResolution = charSubdivisionCount + 2;
-		int subDivisionCount = ( charSubdivisionCount + 1 ) * myMail.getDisplayName().length() + 1;
+		int subDivisionCount = charSubdivisionCount * myMail.getDisplayName().length() + 2;
 		
 		float[] vertexPos = new float[ subDivisionCount * verResolution * 3 + 3 ];
 		float[] vertexNorm = new float[ subDivisionCount * verResolution * 3 + 3 ];
 		float[] uvCoords = new float[ subDivisionCount * verResolution * 2 + 2 ];
 		float[] uvCoordsCharacter = new float[ subDivisionCount * verResolution * 2 + 2 ];
+		
+		float horSize = ( float ) characterRefs.length / 5.0f;
 		
 		for ( int subDivIndexVer = 0; subDivIndexVer < verResolution; subDivIndexVer++ )
 		{
@@ -113,7 +119,7 @@ public class MailSceneObject
 			{
 				
 				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 ] = 
-					2.0f * ( float ) subDivIndexHor / ( float ) ( subDivisionCount - 1 ) - 1.0f;
+					2.0f * horSize * ( float ) subDivIndexHor / ( float ) ( subDivisionCount - 1 ) - horSize;
 				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 1 ] =
 					1.2f * ( float ) subDivIndexVer / ( float ) ( verResolution - 1 ) - 0.6f;
 				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 2 ] = 0;
@@ -152,9 +158,9 @@ public class MailSceneObject
 				{
 				
 					uvCoordsCharacter[ ( meshIndex + subDivIndexVer * subDivisionCount + subDivIndexHor ) * 2 ] = 
-						subDivIndexHor / ( charSubdivisionCount - 1 );
+						0.02f + 0.96f * ( float ) subDivIndexHor / ( float ) ( charSubdivisionCount - 1 );
 					uvCoordsCharacter[ ( meshIndex + subDivIndexVer * subDivisionCount + subDivIndexHor ) * 2 + 1 ] =
-						subDivIndexVer / ( charSubdivisionCount - 1 );
+						0.98f - 0.96f * ( float ) subDivIndexVer / ( float ) ( charSubdivisionCount - 1 );
 				}
 			}
 			
@@ -186,8 +192,7 @@ public class MailSceneObject
 			indices.put( localIndexSrc );
 			indices.position( 0 );
 			
-			characterRefs[ charIndex ] = null;
-// TODO : fix this				//MailCharacter.getMailCharacter( myMail.getDisplayName().charAt( charIndex ), context, renderContext, indices );
+			characterRefs[ charIndex ] = MailCharacter.getMailCharacter( myMail.getDisplayName().charAt( charIndex ), context, indices );
 		}
 		
 		int letterTriangleCount = ( ( subDivisionCount - 1 ) * ( verResolution - 1 ) - 
@@ -275,7 +280,7 @@ public class MailSceneObject
 		byteBuf = ByteBuffer.allocateDirect( uvCoordsCharacter.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		uvCoordinatesCharacter = byteBuf.asFloatBuffer();
-		uvCoordinatesCharacter.put( uvCoords );
+		uvCoordinatesCharacter.put( uvCoordsCharacter );
 		uvCoordinatesCharacter.position( 0 );
 
 		byteBuf = ByteBuffer.allocateDirect( indexSrc.length * 2 );
@@ -326,7 +331,9 @@ public class MailSceneObject
 		
 		float relativeTime = accTime / animationTime;
 		
-		position.z = relativeTime * 100 - 100;
+		position.x = (float) Math.sin( relativeTime * 20.0f ) / 3.0f;
+		position.y = (float) Math.cos( relativeTime * 50.0f + 13.0f ) / 3.0f + 0.35f;
+		position.z = relativeTime * 20 - 30;
 		
 		// TODO : Use kubic spline interpolation for the animation
 		
@@ -364,12 +371,30 @@ public class MailSceneObject
 		renderContext.glActiveTexture( GL10.GL_TEXTURE0 );
 		renderContext.glClientActiveTexture( GL10.GL_TEXTURE0 );
 		renderContext.glEnable( GL10.GL_TEXTURE_2D );
+		renderContext.glBindTexture( GL10.GL_TEXTURE_2D, texture[ texIndex ] );
 		renderContext.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		glBindTexture( GL10.GL_TEXTURE_2D, texture[ texIndex ] );
 		renderContext.glTexCoordPointer(2, GL10.GL_FLOAT, 0, uvCoordinates );
 		
 		renderContext.glDrawElements(GL10.GL_TRIANGLES, indices.capacity(), GL10.GL_UNSIGNED_SHORT, indices );
 		
+		renderContext.glActiveTexture( GL10.GL_TEXTURE1 );
+		renderContext.glClientActiveTexture( GL10.GL_TEXTURE1 );
+		renderContext.glEnable( GL10.GL_TEXTURE_2D );
+		renderContext.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		renderContext.glTexCoordPointer( 2, GL10.GL_FLOAT, 0, uvCoordinatesCharacter );
+		
+		renderContext.glTexEnvx( GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_BLEND );
+		
+		for ( int actCharIndex = 0; actCharIndex < characterRefs.length; actCharIndex++ )
+			characterRefs[ actCharIndex ].bindAndDraw( renderContext );
+		
+		renderContext.glTexEnvx( GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE );
+		
+		renderContext.glDisable( GL10.GL_TEXTURE_2D );
+		renderContext.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		renderContext.glActiveTexture( GL10.GL_TEXTURE0 );
+		renderContext.glClientActiveTexture( GL10.GL_TEXTURE0 );
 		renderContext.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		renderContext.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		renderContext.glDisableClientState(GL10.GL_NORMAL_ARRAY);
@@ -406,7 +431,8 @@ public class MailSceneObject
 		
 		if ( !isAlive )	return SuccessState.Loose;
 		 
-		if ( myMail.getRequiredInput().charAt( actCheckingIndex++ ) != input )	return SuccessState.Loose;
+		if ( myMail.getRequiredInput().charAt( actCheckingIndex ) != input )	return SuccessState.Loose;
+		characterRefs[ actCheckingIndex++ ].setDone();
 		if ( actCheckingIndex == myMail.getRequiredInput().length() )	return SuccessState.Win;
 		 
 		return SuccessState.Pending;

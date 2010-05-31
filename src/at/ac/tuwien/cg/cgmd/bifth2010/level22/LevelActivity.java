@@ -17,6 +17,7 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.gamelogic.GameLogic;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.SpamRenderer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level22.sound.SoundManager;;
 
 /**
  *
@@ -90,6 +91,9 @@ public class LevelActivity extends Activity {
 		
 		gameThread = new GameLogic();
 		MainThread.setVibrator( (Vibrator) getSystemService( Context.VIBRATOR_SERVICE ) );
+		
+		SoundManager.init( this );
+		SoundManager.continueMusic();
 	}
 
 	/* (non-Javadoc)
@@ -261,6 +265,7 @@ public class LevelActivity extends Activity {
 	{
 		
 		SpamRenderer.deactivate();	
+		SoundManager.uninit();
 		GameLogic.kill();
 		
 		SessionState quitState = new SessionState();

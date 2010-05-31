@@ -10,7 +10,6 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.MainThread;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.MailSceneObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.SpamRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level22.rendering.MailSceneObject.SuccessState;
 
 /**
