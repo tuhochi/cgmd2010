@@ -18,6 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 public class LevelActivity extends Activity{
 	private Display mDisplay = null;
 	private GLRenderer mRenderer = null;
+	private int mBGMusicID = 0;
 	
     /** Called when the activity is first created. */
     @Override
@@ -51,7 +52,9 @@ public class LevelActivity extends Activity{
     
     @Override
     protected void onResume() {
-    	TextureManager.getSingletonObject().initializeContext(this);	
+    	SoundHandler.setContext(this);
+    	mBGMusicID = SoundHandler.getSingleton().addSound(R.raw.l12_music);
+    	TextureManager.getSingletonObject().initializeContext(this);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass1);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass2);
     	TextureManager.getSingletonObject().add(R.drawable.l12_basic_tower);
@@ -76,13 +79,10 @@ public class LevelActivity extends Activity{
     	TextureManager.getSingletonObject().add(R.drawable.l12_bunny3_icon);	
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass);
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
-    	
-       	SoundHandler.setContext(this);
     	int fieldheight = (int)( mDisplay.getHeight() * 0.9 ) ;
     	int menuheight = mDisplay.getHeight() - fieldheight;
     	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
-    	SoundHandler.getSingleton().loadSound();
 	
  	   	GLSurfaceView glview = new GLSurfaceView(this);
  	   	if( mRenderer == null ) mRenderer = new GLRenderer();
@@ -98,7 +98,7 @@ public class LevelActivity extends Activity{
         l.addView( glview );
         
         setContentView( l );
-       
+    	SoundHandler.getSingleton().playLoop(mBGMusicID);
         super.onResume();
     }
     
@@ -106,6 +106,7 @@ public class LevelActivity extends Activity{
     @Override
     protected void onPause() {
     	GameMechanics.getSingleton().pause();
+    	SoundHandler.getSingleton().pause( mBGMusicID );
         super.onPause();
     }
     
@@ -125,6 +126,7 @@ public class LevelActivity extends Activity{
 		setResult(Activity.RESULT_OK, s.asIntent());
 		GameWorld.destroySingleton();
     	GameMechanics.destroySingleton();
+    	SoundHandler.getSingleton().stop();
 		super.finish();
 		mDisplay = null;
 	}
