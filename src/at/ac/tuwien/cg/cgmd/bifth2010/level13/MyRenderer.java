@@ -304,7 +304,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		else {
 			for(GameObject object : gameObjects) {
 				if(object instanceof PlayerObject) {
-					PlayerObject player = (PlayerObject)object;
+					player = (PlayerObject)object;
 					Vector2 currentTile = player.getCurrentTile();
 					player.updatePosition();
 					GameObject.setStartTile(currentTile);
