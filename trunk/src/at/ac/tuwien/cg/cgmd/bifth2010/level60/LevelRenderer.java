@@ -70,6 +70,8 @@ public class LevelRenderer implements Renderer {
 	private float COP_MOVEMENT_UNIT = 6.0f;
 	private int CONTROL_X;
 	private int CONTROL_Y;
+	private int makeCopsPuff = 0;
+	private int crimeCounter = 0;
 
 	private final static String BUNNY_X = "BUNNY_X";
 	private final static String BUNNY_Y = "BUNNY_Y";
@@ -81,6 +83,7 @@ public class LevelRenderer implements Renderer {
 	private final static String SCORE = "SCORE";
 	private final static String CRIME = "CRIME";
 	private final static String STARTFRAMETIME = "STARTFRAMETIME";
+	private final static String PAUSETIME = "PAUSETIME";
 	private final static int COP_SIZE = 50;
 
 	private ArrayList<Tablet> actiontextures;
@@ -88,10 +91,10 @@ public class LevelRenderer implements Renderer {
 
 	private static int levelMap[][] = {  
 		{ 3, 1, 1, 3, 1 },
-		{ 2, 0, 0, 2, 0 },
+		{ 2,20,20, 2,20 },
 		{ 3, 1, 1, 3, 1 },
-		{ 2, 8, 9, 2, 0 },
-		{ 2,10,11, 2, 0 },
+		{ 2, 8, 9, 2,20 },
+		{ 2,10,11, 2,20 },
 		{ 3, 1, 1, 3, 1 }
 	};
 
@@ -133,6 +136,7 @@ public class LevelRenderer implements Renderer {
 			put(15, "housebr");
 			put(16, "housecl");
 			put(17, "housecr");
+			put(20, "blank");
 		}
 	};
 
@@ -231,6 +235,7 @@ public class LevelRenderer implements Renderer {
 					cops.add(new Tablet(context, COP_SIZE, COP_SIZE, 0, 0, manager.getTexture("cop_front_l"), gl));
 
 				crime += keks.get(actionMap[tile_y][tile_x]);
+				crimeCounter++;
 			}
 		}
 	}
@@ -243,13 +248,17 @@ public class LevelRenderer implements Renderer {
 		float myX = 0;
 		float myY = 0;
 
-		if (y<0) {
-			bunny.changeTexture(manager.getTexture("bunny_front"));
-		} else if (y>0) {
-			bunny.changeTexture(manager.getTexture("bunny_back"));
+		if (frameCounter%10==0) {
+			if (y<0) bunny.changeTexture(manager.getTexture("bunny_front_l"));
+			else if (y>0) bunny.changeTexture(manager.getTexture("bunny_back_l"));
+
+		} else if (frameCounter%10==5) {
+			if (y<0) bunny.changeTexture(manager.getTexture("bunny_front_r"));
+			else if (y>0) bunny.changeTexture(manager.getTexture("bunny_back_r"));
 		}
 
-		if (!checkCollision(xPos,yPos,x,y) && 
+		int coll = checkCollision(xPos,yPos,x,y); 
+		if (coll == 0 && 
 				xPos+x >= 0 && yPos+y >= 0 && 
 				xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 				yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
@@ -259,41 +268,25 @@ public class LevelRenderer implements Renderer {
 		}
 		else {
 			//strafe along edges
-			if(Math.abs(y) >= Math.abs(x)) { //wants to move up or down
-				if (x > 0) { //strafe RIGHT
-					newX = BUNNY_MOVEMENT_UNIT;
-					newY = 0;
-				}
-				else { //strafe LEFT
-					newX = -BUNNY_MOVEMENT_UNIT;
-					newY = 0;
-				}
-			}
-			else { //wants to move left or right
-				if (y > 0) { //strafe UP
-					newX = 0;
-					newY = BUNNY_MOVEMENT_UNIT;
-				}
-				else { //strafe DOWN
-					newX = 0;
-					newY = -BUNNY_MOVEMENT_UNIT;
-				}
-			}
-			//strafe
-			if (!checkCollision(xPos,yPos,newX,newY) && 
-					xPos+newX >= 0 && yPos+newY >= 0 && 
-					xPos+newX <= LEVEL_WIDTH*LEVEL_TILESIZE && 
-					yPos+newY <= LEVEL_HEIGHT*LEVEL_TILESIZE) {
-				bunny.move(newX, newY);
-				myX = newX; myY = newY;
-			}
+			if (x > 0) newX = BUNNY_MOVEMENT_UNIT;
+			else if (x < 0) newX = -BUNNY_MOVEMENT_UNIT;
+			else newX = 0;
+			if (y > 0) newY = BUNNY_MOVEMENT_UNIT;
+			else if (y < 0) newY = -BUNNY_MOVEMENT_UNIT;
+			else newY = 0;
+			
+			if ((coll & 1) > 0 || (coll & 2) > 0) newX = 0;
+			if ((coll & 4) > 0 || (coll & 8) > 0) newY = 0;
+				
+			bunny.move(newX, newY);
+			myX = newX; myY = newY;
 		}
 
 		//move map
-		if (xPos*scale > screenWidth/2 && xPos < (LEVEL_WIDTH*LEVEL_TILESIZE*scale)-screenWidth/2)
+		if (xPos*scale > screenWidth/2 && xPos < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale))
 			moveMap(myX, 0);
 
-		if (yPos*scale > screenHeight/2 && yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE*scale)-screenHeight/2)
+		if (yPos*scale > screenHeight/2 && yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale))
 			moveMap(0, myY);
 	}
 
@@ -307,15 +300,14 @@ public class LevelRenderer implements Renderer {
 		float altX;
 		float altY;
 
-
-		if (!checkCollision(xPos,yPos,x,y) && 
+		int coll = checkCollision(xPos,yPos,x,y);
+		if (coll==0 && 
 				xPos+x >= 0 && yPos+y >= 0 && 
 				xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 				yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
 			cop.move(x, y);
 			cnewX = 0; cnewY = 0;
-		}
-		else {
+		} else {
 			if(Math.abs(y) >= Math.abs(x)) {
 				if (bunnyX > xPos) { //RIGHT
 					newX = COP_MOVEMENT_UNIT;
@@ -362,14 +354,14 @@ public class LevelRenderer implements Renderer {
 				altX = cnewX; altY = cnewY;
 			}
 
-			if (!checkCollision(xPos,yPos,newX,newY) && 
+			if (checkCollision(xPos,yPos,newX,newY)==0 && 
 					xPos+newX >= 0 && yPos+newY >= 0 && 
 					xPos+newX <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 					yPos+newY <= LEVEL_HEIGHT*LEVEL_TILESIZE) {
 				cop.move(newX, newY);
 				cnewX = newX; cnewY = newY;
 			}
-			else if (!checkCollision(xPos,yPos,altX,altY) && 
+			else if (checkCollision(xPos,yPos,altX,altY)==0 && 
 					xPos+altX >= 0 && yPos+altY >= 0 && 
 					xPos+altX <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 					yPos+altY <= LEVEL_HEIGHT*LEVEL_TILESIZE) {
@@ -389,55 +381,51 @@ public class LevelRenderer implements Renderer {
 		mapOffset_y -= y;
 	}
 
-	private boolean checkCollision(float xPos, float yPos, float xwise, float ywise) {
+	private int checkCollision(float xPos, float yPos, float xwise, float ywise) {
 		//find out which tile we want to go to
-		int tile1_x = 0, tile1_y = 0, tile2_x = 0, tile2_y = 0;
-
-		if (Math.abs(ywise)<Math.abs(xwise)) {
-			if (xwise > 0) {
-				tile1_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
-				tile1_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
-				tile2_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
-				tile2_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
-			} else if (xwise < 0) {
-				tile1_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
-				tile1_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
-				tile2_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
-				tile2_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
+		//ul ur ol or
+		int result = 0;
+		
+		xPos += xwise;
+		int btile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile1_y = (int)((xPos) / (float)LEVEL_TILESIZE), btile2_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), btile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), btile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile3_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE), btile4_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), btile4_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE);
+		xPos -= xwise;
+		yPos += ywise;
+		int ctile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile1_y = (int)((xPos) / (float)LEVEL_TILESIZE), ctile2_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), ctile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), ctile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile3_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE), ctile4_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), ctile4_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE);
+		xPos += xwise;
+		int dtile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile1_y = (int)((xPos) / (float)LEVEL_TILESIZE), dtile2_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), dtile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), dtile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile3_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE), dtile4_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), dtile4_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE);
+		
+		if (btile1_x < 0 || btile2_x < 0 || btile3_x < 0 || btile4_x < 0) result |= 2;
+		if (btile1_x >= LEVEL_WIDTH || btile2_x >= LEVEL_WIDTH || btile3_x >= LEVEL_WIDTH || btile4_x >= LEVEL_WIDTH) result |= 1;
+		if (ctile1_y < 0 || ctile2_y < 0 || ctile3_y < 0 || ctile4_y < 0) result |= 8;
+		if (ctile1_y >= LEVEL_HEIGHT || ctile2_y >= LEVEL_HEIGHT || ctile3_y >= LEVEL_HEIGHT || ctile4_y >= LEVEL_HEIGHT) result |= 4;
+		
+		if (result > 0) return result;
+		
+		int b1 = levelMap[btile1_y][btile1_x], b2 = levelMap[btile2_y][btile2_x], b3 = levelMap[btile3_y][btile3_x], b4 = levelMap[btile4_y][btile4_x];
+		int c1 = levelMap[ctile1_y][ctile1_x], c2 = levelMap[ctile2_y][ctile2_x], c3 = levelMap[ctile3_y][ctile3_x], c4 = levelMap[ctile4_y][ctile4_x];
+		int d1 = levelMap[dtile1_y][dtile1_x], d2 = levelMap[dtile2_y][dtile2_x], d3 = levelMap[dtile3_y][dtile3_x], d4 = levelMap[dtile4_y][dtile4_x];
+		// rechts links oben unten
+		if (d1 >= 8 || d2 >= 8 || d3 >= 8 || d4 >= 8) {
+			//only xwise
+			if (b1 >= 8 || b2 >= 8 || b3 >= 8 || b4 >= 8) {
+				if (xwise > 0) result |= 1;
+				else result |= 2;
+			}
+			//only ywise
+			if (c1 >= 8 || c2 >= 8 || c3 >= 8 || c4 >= 8) {
+				if (ywise > 0) result |= 4;
+				else result |= 8;
 			}
 		}
-		else {
-			if (ywise > 0) {
-
-				tile1_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
-				tile1_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
-				tile2_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
-				tile2_y = (int)((yPos+BUNNY_HEIGHT+ywise) / (float)LEVEL_TILESIZE);
-			} else if (ywise < 0){
-				tile1_x = (int)((xPos+BUNNY_WIDTH+xwise) / (float)LEVEL_TILESIZE);
-				tile1_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
-				tile2_x = (int)((xPos+xwise) / (float)LEVEL_TILESIZE);
-				tile2_y = (int)((yPos+ywise) / (float)LEVEL_TILESIZE);
-			}
-		}
-
-		if (tile1_x < 0 || tile1_x >= LEVEL_WIDTH ||
-				tile1_y < 0 || tile1_y >= LEVEL_HEIGHT ||
-				tile2_x < 0 || tile2_x >= LEVEL_WIDTH ||
-				tile2_y < 0 || tile2_y >= LEVEL_HEIGHT ||
-				levelMap[tile1_y][tile1_x] >= 8 || 
-				levelMap[tile1_y][tile1_x] == 0 ||
-				levelMap[tile2_y][tile2_x] >= 8 || 
-				levelMap[tile2_y][tile2_x] == 0)
-			return true;
-		return false;
+		return result;
 	}
 
 	private void bunnyWasCaught () {
-		score -= crime;
+		score -= crime*crimeCounter;
+		crimeCounter = 0;
 		crime = 0;
-		cops.clear();
 		//poff
+		makeCopsPuff = 1;
 		if (score <= 0) endGame();
 		updateScore();
 	}
@@ -522,8 +510,8 @@ public class LevelRenderer implements Renderer {
 		}
 
 		if (frameCounter%10==9) {
-			if (oldFrameTime!=0)
-				fps = 10.0f/(float)(System.currentTimeMillis()-oldFrameTime)*1000.0f;
+			if (oldFrameTime!=0) fps = 10.0f/(float)(System.currentTimeMillis()-oldFrameTime)*1000.0f;
+			else fps = 100.0f;
 			oldFrameTime = System.currentTimeMillis();
 		}
 		COP_MOVEMENT_UNIT = COP_DEFAULT_MOVEMENT_UNIT * DEFAULT_FPS/fps;
@@ -568,6 +556,7 @@ public class LevelRenderer implements Renderer {
 		Iterator<Tablet> copIt = cops.iterator();
 		while (copIt.hasNext()) {
 			Tablet currentCop = copIt.next();
+			if (makeCopsPuff != 0) currentCop.changeTexture(manager.getTexture("cloud"+makeCopsPuff));
 			handleCop(currentCop);
 
 			if(currentCop.getY() > bunny.getY())
@@ -579,11 +568,19 @@ public class LevelRenderer implements Renderer {
 		copIt = cops.iterator();
 		while (copIt.hasNext()) {
 			Tablet currentCop = copIt.next();
+			if (makeCopsPuff != 0 && frameCounter%20==0) {
+				currentCop.changeTexture(manager.getTexture("cloud"+makeCopsPuff));
+				if (makeCopsPuff < 3) makeCopsPuff++;
+			}
 			if(currentCop.getY() <= bunny.getY())
 				currentCop.draw(gl);
 		}
 
 		drawLock = false;
+		if (makeCopsPuff == 3) {
+			cops.clear();
+			makeCopsPuff = 0;
+		}
 
 		//write score
 		gold.draw(gl);
@@ -648,7 +645,7 @@ public class LevelRenderer implements Renderer {
 
 		//create all needed textures
 		this.manager = new textureManager(context, gl);
-		bunny = manager.getGameObject("bunny_front");
+		bunny = manager.getGameObject("bunny_front_l");
 
 		gold = manager.getGameObject("gold");
 		gold_000 = 1;
@@ -661,7 +658,7 @@ public class LevelRenderer implements Renderer {
 		oldFrameTime = 0;
 		startFrameTime = 0;
 		frameCounter = 0;
-		fps = DEFAULT_FPS;
+		fps = 100.0f;
 		
 		if (mSavedInstance != null && mSavedInstance.containsKey(MAP_OFFSET_X) && mSavedInstance.containsKey(MAP_OFFSET_Y) &&
 				mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y) && mSavedInstance.containsKey(COP_NUMBER) &&
@@ -670,7 +667,7 @@ public class LevelRenderer implements Renderer {
 			mapOffset_x = mSavedInstance.getFloat(MAP_OFFSET_X);
 			mapOffset_y = mSavedInstance.getFloat(MAP_OFFSET_Y);
 
-			startFrameTime = mSavedInstance.getLong(STARTFRAMETIME); 
+			startFrameTime = mSavedInstance.getLong(STARTFRAMETIME) - (System.currentTimeMillis() - mSavedInstance.getLong(PAUSETIME)); 
 				
 			Log.d("LevelRenderer", "Load mapOffsetx: " + mSavedInstance.getFloat(MAP_OFFSET_X));
 			Log.d("LevelRenderer", "Load mapOffsety: " + mSavedInstance.getFloat(MAP_OFFSET_Y));
@@ -715,6 +712,7 @@ public class LevelRenderer implements Renderer {
 		outState.putInt(CRIME, crime);
 		outState.putInt(COP_NUMBER, cops.size());
 		outState.putLong(STARTFRAMETIME, startFrameTime);
+		outState.putLong(PAUSETIME, System.currentTimeMillis());
 		
 		Iterator<Tablet> ci = cops.iterator();
 		int i=0;
