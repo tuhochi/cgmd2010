@@ -30,9 +30,17 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 	{
 		
 		super( context );
+		
+		width = 0.0f;
+		height = 0.0f;
+		fov = 30.0f;
+		np = 1.0f;
+		fp = 100.0f;
+		
 		setRenderer( this );
 		SpamRenderer.context = context;
 		SpamRenderer.activate();
+		bg = new Background();
 	}
 	@Override
 	public void onDrawFrame(GL10 arg0) 
@@ -55,6 +63,14 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 			MailSceneObject.init( arg0, context );
 			MailDataBase.displayMails( arg0 );
 			
+			glMatrixMode( GL_PROJECTION );
+			glLoadIdentity();
+			GLU.gluOrtho2D( arg0, 0, width, 0, height );
+			bg.draw( context, arg0 );
+			glLoadIdentity();
+			GLU.gluPerspective( arg0, fov, (float) width / (float) height, np, fp );
+			glMatrixMode( GL_MODELVIEW );
+			
 			arg0.glDisable( GL10.GL_TEXTURE_2D );
 		}
 	}
@@ -66,8 +82,12 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 		gl.glViewport(0, 0, width, height);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
+		this.width = width;
+		this.height = height;
 		GLU.gluPerspective( gl, 30.0f, ( float ) width / height, 1.0f, 100.0f );
 		glMatrixMode(GL_MODELVIEW);
+		
+		bg.changeSize( width, height );
 		
 		cachedRenderContext = gl;
 	}
@@ -110,4 +130,11 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 	private static GL10 cachedRenderContext;
 	private static Context context;
 	private static boolean isActive;
+	private static Background bg;
+	
+	private float width;
+	private float height;
+	private float np;
+	private float fp;
+	private float fov;
 }
