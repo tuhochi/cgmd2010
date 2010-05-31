@@ -305,7 +305,8 @@ public class LevelActivity extends Activity{
 			outState.putInt("game.police.get("+i+").currentPosX", game.police.get(i).currentPosX);
 			outState.putInt("game.police.get("+i+").currentPosY", game.police.get(i).currentPosY);
 			outState.putInt("game.police.get("+i+").moveStatus", game.police.get(i).moveStatus);
-			outState.putFloat("game.police.get("+i+").transition", game.police.get(i).transition);	
+			outState.putFloat("game.police.get("+i+").transition", game.police.get(i).transition);
+			outState.putInt("game.police.get("+i+").distanceToLastBunnyPos", game.police.get(i).distanceToLastBunnyPos);			
 		}
 
 		// Save Stashes
@@ -342,6 +343,7 @@ public class LevelActivity extends Activity{
 				);
 			game.police.get(i).moveStatus = savedInstanceState.getInt("game.police.get("+i+").moveStatus");
 			game.police.get(i).transition = savedInstanceState.getFloat("game.police.get("+i+").transition");
+			game.police.get(i).distanceToLastBunnyPos = savedInstanceState.getInt("game.police.get("+i+").distanceToLastBunnyPos");
 		}
 
 		// Restore Stashes
