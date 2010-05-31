@@ -46,7 +46,13 @@ public class Police {
 	 * Used to avoid dead-lock situations.
 	 */
 	private boolean wasStuckLastFrame;
-
+	/**
+	 * Distance to the position the bunny was last seen.
+	 * The police won't change it's move direction until this
+	 * distance is 0.
+	 */
+	public int distanceToLastBunnyPos;
+	
 	/**
 	 * Moving possibilities of the police
 	 * @author Asperger, Radax
@@ -72,6 +78,7 @@ public class Police {
 		currentPosX = x;
 		currentPosY = y;
 		
+		distanceToLastBunnyPos = 0;
 		moveStatus = MOVE_LEFT;
 		transitionTime = 0.75f;
 		transition = 0;
@@ -159,56 +166,76 @@ public class Police {
 			 * If bunny is not visible
 			 */
 			if( newMoveDir==STANDING ) {
-				ArrayList<Integer> dirs = new ArrayList<Integer>();
 				/*
-				 * If the current position the police is standing at is a blind end (or the police was stuck
-				 * couldn't move in the last frame), find all possible ways the police could move to 
+				 * We still haven't reached the place the bunny was last seen
 				 */
-				if( game.map.cells[currentPosX][currentPosY].numStreetNeighboursPolice==1 || wasStuckLastFrame )
+				if( distanceToLastBunnyPos > 0 )
 				{
-					if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice )
-						dirs.add(MOVE_RIGHT);
-					if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice )
-						dirs.add(MOVE_LEFT);
-					if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice )
-						dirs.add(MOVE_UP);
-					if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice )
-						dirs.add(MOVE_DOWN);
+					newMoveDir = moveStatus;
+					distanceToLastBunnyPos--;
 				}
 				/*
-				 * If the police isn't at a blind end, search for all possible move directions, except the one
-				 * the police came from
+				 * We have lost track of bunny: random change of direction
 				 */
-				else {
-					if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice && moveStatus!=MOVE_LEFT )
-						dirs.add(MOVE_RIGHT);
-					if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice && moveStatus!=MOVE_RIGHT )
-						dirs.add(MOVE_LEFT);
-					if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice && moveStatus!=MOVE_DOWN )
-						dirs.add(MOVE_UP);
-					if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice && moveStatus!=MOVE_UP )
-						dirs.add(MOVE_DOWN);
+				else
+				{
+					ArrayList<Integer> dirs = new ArrayList<Integer>();
+					/*
+					 * If the current position the police is standing at is a blind end (or the police was stuck
+					 * couldn't move in the last frame), find all possible ways the police could move to 
+					 */
+					if( game.map.cells[currentPosX][currentPosY].numStreetNeighboursPolice==1 || wasStuckLastFrame )
+					{
+						if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice )
+							dirs.add(MOVE_RIGHT);
+						if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice )
+							dirs.add(MOVE_LEFT);
+						if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice )
+							dirs.add(MOVE_UP);
+						if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice )
+							dirs.add(MOVE_DOWN);
+					}
+					/*
+					 * If the police isn't at a blind end, search for all possible move directions, except the one
+					 * the police came from
+					 */
+					else {
+						if( game.map.cells[currentPosX+1][currentPosY].isStreetForPolice && moveStatus!=MOVE_LEFT )
+							dirs.add(MOVE_RIGHT);
+						if( game.map.cells[currentPosX-1][currentPosY].isStreetForPolice && moveStatus!=MOVE_RIGHT )
+							dirs.add(MOVE_LEFT);
+						if( game.map.cells[currentPosX][currentPosY+1].isStreetForPolice && moveStatus!=MOVE_DOWN )
+							dirs.add(MOVE_UP);
+						if( game.map.cells[currentPosX][currentPosY-1].isStreetForPolice && moveStatus!=MOVE_UP )
+							dirs.add(MOVE_DOWN);
+					}
+		
+					/*
+					 * Select a random direction from the collected directions.
+					 * All of this directions are valid (so the next field is a street for the police).
+					 */
+					if( dirs.size()==0 ) {
+						/* do nothing */
+					}
+					else if( dirs.size()==1 ) {
+						newMoveDir = dirs.get(0);
+					}
+					else {
+						Random r = new Random();
+						newMoveDir = dirs.get(r.nextInt(dirs.size()));
+					}
 				}
-	
-				/*
-				 * Select a random direction from the collected directions.
-				 * All of this directions are valid (so the next field is a street for the police).
-				 */
-				if( dirs.size()==0 ) {
-					/* do nothing */
-				}
-				else if( dirs.size()==1 ) {
-					newMoveDir = dirs.get(0);
-				}
-				else {
-					Random r = new Random();
-					newMoveDir = dirs.get(r.nextInt(dirs.size()));
-				}
+			}
+			else
+			{
+				distanceToLastBunnyPos = Math.abs(
+					currentPosX - game.bunny.currentPosX +
+					currentPosY - game.bunny.currentPosY) -1;
 			}
 			moveStatus = newMoveDir;
 	
 			/*
-			 * If the police isn't standing
+			 * If the police isn't standing 
 			 */
 			if( newMoveDir!=STANDING ) {
 				/*
