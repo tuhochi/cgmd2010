@@ -9,4 +9,7 @@
 	Also, lasst das Shoppen beginnen!
 	</string>
 	<string name="l20_nameofthegame_full">Stufe 20</string>
+	<string name="l20_button_start_text">Start!</string>
+	<string name="l20_button_resume_text">Fortfahren!</string>
+	<string name="l20_description_text">Klick die Produkte um sie in den Einkaufswagen zu legen. Wähle eher teure statt billige Produkte.</string>
 </resources>

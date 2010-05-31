@@ -8,4 +8,7 @@
 	money by collecting the items on your shopping list. So let the shopping begin! 
 	</string>
 	<string name="l20_nameofthegame_full">Level 20</string>
+	<string name="l20_button_start_text">Start!</string>
+	<string name="l20_button_resume_text">Continue!</string>
+	<string name="l20_description_text">Click the products to put them in your shopping cart. Choose more expensive products over cheap ones. </string>
 </resources>

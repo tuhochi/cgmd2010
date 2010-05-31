@@ -22,6 +22,9 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -31,7 +34,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * @author Ferdinand Pilz
  * @author Reinhard Sprung
  */
-public class RenderView extends GLSurfaceView implements Renderer {
+public class RenderView extends GLSurfaceView implements Renderer, OnClickListener {
 	
 	/** Updates the TextViews each frame */
 	class TextViewUpdater implements Runnable{
@@ -46,10 +49,10 @@ public class RenderView extends GLSurfaceView implements Renderer {
        }
 	};
 	
-
-
-	/** The run time of the game in seconds. */
-//	protected float gameTime;
+	
+	
+	/** If the game is fully running */
+	protected boolean running;
 	
 	/** The texture collection. (The ids increase themselves) */	 
 	protected Hashtable<Integer, Integer> textures;
@@ -64,6 +67,12 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	protected TextView moneyText;
 	/** The TextView to show the time left. */
 	protected TextView timeText;
+	/** The TextView to show what to do at the beginning. */
+	protected TextView descriptionText;
+	/** The Button to start and resume the game. */
+	protected Button startButton;
+	
+
 	
 	// Textures.
 	static final int[] TEXTURE_BUNNY = {R.drawable.l20_bunny1, 
@@ -74,31 +83,16 @@ public class RenderView extends GLSurfaceView implements Renderer {
 	static final int TEXTURE_SHELF = 	R.drawable.l20_backg;
 	static final int TEXTURE_CART = 	R.drawable.l20_shopping_cart;
 	
-//	static final int[] TEXTURE_PRODUCTS = new int[]{
-//										R.drawable.l20_bananamilk,
-//										R.drawable.l20_beer,
-//										R.drawable.l20_broccoli,
-//										R.drawable.l20_cereal,
-//										R.drawable.l20_drink,
-//										R.drawable.l20_icecream,
-//										R.drawable.l20_lollipop,
-//										R.drawable.l20_penne,
-//										R.drawable.l20_pizza,
-//										R.drawable.l20_playboy,
-//										R.drawable.l20_probio,
-//										R.drawable.l20_soup,
-//										R.drawable.l20_yoghurt
-//										
-//										};
-//	
 
 	/**
 	 * @param context The render context
 	 * @param attr The attribute set
 	 */
-	public RenderView(Context context, AttributeSet attr)
-	{
-		super(context, attr);
+	public RenderView(Context context, AttributeSet attr) {
+		
+		super(context, attr);		
+
+		running = false;
 		
 		setRenderer(this); 
         setFocusable(true);
@@ -151,10 +145,10 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		if (LevelActivity.gameManager.firstRun) {
 			LevelActivity.gameManager.createEntities(gl);
-			Log.d(getClass().getSimpleName(), "RenderView created");
+//			Log.d(getClass().getSimpleName(), "RenderView created");
 		} else {
 			LevelActivity.gameManager.reCreateEntities(gl);
-			Log.d(getClass().getSimpleName(), "RenderView reCreated");
+//			Log.d(getClass().getSimpleName(), "RenderView reCreated");
 		}
 	}
 	
@@ -190,8 +184,11 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		
 		GameManager gameManager = LevelActivity.gameManager;
 		
-		// Update the GameManager first
-		gameManager.update();
+		// Render, but do not update the game when its not running
+		if (running) {
+			// Update the GameManager first
+			gameManager.update();
+		}
 		
 		//Clear Screen And Depth Buffer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -214,29 +211,49 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		// After all rendering is complete, update the UI TextViews
 		handler.post(textViewUpdater);
 	}
+	
+	
+	/**
+	 * Is called when the button is clicked. At the beginning of the game and when resuming.
+	 * @param v The View
+	 */
+	@Override
+	public void onClick(View v) {
+		descriptionText.setVisibility(GLSurfaceView.INVISIBLE);
+		startButton.setVisibility(GLSurfaceView.INVISIBLE);
+		startButton.setClickable(false);
+		running = true;
+	}
 
 	
 
-//	/* (non-Javadoc)
-//	 * @see android.opengl.GLSurfaceView#onPause()
-//	 */
-//	@Override
-//	public void onPause() {
-//		
-//		super.onPause();
-//	}
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView#onPause()
+	 */
+	@Override
+	public void onPause() {
+		
+		running = false;
+		startButton.setText(R.string.l20_button_resume_text);
+		super.onPause();
+	}
 
 
 
 	
-//	/* (non-Javadoc)
-//	 * @see android.opengl.GLSurfaceView#onResume()
-//	 */
-//	@Override
-//	public void onResume() {
-//		super.onResume();		
-//		timer.reset();
-//	}
+	/* (non-Javadoc)
+	 * @see android.opengl.GLSurfaceView#onResume()
+	 */
+	@Override
+	public void onResume() {
+
+		
+		descriptionText.setVisibility(GLSurfaceView.VISIBLE);
+		startButton.setVisibility(GLSurfaceView.VISIBLE);
+		startButton.setClickable(true);
+
+		super.onResume();
+	}
 
 
 

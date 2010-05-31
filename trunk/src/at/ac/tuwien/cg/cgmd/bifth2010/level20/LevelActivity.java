@@ -6,11 +6,17 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.opengl.GLSurfaceView;
+import android.opengl.Visibility;
+import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
@@ -28,12 +34,13 @@ public class LevelActivity extends Activity {
 	protected static GameManager gameManager;
 	
 	protected static LevelActivity instance;
-//	protected static Handler handler; 
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		super.onCreate(savedInstanceState);		
+		super.onCreate(savedInstanceState);
 		instance = this;
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  
@@ -42,30 +49,40 @@ public class LevelActivity extends Activity {
         setContentView(R.layout.l20_level);
         renderView = (RenderView)findViewById(R.id.l20_RenderView);
         
+        // INFO: Render Content has to be set outside of RenderViews Constructor or render method
         // Create text view for display of money count.
         renderView.moneyText = (TextView)findViewById(R.id.l20_MoneyText);
 		// Create text view for display of time left.		
         renderView.timeText = (TextView)findViewById(R.id.l20_TimeText);
+        
+        renderView.descriptionText = (TextView)findViewById(R.id.l20_DescriptionText);
+		
+        renderView.startButton = (Button)findViewById(R.id.l20_ButtonStart);
+        renderView.startButton.setOnClickListener(renderView);
+        renderView.startButton.setText(R.string.l20_button_start_text);
 
         gameManager = new GameManager();
 		renderView.setOnTouchListener(gameManager);
-		
-//		handler = new Handler();
-                		
+	
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());
 		
-		Log.d(getClass().getSimpleName(), "LevelActivity (re)created");
+//		Log.d(getClass().getSimpleName(), "LevelActivity (re)created");
 		
 	}
 	
-
-
+	
+	
+	/** 
+	 * Called when the activity is started. 
+	 */
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
+	protected void onStart() {
+		super.onStart();
 	}
+
+
 
 	/**
 	 * Called when the activity is paused. Should be slim, because it can be called often
@@ -85,7 +102,7 @@ public class LevelActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		gameManager.time.reset();
-		renderView.onResume();
+		renderView.onResume();		
 	}
 
 
@@ -95,7 +112,7 @@ public class LevelActivity extends Activity {
 	 */
 	@Override
 	protected void onStop() {
-		super.onStop();
+		super.onStop();		
 	}
 	
 	/**
