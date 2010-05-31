@@ -46,7 +46,7 @@ public class SoundHandler {
 	
 	
 	public void loadSound(){
-		addSound(R.raw.l12_music);
+		int backgroundmusic = addSound(R.raw.l12_music);
 		for( int i = 0; i < mSoundResources.size();  i++ ) {
 			int loadedmusic = mSP.load(mContext, mSoundResources.get(i), 1);
 			System.out.println("LOADEDMUSIC IS "+loadedmusic+" RESOURCE "+mSoundResources.get(i));
@@ -54,7 +54,7 @@ public class SoundHandler {
 		//for( int i = 0; i < mSoundResources.size();  i++ ) System.out.println( mSoundResources.get(i));
 		AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
 		mStreamVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-		mSP.play(R.raw.l12_music, mStreamVolume,mStreamVolume, 1, -1, 1.0f);	
+		mSP.play(backgroundmusic, mStreamVolume,mStreamVolume, 1, -1, 1.0f);	
 	}
 	
 	public void play( int sampleID ){
