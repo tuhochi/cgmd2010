@@ -40,7 +40,7 @@ public class MailCharacter {
 	public void bindAndDraw( GL10 renderContext )
 	{
 		
-		float color[] = { 0.7f, 0.3f, 0.8f, 1.0f };
+		float color[] = { 0.0f, 0.3f, 0.8f, 1.0f };
 		if ( pending )
 		{
 			

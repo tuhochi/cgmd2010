@@ -30,17 +30,17 @@ public class SoundManager {
 		musicProcessor.setLooping( true );
 
 		soundFXPool = new SoundPool( 2, AudioManager.STREAM_MUSIC, 100 );
-		looseSound = soundFXPool.load( myContextRef, R.raw.l33_trash, 1 );
-		winSound = soundFXPool.load( myContextRef, R.raw.l33_trash, 1 );
+		loseSound = soundFXPool.load( myContextRef, R.raw.l22_lose, 1 );
+		winSound = soundFXPool.load( myContextRef, R.raw.l22_win, 1 );
 		
 		AudioManager audioRef = (AudioManager) myContextRef.getSystemService(Context.AUDIO_SERVICE);
 		audioManVolume = (float)audioRef.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioRef.getStreamMaxVolume(AudioManager.STREAM_MUSIC); 
 	}
 	
-	public static void playLooseSound()
+	public static void playLoseSound()
 	{
 		
-		soundFXPool.play( looseSound, audioManVolume, audioManVolume, 1, 0, 1 );
+		soundFXPool.play( loseSound, audioManVolume, audioManVolume, 1, 0, 1 );
 	}
 	
 	public static void playWinSound()
@@ -76,7 +76,7 @@ public class SoundManager {
 	
 	private static Context myContextRef;
 	
-	private static int looseSound;
+	private static int loseSound;
 	private static int winSound;
 	
 	private static float audioManVolume;
