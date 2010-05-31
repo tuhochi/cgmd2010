@@ -78,7 +78,7 @@ public class Arms {
 		
 		Textures.tex.setTexture(arm_texture_id);
 		
-		
+		// left arm
 		gl.glPushMatrix();
 			gl.glTranslatef(position.x, position.y, 0.0f);
 			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
@@ -88,7 +88,7 @@ public class Arms {
 			left_arm.draw(gl);
 		gl.glPopMatrix();
 		
-		
+		// right arm
 		gl.glPushMatrix();
 			gl.glTranslatef(position.x, position.y, 0.0f);
 			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
@@ -102,6 +102,7 @@ public class Arms {
 		
 		Textures.tex.setTexture(hand_texture_id);
 		
+		// left hand
 		gl.glPushMatrix();
 			gl.glTranslatef(position.x, position.y, 0.0f);
 			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
@@ -111,7 +112,7 @@ public class Arms {
 			left_hand.draw(gl);
 		gl.glPopMatrix();
 		
-		
+		// right hand
 		gl.glPushMatrix();
 			gl.glTranslatef(position.x, position.y, 0.0f);
 			gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
