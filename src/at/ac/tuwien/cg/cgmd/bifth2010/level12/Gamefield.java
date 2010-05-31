@@ -141,10 +141,17 @@ public class Gamefield extends GLObject{
 	}
 
 
-	public boolean getOccupied(float xpos, float ypos) {
+	public boolean getOccupied(int xpos, int ypos) {
 		int f = getFieldCount( xpos, ypos );
 		if( f >= mFields.length) return true;
 		return mFields[ f ].getOccupied();
+	}
+
+
+	public void setFieldUnOccupied(int xpos, int ypos) {
+		int f = getFieldCount( xpos, ypos );
+		if( f >= mFields.length) return;
+		mFields[ f ].setOccupied( false );
 	}
 	
 }

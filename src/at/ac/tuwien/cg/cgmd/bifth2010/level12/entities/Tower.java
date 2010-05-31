@@ -131,9 +131,6 @@ public abstract class Tower extends GLObject {
 				mProjectiles[i].reset();
 			}
 		}
-		if( carrier.getX() <= this.getX() ){
-			this.reset();
-		}
 	}
 	
 	
@@ -141,9 +138,13 @@ public abstract class Tower extends GLObject {
 		this.setActiveState(false);
 	}
 	
-	@Override
-	public int getX(){
+
+	public int getFrontX(){
 		return mX + mRadius;
+	}
+	
+	public int getBackX(){
+		return mX - mRadius;
 	}
 	
 	public short getPrice(){
