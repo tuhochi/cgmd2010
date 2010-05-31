@@ -23,6 +23,7 @@ public abstract class Tower extends GLObject {
 	protected int mScreenWidth = 800;
 	protected short mDmg = 10;
 	protected int mSound = R.raw.l12_basic_tower_shooting_sound;
+	protected int mSoundSampleID = 1;
 	protected short mPrice = Definitions.BASIC_TOWER_IRON_NEED;
 	
 	
@@ -100,9 +101,9 @@ public abstract class Tower extends GLObject {
 					if( mProjectiles[i].getActiveState() == false ){
 						found = true;
 						mProjectiles[i].setActiveState( true );
-						mProjectiles[i].setXY( this.getX(), mY);
+						mProjectiles[i].setXY( this.getFrontX(), mY);
 						mTimeLastProjectileShot = System.currentTimeMillis();
-						SoundHandler.play(mSound);
+						SoundHandler.getSingleton().play(mSoundSampleID);
 						break;
 					}
 				}

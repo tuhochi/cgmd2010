@@ -77,11 +77,12 @@ public class LevelActivity extends Activity{
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass);
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
     	
+       	SoundHandler.setContext(this);
     	int fieldheight = (int)( mDisplay.getHeight() * 0.9 ) ;
     	int menuheight = mDisplay.getHeight() - fieldheight;
     	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
-    	SoundHandler.loadSound(this);
+    	SoundHandler.getSingleton().loadSound();
 	
  	   	GLSurfaceView glview = new GLSurfaceView(this);
  	   	if( mRenderer == null ) mRenderer = new GLRenderer();
