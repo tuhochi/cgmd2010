@@ -111,6 +111,7 @@ public class MailSceneObject
 		float[] uvCoordsCharacter = new float[ subDivisionCount * verResolution * 2 + 2 ];
 		
 		float horSize = ( float ) characterRefs.length / 5.0f;
+		pullPositionRadius =  horSize * 1.5f;
 		
 		for ( int subDivIndexVer = 0; subDivIndexVer < verResolution; subDivIndexVer++ )
 		{
@@ -126,7 +127,7 @@ public class MailSceneObject
 				
 				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 ] = 0;
 				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 1 ] = 0;
-				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 2 ] = - 1.0f;
+				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 2 ] = 1.0f;
 				
 				uvCoords[ subDivIndexVer * subDivisionCount * 2 + subDivIndexHor * 2 ] = 
 					( float ) subDivIndexHor / ( float ) ( subDivisionCount - 1 );
@@ -141,7 +142,7 @@ public class MailSceneObject
 		
 		vertexNorm[ subDivisionCount * verResolution * 3 ] = 0;
 		vertexNorm[ subDivisionCount * verResolution * 3 + 1 ] = 0;
-		vertexNorm[ subDivisionCount * verResolution * 3 + 2 ] = -1.0f;
+		vertexNorm[ subDivisionCount * verResolution * 3 + 2 ] = 1.0f;
 		
 		uvCoords[ subDivisionCount * verResolution * 2 ] = 0.5f;
 		uvCoords[ subDivisionCount * verResolution * 2 + 1 ] = 0.0f;
@@ -366,6 +367,10 @@ public class MailSceneObject
 		
 		renderContext.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		renderContext.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+		
+		float colors[] = { 1, 1, 1, 1 };
+		renderContext.glMaterialfv( GL10.GL_FRONT_AND_BACK, GL_DIFFUSE, colors, 0 );
+		renderContext.glMaterialfv( GL10.GL_FRONT_AND_BACK, GL_SPECULAR, colors, 0 );
 
 		renderContext.glFrontFace(GL10.GL_CCW );
 		
@@ -545,6 +550,9 @@ public class MailSceneObject
 	private boolean isAlive;
 	private short actCheckingIndex;
 	private int texIndex;
+	private float pullPositionRadius;
+	private Vector3f previousPullPos;
+	private Vector3f actPullPos;
 	
 	public static long animationTime;
 	private static int texture[];
