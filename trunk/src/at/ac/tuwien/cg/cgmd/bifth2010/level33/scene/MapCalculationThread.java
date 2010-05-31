@@ -31,12 +31,13 @@ public class MapCalculationThread extends Thread {
 	private LevelHandler level = null;
 	
 	public static boolean isThreadReady = false;
-	private boolean done = false;
+	private boolean done = true;
 	
 	public MapCalculationThread(LevelHandler level, int columnsRows){
 		this.level = level;
 		this.columns = columnsRows;
 		this.rows = columnsRows;
+		done = false;
 		
 	}
 	
@@ -99,7 +100,7 @@ public class MapCalculationThread extends Thread {
 	 */
 	private void addCornerArrows(){
 		
-		newArrowOrder = new int[arrowOrder.length][2];
+		newArrowOrder = new int[arrowOrder.length-1][2];
 		for(int i=0;i<arrowOrder.length && i+1<arrowOrder.length;i++)
 		{
 			if(i==0)
@@ -199,6 +200,13 @@ public class MapCalculationThread extends Thread {
 		isThreadReady=false;
 		return newArrowOrder;
 		//return arrowOrder;
+	}
+	
+	/**
+	 * Terminates the actually thread.
+	 */
+	public void terminateThread(){
+		done=true;
 	}
 	
 	

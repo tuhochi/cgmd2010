@@ -162,6 +162,8 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		
 		Log.w("onDestroy", "ok");
 		// stop mapCalculationThread if running
+		if(LevelHandler.mapCalculationThread!=null)
+			LevelHandler.mapCalculationThread.terminateThread();
 //		if(LevelHandler.mapCalculationThread!=null)
 //			LevelHandler.mapCalculationThread.suspend();
 		
