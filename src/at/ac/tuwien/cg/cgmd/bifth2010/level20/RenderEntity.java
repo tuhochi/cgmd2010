@@ -65,6 +65,13 @@ public class RenderEntity extends GameEntity implements Renderable {
 		textureBuffer.position(0);
 	}
 	
+	/**
+	 * This Constructor is just for Shelf
+	 */
+	protected RenderEntity() {
+		super();
+	}
+	
 	@Override
 	public void render(GL10 gl) {
 		

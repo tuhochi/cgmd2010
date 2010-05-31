@@ -31,12 +31,15 @@ public class GameManager implements EventListener, OnTouchListener {
 	
 	/** @see at.ac.tuwien.cg.cgmd.bifth2010.level20.TimeUtil */
 	protected TimeUtil time;
-	
-	/** The animator collection */
-	protected Hashtable<Integer, Animator> animators;
 
 	/** The background Shelf of the game */		 
 	protected Shelf shelf;
+	
+	/** Manages products and interactions */		 
+	protected ProductManager productManager;
+	
+	/** The animator collection */
+	protected Hashtable<Integer, Animator> animators;
 	
 	/** The moving speed of the background and the products */ 
 	protected float scrollSpeed;
@@ -45,10 +48,7 @@ public class GameManager implements EventListener, OnTouchListener {
 	protected float totalMoney;
 	
 	/** The time left in the game */
-	protected float remainingTime;
-	/** The initial time left at the beginning of the level */ // We need to store both of them because of the TimeUtil class - or do we?
-	protected float levelTime;
-	protected float remainingTime2; //TODO: No we don't. probably change it
+	protected float remainingTime;	
 	
 	
 	protected ShoppingCart shoppingCart;
@@ -75,19 +75,20 @@ public class GameManager implements EventListener, OnTouchListener {
 		activity = LevelActivity.instance;
 		renderView = LevelActivity.renderView;
 		
-		time = TimeUtil.instance;		
+		time = TimeUtil.instance;
 		
-		animators = new Hashtable<Integer, Animator>();		
+		productManager = new ProductManager();	
+		
+		animators = new Hashtable<Integer, Animator>();
+		
 		EventManager.getInstance().addListener(this);		
 		
 		// Pixel per second
 		scrollSpeed = activity.getResources().getInteger(R.integer.l20_scroll_speed) * 0.001f;
 		
 		// Time in milliseconds
-		levelTime = activity.getResources().getInteger(R.integer.l20_level_time) * 1000;
-		remainingTime = levelTime;
+		remainingTime = activity.getResources().getInteger(R.integer.l20_level_time) * 1000;
 		totalMoney = 100;
-		remainingTime2 = remainingTime;
 
 		touchDown = false;
 		touchX = 0;
@@ -105,21 +106,24 @@ public class GameManager implements EventListener, OnTouchListener {
 		
 		// Create background shelf.
 		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
-		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);			
+		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);		
 
-		// Preload textures
+		// Preload product textures
 		for (int i = 0; i < ProductInfo.length; i++) {
 			renderView.getTexture(ProductInfo.texture(i), gl);
 		}
 		
+		// This is the default for a screen height of 480px. 
+		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
+		shoppingCartSize *= renderView.getHeight() / 480.0f;
+			
 		// Create shopping cart.
-		shoppingCart = new ShoppingCart(125, 60, 2, 200, 110);
+		shoppingCart = new ShoppingCart(200, 100, 2, shoppingCartSize, shoppingCartSize);
 		shoppingCart.texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
 		
 		// Create bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
-		for (int i = 0; i < RenderView.TEXTURE_BUNNY.length; i++)
-		{
+		for (int i = 0; i < RenderView.TEXTURE_BUNNY.length; i++) {
 			bunnySequence[i] = renderView.getTexture(RenderView.TEXTURE_BUNNY[i], gl);
 		}
 				
@@ -148,10 +152,10 @@ public class GameManager implements EventListener, OnTouchListener {
 		}	
 		
 		// Assign each product the same texture again
-		Enumeration<Integer> keys = shelf.products.keys();		
+		Enumeration<Integer> keys = productManager.products.keys();		
 		while(keys.hasMoreElements()) {
 			
-			ProductEntity pe = shelf.products.get(keys.nextElement());
+			ProductEntity pe = productManager.products.get(keys.nextElement());
 			pe.texture = renderView.getTexture(ProductInfo.texture(pe.type), gl);
 			
 		}
@@ -178,7 +182,8 @@ public class GameManager implements EventListener, OnTouchListener {
 		// Advance in time
 		time.update();
 		
-		remainingTime = levelTime - time.getTotalTime();
+		float dt = time.getDt();
+		remainingTime -= dt;
 		
 		// End the game if the time's up
 		if (remainingTime <= 0) {			
@@ -186,11 +191,10 @@ public class GameManager implements EventListener, OnTouchListener {
 			return;
 		}
 		
-		float dt = time.getDt();
-		remainingTime2 -= dt;
 		
-		// Difference in x since last frame 
-		shelf.update(scrollSpeed * dt);
+		
+		// Difference in movement since last frame 
+		productManager.update(scrollSpeed * dt);
 		bunny.update(dt);
 		
 		// Update all Animators
@@ -229,7 +233,7 @@ public class GameManager implements EventListener, OnTouchListener {
         
 		// Forward the event if there is a touchDown, so we don't miss very short touches. (Useful on the emulator where fps are very low)
         if (touchDown) {        	
-    		shelf.touchEvent(touchX, touchY);
+    		productManager.touchEvent(touchX, touchY);
         }
 		
 		// Sleep the thread, so that it doesn't fire too many events
