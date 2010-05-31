@@ -48,11 +48,11 @@ public class Tablet {
 	public static final int INTENDED_RES_X = 480;
 	public static final int INTENDED_RES_Y = 320;
 	
-	public Tablet(Context context, int width, int height, int x, int y, int texture, GL10 gl) {
+	public Tablet(Context context, int width, int height, float x, float y, int texture, GL10 gl) {
 		this(context, width, height, x, y, texture, false, gl);
 	}
 	
-	public Tablet(Context context, int width, int height, int x, int y, int texture, boolean sticky, GL10 gl) {
+	public Tablet(Context context, int width, int height, float x, float y, int texture, boolean sticky, GL10 gl) {
 		this.context = context;
 		this.sticky = sticky;
 		

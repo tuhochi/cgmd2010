@@ -23,6 +23,19 @@ public class LevelRenderer implements Renderer {
 	private Bundle mSavedInstance;
 	private GL10 gl;
 
+	private final float BUNNY_DEFAULT_MOVEMENT_UNIT = 6.0f;
+	private final float COP_DEFAULT_MOVEMENT_UNIT = 4.0f;
+	private final float DEFAULT_FPS = 12.0f;
+	private final static int BUNNY_WIDTH = 55;
+	private final static int BUNNY_HEIGHT = 60;
+	private final static int LEVEL_WIDTH = 5;
+	private final static int LEVEL_HEIGHT = 6;
+	private final static int LEVEL_TILESIZE = 100;
+	private final static int ACTION_WIDTH = 5;
+	private final static int ACTION_HEIGHT = 6;
+	private final static int ACTION_TILESIZE = 100;
+	public final static int CONTROL_SIZE = 150;
+	
 	private boolean drawLock = false;
 	private float[] keystates = new float[4];
 	private int score = 100;
@@ -33,14 +46,13 @@ public class LevelRenderer implements Renderer {
 	private long oldFrameTime = 0;
 	private long startFrameTime = 0;
 	private int frameCounter = 0;
-	private float fps = 20.0f;
+	private float fps = DEFAULT_FPS;
 	private float scale = 1.0f;
 
 	private LevelSurfaceView glv;
 	private textureManager manager;
-	private ArrayList<Cop> cops;
+	private ArrayList<Tablet> cops;
 	private Tablet bunny;
-	private Tablet cop;
 	private Tablet gold;
 	private Tablet control;
 	private int gold_000;
@@ -53,33 +65,23 @@ public class LevelRenderer implements Renderer {
 	private float mapOffset_y;
 	private float cnewX = 0;
 	private float cnewY = 0;
-
-	private final static int BUNNY_WIDTH = 55;
-	private final static int BUNNY_HEIGHT = 60;
-	private final static int LEVEL_WIDTH = 5;
-	private final static int LEVEL_HEIGHT = 6;
-	private final static int LEVEL_TILESIZE = 100;
-	private final static int ACTION_WIDTH = 5;
-	private final static int ACTION_HEIGHT = 6;
-	private final static int ACTION_TILESIZE = 100;
-	public final static int CONTROL_SIZE = 150;
-
+	
 	private float BUNNY_MOVEMENT_UNIT = 9.0f; 
 	private float COP_MOVEMENT_UNIT = 6.0f;
-	private final float BUNNY_DEFAULT_MOVEMENT_UNIT = 6.0f;
-	private final float COP_DEFAULT_MOVEMENT_UNIT = 4.0f;
-	private final float DEFAULT_FPS = 12.0f;
 	private int CONTROL_X;
 	private int CONTROL_Y;
 
 	private final static String BUNNY_X = "BUNNY_X";
 	private final static String BUNNY_Y = "BUNNY_Y";
+	private final static String COP_NUMBER = "COP_NUMBER";
 	private final static String COP_X = "COP_X";
 	private final static String COP_Y = "COP_Y";
 	private final static String MAP_OFFSET_X = "MAP_OFFSET_X";
 	private final static String MAP_OFFSET_Y = "MAP_OFFSET_Y";
 	private final static String SCORE = "SCORE";
 	private final static String CRIME = "CRIME";
+	private final static String STARTFRAMETIME = "STARTFRAMETIME";
+	private final static int COP_SIZE = 50;
 
 	private ArrayList<Tablet> actiontextures;
 
@@ -157,7 +159,7 @@ public class LevelRenderer implements Renderer {
 		mSavedInstance = msavedinstance;
 		for (int i=0;i<4;i++) keystates[i] = 0;
 		actiontextures = new ArrayList<Tablet>();
-		cops = new ArrayList<Cop>();
+		cops = new ArrayList<Tablet>();
 	}
 
 	public void setKey (int code, float amount) {
@@ -212,7 +214,7 @@ public class LevelRenderer implements Renderer {
 
 		while(it.hasNext()) {
 			Tablet t = it.next();
-			if (Math.abs(t.getX() - xPos) < ACTION_TILESIZE && Math.abs(t.getY() - yPos) < ACTION_TILESIZE) proximity = true; 
+			if (Math.abs(t.getX() - xPos) < ACTION_TILESIZE/2 && Math.abs(t.getY() - yPos) < ACTION_TILESIZE/2) proximity = true; 
 		}
 
 		if (!proximity && !drawLock) {
@@ -226,7 +228,7 @@ public class LevelRenderer implements Renderer {
 
 			if (acted) {	
 				if (copCounter == 0 || Math.ceil(crime/20)>copCounter)
-					cops.add(new Cop(0,0,context,gl,manager));
+					cops.add(new Tablet(context, COP_SIZE, COP_SIZE, 0, 0, manager.getTexture("cop_front_l"), gl));
 
 				crime += keks.get(actionMap[tile_y][tile_x]);
 			}
@@ -241,19 +243,11 @@ public class LevelRenderer implements Renderer {
 		float myX = 0;
 		float myY = 0;
 
-//		if (frameCounter%10==0) {
 		if (y<0) {
 			bunny.changeTexture(manager.getTexture("bunny_front"));
 		} else if (y>0) {
 			bunny.changeTexture(manager.getTexture("bunny_back"));
 		}
-//		} else if (frameCounter%10==5) {
-//		if (y<0) {
-//		bunny.changeTexture(manager.getTexture("cop_front_r"));
-//		} else {
-//		bunny.changeTexture(manager.getTexture("cop_back_r"));
-//		}
-//		}
 
 		if (!checkCollision(xPos,yPos,x,y) && 
 				xPos+x >= 0 && yPos+y >= 0 && 
@@ -303,7 +297,7 @@ public class LevelRenderer implements Renderer {
 			moveMap(0, myY);
 	}
 
-	private void moveCop(float x, float y, Cop cop) {
+	private void moveCop(float x, float y, Tablet cop) {
 		float xPos = cop.getX();
 		float yPos = cop.getY();
 		float bunnyX = bunny.getX();
@@ -448,7 +442,7 @@ public class LevelRenderer implements Renderer {
 		updateScore();
 	}
 
-	private void handleCop(Cop cop) {
+	private void handleCop(Tablet cop) {
 		if (crime > 0) {
 			float bx = bunny.getX();
 			float by = bunny.getY();
@@ -520,7 +514,7 @@ public class LevelRenderer implements Renderer {
 		if (currentTime < 60) {
 			minutes = 1;
 			seconds = 59 - currentTime;
-		} else if (currentTime < 120) {
+		} else if (currentTime < 119) {
 			minutes = 0;
 			seconds = 120 - currentTime;
 		} else {
@@ -571,10 +565,9 @@ public class LevelRenderer implements Renderer {
 		}
 
 		// render
-		Iterator<Cop> copIt = cops.iterator();
-		Cop currentCop;
+		Iterator<Tablet> copIt = cops.iterator();
 		while (copIt.hasNext()) {
-			currentCop = copIt.next();
+			Tablet currentCop = copIt.next();
 			handleCop(currentCop);
 
 			if(currentCop.getY() > bunny.getY())
@@ -585,7 +578,7 @@ public class LevelRenderer implements Renderer {
 
 		copIt = cops.iterator();
 		while (copIt.hasNext()) {
-			currentCop = copIt.next();
+			Tablet currentCop = copIt.next();
 			if(currentCop.getY() <= bunny.getY())
 				currentCop.draw(gl);
 		}
@@ -656,7 +649,6 @@ public class LevelRenderer implements Renderer {
 		//create all needed textures
 		this.manager = new textureManager(context, gl);
 		bunny = manager.getGameObject("bunny_front");
-		cop = manager.getGameObject("cop_front_r");
 
 		gold = manager.getGameObject("gold");
 		gold_000 = 1;
@@ -665,42 +657,46 @@ public class LevelRenderer implements Renderer {
 
 		control = manager.getGameObject("control");
 		//button = manager.getGameObject("button");
-
-		if(mSavedInstance != null)
+		
+		oldFrameTime = 0;
+		startFrameTime = 0;
+		frameCounter = 0;
+		fps = DEFAULT_FPS;
+		
+		if (mSavedInstance != null && mSavedInstance.containsKey(MAP_OFFSET_X) && mSavedInstance.containsKey(MAP_OFFSET_Y) &&
+				mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y) && mSavedInstance.containsKey(COP_NUMBER) &&
+				mSavedInstance.containsKey(SCORE) && mSavedInstance.containsKey(CRIME) && mSavedInstance.containsKey(STARTFRAMETIME))
 		{
-			if(mSavedInstance.containsKey(MAP_OFFSET_X) && mSavedInstance.containsKey(MAP_OFFSET_Y)) {
-				mapOffset_x = mSavedInstance.getFloat(MAP_OFFSET_X);
-				mapOffset_y = mSavedInstance.getFloat(MAP_OFFSET_Y);
+			mapOffset_x = mSavedInstance.getFloat(MAP_OFFSET_X);
+			mapOffset_y = mSavedInstance.getFloat(MAP_OFFSET_Y);
 
-				Log.d("LevelRenderer", "Load mapOffsetx: " + mSavedInstance.getFloat(MAP_OFFSET_X));
-				Log.d("LevelRenderer", "Load mapOffsety: " + mSavedInstance.getFloat(MAP_OFFSET_Y));
+			startFrameTime = mSavedInstance.getLong(STARTFRAMETIME); 
+				
+			Log.d("LevelRenderer", "Load mapOffsetx: " + mSavedInstance.getFloat(MAP_OFFSET_X));
+			Log.d("LevelRenderer", "Load mapOffsety: " + mSavedInstance.getFloat(MAP_OFFSET_Y));
 
-				Tablet.setMapOffset(mapOffset_x, mapOffset_y);
-			}
-			if(mSavedInstance.containsKey(BUNNY_X) && mSavedInstance.containsKey(BUNNY_Y) &&
-					mSavedInstance.containsKey(COP_X) && mSavedInstance.containsKey(COP_Y)) {
-				bunny.setXY(mSavedInstance.getFloat(BUNNY_X), mSavedInstance.getFloat(BUNNY_Y));
-				cop.setXY(mSavedInstance.getFloat(COP_X), mSavedInstance.getFloat(COP_Y));
+			Tablet.setMapOffset(mapOffset_x, mapOffset_y);
+						
+			bunny.setXY(mSavedInstance.getFloat(BUNNY_X), mSavedInstance.getFloat(BUNNY_Y));
+			copCounter = mSavedInstance.getInt(COP_NUMBER);
+			
+			for (int i=0;i<copCounter;i++)
+				cops.add(new Tablet(context, COP_SIZE, COP_SIZE, mSavedInstance.getFloat(COP_X + i), mSavedInstance.getFloat(COP_Y + i), manager.getTexture("cop_front_l"), gl));
 
-				Log.d("LevelRenderer", "Load bunny pos: x " + mSavedInstance.getFloat(BUNNY_X) + " y " + mSavedInstance.getFloat(BUNNY_Y));
-				Log.d("LevelRenderer", "Load cop pos: x " + mSavedInstance.getFloat(COP_X) + " y " + mSavedInstance.getFloat(COP_Y));
-			}
-			if(mSavedInstance.containsKey(SCORE) && mSavedInstance.containsKey(CRIME))
-			{
-				score = mSavedInstance.getInt(SCORE);
-				crime = mSavedInstance.getInt(CRIME);
+			Log.d("LevelRenderer", "Load bunny pos: x " + mSavedInstance.getFloat(BUNNY_X) + " y " + mSavedInstance.getFloat(BUNNY_Y));
+			Log.d("LevelRenderer", "Load cop pos: x " + mSavedInstance.getFloat(COP_X) + " y " + mSavedInstance.getFloat(COP_Y));
+		
+			score = mSavedInstance.getInt(SCORE);
+			crime = mSavedInstance.getInt(CRIME);
 
-				Log.d("LevelRenderer", "Load score: " + score);
-				Log.d("LevelRenderer", "Load crime: " + crime);
-			}
+			Log.d("LevelRenderer", "Load score: " + score);
+			Log.d("LevelRenderer", "Load crime: " + crime);
+		
 			updateScore();
-			//moveScore(mapOffset_x, mapOffset_y);
-		}
-		else {
+		} else {
 			score = 100;
 			mapOffset_x = mapOffset_y = 0;
 			bunny.setXY(100, 20);
-			cop.setXY(20, 30);
 			Tablet.setMapOffset(mapOffset_x, mapOffset_y);
 		}
 	}
@@ -713,15 +709,23 @@ public class LevelRenderer implements Renderer {
 		mSavedInstance = outState;
 		outState.putFloat(BUNNY_Y, bunny.getY());
 		outState.putFloat(BUNNY_X, bunny.getX());
-		outState.putFloat(COP_Y, cop.getY());
-		outState.putFloat(COP_X, cop.getX());
 		outState.putFloat(MAP_OFFSET_X, mapOffset_x);
 		outState.putFloat(MAP_OFFSET_Y, mapOffset_y);
 		outState.putInt(SCORE, score);
 		outState.putInt(CRIME, crime);
+		outState.putInt(COP_NUMBER, cops.size());
+		outState.putLong(STARTFRAMETIME, startFrameTime);
+		
+		Iterator<Tablet> ci = cops.iterator();
+		int i=0;
+		while (ci.hasNext()) {
+			Tablet c = ci.next();
+			outState.putFloat(COP_X + i, c.getX());
+			outState.putFloat(COP_Y + i, c.getY());
+			i++;
+		}
 
 		Log.d("LevelRenderer", "Save bunny pos: x " + bunny.getX() + " y " + bunny.getY());
-		Log.d("LevelRenderer", "Save cop pos: x " + cop.getX() + " y " + cop.getY());
 		Log.d("LevelRenderer", "Save mapOffsetx: " + (mapOffset_x));
 		Log.d("LevelRenderer", "Save mapOffsety: " + (mapOffset_y));
 		Log.d("LevelRenderer", "Save score: " + score);
