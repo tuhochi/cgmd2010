@@ -61,7 +61,7 @@ public class Level extends Thread {
 		this._isActive = true;
 		this._isStarted = false;
 		
-		this.maxPlayTime = 60;
+		this.maxPlayTime = 120;
 		timing = new Timing();
 		timing.start();
 		timing.pause();
@@ -81,7 +81,7 @@ public class Level extends Thread {
 		
 		this.initTextures();
 		
-		this.generatePedestrians(5, 40);
+		this.generatePedestrians(10, 40);
 		//this.addTreasure(new Treasure(10.0f, 200.0f, new Vector2(200.0f, 200.0f)));
 		
 		background = new Square();
@@ -178,6 +178,8 @@ public class Level extends Thread {
 		for (int i=0; i < pedestrianList.size(); i++) {
 			Pedestrian pedestrian = pedestrianList.get(i);
 			//check if it is in bounding box
+			System.out.println("start: "+x1+"; "+y1+"; end: "+x2+"; "+y2);
+			System.out.println("ped: "+pedestrian.getPosition().toString());
 			if(pedestrian.getPosition().x > Math.min(x1, x2)-pedestrian.getBounceRadius()&&
 			   pedestrian.getPosition().x < Math.max(x1, x2)+pedestrian.getBounceRadius()&&
 			   pedestrian.getPosition().y > Math.min(y1, y2)-pedestrian.getBounceRadius()&&
@@ -189,7 +191,7 @@ public class Level extends Thread {
 				//				Math.sqrt(a*a+b*b));
 				//System.out.println("distance: "+dist);
 				//if(pedestrian.getBounceRadius() > dist){
-					//System.out.println("hit pedestrian");
+					System.out.println("hit pedestrian");
 					pedestrian.bounce(x1, y1, x2, y2, time);
 				//}
 			}
