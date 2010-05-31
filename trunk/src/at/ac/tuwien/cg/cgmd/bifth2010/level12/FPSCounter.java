@@ -4,6 +4,7 @@ public class FPSCounter {
 	private int mFPSLastSecond = 0;
 	private int mFPSnow = 0;
 	private long mTimeStarted = 0;
+	long dt;
 	
 	private static FPSCounter mSingleton = null;
 	
@@ -18,7 +19,7 @@ public class FPSCounter {
 	
 	public void addFrame(){	
 		mFPSnow++;
-		long dt = System.currentTimeMillis() - mTimeStarted;
+		dt = System.currentTimeMillis() - mTimeStarted;
 		if( dt >= 1000 ){
 			mFPSLastSecond = mFPSnow;
 			mFPSnow = 0;

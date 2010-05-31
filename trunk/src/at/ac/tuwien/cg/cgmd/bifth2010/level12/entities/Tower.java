@@ -25,8 +25,8 @@ public abstract class Tower extends GLObject {
 	protected int mSound = R.raw.l12_basic_tower_shooting_sound;
 	protected int mSoundSampleID = 1;
 	protected short mPrice = Definitions.BASIC_TOWER_IRON_NEED;
-	
-	
+	long dt;
+	boolean found;
 	
 	public void setXY( int xCentr, int yCentr ){
 		mX = xCentr;
@@ -87,16 +87,15 @@ public abstract class Tower extends GLObject {
 	}
 	
 	
-	
 	@Override
 	public void draw( GL10 gl ){	
 		//pause
 		if( GameMechanics.getSingleton().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
 		if( this.getActiveState() == false ) return;
-		long dt =(System.currentTimeMillis() - mTimeLastProjectileShot );
+		dt =(System.currentTimeMillis() - mTimeLastProjectileShot );
 		if( dt >= mShootingInterval ){
 			if( mProjectiles != null ){
-				boolean found = false;
+				found = false;
 				for ( int  i = 0; i < mProjectiles.length && !found; i++){
 					if( mProjectiles[i].getActiveState() == false ){
 						found = true;
@@ -110,17 +109,18 @@ public abstract class Tower extends GLObject {
 			}
 		}
 		for( int i = 0; i < mProjectiles.length; i++){
-			if( mProjectiles[i].getActiveState() && ( mProjectiles[i].getX() >= mScreenWidth )){
+
+			//all active sollen gezeichnet werden
+			if(mProjectiles[i].getActiveState() == true) {
+				mProjectiles[i].draw(gl);
+				//reset projectile when it leaves the screen
+				if(  mProjectiles[i].getX() >= mScreenWidth ){
 					mProjectiles[i].reset();
+				}
 			}
 		}
 		
-		//all active sollen gezeichnet werden
-		for( int  i = 0; i < mProjectiles.length; i++){
-			if(mProjectiles[i].getActiveState() == true) {
-				mProjectiles[i].draw(gl);
-			}
-		}
+
 		TextureManager.getSingletonObject().setTexture( mTexture );
 		super.draw(gl);
 	}

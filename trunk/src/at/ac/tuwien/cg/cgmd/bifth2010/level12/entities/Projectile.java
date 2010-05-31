@@ -19,7 +19,9 @@ public abstract class Projectile extends GLObject{
 	protected short mSpeed = 5;
 	protected short mDmg = 10;
 	protected int mTexture = R.drawable.l12_basic_projectile;
-	
+	long ms;
+	double dt;
+	int distance;
 	
 	public float getSpeed(){
 		return mSpeed;
@@ -79,12 +81,12 @@ public abstract class Projectile extends GLObject{
 	@Override
 	public void draw( GL10 gl ){
 		TextureManager.getSingletonObject().setTexture( mTexture );
-		long ms = System.currentTimeMillis();
-		double dt = (ms - mLastFrametime) * 0.001;
+		ms = System.currentTimeMillis();
+		dt = (ms - mLastFrametime) * 0.001;
 		//pause
 		if( GameMechanics.getSingleton().running() == false ) dt = 0;		
 		mLastFrametime = ms;
-		int distance = (int)(this.getSpeed() * dt);
+		distance = (int)(this.getSpeed() * dt);
 		mXTranslate += distance;		
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
