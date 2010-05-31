@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/l55_FrameLayout" android:background="@color/l55_Background"><ImageView android:id="@+id/ImageView01" android:src="@drawable/l00_coin" android:scaleType="fitXY" android:paddingLeft="2pt" android:layout_width="8pt" android:paddingTop="3pt" android:layout_height="9pt"></ImageView><ImageView android:id="@+id/ImageView01" android:scaleType="fitXY" android:src="@drawable/l55_time" android:layout_gravity="right" android:paddingRight="18pt" android:layout_width="24pt" android:layout_height="9pt" android:paddingTop="3pt"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l55_TextCash" android:textColor="@color/l55_UIPointsColor" android:paddingTop="2pt" android:textSize="6pt" android:text="54654" android:paddingLeft="10pt"></TextView>
+<TextView android:layout_height="wrap_content" android:id="@+id/l55_TextTime" android:textColor="@color/l55_UITimeColor" android:paddingTop="2pt" android:layout_width="wrap_content" android:layout_gravity="right" android:paddingRight="5pt" android:textSize="6pt" android:text="1:23"></TextView>
+
+</FrameLayout>

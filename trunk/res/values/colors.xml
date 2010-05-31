@@ -2,4 +2,7 @@
 <resources>
 <color name="l00_buttonBackground">#221100</color>
 <color name="l55_HelpTextColor">#000000</color>
+<color name="l55_UITimeColor">#000000</color>
+<color name="l55_UIPointsColor">#000000</color>
+<color name="l55_Background">#A1BDF6</color>
 </resources>

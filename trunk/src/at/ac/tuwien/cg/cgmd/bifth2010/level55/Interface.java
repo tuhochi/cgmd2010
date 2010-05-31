@@ -39,7 +39,7 @@ public class Interface {
 		rightFieldTex.create(R.drawable.l55_rightfield);
 		
 		jumpQuad=new Quad();
-		jumpQuad.init(gl, 0.0f,0.0f,fieldSize,fieldSize);
+		jumpQuad.init(gl, 0.0f,0.0f,fieldSize*2.25f,fieldSize*0.5f);
 		
 		leftQuad=new Quad();
 		leftQuad.init(gl, 0.0f,0.0f,fieldSize,fieldSize);
@@ -54,11 +54,11 @@ public class Interface {
 	 */
 	public void draw(GL10 gl) {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
 		
+		/*gl.glLoadIdentity();
 		gl.glTranslatef(gap, screenHeight-gap-fieldSize, 0.0f);
 		jumpFieldTex.bind(gl);
-		jumpQuad.draw(gl);
+		jumpQuad.draw(gl);*/
 		
 		gl.glLoadIdentity();
 		gl.glTranslatef(screenWidth-gap-fieldSize, screenHeight-gap-fieldSize, 0.0f);
@@ -68,5 +68,9 @@ public class Interface {
 		gl.glTranslatef(-gap-fieldSize, 0.0f, 0.0f);
 		leftFieldTex.bind(gl);
 		leftQuad.draw(gl);
+		
+		gl.glTranslatef(0.0f, -(fieldSize+gap)*0.5f, 0.0f);
+		jumpFieldTex.bind(gl);
+		jumpQuad.draw(gl);
 	}
 }

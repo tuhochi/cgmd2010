@@ -140,7 +140,7 @@ public class Player {
 			//Log.d("Player", "in loop");
 			x = (int) Math.floor(playerPos[0]+i);
 			quadId = level.getTypeAt(x, y);
-			if(quadId!=-1 && quadId!=10 && quadId!=11)
+			if(quadId!=-1 && quadId!=10 && quadId!=11 && quadId!=12 && quadId!=13 && quadId!=14 && quadId!=15)
 			{
 				collisionThreshold[COL_BOTTOM] = Math.min(collisionThreshold[COL_BOTTOM], (float) Math.floor(playerPos[1]) + 0.5f);
 				if(v[1]>0) {
@@ -168,7 +168,7 @@ public class Player {
 			//Log.d("Player", "in loop");
 			x = (int) Math.floor(playerPos[0]+i);
 			quadId = level.getTypeAt(x, y);
-			if(quadId!=-1 && quadId!=10 && quadId!=11)
+			if(quadId!=-1 && quadId!=10 && quadId!=11 && quadId!=12 && quadId!=13 && quadId!=14 && quadId!=15)
 			{
 				collisionThreshold[COL_TOP] = Math.max(collisionThreshold[COL_TOP], (float) Math.floor(playerPos[1]) + 0.5f);
 				if(v[1]<0) {
@@ -189,7 +189,7 @@ public class Player {
 			//Log.d("Player", "in loop");
 			y = (int) Math.floor(playerPos[1]+i);
 			quadId = level.getTypeAt(x, y);
-			if(quadId!=-1 && quadId!=10 && quadId!=11)
+			if(quadId!=-1 && quadId!=10 && quadId!=11 && quadId!=12 && quadId!=13 && quadId!=14 && quadId!=15)
 			{
 				collisionThreshold[COL_LEFT] = Math.max(collisionThreshold[COL_LEFT], (float) Math.floor(playerPos[0]) + 0.5f);
 				if(v[0]<0) {
@@ -210,7 +210,7 @@ public class Player {
 			//Log.d("Player", "in loop");
 			y = (int) Math.floor(playerPos[1]+i);
 			quadId = level.getTypeAt(x, y);
-			if(quadId!=-1 && quadId!=10 && quadId!=11)
+			if(quadId!=-1 && quadId!=10 && quadId!=11 && quadId!=12 && quadId!=13 && quadId!=14 && quadId!=15)
 			{
 				collisionThreshold[COL_RIGHT] = Math.min(collisionThreshold[COL_RIGHT], (float) Math.floor(playerPos[0]) + 0.5f);
 				if(v[0]>0) {
@@ -234,8 +234,12 @@ public class Player {
 			int y = (int) playerPos[1];
 			
 			int quadId = level.getTypeAt(x, y);
-			if(quadId == 10 || quadId == 11) {
+			if(quadId == 10 || quadId == 11 || quadId == 12 || quadId == 13) {
 				level.changeCoinState(x, y);
+			}
+			
+			if (quadId == 14 || quadId == 15) {
+				level.finish();
 			}
 		}
 	}

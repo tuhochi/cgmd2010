@@ -48,13 +48,13 @@ class MyRenderer implements MyOpenGLView.Renderer {
 
     @Override
 	public void onDrawFrame(GL10 gl) {
-    	Timer.update();
+    	MyTimer.update();
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	
     	//Ich hab jetzt dT auf Sekunden umgerechnet, weils sonst verwirrend ist...
     	//Player updated früher weil sonst das Level um ein Frame nachhinkt.
-    	float dt = Timer.dT*0.001f;
+    	float dt = MyTimer.dT*0.001f;
     	player.update(dt);
     	camera.update(dt);
     	
@@ -163,7 +163,7 @@ class MyRenderer implements MyOpenGLView.Renderer {
          ui=new Interface();
          ui.init(gl);
          
-         Timer.lastTime=0;
+         MyTimer.lastTime=0;
          
     }
 
