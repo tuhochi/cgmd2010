@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Vector;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -12,9 +14,9 @@ public class SoundHandler {
 	
 	private static boolean mSoundOn = true;
 	private SoundPool mSP = null;
-	private Vector< Integer > mSoundResources = new Vector< Integer >();
 	private int mStreamVolume = 100;
 	private static Context mContext = null;
+	private HashMap<Integer, Integer> mSoundIDs = null;
 	
 	private static SoundHandler mSingleton = null;
 	
@@ -30,6 +32,7 @@ public class SoundHandler {
 	}
 	
 	private SoundHandler( Context context ){
+		mSoundIDs = new HashMap<Integer, Integer>();
 		SharedPreferences audiosettings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
 		mSoundOn = audiosettings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
 		mSP = new SoundPool( Definitions.SOUND_CHANNEL_NUMBER,  AudioManager.STREAM_MUSIC, 100 );
@@ -37,25 +40,14 @@ public class SoundHandler {
 	
 	
 	public int addSound( int resID ){
-		for( int i = 0; i < mSoundResources.size(); i++ ){
-			if( mSoundResources.get(i) == resID ) return i;
+		if( mSoundIDs.containsKey(resID)) return mSoundIDs.get(resID);
+		else {
+			int val = mSP.load(mContext, resID, 1);
+			mSoundIDs.put(resID, val);
+			return val;
 		}
-		mSoundResources.add(resID);
-		return ( mSoundResources.size() - 1 );
 	}
 	
-	
-	public void loadSound(){
-		int backgroundmusic = addSound(R.raw.l12_music);
-		for( int i = 0; i < mSoundResources.size();  i++ ) {
-			int loadedmusic = mSP.load(mContext, mSoundResources.get(i), 1);
-			System.out.println("LOADEDMUSIC IS "+loadedmusic+" RESOURCE "+mSoundResources.get(i));
-		}
-		//for( int i = 0; i < mSoundResources.size();  i++ ) System.out.println( mSoundResources.get(i));
-		AudioManager am = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-		mStreamVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-		mSP.play(backgroundmusic, mStreamVolume,mStreamVolume, 1, -1, 1.0f);	
-	}
 	
 	public void play( int sampleID ){
 		if( mSoundOn && mSP != null ) mSP.play(sampleID, mStreamVolume, mStreamVolume, 1, 0, 1.0f);
@@ -66,6 +58,13 @@ public class SoundHandler {
 		mSP.stop( R.raw.l12_music);
 		mSP.release();
 		mSP = null;
-		mSoundResources.removeAllElements();
+	}
+	
+	public void playLoop( int sampleID){
+		if( mSoundOn && mSP != null ) mSP.play(sampleID, mStreamVolume, mStreamVolume, 1, -1, 1.0f);
+	}
+
+	public void pause(int sampleID ) {
+		if( mSP != null ) mSP.pause(sampleID);
 	}
 }

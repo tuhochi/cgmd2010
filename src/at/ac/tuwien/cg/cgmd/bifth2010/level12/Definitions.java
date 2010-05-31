@@ -1,7 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public final class Definitions {
-	public static final int SOUND_CHANNEL_NUMBER = 10;
+	public static final int SOUND_CHANNEL_NUMBER = 25;
 	
 	public static int FIELD_SEGMENT_LENGTH = 10;
 	public static final short FIELD_HEIGHT_SEGMENTS = 5;	
