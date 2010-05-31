@@ -50,3 +50,7 @@ You have to uninstall BIFTH. "Click" on the menu button when you can see the hom
 Open a Command Window and enter:
 'emulator -avd #AVD_NAME# -partition-size 1024 -memory 1024'
 where #AVD_NAME# is the name of your emulator. 
+
+== How do I solve the "Type Conversion to Dalvik format failed: Unable to execute dex:null"? ==
+If you get that error permanently edit the eclipse.ini which is located at your Eclipse installation directory. Alter the values for the Java heap size: "-Xms256m
+-Xmx1024m". After that you have to restart Eclipse. (see [http://www.informatik-forum.at/showthread.php?80744-Type-Conversion-to-Dalvik-format-failed-Unable-to-execute-dex-null this thread] for more information)
