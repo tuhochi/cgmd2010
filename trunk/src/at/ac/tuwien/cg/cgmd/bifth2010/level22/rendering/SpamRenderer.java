@@ -59,11 +59,19 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 			arg0.glShadeModel(GL10.GL_SMOOTH);
 			arg0.glEnable(GL10.GL_TEXTURE_2D);
 			arg0.glEnable(GL10.GL_CULL_FACE);
+			arg0.glEnable( GL10.GL_LIGHTING );
+			arg0.glEnable( GL10.GL_LIGHT0 );
+			arg0.glEnable( GL10.GL_NORMALIZE );
+			float lightPos[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			arg0.glLightfv( GL10.GL_LIGHT0, GL10.GL_POSITION, lightPos, 0 );
 			
 			cachedRenderContext = arg0;
 			
 			MailSceneObject.init( arg0, context );
 			MailDataBase.displayMails( arg0 );
+			
+			arg0.glDisable( GL10.GL_LIGHTING );
+			arg0.glDisable( GL10.GL_NORMALIZE );
 			
 			glMatrixMode( GL_PROJECTION );
 			glLoadIdentity();
