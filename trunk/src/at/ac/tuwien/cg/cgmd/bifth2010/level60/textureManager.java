@@ -51,7 +51,8 @@ public class textureManager {
 		createTexture("cop_back_l", R.drawable.l60_cop_back_l, 50, 50);
 		createTexture("cop_back_r", R.drawable.l60_cop_back_r, 50, 50);
 		
-		createTexture("bunny", R.drawable.l60_bunny_front, 60, 60);
+		createTexture("bunny_front", R.drawable.l60_bunny_front, 60, 60);
+		createTexture("bunny_back", R.drawable.l60_bunny_back, 60, 60);
 		createTexture("streetHor", R.drawable.l60_street_hor, 100, 100);
 		createTexture("streetVer", R.drawable.l60_street_ver, 100, 100);
 		createTexture("intersection", R.drawable.l60_intersection, 100, 100);
