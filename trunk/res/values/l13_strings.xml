@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l13_GameName">Drunken Bunny</string>
-<string name="l13_HelpActivity_Text1">TODO</string>
-<string name="l13_HelpActivity_Text2">TODO</string>
-<string name="l13_HelpActivity_Text3">TODO</string>
+<string name="l13_HelpActivity_Text1">Help the money weary grown rabbit on his drinking spree.</string>
+<string name="l13_HelpActivity_Text2">Try to loose money by consuming beer and  red light district services.</string>
+<string name="l13_HelpActivity_Text3">Touch the screen on the vertical/horizontal Axis near your character to move.  By consuming beer the control gets increasingly difficult.  Don get cought be the cops completely drunken or you will be arrested for a short time period.</string>
 <string name="l13_moneyText">Money</string>
 <string name="l13_timeText">Time</string>
 </resources>
