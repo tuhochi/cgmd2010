@@ -45,7 +45,7 @@ public class ProductEntity extends RenderEntity implements Clickable {
 		
 		clickable = true;
 		animated = false;
-		neighbors = new int[Shelf.NUMBER_PRODUCTS - 1];
+		neighbors = new int[ProductManager.NUMBER_PRODUCTS - 1];
 	}
 
 	@Override

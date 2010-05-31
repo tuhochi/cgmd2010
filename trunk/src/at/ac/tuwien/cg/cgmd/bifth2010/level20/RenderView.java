@@ -202,9 +202,9 @@ public class RenderView extends GLSurfaceView implements Renderer {
 		gameManager.shelf.render(gl);		
 
 		// Render products.	
-		Enumeration<Integer> keys = gameManager.shelf.products.keys();
+		Enumeration<Integer> keys = gameManager.productManager.products.keys();
 		while(keys.hasMoreElements()) {
-			gameManager.shelf.products.get(keys.nextElement()).render(gl);
+			gameManager.productManager.products.get(keys.nextElement()).render(gl);
 		}	
 		
 		gameManager.shoppingCart.render(gl);
