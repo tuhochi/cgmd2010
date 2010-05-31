@@ -22,6 +22,7 @@ public abstract class MoneyCarrier extends GLObject {
 	protected int mType = 0; //zombie type
 	protected int mTexture = R.drawable.l12_enemie_lvl0;
 	protected int mSound = R.raw.l12_enemie1_dying;
+	protected int mSoundSampleID = 5;
 	protected short mMoney = 10;
 	protected short mSpeed = 5;
 	protected int mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
@@ -124,7 +125,7 @@ public abstract class MoneyCarrier extends GLObject {
 	}
 	
 	public void die(){
-		SoundHandler.play(mSound);
+		SoundHandler.getSingleton().play(mSoundSampleID);
 		GameMechanics.getSingleton().addIron(mIronToDrop);
 	}
 }

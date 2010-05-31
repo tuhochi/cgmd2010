@@ -19,7 +19,7 @@ public class CarrierRoundFour extends MoneyCarrier {
 		mColor[3] = 1.0f;
 		mTexture = R.drawable.l12_enemie_lvl3;
 		mSound = R.raw.l12_enemie4_dying;
-		SoundHandler.addSound(mSound);
+		mSoundSampleID = SoundHandler.getSingleton().addSound(mSound);
 		mType = 4;
 		mIronToDrop = Definitions.FOURTH_ROUND_ENEMIE_IRON;
 	}
