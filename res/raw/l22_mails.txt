@@ -4,7 +4,6 @@ d0l42:d0l42:true
 h0t:hot:false
 b4b3s:babes:false
 v14924:viagra:false
-c4$h:c4$h:true
 hug3:huge:false
 m1ll10n:m1ll10n:true
 h02ny:horny:false
