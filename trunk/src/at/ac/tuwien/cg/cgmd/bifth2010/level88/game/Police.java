@@ -152,8 +152,8 @@ public class Police {
 			 * If the bunny and the police are at the same place: bunny caught!
 			 */
 			if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
-				//game.policeCatchesBunny();
-				//return;
+				game.policeCatchesBunny();
+				return;
 			}
 
 			int mx=0, my=0;
@@ -181,8 +181,8 @@ public class Police {
 				{
 					ArrayList<Integer> dirs = new ArrayList<Integer>();
 					/*
-					 * If the current position the police is standing at is a blind end (or the police was stuck
-					 * couldn't move in the last frame), find all possible ways the police could move to 
+					 * If the current position the police a dead end (or the police
+					 * couldn't move in the last frame) 
 					 */
 					if( game.map.cells[currentPosX][currentPosY].numStreetNeighboursPolice==1 || wasStuckLastFrame )
 					{
@@ -226,6 +226,10 @@ public class Police {
 					}
 				}
 			}
+			/*
+			 * Bunny is visible. We update the distance, so when we loose sight the police will keep
+			 * moving until it reaches the place the bunny was last seen.
+			 */
 			else
 			{
 				distanceToLastBunnyPos = Math.abs(
@@ -273,8 +277,8 @@ public class Police {
 			 * the position of the bunny.
 			 */
 			if( game.bunny.currentPosX==currentPosX && game.bunny.currentPosY==currentPosY ) {
-				//game.policeCatchesBunny();
-				//return;
+				game.policeCatchesBunny();
+				return;
 			}
 		}
 		updateTranslation();
