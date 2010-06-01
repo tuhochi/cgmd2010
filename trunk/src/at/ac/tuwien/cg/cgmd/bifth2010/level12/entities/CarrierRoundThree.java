@@ -19,7 +19,6 @@ public class CarrierRoundThree extends MoneyCarrier {
 		mColor[3] = 1.0f;
 		mTexture = R.drawable.l12_enemie_lvl2;
 		mSound = R.raw.l12_enemie3_dying;
-		mSoundSampleID = SoundHandler.getSingleton().addSound(mSound);
 		mType = 3;
 		mIronToDrop = Definitions.THIRD_ROUND_ENEMIE_IRON;
 	}

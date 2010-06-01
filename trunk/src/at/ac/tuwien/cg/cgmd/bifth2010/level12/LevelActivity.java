@@ -19,7 +19,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 public class LevelActivity extends Activity{
 	private Display mDisplay = null;
 	private GLRenderer mRenderer = null;
-	private int mBGMusicID = 0;
 	
 	
     /** Called when the activity is first created. */
@@ -56,7 +55,6 @@ public class LevelActivity extends Activity{
     @Override
     protected void onResume() {
     	SoundHandler.setContext(this);
-    	mBGMusicID = SoundHandler.getSingleton().addSound(R.raw.l12_music);
     	TextureManager.getSingletonObject().initializeContext(this);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass1);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass2);
@@ -101,7 +99,7 @@ public class LevelActivity extends Activity{
         l.addView( glview );
         
         setContentView( l );
-    	SoundHandler.getSingleton().playLoop(mBGMusicID);
+    	SoundHandler.getSingleton().playLoop(R.raw.l12_music);
         super.onResume();
     }
     
@@ -109,7 +107,7 @@ public class LevelActivity extends Activity{
     @Override
     protected void onPause() {
     	GameMechanics.getSingleton().pause();
-    	SoundHandler.getSingleton().pause( mBGMusicID );
+    	SoundHandler.getSingleton().stop();
         super.onPause();
     }
     
