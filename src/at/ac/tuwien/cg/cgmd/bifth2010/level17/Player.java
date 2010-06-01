@@ -2,7 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level17;
 
 import java.util.Date;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.sound.SoundManager;
 
 /**
  * A class representing the player
@@ -18,6 +20,8 @@ public class Player {
 	private long mLastHouseStreak = 0;
 	
 	private PlayerStateListener mListener;
+	private int mCrashSound;
+	private int mCoinSound;
 
 	/**
 	 * Creates a new player
@@ -32,6 +36,8 @@ public class Player {
 		mRadius = radius;
 		mLives = lives;
 		mMoney = money;
+		mCrashSound = SoundManager.getInstance().getPlayer(R.raw.l17_au, false);
+		mCoinSound = SoundManager.getInstance().getPlayer(R.raw.l17_katsching, false);
 	}
 	
 	/**
@@ -40,6 +46,7 @@ public class Player {
 	public void hitHouse() {
 		mLives--;
 		mListener.playerHPChanged(mLives);
+		SoundManager.getInstance().startPlayer(mCrashSound);
 	}
 	
 	/**
@@ -48,6 +55,7 @@ public class Player {
 	public void hitBird() {
 		mMoney += 10;
 		mListener.playerMoneyChanged(mMoney, true);
+		SoundManager.getInstance().startPlayer(mCoinSound);
 	}
 	
 	/**

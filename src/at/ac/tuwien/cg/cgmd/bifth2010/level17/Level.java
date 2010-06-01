@@ -17,6 +17,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.HouseModel;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.sound.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Util;
 
 /**
@@ -45,6 +46,7 @@ public class Level {
 	private Random mRandom = new Random();
 	private List<Integer> mHouseTex = new ArrayList<Integer>();
 	private long mLastHouseHit = 0;
+	private int mBackgroundSound = 0;
 	
 	public static final String PLAYER_LIFES = "feelGood";
 	public static final String PLAYER_MONEY = "muney";
@@ -93,6 +95,10 @@ public class Level {
         mForceField1 = new ForceField(50f, new Vector3(0,0,0), 200f, 30f);
         mForceField2 = new ForceField(50f, new Vector3(0,0,0), 200f, -30f);
 		mParticle = new Quad(0.2f, 0.2f);
+		
+
+		mBackgroundSound = SoundManager.getInstance().getPlayer(R.raw.l17_chhhhh, true);
+		SoundManager.getInstance().startPlayer(mBackgroundSound);
         
 	}
 	

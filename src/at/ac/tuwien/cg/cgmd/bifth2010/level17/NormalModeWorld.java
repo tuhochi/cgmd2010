@@ -15,6 +15,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.OBJRenderable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.renderables.Quad;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.sound.SoundManager;
 
 /**
  * The implementation of the World we are using
@@ -70,6 +71,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
         mContext = context;
         mHandler = handler;
         mSavedInstance = savedInstance;
+        SoundManager.getInstance().init(context);
     }
     
     /**

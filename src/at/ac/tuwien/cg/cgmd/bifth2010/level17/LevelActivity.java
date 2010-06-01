@@ -19,6 +19,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.sound.SoundManager;
 
 /**
  * Wrapper activity demonstrating the use of {@link GLSurfaceView}, a view
@@ -119,6 +120,7 @@ public class LevelActivity extends Activity {
     @Override
 	protected void onStop() {
 		mNormalModeView.onStop();
+		SoundManager.getInstance().releaseAudioResources();
 		super.onStop();
     }
 
