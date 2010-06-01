@@ -123,7 +123,11 @@ public class LevelActivity extends Activity{
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
 		//we set the progress the user has made (must be between 0-100)
-		s.setProgress(GameMechanics.getSingleton().getMoney());
+		int gainedMoney = GameMechanics.getSingleton().getMoney();
+		int burnedMoney = GameMechanics.getSingleton().getBurnedMoney();
+		float totalMoneyPercent = (gainedMoney + burnedMoney)*0.01f;
+		s.setProgress((int)(burnedMoney/totalMoneyPercent));
+		System.out.println("burned: " + burnedMoney + " |gained: " + gainedMoney + "score: " + (int)(burnedMoney/totalMoneyPercent));
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
 		GameWorld.destroySingleton();
