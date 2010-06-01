@@ -22,7 +22,7 @@ public class Timing {
 		pausedTime = 0.0f;
 	}
 	public void start(){
-		System.out.println("start timer");
+		//System.out.println("start timer");
 		startTime = System.nanoTime()/1000000000.0f;
 		currTime = 0.0f;
 		pauseTimeStamp = 0.0f;
@@ -61,7 +61,7 @@ public class Timing {
 	 * pauses timer
 	 */
 	public void pause(){
-		System.out.println("pause timer at "+currTime);
+		//System.out.println("pause timer at "+currTime);
 		if(pauseTimeStamp == 0.0f)
 			pauseTimeStamp = (System.nanoTime()/1000000000.0f);
 		else{
@@ -78,7 +78,7 @@ public class Timing {
 			pausedTime += (System.nanoTime()/1000000000.0f) - pauseTimeStamp;
 			currTime = (System.nanoTime()/1000000000.0f) - startTime - pausedTime;
 			pauseTimeStamp = 0.0f;
-			System.out.println("resume in timer from paused; currTime: "+currTime);
+			//System.out.println("resume in timer from paused; currTime: "+currTime);
 		}
 	}
 	/**
