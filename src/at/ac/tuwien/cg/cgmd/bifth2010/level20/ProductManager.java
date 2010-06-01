@@ -28,7 +28,22 @@ public class ProductManager{
 	/**
 	 * The distance between 2 product rows in pixels
 	 */
-	protected float MAX_PRODUCT_DISTANCE;
+	protected float PRODUCT_DISTANCE;
+	
+	/**
+	 * The distance after which a shopping cart is spawned
+	 */
+	protected float SHOPPING_CART_DISTANCE;
+	
+	/**
+	 * This value increases every frame until PRODUCT_DISTANCE is reached and is set to 0 again.
+	 */
+	protected float productDistance;
+	
+	/**
+	 * This value increases every frame until SHOPPING_CART_DISTANCE is reached and is set to 0 again.
+	 */
+	protected float shoppingCartDistance;
 	
 	/** 
 	 * The product collection. 
@@ -40,15 +55,15 @@ public class ProductManager{
 	 */
 	protected LinkedList<ProductEntity> removeFromProducts;
 	
+	/** 
+	 * If a new shopping carts spawns, it's stored here
+	 */
+	protected ShoppingCart movingShoppingCart;
+	
 	/**
 	 * The distance in pixels, the shelf has moved since the start of the game
 	 */
 	protected float pixelsMoved;
-	
-	/**
-	 * This value increases every frame until PRODUCT_DISTANCE_X is reached and is set to 0 again.
-	 */
-	protected float productDistance;
 	
 	/**
 	 * The Y positions of the shelves. (At this height, the products are spawning)
@@ -61,10 +76,12 @@ public class ProductManager{
 	public ProductManager() {
 		
 		NUMBER_PRODUCTS = 3;
-		MAX_PRODUCT_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_distance);
+		PRODUCT_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_distance);
+		SHOPPING_CART_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_shopping_cart_distance);
 		
 		pixelsMoved = 0;
 		productDistance = 0;
+		shoppingCartDistance = 0;
 		
 		products = new Hashtable<Integer, ProductEntity>();
 		removeFromProducts = new LinkedList<ProductEntity>();
@@ -102,11 +119,23 @@ public class ProductManager{
 				removeFromProducts.add(pe);
 			}
 		}
-						
-		// Check every frame if the touch touches a product
-		if (LevelActivity.gameManager.touchDown) {			
+		
+		// Move a shopping cart if there is one
+		if (movingShoppingCart != null) {
+			movingShoppingCart.x -= scroll;
+			
+			// If it is out of the screen remove it
+			if (movingShoppingCart.x < -movingShoppingCart.width) {				
+				movingShoppingCart = null;
+			}
+		}
+			
+			
+		// Check every frame if the touch touches a product or a shopping cart
+		if (LevelActivity.gameManager.touchDown) {
 			touchEvent(LevelActivity.gameManager.touchX, LevelActivity.gameManager.touchY);
-		}			
+		}
+		
 		
 		// Now remove all marked products and empty the list again
 		for (ProductEntity pe : removeFromProducts) {			
@@ -117,10 +146,19 @@ public class ProductManager{
 		// At last, add some new products every few pixels
 		productDistance += scroll;
 		
-		if (productDistance >= MAX_PRODUCT_DISTANCE) {			
-			productDistance -= MAX_PRODUCT_DISTANCE;	
+		if (productDistance >= PRODUCT_DISTANCE) {			
+			productDistance -= PRODUCT_DISTANCE;	
 			
 			createProducts();
+		}
+		
+		// And a shopping cart if it's time
+		shoppingCartDistance += scroll;
+		
+		if (shoppingCartDistance >= SHOPPING_CART_DISTANCE && LevelActivity.gameManager.nShoppingCarts < LevelActivity.gameManager.shoppingCarts.length) {			
+			shoppingCartDistance -= SHOPPING_CART_DISTANCE;	
+			
+			createShoppingCart();
 		}
 	}
 	
@@ -133,6 +171,15 @@ public class ProductManager{
 	 * @param y The y coord on screen
 	 */
 	public void touchEvent(float x, float y) {
+		
+		// Check if we hit the shopping cart and tell the Eventmanager
+		if (movingShoppingCart != null && movingShoppingCart.clickable && movingShoppingCart.hitTest(x, y)) {
+			
+			movingShoppingCart.clickable = false;
+			EventManager.getInstance().dispatchEvent(EventManager.SHOPPING_CART_COLLECTED, movingShoppingCart);
+			movingShoppingCart = null;
+		}
+		
 		
 		Enumeration<Integer> keys = products.keys();		
 		while(keys.hasMoreElements()) {
@@ -200,6 +247,21 @@ public class ProductManager{
 		}	
 	}
 	
-	
+	/**
+	 * Creates a moving shopping cart.
+	 */
+	public void createShoppingCart() {
+		
+		float width = LevelActivity.renderView.getWidth();		
+		
+		// Spawn outside the screen and subtract the amount of d already passed.
+		float offsetX = 75;
+		float x = width + offsetX;
+		float y = LevelActivity.gameManager.shoppingCarts[0].y;
+		float shoppingCartSize = LevelActivity.gameManager.shoppingCarts[0].width;
+		
+		movingShoppingCart = new ShoppingCart(x, y, 2, shoppingCartSize, shoppingCartSize);
+		movingShoppingCart.texture = LevelActivity.renderView.getTexture(RenderView.TEXTURE_CART);
+	}
 }
 	
