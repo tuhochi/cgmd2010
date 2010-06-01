@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Date;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -97,21 +99,38 @@ public class MailSceneObject
 	public MailSceneObject ( Mail myMail, float lifeTime, Context context )
 	{
 		
-		position = new Vector3f( 0, 0, -30.0f );
+		position = new Vector3f( 0, 0, - maxDist );
 		
 		characterRefs = new MailCharacter[ myMail.getDisplayName().length() ];
+		float horSize = ( float ) characterRefs.length / 5.0f;
+		
+		pullPositionRadius = horSize * 1.35f;
+		nextCheckPoint = pullDt;
+		maxPullRadius = new float[ 2 ];
+		
+		float u, v;
+		seed = new Random( new Date().getTime() );		
+		pullPositions = new Vector3f[ 2 ];
+		
+		for ( int pullIndex = 0; pullIndex < 2; pullIndex++ )
+		{
+			
+			u = seed.nextFloat() * (float) Math.PI;
+			v = seed.nextFloat() * (float) Math.PI;
+			
+			pullPositions[ pullIndex ] = new Vector3f( 	(float) Math.sin( u ) * (float) Math.cos( v ) * pullPositionRadius,
+														(float) Math.sin( u ) * (float) Math.sin( v ) * pullPositionRadius,
+														(float) Math.cos( u ) * pullPositionRadius / 2.0f );
+		}
 		
 		int charSubdivisionCount = 3;
-		int verResolution = charSubdivisionCount + 2;
-		int subDivisionCount = charSubdivisionCount * myMail.getDisplayName().length() + 2;
+		verResolution = charSubdivisionCount + 2;
+		subDivisionCount = charSubdivisionCount * myMail.getDisplayName().length() + 2;
 		
-		float[] vertexPos = new float[ subDivisionCount * verResolution * 3 + 3 ];
+		vertexData = new float[ subDivisionCount * verResolution * 3 + 3 ];
 		float[] vertexNorm = new float[ subDivisionCount * verResolution * 3 + 3 ];
 		float[] uvCoords = new float[ subDivisionCount * verResolution * 2 + 2 ];
 		float[] uvCoordsCharacter = new float[ subDivisionCount * verResolution * 2 + 2 ];
-		
-		float horSize = ( float ) characterRefs.length / 5.0f;
-		pullPositionRadius =  horSize * 1.5f;
 		
 		for ( int subDivIndexVer = 0; subDivIndexVer < verResolution; subDivIndexVer++ )
 		{
@@ -119,11 +138,11 @@ public class MailSceneObject
 			for ( int subDivIndexHor = 0; subDivIndexHor < subDivisionCount; subDivIndexHor++ )
 			{
 				
-				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 ] = 
+				vertexData[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 ] = 
 					2.0f * horSize * ( float ) subDivIndexHor / ( float ) ( subDivisionCount - 1 ) - horSize;
-				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 1 ] =
+				vertexData[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 1 ] =
 					1.2f * ( float ) subDivIndexVer / ( float ) ( verResolution - 1 ) - 0.6f;
-				vertexPos[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 2 ] = 0;
+				vertexData[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 2 ] = 0;
 				
 				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 ] = 0;
 				vertexNorm[ subDivIndexVer * subDivisionCount * 3 + subDivIndexHor * 3 + 1 ] = 0;
@@ -136,9 +155,9 @@ public class MailSceneObject
 			}
 		}
 		
-		vertexPos[ subDivisionCount * verResolution * 3 ] = 0;
-		vertexPos[ subDivisionCount * verResolution * 3 + 1 ] = 1;
-		vertexPos[ subDivisionCount * verResolution * 3 + 2 ] = 0;
+		vertexData[ subDivisionCount * verResolution * 3 ] = 0;
+		vertexData[ subDivisionCount * verResolution * 3 + 1 ] = 1;
+		vertexData[ subDivisionCount * verResolution * 3 + 2 ] = 0;
 		
 		vertexNorm[ subDivisionCount * verResolution * 3 ] = 0;
 		vertexNorm[ subDivisionCount * verResolution * 3 + 1 ] = 0;
@@ -260,10 +279,10 @@ public class MailSceneObject
 			}
 		}
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect( vertexPos.length * 4);
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect( vertexData.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexPositions = byteBuf.asFloatBuffer();
-		vertexPositions.put( vertexPos );
+		vertexPositions.put( vertexData );
 		vertexPositions.position( 0 );
 		
 		byteBuf = ByteBuffer.allocateDirect( vertexNorm.length * 4);
@@ -290,6 +309,8 @@ public class MailSceneObject
 		indices.put( indexSrc );
 		indices.position( 0 );
 		
+		getMaxPullRadius();
+		
 		this.myMail = myMail;
 
 		if ( myMail.isRich() )
@@ -315,7 +336,7 @@ public class MailSceneObject
 	 * @param deltaT the passed time between the current and the previous frame
 	 * @return is false, if the mail passed it's lifetime
 	 */
-	public boolean updatePosition ( float deltaT )
+	public synchronized boolean updatePosition ( float deltaT )
 	{
 		
 		if ( !isAlive )	return false;
@@ -334,11 +355,29 @@ public class MailSceneObject
 		
 		position.x = (float) Math.sin( relativeTime * 20.0f ) / 3.0f;
 		position.y = (float) Math.cos( relativeTime * 50.0f + 13.0f ) / 3.0f + 0.35f;
-		position.z = relativeTime * 20 - 30;
+		position.z = relativeTime * ( maxDist - minDist ) - maxDist;
 		
-		alpha = (float) Math.sin( relativeTime * 100.0f ) / ( float ) Math.PI;
-		scale = 1.0f + alpha / 8.0f;
-		alpha /= 4.0f;
+		alpha = (float) Math.sin( relativeTime * 100.0f );
+		scale = 1.0f + alpha / 25.0f;
+		alpha /= 10.0f;
+		
+		if ( relativeTime > nextCheckPoint )
+		{
+			
+			relativeTime += pullDt;
+			pullPositions[ 0 ] = pullPositions[ 1 ];
+			
+			float u = seed.nextFloat() * (float) Math.PI;
+			float v = seed.nextFloat() * (float) Math.PI;
+			
+			pullPositions[ 1 ].x = (float) Math.sin( u ) * (float) Math.cos( v ) * pullPositionRadius;
+			pullPositions[ 1 ].y = (float) Math.sin( u ) * (float) Math.sin( v ) * pullPositionRadius;
+			pullPositions[ 1 ].z = (float) Math.cos( u ) * pullPositionRadius / 2.0f;
+			
+			getMaxPullRadius();
+		}
+		
+		calculateMesh( ( nextCheckPoint - relativeTime ) / pullDt );
 		
 		return true;
 	}
@@ -357,7 +396,7 @@ public class MailSceneObject
 	 * 
 	 * @param renderContext the current rendering context
 	 */
-	public void display ( GL10 renderContext )
+	public synchronized void display ( GL10 renderContext )
 	{
 		
 		renderContext.glPushMatrix();
@@ -533,11 +572,109 @@ public class MailSceneObject
 		scaleFactor = target.getFloatArray( "scalefactors" )[ index ];
 		actCheckingIndex = target.getShortArray( "checkingindices" )[ index ];
 	}
+	private void calculateMesh( float weightNew )
+	{
+		
+		vertexPositions.position( 0 );
+		
+		float actPosition[] = new float[ 3 ];
+		float modifiedPosition[] = new float[ 3 ];
+		float distanceVec[] = { 0, 0, 0 };
+		float weights[] = { 1.0f - weightNew, weightNew };
+		
+		for ( int vIndex = 0; vIndex < vertexData.length; vIndex += 3 )
+		{
+			
+			actPosition[ 0 ] = vertexData[ vIndex ];
+			actPosition[ 1 ] = vertexData[ vIndex + 1 ];
+			actPosition[ 2 ] = vertexData[ vIndex + 2 ];
+			
+			modifiedPosition[ 0 ] = actPosition[ 0 ];
+			modifiedPosition[ 1 ] = actPosition[ 1 ];
+			modifiedPosition[ 2 ] = actPosition[ 2 ];
+			
+			for ( int pullIndex = 0; pullIndex < 2; pullIndex++ )
+			{
+				
+				distanceVec[ 0 ] = pullPositions[ pullIndex ].x - actPosition[ 0 ];
+				distanceVec[ 1 ] = pullPositions[ pullIndex ].y - actPosition[ 1 ];
+				distanceVec[ 2 ] = pullPositions[ pullIndex ].z - actPosition[ 2 ];
+				
+				float distance = (float) Math.sqrt(	Math.pow( distanceVec[ 0 ], 2.0f ) + 
+													Math.pow( distanceVec[ 1 ], 2.0f ) +
+													Math.pow( distanceVec[ 2 ], 2.0f ) );
+				
+				distanceVec[ 0 ] /= distance;
+				distanceVec[ 1 ] /= distance;
+				distanceVec[ 2 ] /= distance;
+				
+				distance /= maxPullRadius[ pullIndex ];
+				distance = (float) Math.pow( ( 1.0f - distance ) * weights[ pullIndex ], 3.0f );
+				distance /= 1000.0f;
+				distance *= position.z + minDist;
+				
+				modifiedPosition[ 0 ] -= distanceVec[ 0 ] * distance;
+				modifiedPosition[ 1 ] -= distanceVec[ 1 ] * distance; 
+				modifiedPosition[ 2 ] -= distanceVec[ 2 ] * distance; 
+			}
+			
+			vertexPositions.put( modifiedPosition[ 0 ] );
+			vertexPositions.put( modifiedPosition[ 1 ] );
+			vertexPositions.put( modifiedPosition[ 2 ] );
+		}
+		
+		vertexPositions.position( 0 );
+	}
+	
+	private float distance( float x1, float y1, float z1, float x2, float y2, float z2 )
+	{
+		
+		return (float) Math.sqrt( Math.pow( x1 - x2, 2.0f ) + Math.pow( y1 - y2, 2.0f ) + Math.pow( z1 - z2, 2.0f ) );
+	}
+	
+	private void getMaxPullRadius()
+	{
+		
+		for ( int pullIndex = 0; pullIndex < 2; pullIndex++ )
+		{
+			
+			maxPullRadius[ pullIndex ] = 0.0f;
+			
+			float actDist = distance( vertexData[ 0 ], vertexData[ 1 ], vertexData[ 2 ],
+										pullPositions[ pullIndex ].x, pullPositions[ pullIndex ].y, pullPositions[ pullIndex ].z );
+			maxPullRadius[ pullIndex ] = Math.max( maxPullRadius[ pullIndex ], actDist );
+			
+			actDist = distance( vertexData[ subDivisionCount * 3 - 3 ], 
+								vertexData[ subDivisionCount * 3 - 2 ], 
+								vertexData[ subDivisionCount * 3 - 1 ],
+								pullPositions[ pullIndex ].x, pullPositions[ pullIndex ].y, pullPositions[ pullIndex ].z );
+			maxPullRadius[ pullIndex ] = Math.max( maxPullRadius[ pullIndex ], actDist );
+			
+			actDist = distance( vertexData[ ( verResolution - 1 ) * subDivisionCount * 3 ], 
+								vertexData[ ( verResolution - 1 ) * subDivisionCount * 3 + 1 ], 
+								vertexData[ ( verResolution - 1 ) * subDivisionCount * 3 + 2 ],
+								pullPositions[ pullIndex ].x, pullPositions[ pullIndex ].y, pullPositions[ pullIndex ].z );
+			maxPullRadius[ pullIndex ] = Math.max( maxPullRadius[ pullIndex ], actDist );
+			
+			actDist = distance( vertexData[ ( ( verResolution - 1 ) * subDivisionCount + subDivisionCount - 1 ) * 3 ], 
+								vertexData[ ( ( verResolution - 1 ) * subDivisionCount + subDivisionCount - 1 ) * 3 + 1 ], 
+								vertexData[ ( ( verResolution - 1 ) * subDivisionCount + subDivisionCount - 1 ) * 3 + 2 ],
+								pullPositions[ pullIndex ].x, pullPositions[ pullIndex ].y, pullPositions[ pullIndex ].z );
+			maxPullRadius[ pullIndex ] = Math.max( maxPullRadius[ pullIndex ], actDist );
+			
+			actDist = distance( vertexData[ verResolution * subDivisionCount * 3 ], 
+								vertexData[ verResolution * subDivisionCount * 3 + 1 ], 
+								vertexData[ verResolution * subDivisionCount * 3 + 2 ],
+								pullPositions[ pullIndex ].x, pullPositions[ pullIndex ].y, pullPositions[ pullIndex ].z );
+			maxPullRadius[ pullIndex ] = Math.max( maxPullRadius[ pullIndex ], actDist );
+		}
+	}
 	
 	private Vector3f position;
 	private float scale;
 	private float alpha;
 	
+	private float[] vertexData;
 	private FloatBuffer vertexPositions;
 	private FloatBuffer vertexNormals;
 	private FloatBuffer uvCoordinates;
@@ -550,10 +687,19 @@ public class MailSceneObject
 	private boolean isAlive;
 	private short actCheckingIndex;
 	private int texIndex;
-	private float pullPositionRadius;
-	private Vector3f previousPullPos;
-	private Vector3f actPullPos;
+	private final float minDist = 10.0f;
+	private final float maxDist = 30.0f;
 	
+	private float pullPositionRadius;
+	private Vector3f[] pullPositions;
+	private float nextCheckPoint;
+	private final float pullDt = 0.1f;
+	private float[] maxPullRadius;
+	
+	private int subDivisionCount;
+	private int verResolution;
+	
+	private Random seed;
 	public static long animationTime;
 	private static int texture[];
 	private static boolean initialized = false;

@@ -45,7 +45,7 @@ public class MainThread extends Thread {
 	public void setStrings( String typedIn, String remaining )
 	{
 		
-		this.typedIn = typedIn;
+		this.typedIn = "Hint:" + typedIn;
 		this.remaining = remaining;
 	}
 	
