@@ -86,7 +86,7 @@ public class GameWorld {
 		boolean last = false;
 			switch ( GameMechanics.getSingleton().getSelectedTower() ){
 				case Definitions.BASIC_TOWER:
-					if( mBasicTower[0].getPrice() < GameMechanics.getSingleton().getIron()){
+					if( mBasicTower[0].getPrice() <= GameMechanics.getSingleton().getIron()){
 						for( int i = 0; i < Definitions.BASIC_TOWER_POOL && !last; i++){
 							if( mBasicTower[i].getActiveState() == false){
 								mBasicTower[i].setXY(mXPos, mYPos);
@@ -100,7 +100,7 @@ public class GameWorld {
 					}
 					break;
 				case Definitions.ADVANCED_TOWER:
-					if( mAdvancedTower[0].getPrice() < GameMechanics.getSingleton().getIron()){
+					if( mAdvancedTower[0].getPrice() <= GameMechanics.getSingleton().getIron()){
 						for( int i = 0; i < Definitions.ADVANCED_TOWER_POOL && !last; i++){
 							if( mAdvancedTower[i].getActiveState() == false){
 								mAdvancedTower[i].setXY(mXPos, mYPos);
@@ -114,7 +114,7 @@ public class GameWorld {
 					}
 					break;
 				case Definitions.HYPER_TOWER:
-					if( mHyperTower[0].getPrice() < GameMechanics.getSingleton().getIron()){
+					if( mHyperTower[0].getPrice() <= GameMechanics.getSingleton().getIron()){
 						for( int i = 0; i < Definitions.HYPER_TOWER_POOL && !last; i++){
 							if( mHyperTower[i].getActiveState() == false){
 								mHyperTower[i].setXY(mXPos, mYPos);
