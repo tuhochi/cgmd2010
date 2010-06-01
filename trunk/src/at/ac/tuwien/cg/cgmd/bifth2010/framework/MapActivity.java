@@ -7,7 +7,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -25,8 +24,6 @@ import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.CycleInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -59,7 +56,7 @@ public class MapActivity extends Activity {
 	 */
 	public static final String EXTRA_DEBUG_LEVELASSIGNMENT = "firstlevel";
 
-	
+
 	/**
 	 * Extra data of type boolean that can be passed to the activity. 
 	 * If true a new game is started (the game state is initialized).
@@ -92,7 +89,7 @@ public class MapActivity extends Activity {
 	 * preference saving the maximum level
 	 */
 	private static final String PREFERENCE_MAXLEVEL = "maxlevel";
-	
+
 	/**
 	 * is used to save the level to icon assignment
 	 * levelassignment_i stores the level id assigned to icon i 
@@ -102,7 +99,7 @@ public class MapActivity extends Activity {
 
 	private static final int MESSAGE_UPDATE_UI = 0;
 
-	
+
 
 
 	///////////////////////////////////////////////
@@ -154,7 +151,7 @@ public class MapActivity extends Activity {
 	 *  
 	 */
 	private int mMaxAllowedLevel = 1;
-	
+
 	/**
 	 * The assignment of level icons ( 0 - 5 ) to group/level ids ( 1 - number of groups )
 	 */
@@ -180,7 +177,7 @@ public class MapActivity extends Activity {
 		}
 	};
 
-	
+
 
 	/**
 	 * Listens for clicks on the individual level icons.
@@ -194,7 +191,7 @@ public class MapActivity extends Activity {
 			int iId = v.getId();
 			switch(iId) {
 			case R.id.l00_ImageButtonLevel00:
-				//TODO anything here???
+				Toast.makeText(MapActivity.this, "To start a level, press a button that is ahead and already visible!", Toast.LENGTH_LONG).show();;
 				return;
 			case R.id.l00_ImageButtonLevel01:
 				iLevel = 1; 
@@ -215,7 +212,7 @@ public class MapActivity extends Activity {
 				iLevel = 6;
 				break;
 			case R.id.l00_ImageButtonLevel07:
-				//TODO anything here???
+				Toast.makeText(MapActivity.this, "To reach this point you have to lose more money! Press a level icon that is already visible!", Toast.LENGTH_LONG).show();;
 				return;
 			};
 
@@ -223,6 +220,7 @@ public class MapActivity extends Activity {
 				SessionState s = new SessionState();
 				s.setLevel(iLevel);
 				s.setProgress(mProgress);
+				s.setMusicAndSoundOn(mMusicOn);
 				//set appropriate level to start
 				String sAction = Constants.getLevelActionString(mLevelAssignment[iLevel-1]);
 				Intent levelIntent = new Intent();
@@ -263,7 +261,6 @@ public class MapActivity extends Activity {
 
 	};
 
-
 	/**
 	 * Handler for UI updates
 	 */
@@ -272,72 +269,41 @@ public class MapActivity extends Activity {
 		public void handleMessage(android.os.Message msg) {
 
 			//show level icons for levels <=mMaxAllowedLevel
+			if(mMaxAllowedLevel>=1){
+				//get hardcoded values for level icon resources
+				int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[0]);
+				mLayout.findViewById(R.id.l00_ImageButtonLevel01).setBackgroundResource(iLevelIconResource);
+			}
+			if(mMaxAllowedLevel>=2){
+				//get hardcoded values for level icon resources
+				int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[1]);
+				mLayout.findViewById(R.id.l00_ImageButtonLevel02).setBackgroundResource(iLevelIconResource);
+			}
+			if(mMaxAllowedLevel>=3){
+				//get hardcoded values for level icon resources
+				int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[2]);
+				mLayout.findViewById(R.id.l00_ImageButtonLevel03).setBackgroundResource(iLevelIconResource);
+			}
+			if(mMaxAllowedLevel>=4){
+				//get hardcoded values for level icon resources
+				int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[3]);
+				mLayout.findViewById(R.id.l00_ImageButtonLevel04).setBackgroundResource(iLevelIconResource);
+			}
+			if(mMaxAllowedLevel>=5){
+				//get hardcoded values for level icon resources
+				int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[4]);
+				mLayout.findViewById(R.id.l00_ImageButtonLevel05).setBackgroundResource(iLevelIconResource);
+			}
+			if(mMaxAllowedLevel>=6){
+				//get hardcoded values for level icon resources
+				int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[5]);
+				mLayout.findViewById(R.id.l00_ImageButtonLevel06).setBackgroundResource(iLevelIconResource);
+			}
 			
-			//if(msg.what==MESSAGE_UPDATE_UI){
-			
-				if(mMaxAllowedLevel>=1){
-					//get hardcoded values for level icon resources
-					int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[0]);
-					mLayout.findViewById(R.id.l00_ImageButtonLevel01).setBackgroundResource(iLevelIconResource);
-				}
-				if(mMaxAllowedLevel>=2){
-					//get hardcoded values for level icon resources
-					int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[1]);
-					mLayout.findViewById(R.id.l00_ImageButtonLevel02).setBackgroundResource(iLevelIconResource);
-				}
-				if(mMaxAllowedLevel>=3){
-					//get hardcoded values for level icon resources
-					int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[2]);
-					mLayout.findViewById(R.id.l00_ImageButtonLevel03).setBackgroundResource(iLevelIconResource);
-				}
-				if(mMaxAllowedLevel>=4){
-					//get hardcoded values for level icon resources
-					int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[3]);
-					mLayout.findViewById(R.id.l00_ImageButtonLevel04).setBackgroundResource(iLevelIconResource);
-				}
-				if(mMaxAllowedLevel>=5){
-					//get hardcoded values for level icon resources
-					int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[4]);
-					mLayout.findViewById(R.id.l00_ImageButtonLevel05).setBackgroundResource(iLevelIconResource);
-				}
-				if(mMaxAllowedLevel>=6){
-					//get hardcoded values for level icon resources
-					int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[5]);
-					mLayout.findViewById(R.id.l00_ImageButtonLevel06).setBackgroundResource(iLevelIconResource);
-				}
-				//if(mMaxAllowedLevel>=7){
-					//get hardcoded values for level icon resources
-					//int iLevelIconResource = Constants.getLevelIconResource(mLevelAssignment[6]);
-					//mLayout.findViewById(R.id.l00_ImageButtonLevel07).setBackgroundResource(iLevelIconResource);
-				//}
-			//}
-
-			/*if(msg.what==2) {
-				mLayout.findViewById(R.id.l00_ImageButtonLevel02).setBackgroundResource(R.drawable.l00_coin40);
-			}
-			else if(msg.what==3) {
-				mLayout.findViewById(R.id.l00_ImageButtonLevel03).setBackgroundResource(R.drawable.l00_coin40);
-			}
-			else if(msg.what==4) {
-				mLayout.findViewById(R.id.l00_ImageButtonLevel04).setBackgroundResource(R.drawable.l00_coin40);
-			}
-			else if(msg.what==5) {
-				mLayout.findViewById(R.id.l00_ImageButtonLevel05).setBackgroundResource(R.drawable.l00_coin40);
-			}
-			else if(msg.what==6) {
-				mLayout.findViewById(R.id.l00_ImageButtonLevel06).setBackgroundResource(R.drawable.l00_coin40);
-			} 
-			else if(msg.what==7) {
-				//TODO remove this (there is no level 7)??? 
-				mLayout.findViewById(R.id.l00_ImageButtonLevel07).setBackgroundResource(R.drawable.l00_coin40);
-			}*/
-
 			//update players progress
 			float fProgress = (float)(mMaxAllowedLevel-1)  + ((float)mProgress  / (100.0f)); 
 			PathPoint p = mPath.interpolate(fProgress);
-			AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) mPlayer.getLayoutParams();
-			lp.x = (int) p.mX;
-			lp.y = (int) p.mY;
+			mLayout.setRelativePosition(mPlayer, p.mX, p.mY);
 			int iGold = 700 - ((mMaxAllowedLevel-1)*100) - mProgress;
 			mStateTextView.setText(iGold+" gold left");
 			mPlayer.invalidate();
@@ -358,6 +324,7 @@ public class MapActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 
 		boolean bRestart = false;
 		if(savedInstanceState!=null){
@@ -405,35 +372,26 @@ public class MapActivity extends Activity {
 		Drawable d = mLayout.getBackground();;
 		int iSize = absoluteLayout.getChildCount();
 
-		// we convert the layouting coordinates into relative coordinates and exchange the absolute view with a relativepositioning view 
+		// For layouting we used an AbsoluteLayout that cannot be used because of different screen sizes.
+		// Instead we use a RelativePositionLayout.
+		// Therefore, we convert the coordinates from layouting coordinates to relative coordinates (and exchange the AbsoluteLayout with a RelativePositionLayout). 
 		float fW = 480;
 		float fH = 270;
-		//String s ="";
 		absoluteLayout.measure((int)fW, (int)fH);
 		absoluteLayout.layout(0, 0, (int)fW, (int)fH);
 		for(int i=0; i<iSize; i++) {
 			View v = absoluteLayout.getChildAt(0);
 			AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v.getLayoutParams(); 
-			
-			float fX = ((float)lp.x+(float)v.getMeasuredWidth()*0.5f) / fW * 100.f;
-			float fY = ((float)lp.y+(float)v.getMeasuredHeight()*0.5f) / fH * 100.f;
-
-			//s += "Point p = new PathPoint(" + Float.toString(fX) + ", " + Float.toString(fY) + ")";  
+			float fX = ((float)lp.x+(float)v.getMeasuredWidth()*0.5f) / fW;
+			float fY = ((float)lp.y+(float)v.getMeasuredHeight()*0.5f) / fH;
 			absoluteLayout.removeView(v);
-			
-			Rect r = new Rect();
-			v.getDrawingRect(r);
-			lp.x = (int) fX;
-			lp.y = (int) fY;
 			if(! ( (v.getId()==R.id.l00_ImageButtonWayPoint01) || (v.getId()==R.id.l00_ImageButtonWayPoint02) || (v.getId()==R.id.l00_ImageButtonWayPoint03) || (v.getId()==R.id.l00_ImageButtonWayPoint04) ) ) {
-				mLayout.addView(v);
+				mLayout.addView(v, fX, fY);
 			}
 		}
-		//Log.d(CLASS_TAG, s);
 
 		fl.removeView(absoluteLayout);
 		fl.addView(mLayout);
-
 
 		mPlayer = (ImageView) findViewById(R.id.l00_ImageButtonPlayer);
 		Animation animation = new AlphaAnimation(0.9f,0.6f);
@@ -441,7 +399,7 @@ public class MapActivity extends Activity {
 		animation.setRepeatMode(Animation.REVERSE);
 		animation.setRepeatCount(Animation.INFINITE);
 		animation.setDuration(800);
-		
+
 		mPlayer.setAnimation(animation);
 		animation.start();
 
@@ -482,6 +440,7 @@ public class MapActivity extends Activity {
 			}
 		});
 		mLoopPlayer.setLooping(true);
+
 	}
 
 
@@ -491,12 +450,12 @@ public class MapActivity extends Activity {
 		mUiUpdateHandler.sendEmptyMessage(MESSAGE_UPDATE_UI);
 		super.onStart();
 	}
-	
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putBoolean(INSTANCESTATE_IS_RESTARTING, true);
@@ -566,7 +525,7 @@ public class MapActivity extends Activity {
 			int iLastLevel=mMaxAllowedLevel;
 			increaseProgress(iPoints);
 
-			
+
 			if(iPoints>0){
 				String message = "";
 				message+="Great! ";
@@ -596,7 +555,8 @@ public class MapActivity extends Activity {
 				//user won
 				//finish game
 				Toast.makeText(this, "Congratulations - You lost all your wealth! Do you already feel your newly gained freedom!", Toast.LENGTH_LONG).show();
-				//TODO show about activity???
+				Intent intent = new Intent();
+				intent.setClassName("at.ac.tuwien.cg.cgmd.bifth2010", AboutActivity.class.getCanonicalName());				
 				finish();
 			} else if (mMaxAllowedLevel>iLastLevel) {
 				if(mMusicOn) {
@@ -619,14 +579,10 @@ public class MapActivity extends Activity {
 					} 				
 				}
 			} 
-
-
-
 			//tell the ui to update the progress 
 			mUiUpdateHandler.sendEmptyMessage(MESSAGE_UPDATE_UI);
 
 		}
-
 		//store the state everytime it changes  
 		storeGameState();
 		Log.d(CLASS_TAG, "Storing game state!");
@@ -671,7 +627,7 @@ public class MapActivity extends Activity {
 						mLevelAssignment[i]=levelAssignment[i];
 					}
 				}
-				
+
 			}
 		} 
 		for(int i=0; i<Constants.NUMBER_OF_LEVELS_TO_PLAY; i++) {
@@ -685,7 +641,7 @@ public class MapActivity extends Activity {
 		//different assignments can be hardcoded once the number of groups/levels is fixed
 		//for the moment it is simply always level 0
 		int[] assignment = {0,0,0,0,0,0};
- 		return assignment;
+		return assignment;
 	}
 
 
