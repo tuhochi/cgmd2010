@@ -29,6 +29,8 @@ public class Level extends Thread {
 	
 	private float maxPlayTime;
 	
+	public static float ratioFix;
+	
 
 	private LinkedList<Treasure> treasureList;
 	private LinkedList<Pedestrian> pedestrianList;
@@ -48,7 +50,7 @@ public class Level extends Thread {
 	 */
 	public Level(float sizeX, float sizeY) {
 		//Log.i(LOG_TAG, "Level(float, float)");
-		
+		this.ratioFix = (sizeY/320.0f)/(sizeX/480.0f);
 		Level.sizeX = 480.0f;
 		Level.sizeY = 320.0f;
 		treasureList = new LinkedList<Treasure>();
