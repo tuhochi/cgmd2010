@@ -391,6 +391,7 @@ public class GameWorld {
                     remove = true;
                 }
                 if( mEnemies.get(i).getHP() <= 0 ){
+                    GameMechanics.getSingleton().removeMoney( mEnemies.get(i).getMoney() );
                     mEnemies.get(i).deactivate();
                     mEnemies.get(i).die();
                     remove = true;

@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public class GameMechanics {
 	private int mMoney = 0;
+	private int mBurnedMoney = 0;
 	private short mIron = Definitions.STARTING_IRON;
 	private boolean mGameRunning = true;
 	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
@@ -39,7 +40,7 @@ public class GameMechanics {
 	
 	public int removeMoney( int amount){
 		System.out.println("Removing Money, amount: "+amount+" sum: "+mMoney);
-		return mMoney -=amount;
+		return mBurnedMoney +=amount;
 	}
 	
 	
@@ -92,6 +93,9 @@ public class GameMechanics {
 		return mMoney;
 	}
 	
+	public int getBurnedMoney() {	
+		return mBurnedMoney;
+	}
 	public long getRoundStartedTime(){
 		return mRoundStartedTime;
 	}
