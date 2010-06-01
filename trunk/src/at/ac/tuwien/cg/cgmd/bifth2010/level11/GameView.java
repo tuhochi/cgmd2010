@@ -55,8 +55,8 @@ public class GameView extends GLSurfaceView {
         	if(Math.abs(_x-x)>time*500 || Math.abs(_y-y)>time*500){
         		//System.out.println("in");
         		isBouncing = true;
-        		((GameActivity)_renderer.context)._level.bouncePedestrians(x/_renderer._width*Level.sizeX, Level.sizeY-(y/_renderer._height*Level.sizeY), _x/_renderer._width*Level.sizeX, Level.sizeY-(_y/_renderer._height*Level.sizeY), time);
-                _x = x;
+        		((GameActivity)_renderer.context)._level.bouncePedestrians(x/_renderer._width*Level.sizeX, Level.ratioFix*Level.sizeY-(y/_renderer._height*Level.sizeY), _x/_renderer._width*Level.sizeX, Level.ratioFix*Level.sizeY-(_y/_renderer._height*Level.sizeY), time);
+        		_x = x;
                 _y = y;
                 this.touchedTime = System.currentTimeMillis();
         	}
@@ -78,7 +78,8 @@ public class GameView extends GLSurfaceView {
 	        	((GameActivity)_renderer.context)._level.
 	        	addTreasure(new Treasure(_value,
 	        			new Vector2(_x/_renderer._width*Level.sizeX,
-	        			Level.sizeY-(_y/_renderer._height*Level.sizeY))));
+	        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY)))));
+	   
 	
 	
 	        	//((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
