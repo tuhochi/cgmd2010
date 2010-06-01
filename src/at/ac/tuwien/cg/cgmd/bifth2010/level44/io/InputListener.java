@@ -20,9 +20,16 @@ public class InputListener extends SimpleOnGestureListener {
 	private int width;
 	/** height of the Screen */
 	private int height;
+	/** the GameScene */
 	private GameScene scene;
 
-	
+	/**
+	 * creates the inputListener
+	 * 
+	 * @param scene
+	 * @param width width of the scene
+	 * @param height height of the scene
+	 */
 	public InputListener(GameScene scene, int width, int height) {
 		this.scene = scene;
 		this.width = width;
@@ -53,7 +60,7 @@ public class InputListener extends SimpleOnGestureListener {
 			}
 			
 			// add Gesture to InputQueue
-			scene.addInputGesture(new Swipe(e1.getX(), e1.getY(), e2.getX(), e2.getY(), position));
+			scene.addInputGesture(new Swipe(e1.getX(), e1.getY(), e2.getX(), e2.getY(), velocityY, position));
 		}
 		
 		return true;
@@ -61,7 +68,8 @@ public class InputListener extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
-		//scene.addInputGesture(new DoubleTap(e.getX(), e.getY()));
+		// TODO: remove
+		scene.addInputGesture(new DoubleTap(e.getX(), e.getY()));
 		
 		return true;
 	}

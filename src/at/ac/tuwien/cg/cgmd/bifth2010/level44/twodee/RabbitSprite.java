@@ -21,7 +21,7 @@ public class RabbitSprite extends SpriteContainer {
 	/** maximum rotation the rabbit itself can have */
 	private static final float MAX_ROTATION = 30.f;
 	/** quotient to map a maximum swipe to ANGLE_MAX and every shorter swipe proportionally */
-	private static final float ANGLE_QUOTIENT = ANGLE_MAX / Swipe.MAX_MIN_DELTA;
+	private static final float ANGLE_QUOTIENT = ANGLE_MAX / Swipe.MAX_MIN_DELTA_LENGTH;
 
         private static final int CENTER_X = 45;
         private static final int CENTER_Y = 42;
@@ -120,12 +120,12 @@ public class RabbitSprite extends SpriteContainer {
 	 */
 	public void setCurrentAngleMax(Swipe swipe) {
 		if (swipe.isLeft()) {
-			this.setCurrentLeftAngleMax(swipe.getStrength());
+			this.setCurrentLeftAngleMax(swipe.getLength());
 		} else if (swipe.isRight()) {
-			this.setCurrentRightAngleMax(swipe.getStrength());
+			this.setCurrentRightAngleMax(swipe.getLength());
 		} else {
-			this.setCurrentLeftAngleMax(swipe.getStrength());
-			this.setCurrentRightAngleMax(swipe.getStrength());
+			this.setCurrentLeftAngleMax(swipe.getLength());
+			this.setCurrentRightAngleMax(swipe.getLength());
 		}
 	}
 
@@ -207,9 +207,9 @@ public class RabbitSprite extends SpriteContainer {
 	 * @param swipe
 	 */
 	public void rotate(Swipe swipe) {
-			float angleDelta = (swipe.getStrength() - Swipe.MIN_LENGTH) / 110.f;
+			float angleDelta = (swipe.getPower() - Swipe.MIN_LENGTH) / 110.f;
 
-			angleDelta *= MAX_ROTATION / Swipe.MAX_MIN_DELTA;
+			angleDelta *= MAX_ROTATION / Swipe.MAX_MIN_DELTA_LENGTH;
 
 			if (swipe.isRight()) {
 				angleDelta *= -1.f;

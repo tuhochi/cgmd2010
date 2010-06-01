@@ -1,11 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.io;
 
 /**
- * Wrapper around the Input Gesture DoubleTap
- * This gesture performs a flap with both wings
+ * Wrapper around the Input Gesture SingleTap
  * 
  * @author Matthias
- *
  */
 public class SingleTap implements InputGesture {
 	/** the x-position of the tap */
@@ -13,6 +11,11 @@ public class SingleTap implements InputGesture {
 	/** the y-position of the tap */
 	private float y;
 	
+	/**
+	 * creates a Single-Tap
+	 * @param x x-pos
+	 * @param y y-pos
+	 */
 	public SingleTap(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -42,7 +45,7 @@ public class SingleTap implements InputGesture {
 	/**
 	 * A SingleTap has no strength
 	 */
-	public float getStrength() {
+	public float getPower() {
 		return 0;
 	}
 

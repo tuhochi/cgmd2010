@@ -81,7 +81,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		if (currentGesture != null) {
 			// staerke des Auftriebs proportional zur laenge des Swipes
 			// (Doppeltap = Maximale L�nge)
-			float p = currentGesture.getStrength() / Swipe.MAX_LENGTH;
+			float p = currentGesture.getPower() / Swipe.MAX_LENGTH;
 			flapAcceleration *= p;
 		}
 
@@ -151,7 +151,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		// bottom reached -> stop dropping coin
 		else {
 			coinDrops = false;
-			SoundPlayer.getInstance(null).play(SoundPlayer.SoundEffect.DROP, 0.5f);
+			SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.DROP, 0.5f);
 		}
 	}
 
@@ -223,7 +223,7 @@ public class PhysicalRabbit implements PhysicalObject {
 					// perform one step of the flap and check if the flap is
 					// finished
 					// finshed = at top position again (-45/45 �)
-					finished = sprite.flapLeftWing(swipe.getStrength());
+					finished = sprite.flapLeftWing(swipe.getPower());
 
 					// current flap finished -> remove from input queue
 					if (finished) {
@@ -231,7 +231,7 @@ public class PhysicalRabbit implements PhysicalObject {
 						inputQueue.remove();
 					}
 				} else if (swipe.isRight()) {
-					finished = sprite.flapRightWing(swipe.getStrength());
+					finished = sprite.flapRightWing(swipe.getPower());
 
 					if (finished) {
 						sprite.resetWings();
