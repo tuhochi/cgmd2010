@@ -7,9 +7,13 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.content.Context;
+import android.opengl.GLSurfaceView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
@@ -22,7 +26,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level20.SoundManager.SOUNDS;
  * @author Ferdinand Pilz
  * @author Reinhard Sprung
  */
-public class GameManager implements EventListener, OnTouchListener {
+public class GameManager implements EventListener, OnTouchListener, OnKeyListener {
 
 	protected LevelActivity activity;
 	protected RenderView renderView;
@@ -54,8 +58,13 @@ public class GameManager implements EventListener, OnTouchListener {
 	/** The time left in the game */
 	protected float remainingTime;	
 	
+	/** Our collection of shopping carts */
+	protected ShoppingCart[] shoppingCarts;
 	
-	protected ShoppingCart shoppingCart;
+	/** The amount of shopping carts */
+	protected int nShoppingCarts;
+	
+		
 	protected SpriteAnimationEntity bunny;
 	
 	
@@ -89,6 +98,8 @@ public class GameManager implements EventListener, OnTouchListener {
 		obstacleManager = new ObstacleManager();
 		
 		animators = new Hashtable<Integer, Animator>();
+		shoppingCarts = new ShoppingCart[3];
+		nShoppingCarts = 0;
 		
 		EventManager.getInstance().addListener(this);		
 		
@@ -128,9 +139,11 @@ public class GameManager implements EventListener, OnTouchListener {
 		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
 		shoppingCartSize *= renderView.getHeight() / 480.0f;
 			
-		// Create shopping cart.
-		shoppingCart = new ShoppingCart(200, 100, 2, shoppingCartSize, shoppingCartSize);
-		shoppingCart.texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
+		// Create shopping cart.		
+		shoppingCarts[0] = new ShoppingCart(200, 100, 2, shoppingCartSize, shoppingCartSize);
+		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
+		shoppingCarts[0].clickable = false;
+		nShoppingCarts = 1;
 		
 		// Create bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
@@ -172,7 +185,7 @@ public class GameManager implements EventListener, OnTouchListener {
 		}
 		
 		// ReCreate shopping cart texture.
-		shoppingCart.texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
+		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
 		
 		// ReCreate bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
@@ -194,26 +207,23 @@ public class GameManager implements EventListener, OnTouchListener {
 		time.update();
 		
 		float dt = time.getDt();
-		remainingTime -= dt;
 		
-		// End the game if the time's up
-		if (remainingTime <= 0) {			
-			gameOver();
-			return;
-		}
-		
-		// Difference in movement since last frame
-		float scroll = scrollSpeed * dt;
-		productManager.update(scroll);
-		obstacleManager.update(dt, scroll);
-		
+		// Difference in movement since last frame 
+		productManager.update(scrollSpeed * dt);
 		bunny.update(dt);
 		
 		// Update all Animators
 		Enumeration<Integer> keys = animators.keys();		
 		while(keys.hasMoreElements()) {
 			animators.get(keys.nextElement()).update(dt);
-		}						
+		}
+		
+		remainingTime -= dt;
+		
+		// End the game if the time's up
+		if (remainingTime <= 0) {			
+			gameOver();
+		}
 	}
 
 	
@@ -224,7 +234,11 @@ public class GameManager implements EventListener, OnTouchListener {
 		SessionState s = new SessionState();
 		s.setProgress(100 - (int)totalMoney); 
 		activity.setResult(Activity.RESULT_OK, s.asIntent());
-		activity.finish();
+		
+		boolean finish = activity.getResources().getBoolean(R.bool.l20_endgame);
+		if (finish) {
+			activity.finish();
+		}
 	}
 
 	
@@ -261,6 +275,38 @@ public class GameManager implements EventListener, OnTouchListener {
 	}
 	
 
+	@Override
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
+		
+		Log.d(GameManager.class.getName(), String.valueOf(keyCode));
+		
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_SEARCH:
+			
+			scrollSpeed += 20f;
+			return true;
+			
+		case KeyEvent.KEYCODE_MENU:
+			
+			scrollSpeed -= 20f;
+			return true;
+		
+//		case KeyEvent.KEYCODE_BACK:
+//			
+//			renderView.running = false;
+//			renderView.startButton.setText(R.string.l20_button_resume_text);
+//			renderView.descriptionText.setVisibility(GLSurfaceView.VISIBLE);
+//			renderView.startButton.setVisibility(GLSurfaceView.VISIBLE);
+//			renderView.startButton.setClickable(true);
+//			return true;
+			
+		default:
+			return false;
+		}
+	}
+	
+	
+
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level20.EventListener#handleEvent(int, java.lang.Object)
 	 */
@@ -272,20 +318,36 @@ public class GameManager implements EventListener, OnTouchListener {
 		{
 			// Remove the Animator from the HashTable, effectively destroying it.
 			// NOTE: Does this have to happen at a fixed point in time in the update loop?
-			Animator a = (Animator)eventData;			
-			animators.remove(a.id);			
+			Animator a = (Animator)eventData;
+			animators.remove(a.id);
+			
+			// HACK: But probably the fastest solution
+			if (a.re instanceof ShoppingCart) {
+				// This says, it is now a fixed shopping cart and ready to be filled.
+				a.re.animated = false;
+			}
 		}	
 		break;
 		
 		case EventManager.PRODUCT_COLLECTED:
 		{
 			ProductEntity pe = (ProductEntity)eventData;
-			totalMoney -= ProductInfo.price(pe.type);
+			
+			// Get a random position
+			int cartIndex = (int)(Math.random() * nShoppingCarts);			
+			float[] pos = shoppingCarts[cartIndex].getNextProductPosition();
+			
+			// Move it to the basket.
+			Animator a = new Animator(pe, pos[0], pos[1], 30);
+			animators.put(a.id, a);
+			shoppingCarts[0].addProduct(pe);
 			
 			// Just for fun.
 			if (9 == pe.type) {
 				soundManager.laugh();
 			}
+			
+			totalMoney -= ProductInfo.price(pe.type);
 			
 			// This prevents displaying a negative money count.
 			if (totalMoney <= 0) {
@@ -293,14 +355,18 @@ public class GameManager implements EventListener, OnTouchListener {
 				
 				gameOver();
 				return;
-			}			
+			}				
+		}
+		break;
+		
+		case EventManager.SHOPPING_CART_COLLECTED:
+		{
+			ShoppingCart sc = (ShoppingCart)eventData;			
+			shoppingCarts[nShoppingCarts++] = sc;
 			
-			// Move it to the basket.
-			pe.animated = true;
-			float[] pos = shoppingCart.getNextProductPosition();
-			Animator a = new Animator(pe, pos[0], pos[1], 30);
+			Animator a = new Animator(sc, shoppingCarts[0].x * nShoppingCarts, shoppingCarts[0].y, 30);
 			animators.put(a.id, a);
-			shoppingCart.addProduct(pe);
+			
 		}
 		break;
 		

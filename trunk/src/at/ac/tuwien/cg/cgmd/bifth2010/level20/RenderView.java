@@ -204,10 +204,19 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 			gameManager.productManager.products.get(keys.nextElement()).render(gl);
 		}	
 		
-		gameManager.shoppingCart.render(gl);
+		// Render shopping carts
+		for (int i = 0; i < gameManager.shoppingCarts.length; i++) {			
+			if (gameManager.shoppingCarts[i] != null) {
+				gameManager.shoppingCarts[i].render(gl);
+			}
+		}
 		gameManager.obstacleManager.render(gl);
-		gameManager.bunny.render(gl);		
-
+		
+		if (gameManager.productManager.movingShoppingCart != null) {
+			gameManager.productManager.movingShoppingCart.render(gl);
+		}
+		
+		gameManager.bunny.render(gl);
 		
 		// After all rendering is complete, update the UI TextViews
 		handler.post(textViewUpdater);
@@ -263,36 +272,6 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 	
 
 
-//	/* (non-Javadoc)
-//	 * @see android.view.View#onKeyUp(int, android.view.KeyEvent)
-//	 */
-//	@Override
-//	public boolean onKeyUp(int keyCode, KeyEvent event) {
-//		//
-//		if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-//			gameManager.scrollSpeed += 20f;
-//		
-//			
-//		} else if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-//			gameManager.scrollSpeed -= 20f;
-//			
-//			
-//		} else if(keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-//			
-//			
-//		} else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-//			
-//			
-//		} else if(keyCode == KeyEvent.KEYCODE_BACK) {
-//			
-//			
-//		} else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-//
-//		}
-//
-//		//We handled the event
-//		return true;
-//	}
 
 	/** 
 	 * This method returns the texture id of the given resource file if already available or creates it on the fly. 
