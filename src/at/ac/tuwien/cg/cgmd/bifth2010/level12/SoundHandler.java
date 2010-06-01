@@ -39,6 +39,11 @@ public class SoundHandler {
 		mSP = new SoundPool( Definitions.SOUND_CHANNEL_NUMBER,  AudioManager.STREAM_MUSIC, 100 );
 	}
 	
+	public void addResource( int resID ){
+		if( mSoundIDs.containsKey(resID)) return;
+		mSoundIDs.put(resID, -1 );
+	}
+	
 	
 	public void reloadSamples(){
 		Set<Integer> keys = mSoundIDs.keySet();
@@ -46,35 +51,28 @@ public class SoundHandler {
 		Iterator<Integer> keysiter = keys.iterator();
 		do{
 			int resID = keysiter.next();
-			int val = -1;
-			if( mSP != null ) val = mSP.load(mContext, resID, 1);
+			int val = mSP.load(mContext, resID, 1);
 			mSoundIDs.put(resID, val);
 		} while( keysiter.hasNext());
 	}
 	
 	
 	public void play( int resID ){
-		System.out.println("mSoundOn: "+mSoundOn+" mSP "+mSP.toString()+" resID: "+resID+" val "+mSoundIDs.get(resID));
+		System.out.println("Trying to play: resID - "+resID+" sampleID - "+mSoundIDs.get(resID));
 		if( mSoundOn == false || mSP == null ) return;
-		if( mSoundIDs.containsKey(resID) == false ){
-			int val = mSP.load(mContext, resID, 1);
-			mSoundIDs.put(resID, val);
-		}
+		if( mSoundIDs.containsKey(resID) == false ) return;
 		mSP.play(mSoundIDs.get(resID), mStreamVolume, mStreamVolume, 1, 0, 1.0f);
 	}
 	
 	public void playLoop( int resID){
 		if( mSoundOn == false || mSP == null ) return;
-		if( mSoundIDs.containsKey(resID) == false ){
-			int val = mSP.load(mContext, resID, 1);
-			mSoundIDs.put(resID, val);
-		}
+		if( mSoundIDs.containsKey(resID) == false ) return;
 		mSP.play(mSoundIDs.get(resID), mStreamVolume, mStreamVolume, 1, -1, 1.0f);
 	}
 	
 	
 	public void stop(){
-		mSoundIDs.clear();
+		//mSoundIDs.clear();
 		mSingleton = null;
 		if( mSP == null ) return;
 		mSP.release();

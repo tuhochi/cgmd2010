@@ -16,6 +16,7 @@ public class HyperTower extends Tower {
 		mTexture =  R.drawable.l12_bunny2;
 		mPrice = Definitions.HYPER_TOWER_IRON_NEED;
 		mSound = R.raw.l12_hyper_tower_shooting_sound;
+		SoundHandler.getSingleton().addResource(mSound);
 		initProjectiles();
 	}
 	
