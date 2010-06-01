@@ -37,6 +37,7 @@ public class GameView extends GLSurfaceView {
     		if (event.getAction() == MotionEvent.ACTION_UP){
     			((GameActivity)_renderer.context).finish();
     		}
+    		return true;
     	}
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             _x = event.getX();

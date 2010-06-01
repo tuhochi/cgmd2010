@@ -41,7 +41,7 @@ public class GameActivity extends Activity {
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
-		System.out.println("Create");
+		//System.out.println("Create");
         super.onCreate(savedInstanceState);
         
         // set to fullscreen and no bars
@@ -107,7 +107,7 @@ public class GameActivity extends Activity {
     
     @Override
     protected void onResume() {
-		System.out.println("Resume");
+		//System.out.println("Resume");
 		_level.resume_level();
         _gameView.onResume();
 		super.onResume();
@@ -158,7 +158,7 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) 
 	{
-		System.out.println("Save");
+		//System.out.println("Save");
 		Timing timing = this._level.getTiming();
 		timing.pause();
 		outState.putFloat("startTimeStamp", timing.getStartTime());
@@ -182,11 +182,11 @@ public class GameActivity extends Activity {
 		}
 		outState.putBoolean("isLoadable", true);
 		//super.onSaveInstanceState(outState);
-		System.out.println(outState);
+		//System.out.println(outState);
 	}
     @Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		System.out.println("Restore");
+		//System.out.println("Restore");
 		//super.onRestoreInstanceState(savedInstanceState);
 		
 		Timing timing = new Timing();
@@ -218,7 +218,7 @@ public class GameActivity extends Activity {
 			tl.add(new Treasure(value, startingValue, pos));
 		}
 		this._level.setTreasureList(tl);
-		System.out.println(savedInstanceState);
+		//System.out.println(savedInstanceState);
 	}
 	
     /**
@@ -282,7 +282,7 @@ public class GameActivity extends Activity {
 					_textIntro.setText("Time Up!");
 			}
 		}else{
-			_textIntro.setText("You have to distribute your money on the ground without letting the pedestrians fight.");
+			_textIntro.setText("You have to distribute your money on the ground without letting the pedestrians fight.\nTouch and hold to drop gold. Drag to bounce pedestrians.");
 		}
 	}
 }
