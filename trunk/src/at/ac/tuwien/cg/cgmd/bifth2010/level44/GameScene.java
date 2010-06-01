@@ -24,8 +24,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TimeDisplay;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.VirtualFinger;
 
+/**
+ * The Surface View
+ *
+ */
 
 public class GameScene extends GLSurfaceView implements Renderer {
+	/**
+	 * State of the Game
+	 * @author Matthias
+	 *
+	 */
 	public enum CurrentState {
 		INTRO, RUNNING, EXTRO
 	}
@@ -62,7 +71,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	/** current state of game */
 	private CurrentState currentState = CurrentState.INTRO;
 
-	
+	/**
+	 * Creates the GameScene
+	 * @param context The Context of the Scene
+	 */
 	public GameScene(LevelActivity context) {
 		super(context);
 		
@@ -136,6 +148,11 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glClearColorx((int)(255*.5), (int)(255*.7), 255, 255);
 	}
 	
+	/**
+	 * Initializes a texture
+	 * @param gl
+	 * @param texture
+	 */
 	private void configureTexture(GL10 gl, Texture texture) {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.getTextureName());
 		gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
@@ -186,6 +203,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		restartGameThread();
 	}
 	
+	/**
+	 * restart the game thread
+	 */
 	private void restartGameThread() {
 		stopGameThread();
 		
@@ -195,6 +215,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		}
 	}
 	
+	/**
+	 * stop the game thread
+	 */
 	public void stopGameThread() {
 		if (gameThread != null) {
 			gameThread.doQuit();
@@ -218,10 +241,16 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		restartGameThread();
 	}
 	
+	/**
+	 * @param gesture the new input gesture
+	 */
 	public void addInputGesture(InputGesture gesture) {
 		input = gesture;
 	}
 	
+	/**
+	 * @return the current input gesture
+	 */
 	public InputGesture getNextInputGesture() {
 		/* get the next input gesture and remove it
 		 * if it exists at all (set to null) */
@@ -230,22 +259,38 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		return result;
 	}
 	
+	/**
+	 * @return the device's vibrator
+	 */
 	public Vibrator getVibrator() {
 		return vibrator;
 	}
 	
+	/**
+	 * @return the rabbit the user controls
+	 */
 	public PhysicalRabbit getRabbit() {
 		return rabbit;
 	}
 
+	/**
+	 * @return the current score, between 0 and 100
+	 */
 	public int getScore() {
 		return (CoinBucketSprite.FULL_COIN_COUNT - rabbit.getCoinCount())*10;
 	}
 	
+	/**
+	 * finish the level
+	 */
 	public void finishLevel() {
 		activity.finishLevel(getScore());
 	}
 
+	/**
+	 * permanently store the current instance state
+	 * @param outState
+	 */
 	public void saveInstanceState(Bundle outState) {
 		System.err.println("Saving instance state");
 		
@@ -258,6 +303,10 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		outState.putSerializable(GameState.KEY, gameState);
 	}
 
+	/**
+	 * restore the saved instance state
+	 * @param savedInstanceState
+	 */
 	public void restoreInstanceState(Bundle savedInstanceState) {
 		System.err.println("Restoring instance state");
 		
@@ -268,10 +317,16 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		}		
 	}
 
+	/**
+	 * @param currentState the new state of the game
+	 */
 	public synchronized void setCurrentState(CurrentState currentState) {
 		this.currentState = currentState;
 	}
 
+	/**
+	 * @return the state of the game
+	 */
 	public synchronized CurrentState getCurrentState() {
 		return currentState;
 	}
