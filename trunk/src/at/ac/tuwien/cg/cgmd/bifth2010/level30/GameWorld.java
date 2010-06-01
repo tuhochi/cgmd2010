@@ -65,7 +65,14 @@ public class GameWorld extends Thread {
 	private Handler handler;
 	private LevelActivity context;
 	private Bundle savedInstance;
+	
+	boolean quitThread;
 
+	void SetQuitThread(boolean _quitThread)
+	{
+		quitThread = _quitThread;
+	}
+	
 	/* Implements the game loop.
 	 * (non-Javadoc)
 	 * @see java.lang.Thread#run()
@@ -78,8 +85,12 @@ public class GameWorld extends Thread {
     		try {
 				sleep(20);
 			} catch (InterruptedException e) {				
-			}			
+			}	
+			
+			if (quitThread==true)
+				return;
     	}
+    	
     	
     	Log.d("l30", "level finished");
     	
@@ -110,6 +121,8 @@ public class GameWorld extends Thread {
 	 */
     public GameWorld(LevelActivity levelActivity, Handler _handler, Bundle _savedInstance)
     {
+    	quitThread = false;
+    	
     	Log.d("l30", "GameWorld constructor");
     	
     	isFinished = false;

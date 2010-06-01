@@ -126,7 +126,9 @@ public class LevelActivity extends Activity implements OnClickListener {
 		
 	    mp = MediaPlayer.create(this, R.raw.l00_menu);
 	    mp.setLooping(true);
-	    mp.start();
+
+	    playMusic();
+	    
 	}
 	
 	/* "buy/sell" Button was clicked
@@ -177,7 +179,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 	    super.onResume();
 	    view.onResume();
-	    mp.start();
+	    playMusic();
 	    Log.d("l30","onResume");
 	}
 	
@@ -189,7 +191,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onPause() {
 	    super.onPause();
 	    view.onPause();
-	    mp.pause();
+	    pauseMusic();
 	    Log.d("l30","onPause");
 	}
 	
@@ -201,7 +203,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onStart() {
 		super.onStart();
 		view.onStart();
-		mp.start();
+		playMusic();
 		Log.d("l30","onStart");
 	}
 	
@@ -213,7 +215,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	protected void onStop() {
 		super.onStop();
 		view.onStop();
-		mp.pause();
+		pauseMusic();
 		Log.d("l30","onStop");
 	}
 	
@@ -261,6 +263,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	
 	@Override
 	protected void onDestroy() {
+		releaseMusic();
 		super.onDestroy();
 		Log.d("l30","onDestroy");
 	}
@@ -280,14 +283,15 @@ public class LevelActivity extends Activity implements OnClickListener {
     	}
     }
 
+    
 	/*
 	 * Called from gameworld through handler. Save state&Quit
 	 */
     @Override
 	public void finish() {	
 		
-		updateProgressResult();	
-		mp.stop();
+		updateProgressResult();
+		pauseMusic();
 		super.finish();
 		Log.d("l30","finish");
 	}
@@ -305,5 +309,20 @@ public class LevelActivity extends Activity implements OnClickListener {
 		setResult(Activity.RESULT_OK, s.asIntent());
     }
 	
+    public void playMusic() {
+        if (!mp.isPlaying()) {
+        	mp.seekTo(0);
+        	mp.start();
+        }
+    }
+    
+    public void pauseMusic() {
+        if (mp.isPlaying()) mp.pause();
+    }
 
+    public void releaseMusic() {
+    
+    	mp.stop();
+    	mp.release();
+    }
 }

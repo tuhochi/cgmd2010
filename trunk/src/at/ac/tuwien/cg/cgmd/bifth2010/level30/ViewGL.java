@@ -61,7 +61,9 @@ public class ViewGL extends GLSurfaceView {
      */
 	public void onStart() {
 		if(gameWorld != null && !gameWorld.isAlive())
-			gameWorld.start();
+		{
+			gameWorld.SetPause(false);
+		}
 		
 
 	}
@@ -71,7 +73,9 @@ public class ViewGL extends GLSurfaceView {
      */
 	public void onStop() {
 		if(gameWorld != null && gameWorld.isAlive())
-			gameWorld.stop();
+		{
+			gameWorld.SetPause(true);
+		}
 		
 
 	}
