@@ -1,29 +1,44 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class CustomDialog {
+public class CustomDialog extends AlertDialog {
 
+	private View view;
+	
 	public CustomDialog(Context context)
 	{
-		Dialog dialog = new Dialog(context);
+		super(context);
 		
-		dialog.setContentView(R.layout.l84_customdialog);
-		dialog.setTitle("Info");
+		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		view = inflater.inflate(R.layout.l84_customdialog, null);
 		
-		TextView text = (TextView) dialog.findViewById(R.id.l84_dialogtext);
+		setTitle("Info");
+		
+		//TODO: strings auslagern
+		TextView text = (TextView) view.findViewById(R.id.l84_dialogtext);
 		text.setText("Hier sollte Text stehen");
 		
-		ImageView image = (ImageView) dialog.findViewById(R.id.l84_dialogimage);
+		ImageView image = (ImageView) view.findViewById(R.id.l84_dialogimage);
 		image.setImageResource(R.drawable.l84_tex_gem_oct);
 		
-		dialog.show();
+		setView(view);
 	}
-	
-	
+
+	@Override
+	public void dismiss() {
+		super.dismiss();
+	}
+
+	@Override
+	public void show() {
+		super.show();
+	}
 	
 }
