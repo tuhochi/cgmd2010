@@ -39,6 +39,9 @@ public class GameManager implements EventListener, OnTouchListener {
 	/** Manager audio resources and playback. */
 	SoundManager soundManager;
 	
+	/** Handles obstacles in the game. */
+	ObstacleManager obstacleManager;
+	
 	/** The animator collection */
 	protected Hashtable<Integer, Animator> animators;
 	
@@ -83,6 +86,8 @@ public class GameManager implements EventListener, OnTouchListener {
 		soundManager = new SoundManager((Context)LevelActivity.instance);
 		soundManager.playSound(SOUNDS.RUN);
 		
+		obstacleManager = new ObstacleManager();
+		
 		animators = new Hashtable<Integer, Animator>();
 		
 		EventManager.getInstance().addListener(this);		
@@ -116,6 +121,8 @@ public class GameManager implements EventListener, OnTouchListener {
 		for (int i = 0; i < ProductInfo.length; i++) {
 			renderView.getTexture(ProductInfo.texture(i), gl);
 		}
+		
+		obstacleManager.createObstacle(gl);		
 		
 		// This is the default for a screen height of 480px. 
 		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
@@ -195,10 +202,11 @@ public class GameManager implements EventListener, OnTouchListener {
 			return;
 		}
 		
+		// Difference in movement since last frame
+		float scroll = scrollSpeed * dt;
+		productManager.update(scroll);
+		obstacleManager.update(dt, scroll);
 		
-		
-		// Difference in movement since last frame 
-		productManager.update(scrollSpeed * dt);
 		bunny.update(dt);
 		
 		// Update all Animators
@@ -238,6 +246,7 @@ public class GameManager implements EventListener, OnTouchListener {
 		// Forward the event if there is a touchDown, so we don't miss very short touches. (Useful on the emulator where fps are very low)
         if (touchDown) {        	
     		productManager.touchEvent(touchX, touchY);
+    		obstacleManager.touchEvent(touchX, touchY);
         }
 		
 		// Sleep the thread, so that it doesn't fire too many events

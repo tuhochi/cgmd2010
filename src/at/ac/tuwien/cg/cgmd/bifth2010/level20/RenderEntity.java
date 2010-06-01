@@ -12,10 +12,14 @@ import javax.microedition.khronos.opengles.GL10;
  * @author Ferdinand Pilz
  * @author Reinhard Sprung
  */
-public class RenderEntity extends GameEntity implements Renderable {
+public class RenderEntity extends GameEntity implements Renderable, Clickable {
 
 	protected int texture;
 	protected boolean visible;	
+	/**Flag whether the entity is clickable or not. */	
+	protected boolean clickable;	
+	/** Flag whether the entity is currently animated or not. (If an animator is attached to it) */
+	protected boolean animated;
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
 	
@@ -32,7 +36,10 @@ public class RenderEntity extends GameEntity implements Renderable {
 		super();
 		// INFO: Changed this initial value to 0 to get a white quad on screen everytime
 		texture = 0;
-		visible = true;
+		visible = true;		
+		clickable = true;
+		animated = false;
+		
 		setPos(x, y);
 		this.z = z;
 		setDim(width, height);
@@ -104,22 +111,16 @@ public class RenderEntity extends GameEntity implements Renderable {
 		//Disable the client state before leaving
 //		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 //		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-	}	
+	}
+
+	@Override
+	public boolean hitTest(float hitX, float hitY) {
+		if (!visible) return false;
+		
+		float hW = width * 0.5f;
+		float hH = height * 0.5f;
+		
+		return (hitX >= x - hW && hitX < x + hW   &&   hitY >= y - hH && hitY < y + hH);
+	}
 	
-	// FERDI: Das brauch ma doch nicht :P Und verwenden tuts im Moment auch keine Komponente
-//	public int texture() {
-//		return texture;
-//	}
-//
-//	public void setTexture(int texture) {
-//		this.texture = texture;
-//	}
-//
-//	public boolean isVisible() {
-//		return visible;
-//	}
-//
-//	public void setVisible(boolean visible) {
-//		this.visible = visible;
-//	}
 }

@@ -205,6 +205,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		}	
 		
 		gameManager.shoppingCart.render(gl);
+		gameManager.obstacleManager.render(gl);
 		gameManager.bunny.render(gl);		
 
 		
@@ -292,11 +293,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 //		//We handled the event
 //		return true;
 //	}
-	
-	
 
-	
-	
 	/** 
 	 * This method returns the texture id of the given resource file if already available or creates it on the fly. 
 	 * Note: You have to pass a valid GL everytime you use this method. 
