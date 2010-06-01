@@ -121,6 +121,12 @@ public class EntryPoint extends Activity {
 						SessionState s = new SessionState();
 						s.setLevel(0);
 						s.setProgress(0);
+						
+						//add info about music to session state
+						SharedPreferences settings = getSharedPreferences(MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
+						boolean bMusic = settings.getBoolean(MenuActivity.PREFERENCE_MUSIC, true);
+						s.setMusicAndSoundOn(bMusic);
+						
 						String sAction = Constants.getHelpActionString(iHelp);
 						Intent levelIntent = new Intent();
 						levelIntent.setAction(sAction);
@@ -162,6 +168,11 @@ public class EntryPoint extends Activity {
 						SessionState s = new SessionState();
 						s.setLevel(0);
 						s.setProgress(0);
+						//add info about music to session state
+						SharedPreferences settings = getSharedPreferences(MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
+						boolean bMusic = settings.getBoolean(MenuActivity.PREFERENCE_MUSIC, true);
+						s.setMusicAndSoundOn(bMusic);
+
 						String sAction = Constants.getLevelActionString(iLevel);
 						Intent levelIntent = new Intent();
 						levelIntent.setAction(sAction);
