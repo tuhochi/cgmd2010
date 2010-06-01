@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -20,10 +21,12 @@ public class LevelActivity extends Activity{
 	private GLRenderer mRenderer = null;
 	private int mBGMusicID = 0;
 	
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	System.out.println("ON CREATE ACTIVITY");
+    	//Debug.startMethodTracing("Tracefile");
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);      
@@ -114,6 +117,7 @@ public class LevelActivity extends Activity{
 	protected void onStop() {
 		//we finish this activity;
 		super.onStop();
+    	//Debug.stopMethodTracing();
     }
     
 	@Override

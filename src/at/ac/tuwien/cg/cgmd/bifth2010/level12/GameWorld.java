@@ -337,7 +337,7 @@ public class GameWorld {
 				}
 			}
 		}
-		for( int i = 0; i < mBasicTower.length; i++){
+		for( int i = 0; i < mHyperTower.length; i++){
 			if( mHyperTower[i].getActiveState()){
 				synchronized( mEnemies ){
 					for( int j = 0; j < mEnemies.size() ; j++){
