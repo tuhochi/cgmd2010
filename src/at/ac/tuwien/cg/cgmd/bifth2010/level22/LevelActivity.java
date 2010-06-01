@@ -271,13 +271,13 @@ public class LevelActivity extends Activity {
 	public void quit ()
 	{
 		
+		SoundManager.uninit();
 		SpamRenderer.deactivate();	
 		SoundManager.uninit();
 		GameLogic.kill();
 		
 		SessionState quitState = new SessionState();
 		quitState.setProgress( GameLogic.getMoneyState() );
-		SoundManager.uninit();
 		
 		setResult(Activity.RESULT_OK, quitState.asIntent());
 	}
