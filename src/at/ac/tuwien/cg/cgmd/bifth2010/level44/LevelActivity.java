@@ -39,16 +39,16 @@ public class LevelActivity extends Activity {
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-		//TODO: test
 		// check if sounds effects are set and create soundPlayer
 		SessionState state = new SessionState(getIntent().getExtras());
 		if(state!=null) {
+			System.out.println("state != null");
 			SoundPlayer.createInstance(getApplicationContext(), state.isMusicAndSoundOn());
 		} else {
 			SoundPlayer.createInstance(getApplicationContext(), false);
 		}
 		
-		System.out.println("################ Music: " + SoundPlayer.getInstance().isMusicOn());
+		System.out.println("Music: " + SoundPlayer.getInstance().isMusicOn());
 
 		scene = new GameScene(this);
 		
