@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -39,32 +40,44 @@ public class SoundHandler {
 	}
 	
 	
-	public int addSound( int resID ){
-		if( mSoundIDs.containsKey(resID)) return mSoundIDs.get(resID);
-		else {
-			int val = mSP.load(mContext, resID, 1);
+	public void reloadSamples(){
+		Set<Integer> keys = mSoundIDs.keySet();
+		if( keys.isEmpty() ) return;
+		Iterator<Integer> keysiter = keys.iterator();
+		do{
+			int resID = keysiter.next();
+			int val = -1;
+			if( mSP != null ) val = mSP.load(mContext, resID, 1);
 			mSoundIDs.put(resID, val);
-			return val;
-		}
+		} while( keysiter.hasNext());
 	}
 	
 	
-	public void play( int sampleID ){
-		if( mSoundOn && mSP != null ) mSP.play(sampleID, mStreamVolume, mStreamVolume, 1, 0, 1.0f);
+	public void play( int resID ){
+		System.out.println("mSoundOn: "+mSoundOn+" mSP "+mSP.toString()+" resID: "+resID+" val "+mSoundIDs.get(resID));
+		if( mSoundOn == false || mSP == null ) return;
+		if( mSoundIDs.containsKey(resID) == false ){
+			int val = mSP.load(mContext, resID, 1);
+			mSoundIDs.put(resID, val);
+		}
+		mSP.play(mSoundIDs.get(resID), mStreamVolume, mStreamVolume, 1, 0, 1.0f);
+	}
+	
+	public void playLoop( int resID){
+		if( mSoundOn == false || mSP == null ) return;
+		if( mSoundIDs.containsKey(resID) == false ){
+			int val = mSP.load(mContext, resID, 1);
+			mSoundIDs.put(resID, val);
+		}
+		mSP.play(mSoundIDs.get(resID), mStreamVolume, mStreamVolume, 1, -1, 1.0f);
 	}
 	
 	
 	public void stop(){
-		mSP.stop( R.raw.l12_music);
+		mSoundIDs.clear();
+		mSingleton = null;
+		if( mSP == null ) return;
 		mSP.release();
 		mSP = null;
-	}
-	
-	public void playLoop( int sampleID){
-		if( mSoundOn && mSP != null ) mSP.play(sampleID, mStreamVolume, mStreamVolume, 1, -1, 1.0f);
-	}
-
-	public void pause(int sampleID ) {
-		if( mSP != null ) mSP.pause(sampleID);
 	}
 }
