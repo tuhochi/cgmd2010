@@ -58,13 +58,13 @@ public class GameThread extends Thread {
 						// continue with single-tap
 						if (scene.getNextInputGesture() instanceof SingleTap) {
 							scene.setCurrentState(GameScene.CurrentState.RUNNING);
-							
+
 							// start time for physical movement is resetted
 							rabbit.resetStartTime(0);
 							// reset moving variables
 							rabbit.resetMovement();
 							// position center
-							rabbit.setPosition(scene.getWidth()/2, scene.getHeight()/2);
+							rabbit.setPosition(scene.getWidth() / 2, scene.getHeight() / 2);
 						}
 					}
 
@@ -73,7 +73,7 @@ public class GameThread extends Thread {
 						if (levelFinished()) {
 							rabbit.setBoundaryCheck(false);
 							rabbit.resetStartTime(0);
-							
+
 							scene.setCurrentState(GameScene.CurrentState.EXTRO);
 						}
 
@@ -81,9 +81,9 @@ public class GameThread extends Thread {
 						gesture = scene.getNextInputGesture();
 						if (gesture instanceof SingleTap)
 							gesture = null;
-						
+
 						rabbit.processGesture(gesture);
-						
+
 						// perform movement of rabbit
 						rabbit.move();
 						// move crosshairs
@@ -98,7 +98,7 @@ public class GameThread extends Thread {
 							rabbit.setVelocity(0.f);
 						}
 
-                                                rabbit.getSprite().tick();
+						rabbit.getSprite().tick();
 
 						// perform movement of landscape
 						landscape.step();
@@ -110,28 +110,28 @@ public class GameThread extends Thread {
 					else if (scene.getCurrentState().equals(GameScene.CurrentState.EXTRO)) {
 						// movement depends on current rotation
 						if (rabbit.getSprite().getRotation() < -5.f) {
-							rabbit.processGesture(new Swipe(5, 0, scene.getHeight(), 5, InputGesture.Position.LEFT));
+							rabbit.processGesture(new Swipe(5, 0, scene.getHeight(), 5, Swipe.MAX_VELOCITY, InputGesture.Position.LEFT));
 						} else if (rabbit.getSprite().getRotation() > 5.f) {
-							rabbit.processGesture(new Swipe(scene.getWidth() - 5, 0, scene.getHeight(), scene.getWidth() - 5, InputGesture.Position.RIGHT));
+							rabbit.processGesture(new Swipe(scene.getWidth() - 5, scene.getHeight(), scene.getWidth() - 5, 0,Swipe.MAX_VELOCITY, InputGesture.Position.RIGHT));
 						} else {
 							rabbit.processGesture(new DoubleTap(4.f, 4.f));
 						}
-						
+
 						rabbit.move();
 						landscape.step();
-						
+
 						// shrink rabbit
 						if (System.currentTimeMillis() % 4 == 0)
 							rabbit.getSprite().setScale(rabbit.getSprite().getScale() * 0.997f);
-						
+
 						// rabbit isn't visible anymore -> finish level
-						if (rabbit.getY() + rabbit.getSprite().getHeight() < - 40) {
+						if (rabbit.getY() + rabbit.getSprite().getHeight() < -40) {
 							scene.finishLevel();
 						}
 					}
 				}
 			});
-			
+
 			try {
 				sleep(10);
 			} catch (InterruptedException ie) {
@@ -165,7 +165,7 @@ public class GameThread extends Thread {
 				}
 			}
 
-			scene.getSoundPlayer().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
+			SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
 		}
 
 		// reload after a delay?
@@ -177,7 +177,7 @@ public class GameThread extends Thread {
 					} catch (Exception ex) {
 					}
 
-					scene.getSoundPlayer().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
+					SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
 				}
 			}).start();
 		}

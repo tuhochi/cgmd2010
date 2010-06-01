@@ -13,6 +13,11 @@ public class DoubleTap implements InputGesture {
 	/** the y-position of the tap */
 	private float y;
 	
+	/**
+	 * creates a DoubleTap-Gesture
+	 * @param x the x-position of the tap
+	 * @param y the y-position of the tap
+	 */
 	public DoubleTap(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -38,12 +43,12 @@ public class DoubleTap implements InputGesture {
 		return y;
 	}
 
-	@Override
 	/**
-	 * A DoubleTap hast the strength of a maximum Swipe
+	 * A DoubleTap has the strength of a maximum Swipe
 	 * Therefore the vertical movement of the rabbit will be maximal
 	 */
-	public float getStrength() {
+	@Override
+	public float getPower() {
 		return Swipe.MAX_LENGTH;
 	}
 

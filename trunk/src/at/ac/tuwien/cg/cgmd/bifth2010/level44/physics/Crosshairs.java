@@ -192,7 +192,7 @@ public class Crosshairs {
 	 */
 	public void shoot() {
 		// play shooting sound
-		SoundPlayer.getInstance(scene.getContext()).play(SoundPlayer.SoundEffect.SHOT, 0.5f);
+		SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.SHOT, 0.5f);
 		
 		// position change caused by recoil of the rifle
 		setY(getY()-RECOIL_STRENGTH);

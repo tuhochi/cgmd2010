@@ -14,7 +14,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.CoinBucketSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.IntroBackground;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
@@ -55,8 +54,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	/** the inputgesture to process */
 	private InputGesture input = null;
-	/** soundPlayer */
-	private SoundPlayer player = null;
 	/** the system's vibrator */
 	private Vibrator vibrator = null;
 	
@@ -71,7 +68,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		this.activity = context;
 		
-		player = SoundPlayer.getInstance(context);
 		// get the system's vibrator
 		vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
 		
@@ -232,10 +228,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		InputGesture result = input;
 		input = null;
 		return result;
-	}
-	
-	public SoundPlayer getSoundPlayer() {
-		return player;
 	}
 	
 	public Vibrator getVibrator() {

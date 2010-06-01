@@ -64,9 +64,9 @@ public class TimeDisplay extends Sprite {
 		
 		// Beep for Countdown last 5 Seconds
 		if (remainingSeconds == 0) {
-			SoundPlayer.getInstance(context).play(SoundPlayer.SoundEffect.END, 0.5f);
+			SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.END, 0.5f);
 		} else if (remainingSeconds > 0 && remainingSeconds <= COUNTDOWN_PARTS) {
-			SoundPlayer.getInstance(context).play(SoundPlayer.SoundEffect.BEEP, 0.5f);
+			SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.BEEP, 0.5f);
 		}
 	}
 

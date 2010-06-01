@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -14,11 +13,21 @@ import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputListener;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
+
+/**
+ * Entry-Point for Level 44
+ */
 
 public class LevelActivity extends Activity {
+	/** The Scene for displaying */
 	private GameScene scene;
+	/** detect input gestures */
 	private GestureDetector gestureDetector;
 
+	/**
+	 * @see Activity.onCreate(Bundle b)
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -29,11 +38,24 @@ public class LevelActivity extends Activity {
 		Window window = getWindow();
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		//TODO: test
+		// check if sounds effects are set and create soundPlayer
+		SessionState state = new SessionState(getIntent().getExtras());
+		if(state!=null) {
+			SoundPlayer.createInstance(getApplicationContext(), state.isMusicAndSoundOn());
+		} else {
+			SoundPlayer.createInstance(getApplicationContext(), false);
+		}
+		
+		System.out.println("################ Music: " + SoundPlayer.getInstance().isMusicOn());
 
 		scene = new GameScene(this);
+		
 		if (savedInstanceState != null) {
 			scene.restoreInstanceState(savedInstanceState);
 		}
+		
 		setContentView(scene);
 		
 		Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -54,6 +76,8 @@ public class LevelActivity extends Activity {
 	}
 
 	public void finishLevel(int score) {
+		SoundPlayer.getInstance().release();
+		
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
 		//we set the progress the user has made (must be between 0-100)

@@ -3,7 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.sound;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -24,20 +23,30 @@ public class SoundPlayer {
 	private static SoundPlayer instance = null;
 
 	/**
+	 * create the Singleton-Object
+	 * @param context the context of the SoundPlayer
+	 * @param musicOn shall music be played
+	 */
+	public static void createInstance(Context context, boolean musicOn) {
+		if (instance == null) {
+			instance = new SoundPlayer(context, musicOn);
+		}
+	}
+	/**
 	 * Get the Singleton-Object
 	 * 
 	 * @param context needed for creation
 	 * @return the SoundPlayer
 	 */
-	public static SoundPlayer getInstance(Context context) {
-		if (instance == null) {
-			instance = new SoundPlayer(context);
-		}
-		
+	public static SoundPlayer getInstance() {
 		return instance;
 	}
 	
-	private SoundPlayer(Context context) {
+	/**
+	 * internally creates the Soundplayer
+	 * @param context the context of the SoundPlayer
+	 */
+	private SoundPlayer(Context context, boolean musicOn) {
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
 		sounds = new HashMap<SoundEffect, Integer>();
 
@@ -53,9 +62,14 @@ public class SoundPlayer {
 		AudioManager mgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 		volume = (float)mgr.getStreamVolume(AudioManager.STREAM_MUSIC)	/ (float)mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
-		// check if sounds effects are set
-		SharedPreferences settings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
-		musicOn = settings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
+		this.musicOn = musicOn;
+	}
+	
+	/**
+	 * releases the memory and resources
+	 */
+	public void release() {
+		soundPool.release();
 	}
 
 	/**
@@ -79,5 +93,9 @@ public class SoundPlayer {
 		
 			soundPool.play(sounds.get(sound), leftVolume, rightVolume, 1, 0, 1f);
 		}
+	}
+	
+	public boolean isMusicOn() {
+		return musicOn;
 	}
 }
