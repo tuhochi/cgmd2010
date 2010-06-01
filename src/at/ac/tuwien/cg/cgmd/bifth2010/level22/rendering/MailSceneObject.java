@@ -364,15 +364,15 @@ public class MailSceneObject
 		if ( relativeTime > nextCheckPoint )
 		{
 			
-			relativeTime += pullDt;
+			nextCheckPoint += pullDt;
 			pullPositions[ 0 ] = pullPositions[ 1 ];
 			
 			float u = seed.nextFloat() * (float) Math.PI;
 			float v = seed.nextFloat() * (float) Math.PI;
 			
-			pullPositions[ 1 ].x = (float) Math.sin( u ) * (float) Math.cos( v ) * pullPositionRadius;
-			pullPositions[ 1 ].y = (float) Math.sin( u ) * (float) Math.sin( v ) * pullPositionRadius;
-			pullPositions[ 1 ].z = (float) Math.cos( u ) * pullPositionRadius / 2.0f;
+			pullPositions[ 1 ] = new Vector3f( 	(float) Math.sin( u ) * (float) Math.cos( v ) * pullPositionRadius,
+												(float) Math.sin( u ) * (float) Math.sin( v ) * pullPositionRadius,
+												(float) Math.cos( u ) * pullPositionRadius / 2.0f );
 			
 			getMaxPullRadius();
 		}
@@ -572,7 +572,7 @@ public class MailSceneObject
 		scaleFactor = target.getFloatArray( "scalefactors" )[ index ];
 		actCheckingIndex = target.getShortArray( "checkingindices" )[ index ];
 	}
-	private void calculateMesh( float weightNew )
+	private void calculateMesh( float weight )
 	{
 		
 		vertexPositions.position( 0 );
@@ -580,7 +580,7 @@ public class MailSceneObject
 		float actPosition[] = new float[ 3 ];
 		float modifiedPosition[] = new float[ 3 ];
 		float distanceVec[] = { 0, 0, 0 };
-		float weights[] = { 1.0f - weightNew, weightNew };
+		float weights[] = { weight, 1.0f - weight };
 		
 		for ( int vIndex = 0; vIndex < vertexData.length; vIndex += 3 )
 		{
@@ -610,8 +610,6 @@ public class MailSceneObject
 				
 				distance /= maxPullRadius[ pullIndex ];
 				distance = (float) Math.pow( ( 1.0f - distance ) * weights[ pullIndex ], 2.0f );
-				distance /= 100.0f;
-				//distance *= position.z + minDist;
 				
 				modifiedPosition[ 0 ] -= distanceVec[ 0 ] * distance;
 				modifiedPosition[ 1 ] -= distanceVec[ 1 ] * distance; 
@@ -646,11 +644,7 @@ public class MailSceneObject
 			
 			indices.position( triangleIndex );
 			int[] tIndices = { indices.get(), indices.get(), indices.get() };
-			
-			triangleShareCount[ tIndices[ 0 ] ]++;
-			triangleShareCount[ tIndices[ 1 ] ]++;
-			triangleShareCount[ tIndices[ 2 ] ]++;
-			
+
 			getTriangleNormal( tIndices );
 		}
 		
@@ -665,22 +659,8 @@ public class MailSceneObject
 									characterRefs[ letterIndex ].indices.get(), 
 									characterRefs[ letterIndex ].indices.get() };
 				
-				triangleShareCount[ tIndices[ 0 ] ]++;
-				triangleShareCount[ tIndices[ 1 ] ]++;
-				triangleShareCount[ tIndices[ 2 ] ]++;
-				
 				getTriangleNormal( tIndices );
 			}
-		}
-		
-		for ( int nIndex = 0; nIndex < vertexNormals.capacity(); nIndex++ )
-		{
-			
-			int vStrideIndex = nIndex * 3;
-			
-			vertexNormals.put( vStrideIndex, vertexNormals.get( vStrideIndex ) / (float) triangleShareCount[ nIndex ] );
-			vertexNormals.put( vStrideIndex, vertexNormals.get( vStrideIndex + 1 ) / (float) triangleShareCount[ nIndex ] );
-			vertexNormals.put( vStrideIndex, vertexNormals.get( vStrideIndex + 2 ) / (float) triangleShareCount[ nIndex ] );
 		}
 	}
 	
@@ -784,7 +764,7 @@ public class MailSceneObject
 	private float pullPositionRadius;
 	private Vector3f[] pullPositions;
 	private float nextCheckPoint;
-	private final float pullDt = 0.1f;
+	private final float pullDt = 0.05f;
 	private float[] maxPullRadius;
 	
 	private int subDivisionCount;
