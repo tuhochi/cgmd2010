@@ -102,24 +102,18 @@ public class ProductManager{
 				removeFromProducts.add(pe);
 			}
 		}
-			
-			
+						
 		// Check every frame if the touch touches a product
 		if (LevelActivity.gameManager.touchDown) {			
 			touchEvent(LevelActivity.gameManager.touchX, LevelActivity.gameManager.touchY);
-		}
-		
-		
+		}			
 		
 		// Now remove all marked products and empty the list again
 		for (ProductEntity pe : removeFromProducts) {			
 			products.remove(pe.id);
 		}
 		removeFromProducts.clear();
-		
-		
-		
-		
+
 		// At last, add some new products every few pixels
 		productDistance += scroll;
 		
