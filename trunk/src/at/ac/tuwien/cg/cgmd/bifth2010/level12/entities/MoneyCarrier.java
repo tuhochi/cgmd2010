@@ -49,6 +49,7 @@ public abstract class MoneyCarrier extends GLObject {
 	
 	
 	public void initVBOs(){
+		SoundHandler.getSingleton().addResource(mSound);
 		float[] vertices = {
 				(mX - mRadius),	(mY - mRadius), 1.0f,
 				(mX + mRadius),	(mY - mRadius), 1.0f,

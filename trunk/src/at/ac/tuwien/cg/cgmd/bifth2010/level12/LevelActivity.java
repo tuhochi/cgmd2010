@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -55,7 +56,16 @@ public class LevelActivity extends Activity{
     @Override
     protected void onResume() {
     	SoundHandler.setContext(this);
-    	SoundHandler.getSingleton().addResource(R.raw.l12_music);
+    	
+		Intent callingIntent = getIntent();
+		SessionState state = new SessionState(callingIntent.getExtras());
+		if(state!=null){
+			boolean isMusicAndSoundOn = state.isMusicAndSoundOn(); 
+			SoundHandler.getSingleton().setSound(isMusicAndSoundOn);
+			System.out.println("SETTING SOUND TO: "+isMusicAndSoundOn);
+		}
+    	
+    	//SoundHandler.getSingleton().addResource(R.raw.l12_music);
     	TextureManager.getSingletonObject().initializeContext(this);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass1);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass2);
@@ -101,7 +111,7 @@ public class LevelActivity extends Activity{
         l.addView( glview );
         
         setContentView( l );
-    	SoundHandler.getSingleton().playLoop(R.raw.l12_music);
+    	//SoundHandler.getSingleton().playLoop(R.raw.l12_music);
         super.onResume();
     }
     

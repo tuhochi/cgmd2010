@@ -18,7 +18,6 @@ public class BasicTower extends Tower {
 		mTexture =  R.drawable.l12_bunny1;
 		mPrice = Definitions.BASIC_TOWER_IRON_NEED;
 		mSound = R.raw.l12_basic_tower_shooting_sound;
-		SoundHandler.getSingleton().addResource(mSound);
 		initProjectiles();	
 	}
 	
