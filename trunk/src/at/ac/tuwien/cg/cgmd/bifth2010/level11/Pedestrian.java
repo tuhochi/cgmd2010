@@ -202,7 +202,7 @@ public class Pedestrian implements Target{
 					angle = 180;
 				else if(this.position.x < 0)
 					angle = 0;
-				else if(this.position.y > Level.sizeY)
+				else if(this.position.y > Level.sizeY*Level.ratioFix)
 					angle = 270;
 				else if(this.position.y < 0)
 					angle = 90;
