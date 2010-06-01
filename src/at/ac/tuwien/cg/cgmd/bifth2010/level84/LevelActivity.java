@@ -10,7 +10,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -73,9 +72,6 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	private SoundManager soundManager;
 	
 	private Vibrator vibrator;
-	
-	private Toast introToast;
-	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
