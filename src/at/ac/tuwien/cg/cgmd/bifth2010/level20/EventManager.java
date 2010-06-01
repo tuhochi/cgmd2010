@@ -20,6 +20,8 @@ public class EventManager {
 	// FERDI: Hast du dir das so gedacht? Oder Enum? Ich überlass das Design vom Eventmanager dir :P
 	public static final int ANIMATION_COMPLETE = 1;
 	public static final int PRODUCT_COLLECTED = 2;
+	public static final int SHOPPING_CART_COLLECTED = 3;
+//	public static final int SHOPPING_CART_IN_PLACE = 4;
 	
 	
 	/**

@@ -63,6 +63,7 @@ public class LevelActivity extends Activity {
 
         gameManager = new GameManager();
 		renderView.setOnTouchListener(gameManager);
+		renderView.setOnKeyListener(gameManager);
 	
 		SessionState s = new SessionState();
 		s.setProgress(0); 
