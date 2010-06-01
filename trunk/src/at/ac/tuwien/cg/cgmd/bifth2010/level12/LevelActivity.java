@@ -55,6 +55,7 @@ public class LevelActivity extends Activity{
     @Override
     protected void onResume() {
     	SoundHandler.setContext(this);
+    	SoundHandler.getSingleton().addResource(R.raw.l12_music);
     	TextureManager.getSingletonObject().initializeContext(this);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass1);
     	TextureManager.getSingletonObject().add(R.drawable.l12_grass2);
@@ -84,6 +85,7 @@ public class LevelActivity extends Activity{
     	int menuheight = mDisplay.getHeight() - fieldheight;
     	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
+    	SoundHandler.getSingleton().reloadSamples();
 	
  	   	GLSurfaceView glview = new GLSurfaceView(this);
  	   	if( mRenderer == null ) mRenderer = new GLRenderer();
