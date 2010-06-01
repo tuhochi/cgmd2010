@@ -64,7 +64,7 @@ public class SoundManager {
 	public static void uninit()
 	{
 		
-		musicProcessor.stop();
+		if ( musicProcessor.isPlaying() ) musicProcessor.stop();
 		
 		soundFXPool.release();
 		musicProcessor.release();

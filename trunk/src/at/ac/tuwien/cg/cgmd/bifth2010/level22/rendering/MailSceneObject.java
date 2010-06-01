@@ -123,7 +123,7 @@ public class MailSceneObject
 														(float) Math.cos( u ) * pullPositionRadius / 2.0f );
 		}
 		
-		int charSubdivisionCount = 3;
+		int charSubdivisionCount = Math.max( 2, (int) ( 12 - characterRefs.length * 1.5f ) );
 		verResolution = charSubdivisionCount + 2;
 		subDivisionCount = charSubdivisionCount * myMail.getDisplayName().length() + 2;
 		
@@ -609,9 +609,9 @@ public class MailSceneObject
 				distanceVec[ 2 ] /= distance;
 				
 				distance /= maxPullRadius[ pullIndex ];
-				distance = (float) Math.pow( ( 1.0f - distance ) * weights[ pullIndex ], 3.0f );
-				distance /= 1000.0f;
-				distance *= position.z + minDist;
+				distance = (float) Math.pow( ( 1.0f - distance ) * weights[ pullIndex ], 2.0f );
+				distance /= 100.0f;
+				//distance *= position.z + minDist;
 				
 				modifiedPosition[ 0 ] -= distanceVec[ 0 ] * distance;
 				modifiedPosition[ 1 ] -= distanceVec[ 1 ] * distance; 
@@ -784,7 +784,7 @@ public class MailSceneObject
 	private float pullPositionRadius;
 	private Vector3f[] pullPositions;
 	private float nextCheckPoint;
-	private final float pullDt = 0.5f;
+	private final float pullDt = 0.1f;
 	private float[] maxPullRadius;
 	
 	private int subDivisionCount;
