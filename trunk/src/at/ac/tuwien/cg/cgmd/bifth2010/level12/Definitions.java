@@ -22,7 +22,7 @@ public final class Definitions {
 	public static final short HYPER_TOWER = 2;
 	
 	//Tower Counts:
-	public static final short BASIC_TOWER_POOL = 5;
+	public static final short BASIC_TOWER_POOL = 7;
 	public static final short ADVANCED_TOWER_POOL = 5;
 	public static final short HYPER_TOWER_POOL = 5;
 	
