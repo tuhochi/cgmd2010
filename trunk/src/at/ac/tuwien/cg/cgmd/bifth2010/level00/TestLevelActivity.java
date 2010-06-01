@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
@@ -22,6 +23,16 @@ public class TestLevelActivity extends Activity{
 		//set a layout
 		setContentView(R.layout.l00_testlevel);
 		//get the button specified in the layout
+		
+		TextView tv = (TextView) findViewById(R.id.l00_TextViewSessionState);
+		Intent callingIntent = getIntent();
+		SessionState state = new SessionState(callingIntent.getExtras());
+		if(state!=null){
+			String s = "SessionState: level " + state.getLevel() + ", progress " + state.getProgress() + ", musicison " + state.isMusicAndSoundOn();
+			tv.setText(s);
+		} else {
+			tv.setText("No session state");
+		}
 		Button buttonFinish = (Button) findViewById(R.id.l00_ButtonFinish);
 		//set a onClickListener to react to the user's click
 		buttonFinish.setOnClickListener(new OnClickListener(){
