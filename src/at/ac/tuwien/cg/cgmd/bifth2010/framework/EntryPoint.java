@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -24,21 +23,15 @@ public class EntryPoint extends Activity {
 	private static final String CLASS_TAG = EntryPoint.class.getName();
 
 	private static final String PREFERENCE_HELP = "help_id";
-
 	private static final String PREFERENCE_LEVEL = "level_id";
-
+	
 	public static final String PREFERENCE_LEVEL_01 = "level01_id";
-
 	public static final String PREFERENCE_LEVEL_02 = "level02_id";
-
 	public static final String PREFERENCE_LEVEL_03 = "level03_id";
-
 	public static final String PREFERENCE_LEVEL_04 = "level04_id";
-
 	public static final String PREFERENCE_LEVEL_05 = "level05_id";
-
 	public static final String PREFERENCE_LEVEL_06 = "level06_id";
-
+	
 	private static final String  PREFERENCE_DEBUG_ALWAYSSTARTLEVEL = "alwaysstart";
 
 	public static final String SHAREDPREFERENCES_FRAMEWORK_DEBUGSETTINGS = "l00_debug_settings";

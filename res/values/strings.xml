@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="l00_help_part03">The placement of the levels is randomly chosen when you start a game. Here is a list of all possible levels. To see the help for a individual level click on its icon!</string>
-    <string name="l00_help_part02">To loose part of your treasure play the level of your choice by pressing its icon. Levels that are marked with a questionmark cannot be played yet. </string>
-    <string name="l00_help_part01">Choose one of the menu items to continoue the last game, to start a new game, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to loose your treasure.</string>
+    <string name="l00_help_part03">The placement of the levels is randomly chosen when you start a game. Here is a list of all possible levels. To see the help for an individual level click on its icon!</string>
+    <string name="l00_help_part02">To lose part of your treasure play the level of your choice by pressing its icon. Levels that are marked with a question mark cannot be played yet. </string>
+    <string name="l00_help_part01">Choose one of the menu items to continue the last game, to start a new game, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to lose your treasure.</string>
     
     <string name="l00_nameofthegame_full">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
     

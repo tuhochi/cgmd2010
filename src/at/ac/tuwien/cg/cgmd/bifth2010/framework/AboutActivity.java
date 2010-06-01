@@ -211,6 +211,7 @@ public class AboutActivity extends Activity {
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 			
 			
+			mLabels.clear();
 			
 			mCoin = new Cylinder(0.5f, 0.10f, (short) 10);
 			mCoin.setTexture(gl, getResources(), R.drawable.l00_coin);

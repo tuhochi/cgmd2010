@@ -9,18 +9,20 @@ public class Path {
 	
 	public Path(){
 
-		mPointList.add(new PathPoint(11.04f, 41.85f));
-		mPointList.add(new PathPoint(22.91f, 11.11f));
-		mPointList.add(new PathPoint(62.50f, 14.81f));
-		mPointList.add(new PathPoint(62.50f, 33.33f));
-		mPointList.add(new PathPoint(22.91f, 42.59f));
-		mPointList.add(new PathPoint(33.33f, 55.55f));
-		mPointList.add(new PathPoint(70.80f, 55.55f));
-		mPointList.add(new PathPoint(79.16f, 09.25f));
-		mPointList.add(new PathPoint(89.58f, 27.77f));
-		mPointList.add(new PathPoint(80.20f, 74.07f));
-		mPointList.add(new PathPoint(06.25f, 77.77f));
-		mPointList.add(new PathPoint(04.16f, 51.85f));
+		float fWHalf = 0.042f;
+		float fHHalf = 0.074f;
+		mPointList.add(new PathPoint(0.1104f+fWHalf, 0.4185f+fHHalf));
+		mPointList.add(new PathPoint(0.2291f+fWHalf, 0.1111f+fHHalf));
+		mPointList.add(new PathPoint(0.6250f+fWHalf, 0.1481f+fHHalf));
+		mPointList.add(new PathPoint(0.6250f+fWHalf, 0.3333f+fHHalf));
+		mPointList.add(new PathPoint(0.2291f+fWHalf, 0.4259f+fHHalf));
+		mPointList.add(new PathPoint(0.3333f+fWHalf, 0.5555f+fHHalf));
+		mPointList.add(new PathPoint(0.7080f+fWHalf, 0.5555f+fHHalf));
+		mPointList.add(new PathPoint(0.7916f+fWHalf, 0.0925f+fHHalf));
+		mPointList.add(new PathPoint(0.8958f+fWHalf, 0.2777f+fHHalf));
+		mPointList.add(new PathPoint(0.8020f+fWHalf, 0.7407f+fHHalf));
+		mPointList.add(new PathPoint(0.0625f+fWHalf, 0.7777f+fHHalf));
+		mPointList.add(new PathPoint(0.0416f+fWHalf, 0.5185f+fHHalf));
 		//mPointList.add(new PathPoint(11.041667f, 41.851852f));
 
 		mWeights.add(0.f);
