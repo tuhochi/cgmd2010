@@ -26,8 +26,10 @@ public class LevelRenderer implements Renderer {
 	private final float BUNNY_DEFAULT_MOVEMENT_UNIT = 6.0f;
 	private final float COP_DEFAULT_MOVEMENT_UNIT = 4.0f;
 	private final float DEFAULT_FPS = 12.0f;
-	private final static int BUNNY_WIDTH = 55;
-	private final static int BUNNY_HEIGHT = 60;
+	public final static int BUNNY_WIDTH = 60;
+	public final static int BUNNY_HEIGHT = 60;
+	public final static int COP_WIDTH = 50;
+	public final static int COP_HEIGHT = 50;
 	private final static int LEVEL_WIDTH = 5;
 	private final static int LEVEL_HEIGHT = 6;
 	private final static int LEVEL_TILESIZE = 100;
@@ -35,6 +37,7 @@ public class LevelRenderer implements Renderer {
 	private final static int ACTION_HEIGHT = 6;
 	private final static int ACTION_TILESIZE = 100;
 	public final static int CONTROL_SIZE = 150;
+	private final static float CATCH_DISTANCE = COP_WIDTH;
 	
 	private boolean drawLock = false;
 	private float[] keystates = new float[4];
@@ -84,17 +87,16 @@ public class LevelRenderer implements Renderer {
 	private final static String CRIME = "CRIME";
 	private final static String STARTFRAMETIME = "STARTFRAMETIME";
 	private final static String PAUSETIME = "PAUSETIME";
-	private final static int COP_SIZE = 50;
 
 	private ArrayList<Tablet> actiontextures;
 
 
 	private static int levelMap[][] = {  
 		{ 3, 1, 1, 3, 1 },
-		{ 2,20,20, 2,20 },
+		{ 2, 0, 0, 2, 0 },
 		{ 3, 1, 1, 3, 1 },
-		{ 2, 8, 9, 2,20 },
-		{ 2,10,11, 2,20 },
+		{ 2, 8, 9, 2, 0 },
+		{ 2,10,11, 2, 0 },
 		{ 3, 1, 1, 3, 1 }
 	};
 
@@ -232,7 +234,7 @@ public class LevelRenderer implements Renderer {
 
 			if (acted) {	
 				if (copCounter == 0 || Math.ceil(crime/20)>copCounter)
-					cops.add(new Tablet(context, COP_SIZE, COP_SIZE, 0, 0, manager.getTexture("cop_front_l"), gl));
+					cops.add(new Tablet(context, COP_WIDTH, COP_HEIGHT, 0, 0, manager.getTexture("cop_front_l"), gl));
 
 				crime += keks.get(actionMap[tile_y][tile_x]);
 				crimeCounter++;
@@ -257,11 +259,8 @@ public class LevelRenderer implements Renderer {
 			else if (y>0) bunny.changeTexture(manager.getTexture("bunny_back_r"));
 		}
 
-		int coll = checkCollision(xPos,yPos,x,y); 
-		if (coll == 0 && 
-				xPos+x >= 0 && yPos+y >= 0 && 
-				xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
-				yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
+		int coll = checkCollision(xPos,yPos,x,y, BUNNY_WIDTH, BUNNY_HEIGHT); 
+		if (coll == 0)	{
 			bunny.move(x, y);
 			posX = x; posY = y;
 			myX = x; myY = y;
@@ -275,8 +274,8 @@ public class LevelRenderer implements Renderer {
 			else if (y < 0) newY = -BUNNY_MOVEMENT_UNIT;
 			else newY = 0;
 			
-			if ((coll & 1) > 0 || (coll & 2) > 0) newX = 0;
-			if ((coll & 4) > 0 || (coll & 8) > 0) newY = 0;
+			if ((coll & 1) > 0 || (coll & 2) > 0) newX = 0; // left/right
+			if ((coll & 4) > 0 || (coll & 8) > 0) newY = 0; // up/down
 				
 			bunny.move(newX, newY);
 			myX = newX; myY = newY;
@@ -300,7 +299,7 @@ public class LevelRenderer implements Renderer {
 		float altX;
 		float altY;
 
-		int coll = checkCollision(xPos,yPos,x,y);
+		int coll = checkCollision(xPos,yPos,x,y, COP_WIDTH, COP_HEIGHT);
 		if (coll==0 && 
 				xPos+x >= 0 && yPos+y >= 0 && 
 				xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
@@ -354,14 +353,14 @@ public class LevelRenderer implements Renderer {
 				altX = cnewX; altY = cnewY;
 			}
 
-			if (checkCollision(xPos,yPos,newX,newY)==0 && 
+			if (checkCollision(xPos,yPos,newX,newY, COP_WIDTH, COP_HEIGHT)==0 && 
 					xPos+newX >= 0 && yPos+newY >= 0 && 
 					xPos+newX <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 					yPos+newY <= LEVEL_HEIGHT*LEVEL_TILESIZE) {
 				cop.move(newX, newY);
 				cnewX = newX; cnewY = newY;
 			}
-			else if (checkCollision(xPos,yPos,altX,altY)==0 && 
+			else if (checkCollision(xPos,yPos,altX,altY, COP_WIDTH, COP_HEIGHT)==0 && 
 					xPos+altX >= 0 && yPos+altY >= 0 && 
 					xPos+altX <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 					yPos+altY <= LEVEL_HEIGHT*LEVEL_TILESIZE) {
@@ -381,38 +380,72 @@ public class LevelRenderer implements Renderer {
 		mapOffset_y -= y;
 	}
 
-	private int checkCollision(float xPos, float yPos, float xwise, float ywise) {
+	private int checkCollision(float xPos, float yPos, float xwise, float ywise, float tabletWidth, float tabletHeight) {
 		//find out which tile we want to go to
 		//ul ur ol or
 		int result = 0;
+		int b1=0, b2=0, b3=0, b4=0, c1=0, c2=0, c3=0, c4=0, d1=0, d2=0, d3=0, d4=0;
 		
+		// calculate where we would be if we go xwise&ywise(d), only xwise(b) and only ywise(c)
 		xPos += xwise;
-		int btile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile1_y = (int)((xPos) / (float)LEVEL_TILESIZE), btile2_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), btile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), btile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile3_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE), btile4_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), btile4_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE);
+		int btile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile1_y = (int)((yPos) / (float)LEVEL_TILESIZE), btile2_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), btile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), btile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile3_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE), btile4_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), btile4_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE);
 		xPos -= xwise;
 		yPos += ywise;
-		int ctile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile1_y = (int)((xPos) / (float)LEVEL_TILESIZE), ctile2_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), ctile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), ctile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile3_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE), ctile4_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), ctile4_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE);
+		int ctile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile1_y = (int)((yPos) / (float)LEVEL_TILESIZE), ctile2_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), ctile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), ctile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile3_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE), ctile4_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), ctile4_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE);
 		xPos += xwise;
-		int dtile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile1_y = (int)((xPos) / (float)LEVEL_TILESIZE), dtile2_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), dtile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), dtile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile3_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE), dtile4_x = (int)((xPos+BUNNY_WIDTH) / (float)LEVEL_TILESIZE), dtile4_y = (int)((yPos+BUNNY_HEIGHT) / (float)LEVEL_TILESIZE);
+		int dtile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile1_y = (int)((yPos) / (float)LEVEL_TILESIZE), dtile2_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), dtile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), dtile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile3_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE), dtile4_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), dtile4_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE);
 		
+		if (xPos <= 0) result |= 2;
+		if (xPos+tabletWidth >= LEVEL_WIDTH*LEVEL_TILESIZE) result |= 1;
+		if (yPos <= 0) result |= 8;
+		if (yPos+tabletHeight >= LEVEL_HEIGHT*LEVEL_TILESIZE) result |= 4;
+		
+		// check if we're out of boundaries in any of those cases
 		if (btile1_x < 0 || btile2_x < 0 || btile3_x < 0 || btile4_x < 0) result |= 2;
 		if (btile1_x >= LEVEL_WIDTH || btile2_x >= LEVEL_WIDTH || btile3_x >= LEVEL_WIDTH || btile4_x >= LEVEL_WIDTH) result |= 1;
 		if (ctile1_y < 0 || ctile2_y < 0 || ctile3_y < 0 || ctile4_y < 0) result |= 8;
 		if (ctile1_y >= LEVEL_HEIGHT || ctile2_y >= LEVEL_HEIGHT || ctile3_y >= LEVEL_HEIGHT || ctile4_y >= LEVEL_HEIGHT) result |= 4;
 		
-		if (result > 0) return result;
+		if ((result & 1) > 0) { b2=20; b4=20; d2=20; d4=20; }
+		if ((result & 2) > 0) { b1=20; b3=20; d1=20; d3=20; }
+		if ((result & 4) > 0) { c3=20; c4=20; d3=20; d4=20; }
+		if ((result & 8) > 0) { c1=20; c2=20; d3=20; d4=20; }
+		if (btile1_y < 0 || btile1_y >= LEVEL_HEIGHT || btile1_x < 0 || btile1_x >= LEVEL_WIDTH) b1 = 20;
+		if (btile2_y < 0 || btile2_y >= LEVEL_HEIGHT || btile2_x < 0 || btile2_x >= LEVEL_WIDTH) b2 = 20;
+		if (btile3_y < 0 || btile3_y >= LEVEL_HEIGHT || btile3_x < 0 || btile3_x >= LEVEL_WIDTH) b3 = 20;
+		if (btile4_y < 0 || btile4_y >= LEVEL_HEIGHT || btile4_x < 0 || btile4_x >= LEVEL_WIDTH) b4 = 20;
+		if (ctile1_y < 0 || ctile1_y >= LEVEL_HEIGHT || ctile1_x < 0 || ctile1_x >= LEVEL_WIDTH) c1 = 20;
+		if (ctile2_y < 0 || ctile2_y >= LEVEL_HEIGHT || ctile2_x < 0 || ctile2_x >= LEVEL_WIDTH) c2 = 20;
+		if (ctile3_y < 0 || ctile3_y >= LEVEL_HEIGHT || ctile3_x < 0 || ctile3_x >= LEVEL_WIDTH) c3 = 20;
+		if (ctile4_y < 0 || ctile4_y >= LEVEL_HEIGHT || ctile4_x < 0 || ctile4_x >= LEVEL_WIDTH) c4 = 20;
+		if (dtile1_y < 0 || dtile1_y >= LEVEL_HEIGHT || dtile1_x < 0 || dtile1_x >= LEVEL_WIDTH) d1 = 20;
+		if (dtile2_y < 0 || dtile2_y >= LEVEL_HEIGHT || dtile2_x < 0 || dtile2_x >= LEVEL_WIDTH) d2 = 20;
+		if (dtile3_y < 0 || dtile3_y >= LEVEL_HEIGHT || dtile3_x < 0 || dtile3_x >= LEVEL_WIDTH) d3 = 20;
+		if (dtile4_y < 0 || dtile4_y >= LEVEL_HEIGHT || dtile4_x < 0 || dtile4_x >= LEVEL_WIDTH) d4 = 20;
 		
-		int b1 = levelMap[btile1_y][btile1_x], b2 = levelMap[btile2_y][btile2_x], b3 = levelMap[btile3_y][btile3_x], b4 = levelMap[btile4_y][btile4_x];
-		int c1 = levelMap[ctile1_y][ctile1_x], c2 = levelMap[ctile2_y][ctile2_x], c3 = levelMap[ctile3_y][ctile3_x], c4 = levelMap[ctile4_y][ctile4_x];
-		int d1 = levelMap[dtile1_y][dtile1_x], d2 = levelMap[dtile2_y][dtile2_x], d3 = levelMap[dtile3_y][dtile3_x], d4 = levelMap[dtile4_y][dtile4_x];
-		// rechts links oben unten
-		if (d1 >= 8 || d2 >= 8 || d3 >= 8 || d4 >= 8) {
+		// now let's see what's there
+		if (b1 != 20) b1 = levelMap[btile1_y][btile1_x]; 
+		if (b2 != 20) b2 = levelMap[btile2_y][btile2_x]; 
+		if (b3 != 20) b3 = levelMap[btile3_y][btile3_x]; 
+		if (b4 != 20) b4 = levelMap[btile4_y][btile4_x];
+		if (c1 != 20) c1 = levelMap[ctile1_y][ctile1_x]; 
+		if (c2 != 20) c2 = levelMap[ctile2_y][ctile2_x]; 
+		if (c3 != 20) c3 = levelMap[ctile3_y][ctile3_x]; 
+		if (c4 != 20) c4 = levelMap[ctile4_y][ctile4_x];
+		if (d1 != 20) d1 = levelMap[dtile1_y][dtile1_x]; 
+		if (d2 != 20) d2 = levelMap[dtile2_y][dtile2_x]; 
+		if (d3 != 20) d3 = levelMap[dtile3_y][dtile3_x]; 
+		if (d4 != 20) d4 = levelMap[dtile4_y][dtile4_x];
+		
+		// rechts=1 links=2 oben=4 unten=8
+		if (d1 >= 8 || d1 == 0 || d2 >= 8 || d2 == 0 || d3 >= 8 || d3 == 0 || d4 >= 8 || d4 == 0) {
 			//only xwise
-			if (b1 >= 8 || b2 >= 8 || b3 >= 8 || b4 >= 8) {
+			if (b1 >= 8 || b1 == 0 || b2 >= 8 || b2 == 0 || b3 >= 8 || b3 == 0 || b4 >= 8 || b4 == 0) {
 				if (xwise > 0) result |= 1;
 				else result |= 2;
 			}
 			//only ywise
-			if (c1 >= 8 || c2 >= 8 || c3 >= 8 || c4 >= 8) {
+			if (c1 >= 8 || c1 == 0 || c2 >= 8 || c2 == 0 || c3 >= 8 || c3 == 0 || c4 >= 8 || c4 == 0) {
 				if (ywise > 0) result |= 4;
 				else result |= 8;
 			}
@@ -445,24 +478,18 @@ public class LevelRenderer implements Renderer {
 			dy /= d_len;
 
 			if (frameCounter%10==0) {
-				if (dy<0)
-					cop.changeTexture(manager.getTexture("cop_front_l"));
-				else 
-					cop.changeTexture(manager.getTexture("cop_back_l"));
-
+				if (dy<0) cop.changeTexture(manager.getTexture("cop_front_l"));
+				else cop.changeTexture(manager.getTexture("cop_back_l"));
 			} else if (frameCounter%10==5) {
-				if (dy<0) 
-					cop.changeTexture(manager.getTexture("cop_front_r"));
-				else 
-					cop.changeTexture(manager.getTexture("cop_back_r"));
+				if (dy<0) cop.changeTexture(manager.getTexture("cop_front_r"));
+				else cop.changeTexture(manager.getTexture("cop_back_r"));
 			}
-
 
 			if (bx != cx && by != cy) {
 				moveCop(dx*COP_MOVEMENT_UNIT, dy*COP_MOVEMENT_UNIT, cop);
 
 				//check if cop catches bunny
-				if (d_len <= COP_MOVEMENT_UNIT*3)
+				if (d_len-3.0f <= CATCH_DISTANCE)
 					bunnyWasCaught();
 
 			}
@@ -527,7 +554,7 @@ public class LevelRenderer implements Renderer {
 //		if (keystates[1]) moveBunny(BUNNY_MOVEMENT_UNIT, 0);
 //		if (keystates[2]) moveBunny(0, BUNNY_MOVEMENT_UNIT);
 //		if (keystates[3]) moveBunny(0, -BUNNY_MOVEMENT_UNIT);
-		moveBunny(keystates[0], keystates[2]);
+		if (keystates[0] != 0.0f && keystates[2] != 0.0f) moveBunny(keystates[0], keystates[2]);
 
 		Tablet block = null;
 
@@ -678,7 +705,7 @@ public class LevelRenderer implements Renderer {
 			copCounter = mSavedInstance.getInt(COP_NUMBER);
 			
 			for (int i=0;i<copCounter;i++)
-				cops.add(new Tablet(context, COP_SIZE, COP_SIZE, mSavedInstance.getFloat(COP_X + i), mSavedInstance.getFloat(COP_Y + i), manager.getTexture("cop_front_l"), gl));
+				cops.add(new Tablet(context, COP_WIDTH, COP_HEIGHT, mSavedInstance.getFloat(COP_X + i), mSavedInstance.getFloat(COP_Y + i), manager.getTexture("cop_front_l"), gl));
 
 			Log.d("LevelRenderer", "Load bunny pos: x " + mSavedInstance.getFloat(BUNNY_X) + " y " + mSavedInstance.getFloat(BUNNY_Y));
 			Log.d("LevelRenderer", "Load cop pos: x " + mSavedInstance.getFloat(COP_X) + " y " + mSavedInstance.getFloat(COP_Y));
