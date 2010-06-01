@@ -39,17 +39,22 @@ public class SoundManager {
 	public SoundManager(Context context)
 	{
 		this.context = context;
-		
-		//init soundPool and soundeffects
-		soundPool = new SoundPool(soundsamount, AudioManager.STREAM_MUSIC, 100);
-		initSoundMap(context);
-		
-		//init musicplayer for background sounds
-		initMusicBG(context);
-		initMusicNature(context);
-		
+	
+		//get soundsettings - if sound is on/off
 		SharedPreferences audiosettings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
 		soundOn = audiosettings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
+
+		if (soundOn)
+		{
+			//init soundPool and soundeffects
+			soundPool = new SoundPool(soundsamount, AudioManager.STREAM_MUSIC, 100);
+			initSoundMap(context);
+			
+			//init musicplayer for background sounds
+			initMusicBG(context);
+			initMusicNature(context);
+		}
+
 	}
 	
 	/**
@@ -97,9 +102,12 @@ public class SoundManager {
 	 */
 	public void releaseSounds()
 	{
-		releaseBackground();
-		releaseNature();
-		soundPool.release();
+		if (soundOn)
+		{
+			releaseBackground();
+			releaseNature();
+			soundPool.release();
+		}
 	}
 	
 	
