@@ -52,6 +52,7 @@ public class SoundHandler {
 		do{
 			int resID = keysiter.next();
 			int val = mSP.load(mContext, resID, 1);
+			System.out.println("LOAD SOUNDSAMPLE : "+resID+" ID: "+val);
 			mSoundIDs.put(resID, val);
 		} while( keysiter.hasNext());
 	}
@@ -77,5 +78,9 @@ public class SoundHandler {
 		if( mSP == null ) return;
 		mSP.release();
 		mSP = null;
+	}
+	
+	public void setSound( boolean sound ){
+		mSoundOn = sound;
 	}
 }
