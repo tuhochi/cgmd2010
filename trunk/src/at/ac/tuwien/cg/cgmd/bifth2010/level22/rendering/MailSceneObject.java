@@ -626,6 +626,64 @@ public class MailSceneObject
 		vertexPositions.position( 0 );
 	}
 	
+	private void calculateNormals()
+	{
+		
+		byte[] triangleShareCount = new byte[ vertexPositions.capacity() / 3 ];
+		vertexNormals.position( 0 );
+		
+		for ( int nIndex = 0; nIndex < triangleShareCount.length; nIndex++ )
+		{
+		
+			triangleShareCount[ nIndex ] = 0;
+			vertexNormals.put( 0.0f );
+			vertexNormals.put( 0.0f );
+			vertexNormals.put( 0.0f );
+		}
+		
+		for ( int triangleIndex = 0; triangleIndex < indices.capacity(); triangleIndex += 3 )
+		{
+			
+			indices.position( triangleIndex );
+			int[] tIndices = { indices.get(), indices.get(), indices.get() };
+			
+			triangleShareCount[ tIndices[ 0 ] ]++;
+			triangleShareCount[ tIndices[ 1 ] ]++;
+			triangleShareCount[ tIndices[ 2 ] ]++;
+			
+			getTriangleNormal( tIndices );
+		}
+		
+		for ( int letterIndex = 0; letterIndex < characterRefs.length; letterIndex++ )
+		{
+		
+			for ( int triangleIndex = 0; triangleIndex < characterRefs[ letterIndex ].indices.capacity(); triangleIndex += 3 )
+			{
+				
+				characterRefs[ letterIndex ].indices.position( triangleIndex );
+				int[] tIndices = { characterRefs[ letterIndex ].indices.get(), 
+									characterRefs[ letterIndex ].indices.get(), 
+									characterRefs[ letterIndex ].indices.get() };
+				
+				triangleShareCount[ tIndices[ 0 ] ]++;
+				triangleShareCount[ tIndices[ 1 ] ]++;
+				triangleShareCount[ tIndices[ 2 ] ]++;
+				
+				getTriangleNormal( tIndices );
+			}
+		}
+		
+		for ( int nIndex = 0; nIndex < vertexNormals.capacity(); nIndex++ )
+		{
+			
+			int vStrideIndex = nIndex * 3;
+			
+			vertexNormals.put( vStrideIndex, vertexNormals.get( vStrideIndex ) / (float) triangleShareCount[ nIndex ] );
+			vertexNormals.put( vStrideIndex, vertexNormals.get( vStrideIndex + 1 ) / (float) triangleShareCount[ nIndex ] );
+			vertexNormals.put( vStrideIndex, vertexNormals.get( vStrideIndex + 2 ) / (float) triangleShareCount[ nIndex ] );
+		}
+	}
+	
 	private float distance( float x1, float y1, float z1, float x2, float y2, float z2 )
 	{
 		
@@ -669,6 +727,39 @@ public class MailSceneObject
 			maxPullRadius[ pullIndex ] = Math.max( maxPullRadius[ pullIndex ], actDist );
 		}
 	}
+	private void getTriangleNormal( int[] index_ )
+	{
+	
+		vertexPositions.position( index_[ 0 ] * 3 );
+		float[] vertex1 = { vertexPositions.get(), vertexPositions.get(), vertexPositions.get() };
+		vertexPositions.position( index_[ 1 ] * 3 );
+		float[] vertex2 = { vertexPositions.get(), vertexPositions.get(), vertexPositions.get() };
+		vertexPositions.position( index_[ 2 ] * 3 );
+		float[] vertex3 = { vertexPositions.get(), vertexPositions.get(), vertexPositions.get() };
+		
+		float[] s1 = { vertex1[ 0 ] - vertex2[ 0 ], vertex1[ 1 ] - vertex2[ 1 ], vertex1[ 2 ] - vertex2[ 2 ] };
+		float[] s2 = { vertex1[ 0 ] - vertex3[ 0 ], vertex1[ 1 ] - vertex3[ 1 ], vertex1[ 2 ] - vertex3[ 2 ] };
+		
+		float[] normal = { 	s1[ 1 ] * s2[ 2 ] - s1[ 2 ] * s2[ 1 ],
+							s1[ 2 ] * s2[ 0 ] - s1[ 0 ] * s2[ 2 ],
+							s1[ 0 ] * s2[ 1 ] - s1[ 1 ] * s2[ 0 ] };
+		
+		for ( int iIndex = 0; iIndex < 3; iIndex++ )
+		{
+			
+			vertexNormals.position( index_[ iIndex ] * 3 );
+			
+			float[] vNormal = { vertexNormals.get() + normal[ 0 ], 
+								vertexNormals.get() + normal[ 1 ], 
+								vertexNormals.get() + normal[ 2 ] };
+			
+			vertexNormals.position( index_[ iIndex ] * 3 );
+			
+			vertexNormals.put( vNormal[ 0 ] );
+			vertexNormals.put( vNormal[ 1 ] );
+			vertexNormals.put( vNormal[ 2 ] );
+		}
+	}
 	
 	private Vector3f position;
 	private float scale;
@@ -693,7 +784,7 @@ public class MailSceneObject
 	private float pullPositionRadius;
 	private Vector3f[] pullPositions;
 	private float nextCheckPoint;
-	private final float pullDt = 0.1f;
+	private final float pullDt = 0.5f;
 	private float[] maxPullRadius;
 	
 	private int subDivisionCount;

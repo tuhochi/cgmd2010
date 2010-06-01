@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
@@ -55,19 +56,19 @@ public class LevelActivity extends Activity {
         
         TextView typedIn = new TextView(this);
         typedIn.setText("typedIn");
-        typedIn.setTextSize(25);
+        typedIn.setTextSize( TypedValue.COMPLEX_UNIT_PX, 25);
         typedIn.setGravity(Gravity.LEFT);
         typedIn.setTextColor(Color.RED );
         
         TextView remaining = new TextView(this);
         remaining.setText( "remaining" );
-        remaining.setTextSize( 25 );
+        remaining.setTextSize( TypedValue.COMPLEX_UNIT_PX,  25 );
         remaining.setGravity( Gravity.LEFT );
         remaining.setTextColor( Color.YELLOW );
         
         TextView money = new TextView(this);
         money.setText("money");
-        money.setTextSize(25);
+        money.setTextSize( TypedValue.COMPLEX_UNIT_PX, 25);
         money.setGravity(Gravity.RIGHT );
         money.setTextColor(Color.GREEN );
         
@@ -234,6 +235,7 @@ public class LevelActivity extends Activity {
 		SessionState quitState = new SessionState();
 		quitState.setProgress( GameLogic.getMoneyState() );
 		setResult(Activity.RESULT_OK, quitState.asIntent());
+		SoundManager.pauseMusic();
 		
 		super.onStop();
 	}
@@ -275,6 +277,8 @@ public class LevelActivity extends Activity {
 		
 		SessionState quitState = new SessionState();
 		quitState.setProgress( GameLogic.getMoneyState() );
+		SoundManager.uninit();
+		
 		setResult(Activity.RESULT_OK, quitState.asIntent());
 	}
 }

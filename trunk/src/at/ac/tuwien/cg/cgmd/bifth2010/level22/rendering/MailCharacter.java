@@ -296,6 +296,6 @@ public class MailCharacter {
 	private IntRef textureID;
 	private static HashMap< String, IntRef > characterRepository = new HashMap< String, IntRef >();
 	
-	private ShortBuffer indices;
+	public ShortBuffer indices;
 	private boolean pending;
 }
