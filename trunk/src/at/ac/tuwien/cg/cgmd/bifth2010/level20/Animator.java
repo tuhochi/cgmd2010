@@ -34,6 +34,8 @@ public class Animator {
 		this.destX = destX;
 		this.destY = destY;
 		this.speed = speed;
+		
+		re.animated = true;
 	}
 	
 	

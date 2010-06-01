@@ -10,12 +10,19 @@ import javax.microedition.khronos.opengles.GL10;
  * @author Reinhard Sprung
  */
 
-public class ShoppingCart extends RenderEntity {
+public class ShoppingCart extends RenderEntity implements Clickable {
 
 	/**
 	 * Holds all products in the ShoppingCart
 	 */
 	protected Hashtable<Integer, ProductEntity> entities;
+	
+	/**
+	 * Flag whether the entity is clickable or not.
+	 */
+	protected boolean clickable;
+	
+	
 	
 	/**
 	 * Creates the shopping cart in the given place. It holds all clicked products and handles their prices
@@ -30,19 +37,13 @@ public class ShoppingCart extends RenderEntity {
 		super(x, y, z, width, height);
  
 		entities = new Hashtable<Integer, ProductEntity>();
+		clickable = true;
+		animated = false;
 	}
 	
 	@Override
 	public void render(GL10 gl) {		
 		
-		// FERDI: Hab das mal rausgenommen. Ich render jetzt nur mehr im Shelf. Vielleicht sind dann die Crashes weg.
-//		// Render products.	
-//		Enumeration<Integer> keys = entities.keys();
-//		while(keys.hasMoreElements()) {
-//			entities.get(keys.nextElement()).render(gl);
-//		}
-		
-		// And render the shopping cart itself
 		super.render(gl);
 	}
 	
@@ -60,6 +61,9 @@ public class ShoppingCart extends RenderEntity {
 		entities.clear();
 	}
 	
+	/**
+	 * 
+	 */
 	public int getNumberProducts() {
 		return entities.size();
 	}
@@ -71,10 +75,22 @@ public class ShoppingCart extends RenderEntity {
 		float[] pos = new float[2];
 		int nrProducts = getNumberProducts();		
 		int row = nrProducts / 8; // Integer division is fun :D
-		float width = this.width*.5f - 50;
+		float width = this.width * 0.5f - 100;
 		pos[0] = (float) (x - width + Math.random()* width*2);
 		pos[1] = y + row*15;
 		return pos;
 	}
 
+	
+	@Override
+	public boolean hitTest(float hitX, float hitY) {
+		
+		float hW = width * 0.5f;
+		float hH = height * 0.5f;
+		
+		return (hitX >= x - hW && hitX < x + hW   &&   hitY >= y - hH && hitY < y + hH);
+	}
+
+	
+	
 }
