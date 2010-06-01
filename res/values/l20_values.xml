@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<integer name="l20_level_time">61</integer>
-	<integer name="l20_scroll_speed">100</integer>
+	<integer name="l20_level_time">300</integer>
+	<integer name="l20_scroll_speed">400</integer>
 	<integer name="l20_shopping_cart_default_size">308</integer>
+	<integer name="l20_shopping_cart_distance">6000</integer>
 	<integer name="l20_product_default_size">64</integer>
-	<integer name="l20_product_distance">200</integer>
+	<integer name="l20_product_distance">400</integer>
+	<bool name="l20_endgame">false</bool>
 
 </resources>
