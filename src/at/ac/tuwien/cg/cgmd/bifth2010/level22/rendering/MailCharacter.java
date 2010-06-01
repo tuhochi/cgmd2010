@@ -284,7 +284,7 @@ public class MailCharacter {
 		{
 			
 			targetStream = refContext.getResources().openRawResource( R.drawable.l22_ruf );
-		} else if ( requestChar == ' ' )
+		} else
 		{
 			
 			targetStream = refContext.getResources().openRawResource( R.drawable.l22_space );
