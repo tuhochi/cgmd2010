@@ -25,10 +25,20 @@ public class TestLevelActivity extends Activity{
 		//get the button specified in the layout
 		
 		TextView tv = (TextView) findViewById(R.id.l00_TextViewSessionState);
+
+		
+		//get the calling intent
 		Intent callingIntent = getIntent();
+		//get the session state
 		SessionState state = new SessionState(callingIntent.getExtras());
 		if(state!=null){
-			String s = "SessionState: level " + state.getLevel() + ", progress " + state.getProgress() + ", musicison " + state.isMusicAndSoundOn();
+			int progress = state.getProgress();
+			int level = state.getLevel();
+			boolean isMusicAndSoundOn = state.isMusicAndSoundOn(); 
+			
+			
+			String isOn = isMusicAndSoundOn ? "is on" : "is off";
+			String s = "SessionState: level " + level + ", progress " + progress + ", music " + isOn;
 			tv.setText(s);
 		} else {
 			tv.setText("No session state");
