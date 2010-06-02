@@ -60,13 +60,13 @@ public class MenuActivity extends Activity {
 				SharedPreferences.Editor editor = settings.edit();
 			    editor.putBoolean(PREFERENCE_MUSIC, isChecked);
 			    editor.commit();
-		    	String m = "Music is ";
+		    	String m = "";
 		    	if(isChecked){
-		    		m+="on ";
+		    		m=getResources().getString(R.string.l00_menu_01);
 		    	} else {
-		    		m+="off ";
+		    		m=getResources().getString(R.string.l00_menu_02);
 		    	}
-		    	m+="now.";
+		    	
 		    	Toast.makeText(getApplicationContext(), m, Toast.LENGTH_LONG).show();
 		    	if((isChecked)&&(mAudioPlayer!=null)){
 		       		//play music if sound is allowed
@@ -193,16 +193,16 @@ public class MenuActivity extends Activity {
 				mAudioPlayer.setDataSource(this, uri);
 				mAudioPlayer.prepareAsync();
 			} catch (IllegalArgumentException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			} catch (IllegalStateException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			} catch (IOException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			}
        	}

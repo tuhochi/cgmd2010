@@ -129,10 +129,10 @@ public class CreditsActivity extends Activity {
 				if(credit.mType.equalsIgnoreCase("texture")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the texture(s) \""+ credit.mName + "\". ";
+						text+=getResources().getString(R.string.l00_credits_01)+"\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+=getResources().getString(R.string.l00_credits_02)+"\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -141,10 +141,10 @@ public class CreditsActivity extends Activity {
 				} else if(credit.mType.equalsIgnoreCase("artwork")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the artwork(s) \""+ credit.mName + "\". ";
+						text+= getResources().getString(R.string.l00_credits_03)+"\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+= getResources().getString(R.string.l00_credits_02)+"\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -153,10 +153,10 @@ public class CreditsActivity extends Activity {
 				} else if(credit.mType.equalsIgnoreCase("sound")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the sound(s) \""+ credit.mName + "\". ";
+						text+=  getResources().getString(R.string.l00_credits_04)+"\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+=getResources().getString(R.string.l00_credits_02)+"\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -165,10 +165,10 @@ public class CreditsActivity extends Activity {
 				} else if(credit.mType.equalsIgnoreCase("music")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the 3D music \""+ credit.mName + "\". ";
+						text+=getResources().getString(R.string.l00_credits_05) + "\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+=getResources().getString(R.string.l00_credits_02)+ "\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -177,10 +177,10 @@ public class CreditsActivity extends Activity {
 				} else if(credit.mType.equalsIgnoreCase("3D model")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the 3D model(s) \""+ credit.mName + "\". ";
+						text+= getResources().getString(R.string.l00_credits_06) +"\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+=getResources().getString(R.string.l00_credits_02) + "\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -189,10 +189,10 @@ public class CreditsActivity extends Activity {
 				} else if(credit.mType.equalsIgnoreCase("photo")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the photo(s) \""+ credit.mName + "\". ";
+						text+= getResources().getString(R.string.l00_credits_07) + "\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+=getResources().getString(R.string.l00_credits_02) + "\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -201,10 +201,10 @@ public class CreditsActivity extends Activity {
 				} else if(credit.mType.equalsIgnoreCase("text")) {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the text(s) \""+ credit.mName + "\". ";
+						text+= getResources().getString(R.string.l00_credits_08)+ "\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+=getResources().getString(R.string.l00_credits_02) + "\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -213,10 +213,10 @@ public class CreditsActivity extends Activity {
 				} else {
 					String text = credit.mAuthor;
 					if(credit.mName!=null) {
-						text+=" shared the work(s) \""+ credit.mName + "\". ";
+						text+= getResources().getString(R.string.l00_credits_09) + "\""+ credit.mName + "\". ";
 					} 
 					if(credit.mLicense!=null) {
-						text+="Distributed under the license \""+ credit.mLicense + "\". ";
+						text+=getResources().getString(R.string.l00_credits_02) + "\""+ credit.mLicense + "\". ";
 					}
 					if(credit.mAcknowledgement!=null) {
 						text+="(\""+ credit.mAcknowledgement + "\").";
@@ -228,16 +228,16 @@ public class CreditsActivity extends Activity {
 			}
 		}
 
-		String alltext = "Thanks to everybody who contributed to this project: \n";
+		String alltext = getResources().getString(R.string.l00_credits_10) + " \n";
 
 		alltext += "\n";
 		for(String m : authors) {
 			alltext+= m +", ";
 		}
-		alltext+= "and anybody else.\n\n\n";
+		alltext+= getResources().getString(R.string.l00_credits_11) +"\n\n\n";
 
 		if(!music.isEmpty()){
-			alltext += "\nMusic:\n\n";
+			alltext += "\n"+getResources().getString(R.string.l00_credits_12)+"\n\n";
 			for(String m : music) {
 				alltext+= m +"\n";
 			}
@@ -245,49 +245,49 @@ public class CreditsActivity extends Activity {
 
 
 		if(!sounds.isEmpty()){
-			alltext += "\nSounds:\n\n";
+			alltext += "\n"+getResources().getString(R.string.l00_credits_13)+"\n\n";
 			for(String s : sounds) {
 				alltext+=s+"\n";
 			}
 		}
 
 		if(!models.isEmpty()){
-			alltext += "\n3D Models:\n\n";
+			alltext += "\n" +getResources().getString(R.string.l00_credits_14) + "\n\n";
 			for(String m : models) {
 				alltext+=m+"\n";
 			}
 		}
 
 		if(!textures.isEmpty()){
-			alltext += "\nTextures:\n\n";
+			alltext += "\n"+ getResources().getString(R.string.l00_credits_15)+"\n\n";
 			for(String t0 : textures) {
 				alltext+=t0+"\n";
 			}
 		}
 
 		if(!artworks.isEmpty()){
-			alltext += "\nArtworks:\n\n";
+			alltext += "\n" + getResources().getString(R.string.l00_credits_16) + "\n\n";
 			for(String a1 : artworks) {
 				alltext+=a1+"\n";
 			}
 		}
 
 		if(!texts.isEmpty()){
-			alltext += "\nText:\n\n";
+			alltext += "\n" +getResources().getString(R.string.l00_credits_17) + "\n\n";
 			for(String t1 : texts) {
 				alltext+=t1+"\n";
 			}
 		}
 
 		if(!photos.isEmpty()){
-			alltext += "\nPhotos:\n\n";
+			alltext += "\n" +getResources().getString(R.string.l00_credits_18)  + "\n\n";
 			for(String p : photos) {
 				alltext+=p+"\n";
 			}
 		}
 
 		if(!others.isEmpty()){
-			alltext += "\nOthers:\n\n";
+			alltext += "\n" + getResources().getString(R.string.l00_credits_19) + "\n\n";
 			for(String o : others) {
 				alltext+=o+"\n";
 			}
