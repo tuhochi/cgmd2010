@@ -61,7 +61,7 @@ public class SpamRenderer extends GLSurfaceView implements GLSurfaceView.Rendere
 			arg0.glEnable(GL10.GL_CULL_FACE);
 			arg0.glEnable( GL10.GL_LIGHTING );
 			arg0.glEnable( GL10.GL_LIGHT0 );
-			arg0.glEnable( GL10.GL_NORMALIZE );
+			arg0.glEnable( GL10.GL_RESCALE_NORMAL );
 			float lightPos[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 			arg0.glLightfv( GL10.GL_LIGHT0, GL10.GL_POSITION, lightPos, 0 );
 			

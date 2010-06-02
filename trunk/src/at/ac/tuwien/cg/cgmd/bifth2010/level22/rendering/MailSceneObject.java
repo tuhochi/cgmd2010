@@ -409,7 +409,6 @@ public class MailSceneObject
 		
 		float colors[] = { 1, 1, 1, 1 };
 		renderContext.glMaterialfv( GL10.GL_FRONT_AND_BACK, GL_DIFFUSE, colors, 0 );
-		renderContext.glMaterialfv( GL10.GL_FRONT_AND_BACK, GL_SPECULAR, colors, 0 );
 
 		renderContext.glFrontFace(GL10.GL_CCW );
 		
@@ -621,23 +620,22 @@ public class MailSceneObject
 			vertexPositions.put( modifiedPosition[ 2 ] );
 		}
 		
+		vertexNormals.position( 0 );
+		
+		calculateNormals();
+		
 		vertexPositions.position( 0 );
+		vertexNormals.position( 0 );
+		indices.position( 0 );
 	}
 	
 	private void calculateNormals()
 	{
 		
-		byte[] triangleShareCount = new byte[ vertexPositions.capacity() / 3 ];
 		vertexNormals.position( 0 );
 		
-		for ( int nIndex = 0; nIndex < triangleShareCount.length; nIndex++ )
-		{
-		
-			triangleShareCount[ nIndex ] = 0;
+		for ( int nIndex = 0; nIndex < vertexNormals.capacity(); nIndex++ )		
 			vertexNormals.put( 0.0f );
-			vertexNormals.put( 0.0f );
-			vertexNormals.put( 0.0f );
-		}
 		
 		for ( int triangleIndex = 0; triangleIndex < indices.capacity(); triangleIndex += 3 )
 		{
@@ -650,17 +648,19 @@ public class MailSceneObject
 		
 		for ( int letterIndex = 0; letterIndex < characterRefs.length; letterIndex++ )
 		{
+			
+			ShortBuffer actIndices = characterRefs[ letterIndex ].indices;
 		
-			for ( int triangleIndex = 0; triangleIndex < characterRefs[ letterIndex ].indices.capacity(); triangleIndex += 3 )
+			for ( int triangleIndex = 0; triangleIndex < actIndices.capacity(); triangleIndex += 3 )
 			{
 				
-				characterRefs[ letterIndex ].indices.position( triangleIndex );
-				int[] tIndices = { characterRefs[ letterIndex ].indices.get(), 
-									characterRefs[ letterIndex ].indices.get(), 
-									characterRefs[ letterIndex ].indices.get() };
+				actIndices.position( triangleIndex );
+				int[] tIndices = { 	actIndices.get(), actIndices.get(),	actIndices.get() };
 				
 				getTriangleNormal( tIndices );
 			}
+			
+			actIndices.position( 0 );
 		}
 	}
 	
@@ -711,27 +711,44 @@ public class MailSceneObject
 	{
 	
 		vertexPositions.position( index_[ 0 ] * 3 );
-		float[] vertex1 = { vertexPositions.get(), vertexPositions.get(), vertexPositions.get() };
-		vertexPositions.position( index_[ 1 ] * 3 );
-		float[] vertex2 = { vertexPositions.get(), vertexPositions.get(), vertexPositions.get() };
-		vertexPositions.position( index_[ 2 ] * 3 );
-		float[] vertex3 = { vertexPositions.get(), vertexPositions.get(), vertexPositions.get() };
+		float[] vertex1 = new float[ 3 ];
+		vertex1[ 0 ] = vertexPositions.get();
+		vertex1[ 1 ] = vertexPositions.get();
+		vertex1[ 2 ] = vertexPositions.get();
 		
-		float[] s1 = { vertex1[ 0 ] - vertex2[ 0 ], vertex1[ 1 ] - vertex2[ 1 ], vertex1[ 2 ] - vertex2[ 2 ] };
-		float[] s2 = { vertex1[ 0 ] - vertex3[ 0 ], vertex1[ 1 ] - vertex3[ 1 ], vertex1[ 2 ] - vertex3[ 2 ] };
+		vertexPositions.position( index_[ 1 ] * 3 );
+		float[] vertex2 = new float[ 3 ];
+		vertex2[ 0 ] = vertexPositions.get();
+		vertex2[ 1 ] = vertexPositions.get();
+		vertex2[ 2 ] = vertexPositions.get();
+		
+		vertexPositions.position( index_[ 2 ] * 3 );
+		float[] vertex3 = new float[ 3 ];
+		vertex3[ 0 ] = vertexPositions.get();
+		vertex3[ 1 ] = vertexPositions.get();
+		vertex3[ 2 ] = vertexPositions.get();
+		
+		float[] s1 = { vertex2[ 0 ] - vertex1[ 0 ], vertex2[ 1 ] - vertex1[ 1 ], vertex2[ 2 ] - vertex1[ 2 ] };
+		float[] s2 = { vertex3[ 0 ] - vertex1[ 0 ], vertex3[ 1 ] - vertex1[ 1 ], vertex3[ 2 ] - vertex1[ 2 ] };
 		
 		float[] normal = { 	s1[ 1 ] * s2[ 2 ] - s1[ 2 ] * s2[ 1 ],
 							s1[ 2 ] * s2[ 0 ] - s1[ 0 ] * s2[ 2 ],
 							s1[ 0 ] * s2[ 1 ] - s1[ 1 ] * s2[ 0 ] };
+		
+		float normalLength = (float) Math.sqrt( Math.pow( normal[ 0 ], 2.0 ) + Math.pow( normal[ 1 ], 2.0 ) + Math.pow( normal[ 2 ], 2.0 ) );
+		normal[ 0 ] /= normalLength;
+		normal[ 1 ] /= normalLength;
+		normal[ 2 ] /= normalLength;
 		
 		for ( int iIndex = 0; iIndex < 3; iIndex++ )
 		{
 			
 			vertexNormals.position( index_[ iIndex ] * 3 );
 			
-			float[] vNormal = { vertexNormals.get() + normal[ 0 ], 
-								vertexNormals.get() + normal[ 1 ], 
-								vertexNormals.get() + normal[ 2 ] };
+			float[] vNormal = new float[ 3 ];
+			vNormal[ 0 ] = vertexNormals.get() + normal[ 0 ];
+			vNormal[ 1 ] = vertexNormals.get() + normal[ 1 ];
+			vNormal[ 2 ] = vertexNormals.get() + normal[ 2 ];
 			
 			vertexNormals.position( index_[ iIndex ] * 3 );
 			
