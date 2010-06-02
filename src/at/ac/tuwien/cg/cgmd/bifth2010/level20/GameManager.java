@@ -144,8 +144,6 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		obstacleManager.init(gl);			
 		productManager.init();
 		
-		float height = renderView.getHeight();
-		
 		// This is the default for a screen height of 480px. 
 		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
 		shoppingCartSize *= height / 480.0f;
