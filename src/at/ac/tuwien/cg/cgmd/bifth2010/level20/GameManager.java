@@ -35,10 +35,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	protected TimeUtil time;
 
 	/** The background Shelf of the game */		 
-	protected Shelf shelf;
+	protected RenderEntity shelf;
 	
 	/** Manages products and interactions */		 
 	protected ProductManager productManager;
+	/** Whether collecting products is enabled. 
+	 *  Set to false if the bunny crashes into an obstacle. */
+	protected boolean collectingEnabled;
 	
 	/** Manager audio resources and playback. */
 	SoundManager soundManager;
@@ -51,6 +54,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	
 	/** The moving speed of the background and the products */ 
 	protected float scrollSpeed;
+	/** The speed of tranform animations. */
+	protected float animationSpeed;
 	
 	/** The amount of all money spent on products */
 	protected float totalMoney;
@@ -84,6 +89,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	public GameManager() {
 		
 		firstRun = true;
+		collectingEnabled = true;
 		
 		activity = LevelActivity.instance;
 		renderView = LevelActivity.renderView;
@@ -101,10 +107,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		shoppingCarts = new ShoppingCart[3];
 		nShoppingCarts = 0;
 		
-		EventManager.getInstance().addListener(this);		
-		
-		// Pixel per second
-		scrollSpeed = activity.getResources().getInteger(R.integer.l20_scroll_speed) * 0.001f;
+		EventManager.getInstance().addListener(this);			
 		
 		// Time in milliseconds
 		remainingTime = activity.getResources().getInteger(R.integer.l20_level_time) * 1000;
@@ -125,7 +128,12 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		renderView.textures.clear();
 		
 		// Create background shelf.
-		shelf = new Shelf(renderView.getWidth(), renderView.getHeight());
+		float width = renderView.getWidth();
+		float widthPercent = width * 0.01f;
+		float height = renderView.getHeight();
+		float heightPercent = height * 0.01f;
+		
+		shelf = new Shelf(width*0.5f, height*0.5f, 0f, width, height);
 		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);		
 
 		// Preload product textures
@@ -133,14 +141,17 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			renderView.getTexture(ProductInfo.texture(i), gl);
 		}
 		
-		obstacleManager.createObstacle(gl);		
+		obstacleManager.init(gl);			
+		productManager.init();
 		
 		// This is the default for a screen height of 480px. 
 		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
-		shoppingCartSize *= renderView.getHeight() / 480.0f;
+		shoppingCartSize *= height / 480.0f;
 			
 		// Create shopping cart.		
-		shoppingCarts[0] = new ShoppingCart(200, 100, 2, shoppingCartSize, shoppingCartSize);
+		float cartPosY = height / 5.f;
+		//cartPosY += (shoppingCartSize * .5f);
+		shoppingCarts[0] = new ShoppingCart(200, cartPosY, 2, shoppingCartSize, shoppingCartSize);
 		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
 		shoppingCarts[0].clickable = false;
 		nShoppingCarts = 1;
@@ -155,6 +166,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		bunny.setFps(10);
 		bunny.setAnimationSequence(bunnySequence);
 		
+		// Pixel per second
+		scrollSpeed = activity.getResources().getInteger(R.integer.l20_scroll_speed) * widthPercent * 0.0001f;
+		animationSpeed = activity.getResources().getInteger(R.integer.l20_animation_speed) * widthPercent;
 		
 		firstRun = false;
 	}
@@ -208,8 +222,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		float dt = time.getDt();
 		
-		// Difference in movement since last frame 
-		productManager.update(scrollSpeed * dt);
+		// Difference in movement since last frame
+		float scroll = scrollSpeed * dt;
+		productManager.update(scroll);
+		obstacleManager.update(dt, scroll);
 		bunny.update(dt);
 		
 		// Update all Animators
@@ -258,8 +274,11 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		touchDown = (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN);		
         
 		// Forward the event if there is a touchDown, so we don't miss very short touches. (Useful on the emulator where fps are very low)
-        if (touchDown) {        	
-    		productManager.touchEvent(touchX, touchY);
+        if (touchDown) {
+        	// If bunny crashed no products can be collected.
+        	if(!bunny.crashed) {
+        		productManager.touchEvent(touchX, touchY);
+        	}
     		obstacleManager.touchEvent(touchX, touchY);
         }
 		
@@ -338,7 +357,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			float[] pos = shoppingCarts[cartIndex].getNextProductPosition();
 			
 			// Move it to the basket.
-			Animator a = new Animator(pe, pos[0], pos[1], 30);
+			Animator a = new Animator(pe, pos[0], pos[1], animationSpeed);
 			animators.put(a.id, a);
 			shoppingCarts[0].addProduct(pe);
 			
@@ -369,6 +388,14 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			
 		}
 		break;
+		
+		case EventManager.OBSTACLE_CRASH: {
+			soundManager.pauseMusic();
+			soundManager.playSound(SOUNDS.CRASH);
+			bunny.crash();
+			obstacleManager.removeObstacle();			
+		}
+		break;			
 		
 		default:
 			break;

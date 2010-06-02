@@ -22,6 +22,10 @@ public class SpriteAnimationEntity extends RenderEntity {
 	private float timePassed;
 	/** The next time the texture has to progress. */
 	private float updateTime;
+	/** The duration the player is handicapped when crashing into an obstacle. */
+	protected float crashDuration;	
+	/** Flag whether the bunny crashed into an obstacle. */
+	protected boolean crashed;
 	
 
 	/**
@@ -34,10 +38,12 @@ public class SpriteAnimationEntity extends RenderEntity {
 	 */
 	public SpriteAnimationEntity(float x, float y, float z, float height, float width) {
 		super(x, y, z, height, width);
+		crashed = false;
 		textureIdx = 0;
 		fps = 10;
 		timePassed = 0;
-		updateTime = 1.f/fps;					
+		updateTime = 1.f/fps;	
+		crashDuration = 3000;
 	}
 	
 	/**
@@ -58,14 +64,21 @@ public class SpriteAnimationEntity extends RenderEntity {
 	 */
 	public void update(float dt) {
 		timePassed += dt;
-		if (timePassed >= updateTime) {
-			textureIdx++;
-			textureIdx %= textureIds.length;
-			texture = textureIds[textureIdx];
-			timePassed = updateTime;
-			updateTime += 1.f/fps;
+		if(crashed)
+		{
+			if (timePassed >= crashDuration) {
+				run();
+			}
 		}
-		
+		else {
+			if (timePassed >= updateTime) {
+				textureIdx++;
+				textureIdx %= textureIds.length;
+				texture = textureIds[textureIdx];
+				timePassed = updateTime;
+				updateTime += 1.f/fps;
+			}
+		}		
 	}
 
 	public int getFps() {
@@ -74,6 +87,21 @@ public class SpriteAnimationEntity extends RenderEntity {
 
 	public void setFps(int fps) {
 		this.fps = fps;
+	}
+	
+	/** Performs the a crash of the bunny with an obstacle. */	
+	public void crash() {
+		angle = 45;
+		crashed = true;
+		timePassed = 0;
+	}
+	
+	/** Sets the bunny in its running position. */	
+	public void run() {
+		angle = 0;
+		crashed = false;
+		timePassed = 0;
+		updateTime = 1.f/fps;
 	}
 
 }

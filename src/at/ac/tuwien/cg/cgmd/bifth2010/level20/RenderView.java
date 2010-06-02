@@ -172,7 +172,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-
+		
 	}
 	
 	

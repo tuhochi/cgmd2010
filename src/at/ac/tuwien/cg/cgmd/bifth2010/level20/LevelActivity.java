@@ -68,6 +68,7 @@ public class LevelActivity extends Activity {
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());
+				
 		
 //		Log.d(getClass().getSimpleName(), "LevelActivity (re)created");
 		
