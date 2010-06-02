@@ -3,10 +3,12 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
  * Loads audio resources and is responsible for playing/stopping sounds.
@@ -37,21 +39,32 @@ public class SoundManager {
 		musicInit = false;
 		nSounds = 5;
 		sounds = new HashMap<SOUNDS, Integer>(nSounds);
-		init(context);
+		init();
 	}
 
 	
 	/**
 	 * Initializes the SoundManager.
-	 * @param context The context holding the properties to initialize the manager with. 
 	 */
-	private void init(Context context)
+	private void init()
 	{
 		soundPool = new SoundPool(nSounds, AudioManager.STREAM_MUSIC, 100);
-		loadSounds(context);
+		loadSounds(LevelActivity.instance);
 		
-		SharedPreferences audiosettings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
-		soundOn = audiosettings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
+		// FERDI: Funktioniert leider nicht. 
+//		SharedPreferences audiosettings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
+//		soundOn = audiosettings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
+		
+		// So sollts laut FAQ aber gehn:
+		
+		// Get the calling intent & the session state
+		Intent callingIntent = LevelActivity.instance.getIntent();
+		SessionState state = new SessionState(callingIntent.getExtras());
+		
+		if (state != null) {
+			soundOn = state.isMusicAndSoundOn(); 
+		}
+		
 	}
 	
 	/**

@@ -17,10 +17,9 @@ public class ProductManager{
 
 	
 	/**
-	 * FERDI: Das ist static. Geht das anders?
 	 * The number of products to spawn at each row
 	 */
-	protected static int NUMBER_PRODUCTS;
+	protected static final int NUMBER_PRODUCTS = 3;
 	
 	/**
 	 * The distance between 2 product rows in pixels
@@ -72,7 +71,7 @@ public class ProductManager{
 	 */
 	public ProductManager() {
 		
-		NUMBER_PRODUCTS = 3;		
+		PRODUCT_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_distance);
 		SHOPPING_CART_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_shopping_cart_distance);
 		
 		pixelsMoved = 0;
@@ -80,8 +79,26 @@ public class ProductManager{
 		shoppingCartDistance = 0;
 		
 		products = new Hashtable<Integer, ProductEntity>();
-		removeFromProducts = new LinkedList<ProductEntity>();		
-				
+		removeFromProducts = new LinkedList<ProductEntity>();
+		
+		// The y spawning position
+		productSpawnY = new float[NUMBER_PRODUCTS];				
+	}
+	
+	/**
+	 * Has to be called, after the RenderView has been created.
+	 */
+	public void initProductSpawn() {
+
+		productSpawnY[0] = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_spawn_y_0);
+		productSpawnY[1] = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_spawn_y_1);
+		productSpawnY[2] = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_spawn_y_2);
+		
+		// Optimized for a height of 480 pixels
+		float height = LevelActivity.renderView.getHeight();
+		productSpawnY[0] *= height / 480.0f;
+		productSpawnY[1] *= height / 480.0f;
+		productSpawnY[2] *= height / 480.0f;
 	}
 
 	/**
@@ -136,11 +153,15 @@ public class ProductManager{
 			}
 		}			
 			
-		// Check every frame if the touch touches a product or a shopping cart
-		if (LevelActivity.gameManager.touchDown) {
-			touchEvent(LevelActivity.gameManager.touchX, LevelActivity.gameManager.touchY);
-		}
+//		// Check every frame if the touch touches a product or a shopping cart
+//		if (LevelActivity.gameManager.touchDown) {
+//			touchEvent(LevelActivity.gameManager.touchX, LevelActivity.gameManager.touchY);
+//			
+//			// NEW: Deactivate the touch down each frame again
+//			LevelActivity.gameManager.touchDown = false;			
+//		}
 				
+		
 		// Now remove all marked products and empty the list again
 		for (ProductEntity pe : removeFromProducts) {			
 			products.remove(pe.id);
@@ -218,19 +239,26 @@ public class ProductManager{
 		float width = LevelActivity.renderView.getWidth();
 		float height = LevelActivity.renderView.getHeight();
 		
-		for (int i = 0; i < NUMBER_PRODUCTS; i++) {
-			// Spawn outside the screen and subtract the amount of d already passed.
-			float offsetX = 75;
-			float x = width + offsetX;// + jitterX;			
-			float y = productSpawnY[i];
-			
-			// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different.
-			float productSize = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_default_size);
-			productSize *= height / 480.0f;
+		// Spawn outside the screen and subtract the amount of d already passed.
+		float offsetX = 75;
+		float productSpawnX = width + offsetX;		
 
+		// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different.
+		float productSize = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_default_size);
+		productSize *= height / 480.0f;
+		
+		// Calc bounding box size
+		float bbX = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_bb_default_size_x);
+		float bbY = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_bb_default_size_y);
+		bbX *= height / 480.0f;
+		bbY *= height / 480.0f;
+		
+		for (int i = 0; i < NUMBER_PRODUCTS; i++) {
+			
 			// TODO: Spawn rare products more often
 			int productType = (int)(Math.random() * ProductInfo.length);
-			ProductEntity pe = ProductInfo.createEntity(productType, x, y, 1, productSize);
+			ProductEntity pe = ProductInfo.createEntity(productType, productSpawnX, productSpawnY[i], 1, productSize);
+			pe.setBBDim(bbX, bbY);
 			
 			// Declaring neighbors
 			// INFO: This might be unsafe, because we are declaring ids which haven't been created yet. But should work for now			
@@ -260,11 +288,14 @@ public class ProductManager{
 		// Spawn outside the screen and subtract the amount of d already passed.
 		float offsetX = 75;
 		float x = width + offsetX;
-		float y = LevelActivity.gameManager.shoppingCarts[0].y;
-		float shoppingCartSize = LevelActivity.gameManager.shoppingCarts[0].width;
-		
-		movingShoppingCart = new ShoppingCart(x, y, 2, shoppingCartSize, shoppingCartSize);
+		float y = LevelActivity.gameManager.shoppingCarts[0].y;		
+		float shoppingCartWidth = LevelActivity.gameManager.shoppingCarts[0].width;
+		float shoppingCartHeight = LevelActivity.gameManager.shoppingCarts[0].height;
+				
+		movingShoppingCart = new ShoppingCart(x, y, 2, shoppingCartWidth, shoppingCartHeight);
 		movingShoppingCart.texture = LevelActivity.renderView.getTexture(RenderView.TEXTURE_CART);
+		movingShoppingCart.bb_hWidth = LevelActivity.gameManager.shoppingCarts[0].bb_hWidth;
+		movingShoppingCart.bb_hHeight = LevelActivity.gameManager.shoppingCarts[0].bb_hHeight;
 	}
 }
 	

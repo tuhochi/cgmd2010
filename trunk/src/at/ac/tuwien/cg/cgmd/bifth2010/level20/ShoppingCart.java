@@ -17,12 +17,6 @@ public class ShoppingCart extends RenderEntity implements Clickable {
 	 */
 	protected Hashtable<Integer, ProductEntity> entities;
 	
-	/**
-	 * Flag whether the entity is clickable or not.
-	 */
-	protected boolean clickable;
-	
-	
 	
 	/**
 	 * Creates the shopping cart in the given place. It holds all clicked products and handles their prices
@@ -37,8 +31,6 @@ public class ShoppingCart extends RenderEntity implements Clickable {
 		super(x, y, z, width, height);
  
 		entities = new Hashtable<Integer, ProductEntity>();
-		clickable = true;
-		animated = false;
 	}
 	
 	@Override
@@ -80,17 +72,5 @@ public class ShoppingCart extends RenderEntity implements Clickable {
 		pos[1] = y + row*15;
 		return pos;
 	}
-
-	
-	@Override
-	public boolean hitTest(float hitX, float hitY) {
-		
-		float hW = width * 0.5f;
-		float hH = height * 0.5f;
-		
-		return (hitX >= x - hW && hitX < x + hW   &&   hitY >= y - hH && hitY < y + hH);
-	}
-
-	
 	
 }

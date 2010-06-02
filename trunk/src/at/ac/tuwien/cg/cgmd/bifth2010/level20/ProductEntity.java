@@ -28,5 +28,6 @@ public class ProductEntity extends RenderEntity {
 		neighbors = new int[ProductManager.NUMBER_PRODUCTS - 1];
 	}
 
+	
 
 }
