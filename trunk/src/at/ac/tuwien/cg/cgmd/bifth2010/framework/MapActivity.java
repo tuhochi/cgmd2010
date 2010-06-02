@@ -191,7 +191,7 @@ public class MapActivity extends Activity {
 			int iId = v.getId();
 			switch(iId) {
 			case R.id.l00_ImageButtonLevel00:
-				Toast.makeText(MapActivity.this, "To start a level, press a button that is ahead and already visible!", Toast.LENGTH_LONG).show();;
+				Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_01), Toast.LENGTH_LONG).show();;
 				return;
 			case R.id.l00_ImageButtonLevel01:
 				iLevel = 1; 
@@ -212,7 +212,7 @@ public class MapActivity extends Activity {
 				iLevel = 6;
 				break;
 			case R.id.l00_ImageButtonLevel07:
-				Toast.makeText(MapActivity.this, "To reach this point you have to lose more money! Press a level icon that is already visible!", Toast.LENGTH_LONG).show();;
+				Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_02), Toast.LENGTH_LONG).show();;
 				return;
 			};
 
@@ -229,7 +229,7 @@ public class MapActivity extends Activity {
 				try{
 					startActivityForResult(levelIntent, 1);
 				} catch(ActivityNotFoundException e) {
-					Toast.makeText(MapActivity.this, "Level not found!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_03), Toast.LENGTH_SHORT).show();
 				}
 			} else { 
 				if(mMusicOn) {
@@ -305,7 +305,7 @@ public class MapActivity extends Activity {
 			PathPoint p = mPath.interpolate(fProgress);
 			mLayout.setRelativePosition(mPlayer, p.mX, p.mY);
 			int iGold = 700 - ((mMaxAllowedLevel-1)*100) - mProgress;
-			mStateTextView.setText(iGold+" gold left");
+			mStateTextView.setText(iGold+getResources().getString(R.string.l00_map_04));
 			mPlayer.invalidate();
 		};
 	};
@@ -368,7 +368,7 @@ public class MapActivity extends Activity {
 		AbsoluteLayout absoluteLayout = (AbsoluteLayout) findViewById(R.id.l00_AbsoluteLayout);
 		mLayout = new RelativePositionLayout(this);
 
-		mLayout.setBackgroundResource(R.drawable.l00_map_landscape);
+		mLayout.setBackgroundResource(R.drawable.l00_map);
 		Drawable d = mLayout.getBackground();;
 		int iSize = absoluteLayout.getChildCount();
 
@@ -472,16 +472,16 @@ public class MapActivity extends Activity {
 				mLoopPlayer.setDataSource(this, uri);
 				mLoopPlayer.prepareAsync();
 			} catch (IllegalArgumentException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			} catch (SecurityException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			} catch (IllegalStateException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			} catch (IOException e) {
-				Toast.makeText(this, "Audio replay is currently not working. Restarting the game or phone might help.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_error_audio), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			}
 		}
@@ -528,8 +528,7 @@ public class MapActivity extends Activity {
 
 			if(iPoints>0){
 				String message = "";
-				message+="Great! ";
-				message+="You lost "+iPoints+" gold!";
+				message+=getResources().getString(R.string.l00_map_06)+iPoints+getResources().getString(R.string.l00_map_07);
 				Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 				if(mMusicOn) {
 					MediaPlayer soundPlayer = MediaPlayer.create(MapActivity.this, R.raw.l00_gold03);
@@ -554,7 +553,7 @@ public class MapActivity extends Activity {
 			{
 				//user won
 				//finish game
-				Toast.makeText(this, "Congratulations - You lost all your wealth! Do you already feel your newly gained freedom!", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, getResources().getString(R.string.l00_map_08), Toast.LENGTH_LONG).show();
 				Intent intent = new Intent();
 				intent.setClassName("at.ac.tuwien.cg.cgmd.bifth2010", AboutActivity.class.getCanonicalName());				
 				finish();

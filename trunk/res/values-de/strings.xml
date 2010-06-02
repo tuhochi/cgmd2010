@@ -1,9 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="l00_help_part03">TODO: ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN </string>
-    <string name="l00_help_part02">TODO: ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN  </string>
-    <string name="l00_help_part01">TODO: ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN </string>
-    <string name="l00_unallowedLevel">TODO: ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN </string>
+    
+    
+    <string name="l00_error_audio">"Audiowiedergabe funktioniert derzeit nicht. Starten sie das Spiel oder das Gerät neu um Audiowiedergabe möglicherweise wieder herzustellen."</string>
+  
+    <string name="l00_help_part03">Die Anordnung der Levels wird zufällig erstellt wenn sie ein neues Spiel starten. Hier folgt eine Liste von allen Levels. Um die Hilfe eines bestimmten Levels aufzurufen, clicken sie auf das zugehörige Icon.</string>
+    <string name="l00_help_part02">Um einen Teil ihres Vermögens zu verlieren müssen sie ein Level ihrer Wahl spielen. Clicken sie dazu auf das Icon in der Übersichtskarte. Levels die mit einem Fragezeichen markiert sind können noch nicht gespielt werden und müssen erst freigespielt werden.</string>
+    <string name="l00_help_part01">Wählen sie einen der Menüpunkte aus um ein altes Spiel fortzusetzen, ein neues Spiel zu starten, oder um die Credits zu sehen. Wenn sie ein Spiel gestartet haben werden sie eine Übersichtskarte sehen. Auf dieser Karte können sie die derzeit spielbaren Levels und ihren Fortschritt beim Verlieren ihres Vermögens sehen.</string>
+    
+    <string name="l00_nameofthegame_middle">The Big Incredible and Funny Treasure Hunt</string>
+    <string name="l00_nameofthegame_short">BIFTH</string>
+    
+    <string name="l00_unallowedLevel">Soweit sind sie noch nicht! Spielen sie ein anderes Level!</string>
+    
+    <string name="l00_about_01">"wurde programmiert von Studenten der"</string>
+    <string name="l00_about_02">"Technischen Universität Wien."</string>
+    <string name="l00_about_03">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_04">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_05">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_06">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_07">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_08">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_09">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_10">"Um die Credits zu sehen drücken sie Menü"</string>
+    
+    <string name="l00_help_01">das sind sie</string>
+    <string name="l00_help_02">noch nicht erreichtes Level</string>
+    <string name="l00_help_03"></string>
+    <string name="l00_help_04"></string>
+    <string name="l00_help_05"></string>
+    
+    <string name="l00_credits_01">" hat folgende Textur(en) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_02">"Vertrieben unter der Lizenz "</string>
+    <string name="l00_credits_03">" hat folgende Artwork(s) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_04">" hat folgende Sound(s) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_05">" hat folgende Musik zur Verfügung gestellt: "</string>
+    <string name="l00_credits_06">" hat folgende 3D Modell(e) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_07">" hat folgende Foto(s) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_08">" hat folgende Text(e) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_09">" hat folgende Arbeit(en) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_10">"Danke an alle die zu diesem Projekt beigetragen haben:"</string>
+    <string name="l00_credits_11">"und alle anderen."</string>
+    <string name="l00_credits_12">"Musik:"</string>
+    <string name="l00_credits_13">"Sounds:"</string>
+    <string name="l00_credits_14">"3D Modelle:"</string>
+    <string name="l00_credits_15">"Texturen:"</string>
+    <string name="l00_credits_16">"Artwork:"</string>
+    <string name="l00_credits_17">"Text:"</string>
+    <string name="l00_credits_18">"Photos:"</string>
+    <string name="l00_credits_19">"Anderes:"</string>
+    
+    <string name="l00_map_01">"Um ein Level zu starten drücken sie ein Icon das am Weg liegt und schon sichtbar ist!"</string>
+    <string name="l00_map_02">"Um hierher zu kommen müssen sie etwas Geld verlieren! Starten sie dazu ein Level das schon sichtbar ist!"</string>
+    <string name="l00_map_03">"Level nicht gefunden!"</string>
+    <string name="l00_map_04">" Gold übrig"</string>
+    
+    <string name="l00_map_06">"Super! Sie haben "</string>
+    <string name="l00_map_07">" Gold verloren!"</string>
+    <string name="l00_map_08">"Glückwunsch sie haben all ihre Reichtümer verloren! Fühlen sie schon ihre neu erstandene Freiheit!?"</string>
+    
+    <string name="l00_menu_01">"Die Musik ist jetzt an!"</string>
+    <string name="l00_menu_02">"Die Musik ist jetzt aus!"</string>
+
+    <string name="l00_menu_03">Spiel Fortsetzen</string>
+    <string name="l00_menu_04">Neues Spiel</string>
+    <string name="l00_menu_05">Hilfe</string>
+    <string name="l00_menu_06">Über</string>
+    <string name="l00_menu_07">Credits</string>
+    <string name="l00_menu_08">   Sound</string>
+    
+    
+    
     <string name="l01_hello">TODO:  ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN </string>
     
     <string name="l55_HelpTitle">Heldenhelfer</string>

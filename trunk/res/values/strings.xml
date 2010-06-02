@@ -1,18 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="l00_nameofthegame_full">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
+    
+    <string name="l00_error_audio">"Audio replay is currently not working. Restarting the game or phone might help."</string>
+  
     <string name="l00_help_part03">The placement of the levels is randomly chosen when you start a game. Here is a list of all possible levels. To see the help for an individual level click on its icon!</string>
     <string name="l00_help_part02">To lose part of your treasure play the level of your choice by pressing its icon. Levels that are marked with a question mark cannot be played yet. </string>
     <string name="l00_help_part01">Choose one of the menu items to continue the last game, to start a new game, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to lose your treasure.</string>
     
-    <string name="l00_nameofthegame_full">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
-    
     <string name="l00_nameofthegame_middle">The Big Incredible and Funny Treasure Hunt</string><string name="l00_nameofthegame_short">BIFTH</string><string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string><string name="l01_hello">Level01 Hello World </string>
-    <string name="l02_hello">Level02 Hello World </string>
-    <string name="l03_hello">Level03 Hello World </string>
-    <string name="l04_hello">Level04 Hello World </string>
-    <string name="l05_hello">Level05 Hello World </string>
-    <string name="l06_hello">Level06 Hello World </string>
-    <string name="l07_hello">Level07 Hello World </string>
+    <string name="l00_about_01">"was created by students at"</string>
+    <string name="l00_about_02">"Vienna University of Technology."</string>
+    <string name="l00_about_03">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_04">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_05">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_06">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_07">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_08">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_09">"TODO TODO TODO TODO TODO TODO"</string>
+    <string name="l00_about_10">"For credits press menu"</string>
+    
+    <string name="l00_help_01">that\'s you</string>
+    <string name="l00_help_02">not allowed level</string>
+    <string name="l00_help_03"></string>
+    <string name="l00_help_04"></string>
+    <string name="l00_help_05"></string>
+    
+    <string name="l00_credits_01">" shared the texture(s) "</string>
+    <string name="l00_credits_02">"Distributed under the license "</string>
+    <string name="l00_credits_03">" shared the artwork(s) "</string>
+    <string name="l00_credits_04">" shared the sound(s) "</string>
+    <string name="l00_credits_05">" shared the music "</string>
+    <string name="l00_credits_06">" shared the 3D model(s) "</string>
+    <string name="l00_credits_07">" shared the photo(s) "</string>
+    <string name="l00_credits_08">" shared the text(s) "</string>
+    <string name="l00_credits_09">" shared the work(s) "</string>
+    <string name="l00_credits_10">"Thanks to everybody who contributed to this project:"</string>
+    <string name="l00_credits_11">"and anybody else."</string>
+    <string name="l00_credits_12">"Music:"</string>
+    <string name="l00_credits_13">"Sounds:"</string>
+    <string name="l00_credits_14">"3D Models:"</string>
+    <string name="l00_credits_15">"Textures:"</string>
+    <string name="l00_credits_16">"Artworks:"</string>
+    <string name="l00_credits_17">"Text:"</string>
+    <string name="l00_credits_18">"Photos:"</string>
+    <string name="l00_credits_19">"Others:"</string>
+    
+    <string name="l00_map_01">"To start a level, press a button that is ahead and already visible!"</string>
+    <string name="l00_map_02">"To reach this point you have to lose more money! Press a level icon that is already visible!"</string>
+    <string name="l00_map_03">"Level not found!"</string>
+    <string name="l00_map_04">" gold left"</string>
+    
+    <string name="l00_map_06">"Great! You lost "</string>
+    <string name="l00_map_07">" gold!"</string>
+    <string name="l00_map_08">"Congratulations - You lost all your wealth! Do you already feel your newly gained freedom!"</string>
+    
+    <string name="l00_menu_01">"Music is on now."</string>
+    <string name="l00_menu_02">"Music is off now."</string>
+
+    <string name="l00_menu_03">Continue Game</string>
+    <string name="l00_menu_04">New Game</string>
+    <string name="l00_menu_05">Help</string>
+    <string name="l00_menu_06">About</string>
+    <string name="l00_menu_07">Credits</string>
+    <string name="l00_menu_08">   Sound</string>
+    
+    
     
 	<string name="l55_HelpTitle">Herohelper</string>
 	<string name="l55_HelpText">(English)Jeder kennt die Situation: Man spielt ein Jump \'n\' Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist du gefragt! Bestücke das leergeräumte Level wieder mit Münzen, und zwar so schnell, wie möglich. Denn etwas haben Helden nicht - und das ist Geduld.</string>

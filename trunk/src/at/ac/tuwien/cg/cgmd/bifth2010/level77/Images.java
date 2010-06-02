@@ -92,7 +92,7 @@ public class Images
 		if (name == "multi-blocks.png")
 			res_id = R.drawable.l77_multi_blocks;
 		else
-			res_id = R.drawable.l00_map_landscape;
+			res_id = R.drawable.l00_map;
 		
 		//load bitmap
         InputStream is = mContext.getResources().openRawResource(res_id); 
