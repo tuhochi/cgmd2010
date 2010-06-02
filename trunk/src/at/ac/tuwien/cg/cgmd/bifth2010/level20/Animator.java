@@ -49,8 +49,7 @@ public class Animator {
 		if (re == null)
 			return;
 		
-		// Do a straight line
-		
+		// Do a straight line		
 		float dx = destX - re.x;
 		float dy = destY - re.y;
 		

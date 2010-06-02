@@ -17,6 +17,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class ObstacleManager {
 	/** The obstacle entity to spawn. */
 	private RenderEntity obstacle;
+	/** The x-Position the obstacles are spawned. */
+	private float spawnPos;
 	/** The number of spawned obstacles up to now. */
 	private int nSpawnedObstacles;
 	/** The number of successfully avoided obstacles. */
@@ -27,6 +29,8 @@ public class ObstacleManager {
 	private float nextSpawnTime;
 	/** Accumulates the time since the last obstacle vanished. */
 	private float updateTime;
+	/** The position where the player crashes into the obstacle. */
+	protected float crashPosition;
 
 	/** Constructor of ObstacleManager. */
 	public ObstacleManager() {
@@ -37,6 +41,15 @@ public class ObstacleManager {
 		timeInterval = 10000;
 		nextSpawnTime = timeInterval;
 		updateTime = 0;		
+		crashPosition = 100;
+	}
+	
+	/** Initializes the manager. 
+	 * @param gl */
+	public void init(GL10 gl) {
+		spawnPos = LevelActivity.renderView.getWidth() + 100;
+		obstacle.x = spawnPos;
+		createObstacle(gl);
 	}
 	
 	/** 
@@ -58,12 +71,15 @@ public class ObstacleManager {
 		if (obstacle.visible) {
 			// Scroll.
 			obstacle.x -= scroll;
+			// Crashing with player.
+			if (obstacle.x < crashPosition) {
+				EventManager.getInstance().dispatchEvent(EventManager.OBSTACLE_CRASH, obstacle);
+			}
 		}
 		
 		// Obstacle vanished.
 		if (obstacle.x < 0) {
 			removeObstacle();
-
 		}
 	}
 
@@ -76,9 +92,9 @@ public class ObstacleManager {
 	
 	}
 	
-	private void removeObstacle() {
+	public void removeObstacle() {
 		obstacle.visible = false;
-		obstacle.x = 500;
+		obstacle.x = spawnPos;
 		updateTime = 0;
 	}
 

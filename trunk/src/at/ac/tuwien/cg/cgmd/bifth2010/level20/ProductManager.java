@@ -1,12 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -75,8 +72,7 @@ public class ProductManager{
 	 */
 	public ProductManager() {
 		
-		NUMBER_PRODUCTS = 3;
-		PRODUCT_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_distance);
+		NUMBER_PRODUCTS = 3;		
 		SHOPPING_CART_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_shopping_cart_distance);
 		
 		pixelsMoved = 0;
@@ -84,13 +80,23 @@ public class ProductManager{
 		shoppingCartDistance = 0;
 		
 		products = new Hashtable<Integer, ProductEntity>();
-		removeFromProducts = new LinkedList<ProductEntity>();
-		
-		// TODO: Calc better values
-		productSpawnY = new float[]{480 * 285 / 320f, 480 * 220 / 320f, 480 * 155 / 320f};
+		removeFromProducts = new LinkedList<ProductEntity>();		
 				
 	}
 
+	/**
+	 * Initializes the manager. 
+	 */
+	public void init() {
+		// TODO: Calc better values
+		float height = LevelActivity.renderView.getHeight();
+		float width = LevelActivity.renderView.getWidth();
+		float row = height / 8.f;
+		productSpawnY = new float[]{height - row, height - row*2.6f, height - row*4.3f};
+		
+		PRODUCT_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_distance) * width * 0.005f;
+	}
+	
 	/**
 	 * Updates the shelf.
 	 * @param scroll The new scroll value for the shelf animation.
@@ -128,15 +134,13 @@ public class ProductManager{
 			if (movingShoppingCart.x < -movingShoppingCart.width) {				
 				movingShoppingCart = null;
 			}
-		}
-			
+		}			
 			
 		// Check every frame if the touch touches a product or a shopping cart
 		if (LevelActivity.gameManager.touchDown) {
 			touchEvent(LevelActivity.gameManager.touchX, LevelActivity.gameManager.touchY);
 		}
-		
-		
+				
 		// Now remove all marked products and empty the list again
 		for (ProductEntity pe : removeFromProducts) {			
 			products.remove(pe.id);
@@ -147,8 +151,7 @@ public class ProductManager{
 		productDistance += scroll;
 		
 		if (productDistance >= PRODUCT_DISTANCE) {			
-			productDistance -= PRODUCT_DISTANCE;	
-			
+			productDistance -= PRODUCT_DISTANCE;				
 			createProducts();
 		}
 		
@@ -158,7 +161,7 @@ public class ProductManager{
 		if (shoppingCartDistance >= SHOPPING_CART_DISTANCE && LevelActivity.gameManager.nShoppingCarts < LevelActivity.gameManager.shoppingCarts.length) {			
 			shoppingCartDistance -= SHOPPING_CART_DISTANCE;	
 			
-			createShoppingCart();
+			//createShoppingCart();
 		}
 	}
 	
@@ -198,7 +201,7 @@ public class ProductManager{
 					ne.clickable = false;
 					
 					// TODO: Small hack, do something better:
-					ne.angle = 45;
+					ne.visible = false;
 				}				
 				break;
 			}

@@ -15,48 +15,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class Shelf extends RenderEntity {
 
-		
-	
-	/**
-	 * @param width The screen width.
-	 * @param height The screen height.
-	 */
-	public Shelf(float width, float height) {
-		
-		super();
-		
-		texture = 0;
-		visible = true;
-		setPos(x, y);
-		z = 0;
-		setDim(width, height);
-		
-		float vertices[] = {0, 		0, 		0, 		
-							width, 	0, 		0, 		
-							0,  	height, 0,
-							width,  height, 0};
-
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
-		
-		// (The texture is built that way)
-		float oneSixth = 1.0f / 6.0f;		
-		float texCoords[] = {0, 1 - oneSixth,
-							 1, 1 - oneSixth,
-							 0, oneSixth,
-							 1, oneSixth};
-		
-		byteBuf = ByteBuffer.allocateDirect(texCoords.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texCoords);
-		textureBuffer.position(0);
-		
+	/** @see RenderEntity */ 
+	public Shelf(float x, float y, float z, float width, float height) {
+		super(x, y, z, width, height);
 	}
-
+	
 	
 	/**
 	 * The object own drawing function.
