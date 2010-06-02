@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
 /**
@@ -85,5 +86,9 @@ public class PlayerObject extends GameObject {
 		float x = (position.x + GameObject.offset.x);
 		float y = (position.y + GameObject.offset.y);
 		return new Vector2(x, y);
+	}
+	
+	public void setTexture(Texture texture) {
+		this.texture = texture;
 	}
 }

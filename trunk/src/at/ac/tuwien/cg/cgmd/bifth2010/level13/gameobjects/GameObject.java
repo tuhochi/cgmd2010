@@ -34,6 +34,7 @@ public abstract class GameObject {
 	protected ShortBuffer indexBuffer;
 	
 	public Vector2 moveVec;
+	public Vector2 moveVec2;
 	//texture of object (=singleton)
 	protected Texture texture;
 	
@@ -146,6 +147,9 @@ public abstract class GameObject {
 	 * @param movement
 	 */
 	public static void updateOffset(Vector2 movement) {
+		if(GameControl.getInstance().isInJail() || GameControl.getInstance().isSexState()) {
+			return;
+		}
 		//offset.add(new Vector2(movement.x * MyRenderer.STEP / 1000, movement.y * MyRenderer.STEP / 1000));
 		offset.add(movement);
 		
