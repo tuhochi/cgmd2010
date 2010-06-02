@@ -30,6 +30,7 @@ public class EnemyObject extends GameObject {
 		//set dimension (must be equal to GameObject.BLOCKSIZE)
 		super(GameObject.BLOCKSIZE, GameObject.BLOCKSIZE);
 		moveVec = new Vector2(0,0);
+		moveVec2 = new Vector2(0, 0);
 		
 		directionVectorArray[0] = new Vector2(0,1);
 		directionVectorArray[1] = new Vector2(0,-1);
@@ -53,6 +54,16 @@ public class EnemyObject extends GameObject {
 		
 		int randomDir = random.nextInt(4);
 		this.moveVec = directionVectorArray[randomDir];
+		
+		randomDir = random.nextInt(2);
+		if(randomDir == 0) {
+			this.moveVec2.x = this.moveVec.y;
+			this.moveVec2.y = this.moveVec.x;
+		}
+		else {
+			this.moveVec2.x = -this.moveVec.y;
+			this.moveVec2.y = -this.moveVec.x;
+		}
 
 	}
 	

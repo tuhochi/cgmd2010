@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
@@ -80,8 +81,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
 	public static final int SPEED = 4;
-	private static final float ROTATIONINC = 5.4f;
+	private static final float ROTATIONINC = 3f;
 	private float rotation = 0;
+	private int renderedPlayer = 0;
 	
 	private float zoomFactor = 1.0f;
 	private float zoom = 0.0f;
@@ -145,7 +147,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		while(lastTime + STEP <= now) {
 
 
-			gameControl.update();
+			gameControl.update(player);
 
 			//draw all game objects
 			for(GameObject gameObject : gameObjects) {
@@ -178,7 +180,10 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 				zoomFactor+=zoom;
 			}
 			else {
-				rotation = 0;
+				if(rotation >= 360) {
+					int div = (int)rotation / 360;
+					rotation -= div * 360;
+				}
 				zoomFactor = 1.0f;
 			}
 			
@@ -210,10 +215,27 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		
 		//draw all game objects
 		for(GameObject gameObject : gameObjects) {
+			if(gameObject instanceof PlayerObject) {
+				continue;
+			}
 			if (gameObject.isActive){
 			gameObject.draw(gl);
 			
 			}
+		}
+		
+		//draw player
+		if(gameControl.isInvincibleState()) {
+			if(renderedPlayer == 8) {
+				player.draw(gl);
+				renderedPlayer = 0;
+			}
+			else {
+				renderedPlayer++;
+			}
+		}
+		else {
+			player.draw(gl);
 		}
 		
 		
@@ -270,7 +292,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		
 		//set background color
-		gl.glClearColor(1.0f, 0.0f, 0.0f, 0.5f);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 		
 		//set display size
 		MyRenderer.screenHeight = this.getHeight();
@@ -317,6 +339,8 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		jailStatusBar = new JailBar(200, 50);
 	    jailStatusBar.position.y = 50;
 	
+	    
+		SoundManager.startMusic();
 	}
 	
 

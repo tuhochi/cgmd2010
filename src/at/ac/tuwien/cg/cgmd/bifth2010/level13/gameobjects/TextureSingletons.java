@@ -36,6 +36,7 @@ public class TextureSingletons {
 		textures.put(DrunkBar.class.getSimpleName(), new DrunkBarTexture(gl, context));
 		textures.put(JailBar.class.getSimpleName(), new JailBarTexture(gl, context));
 		textures.put(DrunkBarBlock.class.getSimpleName(), new DrunkBarBlockTexture(gl, context));
+		textures.put("censored", new CensoredTexture(gl, context));
 	}
 	
 	/**
