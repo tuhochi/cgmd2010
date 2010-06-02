@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
@@ -17,7 +18,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
-
 public class LevelRenderer implements Renderer {
 	private Context context;
 	private Bundle mSavedInstance;
@@ -25,7 +25,7 @@ public class LevelRenderer implements Renderer {
 
 	private final float BUNNY_DEFAULT_MOVEMENT_UNIT = 6.0f;
 	private final float COP_DEFAULT_MOVEMENT_UNIT = 4.0f;
-	private final float DEFAULT_FPS = 12.0f;
+	private final float DEFAULT_FPS = 22.0f;
 	public final static int BUNNY_WIDTH = 60;
 	public final static int BUNNY_HEIGHT = 60;
 	public final static int COP_WIDTH = 50;
@@ -37,7 +37,7 @@ public class LevelRenderer implements Renderer {
 	private final static int ACTION_HEIGHT = 6;
 	private final static int ACTION_TILESIZE = 100;
 	public final static int CONTROL_SIZE = 150;
-	private final static float CATCH_DISTANCE = COP_WIDTH;
+	private final static float CATCH_DISTANCE = COP_WIDTH/2;
 	
 	private boolean drawLock = false;
 	private float[] keystates = new float[4];
@@ -55,6 +55,7 @@ public class LevelRenderer implements Renderer {
 	private LevelSurfaceView glv;
 	private textureManager manager;
 	private ArrayList<Tablet> cops;
+	private ArrayList<Tablet> cars;
 	private Tablet bunny;
 	private Tablet gold;
 	private Tablet control;
@@ -166,6 +167,7 @@ public class LevelRenderer implements Renderer {
 		for (int i=0;i<4;i++) keystates[i] = 0;
 		actiontextures = new ArrayList<Tablet>();
 		cops = new ArrayList<Tablet>();
+		cars = new ArrayList<Tablet>();
 	}
 
 	public void setKey (int code, float amount) {
@@ -450,6 +452,8 @@ public class LevelRenderer implements Renderer {
 				else result |= 8;
 			}
 		}
+		
+		// here you may insert code to check for collisions against arbitrary objects
 		return result;
 	}
 
@@ -570,11 +574,14 @@ public class LevelRenderer implements Renderer {
 
 			}
 		}
-
+		
+		//draw cars
+		Iterator<Tablet> it = cars.iterator();
+		while (it.hasNext()) it.next().draw(gl);
 
 		//draw action stuff
 		drawLock = true;
-		Iterator<Tablet> it = actiontextures.iterator();
+		it = actiontextures.iterator();
 		while (it.hasNext()) {
 			it.next().draw(gl);
 		}
@@ -722,6 +729,32 @@ public class LevelRenderer implements Renderer {
 			mapOffset_x = mapOffset_y = 0;
 			bunny.setXY(100, 20);
 			Tablet.setMapOffset(mapOffset_x, mapOffset_y);
+			
+			//create cars
+			Random rnd = new Random();
+			int rnr11=0, rnr12=0, rnr21=0, rnr22=0;
+			do { 
+				rnr11 = rnd.nextInt(LEVEL_WIDTH);
+				rnr12 = rnd.nextInt(LEVEL_HEIGHT);
+			}
+			while ((rnr11 == 0 && rnr12 == 0) || 
+				   (levelMap[rnr12][rnr11] < 1 && levelMap[rnr12][rnr11] > 7) ||
+					levelMap[rnr12][rnr11] == 3);
+			do { 
+				rnr21 = rnd.nextInt(LEVEL_WIDTH);
+				rnr22 = rnd.nextInt(LEVEL_HEIGHT);
+			}
+			while ((rnr21 == 0 && rnr22 == 0) || 
+				   (levelMap[rnr22][rnr21] < 1 && levelMap[rnr22][rnr21] > 7) ||
+					levelMap[rnr22][rnr21] == 3);
+			// now that we know which tile to put the car on, place it there
+			Tablet newcar1 = new Tablet(context, 50, 75, rnr11*LEVEL_TILESIZE*scale, rnr12*LEVEL_TILESIZE*scale, manager.getTexture("car0"), gl);
+			if (levelMap[rnr12][rnr11] == 1 || levelMap[rnr12][rnr11] == 4 || levelMap[rnr12][rnr11] == 5) newcar1.rotate(90.0f);
+
+			Tablet newcar2 = new Tablet(context, 50, 75, rnr21*LEVEL_TILESIZE*scale, rnr22*LEVEL_TILESIZE*scale, manager.getTexture("car0"), gl);
+			if (levelMap[rnr22][rnr21] == 1 || levelMap[rnr22][rnr21] == 4 || levelMap[rnr22][rnr21] == 5) newcar2.rotate(90.0f);
+			cars.add(newcar1);
+			cars.add(newcar2);
 		}
 	}
 

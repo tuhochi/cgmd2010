@@ -76,6 +76,14 @@ public class textureManager {
 		createTexture("cloud1", R.drawable.l60_cloud1, 50, 50);
 		createTexture("cloud2", R.drawable.l60_cloud2, 50, 50);
 		createTexture("cloud3", R.drawable.l60_cloud3, 50, 50);
+		
+		loadTexture("car0", R.drawable.l60_car);
+		loadTexture("car1", R.drawable.l60_car0);
+		loadTexture("car2", R.drawable.l60_car1);
+		loadTexture("car3", R.drawable.l60_car2);
+		loadTexture("car4", R.drawable.l60_car3);
+		loadTexture("car5", R.drawable.l60_car4);
+		loadTexture("car6", R.drawable.l60_car5);
 
 		//add all texture elements
 	}

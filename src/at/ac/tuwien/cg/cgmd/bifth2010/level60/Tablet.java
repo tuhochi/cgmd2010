@@ -40,13 +40,13 @@ public class Tablet {
 	private float x;
 	private float y;
 	private int texture;
-	private int rotation_angle;
+	private float rotation_angle;
 	private static float scale = 1.0f;
 	private static float mapOffset_x = 0;
 	private static float mapOffset_y = 0;
 	private boolean sticky = false;
-	public static final int INTENDED_RES_X = 480;
-	public static final int INTENDED_RES_Y = 320;
+	public static final int INTENDED_RES_X = 400;
+	public static final int INTENDED_RES_Y = 520;
 	
 	public Tablet(Context context, int width, int height, float x, float y, int texture, GL10 gl) {
 		this(context, width, height, x, y, texture, false, gl);
@@ -124,7 +124,7 @@ public class Tablet {
 	}
 	
 	
-	public void rotate(int angle) {
+	public void rotate(float angle) {
 		this.rotation_angle = angle;
 	}
 	
@@ -148,7 +148,7 @@ public class Tablet {
 		gl.glPushMatrix();
 		gl.glTranslatef(drawtoX, drawtoY, 0);
 		gl.glScalef(Tablet.scale, Tablet.scale, 0);
-		gl.glRotatex(rotation_angle, 0, 0, 1);
+		gl.glRotatef(rotation_angle, 0, 0, 1);
 		
 		gl.glDrawElements(GL10.GL_TRIANGLES, indices.length, GL10.GL_UNSIGNED_SHORT, indexBuffer);
 
