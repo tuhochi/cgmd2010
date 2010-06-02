@@ -31,7 +31,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	protected LevelActivity activity;
 	protected RenderView renderView;
 	
-	/** @see at.ac.tuwien.cg.cgmd.bifth2010.level20.TimeUtil */
+	/** Manages all time related stuff */
 	protected TimeUtil time;
 
 	/** The background Shelf of the game */		 
@@ -44,10 +44,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	protected boolean collectingEnabled;
 	
 	/** Manager audio resources and playback. */
-	SoundManager soundManager;
+	protected SoundManager soundManager;
 	
 	/** Handles obstacles in the game. */
-	ObstacleManager obstacleManager;
+	protected ObstacleManager obstacleManager;
 	
 	/** The animator collection */
 	protected Hashtable<Integer, Animator> animators;
@@ -69,7 +69,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	/** The amount of shopping carts */
 	protected int nShoppingCarts;
 	
-		
+	/** The animated bunny */
 	protected SpriteAnimationEntity bunny;
 	
 	
@@ -144,9 +144,17 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		obstacleManager.init(gl);			
 		productManager.init();
 		
+		float height = renderView.getHeight();
+		
 		// This is the default for a screen height of 480px. 
 		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
 		shoppingCartSize *= height / 480.0f;
+		
+		// Calc bounding box size
+		float bbX = activity.instance.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_x);
+		float bbY = activity.instance.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_y);
+		bbX *= height / 480.0f;
+		bbY *= height / 480.0f;
 			
 		// Create shopping cart.		
 		float cartPosY = height / 5.f;
@@ -154,6 +162,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		shoppingCarts[0] = new ShoppingCart(200, cartPosY, 2, shoppingCartSize, shoppingCartSize);
 		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
 		shoppingCarts[0].clickable = false;
+		shoppingCarts[0].setBBDim(bbX, bbY);
 		nShoppingCarts = 1;
 		
 		// Create bunny.
@@ -166,6 +175,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		bunny.setFps(10);
 		bunny.setAnimationSequence(bunnySequence);
 		
+		productManager.initProductSpawn();
 		// Pixel per second
 		scrollSpeed = activity.getResources().getInteger(R.integer.l20_scroll_speed) * widthPercent * 0.0001f;
 		animationSpeed = activity.getResources().getInteger(R.integer.l20_animation_speed) * widthPercent;
@@ -209,6 +219,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				
 		bunny.setAnimationSequence(bunnySequence);
 		
+		productManager.initProductSpawn();
 	}
 
 
@@ -270,17 +281,27 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		// Set these variables so that the touch can be checked each frame.
 		// Be aware that the event Y axis is mirrored to the render Y axis.
 		touchX = event.getX();
-		touchY = renderView.getHeight() - event.getY();		
-		touchDown = (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN);		
+		touchY = renderView.getHeight() - event.getY();
+		
+		// INFO: Removing click and hold for now. seems too easy.
+		
+		boolean tempDown = (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN);
+		
+		// If there is a touch now, and it's a new touch, forward it. (Don't trigger more events until the finger is removed again)
+		if (tempDown && !touchDown) {
+			touchDown = true;
         
 		// Forward the event if there is a touchDown, so we don't miss very short touches. (Useful on the emulator where fps are very low)
-        if (touchDown) {
-        	// If bunny crashed no products can be collected.
-        	if(!bunny.crashed) {
-        		productManager.touchEvent(touchX, touchY);
-        	}
-    		obstacleManager.touchEvent(touchX, touchY);
+        // If bunny crashed no products can be collected.
+        if(!bunny.crashed) {
+        	productManager.touchEvent(touchX, touchY);
         }
+    		obstacleManager.touchEvent(touchX, touchY);
+    		
+	        // Else, if we release the touch, reset touchDown to false too.
+		} else if (!tempDown) {
+			touchDown = false;
+		}
 		
 		// Sleep the thread, so that it doesn't fire too many events
 		try {
@@ -351,15 +372,19 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		case EventManager.PRODUCT_COLLECTED:
 		{
 			ProductEntity pe = (ProductEntity)eventData;
-			
-			// Get a random position
-			int cartIndex = (int)(Math.random() * nShoppingCarts);			
+						
+			// Get the nearest cart index
+			int cartIndex = (int)(pe.x * nShoppingCarts / renderView.getWidth());			
 			float[] pos = shoppingCarts[cartIndex].getNextProductPosition();
 			
 			// Move it to the basket.
 			Animator a = new Animator(pe, pos[0], pos[1], animationSpeed);
 			animators.put(a.id, a);
-			shoppingCarts[0].addProduct(pe);
+			
+			// Remove from products
+			productManager.products.remove(pe.id);
+			// And add to cart. (PE is now also rendered from here)
+			shoppingCarts[cartIndex].addProduct(pe);
 			
 			// Just for fun.
 			if (9 == pe.type) {
@@ -368,7 +393,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			
 			totalMoney -= ProductInfo.price(pe.type);
 			
-			// This prevents displaying a negative money count.
+			// This prevents displaying a negative money count and exits the game.
 			if (totalMoney <= 0) {
 				totalMoney = 0;
 				

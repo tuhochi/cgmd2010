@@ -182,6 +182,9 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		
+		try {
+			
+		
 		GameManager gameManager = LevelActivity.gameManager;
 		
 		// Render, but do not update the game when its not running
@@ -207,19 +210,38 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		// Render shopping carts
 		for (int i = 0; i < gameManager.shoppingCarts.length; i++) {			
 			if (gameManager.shoppingCarts[i] != null) {
+				
+				// Render shopping cart products
+				keys = gameManager.shoppingCarts[i].entities.keys();				
+				while(keys.hasMoreElements()) {
+					gameManager.shoppingCarts[i].entities.get(keys.nextElement()).render(gl);
+				}
+				
+				// And SC itself
 				gameManager.shoppingCarts[i].render(gl);
 			}
 		}
-		gameManager.obstacleManager.render(gl);
 		
 		if (gameManager.productManager.movingShoppingCart != null) {
 			gameManager.productManager.movingShoppingCart.render(gl);
 		}
 		
+		gameManager.obstacleManager.render(gl);	
+		
 		gameManager.bunny.render(gl);
 		
 		// After all rendering is complete, update the UI TextViews
 		handler.post(textViewUpdater);
+		
+
+		} catch (Exception e) {
+			
+			
+			Log.e("Exception", "RenderThread", e);
+			
+			int a = 1;
+			
+		}
 	}
 	
 	

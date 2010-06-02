@@ -14,14 +14,22 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class RenderEntity extends GameEntity implements Renderable, Clickable {
 
+	/** The OpenGl texture handle */
 	protected int texture;
+	/** If it is visible */
 	protected boolean visible;	
 	/**Flag whether the entity is clickable or not. */	
 	protected boolean clickable;	
 	/** Flag whether the entity is currently animated or not. (If an animator is attached to it) */
 	protected boolean animated;
+	/** Holds the vertices */
 	protected FloatBuffer vertexBuffer;
+	/** Holds the texture coordinates */
 	protected FloatBuffer textureBuffer;
+	/** The half width of the bounding box */
+	protected float bb_hWidth;
+	/** The half height of the bounding box */
+	protected float bb_hHeight;
 	
 	
 	/**
@@ -43,14 +51,15 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 		setPos(x, y);
 		this.z = z;
 		setDim(width, height);
+
+		// If not changed, the bb is the same size as this dimension
+		setBBDim(width, height);
 		
-		float hWidth = width * 0.5f;
-		float hHeight = height * 0.5f;
-		
-		float vertices[] = {-hWidth, -hHeight, 0, 		
-							 hWidth, -hHeight, 0, 		
-							-hWidth,  hHeight, 0,
-							 hWidth,  hHeight, 0};
+		// Since these values are correct !now!, just use them
+		float vertices[] = {-bb_hWidth, -bb_hHeight, 0, 		
+							 bb_hWidth, -bb_hHeight, 0, 		
+							-bb_hWidth,  bb_hHeight, 0,
+							 bb_hWidth,  bb_hHeight, 0};
 
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
@@ -83,15 +92,10 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 	public void render(GL10 gl) {
 		
 		if (!visible)
-			return;
-		
+			return;		
 
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
-		
-		//Point to our buffers
-//		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-//		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);		
-		
+				
 		//Point to our buffers
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
@@ -107,20 +111,26 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 			gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 		
 		gl.glPopMatrix();
-		
-		//Disable the client state before leaving
-//		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-//		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level20.Clickable#hitTest(float, float)
+	 */
 	@Override
 	public boolean hitTest(float hitX, float hitY) {
 		if (!visible) return false;
 		
-		float hW = width * 0.5f;
-		float hH = height * 0.5f;
-		
-		return (hitX >= x - hW && hitX < x + hW   &&   hitY >= y - hH && hitY < y + hH);
+		return (hitX >= x - bb_hWidth && hitX < x + bb_hWidth   &&   hitY >= y - bb_hHeight && hitY < y + bb_hHeight);
+	}
+	
+	/**
+	 * Sets the bounding box dimension in a comfortable way
+	 * @param width The width of the bounding box.
+	 * @param height The height of the bounding box
+	 */
+	public void setBBDim(float width, float height) {
+		bb_hWidth = width * 0.5f;
+		bb_hHeight = height * 0.5f;
 	}
 	
 }
