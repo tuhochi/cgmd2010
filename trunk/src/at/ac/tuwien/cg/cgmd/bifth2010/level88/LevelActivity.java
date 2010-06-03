@@ -141,9 +141,10 @@ public class LevelActivity extends Activity{
         SharedPreferences settings = this.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
         mMusicOn = settings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
         
-        updateTexts();
+        //updateTexts();
         
         mLoopPlayer = new MediaPlayer();
+        mLoopPlayer.setVolume(4.2f, 4.2f);
         mLoopPlayer.setOnPreparedListener(mSoundPrepListener);
         mLoopPlayer.setOnErrorListener(new OnErrorListener() {
 			@Override
@@ -158,7 +159,7 @@ public class LevelActivity extends Activity{
 		});
         mLoopPlayer.setLooping(true);
         
-        //updateTexts();
+        updateTexts();
 	}
 	
 	/**

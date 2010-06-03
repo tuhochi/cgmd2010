@@ -62,8 +62,19 @@
 	license="CC" />
 <credit type="sound" name="Voices bie bie I'll be off then"
 	author="ingsey101" url="http://www.freesound.org/samplesViewSingle.php?id=49981"
-	usage="Lenny Must Die: by by lenny" license="CC" />
-		
+	usage="Lenny Must Die: by by lenny" license="CC" /><!--Level 88 - credits--><credit
+		type="" name="" author="" url="" usage="" license="">
+</credit>
+	<credit
+		type="sound" name="Discount Funk Bass Riff _D_G_F_85 -01" author="enoe" url="http://audio.ibeat.org/?ccm=/files/enoe/617" usage="Bunny Heist: Background loop" license="CC">
+</credit>
+	<credit
+		type="sound" name="Ta Da" author="Mike Koenig" url="http://soundbible.com/1003-Ta-Da.html" usage="Bunny Heist: Winning" license="CC">
+</credit>
+	<credit
+		type="sound" name="Police Siren Sounds Sound Effect" author="FreeSounds.info" url="http://free-loops.com/download-free-loop-4823.html" usage="Bunny Heist: Getting caught by the police" license="CC">
+</credit>
+
 </credits>
 
 
