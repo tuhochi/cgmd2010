@@ -133,6 +133,9 @@ public class SoundManager
 	
 	public synchronized MediaPlayer playSound(int resID)
 	{
+		if(!LevelActivity.SOUND_ENABLED)
+			return null;
+		
 		MediaPlayer myPlayer = null;
 		
 		// Try to find a player for this resource

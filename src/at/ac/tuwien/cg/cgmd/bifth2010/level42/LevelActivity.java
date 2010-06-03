@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
@@ -56,7 +57,7 @@ public class LevelActivity extends Activity
 	/** The instance. */
 	private static LevelActivity instance;
 	
-	private final SessionState sessionState;
+	private static final SessionState sessionState = new SessionState();
 	
 	/** The render view. */
 	private RenderView renderView;
@@ -85,6 +86,8 @@ public class LevelActivity extends Activity
 	/** The time manager. */
 	private final TimeManager timeManager = TimeManager.instance;
 	private final SoundManager soundManager = SoundManager.instance;
+	
+	public static boolean SOUND_ENABLED = true;
 	
 	/** The vibrator. */
 	private Vibrator vibrator;
@@ -166,7 +169,6 @@ public class LevelActivity extends Activity
 				time.setText(remainingMinutesString + ":" + remainingSecondsString);
 			}
 		};
-		sessionState = new SessionState();
 	}
 	
 	/**
@@ -187,6 +189,8 @@ public class LevelActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		Log.v(TAG,"onCreate(" + savedInstanceState + ")");
+		
+		SOUND_ENABLED = getIntent().getBooleanExtra(MenuActivity.PREFERENCE_MUSIC, false);
 		
 		if(savedInstanceState == null)	// first start or restart
 			timeManager.reset(true);
