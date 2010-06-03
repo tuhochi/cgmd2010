@@ -167,7 +167,7 @@ public class GameControl {
 
                 	}
                 	else{
-                		
+                		MyRenderer.rotation = 0;
                         drunkState = false;
                         ratArsedState = false;
                        

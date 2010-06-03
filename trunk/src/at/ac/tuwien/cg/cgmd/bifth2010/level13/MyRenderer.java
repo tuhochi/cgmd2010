@@ -82,7 +82,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
 	public static final int SPEED = 4;
 	private static final float ROTATIONINC = 3f;
-	private float rotation = 0;
+	public static float rotation = 0;
 	private int renderedPlayer = 0;
 	
 	private float zoomFactor = 1.0f;
