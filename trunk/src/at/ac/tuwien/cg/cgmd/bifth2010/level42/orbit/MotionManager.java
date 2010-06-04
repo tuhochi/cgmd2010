@@ -134,19 +134,21 @@ public class MotionManager {
 			tempForceDirectionVec.set(aimCenter);
 			tempForceDirectionVec.subtract(entity.getCurrentPosition());		
 			
-			LogManager.d("SELECTION push force="+pushVec.length());
+			float motionSpeed = pushVec.length()*Config.SELECTION_FORCE_FACTOR;
+			
+			LogManager.d("SELECTION push force="+motionSpeed);
 			
 			if(motion instanceof DirectionalMotion){
 				DirectionalMotion dirMotion = (DirectionalMotion)motion;
 				dirMotion.reconfigMotion(	entity.getCurrentPosition(),
 											tempForceDirectionVec,
-											pushVec.length()*Config.SELECTION_FORCE_FACTOR,
+											motionSpeed,
 											motion.getBasicOrientation());
 			}else{
 				DirectionalSatelliteMotion dirMotion =  
 					new DirectionalSatelliteMotion(	entity.getCurrentPosition(),
 													tempForceDirectionVec,
-													pushVec.length()*Config.SELECTION_FORCE_FACTOR,
+													motionSpeed,
 													motion.getBasicOrientation());
 				//exchange motion
 				setMotion(dirMotion, entity);

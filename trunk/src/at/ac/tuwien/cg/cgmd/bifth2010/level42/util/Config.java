@@ -115,10 +115,10 @@ public class Config
 	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 12f;
 	
 	/** minimal force to change the motion into a directional motion */
-	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 20.5f;
+	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 0.98f * MAX_FORCE;
 	
 	/** the selection vector gets divided by this factor */
-	public static float SELECTION_FORCE_FACTOR = 0.8f;
+	public static float SELECTION_FORCE_FACTOR = 1f;
 	
 	public static final float DIRORBITTRANSFORM_DIRVEC_FACTOR = 2;
 	public static final float TRANSFORMATION_DISTANCE = 10;
