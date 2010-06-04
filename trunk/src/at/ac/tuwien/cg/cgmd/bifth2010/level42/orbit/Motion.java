@@ -29,6 +29,16 @@ public abstract class Motion implements Persistable
 	/** flag used to play the collision sound only once */
 	boolean playedCollSound = false;
 	
+	int collCount = 0;
+	
+	public void setCollCount(int newCollCount){
+		collCount = newCollCount;
+	}
+	
+	public int getCollCount(){
+		return collCount;
+	}
+	
 	/**
 	 * Do the next iteration step 
 	 * @param dt delta time between frames for a frame-independent motion

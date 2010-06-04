@@ -64,7 +64,7 @@ public class CollisionManager implements Persistable{
 	/** Describes the planet part direction */
 	private final Vector3 planetPushVec;
 	/** The deflaction vector for the satellite */
-	private final Vector3 morphPlanetPushVec;
+	private final Vector3 morphPlanetPushVec,tempMorphPlanetPushVec;
 	/** Temp var for the center vector */
 	private final Vector3 toCenterVecA;
 	/** Temp var for the center vector */
@@ -128,6 +128,7 @@ public class CollisionManager implements Persistable{
 		this.objBPushVec = new Vector3();
 		this.planetPushVec = new Vector3();
 		this.morphPlanetPushVec = new Vector3();
+		this.tempMorphPlanetPushVec = new Vector3();
 		
 		this.toCenterVecA = new Vector3();
 		this.toCenterVecB = new Vector3();
@@ -335,11 +336,12 @@ public class CollisionManager implements Persistable{
 						 * SPECIAL CASE
 						 * planet part moves out of the planet -> avoid collision with planet
 						 */
-						if(satellite.getMotion().getFilterPlanetColl())
+						Motion satMotion = satellite.getMotion();
+						if(satMotion.getFilterPlanetColl())
 							continue;
 					
 						//set planet entrance flag
-						satellite.getMotion().setInsidePlanet(true);
+						satMotion.setInsidePlanet(true);
 												
 						Model planetPart = null;
 						
@@ -353,9 +355,9 @@ public class CollisionManager implements Persistable{
 							//check for contact
 							if(collisionDetected(planetPart,satellite,Config.COLLISION_PENETRATION_DEPTH,planetCenterDistance))
 							{
-								if(!satellite.getMotion().getPlayedCollSound()){
+								if(!satMotion.getPlayedCollSound()){
 									playCollSound(satellite);
-									satellite.getMotion().setPlayedCollSound(true);
+									satMotion.setPlayedCollSound(true);
 								}
 								
 								Motion planetPartMotion = planetPart.getMotion();
@@ -370,15 +372,41 @@ public class CollisionManager implements Persistable{
 									
 									planetPartMotion = new DirectionalPlanetMotion(	planetPart.getBoundingSphereWorld().center,
 																					planetPushVec,
-																					satellite.getMotion().getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
+																					satMotion.getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
 																					planetPart.getBasicOrientation());
-									
-									
-									if(satellite.getMotion().getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL){
-										morphPlanetPushVec.set(planetPushVec);
+
+									if(satMotion.getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL){
+//										morphPlanetPushVec.set(planetPushVec);
+//										morphPlanetPushVec.normalize();
+//										morphPlanetPushVec.multiply(satellite.getMotion().getSpeed()*Config.PLANETPART_BOUNCE_FAC);
+//										satellite.getMotion().morph(morphPlanetPushVec);
+										
+										morphPlanetPushVec.set(satellite.getBoundingSphereWorld().center);
+										tempMorphPlanetPushVec.set(morphPlanetPushVec);
+										morphPlanetPushVec.subtract(planetPart.getBoundingSphereWorld().center);
 										morphPlanetPushVec.normalize();
+										centerDistance.normalize();
+										
+										morphPlanetPushVec.add(centerDistance).normalize();
+										if(morphPlanetPushVec.length()<=0.1f){
+											morphPlanetPushVec.set(tempMorphPlanetPushVec).normalize();
+										}
+										
 										morphPlanetPushVec.multiply(satellite.getMotion().getSpeed()*Config.PLANETPART_BOUNCE_FAC);
-										satellite.getMotion().morph(morphPlanetPushVec);
+										
+										satMotion.morph(morphPlanetPushVec);
+										
+										//COLLISION FILTER
+										int collCount = satMotion.getCollCount();
+										collCount++;
+										satMotion.setCollCount(collCount);
+										
+										if(collCount>=Config.DAMPED_MAX_COLLISION_COUNT){
+											LogManager.d("MAX COLLISION COUNT REACHED");
+											satMotion.setFilterPlanetColl(true);
+											satMotion.setCollCount(0);											
+										}
+										
 									}
 									
 									motionManager.addMotion(planetPartMotion,planetPart);
@@ -472,23 +500,23 @@ public class CollisionManager implements Persistable{
 				
 						if(!motionManager.isPlanetPart(objA)){
 							if(distance > Config.TRANSFORMATION_DISTANCE){
+								
 								if(motion instanceof DirectionalMotion){
 									motionManager.transformDirMotionInOrbit(objA);
-									motion.setPlayedCollSound(false);
-								}else{
-									//orbit collision
-									objA.getMotion().setInsidePlanet(false);
-									motion.setPlayedCollSound(false);
 								}
+								motion.setInsidePlanet(false);
+								motion.setPlayedCollSound(false);
+								motion.setFilterPlanetColl(false);
+								motion.setCollCount(0);
 							}
 						}else{
 							if(distance > goldPlanet.getBoundingSphereWorld().radius + Config.PLANETPART_REUSE_MINDISTANCE){
 								motion.setInsidePlanet(false);
 								motion.setFilterPlanetColl(false);
 								motion.setPlayedCollSound(false);
+								motion.setCollCount(0);
 							}
-						}
-						
+						}						
 					}
 				}
 				
