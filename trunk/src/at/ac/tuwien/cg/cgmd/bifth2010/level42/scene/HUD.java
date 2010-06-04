@@ -10,6 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.MathUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
@@ -167,18 +168,13 @@ public class HUD extends Model
 		if(circleRender)
 		{
 			long circleTime = timeManager.getTimeOfLastFrame()-circleStartMillis;
-			float circlePercent = (float)Math.min(circleTime,Config.MAX_LONG_PRESS_TIME) / (float)Config.MAX_LONG_PRESS_TIME;
-			float scale = circlePercent * Config.MAX_FORCE_VIS_SIZE;
+			float circlePercent = (float)circleTime / (float)Config.LONG_PRESS_CYCLE_DURATION;
+			float scale = MathUtil.forcePulseFunktion(circlePercent) * Config.MAX_FORCE_VIS_SIZE;
 			float angle = circleTime * Config.FORCE_VIS_ROTATION_SPEED;
 			transformation.setScale(scale,scale,scale);
 			transformation.addRotateZ(angle);
 			transformation.addTranslate(circleCenter.v[0], circleCenter.v[1], 0);
 		}
-//		else if(chargePlayer != null && chargePlayer.isPlaying())
-//		{
-//			chargePlayer.pause();
-//			chargePlayer = null;
-//		}
 	}
 	
 	

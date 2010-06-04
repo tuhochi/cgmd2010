@@ -29,6 +29,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.MathUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
@@ -344,8 +345,13 @@ public class RenderView extends GLSurfaceView implements Renderer
 
 			if(wasLongPress || Config.EASY_MODE)
 			{
-				duration = Math.min(duration, Config.MAX_LONG_PRESS_TIME);
-
+				float powerPercent = (float)duration / (float)Config.LONG_PRESS_CYCLE_DURATION;
+				
+				float powerPercentPulsed = MathUtil.forcePulseFunktion(powerPercent);
+				
+				//force strength
+				float power = powerPercentPulsed * Config.MAX_FORCE;
+				
 				Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
 				Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
 
@@ -357,14 +363,12 @@ public class RenderView extends GLSurfaceView implements Renderer
 					selectionDirection.set(cam.viewPosition);
 					selectionDirection.subtract(cam.eyePosition);
 
-					//force strength
-					int power = ((int)duration)/Config.PRESS_TIME_TO_FORCE_DIVISOR;
 					selectionDirection.normalize().multiply(power);
 
 					LogManager.d("selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
 
 					// vibrate according to the strength
-					context.vibrate(duration/2);
+					context.vibrate((long)(powerPercentPulsed * (float)Config.MAX_VIBRATION_LENGTH));
 
 					// play sound
 					soundManager.playSound(Config.SOUND_SHOOT);

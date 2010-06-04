@@ -36,25 +36,29 @@ public class Config
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
 	public static boolean EASY_MODE = false;
 	public static boolean VIBRATE = true;
-	public static int LOGLEVEL = Log.VERBOSE;
+	public static int LOGLEVEL = Log.ERROR+1;
 	
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;
 	
-	/** HUD */
+	/** UI */
 
 	/** 0.5f = half the smaller side of the screen */
 	public static final float MAX_FORCE_VIS_SIZE = 0.50f;
-	/** (PI/2)/1000.0f = 180ï¿½ per second */
+	
+	/** (PI/2)/1000.0f = 180° per second */
 	public static final float FORCE_VIS_ROTATION_SPEED = Constants.PIHALF/1000.0f;
 	
-	/** GAMEPLAY */
-
-	/** the milliseconds of a long press are divided by this to get the force strength */
-	public static int PRESS_TIME_TO_FORCE_DIVISOR = 15;
+	/** How long the Vibrator should fire on full power */
+	public static final float MAX_VIBRATION_LENGTH = 250;
 	
-	/** the maximum milliseconds for a long press */
-	public static long MAX_LONG_PRESS_TIME = 400;
+	/** GAMEPLAY */
+	
+	/** the maximum length of the force vector (in units) */
+	public static int MAX_FORCE = 25;
+	
+	/** how long a force cycle 0->full->0 takes (ms) */
+	public static int LONG_PRESS_CYCLE_DURATION = 800;
 	
 	/** The Constant TOUCH_DEADZONE. */
 	public static final int TOUCH_DEADZONE = 30;
