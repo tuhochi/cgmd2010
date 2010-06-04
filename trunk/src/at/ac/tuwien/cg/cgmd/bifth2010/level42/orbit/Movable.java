@@ -33,6 +33,11 @@ public interface Movable {
 	 */
 	public Matrix44 getBasicOrientation();
 	
+	/**
+	 * Gets the current position.
+	 *
+	 * @return the current position of the object
+	 */
 	public Vector3 getCurrentPosition();
 	
 	/**
@@ -63,7 +68,18 @@ public interface Movable {
 	 */
 	public String getName();
 	
+	/**
+	 * Checks if the object is disabled.
+	 *
+	 * @return true, if is disabled
+	 */
 	public boolean isDisabled();
+	
+	/**
+	 * Sets the disabled flag
+	 *
+	 * @param disabled true, to disable the object
+	 */
 	public void setDisabled(boolean disabled);
 	
 }

@@ -30,10 +30,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
  */
 public class CollisionManager implements Persistable{
 
+	/** The scene reference */
 	private Scene scene;
 	
+	/** list containing the current scene entities */
 	private ArrayList<SceneEntity> entityList;
-	private SceneEntity entity,nearestEntity;
 	
 	/** The point on the line */
 	private final Vector3 p;
@@ -44,33 +45,70 @@ public class CollisionManager implements Persistable{
 	/** The point which distance should be evaluated */
 	private final Vector3 q;
 	
+	/** The vector between p and q */
 	private final Vector3 pq;
+	
+	/** The normal distance */
 	private final Vector3 normalDistance;
+
+	/** The distance vector between two center points. */
+	private final Vector3 centerDistance;
+	/** The distance vector between planet and sat. center points. */
+	private final Vector3 planetCenterDistance;
+	/** Temp var for the approximation of the current direction. */
+	private final Vector3 objACurrDir;
+	/** Temp var for the approximation of the current direction. */
+	private final Vector3 objBCurrDir;
+	/** Temp var for the push vector */
+	private final Vector3 objAPushVec;
+	/** Temp var for the push vector */
+	private final Vector3 objBPushVec;
+	/** Describes the planet part direction */
+	private final Vector3 planetPushVec;
+	/** The deflaction vector for the satellite */
+	private final Vector3 morphPlanetPushVec;
+	/** Temp var for the center vector */
+	private final Vector3 toCenterVecA;
+	/** Temp var for the center vector */
+	private final Vector3 toCenterVecB;
+		
+	/** The gold planet. */
+	private Movable goldPlanet;
 	
-	private final Vector3 centerDistance, planetCenterDistance,
-						  objACurrDir,objBCurrDir,
-						  objAPushVec,objBPushVec,planetPushVec,morphPlanetPushVec,
-					      toCenterVecA,toCenterVecB;
-	private Motion objAMotion,objBMotion;
+	/** The skysphere. */
+	private Movable skysphere;
 	
-	private Movable objA,objB,goldPlanet,skysphere;
-	
-	private float minDistance;
-	private boolean objAIsMoveable,objBIsMoveable;
-	
+	/** list containing the remaining parts of the planet -
+	 * 	sorted by the distance to the planet center. */
 	public Vector<Model> remainingPlanetParts;
 	
+	/** Singelton */
 	public static CollisionManager instance = new CollisionManager();
+	
+	/** The comperator for sorting the remainingPlanetParts. */
 	public static NearestEntityComperator comperator;
 	
+	/** The game manager. */
 	public GameManager gameManager;
+	
+	/** The motion manager. */
 	private MotionManager motionManager;
+	
+	/** The time manager. */
 	private TimeManager timeManager;
+	
+	/** The sound manager. */
 	private SoundManager soundManager;
 	
+	/** The collision list offset / startpoint */
 	private int collOffset;
+	
+	/** Proceed the collision up to this index */
 	private int collOffsetLimit;
 
+	/**
+	 * Instantiates a new collision manager.
+	 */
 	public CollisionManager()
 	{
 		this.scene = null;
@@ -95,8 +133,6 @@ public class CollisionManager implements Persistable{
 		
 		this.toCenterVecA = new Vector3();
 		this.toCenterVecB = new Vector3();
-			
-		this.minDistance = 0;
 
 		this.remainingPlanetParts = new Vector<Model>();
 		comperator = new NearestEntityComperator();
@@ -106,6 +142,10 @@ public class CollisionManager implements Persistable{
 		this.soundManager = SoundManager.instance;
 	}
 	
+	/**
+	 * Initialize the collision manager - call this method before using the manager!
+	 * @param scene the scene
+	 */
 	public void init(Scene scene)
 	{
 		this.scene = scene;
@@ -131,6 +171,10 @@ public class CollisionManager implements Persistable{
 		this.collOffsetLimit = entityList.size();
 	}
 	
+	/**
+	 * Initialize the game manager
+	 * @param gameManager the game manager
+	 */
 	public void initAndSetGameManager(GameManager gameManager)
 	{
 		gameManager.init(remainingPlanetParts.size());
@@ -152,9 +196,10 @@ public class CollisionManager implements Persistable{
 		p.set(origin);
 		
 		//reset values
-		minDistance = Float.MAX_VALUE;
-		nearestEntity = null;
-
+		float minDistance = Float.MAX_VALUE;
+		SceneEntity nearestEntity = null;
+		SceneEntity entity = null;
+		
 		//iterate over all scene entities and calc the hesse normal form
 		for(int i=0;i<entityList.size();i++)
 		{
@@ -230,6 +275,12 @@ public class CollisionManager implements Persistable{
 	{		
 		int entityListSize = entityList.size();
 		int listSize = remainingPlanetParts.size();
+		
+		Movable objA = null;
+		Movable objB = null;
+
+		boolean objAIsMoveable = true;
+		boolean objBIsMoveable = true;
 		
 		if(collOffset==0){
 			collOffset = (int)(entityListSize/2);
@@ -357,8 +408,8 @@ public class CollisionManager implements Persistable{
 					}
 					else
 					{
-						objAMotion = objA.getMotion();
-						objBMotion = objB.getMotion();
+						Motion objAMotion = objA.getMotion();
+						Motion objBMotion = objB.getMotion();
 						
 						if(objAMotion==null)
 						{
@@ -446,6 +497,11 @@ public class CollisionManager implements Persistable{
 			}
 		}
 	}
+	
+	/**
+	 * Play a collision sound depending on the motion speed
+	 * @param satellite the satellite with collision
+	 */
 	private void playCollSound(Movable satellite)
 	{
 		//play sound per sat - planet hit only once
@@ -455,6 +511,10 @@ public class CollisionManager implements Persistable{
 			soundManager.playSound(Config.SOUND_IMPACT);
 	}
 	
+	/**
+	 * Select randomly an entity from the <code>remainingPlanetParts</code> list
+	 * @return a random selected entity
+	 */
 	public Movable getAutoAimEntity()
 	{
 		//printRemaingingPlanetParts();
@@ -468,8 +528,18 @@ public class CollisionManager implements Persistable{
 	}
 	
 	
+	/**
+	 * The Class NearestEntityComperator - Comperator used to sort the 
+	 * <code>remainingPlanetParts</code> list
+	 *
+	 * @author Alex Druml
+	 * @author Lukas Roessler
+	 */
 	protected class NearestEntityComperator implements Comparator<Movable>{
 
+		/* (non-Javadoc)
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 */
 		@Override
 		public int compare(Movable objA, Movable objB) {
 			if(objA.getBoundingSphereWorld().center.length() <
@@ -485,12 +555,9 @@ public class CollisionManager implements Persistable{
 		
 	}
 
-
-	@Override
-	public void persist(DataOutputStream dos) throws IOException {
-	}
-
-
+	/**
+	 * Prints the <code>remainingPlanetParts</code> list
+	 */
 	private void printRemaingingPlanetParts()
 	{
 		Log.d(LevelActivity.TAG,"AUTOAIM ----");
@@ -498,6 +565,16 @@ public class CollisionManager implements Persistable{
 			Log.d(LevelActivity.TAG,"AUTOAIM: i=" + i + " length=" + remainingPlanetParts.get(i).getBoundingSphereWorld().center.length());
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#persist(java.io.DataOutputStream)
+	 */
+	@Override
+	public void persist(DataOutputStream dos) throws IOException {
+	}
+
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#restore(java.io.DataInputStream)
+	 */
 	@Override
 	public void restore(DataInputStream dis) throws IOException {
 		

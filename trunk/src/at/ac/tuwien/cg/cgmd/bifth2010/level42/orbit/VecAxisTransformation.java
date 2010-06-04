@@ -8,7 +8,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class VecAxisTransformation represents a satellite
  * transformation around a vector axis.
@@ -18,8 +17,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
  */
 public class VecAxisTransformation extends SatelliteTransformation{
 
-	/** The qv curr. */
-	private float qvStep,qvCurr;
+	/** The rotation step size. */
+	private float qvStep;
+	
+	/** The current rotation value */
+	private float qvCurr;
 	
 	/** The rotation angle. */
 	public float qv;
@@ -154,6 +156,9 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		//Log.d(LevelActivity.TAG,"ratio="+(speed/qv) + " speed="+speed+" qv="+qv);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation#reset()
+	 */
 	@Override
 	public void reset() {
 		this.qvCurr = 0;

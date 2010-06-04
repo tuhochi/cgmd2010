@@ -30,7 +30,14 @@ public abstract class SatelliteTransformation implements Persistable{
 	 */
 	public abstract Matrix44 getTransform();
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#persist(java.io.DataOutputStream)
+	 */
 	public abstract void persist(DataOutputStream dos) throws IOException;
+	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#restore(java.io.DataInputStream)
+	 */
 	public abstract void restore(DataInputStream dis) throws IOException;
 	
 	
@@ -47,6 +54,9 @@ public abstract class SatelliteTransformation implements Persistable{
 	 */
 	public abstract void setBasicOrientation(Matrix44 orientation);
 	
+	/**
+	 * Reset the rotation (parameter)
+	 */
 	public abstract void reset();
 
 	/**

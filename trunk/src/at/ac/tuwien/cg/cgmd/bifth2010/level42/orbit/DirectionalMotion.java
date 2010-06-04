@@ -57,6 +57,14 @@ public class DirectionalMotion extends Motion
 			this.basicOrientation.copy(basicOrientation);
 	}
 	
+	/**
+	 * Reuse the directional motion via reconfiguration
+	 *
+	 * @param startPos the initial position of the motion
+	 * @param directionVec the direction of the movement
+	 * @param speed the motion speed
+	 * @param basicOrientation the basic orientation of the object
+	 */
 	public void reconfigMotion(Vector3 startPos,Vector3 directionVec,float speed,Matrix44 basicOrientation){
 		this.directionVec.set(directionVec.normalize());
 		this.position.set(startPos);
@@ -206,11 +214,17 @@ public class DirectionalMotion extends Motion
 		this.directionVec.normalize();
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#getBasicOrientation()
+	 */
 	@Override
 	public Matrix44 getBasicOrientation() {
 		return basicOrientation;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setBasicOrientation(at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44)
+	 */
 	@Override
 	public void setBasicOrientation(Matrix44 basicOrientation){
 		if(basicOrientation!=null)

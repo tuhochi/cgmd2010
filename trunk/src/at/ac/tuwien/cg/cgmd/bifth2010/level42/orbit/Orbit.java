@@ -12,7 +12,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Orbit represents a elliptic motion.
  *
@@ -24,26 +23,49 @@ public class Orbit extends Motion
 	
 	/** The iteration speed. */
 	private float 	speed;
-	
-	/** The dynamic morph speed. */
-	private float  	u,step,
+	/** The ellipse parameter */
+	private float  	u;
+	/** The step size */
+	private float  	step;
  
-					//directionVec rotation
-					dirVecRotationDiff,dirVecRotationDiffStep,dirVecRotationDiffIteration,
+	/** The direction vector rotation difference resp. to the final angle */
+	private float  	dirVecRotationDiff;
+	/** The stepsize for the direction vector rotation */
+	private float  	dirVecRotationDiffStep;	
+				
+	/** The scaling speed for the main axis */
+	private float  	aScalingMorphSpeed;
+	/** The scaling speed for the secondary axis */
+	private float  	bScalingMorphSpeed;
+	
+	/** The final main axis factor */
+	private float  	centerDiffFactor;
+	/** The main axis scaling stepsize */
+	private float  	centerDiffStep;
+	/** The current main axis factor */
+	private float  	centerDiff;
+	
+	/** The final sec. axis factor */
+	private float  	directionDiffFactor;
+	/** The sec. axis scaling stepsize */
+	private float  	directionDiffStep;
+	/** The current sec. axis factor */
+	private float  	directionDiff;
+	
+	/** The main axis cap/limit */
+	private float  	centerVecCap;
+	/** The sec. axis cap/limit */
+	private float  	directionVecCap;
 					
-					//scale morphing
-					aScalingMorphSpeed,bScalingMorphSpeed,
-					centerDiffFactor,centerDiffStep,centerDiff,centerDiffIteration,
-					directionDiffFactor,directionDiffStep,directionDiff,directionDiffIteration,
-					centerVecCap,directionVecCap,
-					
-					//speed morphing
-					newSpeed,
-					speedMorphStep,speedMorphIteration,speedMorphDifference,
-					dynamicMorphSpeed;
 
-	/** The do direction vec scaling. */
-	private boolean doCenterVecScaling,doDirectionVecScaling;
+	/** The new reference speed */
+	private float  	newSpeed;
+	/** The stepsize for speed morphing */
+	private float  	speedMorphStep;
+	/** The difference between current and reference value */
+	private float  	speedMorphDifference;
+	/** The dynamic morph speed factor */
+	private float  	dynamicMorphSpeed;
 	
 	/** The position on the ellipse. */
 	public final Vector3 position;
@@ -62,15 +84,22 @@ public class Orbit extends Motion
 
 	private final Vector3 normalVec;
 	
-	/** The ref center vec. */
-	private final Vector3 currtDirApproximation,
-						  tempDirectionVec,tempCenterVec,
-						  refDirectionVec,refCenterVec;
+	/** temp vector for the approximation of the current direction */
+	private final Vector3 currtDirApproximation;
+	/** temp direction vector */
+	private final Vector3 tempDirectionVec;
+	/** temp center vector */
+	private final Vector3 tempCenterVec;
+	
+	/** This vector stores the original direction/sec. vector during axis scaling */
+	private final Vector3 refDirectionVec;
+	/** This vector stores the original center/main vector during axis scaling */
+	private final Vector3 refCenterVec;
 
 	/** The generated transformation matrix. */
 	private Matrix44 transform;
-	
 
+	/** The rotation matrix for the direction/sec vector */
 	private Matrix44 dirRotationMatrix;
 	
 	/** The basic orientation of the object. */
@@ -173,7 +202,6 @@ public class Orbit extends Motion
 	 */
 	public void update(float dt)
 	{	
-		
 		//inc parameter
 		u+=(speed*step*dt);
 		if(u>=Constants.TWOPI)
@@ -183,13 +211,13 @@ public class Orbit extends Motion
 		if(satTrans!=null)
 			satTrans.update(dt);
 		
-	
-		//update the morphing for the direction vec length
+		//update the morphing for the direction vector length
 		updateSpeedMorphing(dt);
 		
 		//update the morphing for the axis scaling
 		updateAxisScaling(dt);
-	
+		
+		//update the rotation of the direction vector
 		updateDirVecRotation(dt);
 		
 		//calc position on ellipse - build transformation matrix
@@ -197,15 +225,21 @@ public class Orbit extends Motion
 		
 //		//check the limitations
 //		if(this.centerVec.length()<Config.FORCEFIELD_CENTERLENGTH_LIMIT || 
-//				this.directionVec.length()<Config.FORCEFIELD_DIRLENGTH_LIMIT)
+//		          this.directionVec.length()<Config.FORCEFIELD_DIRLENGTH_LIMIT)
 //			Log.d(LevelActivity.TAG,"OUT centerVec="+centerVec.length()+" directionVec="+directionVec.length()+" speed="+speed);
+
 	}
 	
+	/**
+	 * Update the rotation of the direction vector
+	 *
+	 * @param dt delta time between frames for a frame-independent transition
+	 */
 	private void updateDirVecRotation(float dt)
 	{
 		if(dirVecRotationDiff > 0)
 		{
-			dirVecRotationDiffIteration = dirVecRotationDiffStep*dt;
+			float dirVecRotationDiffIteration = dirVecRotationDiffStep*dt;
 			
 			if(dirVecRotationDiff-Math.abs(dirVecRotationDiffIteration)<0)
 				dirVecRotationDiffIteration = Math.signum(dirVecRotationDiffStep)*dirVecRotationDiff;
@@ -229,7 +263,7 @@ public class Orbit extends Motion
 	{
 		if(speedMorphDifference>0)
 		{
-			speedMorphIteration = speedMorphStep * dt * dynamicMorphSpeed;
+			float speedMorphIteration = speedMorphStep * dt * dynamicMorphSpeed;
 			
 			if(speedMorphStep<0)
 			{
@@ -263,8 +297,10 @@ public class Orbit extends Motion
 	 */
 	private void updateAxisScaling(float dt)
 	{
-		doCenterVecScaling = false;
-		doDirectionVecScaling = false;
+		boolean doCenterVecScaling = false;
+		boolean doDirectionVecScaling = false;
+		float centerDiffIteration = 0;
+		float directionDiffIteration = 0;
 		
 		if(centerDiffStep<0){
 			if(centerDiffFactor<centerDiff){
@@ -329,6 +365,11 @@ public class Orbit extends Motion
 
 	}
 	
+	/**
+	 * Rotate direction vector using the normal vector as rotationaxis
+	 *
+	 * @param angle the rotation angle in rad
+	 */
 	public void rotateDirectionVec(float angle){
 		
 		this.dirVecRotationDiff = angle;
@@ -404,7 +445,7 @@ public class Orbit extends Motion
 				this.directionVec.length()<Config.FORCEFIELD_DIRLENGTH_LIMIT)
 			this.directionVecCap = Config.FORCEFIELD_NEW_DIRLENGTH/this.directionVec.length();
 		
-		Log.d(LevelActivity.TAG,"LIMIT - centerVecCap ="+centerVecCap+" length="+this.centerVec.length() +" directionVecCap="+directionVecCap+" length="+this.directionVec.length()+" speed="+this.speed +" newspeed="+this.newSpeed);
+		//Log.d(LevelActivity.TAG,"LIMIT - centerVecCap ="+centerVecCap+" length="+this.centerVec.length() +" directionVecCap="+directionVecCap+" length="+this.directionVec.length()+" speed="+this.speed +" newspeed="+this.newSpeed);
 		
 		if((this.centerVecCap!=1 || this.directionVecCap != 1)){
 			morphAxisScale(	centerVecCap, 
@@ -474,10 +515,8 @@ public class Orbit extends Motion
 		//cap size and speed of orbit
 		//-> get the new speed value
 		limitUniverse();
-		
-		
+				
 		//continue dir vec rotation
-		//TODO: nicht konstant auf 90 drehen
 		if(dirVecRotationInProgress){
 			tempDirectionVec.set(directionVec).normalize();
 			tempCenterVec.set(centerVec).normalize();
@@ -509,6 +548,13 @@ public class Orbit extends Motion
 	}
 	
 	
+	/**
+	 * Morph the motion speed
+	 *
+	 * @param newSpeed the new reference speed
+	 * @param dynamicMorphSpeed should be the ratio between the current and the
+	 * new speed
+	 */
 	public void morphSpeed(float newSpeed,float dynamicMorphSpeed){
 
 		//CAP
@@ -623,8 +669,6 @@ public class Orbit extends Motion
 		}
 		
 		ellipse = new Ellipse(centerPos,centerVec,directionVec);
-		
-		
 	}
 
 	/* (non-Javadoc)
@@ -654,7 +698,6 @@ public class Orbit extends Motion
 		this.transform = transform;		
 	}
 
-
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#getSpeed()
 	 */
@@ -663,7 +706,6 @@ public class Orbit extends Motion
 		return this.speed;
 	}
 	
-
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setSatTrans(at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation)
 	 */
@@ -678,11 +720,17 @@ public class Orbit extends Motion
 		return transform;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#getBasicOrientation()
+	 */
 	@Override
 	public Matrix44 getBasicOrientation() {
 		return basicOrientation;
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setBasicOrientation(at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44)
+	 */
 	@Override
 	public void setBasicOrientation(Matrix44 basicOrientation){
 		if(basicOrientation!=null)

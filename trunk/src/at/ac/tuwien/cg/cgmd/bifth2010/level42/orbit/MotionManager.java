@@ -26,20 +26,27 @@ public class MotionManager {
 	/** Manager Singleton */
 	public static final MotionManager instance = new MotionManager();
 	
-	//temp vars
-	private final Vector3 	satTransformAxis,
-							tempDirectionVec, tempCenterVec,
-							tempPushVec,
-							tempForceDirectionVec,deflactionDirVec;
+	/** Temp vector for the sat. transform axis. */
+	private final Vector3 	satTransformAxis;
+	/** Temp var for the direction vector. */
+	private final Vector3 	tempDirectionVec;
+	/** Temp var for the center vector. */
+	private final Vector3 	tempCenterVec;
+	/** Temp var for the push vector. */
+	private final Vector3 	tempPushVec;
+	/** Temp var for the force direction vector. */
+	private final Vector3 	tempForceDirectionVec;
+	/** Temp var for the deflaction vector. */
+	private final Vector3 	deflactionDirVec;
+	/** Temp var for the basic orientation matrix of an object */
 	private final Matrix44 tempBasicOrientation;
-	private Movable tempEntity;
 	
 	/**
 	 * Instantiates a new motion manager.
 	 */
 	private MotionManager()
 	{
-		this.list =  new ArrayList<Movable>();
+		this.list = new ArrayList<Movable>();
 		this.satTransformAxis = new Vector3();
 		this.tempDirectionVec = new Vector3();
 		this.tempCenterVec = new Vector3();
@@ -67,6 +74,11 @@ public class MotionManager {
 	}
 	
 	
+	/**
+	 * Change the motion for a given entity
+	 * @param motion the new motion
+	 * @param entity the entity
+	 */
 	public void setMotion(Motion motion,Movable entity)
 	{
 		int index = list.indexOf(entity);
@@ -80,6 +92,13 @@ public class MotionManager {
 		}
 	}
 	
+	/**
+	 * Transfer the motion between movable entities - <code>oldMoveable</code> 
+	 * has no motion after the transfer!
+	 *
+	 * @param oldMovable references the motion to transfer
+	 * @param newMovable transfer the motion to this entity
+	 */
 	public void transferMotion(Movable oldMovable, Movable newMovable)
 	{
 		Motion motion = oldMovable.getMotion();
@@ -91,6 +110,12 @@ public class MotionManager {
 		list.add(newMovable);
 	}
 	
+	/**
+	 * Apply selection/push force to the given entity
+	 *
+	 * @param entity the entity on which the force should be applyed 
+	 * @param pushVec the force/push vector
+	 */
 	public void applySelectionForce(Movable entity, Vector3 pushVec)
 	{
 		Motion motion = entity.getMotion();
@@ -166,6 +191,8 @@ public class MotionManager {
 	 */
 	public void updateMotion(float dt)
 	{
+		Movable tempEntity;
+		
 		for(int i=0; i<list.size();i++)
 		{
 			tempEntity = list.get(i);
@@ -177,6 +204,10 @@ public class MotionManager {
 	}
 	
 	
+	/**
+	 * Check the universe limits and correct the motion parameter if necessary
+	 * @param entity contains the motion to check
+	 */
 	private void checkUniverseLimits(Movable entity)
 	{
 		Motion motion = entity.getMotion();
@@ -202,6 +233,10 @@ public class MotionManager {
 		
 	}
 	
+	/**
+	 * Convert a directional motion into an orbit
+	 * @param obj entity that contains the motion to transform
+	 */
 	public void transformDirMotionInOrbit(Movable obj){
 		
 		if(obj.getMotion() instanceof DirectionalMotion){
@@ -370,11 +405,20 @@ public class MotionManager {
 		Log.d(LevelActivity.TAG,orbitCounter+" RANDOM SAT ORBITS GENERATED");
 	}
 	
+	/**
+	 * Removes the motion of an entity
+	 * @param entity references the motion to remove
+	 */
 	public void removeMotion(Movable entity){
 		entity.setMotion(null);
 		list.remove(entity);
 	}
 	
+	/**
+	 * Checks if the given entity is part of the planet
+	 * @param entity the entity to check
+	 * @return true, if it is part of the planet
+	 */
 	public boolean isPlanetPart(Movable entity){
 		if(entity!=null)
 			return entity.getName().endsWith(Config.PLANETPART_SUFFIX);
