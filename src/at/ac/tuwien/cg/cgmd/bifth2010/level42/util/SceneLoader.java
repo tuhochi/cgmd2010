@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
 import android.content.Context;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
@@ -311,7 +310,7 @@ public class SceneLoader
 		catch(Throwable t)
 		{
 			scene = null;
-			Log.e(LevelActivity.TAG, "Error when reading Scene:", t);
+			LogManager.e("Error when reading Scene:", t);
 		}
 		finally
 		{
@@ -322,7 +321,7 @@ public class SceneLoader
 		if(scene != null)
 		{
 			long duration = System.currentTimeMillis()-startTime;
-			Log.i(LevelActivity.TAG, "Successfully read Scene '" + filename + "' in " + duration + " ms");
+			LogManager.i("Successfully read Scene '" + filename + "' in " + duration + " ms");
 			scene.update();
 		}
 		

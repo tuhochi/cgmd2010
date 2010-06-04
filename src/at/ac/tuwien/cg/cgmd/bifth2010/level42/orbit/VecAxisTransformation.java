@@ -153,7 +153,7 @@ public class VecAxisTransformation extends SatelliteTransformation{
 		if((speed/qv)<ratio)
 			this.qv = this.speed/ratio;
 		
-		//Log.d(LevelActivity.TAG,"ratio="+(speed/qv) + " speed="+speed+" qv="+qv);
+		//LogManager.d("ratio="+(speed/qv) + " speed="+speed+" qv="+qv);
 	}
 
 	/* (non-Javadoc)

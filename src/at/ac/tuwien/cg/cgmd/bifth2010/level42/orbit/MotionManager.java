@@ -3,8 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
@@ -12,6 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 
 /**
  * The MotionManager handles the linking between objects 
@@ -135,7 +134,7 @@ public class MotionManager {
 			tempForceDirectionVec.set(aimCenter);
 			tempForceDirectionVec.subtract(entity.getCurrentPosition());		
 			
-			Log.d(LevelActivity.TAG,"SELECTION push force="+pushVec.length());
+			LogManager.d("SELECTION push force="+pushVec.length());
 			
 			if(motion instanceof DirectionalMotion){
 				DirectionalMotion dirMotion = (DirectionalMotion)motion;
@@ -216,14 +215,14 @@ public class MotionManager {
 		if(motion instanceof DirectionalSatelliteMotion){
 			if(entity.getCurrentPosition().length()>Config.UNIVERSE_CENTERLENGTH_LIMIT){
 				//change to orbit motion
-				//Log.d(LevelActivity.TAG,"UNIVERSE LIMIT="+entity.getCurrentPosition().length());
+				//LogManager.d("UNIVERSE LIMIT="+entity.getCurrentPosition().length());
 				transformDirMotionInOrbit(entity);
 			}
 		}else{
 			if(isPlanetPart(entity)){
 				if(!entity.isDisabled()){
 					if(entity.getCurrentPosition().length()>Config.PLANETPART_CULL_DISTANCE){
-						Log.d(LevelActivity.TAG,"CULLING ENTITY:"+entity.getName());
+						LogManager.d("CULLING ENTITY:"+entity.getName());
 						entity.setDisabled(true);
 						removeMotion(entity);
 					}
@@ -241,7 +240,7 @@ public class MotionManager {
 		
 		if(obj.getMotion() instanceof DirectionalMotion){
 			
-			Log.d(LevelActivity.TAG,"TRANSFORM in ORBIT");
+			LogManager.d("TRANSFORM in ORBIT");
 			
 			DirectionalMotion oldDirMotion = (DirectionalMotion)obj.getMotion();
 			
@@ -262,7 +261,7 @@ public class MotionManager {
 			tempDirectionVec.set(newOrbit.directionVec).normalize();
 			float angle = Vector3.getAngle(tempCenterVec, tempDirectionVec);
 
-			Log.d(LevelActivity.TAG,"DIR TO ORBIT TRANSFORM - angle="+((float)Math.toDegrees(angle)));
+			LogManager.d("DIR TO ORBIT TRANSFORM - angle="+((float)Math.toDegrees(angle)));
 		
 			//dir = center 
 			if(Float.isNaN(angle))
@@ -315,7 +314,7 @@ public class MotionManager {
 			//set the new rotation angle
 			vecSatTransform.setAngle(Vector3.getAngle(tempDirectionVec, tempPushVec),speedRotationRatio);
 			
-			//Log.d(LevelActivity.TAG,"satAngle="+vecSatTransform.qv);
+			//LogManager.d("satAngle="+vecSatTransform.qv);
 		}
 	}
 	
@@ -367,7 +366,7 @@ public class MotionManager {
 				b.v[2] = a.v[0] *((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio);
 				b.v[2] = (rand.nextBoolean())? -b.v[2]: b.v[2];
 				
-//				Log.d(LevelActivity.TAG," a.x="+a.x+" b.z="+b.z + " rand="+((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio));
+//				LogManager.d(" a.x="+a.x+" b.z="+b.z + " rand="+((float)rand.nextDouble()*(maxDistanceRatio-minDistanceRatio) + minDistanceRatio));
 				
 				rotation.setIdentity();
 				rotation.addRotateY((float)rand.nextDouble()*Constants.TWOPI);
@@ -376,7 +375,7 @@ public class MotionManager {
 				rotation.transformPoint(a);
 				rotation.transformPoint(b);
 
-//				Log.d(LevelActivity.TAG," 	qx="+(float)rand.nextDouble()*(maxQx - minQx) + minQx
+//				LogManager.d(" 	qx="+(float)rand.nextDouble()*(maxQx - minQx) + minQx
 //										+ " qz="+(float)rand.nextDouble()*(maxQz - minQz) + minQz);
 							
 				generatedOrbit = new Orbit(	a,center,b,
@@ -402,7 +401,7 @@ public class MotionManager {
 				orbitCounter++;
 			}
 		}
-		Log.d(LevelActivity.TAG,orbitCounter+" RANDOM SAT ORBITS GENERATED");
+		LogManager.d(orbitCounter+" RANDOM SAT ORBITS GENERATED");
 	}
 	
 	/**

@@ -1,8 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
-import android.util.Log;
 import android.view.MotionEvent;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 
 /**
  * The Class CustomGestureDetector.
@@ -48,7 +46,7 @@ public class CustomGestureDetector
 	 */
 	public void onTouchEvent(MotionEvent e)
 	{
-		Log.v(LevelActivity.TAG, "onTouchEvent(" + e + ", downTime=" + e.getDownTime() + ", eventTime=" + e.getEventTime() + ")");
+		LogManager.v("onTouchEvent(" + e + ", downTime=" + e.getDownTime() + ", eventTime=" + e.getEventTime() + ")");
 		
 		OUTER_SWITCH:
 		switch(e.getAction())
@@ -56,11 +54,11 @@ public class CustomGestureDetector
 		case MotionEvent.ACTION_DOWN:
 		case MotionEvent.ACTION_MOVE:
 			
-			Log.d(LevelActivity.TAG, "ACTION_DOWN or ACTION_MOVE");
+			LogManager.d("ACTION_DOWN or ACTION_MOVE");
 			
 			if(currentStartEvent == null)
 			{
-				Log.d(LevelActivity.TAG, "(currentStartEvent == null), resetting currentStartEvent");
+				LogManager.d("(currentStartEvent == null), resetting currentStartEvent");
 				currentStartEvent = e;
 				firstX = e.getX();
 				firstY = e.getY();
@@ -73,52 +71,52 @@ public class CustomGestureDetector
 			{
 			case MotionEvent.ACTION_DOWN:
 				
-				Log.d(LevelActivity.TAG, "Subdivision: ACTION_DOWN");
+				LogManager.d("Subdivision: ACTION_DOWN");
 				if(lastAction == MotionEvent.ACTION_DOWN)
 				{
-					Log.d(LevelActivity.TAG, "lastAction is ACTION_DOWN, breaking");
+					LogManager.d("lastAction is ACTION_DOWN, breaking");
 					break OUTER_SWITCH;
 				}
 				
-				Log.d(LevelActivity.TAG, "calling onDown()");
+				LogManager.d("calling onDown()");
 				listener.onDown(e);
 				break OUTER_SWITCH;
 				
 			case MotionEvent.ACTION_MOVE:
 				
-				Log.d(LevelActivity.TAG, "Subdivision: ACTION_MOVE");
+				LogManager.d("Subdivision: ACTION_MOVE");
 				float distanceX = lastX-e.getX();
 				float distanceY = lastY-e.getY();
 				
-				Log.d(LevelActivity.TAG, "checking if this is a longpress or a move ... ");
+				LogManager.d("checking if this is a longpress or a move ... ");
 				if(!isLongPress || Math.abs(e.getX()-firstX) > Config.TOUCH_DEADZONE || Math.abs(e.getY()-firstY) > Config.TOUCH_DEADZONE)
 				{
 					isLongPress = false;
-					Log.e(LevelActivity.TAG, " ... move, calling onScroll()");
+					LogManager.d(" ... move, calling onScroll()");
 					listener.onScroll(currentStartEvent, e, distanceX, distanceY);
 				}
 				else
-					Log.d(LevelActivity.TAG, " ... longpress, doing nothing.");
+					LogManager.d(" ... longpress, doing nothing.");
 				break OUTER_SWITCH;
 			}
 			
 		case MotionEvent.ACTION_UP:
 			
-			Log.d(LevelActivity.TAG, "ACTION_UP");
+			LogManager.d("ACTION_UP");
 			
 			if(currentStartEvent == null)
 			{
-				Log.e(LevelActivity.TAG, "currentStartEvent is null, breaking");
+				LogManager.d("currentStartEvent is null, breaking");
 				break;
 			}
 
 			if(lastAction == MotionEvent.ACTION_UP)
 			{
-				Log.d(LevelActivity.TAG, "lastAction is ACTION_UP, breaking");
+				LogManager.d("lastAction is ACTION_UP, breaking");
 				break;
 			}
 			
-			Log.d(LevelActivity.TAG, "calling onUp, setting currentStartEvent to null");
+			LogManager.d("calling onUp, setting currentStartEvent to null");
 			listener.onUp(e, isLongPress, e.getEventTime()-e.getDownTime());
 			currentStartEvent = null;
 			break;

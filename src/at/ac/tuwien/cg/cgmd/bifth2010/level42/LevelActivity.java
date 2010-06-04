@@ -6,7 +6,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +32,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
@@ -47,12 +51,12 @@ public class LevelActivity extends Activity
 	}
 
 	private static native void initNative();
-
-	/** The Constant TAG. */
-	public static final String TAG = "Signanzorbit";
 	
 	/** The Constant SCENE_STATE_KEY. */
 	public static final String SCENE_STATE_KEY = "l42_state";
+	
+	/** The Loglevel Dialog id */
+	private static final int DIALOG_ID_LOGLEVEL = 0;
 	
 	/** The instance. */
 	private static LevelActivity instance;
@@ -94,9 +98,15 @@ public class LevelActivity extends Activity
 	
 	/** The PowerManagers Wake Lock */
 	private PowerManager.WakeLock wakeLock;
-		
+	
+	/** The Milliseconds since the game was considered complete */
 	private float timeSinceComplete;
+	
+	/** indicating that the level has been completed */
 	private boolean levelComplete;
+	
+	private Dialog dialog_Loglevel;
+	
 	/**
 	 * Instantiates a new level activity.
 	 */
@@ -178,7 +188,8 @@ public class LevelActivity extends Activity
 	 */
 	public void vibrate(long millis)
 	{
-		vibrator.vibrate(millis);
+		if(Config.VIBRATE)
+			vibrator.vibrate(millis);
 	}
 	
 	/* (non-Javadoc)
@@ -188,7 +199,28 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		Log.v(TAG,"onCreate(" + savedInstanceState + ")");
+		LogManager.v("onCreate(" + savedInstanceState + ")");
+		
+		final CharSequence[] items = {"Verbose", "Debug", "Info", "Warn", "Error", getString(R.string.l42_Loglevel_none)};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.l42_Select_Loglevel);
+		builder.setItems(items, new DialogInterface.OnClickListener()
+		{
+		    public void onClick(DialogInterface dialog, int item)
+		    {
+		        switch(item)
+		        {
+		        case 0: Config.LOGLEVEL = Log.VERBOSE; break;
+		        case 1: Config.LOGLEVEL = Log.DEBUG; break;
+		        case 2: Config.LOGLEVEL = Log.INFO; break;
+		        case 3: Config.LOGLEVEL = Log.WARN; break;
+		        case 4: Config.LOGLEVEL = Log.ERROR; break;
+		        case 5: Config.LOGLEVEL = Log.ERROR+1; break;
+		        }
+		    }
+		});
+		dialog_Loglevel = builder.create();
 		
 		SOUND_ENABLED = getIntent().getBooleanExtra(MenuActivity.PREFERENCE_MUSIC, false);
 		
@@ -211,7 +243,7 @@ public class LevelActivity extends Activity
 
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, TAG);
+        wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, LogManager.TAG);
 
 	 	//set dedicated volume buttons to control music volume
 	 	setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -227,7 +259,7 @@ public class LevelActivity extends Activity
 	protected void onStart()
 	{
 		super.onStart();
-		Log.v(TAG,"onStart()");
+		LogManager.v("onStart()");
 	}
 	
 	/* (non-Javadoc)
@@ -237,7 +269,7 @@ public class LevelActivity extends Activity
 	protected void onRestart()
 	{
 		super.onRestart();
-		Log.v(TAG,"onRestart()");
+		LogManager.v("onRestart()");
 	}
 	
 	/* (non-Javadoc)
@@ -247,7 +279,7 @@ public class LevelActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-		Log.v(TAG,"onResume()");
+		LogManager.v("onResume()");
 		
 		wakeLock.acquire();
 		soundManager.onResume();
@@ -262,7 +294,7 @@ public class LevelActivity extends Activity
 	protected void onPause()
 	{
 		super.onPause();
-		Log.v(TAG,"onPause()");
+		LogManager.v("onPause()");
 		renderView.synchronizer.setActive(false);
 		renderView.onPause();
 		soundManager.onPause();
@@ -276,7 +308,7 @@ public class LevelActivity extends Activity
 	protected void onStop()
 	{
 		super.onStop();
-		Log.v(TAG,"onStop()");
+		LogManager.v("onStop()");
 	}
 	
 	/* (non-Javadoc)
@@ -286,8 +318,8 @@ public class LevelActivity extends Activity
 	protected void onDestroy()
 	{
 		super.onDestroy();
+		LogManager.v("onDestroy()");
 		soundManager.onDestroy();
-		Log.v(TAG,"onDestroy()");
 	}
 	
 	/* (non-Javadoc)
@@ -297,7 +329,7 @@ public class LevelActivity extends Activity
 	protected void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		Log.v(TAG,"onSaveInstanceState(" + outState + ")");
+		LogManager.v("onSaveInstanceState(" + outState + ")");
 		
 		//this waits for the logic thread to shut down
 		renderView.synchronizer.setActive(false);
@@ -322,7 +354,7 @@ public class LevelActivity extends Activity
 		}
 		catch (Throwable t)
 		{
-			Log.e(TAG, "Failed to persist Scene state: ",t);
+			LogManager.e("Failed to persist Scene state: ",t);
 		}
 	}
 	
@@ -333,7 +365,7 @@ public class LevelActivity extends Activity
 	protected void onRestoreInstanceState(Bundle savedInstanceState)
 	{
 		super.onRestoreInstanceState(savedInstanceState);
-		Log.v(TAG,"onRestoreInstanceState(" + savedInstanceState + ")");
+		LogManager.v("onRestoreInstanceState(" + savedInstanceState + ")");
 		
 		byte[] state = savedInstanceState.getByteArray(SCENE_STATE_KEY);
 		if(state != null)
@@ -363,11 +395,21 @@ public class LevelActivity extends Activity
 			}
 			catch (Throwable t)
 			{
-				Log.e(TAG, "Failed to restore Scene state: ",t);
+				LogManager.e("Failed to restore Scene state: ",t);
 			}
 		}
 	}
 
+	@Override
+	protected Dialog onCreateDialog(int id)
+	{
+		switch(id)
+		{
+		case DIALOG_ID_LOGLEVEL: return dialog_Loglevel;
+		}
+		return super.onCreateDialog(id);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -381,6 +423,12 @@ public class LevelActivity extends Activity
 			return true;
 		case R.id.l42_Menu_EasyMode:
 			Config.EASY_MODE ^= true;
+			return true;
+		case R.id.l42_Menu_Vibrate:
+			Config.VIBRATE ^= true;
+			return true;
+		case R.id.l42_Menu_Loglevel:
+			showDialog(DIALOG_ID_LOGLEVEL);
 			return true;
 		}
 		return false;
@@ -409,6 +457,11 @@ public class LevelActivity extends Activity
 				item.setTitle(Config.EASY_MODE ?
 						R.string.l42_Menu_EasyMode_off : 
 						R.string.l42_Menu_EasyMode_on);
+				break;
+			case R.id.l42_Menu_Vibrate:
+				item.setTitle(Config.VIBRATE ?
+						R.string.l42_Menu_Vibrate_off : 
+						R.string.l42_Menu_Vibrate_on);
 				break;
 			}
 		}

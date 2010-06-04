@@ -13,7 +13,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
@@ -29,6 +28,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
@@ -192,7 +192,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		Log.v(LevelActivity.TAG,"onSurfaceCreated(" + gl + ", " + config + ")");
+		LogManager.v("onSurfaceCreated(" + gl + ", " + config + ")");
 		
 		// reset everything
 		oglManager.reset();
@@ -203,7 +203,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		// check for GLES11
 		boolean gles11 = (gl instanceof GL11);
 		Config.GLES11 = gles11;
-		Log.i(LevelActivity.TAG, "OpenGL ES " + (gles11 ? "1.1" : "1.0") + " found!");
+		LogManager.i("OpenGL ES " + (gles11 ? "1.1" : "1.0") + " found!");
 		
 		initGLSettings();
 		
@@ -310,7 +310,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onDown(MotionEvent e)
 		{
-			Log.v(LevelActivity.TAG, "onDown(" + e + ")");
+			LogManager.v("onDown(" + e + ")");
 			hud.setCircle(e.getRawX(), e.getRawY());
 			return true;
 		}
@@ -321,7 +321,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
-			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
+			LogManager.v("onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
 			
 			if(Config.EASY_MODE)
 				hud.setCircle(e2.getRawX(), e2.getRawY());
@@ -338,7 +338,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		@Override
 		public boolean onUp(MotionEvent e, boolean wasLongPress, long duration)
 		{
-			Log.v(LevelActivity.TAG, "onTouchUp(" + e + ", " + duration + ")");
+			LogManager.v("onTouchUp(" + e + ", " + duration + ")");
 
 			hud.disableCircle();
 
@@ -361,7 +361,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 					int power = ((int)duration)/Config.PRESS_TIME_TO_FORCE_DIVISOR;
 					selectionDirection.normalize().multiply(power);
 
-					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
+					LogManager.d("selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
 
 					// vibrate according to the strength
 					context.vibrate(duration/2);
@@ -373,7 +373,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 					motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
 				}
 
-				Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
+				LogManager.d("unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
 			}
 			return true;
 		}
@@ -422,7 +422,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{
-		Log.v(LevelActivity.TAG,"onSurfaceChanged(" + gl + ", " + width + ", " + height + ")");
+		LogManager.v("onSurfaceChanged(" + gl + ", " + width + ", " + height + ")");
 		// Prevent a Divide By Zero by making height equal one
 		if(height == 0)
 			height = 1;
