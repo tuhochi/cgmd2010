@@ -401,10 +401,13 @@ public class CollisionManager implements Persistable{
 										collCount++;
 										satMotion.setCollCount(collCount);
 										
+										//check if there were to many collision with this satellite
 										if(collCount>=Config.DAMPED_MAX_COLLISION_COUNT){
 											LogManager.d("MAX COLLISION COUNT REACHED");
 											satMotion.setFilterPlanetColl(true);
-											satMotion.setCollCount(0);											
+											satMotion.setCollCount(0);		
+											//stop the collision detection for this satellite
+											break;
 										}
 										
 									}
