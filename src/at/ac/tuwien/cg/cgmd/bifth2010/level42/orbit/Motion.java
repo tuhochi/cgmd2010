@@ -39,6 +39,8 @@ public abstract class Motion implements Persistable
 		return collCount;
 	}
 	
+	public abstract void setSpeed(float newSpeed);
+	
 	/**
 	 * Do the next iteration step 
 	 * @param dt delta time between frames for a frame-independent motion

@@ -43,7 +43,7 @@ public class Config
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
 	public static boolean EASY_MODE = false;
 	public static boolean VIBRATE = true;
-	public static int LOGLEVEL = NONE;
+	public static int LOGLEVEL = DEBUG;
 	
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;
@@ -122,7 +122,7 @@ public class Config
 	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 12f;
 	
 	/** minimal force to change the motion into a directional motion */
-	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 1.1f * MAX_FORCE;
+	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 0.5f * MAX_FORCE;
 	
 	/** the selection vector gets divided by this factor */
 	public static float SELECTION_FORCE_FACTOR = 1f;
@@ -136,7 +136,9 @@ public class Config
 	public static final String PLANETPART_SUFFIX = "_unTied";	
 	public static final float PLANETPART_REUSE_MINDISTANCE = 1f;
 	public static final float PLANETPART_BOUNCE_FAC = 3.5f;
+	
 	public static final float DAMPED_MAX_COLLISION_COUNT_FACTOR = 0.3333f;
+	public static final float UNDAMPED_SPEED_DECREMENT = 0.1f*MAX_FORCE;
 	public static final float SELECTION_BSPHERE_INCREMENT = 0.5f;
 	
 	

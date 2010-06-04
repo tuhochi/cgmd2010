@@ -379,12 +379,9 @@ public class CollisionManager implements Persistable{
 																					satMotion.getSpeed()*Config.PLANETCOLL_SPEED_FROM_SAT_FACTOR,
 																					planetPart.getBasicOrientation());
 
+									LogManager.d(satMotion.getSpeed());
 									if(satMotion.getSpeed()<Config.MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL){
-//										morphPlanetPushVec.set(planetPushVec);
-//										morphPlanetPushVec.normalize();
-//										morphPlanetPushVec.multiply(satellite.getMotion().getSpeed()*Config.PLANETPART_BOUNCE_FAC);
-//										satellite.getMotion().morph(morphPlanetPushVec);
-										
+
 										morphPlanetPushVec.set(satellite.getBoundingSphereWorld().center);
 										tempMorphPlanetPushVec.set(morphPlanetPushVec);
 										morphPlanetPushVec.subtract(planetPart.getBoundingSphereWorld().center);
@@ -413,8 +410,9 @@ public class CollisionManager implements Persistable{
 											break;
 										}
 										
+									}else{
+										satMotion.setSpeed(satMotion.getSpeed()-Config.UNDAMPED_SPEED_DECREMENT);
 									}
-									
 									motionManager.addMotion(planetPartMotion,planetPart);
 									planetPartMotion.setInsidePlanet(true);
 									

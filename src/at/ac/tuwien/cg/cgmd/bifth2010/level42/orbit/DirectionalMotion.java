@@ -199,6 +199,14 @@ public class DirectionalMotion extends Motion
 	public float getSpeed() {
 		return this.speed;
 	}
+	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setSpeed(float)
+	 */
+	@Override
+	public void setSpeed(float newSpeed) {
+		this.speed = newSpeed;
+	}
 
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#morph(at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3)
