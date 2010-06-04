@@ -6,16 +6,18 @@
 	<string name="l42_HelpActivity_Text2">Diesen zentralen &quot;Goldplaneten&quot; gilt es nun so weit wie möglich zu zerstören um den Schatz zu verkleinern. Um dieses Ziel zu erreichen müssen die Objekte (im weiteren Satelliten genannt) aus ihren Umlaufbahnen hinaus auf den Schatz geschleudert werden. Der Spieler besitzt die Fähigkeit gerichtete Kraftimpulse im Raum auszulösen um die Satellitenbahnen zu beeinflussen.</string>
 	<string name="l42_HelpActivity_Text3">Ein Impuls kann durch Berühren des Bildschirms erzeugt werden, dabei lädt sich die Kraft des Impulses über die Zeit auf. Ein Satellit muss mit der richtigen Kraft an der richtigen Stelle getroffen werden um beim Absturz maximalen Schaden anzurichten.</string>
 	<string name="l42_HelpActivity_Text4">Die Kameraperspektive kann kugelförmig rund um den Schatz beliebig verändert werden, die Steuerung der Kamera erfolgt ebenfalls mit dem Touchscreen.</string>
-	<string name="l42_Menu_BoundingSphereSE_show">SceneEntity Bounding Spheres AN</string>
-	<string name="l42_Menu_BoundingSphereSE_hide">SceneEntity Bounding Spheres AUS</string>
-	<string name="l42_Menu_BoundingSphereModel_show">Model Bounding Spheres AN</string>
-	<string name="l42_Menu_BoundingSphereModel_hide">Model Bounding Spheres AUS</string>
-	<string name="l42_Menu_EasyMode_on">Easy Mode AN</string>
-	<string name="l42_Menu_EasyMode_off">Easy Mode AUS</string>
-	<string name="l42_Menu_Vibrate_on">Vibration AN</string>
-	<string name="l42_Menu_Vibrate_off">Vibration AUS</string>
+	<string name="l42_Menu_BoundingSphereSE_show">SceneEntity BS einblenden</string>
+	<string name="l42_Menu_BoundingSphereSE_hide">SceneEntity BS ausblenden</string>
+	<string name="l42_Menu_BoundingSphereModel_show">Model Bounding Spheres einblenden</string>
+	<string name="l42_Menu_BoundingSphereModel_hide">Model Bounding Spheres ausblenden</string>
+	<string name="l42_Menu_EasyMode_on">Easy Mode einschalten</string>
+	<string name="l42_Menu_EasyMode_off">Easy Mode ausschalten</string>
+	<string name="l42_Menu_Vibrate_on">Vibration einschalten</string>
+	<string name="l42_Menu_Vibrate_off">Vibration ausschalten</string>
 	<string name="l42_HUD_PlanetHealth">Planet</string>
 	<string name="l42_Select_Loglevel">Loglevel auswählen</string>
 	<string name="l42_Menu_Loglevel">Loglevel</string>
 	<string name="l42_Loglevel_none">Aus</string>
+	<string name="l42_Menu_ShowFPS_on">FPS einblenden</string>
+	<string name="l42_Menu_ShowFPS_off">FPS ausblenden</string>
 </resources>
