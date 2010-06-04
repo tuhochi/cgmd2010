@@ -28,7 +28,7 @@ public class Ellipse
 	/**
 	 * Instantiates a new ellipse.
 	 *
-	 * @param center the ellipse
+	 * @param center the center of the ellipse
 	 * @param a the major axis (t=0)
 	 * @param b the secondary axis
 	 */
@@ -44,6 +44,9 @@ public class Ellipse
 		calcPerimeter();
 	}
 
+	/**
+	 * Compute a approximation for the perimeter of the ellipse
+	 */
 	private native float calcPerimeter(float[] a, float[] b);
 	
 	/**
@@ -54,6 +57,15 @@ public class Ellipse
 		perimeter = calcPerimeter(a.v, b.v);
 	}
 	
+	/**
+	 * Gets the point on the ellipse for a given parameter t
+	 *
+	 * @param center the center of the ellipse
+	 * @param a the major axis (t=0)
+	 * @param b the secondary axis
+	 * @param result the position/point
+	 * @param t parameter t along the ellipse
+	 */
 	private native void getPoint(float[] center, float[] a, float[] b, float[] result, float t);
 	
 	/**

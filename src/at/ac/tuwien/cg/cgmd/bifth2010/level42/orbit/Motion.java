@@ -20,8 +20,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
  */
 public abstract class Motion implements Persistable
 {	
+	
+	/** flag used to determine if the object is inside the planet */
 	boolean isInsidePlanet = false;
+	
+	/** flag used to avoid collisions of satellites */
 	boolean filterPlanetColl = false;
+	
+	/** flag used to play the collision sound only once */
 	boolean playedCollSound = false;
 	
 	/**
@@ -72,32 +78,74 @@ public abstract class Motion implements Persistable
 	 */
 	public abstract void morph(Vector3 pushVec);
 	
+	/**
+	 * Checks if is inside planet.
+	 * @return true, if is inside planet
+	 */
 	public boolean isInsidePlanet(){
 		return isInsidePlanet;		
 	}
 	
+	/**
+	 * Sets the inside planet flag
+	 * @param isInsidePlanet the satellite is in/outside
+	 */
 	public void setInsidePlanet(boolean isInsidePlanet){
 		this.isInsidePlanet = isInsidePlanet;
 	}
 	
+	/**
+	 * Gets the flag state used to avoid collisions of satellites.
+	 * @return the flag used to avoid collisions of satellites
+	 */
 	public boolean getFilterPlanetColl(){
 		return filterPlanetColl;		
 	}
+	
+	/**
+	 * Sets the flag used to avoid collisions of satellites with the planet.
+	 * @param filterPlanetColl the new state for filtering collisions
+	 */
 	public void setFilterPlanetColl(boolean filterPlanetColl){
 		this.filterPlanetColl = filterPlanetColl;		
 	}
 	
+	/**
+	 * Gets the state of the flag - used to play the collision sound only once.
+	 * @return state if the sound was already played or not
+	 */
 	public boolean getPlayedCollSound(){
 		return playedCollSound;		
 	}
+
+	/**
+	 * Sets the state of the flag - used to play the collision sound only once.
+	 * @param playedCollSound state if the sound was already played or not
+	 */
 	public void setPlayedCollSound(boolean playedCollSound){
 		this.playedCollSound = playedCollSound;		
 	}
 	
+	/**
+	 * Gets the basic orientation of the satellite
+	 * @return the basic orientation matrix
+	 */
 	public abstract Matrix44 getBasicOrientation();
+	
+	/**
+	 * Sets the basic orientation of the satellite
+	 * @param basicOrientation the new basic orientation matrix
+	 */
 	public abstract void setBasicOrientation(Matrix44 basicOrientation);
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#persist(java.io.DataOutputStream)
+	 */
 	public abstract void persist(DataOutputStream dos) throws IOException;
+	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable#restore(java.io.DataInputStream)
+	 */
 	public abstract void restore(DataInputStream dis) throws IOException;
 
 	/**
