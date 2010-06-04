@@ -10,4 +10,6 @@
 	<string name="l42_Menu_BoundingSphereSE_hide">SceneEntity Bounding Spheres AUS</string>
 	<string name="l42_Menu_BoundingSphereModel_show">Model Bounding Spheres AN</string>
 	<string name="l42_Menu_BoundingSphereModel_hide">Model Bounding Spheres AUS</string>
+	<string name="l42_Menu_EasyMode_on">Easy Mode AN</string>
+	<string name="l42_Menu_EasyMode_off">Easy Mode AUS</string>
 </resources>

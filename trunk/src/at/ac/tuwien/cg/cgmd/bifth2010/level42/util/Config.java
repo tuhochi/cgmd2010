@@ -29,8 +29,11 @@ public class Config
 	 * so: BOUNDING_SPHERE_SPACING = 20 -> 324 Faces
 	 */
 	public static int BOUNDING_SPHERE_SPACING = 20;
+	
+	// menu settings
 	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = false;
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
+	public static boolean EASY_MODE = false;
 	
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;

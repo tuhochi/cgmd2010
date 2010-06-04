@@ -305,59 +305,6 @@ public class RenderView extends GLSurfaceView implements Renderer
 	{
 		
 		/* (non-Javadoc)
-		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onTouchUp(android.view.MotionEvent, long)
-		 */
-		@Override
-		public boolean onTouchUp(MotionEvent e, long duration)
-		{
-			duration = Math.min(duration, Config.MAX_LONG_PRESS_TIME);
-			
-			hud.disableCircle();
-			
-			Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
-			Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
-
-			SceneEntity entity = collManager.intersectRay(cam.eyePosition, rayDirection);
-
-			//entity selected
-			if(entity!=null && !entity.getName().equals(Config.PLANET_NAME))
-			{
-				selectionDirection.set(cam.viewPosition);
-				selectionDirection.subtract(cam.eyePosition);
-
-				//force strength
-				int power = ((int)duration)/Config.PRESS_TIME_TO_FORCE_DIVISOR;
-				selectionDirection.normalize().multiply(power);
-				
-				Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
-				
-				// vibrate according to the strength
-				context.vibrate(duration/2);
-				
-				// play sound
-				soundManager.playSound(Config.SOUND_SHOOT);
-				
-				motionManager.applySelectionForce(entity, selectionDirection);				
-				motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
-			}
-			
-			Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
-
-			return true;
-		}
-
-		/* (non-Javadoc)
-		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onScroll(android.view.MotionEvent, android.view.MotionEvent, float, float)
-		 */
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
-		{
-			hud.disableCircle();
-			cam.setMouseDiff(distanceX, distanceY);
-			return true;
-		}
-		
-		/* (non-Javadoc)
 		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onDown(android.view.MotionEvent)
 		 */
 		@Override
@@ -368,18 +315,68 @@ public class RenderView extends GLSurfaceView implements Renderer
 			return true;
 		}
 
-		
 		/* (non-Javadoc)
-		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onUp(android.view.MotionEvent)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onScroll(android.view.MotionEvent, android.view.MotionEvent, float, float)
 		 */
 		@Override
-		public boolean onUp(MotionEvent e)
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 		{
-			Log.v(LevelActivity.TAG, "onUp(" + e + ")");
-			hud.disableCircle();
+			Log.v(LevelActivity.TAG, "onScroll(" + e1 + ", " + e2 + ", " + distanceX + ", " + distanceY + ")");
+			
+			if(Config.EASY_MODE)
+				hud.setCircle(e2.getRawX(), e2.getRawY());
+			else
+				hud.disableCircle();
+			
+			cam.setMouseDiff(distanceX, distanceY);
 			return true;
 		}
-		
+
+		/* (non-Javadoc)
+		 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener#onTouchUp(android.view.MotionEvent, long)
+		 */
+		@Override
+		public boolean onUp(MotionEvent e, boolean wasLongPress, long duration)
+		{
+			Log.v(LevelActivity.TAG, "onTouchUp(" + e + ", " + duration + ")");
+
+			hud.disableCircle();
+
+			if(wasLongPress || Config.EASY_MODE)
+			{
+				duration = Math.min(duration, Config.MAX_LONG_PRESS_TIME);
+
+				Vector3 unprojectedPoint = oglManager.unProject((int)e.getRawX(), (int)e.getRawY());
+				Vector3 rayDirection = Vector3.subtract(unprojectedPoint,cam.eyePosition).normalize();
+
+				SceneEntity entity = collManager.intersectRay(cam.eyePosition, rayDirection);
+
+				//entity selected
+				if(entity!=null && !entity.getName().equals(Config.PLANET_NAME))
+				{
+					selectionDirection.set(cam.viewPosition);
+					selectionDirection.subtract(cam.eyePosition);
+
+					//force strength
+					int power = ((int)duration)/Config.PRESS_TIME_TO_FORCE_DIVISOR;
+					selectionDirection.normalize().multiply(power);
+
+					Log.d(LevelActivity.TAG,"selectionDirection=" + selectionDirection + " power = "+selectionDirection.length());
+
+					// vibrate according to the strength
+					context.vibrate(duration/2);
+
+					// play sound
+					soundManager.playSound(Config.SOUND_SHOOT);
+
+					motionManager.applySelectionForce(entity, selectionDirection);				
+					motionManager.changeSatelliteTransformation(entity, entity.getMotion().getCurrDirectionVec(), selectionDirection,Config.SATELLITE_SPEEDROTA_RATIO);
+				}
+
+				Log.d(LevelActivity.TAG,"unprojectedPoint=" + unprojectedPoint + ", eye=" + cam.eyePosition + ", ray=" + rayDirection);
+			}
+			return true;
+		}
 	}
 
 	/**

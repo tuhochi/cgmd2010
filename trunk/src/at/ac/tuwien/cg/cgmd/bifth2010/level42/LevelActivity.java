@@ -379,6 +379,9 @@ public class LevelActivity extends Activity
 		case R.id.l42_Menu_BoundingSphereModel:
 			Config.SHOW_MODEL_BOUNDING_SPHERES ^= true;
 			return true;
+		case R.id.l42_Menu_EasyMode:
+			Config.EASY_MODE ^= true;
+			return true;
 		}
 		return false;
 	}
@@ -401,6 +404,11 @@ public class LevelActivity extends Activity
 				item.setTitle(Config.SHOW_MODEL_BOUNDING_SPHERES ? 
 						R.string.l42_Menu_BoundingSphereModel_hide : 
 						R.string.l42_Menu_BoundingSphereModel_show);
+				break;
+			case R.id.l42_Menu_EasyMode:
+				item.setTitle(Config.EASY_MODE ?
+						R.string.l42_Menu_EasyMode_off : 
+						R.string.l42_Menu_EasyMode_on);
 				break;
 			}
 		}

@@ -190,11 +190,14 @@ public class HUD extends Model
 	 */
 	public void setCircle(float centerPixelsX, float centerPixelsY)
 	{
-		circleActive = true;
 		circleCenter.v[0] = ((float)centerPixelsX / width)*aspect;
 		circleCenter.v[1] = (float)centerPixelsY / height;
-		circleStartMillis = timeManager.getTimeOfLastFrame();
-//		chargePlayer = soundManager.playSound(R.raw.l42_loadforce);
+		
+		if(!circleActive)
+		{
+			circleStartMillis = timeManager.getTimeOfLastFrame();
+			circleActive = true;
+		}
 	}
 	
 	/**
