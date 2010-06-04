@@ -140,6 +140,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		float width = renderView.getWidth();
 		float widthPercent = width * 0.01f;
 		float height = renderView.getHeight();
+		float heightPercent = height * 0.01f;
 		screenRatio = height / 480.f;
 		
 		shelf = new Shelf(width*0.5f, height*0.5f, 0f, width, height);
@@ -152,29 +153,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		obstacleManager.init(gl);			
 		productManager.init();
-		textSprites.buildSprites(gl);
-		
-		// This is the default for a screen height of 480px. 
-		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
-		shoppingCartSize *= screenRatio;
-		
-		// Calc bounding box size
-		float bbX = activity.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_x);
-		float bbY = activity.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_y);
-		bbX *= screenRatio;
-		bbY *= screenRatio;
-			
-		// Create shopping cart.		
-		float cartPosY = height / 5.f;
-		float cartPos = 200 * screenRatio;
-		shoppingCarts[0] = new ShoppingCart(cartPos, cartPosY, 2, shoppingCartSize, shoppingCartSize);
-		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
-		shoppingCarts[0].clickable = false;
-		shoppingCarts[0].setBBDim(bbX, bbY);
-		nShoppingCarts = 1;
-		
-		// Set crash pos for obstacle to the right of the shopping cart.
-		obstacleManager.crashPosition = cartPos + shoppingCartSize*0.5f - widthPercent*10f;
+		textSprites.buildSprites(gl);			
 		
 		// Create bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
@@ -182,16 +161,40 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			bunnySequence[i] = renderView.getTexture(RenderView.TEXTURE_BUNNY[i], gl);
 		}
 				
-		float bunnySize = 64 * screenRatio;
-		float bunnyPos = 50 * screenRatio;
-		bunny = new SpriteAnimationEntity(bunnyPos, bunnyPos, 2, bunnySize, bunnySize);
+		float bunnySize = activity.getResources().getInteger(R.integer.l20_bunny_size);
+		bunnySize = (int) (bunnySize * screenRatio);
+		float bunnyPosX = 20 * screenRatio + bunnySize*0.5f;
+		float bunnyPosY = 5 * screenRatio + bunnySize*0.5f;
+		bunny = new SpriteAnimationEntity(bunnyPosX, bunnyPosY, 2, bunnySize, bunnySize);
 		bunny.setFps(10);
 		bunny.setAnimationSequence(bunnySequence);
-		float bubbleSize = 156 * screenRatio;
-		float bubblePos = bunnyPos+bunnySize*0.5f + bubbleSize*0.5f;
-		bunny.curseBubble = new RenderEntity(bunny.x + bubbleSize*0.3f, bubblePos, 3, bubbleSize, bubbleSize);
+		float bubbleSize = 182 * screenRatio;
+		float bubblePos = bunnyPosY+bunnySize*0.4f + bubbleSize*0.5f;
+		bunny.curseBubble = new RenderEntity(bunny.x + bubbleSize*0.5f, bubblePos, 3, bubbleSize, bubbleSize);
 		bunny.curseBubble.texture = renderView.getTexture(R.drawable.l20_bunny_curse, gl);
 		bunny.curseBubble.visible = false;
+		
+		// Create shopping cart.
+		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
+		shoppingCartSize *= screenRatio;
+		float cartPosY = heightPercent*19;
+		float cartPos = bunnyPosX + shoppingCartSize*0.45f;		
+		
+		shoppingCarts[0] = new ShoppingCart(cartPos, cartPosY, 2, shoppingCartSize, shoppingCartSize);
+		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
+		shoppingCarts[0].clickable = false;
+		
+		// Calc bounding box size
+		float bbX = activity.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_x);
+		float bbY = activity.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_y);
+		bbX *= screenRatio;
+		bbY *= screenRatio;	
+		shoppingCarts[0].setBBDim(bbX, bbY);
+		nShoppingCarts = 1;
+		
+		// Set crash pos for obstacle to the right of the shopping cart.
+		obstacleManager.crashPosition = cartPos + shoppingCartSize*0.5f - widthPercent*10f;
+		
 		
 		productManager.initProductSpawn();
 		// Pixel per second
@@ -458,6 +461,11 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			bunny.crash();					
 		}
 		break;			
+		
+		case EventManager.BUNNY_RUN: {
+			soundManager.playSound(SOUNDS.RUN);				
+		}
+		break;		
 		
 		default:
 			break;

@@ -22,13 +22,14 @@ public class EventManager {
 	public static final int PRODUCT_COLLECTED = 2;
 	public static final int SHOPPING_CART_COLLECTED = 3;
 	public static final int OBSTACLE_CRASH = 4;
+	public static final int BUNNY_RUN = 5;
 //	public static final int SHOPPING_CART_IN_PLACE = 4;
 	
 	
 	/**
 	 * The singleton instance of the event manager.
 	 */
-	private static final EventManager instance = new EventManager();
+	private static final EventManager instance = new EventManager();	
 	/**
 	 * The list of EventListeners that are registered with the manager.
 	 */	

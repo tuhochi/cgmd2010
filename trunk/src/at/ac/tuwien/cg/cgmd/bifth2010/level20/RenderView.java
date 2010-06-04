@@ -75,10 +75,11 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 
 	
 	// Textures.
-	static final int[] TEXTURE_BUNNY = {R.drawable.l20_bunny1, 
-										R.drawable.l20_bunny2,
-										R.drawable.l20_bunny3,
-										R.drawable.l20_bunny4};
+	static final int[] TEXTURE_BUNNY = {R.drawable.l20_rabbit_3, 
+										R.drawable.l20_rabbit_1,
+										R.drawable.l20_rabbit_3,
+										R.drawable.l20_rabbit_2,
+										R.drawable.l20_rabbit_4};
 	
 	static final int TEXTURE_SHELF = 	R.drawable.l20_backg;
 	static final int TEXTURE_CART = 	R.drawable.l20_shopping_cart;
