@@ -80,7 +80,7 @@ public class SpriteAnimationEntity extends RenderEntity {
 		else {
 			if (timePassed >= updateTime) {
 				textureIdx++;
-				textureIdx %= textureIds.length;
+				textureIdx %= textureIds.length-1;
 				texture = textureIds[textureIdx];
 				timePassed = updateTime;
 				updateTime += 1.f/fps;
@@ -97,20 +97,20 @@ public class SpriteAnimationEntity extends RenderEntity {
 	}
 	
 	/** Performs the a crash of the bunny with an obstacle. */	
-	public void crash() {
-		angle = 65;
-		crashed = true;
+	public void crash() {		
+		crashed = true;		
+		texture = textureIds[textureIds.length-1];
 		curseBubble.visible = true;
 		timePassed = 0;
 	}
 	
 	/** Sets the bunny in its running position. */	
 	public void run() {
-		angle = 0;
 		crashed = false;
 		curseBubble.visible = false;
 		timePassed = 0;
 		updateTime = 1.f/fps;
+		EventManager.getInstance().dispatchEvent(EventManager.BUNNY_RUN, this);
 	}
 	
 	@Override

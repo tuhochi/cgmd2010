@@ -3,7 +3,7 @@
 	<integer name="l20_level_time">60</integer>
 	<integer name="l20_scroll_speed">200</integer>
 	<integer name="l20_animation_speed">5</integer>
-	<integer name="l20_shopping_cart_default_size">308</integer>
+	<integer name="l20_shopping_cart_default_size">290</integer>
 	<integer name="l20_shopping_cart_bb_default_size_x">200</integer>
 	<integer name="l20_shopping_cart_bb_default_size_y">120</integer>
 	<integer name="l20_shopping_cart_distance">6000</integer>
@@ -15,6 +15,7 @@
 	<integer name="l20_product_spawn_y_1">324</integer>
 	<integer name="l20_product_spawn_y_2">223</integer>
 	<integer name="l20_obstacle_size">180</integer>
+	<integer name="l20_bunny_size">136</integer>
 	<integer name="l20_crash_duration">5</integer> <!-- in seconds -->				
 	<bool name="l20_endgame">false</bool>
 </resources>

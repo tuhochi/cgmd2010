@@ -51,20 +51,14 @@ public class SoundManager {
 		soundPool = new SoundPool(nSounds, AudioManager.STREAM_MUSIC, 100);
 		loadSounds(LevelActivity.instance);
 		
-		// FERDI: Funktioniert leider nicht. 
-//		SharedPreferences audiosettings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
-//		soundOn = audiosettings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
-		
-		// So sollts laut FAQ aber gehn:
-		
 		// Get the calling intent & the session state
 		Intent callingIntent = LevelActivity.instance.getIntent();
 		SessionState state = new SessionState(callingIntent.getExtras());
 		
 		if (state != null) {
 			soundOn = state.isMusicAndSoundOn(); 
-		}
-		
+		}		
+		soundOn = true;		
 	}
 	
 	/**

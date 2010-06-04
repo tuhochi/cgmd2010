@@ -119,7 +119,8 @@ public class ObstacleManager {
 
 	public void createObstacle(GL10 gl) {		
 		float size = LevelActivity.instance.getResources().getInteger(R.integer.l20_obstacle_size);
-		size *= GameManager.screenRatio;
+		// Round the float value.
+		size = (int) (size * GameManager.screenRatio);		
 		spawnPos = LevelActivity.renderView.getWidth() + size;	
 		float posY = 65 * GameManager.screenRatio;
 		obstacle = new RenderEntity(spawnPos, posY, 1, size, size);		
