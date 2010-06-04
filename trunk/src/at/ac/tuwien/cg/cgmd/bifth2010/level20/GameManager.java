@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -17,6 +18,7 @@ import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level11.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level20.SoundManager.SOUNDS;
 
 
@@ -46,6 +48,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	/** Manager audio resources and playback. */
 	protected SoundManager soundManager;
 	
+	/** Provides sprites containing characters for rendering. */
+	protected TextSprites textSprites;
+	
 	/** Handles obstacles in the game. */
 	protected ObstacleManager obstacleManager;
 	
@@ -72,7 +77,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	/** The animated bunny */
 	protected SpriteAnimationEntity bunny;
 	
-	
+	/** Ratio to multiply object sizes with for proper size dependent on the current screen resolution. */
+	protected static float screenRatio;
+		
 
 	/** If there's a touch on the screen */
 	protected boolean touchDown;
@@ -97,6 +104,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		time = TimeUtil.instance;
 		
 		productManager = new ProductManager();	
+		textSprites = new TextSprites();
 		
 		soundManager = new SoundManager((Context)LevelActivity.instance);
 		soundManager.playSound(SOUNDS.RUN);
@@ -113,6 +121,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		remainingTime = activity.getResources().getInteger(R.integer.l20_level_time) * 1000;
 		totalMoney = 100;
 
+		screenRatio = 1f;
 		touchDown = false;
 		touchX = 0;
 		touchY = 0;
@@ -125,13 +134,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	public void createEntities(GL10 gl) {
 		
 		// Clear all textures. If this method is called, existing textures are invalid
-		renderView.textures.clear();
+		renderView.textures.clear();			
 		
 		// Create background shelf.
 		float width = renderView.getWidth();
 		float widthPercent = width * 0.01f;
 		float height = renderView.getHeight();
-		float heightPercent = height * 0.01f;
+		screenRatio = height / 480.f;
 		
 		shelf = new Shelf(width*0.5f, height*0.5f, 0f, width, height);
 		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);		
@@ -143,25 +152,29 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		obstacleManager.init(gl);			
 		productManager.init();
+		textSprites.buildSprites(gl);
 		
 		// This is the default for a screen height of 480px. 
 		float shoppingCartSize = activity.getResources().getInteger(R.integer.l20_shopping_cart_default_size);
-		shoppingCartSize *= height / 480.0f;
+		shoppingCartSize *= screenRatio;
 		
 		// Calc bounding box size
-		float bbX = activity.instance.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_x);
-		float bbY = activity.instance.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_y);
-		bbX *= height / 480.0f;
-		bbY *= height / 480.0f;
+		float bbX = activity.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_x);
+		float bbY = activity.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_y);
+		bbX *= screenRatio;
+		bbY *= screenRatio;
 			
 		// Create shopping cart.		
 		float cartPosY = height / 5.f;
-		//cartPosY += (shoppingCartSize * .5f);
-		shoppingCarts[0] = new ShoppingCart(200, cartPosY, 2, shoppingCartSize, shoppingCartSize);
+		float cartPos = 200 * screenRatio;
+		shoppingCarts[0] = new ShoppingCart(cartPos, cartPosY, 2, shoppingCartSize, shoppingCartSize);
 		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
 		shoppingCarts[0].clickable = false;
 		shoppingCarts[0].setBBDim(bbX, bbY);
 		nShoppingCarts = 1;
+		
+		// Set crash pos for obstacle to the right of the shopping cart.
+		obstacleManager.crashPosition = cartPos + shoppingCartSize*0.5f - widthPercent*10f;
 		
 		// Create bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
@@ -169,9 +182,16 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			bunnySequence[i] = renderView.getTexture(RenderView.TEXTURE_BUNNY[i], gl);
 		}
 				
-		bunny = new SpriteAnimationEntity(45, 40, 2, 64, 64);
+		float bunnySize = 64 * screenRatio;
+		float bunnyPos = 50 * screenRatio;
+		bunny = new SpriteAnimationEntity(bunnyPos, bunnyPos, 2, bunnySize, bunnySize);
 		bunny.setFps(10);
 		bunny.setAnimationSequence(bunnySequence);
+		float bubbleSize = 156 * screenRatio;
+		float bubblePos = bunnyPos+bunnySize*0.5f + bubbleSize*0.5f;
+		bunny.curseBubble = new RenderEntity(bunny.x + bubbleSize*0.3f, bubblePos, 3, bubbleSize, bubbleSize);
+		bunny.curseBubble.texture = renderView.getTexture(R.drawable.l20_bunny_curse, gl);
+		bunny.curseBubble.visible = false;
 		
 		productManager.initProductSpawn();
 		// Pixel per second
@@ -364,6 +384,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				// This says, it is now a fixed shopping cart and ready to be filled.
 				a.re.animated = false;
 			}
+			// The animated price number sprite has to be set invisible when animation is finished.
+			else if (a.re.id >= TextSprites.TEXT_SPRITE) {
+				a.re.visible = false;
+			}
 		}	
 		break;
 		
@@ -389,7 +413,23 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				soundManager.laugh();
 			}
 			
-			totalMoney -= ProductInfo.price(pe.type);
+			float productPrice = ProductInfo.price(pe.type); 
+			totalMoney -= productPrice;
+			
+			// Get and animate number sprite.
+			RenderEntity numberSprite = textSprites.getNumberSprite((int)productPrice);
+			RenderEntity plusSprite = textSprites.getCharSprite("-");
+			numberSprite.x = pe.x + (((float)Math.random()-0.5f)*10);
+			numberSprite.y = pe.y + (((float)Math.random()-0.5f)*10);
+			plusSprite.x = numberSprite.x - numberSprite.width;
+			plusSprite.y = numberSprite.y;
+			plusSprite.visible = true;
+			numberSprite.visible = true;
+			Animator spriteAnim = new Animator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.5f);
+			spriteAnim.random(150);
+			Animator plusAnim = new Animator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);
+			animators.put(numberSprite.id, spriteAnim);
+			animators.put(plusSprite.id, plusAnim);
 			
 			// This prevents displaying a negative money count and exits the game.
 			if (totalMoney <= 0) {
@@ -415,8 +455,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		case EventManager.OBSTACLE_CRASH: {
 			soundManager.pauseMusic();
 			soundManager.playSound(SOUNDS.CRASH);
-			bunny.crash();
-			obstacleManager.removeObstacle();			
+			bunny.crash();					
 		}
 		break;			
 		

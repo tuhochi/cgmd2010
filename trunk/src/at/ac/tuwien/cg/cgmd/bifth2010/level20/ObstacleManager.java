@@ -31,24 +31,26 @@ public class ObstacleManager {
 	private float updateTime;
 	/** The position where the player crashes into the obstacle. */
 	protected float crashPosition;
+	/** Flag whether the player crashed into the obstacle. */
+	private boolean crashed;
+	/** The duration of the crash scenario. */
+	private int crashDuration;
 
 	/** Constructor of ObstacleManager. */
-	public ObstacleManager() {
-		// TODO Adjust scaling and positioning.
-		obstacle = new RenderEntity(500, 40, 1, 110, 110);		
+	public ObstacleManager() {		
 		nSpawnedObstacles = 0;
 		nAvoidedObstacles = 0;
 		timeInterval = 10000;
 		nextSpawnTime = timeInterval;
 		updateTime = 0;		
 		crashPosition = 100;
+		crashed = false;
+		crashDuration = LevelActivity.instance.getResources().getInteger(R.integer.l20_crash_duration) * 1000;
 	}
 	
 	/** Initializes the manager. 
 	 * @param gl */
-	public void init(GL10 gl) {
-		spawnPos = LevelActivity.renderView.getWidth() + 100;
-		obstacle.x = spawnPos;
+	public void init(GL10 gl) {		
 		createObstacle(gl);
 	}
 	
@@ -58,28 +60,40 @@ public class ObstacleManager {
 	 * @param scroll The distance to move the obstacle along the x axis.
 	 * */
 	public void update(float dt, float scroll) {
-		if (!obstacle.visible) {
+		if (!obstacle.visible || crashed) {
 			updateTime += dt;
 		}			
 		
-		if (updateTime >= nextSpawnTime) {
+		if (!crashed && updateTime >= nextSpawnTime) {
 			spawnObstacle();	
-			nSpawnedObstacles++;
+			nSpawnedObstacles++;		
 		}			
 		
+		if (crashed && updateTime > crashDuration) {
+			removeObstacle();
+			crashed = false;
+		}
+		
 		// Obstacle spawned.
-		if (obstacle.visible) {
+		if (obstacle.visible && !crashed) {
 			// Scroll.
 			obstacle.x -= scroll;
 			// Crashing with player.
-			if (obstacle.x < crashPosition) {
-				EventManager.getInstance().dispatchEvent(EventManager.OBSTACLE_CRASH, obstacle);
+			if (obstacle.x-obstacle.width*0.5f < crashPosition) {
+				crashed = true;
+				updateTime = 0;
+				EventManager.getInstance().dispatchEvent(EventManager.OBSTACLE_CRASH, obstacle);				
 			}
 		}
 		
 		// Obstacle vanished.
 		if (obstacle.x < 0) {
 			removeObstacle();
+		}
+		
+		// TODO Need some sort of animation that makes more sense.
+		if(crashed) {
+			obstacle.visible = !obstacle.visible;
 		}
 	}
 
@@ -96,14 +110,20 @@ public class ObstacleManager {
 		obstacle.visible = false;
 		obstacle.x = spawnPos;
 		updateTime = 0;
+		nextSpawnTime = timeInterval;
 	}
 
 	private void spawnObstacle() {
 		obstacle.visible = true;		
 	}
 
-	public void createObstacle(GL10 gl) {
-		obstacle.visible = false;
+	public void createObstacle(GL10 gl) {		
+		float size = LevelActivity.instance.getResources().getInteger(R.integer.l20_obstacle_size);
+		size *= GameManager.screenRatio;
+		spawnPos = LevelActivity.renderView.getWidth() + size;	
+		float posY = 65 * GameManager.screenRatio;
+		obstacle = new RenderEntity(spawnPos, posY, 1, size, size);		
+		obstacle.visible = false;		
 		obstacle.texture = LevelActivity.renderView.getTexture(R.drawable.l20_obstacle, gl);		
 	}
 	

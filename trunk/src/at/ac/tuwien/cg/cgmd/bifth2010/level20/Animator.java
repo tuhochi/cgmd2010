@@ -3,6 +3,8 @@
  */
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level11.Vector2;
+
 /**
  * This class manages the animation of a {@code ProductEntity} while being moved into a shopping cart 
  *
@@ -11,7 +13,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
  */
 public class Animator {
 	
-	// This counter increases by 1 everytime a new animator is created. 
+	// This counter increases by 1 every time a new animator is created. 
 	protected static int count = 0;
 
 	protected int id;
@@ -72,6 +74,22 @@ public class Animator {
 		
 		re.setPos(re.x + dx, re.y + dy);
 		
+	}
+	
+	/** 
+	 * Creates a random destination for the animator object.
+	 *  
+	 * @param distFactor The max distance from the origin to the destination.
+	 * */
+	public void random(float distFactor) {
+		Vector2 direction = new Vector2((float) Math.random(), (float) Math.random());
+		direction.normalize();	
+		// Bring in -0.5/0.5 range.
+		direction.x -= 0.5;
+		direction.y -= 0.5;		
+		distFactor *= LevelActivity.renderView.getHeight() / 480.f;
+		destX = destX + direction.x * distFactor;
+		destY = destY + direction.y * distFactor;
 	}
 	
 }

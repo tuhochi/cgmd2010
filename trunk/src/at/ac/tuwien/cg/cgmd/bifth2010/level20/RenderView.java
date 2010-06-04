@@ -200,12 +200,14 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		
 		// Render all objects individually. NOTE: No more stacked renders
 		gameManager.shelf.render(gl);		
-
+		gameManager.obstacleManager.render(gl);	
+		
 		// Render products.	
 		Enumeration<Integer> keys = gameManager.productManager.products.keys();
 		while(keys.hasMoreElements()) {
 			gameManager.productManager.products.get(keys.nextElement()).render(gl);
 		}	
+		
 		
 		// Render shopping carts
 		for (int i = 0; i < gameManager.shoppingCarts.length; i++) {			
@@ -225,10 +227,9 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		if (gameManager.productManager.movingShoppingCart != null) {
 			gameManager.productManager.movingShoppingCart.render(gl);
 		}
-		
-		gameManager.obstacleManager.render(gl);	
-		
+					
 		gameManager.bunny.render(gl);
+		gameManager.textSprites.render(gl);
 		
 		// After all rendering is complete, update the UI TextViews
 		handler.post(textViewUpdater);
