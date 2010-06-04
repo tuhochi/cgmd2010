@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -34,6 +35,8 @@ public class Config
 	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = false;
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
 	public static boolean EASY_MODE = false;
+	public static boolean VIBRATE = true;
+	public static int LOGLEVEL = Log.VERBOSE;
 	
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;

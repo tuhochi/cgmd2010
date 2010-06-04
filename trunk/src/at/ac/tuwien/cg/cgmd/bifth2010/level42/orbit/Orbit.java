@@ -4,13 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Ellipse;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 
 /**
  * The Class Orbit represents a elliptic motion.
@@ -480,7 +479,7 @@ public class Orbit extends Motion
 	public void morph(Vector3 pushVec)
 	{
 		
-		Log.d(LevelActivity.TAG,"MORPH OPERATION "+pushVec.toString());
+		LogManager.d("MORPH OPERATION "+pushVec.toString());
 		
 		//stop scale morphing
 		directionDiffFactor = directionDiff;
@@ -527,7 +526,7 @@ public class Orbit extends Motion
 				angle = Constants.PIHALF-angle;
 			
 			rotateDirectionVec(angle);
-			Log.d(LevelActivity.TAG,"DIRVECROT UPDATE angle="+(float)Math.toDegrees(dirVecRotationDiff));
+			LogManager.d("DIRVECROT UPDATE angle="+(float)Math.toDegrees(dirVecRotationDiff));
 		}
 		
 		

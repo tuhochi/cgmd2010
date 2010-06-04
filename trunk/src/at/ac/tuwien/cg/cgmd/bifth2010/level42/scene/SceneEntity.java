@@ -7,8 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
@@ -17,6 +15,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 /**
@@ -119,7 +118,7 @@ public class SceneEntity implements Movable,Persistable
 	 */
 	public void persist(DataOutputStream dos) throws IOException
 	{
-		Log.d(LevelActivity.TAG, "writing scene entity " + name);
+		LogManager.d("writing scene entity " + name);
 		ArrayList<Model> models = this.models;
 		int size = models.size();
 		for(int i=0; i<size; i++)
@@ -131,7 +130,7 @@ public class SceneEntity implements Movable,Persistable
 		{
 			dos.writeBoolean(true);
 			String className = motion.getClass().getName();
-			Log.d(LevelActivity.TAG, "writing motion " + className);
+			LogManager.d("writing motion " + className);
 			dos.writeUTF(className);
 			motion.persist(dos);
 		}
@@ -144,7 +143,7 @@ public class SceneEntity implements Movable,Persistable
 	 */
 	public void restore(DataInputStream dis) throws IOException
 	{
-		Log.d(LevelActivity.TAG, "reading scene entity " + name);
+		LogManager.d("reading scene entity " + name);
 		ArrayList<Model> models = this.models;
 		int size = models.size();
 		for(int i=0; i<size; i++)
@@ -154,7 +153,7 @@ public class SceneEntity implements Movable,Persistable
 		if(dis.readBoolean())
 		{
 			String className = dis.readUTF();
-			Log.d(LevelActivity.TAG, "reading motion " + className);
+			LogManager.d("reading motion " + className);
 			motion = Motion.restore(dis, className);
 			if(motion != null)
 				MotionManager.instance.addMotion(motion, this);

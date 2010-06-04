@@ -4,9 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 /**
@@ -76,7 +75,7 @@ public abstract class SatelliteTransformation implements Persistable{
 		}
 		catch (Throwable t)
 		{
-			Log.e(LevelActivity.TAG, "Could not restore Motion (no default constructor?)", t);
+			LogManager.e("Could not restore Motion (no default constructor?)", t);
 		}
 		return null;
 	}

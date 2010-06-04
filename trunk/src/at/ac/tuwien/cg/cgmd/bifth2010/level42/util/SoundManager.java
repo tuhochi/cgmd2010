@@ -7,7 +7,6 @@ import java.util.HashMap;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 
 /**
@@ -49,7 +48,7 @@ public class SoundManager
 	
 	private synchronized MediaPlayer preparePlayer(int resID)
 	{
-		Log.i(LevelActivity.TAG, "Preparing player for " + resID);
+		LogManager.i("Preparing player for " + resID);
 		MediaPlayer myPlayer = null;
 		
 		/*
@@ -78,7 +77,7 @@ public class SoundManager
 				// remove it from its old group
 				if(oldGroup != -1)
 				{
-					Log.i(LevelActivity.TAG, "Removing player from group " + oldGroup + " in favor of " + resID);
+					LogManager.i("Removing player from group " + oldGroup + " in favor of " + resID);
 					players.get(oldGroup).remove(currentPlayer);
 				}
 				

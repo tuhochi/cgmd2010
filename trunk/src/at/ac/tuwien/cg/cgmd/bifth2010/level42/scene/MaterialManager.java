@@ -13,10 +13,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES11;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 /**
@@ -139,7 +139,7 @@ public class MaterialManager
 	public Material addMaterial(String name, Color4 ambient, Color4 diffuse, Color4 specular, Color4 emissive, float ks, String textureFilename)
 	{
 		if(materials.containsKey(name))
-			Log.w(LevelActivity.TAG, "Material '" + name + "' already exists, replacing...");
+			LogManager.w("Material '" + name + "' already exists, replacing...");
 		Material m = new Material(name, ambient, diffuse, specular, emissive, ks, textureFilename);
 		materials.put(name, m);
 		return m;
@@ -305,11 +305,11 @@ public class MaterialManager
 				if(bitmap.getConfig() == null)
 					bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false);
 				
-				Log.i(LevelActivity.TAG, "Loaded Texture '" + filename + "': " + bitmap.getWidth() + "x" + bitmap.getHeight() + ", density=" + bitmap.getDensity() + ", config=" + bitmap.getConfig());
+				LogManager.i("Loaded Texture '" + filename + "': " + bitmap.getWidth() + "x" + bitmap.getHeight() + ", density=" + bitmap.getDensity() + ", config=" + bitmap.getConfig());
 			}
 			catch(Throwable t)
 			{
-				Log.e(LevelActivity.TAG, "Could not load Texture: " + filename, t);
+				LogManager.e("Could not load Texture: " + filename, t);
 				bitmap = null;
 			}
 			finally

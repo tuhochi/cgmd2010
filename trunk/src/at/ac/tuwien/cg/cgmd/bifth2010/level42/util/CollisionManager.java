@@ -8,8 +8,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
@@ -165,7 +163,7 @@ public class CollisionManager implements Persistable{
 		}
 		Collections.sort(remainingPlanetParts, comperator);
 		//printRemaingingPlanetParts();
-		Log.d(LevelActivity.TAG,"PLANET BSPHERE RADIUS:"+goldPlanet.getBoundingSphereWorld().radius);
+		LogManager.d("PLANET BSPHERE RADIUS:"+goldPlanet.getBoundingSphereWorld().radius);
 		
 		this.collOffset = (int)(entityList.size()/2);
 		this.collOffsetLimit = entityList.size();
@@ -219,7 +217,7 @@ public class CollisionManager implements Persistable{
 			Vector3.crossProduct(pq,a,normalDistance);
 			if(normalDistance.length() < (entity.getBoundingSphereWorld().radius+Config.SELECTION_BSPHERE_INCREMENT))
 			{
-				Log.d(LevelActivity.TAG,"found hit with " + entity.getName() + " distance="+normalDistance.length()+" sphereradius="+entity.getBoundingSphereWorld().radius);
+				LogManager.d("found hit with " + entity.getName() + " distance="+normalDistance.length()+" sphereradius="+entity.getBoundingSphereWorld().radius);
 				
 				//only store the one with the min distance
 				if(nearestEntity==null && entity.getName().startsWith(Config.SATELLITE_PREFIX))
@@ -233,9 +231,9 @@ public class CollisionManager implements Persistable{
 			}
 		}
 		if(nearestEntity!=null)
-			Log.d(LevelActivity.TAG,"ray intersected with "+nearestEntity.getName());
+			LogManager.d("ray intersected with "+nearestEntity.getName());
 		else
-			Log.d(LevelActivity.TAG,"no ray intersection found");
+			LogManager.d("no ray intersection found");
 		return nearestEntity;
 		
 	}
@@ -316,7 +314,7 @@ public class CollisionManager implements Persistable{
 				if(collisionDetected(objA,objB,Config.COLLISION_PENETRATION_DEPTH,centerDistance))
 				{
 					//collision detected
-					//Log.d(LevelActivity.TAG,"COLLISION DETECTED");
+					//LogManager.d("COLLISION DETECTED");
 					
 					//check for collision between satellite and planet
 					if(!objAIsMoveable||!objBIsMoveable)
@@ -386,7 +384,7 @@ public class CollisionManager implements Persistable{
 									motionManager.addMotion(planetPartMotion,planetPart);
 									planetPartMotion.setInsidePlanet(true);
 									
-									//Log.d(LevelActivity.TAG,"PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetPart.getMotion().getSpeed());
+									//LogManager.d("PLANET COLL - SAT speed="+satellite.getMotion().getSpeed()+" PLANET speed="+planetPart.getMotion().getSpeed());
 									
 									//report game manager
 									gameManager.incScore();
@@ -521,7 +519,7 @@ public class CollisionManager implements Persistable{
 		if(remainingPlanetParts.size()>0){	
 			//pseudo random selection of next element
 			int index = (int)timeManager.getRemainingGameTime()%remainingPlanetParts.size();
-			Log.d(LevelActivity.TAG,"RANDOM SELECTION INDEX:"+index);
+			LogManager.d("RANDOM SELECTION INDEX:"+index);
 			return remainingPlanetParts.get(index);
 		}else 
 			return null;
@@ -560,9 +558,9 @@ public class CollisionManager implements Persistable{
 	 */
 	private void printRemaingingPlanetParts()
 	{
-		Log.d(LevelActivity.TAG,"AUTOAIM ----");
+		LogManager.d("AUTOAIM ----");
 		for(int i=0;i<remainingPlanetParts.size();i++)
-			Log.d(LevelActivity.TAG,"AUTOAIM: i=" + i + " length=" + remainingPlanetParts.get(i).getBoundingSphereWorld().center.length());
+			LogManager.d("AUTOAIM: i=" + i + " length=" + remainingPlanetParts.get(i).getBoundingSphereWorld().center.length());
 	}
 
 	/* (non-Javadoc)
