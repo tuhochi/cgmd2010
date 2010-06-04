@@ -4,20 +4,23 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
 
+/**
+ * @author group13
+ * 
+ * texture for drunkbarblock
+ *
+ */
 public class DrunkBarBlockTexture extends Texture {
 	
 	/**
 	 * constructor loads beer texture
-	 * @param gl
-	 * @param context
+	 * @param gl gl
+	 * @param context context
 	 */
 	public DrunkBarBlockTexture(GL10 gl, Context context) {
 		super();
-		this.textureId = new int[1];
 		this.textureId[0] = R.drawable.l13_beer;
-		this.textures = new int[1];
-		this.loadGLTextures(gl, context);
+		this.loadGLTexture(gl, context);
 	}
 }
