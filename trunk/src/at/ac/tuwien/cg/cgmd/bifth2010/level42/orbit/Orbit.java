@@ -706,6 +706,15 @@ public class Orbit extends Motion
 	}
 	
 	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setSpeed(float)
+	 */
+	@Override
+	public void setSpeed(float newSpeed) {
+		this.speed = newSpeed;
+	}
+
+	
+	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion#setSatTrans(at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation)
 	 */
 	public void setSatTrans(SatelliteTransformation satTrans) {
