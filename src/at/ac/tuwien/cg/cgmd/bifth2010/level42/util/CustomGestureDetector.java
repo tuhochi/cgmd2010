@@ -1,6 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
+import android.util.Log;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
 
 /**
  * The Class CustomGestureDetector.
@@ -17,7 +19,7 @@ public class CustomGestureDetector
 	private MotionEvent currentStartEvent;
 	
 	/** The last action. */
-	private int lastAction;
+	private int lastAction = -1;
 	
 	/** The last x/y. */
 	private float lastX,lastY;
@@ -46,46 +48,78 @@ public class CustomGestureDetector
 	 */
 	public void onTouchEvent(MotionEvent e)
 	{
-		if(currentStartEvent == null)
-		{
-			currentStartEvent = e;
-			firstX = e.getX();
-			firstY = e.getY();
-			isLongPress = true;
-			listener.onDown(currentStartEvent);
-		}
+		Log.v(LevelActivity.TAG, "onTouchEvent(" + e + ", downTime=" + e.getDownTime() + ", eventTime=" + e.getEventTime() + ")");
 		
+		OUTER_SWITCH:
 		switch(e.getAction())
 		{
 		case MotionEvent.ACTION_DOWN:
-			listener.onDown(e);
 		case MotionEvent.ACTION_MOVE:
+			
+			Log.d(LevelActivity.TAG, "ACTION_DOWN or ACTION_MOVE");
+			
 			if(currentStartEvent == null)
-				break;
-			
-			float distanceX = lastX-e.getX();
-			float distanceY = lastY-e.getY();
-			
-			if(!isLongPress || Math.abs(e.getX()-firstX) > Config.TOUCH_DEADZONE || Math.abs(e.getY()-firstY) > Config.TOUCH_DEADZONE)
 			{
-				isLongPress = false;
-				listener.onScroll(currentStartEvent, e, distanceX, distanceY);
+				Log.d(LevelActivity.TAG, "(currentStartEvent == null), resetting currentStartEvent");
+				currentStartEvent = e;
+				firstX = e.getX();
+				firstY = e.getY();
+				isLongPress = true;
+				listener.onDown(e);
+				break;
 			}
-			break;
+			
+			switch(e.getAction())
+			{
+			case MotionEvent.ACTION_DOWN:
+				
+				Log.d(LevelActivity.TAG, "Subdivision: ACTION_DOWN");
+				if(lastAction == MotionEvent.ACTION_DOWN)
+				{
+					Log.d(LevelActivity.TAG, "lastAction is ACTION_DOWN, breaking");
+					break OUTER_SWITCH;
+				}
+				
+				Log.d(LevelActivity.TAG, "calling onDown()");
+				listener.onDown(e);
+				break OUTER_SWITCH;
+				
+			case MotionEvent.ACTION_MOVE:
+				
+				Log.d(LevelActivity.TAG, "Subdivision: ACTION_MOVE");
+				float distanceX = lastX-e.getX();
+				float distanceY = lastY-e.getY();
+				
+				Log.d(LevelActivity.TAG, "checking if this is a longpress or a move ... ");
+				if(!isLongPress || Math.abs(e.getX()-firstX) > Config.TOUCH_DEADZONE || Math.abs(e.getY()-firstY) > Config.TOUCH_DEADZONE)
+				{
+					isLongPress = false;
+					Log.e(LevelActivity.TAG, " ... move, calling onScroll()");
+					listener.onScroll(currentStartEvent, e, distanceX, distanceY);
+				}
+				else
+					Log.d(LevelActivity.TAG, " ... longpress, doing nothing.");
+				break OUTER_SWITCH;
+			}
 			
 		case MotionEvent.ACTION_UP:
-			listener.onUp(e);
-			if(currentStartEvent == null)
-				break;
 			
-			if(lastAction != MotionEvent.ACTION_UP)
+			Log.d(LevelActivity.TAG, "ACTION_UP");
+			
+			if(currentStartEvent == null)
 			{
-				if(isLongPress)
-					listener.onTouchUp(currentStartEvent, e.getEventTime()-e.getDownTime());
-				else
-					listener.onScroll(currentStartEvent, e, lastX-e.getX(), lastY-e.getY());
+				Log.e(LevelActivity.TAG, "currentStartEvent is null, breaking");
+				break;
+			}
+
+			if(lastAction == MotionEvent.ACTION_UP)
+			{
+				Log.d(LevelActivity.TAG, "lastAction is ACTION_UP, breaking");
+				break;
 			}
 			
+			Log.d(LevelActivity.TAG, "calling onUp, setting currentStartEvent to null");
+			listener.onUp(e, isLongPress, e.getEventTime()-e.getDownTime());
 			currentStartEvent = null;
 			break;
 		}
@@ -132,17 +166,10 @@ public class CustomGestureDetector
 		 * Notified on an up touch
 		 * 
 		 * @param e the event that startet the touch
+		 * @param wasLongPress whether this touch was stationary or not
+		 * @param duration how long this touch lasted
 		 * @return true, if the event is consumed, else false
 		 */
-		public boolean onUp(MotionEvent e);
-		
-		/**
-		 * Notified when a long press ends
-		 * 
-		 * @param e The initial on down motion event that started the longpress.
-		 * @param duration How long the press lasted
-		 * @return true, if the event is consumed, else false
-		 */
-		public boolean onTouchUp(MotionEvent e, long duration);
+		public boolean onUp(MotionEvent e, boolean wasLongPress, long duration);
 	}
 }
