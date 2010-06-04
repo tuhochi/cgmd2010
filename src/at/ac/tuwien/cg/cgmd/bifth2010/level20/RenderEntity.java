@@ -39,15 +39,32 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 	 * @param width The width of the entity.
 	 * @param height The height of the entity.
 	 */
-	public RenderEntity(float x, float y, float z, float width, float height) {
-		
-		super();
-		// INFO: Changed this initial value to 0 to get a white quad on screen everytime
-		texture = 0;
-		visible = true;		
-		clickable = true;
-		animated = false;
-		
+	public RenderEntity(float x, float y, float z, float width, float height) {	
+		super();		
+		init();
+		createQuad(x, y, z, width, height, 0.0f, 0.0f, 1.0f, 1.0f);		
+	}
+	
+
+	/**
+	 * Constructor for setting custom texture coordinates.
+	 * 
+	 * @see public RenderEntity(float x, float y, float z, float width, float height)
+	 * @param texCoordOffsetX	The x-offset to use for the texture coordinates.
+	 * @param texCoordOffsetY	The y-offset to use for the texture coordinates.
+	 * @param texCoordW			The width of the texture rectangle.
+	 * @param texCoordT			The height of the texture rectangle.
+	 */
+	public RenderEntity(float x, float y, float z, float width, float height, 
+			float texCoordOffsetX, float texCoordOffsetY, float texCoordW, float texCoordH) {
+		super();		
+		init();
+		createQuad(x, y, z, width, height, texCoordOffsetX, texCoordOffsetY, texCoordW, texCoordH);		
+	}
+	
+	
+	private void createQuad(float x, float y, float z, float width, float height, 
+			float texCoordOffsetX, float texCoordOffsetY, float texCoordW, float texCoordH) {
 		setPos(x, y);
 		this.z = z;
 		setDim(width, height);
@@ -67,12 +84,17 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
 		
-		// TODO: Does not handle independent Quad and Texture sizes
-//		float ratio = width / height;		
-		float texCoords[] = {0.0f,  1.0f,
-							 1.0f, 1.0f,
-							 0.0f,  0.0f,
-							 1.0f, 0.0f};
+		float texCoords[] = {
+				texCoordOffsetX,  texCoordOffsetY+texCoordH,
+				texCoordOffsetX+texCoordW, texCoordOffsetY+texCoordH,
+				texCoordOffsetX,  texCoordOffsetY,
+				texCoordOffsetX+texCoordW, texCoordOffsetY
+		};
+		
+//		texCoords = {0.0f,  1.0f,
+//				 1.0f, 1.0f,
+//				 0.0f,  0.0f,
+//				 1.0f, 0.0f};
 		
 		byteBuf = ByteBuffer.allocateDirect(texCoords.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
@@ -81,11 +103,14 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 		textureBuffer.position(0);
 	}
 	
-	/**
-	 * This Constructor is just for Shelf
-	 */
-	protected RenderEntity() {
-		super();
+	
+	/** Common value initialization of RenderEntity. */
+	public void init() {
+		// INFO: Changed this initial value to 0 to get a white quad on screen everytime
+		texture = 0;
+		visible = true;		
+		clickable = true;
+		animated = false;
 	}
 	
 	@Override

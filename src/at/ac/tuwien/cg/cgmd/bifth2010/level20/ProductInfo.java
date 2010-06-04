@@ -18,19 +18,19 @@ public class ProductInfo {
 	 */
 	private static final ProductInfo[] p = new ProductInfo[]{
 		
-		new ProductInfo(0, 	R.drawable.l20_bananamilk, 	1.29f),
-		new ProductInfo(1, 	R.drawable.l20_beer, 		0.69f),
-		new ProductInfo(2, 	R.drawable.l20_broccoli, 	1.49f),
-		new ProductInfo(3, 	R.drawable.l20_cereal, 		2.3f),
-		new ProductInfo(4, 	R.drawable.l20_drink, 		0.85f),
-		new ProductInfo(5, 	R.drawable.l20_icecream, 	3.29f),
-		new ProductInfo(6, 	R.drawable.l20_lollipop, 	0.49f),
-		new ProductInfo(7, 	R.drawable.l20_penne, 		0.99f),
-		new ProductInfo(8, 	R.drawable.l20_pizza, 		2.45f),
-		new ProductInfo(9, 	R.drawable.l20_playbunny, 	6.60f),
-		new ProductInfo(10,	R.drawable.l20_probio, 		1.1f),
-		new ProductInfo(11,	R.drawable.l20_soup, 		0.89f),
-		new ProductInfo(12,	R.drawable.l20_yoghurt, 	1.35f),
+		new ProductInfo(0, 	R.drawable.l20_bananamilk, 	1),
+		new ProductInfo(1, 	R.drawable.l20_beer, 		2),
+		new ProductInfo(2, 	R.drawable.l20_broccoli, 	3),
+		new ProductInfo(3, 	R.drawable.l20_cereal, 		4),
+		new ProductInfo(4, 	R.drawable.l20_drink, 		5),
+		new ProductInfo(5, 	R.drawable.l20_icecream, 	6),
+		new ProductInfo(6, 	R.drawable.l20_lollipop, 	7),
+		new ProductInfo(7, 	R.drawable.l20_penne, 		8),
+		new ProductInfo(8, 	R.drawable.l20_pizza, 		9),
+		new ProductInfo(9, 	R.drawable.l20_playbunny, 	0),
+		new ProductInfo(10,	R.drawable.l20_probio, 		7),
+		new ProductInfo(11,	R.drawable.l20_soup, 		6),
+		new ProductInfo(12,	R.drawable.l20_yoghurt, 	9),
 					
 		};
 	

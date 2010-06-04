@@ -3,6 +3,11 @@
  */
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Bunny;
+
 
 /**
  * Uses an arbitrary number of textures to generate an animation sequence. 
@@ -26,6 +31,8 @@ public class SpriteAnimationEntity extends RenderEntity {
 	protected float crashDuration;	
 	/** Flag whether the bunny crashed into an obstacle. */
 	protected boolean crashed;
+	/** Displays a cursing speech balloon for the bunny on crashes. */
+	protected RenderEntity curseBubble;
 	
 
 	/**
@@ -43,7 +50,7 @@ public class SpriteAnimationEntity extends RenderEntity {
 		fps = 10;
 		timePassed = 0;
 		updateTime = 1.f/fps;	
-		crashDuration = 3000;
+		crashDuration = LevelActivity.instance.getResources().getInteger(R.integer.l20_crash_duration) * 1000;
 	}
 	
 	/**
@@ -91,8 +98,9 @@ public class SpriteAnimationEntity extends RenderEntity {
 	
 	/** Performs the a crash of the bunny with an obstacle. */	
 	public void crash() {
-		angle = 45;
+		angle = 65;
 		crashed = true;
+		curseBubble.visible = true;
 		timePassed = 0;
 	}
 	
@@ -100,8 +108,15 @@ public class SpriteAnimationEntity extends RenderEntity {
 	public void run() {
 		angle = 0;
 		crashed = false;
+		curseBubble.visible = false;
 		timePassed = 0;
 		updateTime = 1.f/fps;
+	}
+	
+	@Override
+	public void render(GL10 gl) {
+		super.render(gl);		
+		curseBubble.render(gl);		
 	}
 
 }
