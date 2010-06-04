@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -12,6 +11,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class Config
 {
+	public static final int VERBOSE = 0;
+	public static final int DEBUG = 1;
+	public static final int INFO = 2;
+	public static final int WARN = 3;
+	public static final int ERROR = 4;
+	public static final int NONE = 5;
+	
 	public static boolean GLES11 = false;
 
 	public static long FPS_UPDATE_INTERVAL = 1000;
@@ -32,11 +38,12 @@ public class Config
 	public static int BOUNDING_SPHERE_SPACING = 20;
 	
 	// menu settings
+	public static boolean SHOW_FPS = false;
 	public static boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = false;
 	public static boolean SHOW_MODEL_BOUNDING_SPHERES = false;
 	public static boolean EASY_MODE = false;
 	public static boolean VIBRATE = true;
-	public static int LOGLEVEL = Log.ERROR+1;
+	public static int LOGLEVEL = NONE;
 	
 	/** the total level gametime in ms */
 	public static long GAMETIME = 120000;

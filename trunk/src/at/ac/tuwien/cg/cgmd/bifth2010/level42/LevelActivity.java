@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -205,19 +204,12 @@ public class LevelActivity extends Activity
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.l42_Select_Loglevel);
-		builder.setItems(items, new DialogInterface.OnClickListener()
+		builder.setSingleChoiceItems(items, Config.LOGLEVEL, new DialogInterface.OnClickListener()
 		{
 		    public void onClick(DialogInterface dialog, int item)
 		    {
-		        switch(item)
-		        {
-		        case 0: Config.LOGLEVEL = Log.VERBOSE; break;
-		        case 1: Config.LOGLEVEL = Log.DEBUG; break;
-		        case 2: Config.LOGLEVEL = Log.INFO; break;
-		        case 3: Config.LOGLEVEL = Log.WARN; break;
-		        case 4: Config.LOGLEVEL = Log.ERROR; break;
-		        case 5: Config.LOGLEVEL = Log.ERROR+1; break;
-		        }
+		    	Config.LOGLEVEL = item;
+		    	dialog_Loglevel.dismiss();
 		    }
 		});
 		dialog_Loglevel = builder.create();
@@ -239,8 +231,8 @@ public class LevelActivity extends Activity
 		time = (TextView)findViewById(R.id.l42_timeTextField);
 		timeProgress = (ProgressBar)findViewById(R.id.l42_timeProgressbar);
 		fps = (TextView)findViewById(R.id.l42_fpsTextField);
+		fps.setVisibility(Config.SHOW_FPS ? TextView.VISIBLE : TextView.INVISIBLE);
 		
-
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, LogManager.TAG);
@@ -415,6 +407,10 @@ public class LevelActivity extends Activity
 	{
 		switch(item.getItemId())
 		{
+		case R.id.l42_Menu_ShowFPS:
+			Config.SHOW_FPS ^= true;
+			fps.setVisibility(Config.SHOW_FPS ? TextView.VISIBLE : TextView.INVISIBLE);
+			return true;
 		case R.id.l42_Menu_BoundingSphereSE:
 			Config.SHOW_SCENEENTITY_BOUNDING_SPHERES ^= true;
 			return true;
@@ -443,6 +439,11 @@ public class LevelActivity extends Activity
 			MenuItem item = menu.getItem(i);
 			switch(item.getItemId())
 			{
+			case R.id.l42_Menu_ShowFPS:
+				item.setTitle(Config.SHOW_FPS ? 
+						R.string.l42_Menu_ShowFPS_off : 
+						R.string.l42_Menu_ShowFPS_on);
+				break;
 			case R.id.l42_Menu_BoundingSphereSE:
 				item.setTitle(Config.SHOW_SCENEENTITY_BOUNDING_SPHERES ? 
 						R.string.l42_Menu_BoundingSphereSE_hide : 

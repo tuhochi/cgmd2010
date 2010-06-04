@@ -6,16 +6,18 @@
 	<string name="l42_HelpActivity_Text2">This central \'Goldplanet\' must be damaged as much as possible to decrease the treasures value. The only way to damage the Goldplanet is to push the objects (let\'s call them satellites) out of their orbits and let them crash into the planet. The player can use directional force pushes to alter the orbits.</string>
 	<string name="l42_HelpActivity_Text3">A force push is triggered by touching the screen, a longer touch results in a stronger push. A satellite must be hit with the right force at the right place to do maximum damage when it crashes.</string>
 	<string name="l42_HelpActivity_Text4">The perspective camera can be moved freely on a sphere around the treasure by moving your finger on the screen.</string>
-	<string name="l42_Menu_BoundingSphereSE_show">Show SceneEntity Bounding Spheres</string>
-	<string name="l42_Menu_BoundingSphereSE_hide">Hide SceneEntity Bounding Spheres</string>
-	<string name="l42_Menu_BoundingSphereModel_show">Show Model Bounding Spheres</string>
-	<string name="l42_Menu_BoundingSphereModel_hide">Hide Model Bounding Spheres</string>
-	<string name="l42_Menu_EasyMode_on">Easy Mode ON</string>
-	<string name="l42_Menu_EasyMode_off">Easy Mode OFF</string>
-	<string name="l42_Menu_Vibrate_on">Vibrate ON</string>
-	<string name="l42_Menu_Vibrate_off">Vibrate OFF</string>
+	<string name="l42_Menu_BoundingSphereSE_show">Show SceneEntity BS</string>
+	<string name="l42_Menu_BoundingSphereSE_hide">Hide SceneEntity BS</string>
+	<string name="l42_Menu_BoundingSphereModel_show">Show Model BS</string>
+	<string name="l42_Menu_BoundingSphereModel_hide">Hide Model BS</string>
+	<string name="l42_Menu_EasyMode_on">Turn Easy Mode on</string>
+	<string name="l42_Menu_EasyMode_off">Turn Easy Mode off</string>
+	<string name="l42_Menu_Vibrate_on">Turn vibrate on</string>
+	<string name="l42_Menu_Vibrate_off">Turn vibrate off</string>
 	<string name="l42_HUD_PlanetHealth">Planet Health</string>
 	<string name="l42_Select_Loglevel">Select a Loglevel</string>
 	<string name="l42_Menu_Loglevel">Loglevel</string>
 	<string name="l42_Loglevel_none">None</string>
+	<string name="l42_Menu_ShowFPS_on">Show FPS</string>
+	<string name="l42_Menu_ShowFPS_off">Hide FPS</string>
 </resources>
