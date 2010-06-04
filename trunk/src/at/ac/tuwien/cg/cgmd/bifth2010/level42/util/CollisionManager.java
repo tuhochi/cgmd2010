@@ -281,6 +281,8 @@ public class CollisionManager implements Persistable{
 		boolean objAIsMoveable = true;
 		boolean objBIsMoveable = true;
 		
+		float satSpeed = 0;
+		
 		if(collOffset==0){
 			collOffset = (int)(entityListSize/2);
 			collOffsetLimit = entityListSize;
@@ -337,13 +339,15 @@ public class CollisionManager implements Persistable{
 						 * planet part moves out of the planet -> avoid collision with planet
 						 */
 						Motion satMotion = satellite.getMotion();
+						Model planetPart = null;
+						//store sat speed for further processing
+						satSpeed = satMotion.getSpeed();
+						
 						if(satMotion.getFilterPlanetColl())
 							continue;
 					
 						//set planet entrance flag
 						satMotion.setInsidePlanet(true);
-												
-						Model planetPart = null;
 						
 						//find out which part of the planet got hit
 						//only search in remaining planet parts
@@ -391,9 +395,8 @@ public class CollisionManager implements Persistable{
 										if(morphPlanetPushVec.length()<=0.1f){
 											morphPlanetPushVec.set(tempMorphPlanetPushVec).normalize();
 										}
-										
-										morphPlanetPushVec.multiply(satellite.getMotion().getSpeed()*Config.PLANETPART_BOUNCE_FAC);
-										
+																				
+										morphPlanetPushVec.multiply(satMotion.getSpeed()*Config.PLANETPART_BOUNCE_FAC);
 										satMotion.morph(morphPlanetPushVec);
 										
 										//COLLISION FILTER
@@ -402,7 +405,7 @@ public class CollisionManager implements Persistable{
 										satMotion.setCollCount(collCount);
 										
 										//check if there were to many collision with this satellite
-										if(collCount>=Config.DAMPED_MAX_COLLISION_COUNT){
+										if(collCount >= Config.DAMPED_MAX_COLLISION_COUNT_FACTOR * satSpeed){
 											LogManager.d("MAX COLLISION COUNT REACHED");
 											satMotion.setFilterPlanetColl(true);
 											satMotion.setCollCount(0);		
