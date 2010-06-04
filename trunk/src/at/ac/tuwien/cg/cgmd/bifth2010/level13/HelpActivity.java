@@ -5,12 +5,22 @@ import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * The HelpActivity for level 13. 
- * @author Group 13
+ * 
+ * @author group13
+ * 
+ * help activity for level 13 
  */
 public class HelpActivity extends Activity {
+	
+	/**
+	 * create the help activity
+	 * 
+	 * @see super{@link #onCreate(Bundle)}
+	 */
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//set layout
 		setContentView(R.layout.l13_help);
 	}
 }

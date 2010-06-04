@@ -1,139 +1,123 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.DrunkBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.JailBar;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.MistressObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.PlayerObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.TextureSingletons;
 
 /**
  * 
- * @author arthur/ sebastian (group 13)
+ * @author group13
+ * 
+ * opengl renderer for all game objects
  *
  */
-public class MyRenderer extends GLSurfaceView implements Renderer {
-	
-	
-	//the current map in form of an array
-	
-	//Control delay timer
-	//public static int controlDelay = 0;
-	public static int map[][] = {
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, 
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 3, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, 
-		{ 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1 }, 
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 0, 1, 1, 2, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 3, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 0, 3, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 2, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 2, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 2, 0, 3, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
-	};
-	
-	public static final long STEP = 50;
-	private long lastTime = System.currentTimeMillis();
-	
-	
-	//dimensions of screen
-	public static int screenWidth;
-	public static int screenHeight;
-	
-	//general movement speed (must be a divisor of GameObject.BLOCKSIZE -> see todo in collisonhandler)
-	public static final int SPEED = 4;
+public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence {
+
+	/** step size for fixed time step algorithm */
+	private static final long STEP = 50;
+
+	/** rotation amount per fixed time step */
 	private static final float ROTATIONINC = 3f;
-	public static float rotation = 0;
-	private int renderedPlayer = 0;
-	
-	private float zoomFactor = 1.0f;
-	private float zoom = 0.0f;
-	//attached context
+
+	/** width of screen */
+	private static int screenWidth;
+
+	/** height of screen */
+	private static int screenHeight;
+
+	/** last time of fixed time step algorithm */
+	private long lastTime;
+
+	/** rotation for whole game used for rendering */
+	private float rotation;
+
+	/** number of times player was rendered (used in invincible state for blinking) */
+	private int renderedPlayer;
+
+	/** zoomfactor for drunk state */
+	private float zoomFactor;
+
+	/** zoom for drunk state */
+	private float zoom;
+
+
+	/** attached context */
 	private Context context;
-	
-	//all game objects
-	private static List<GameObject> gameObjects = new ArrayList<GameObject>();
-	
-	//counter for fps
+
+	/** singleton object of fps-counter */
 	private FPSCounter counter;
-	private float accTime = 0;
-	public DrunkBar drunkStatusBar;
-	public JailBar jailStatusBar;
-	SoundManager sound;
+
+	/** accumulated time for fps-counter */
+	private float accTime;
+
+	/** singleton object of game control */
 	private GameControl gameControl;
-	
-	public PlayerObject player;
-	
-	public static void reset() {
-		gameObjects = new ArrayList<GameObject>();
-	}
+
+
 	/**
-	 * constructor
-	 * @param context
+	 * @see IPersistence#restore(Bundle)
+	 */
+	@Override
+	public void restore(Bundle savedInstanceState) {
+		this.rotation = savedInstanceState.getFloat("l13_myRenderer_rotation");
+	}
+
+
+	/**
+	 * @see IPersistence#save(Bundle)
+	 */
+	@Override
+	public void save(Bundle outState) {
+		outState.putFloat("l13_myRenderer_rotation", this.rotation);
+	}
+
+
+	/**
+	 * constructor initializes all members
+	 * @param context attached context
+	 * @param attr the attributeset
 	 */
 	public MyRenderer(Context context, AttributeSet attr) {
 		super(context, attr);
+
 		//init members
-		SoundManager.initSoundManager(context);
+		this.lastTime = System.currentTimeMillis();
+		this.rotation = 0;
+		this.renderedPlayer = 0;
+		this.zoomFactor = 1.0f;
+		this.zoom = 0.0f;
+		this.accTime = 0;
 		this.context = context; 
 		this.counter = FPSCounter.getInstance();
 		this.gameControl = GameControl.getInstance();
+
 		//set renderer for view
 		this.setRenderer(this);
+
 		//make it focusable (for touch events)
 		this.setFocusable(true);
-		
 	}
-	
 
-	
+
+
 	/**
-	 * @see Renderer#onDrawFrame(GL10)
+	 * called for drawing a frame
+	 * 
+	 * @see super#onDrawFrame(GL10)
 	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		int width = MyRenderer.screenWidth;
-		int height = MyRenderer.screenHeight;
-		
+
 		//calculate and update fps
 		counter.update();
 		float dt = counter.getDt();
@@ -142,32 +126,19 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 		{
 			accTime = 0;
 		}
-		
 		long now = System.currentTimeMillis();
+
+		//fixed time step algorithm
 		while(lastTime + STEP <= now) {
+			//update positions, states, etc.
+			gameControl.update();
 
-
-			gameControl.update(player);
-
-			//draw all game objects
-			for(GameObject gameObject : gameObjects) {
-				if (gameObject.isActive){
-					gameObject.update();
-				}
-			}
-
-			gameControl.updateDrunkStatus(drunkStatusBar);
-			gameControl.updateJailStatus(jailStatusBar);
-
-			//update game time
-			GameTimer.getInstance().update();
-
-		
-			
+			//increase rotation if in rat-arsed state
 			if(gameControl.isRatArsedState()) {
 				rotation += ROTATIONINC;
 			}
 
+			//zoom in/out if in drunk state
 			if(gameControl.isDrunkState()){
 				if (zoomFactor > 1.1f){
 					zoom = -0.01f;
@@ -180,54 +151,49 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 				zoomFactor+=zoom;
 			}
 			else {
-				if(rotation >= 360) {
-					int div = (int)rotation / 360;
-					rotation -= div * 360;
-				}
 				zoomFactor = 1.0f;
 			}
-			
-			
-			lastTime += STEP;
 
+			//update rotation
+			if(rotation >= 360) {
+				int div = (int)rotation / 360;
+				rotation -= div * 360;
+			}
+
+			lastTime += STEP;
 		}
 
-		
-		
+		//set up orthogonal projection
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		
-	
-			gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
+		gl.glOrthof(0, screenWidth*zoomFactor, 0, screenHeight*zoomFactor, -1.0f, 1.0f);
 
-			gl.glTranslatef(player.getRealPosition().x - GameObject.offset.x, player.getRealPosition().y - GameObject.offset.y, 0);
-			gl.glRotatef(rotation, 0, 0, 1);
-			gl.glTranslatef((-1)*(player.getRealPosition().x - GameObject.offset.x), (-1)*(player.getRealPosition().y - GameObject.offset.y), 0);
-		
+		//rotate whole scene
+		gl.glTranslatef(gameControl.getPlayer().getRealPosition().x - GameObject.offset.x, gameControl.getPlayer().getRealPosition().y - GameObject.offset.y, 0);
+		gl.glRotatef(rotation, 0, 0, 1);
+		gl.glTranslatef((-1)*(gameControl.getPlayer().getRealPosition().x - GameObject.offset.x), (-1)*(gameControl.getPlayer().getRealPosition().y - GameObject.offset.y), 0);
 
-		 	
-		gl.glViewport(0, 0, width, height);
-		
-		
+		gl.glViewport(0, 0, screenWidth, screenHeight);
+
 		//clear color
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		
-		//draw all game objects
-		for(GameObject gameObject : gameObjects) {
+
+		//draw all game objects (except for player object)
+		for(GameObject gameObject : gameControl.getGameObjects()) {
 			if(gameObject instanceof PlayerObject) {
 				continue;
 			}
-			if (gameObject.isActive){
-			gameObject.draw(gl);
-			
+			//only if object is active
+			if(gameObject.isActive()){
+				gameObject.draw(gl);
 			}
 		}
-		
+
 		//draw player
 		if(gameControl.isInvincibleState()) {
+			//simulate blinking effect of player in invincible state
 			if(renderedPlayer == 8) {
-				player.draw(gl);
+				gameControl.getPlayer().draw(gl);
 				renderedPlayer = 0;
 			}
 			else {
@@ -235,187 +201,182 @@ public class MyRenderer extends GLSurfaceView implements Renderer {
 			}
 		}
 		else {
-			player.draw(gl);
+			gameControl.getPlayer().draw(gl);
 		}
-		
-		
+
+
+		//set up camera for status-bars
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		
-		gl.glOrthof(0, width, 0, height, -1.0f, 1.0f);
-		gl.glViewport(0, 0, width, height);
-			drunkStatusBar.draw(gl);
-			jailStatusBar.draw(gl);
-		
-			
+		gl.glOrthof(0, screenWidth, 0, screenHeight, -1.0f, 1.0f);
+		gl.glViewport(0, 0, screenWidth, screenHeight);
+		//draw status-bars
+		gameControl.getDrunkStatusBar().draw(gl);
+		gameControl.getJailStatusBar().draw(gl);
 	}
 
 	/**
-	 * @see Renderer#onSurfaceChanged(GL10, int, int)
+	 * called if screen changes
+	 * 
+	 * @param gl gl
+	 * @param width screen-width
+	 * @param height screen-height
+	 * 
+	 * @see super#onSurfaceChanged(GL10, int, int)
 	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		Log.d("df", "called onsurfacechanged");
 		//set new screen dimensions
-		MyRenderer.screenWidth = width;
-		MyRenderer.screenHeight = height;
-		
+		screenWidth = width;
+		screenHeight = height;
+
 		//set parallel projection
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		
-		
-		
 		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
-		
 		gl.glViewport(0, 0, width, height);
-	
 	}
 
+
 	/**
-	 * @see Renderer#onSurfaceCreated(GL10, EGLConfig)
+	 * called when created
+	 * 
+	 * @see super{@link #onSurfaceCreated(GL10, EGLConfig)}
 	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		Log.d("df", "called onsurfacecreated");
-		
 		//enable texture mapping
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		
+
 		//enable blend capability
 		gl.glEnable(GL10.GL_BLEND);
-		
+
 		//specify blend function
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		
+
 		//set shading model
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		
+
 		//set background color
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-		
+
 		//set display size
-		MyRenderer.screenHeight = this.getHeight();
-		MyRenderer.screenWidth = this.getWidth();
-		
+		screenHeight = this.getHeight();
+		screenWidth = this.getWidth();
+
 		//init all textures
 		TextureSingletons.reset();
 		TextureSingletons.initTextures(gl, context);
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		
-		//create all game objects
-		if(gameObjects.isEmpty()) {
-			gameObjects.add(new BackgroundObject());
-			for(int i = 0; i < MyRenderer.map.length; i++) {
-				for(int j = 0; j < MyRenderer.map[i].length; j++) {
-					if(MyRenderer.map[i][j] == 2) {
-						gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1)));
-					}
-					else if (MyRenderer.map[i][j] == 3){
-						gameObjects.add(new CopObject(j, Math.abs(i - map.length+1)));
-					}
-					else if (MyRenderer.map[i][j] == 4){
-						gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1)));
-					}
-				}
-			}
-			player = new PlayerObject();
-			gameObjects.add(player);
-			GameObject.setStartTile(new Vector2(3, 1));
-		}
-		else {
-			for(GameObject object : gameObjects) {
-				if(object instanceof PlayerObject) {
-					player = (PlayerObject)object;
-					Vector2 currentTile = player.getCurrentTile();
-					player.updatePosition();
-					GameObject.setStartTile(currentTile);
-				}
-			}
-			
-		}
-		
-		drunkStatusBar = new DrunkBar(200, 50);
-		jailStatusBar = new JailBar(200, 50);
-	    jailStatusBar.position.y = 50;
-	
-	    
-		SoundManager.startMusic();
-	}
-	
 
-	
-	
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+
+		//create all game objects
+		gameControl.createGameObjects();
+
+		//start background music
+		SoundManager.init(context);
+		SoundManager.getInstance().startMusic();
+	}
+
+
 	/**
-	 * @see GLSurfaceView#onTouchEvent(MotionEvent)
+	 * called when user touches screen
+	 * 
+	 * @see super#onTouchEvent(MotionEvent)
 	 */
 
 	public boolean onTouchEvent(MotionEvent event) {
 		//only process event if touch is finished
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			//calculate difference of touch-position and screen-center
+			//move player
 			gameControl.movePlayer(event.getX(), event.getY());
-			
-			
-			
-			
 		}
 		return true;
 	}
+
+
 	/**
 	 * handles key movement
+	 * 
+	 * @see super{@link #onKeyUp(int, KeyEvent)}
 	 */
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		switch(keyCode) {
-			case KeyEvent.KEYCODE_DPAD_UP:
-				gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, 0);
-				break;
-			case KeyEvent.KEYCODE_DPAD_DOWN:
-				gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, MyRenderer.screenHeight);
-				break;
-			case KeyEvent.KEYCODE_DPAD_LEFT:
-				gameControl.movePlayer(0, MyRenderer.screenHeight / 2.0f);
-				break;
-			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				gameControl.movePlayer(MyRenderer.screenWidth, MyRenderer.screenHeight / 2.0f);
-				break;
-			default:
-				return false;
+		//move up
+		case KeyEvent.KEYCODE_DPAD_UP:
+			gameControl.movePlayer(screenWidth / 2.0f, 0);
+			break;
+			//move down
+		case KeyEvent.KEYCODE_DPAD_DOWN:
+			gameControl.movePlayer(screenWidth / 2.0f, screenHeight);
+			break;
+			//move left
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+			gameControl.movePlayer(0, screenHeight / 2.0f);
+			break;
+			//move right
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			gameControl.movePlayer(screenWidth, screenHeight / 2.0f);
+			break;
+		default:
+			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * handles trackball movement
+	 * 
+	 * @see super{@link #onTrackballEvent(MotionEvent)}
 	 */
 	public boolean onTrackballEvent(MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_MOVE) {
+			//get trackball direction
 			float x = event.getX();
 			float y = event.getY();
+
+			//calculate dominating direction
 			if(Math.abs(x) > Math.abs(y)) {
-			//	if(Math.abs(x) > 0.6) {
-					if(x > 0) {
-						gameControl.movePlayer(MyRenderer.screenWidth, MyRenderer.screenHeight / 2.0f);
-					}
-					else {
-						gameControl.movePlayer(0, MyRenderer.screenHeight / 2.0f);
-					}
-				//}
+				if(x > 0) {
+					//move right
+					gameControl.movePlayer(screenWidth, screenHeight / 2.0f);
+				}
+				else {
+					//move left
+					gameControl.movePlayer(0, screenHeight / 2.0f);
+				}
 			}
 			else {
-				//if(Math.abs(y) > 0.6) {
-					if(y > 0) {
-						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, MyRenderer.screenHeight);
-					}
-					else {
-						gameControl.movePlayer(MyRenderer.screenWidth / 2.0f, 0);
-					}
-				//}
+				if(y > 0) {
+					//move up
+					gameControl.movePlayer(screenWidth / 2.0f, screenHeight);
+				}
+				else {
+					//move down
+					gameControl.movePlayer(screenWidth / 2.0f, 0);
+				}
 			}
-		
 		}
 		return true;
 	}
-	
-	
+
+
+	/**
+	 * getter for screen-width
+	 * 
+	 * @return screen-width
+	 */
+	public static int getScreenWidth() {
+		return screenWidth;
+	}
+
+
+	/**
+	 * getter for screen-height
+	 * 
+	 * @return screen-height
+	 */
+	public static int getScreenHeight() {
+		return screenHeight;
+	}
 }

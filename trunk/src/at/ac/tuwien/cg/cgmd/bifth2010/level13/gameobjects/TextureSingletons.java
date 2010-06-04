@@ -4,30 +4,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
+
 import android.content.Context;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
 
 /**
  * 
- * @author arthur/sebastian (group 13)
+ * @author group13
+ * 
+ * class managing all textures as singletons
  *
  */
 public class TextureSingletons {
-	/**
-	 * reference to all used textures
-	 */
+	/** reference to all used textures */
 	private static Map<String, Texture> textures = new HashMap<String, Texture>();
 	
 	/**
 	 * creates all used textures
-	 * @param gl
-	 * @param context
+	 * @param gl gl
+	 * @param context context
 	 */
 	public static void initTextures(GL10 gl, Context context) {
 		//only create textures once
 		if(textures.size() != 0) {
 			return;
 		}
+		//put all textures into hash map
 		textures.put(PlayerObject.class.getSimpleName(), new PlayerTexture(gl, context));
 		textures.put(BackgroundObject.class.getSimpleName(), new BackgroundTexture(gl, context));
 		textures.put(BeerObject.class.getSimpleName(), new BeerTexture(gl, context));
@@ -41,8 +42,8 @@ public class TextureSingletons {
 	
 	/**
 	 * returns the texture for a game-object (specified via game-object-class)
-	 * @param className
-	 * @return
+	 * @param className name of the class
+	 * @return texture of class
 	 */
 	public static Texture getTexture(String className) {
 		if(textures.containsKey(className)) {
@@ -53,6 +54,10 @@ public class TextureSingletons {
 		}
 	}
 	
+	
+	/**
+	 * resets singleton object
+	 */
 	public static void reset() {
 		textures = new HashMap<String, Texture>();
 	}

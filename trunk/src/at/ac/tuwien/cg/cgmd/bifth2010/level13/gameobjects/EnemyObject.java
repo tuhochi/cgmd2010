@@ -1,95 +1,82 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 
-
 import java.util.Random;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.Vector2;
 
 /**
  * 
- * @author sebastian (group 13)
+ * @author group13
+ * 
+ * class for enemy objects (cops and prostitutes)
  *
  */
-public class EnemyObject extends GameObject {
+public abstract class EnemyObject extends GameObject {
+
+	/** id of object */
+	protected String id;
+
+	/** movement1 of object */
+	protected Vector2 movement1;
+
+	/** movement2 of object */
+	protected Vector2 movement2;
+
+	/** movement speed of object */
+	private static final float SPEED = 1.0f;
+
+	/** possible movement-directions of object */
+	private static final Vector2[] directionVectorArray = {
+		new Vector2(0,1 * SPEED), 
+		new Vector2(0,-1 * SPEED),
+		new Vector2(1 * SPEED, 0),
+		new Vector2(-1 * SPEED, 0)
+	};
+
+	/** random number generator */
+	protected Random random;
 
 
 	/**
-	 * constructor calls super with object's dimensions
+	 * constructor creates a new enemy object
+	 * 
+	 * @param x x-position of object
+	 * @param y y-position of object
+	 * @param id id of object
 	 */
-
-	public float speed = 1.0f;
-
-	public Vector2[] directionVectorArray = new Vector2[4];
-	Random random;
-	
-	
-	public EnemyObject(int x, int y) {
-		//set dimension (must be equal to GameObject.BLOCKSIZE)
-		super(GameObject.BLOCKSIZE, GameObject.BLOCKSIZE);
-		moveVec = new Vector2(0,0);
-		moveVec2 = new Vector2(0, 0);
-		
-		directionVectorArray[0] = new Vector2(0,1);
-		directionVectorArray[1] = new Vector2(0,-1);
-		directionVectorArray[2] = new Vector2(1,0);
-		directionVectorArray[3] = new Vector2(-1,0);
-		
-		for (int i = 0; i < 4;i++)
-			directionVectorArray[i].mult(speed);
-		
+	public EnemyObject(int x, int y, String id) {
+		super();
+		//set members
+		this.id = id;
+		movement1 = new Vector2(0,0);
+		movement2 = new Vector2(0, 0);
 		random = new Random();
-		
 		setRandomDirection();
-		
+
 		//set position
 		this.position.x = x * GameObject.BLOCKSIZE;
 		this.position.y = y * GameObject.BLOCKSIZE;
 	}
-	
-	
+
+
+	/**
+	 * set new random movement-direction
+	 */
 	protected void setRandomDirection(){
-		
+
+		//set random move-direction1
 		int randomDir = random.nextInt(4);
-		this.moveVec = directionVectorArray[randomDir];
-		
+		this.movement1 = directionVectorArray[randomDir];
+
+		//set movement2 to random opposite of movement1
 		randomDir = random.nextInt(2);
 		if(randomDir == 0) {
-			this.moveVec2.x = this.moveVec.y;
-			this.moveVec2.y = this.moveVec.x;
+			this.movement2.x = this.movement1.y;
+			this.movement2.y = this.movement1.x;
 		}
 		else {
-			this.moveVec2.x = -this.moveVec.y;
-			this.moveVec2.y = -this.moveVec.x;
+			this.movement2.x = -this.movement1.y;
+			this.movement2.y = -this.movement1.x;
 		}
-
-	}
-	
-	
-	//Sets the initial position of the cop object
-	public void setPos(int x, int y){
-		this.position.x = x;
-		this.position.y = y;
-	}
-	
-	
-	
-	/**
-	 * @see GameObject#draw(GL10) 
-	 */
-	@Override
-	public void draw(GL10 gl) {
-		
-		
-		
-		//update position with offset
-		this.position.sub(GameObject.offset);
-		
-		super.draw(gl);
-		
-		//reset position
-		this.position.add(GameObject.offset);		
 	}
 }

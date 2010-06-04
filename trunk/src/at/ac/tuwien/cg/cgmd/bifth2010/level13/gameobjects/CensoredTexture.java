@@ -4,20 +4,26 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.Texture;
 
+
+/**
+ * 
+ * @author group13
+ * 
+ * censored texture for player object
+ *
+ */
 public class CensoredTexture extends Texture {
 
 	/**
-	 * constructor loads rabbit texture
-	 * @param gl
-	 * @param context
+	 * constructor loads censored texture
+	 * 
+	 * @param gl gl
+	 * @param context context
 	 */
 	public CensoredTexture(GL10 gl, Context context) {
 		super();
-		this.textureId = new int[1];
 		this.textureId[0] = R.drawable.l13_censored;
-		this.textures = new int[1];
-		this.loadGLTextures(gl, context);
+		this.loadGLTexture(gl, context);
 	}
 }
