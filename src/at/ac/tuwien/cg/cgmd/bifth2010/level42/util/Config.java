@@ -129,7 +129,7 @@ public class Config
 	public static final String PLANETPART_SUFFIX = "_unTied";	
 	public static final float PLANETPART_REUSE_MINDISTANCE = 1f;
 	public static final float PLANETPART_BOUNCE_FAC = 4f;
-	
+	public static final int DAMPED_MAX_COLLISION_COUNT = 3;
 	public static final float SELECTION_BSPHERE_INCREMENT = 0.5f;
 	
 	
