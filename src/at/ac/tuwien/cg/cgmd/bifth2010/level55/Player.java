@@ -17,6 +17,7 @@ public class Player {
 	public boolean doMoveLeft = false;
 		
 	protected float[] playerPos = {2, 0};
+	protected float[] lastPlayerPos = {2, 0};
 	protected float[] a = {0, 0};
 	protected float[] v = {0, 0};
 	protected float frictionFactor = 0.0005f;
@@ -64,6 +65,10 @@ public class Player {
 		
 		lastPos[0] = playerPos[0];
 		lastPos[1] = playerPos[1];
+		
+		lastPlayerPos[0] = playerPos[0];
+		lastPlayerPos[1] = playerPos[1];
+		
 	}
 	
 	public void draw(GL10 gl) {
@@ -77,52 +82,60 @@ public class Player {
 		//Check for coinChange
 		checkCoinChange(dt);
 		
-		//Log.d("dT",Float.toString(dt));
+		float[] deltaPos = {playerPos[0] - lastPlayerPos[0], playerPos[1] - lastPlayerPos[1]};
+		float distance = (float) Math.sqrt(deltaPos[0]*deltaPos[0] + deltaPos[1]*deltaPos[1]);
 		
-		if (doMoveLeft) {
-			a[0] = -moveForce*dt;
-		}
-		if (doMoveRight) {
-			a[0] = moveForce*dt;
-		}
+		int nbSteps = (int) Math.max(Math.ceil(distance), 1.0f);
 		
-		if (doJump && canJump) {
+		float realDt = dt;
+		dt /=nbSteps;
+		
+		//Log.d("Player", "realDt = "+realDt+" nbSteps = "+nbSteps+" newDt = "+dt + " distance = "+distance);
+		for(int i=0;i<nbSteps;i++) {	
+			if (doMoveLeft) {
+				a[0] = -moveForce*dt;
+			}
+			if (doMoveRight) {
+				a[0] = moveForce*dt;
+			}
 			
-			//level.changeCoinState(2, 4);
-			
-			//a[1] = 0.0f;
-			v[1] = -jumpSpeed;
-			doJump=false;
-			canJump = false;
-		}
-		
-		//Add gravity
-		//Log.d("player", "canJump = "+canJump);
-
-		a[1] += gForce*dt;
-
+			if (doJump && canJump) {
 				
-		v[0] += a[0]*dt;
-		v[1] += a[1]*dt;
-		
-		v[0] -= Math.signum(v[0])*frictionFactor*v[0]*v[0];
-		v[1] -= Math.signum(v[1])*frictionFactor*v[1]*v[1];
-		
-		if(!(doMoveLeft || doMoveRight) && canJump) 
-		{
-			v[0] -= v[0]*Math.min(1.0f, breakForce*dt);
-		}
+				//level.changeCoinState(2, 4);
+				
+				//a[1] = 0.0f;
+				v[1] = -jumpSpeed;
+				doJump=false;
+				canJump = false;
+			}
 			
-		playerPos[0] += v[0]*dt;
-		playerPos[1] += v[1]*dt;
-		
-		//Performs collision detection and flips signs of v if necessary
-		doCollisionDetection(dt);
-		
+			//Add gravity
+			//Log.d("player", "canJump = "+canJump);
+	
+			a[1] += gForce*dt;
+	
+					
+			v[0] += a[0]*dt;
+			v[1] += a[1]*dt;
+			
+			v[0] -= Math.signum(v[0])*frictionFactor*v[0]*v[0];
+			v[1] -= Math.signum(v[1])*frictionFactor*v[1]*v[1];
+			
+			if(!(doMoveLeft || doMoveRight) && canJump) 
+			{
+				v[0] -= v[0]*Math.min(1.0f, breakForce*dt);
+			}
+				
+			playerPos[0] += v[0]*dt;
+			playerPos[1] += v[1]*dt;
+			
+			//Performs collision detection and flips signs of v if necessary
+			doCollisionDetection(dt);
+					
+			a[0] = 0.0f;
+			a[1] = 0.0f;
+		}
 		camera.lookAt(playerPos[0], playerPos[1]);
-		
-		a[0] = 0.0f;
-		a[1] = 0.0f;
 	}
 	
 	protected void doCollisionDetection(float dt) 
