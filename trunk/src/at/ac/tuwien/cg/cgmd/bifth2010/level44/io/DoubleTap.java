@@ -49,7 +49,7 @@ public class DoubleTap implements InputGesture {
 	 */
 	@Override
 	public float getPower() {
-		return Swipe.MAX_LENGTH;
+		return Swipe.MAX_LENGTH*.8f;
 	}
 
 }

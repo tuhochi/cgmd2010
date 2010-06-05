@@ -13,8 +13,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.DoubleTap;
+
 
 /**
  * Entry-Point for Level 44
@@ -119,6 +123,29 @@ public class LevelActivity extends Activity {
 		return gestureDetector.onTouchEvent(event);
 	}
 	
+	@Override
+	public boolean onTrackballEvent(MotionEvent event) {
+		if (scene != null) {
+			InputGesture gesture = null;
+
+			if (event.getY() < -.1f) {
+				/* Up movement - flap both wings */
+				gesture = new DoubleTap(0, 0);
+			} else if (event.getX() < -.1f) {
+				/* Left movement - flap right wing (go left) */
+				gesture = new Swipe(0, Swipe.MAX_LENGTH, 0, 0, Swipe.MAX_VELOCITY*.7f, InputGesture.Position.RIGHT);
+			} else if (event.getX() > .1f) {
+				/* Right movement - flap left wing (go right) */
+				gesture = new Swipe(0, Swipe.MAX_LENGTH, 0, 0, Swipe.MAX_VELOCITY*.7f, InputGesture.Position.LEFT);
+			}
+
+			if (gesture != null) {
+				scene.addInputGesture(gesture);
+			}
+		}
+		return true;
+	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		if (scene != null) {
