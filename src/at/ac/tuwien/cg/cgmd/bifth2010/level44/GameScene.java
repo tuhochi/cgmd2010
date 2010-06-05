@@ -106,8 +106,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		// Intro-Mode
 		if (this.getCurrentState().equals(CurrentState.INTRO)) {
 			introBackground.draw(gl);
-			rabbit.draw(gl);
-			virtualFinger.draw(gl);
+			//rabbit.draw(gl);
+			//virtualFinger.draw(gl);
 		}
 		
 		// Running-Mode or Extro-Mode
@@ -224,8 +224,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private void restartGameThread() {
 		stopGameThread();
 		
-		if (rabbit != null && landscape != null && crosshairs != null && timeManager != null && virtualFinger != null) {
-			gameThread = new GameThread(this, rabbit, landscape, crosshairs, timeManager, virtualFinger);
+		if (rabbit != null && landscape != null && crosshairs != null && timeManager != null && introBackground != null) {
+			gameThread = new GameThread(this, rabbit, landscape, crosshairs, timeManager, introBackground);
 			gameThread.start();
 		}
 	}
