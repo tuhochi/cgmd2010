@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Display;
@@ -94,6 +95,7 @@ public class LevelActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		if (scene != null) {
 			scene.onResume();
