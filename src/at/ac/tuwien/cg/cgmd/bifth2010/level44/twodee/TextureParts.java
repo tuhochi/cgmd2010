@@ -93,11 +93,11 @@ public class TextureParts {
 		return new TexturePart(texture, 565, 521, 565+48, 521+48);
 	}
 
-        public static TexturePart makeRedStar(Texture texture) {
-            return new TexturePart(texture, 630, 519, 630+30, 519+30);
-        }
+    public static TexturePart makeRedStar(Texture texture) {
+        return new TexturePart(texture, 630, 519, 630+30, 519+30);
+    }
 
-        public static TexturePart makeYellowStar(Texture texture) {
-            return new TexturePart(texture, 630, 554, 630+30, 554+30);
-        }
+    public static TexturePart makeYellowStar(Texture texture) {
+        return new TexturePart(texture, 630, 554, 630+30, 554+30);
+    }
 }
