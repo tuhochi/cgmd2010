@@ -98,6 +98,7 @@ public class GameThread extends Thread {
 							rabbit.setVelocity(0.f);
 						}
 
+						/* stars animation */
 						rabbit.getSprite().tick();
 
 						// perform movement of landscape
@@ -119,6 +120,9 @@ public class GameThread extends Thread {
 
 						rabbit.move();
 						landscape.step();
+						
+						/* stars animation */
+						rabbit.getSprite().tick();
 
 						// shrink rabbit
 						if (System.currentTimeMillis() % 4 == 0)
