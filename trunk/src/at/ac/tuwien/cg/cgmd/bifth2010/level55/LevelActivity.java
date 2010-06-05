@@ -64,7 +64,7 @@ public class LevelActivity extends Activity {
 		
 		textTime=(TextView)findViewById(R.id.l55_TextTime);
 		
-		seconds=75;
+		seconds=120;
 		cash=100;
 		returnPoints=0;
 		
