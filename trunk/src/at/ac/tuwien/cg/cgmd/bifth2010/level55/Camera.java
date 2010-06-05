@@ -16,11 +16,14 @@ public class Camera {
 		level = _level;
 		offset[0] = (float) Math.floor(MyRenderer.numTilesHorizontal*0.5f);
 		offset[1] = (float) Math.floor(MyRenderer.numTilesVertical*0.5f);
+		
+		pos[0] = offset[0];
+		pos[1] = offset[1];
 	}
 	
 	public void lookAt(float x, float y) 
 	{
-			lookAtPos[0] = x;
+			lookAtPos[0] = Math.min(level.frontLayer.numTilesX-1-offset[0], Math.max(offset[0], x));
 			lookAtPos[1] = y;
 	}
 	

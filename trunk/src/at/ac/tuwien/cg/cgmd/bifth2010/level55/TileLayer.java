@@ -37,7 +37,7 @@ public class TileLayer {
 	private final static int VBO_WIDTH=5;
 	private final static int VBO_HEIGHT=5;
 	
-	private int numTilesX=0;
+	public int numTilesX=0;
 	private int numTilesY=0;
 	
 	private int maxVBOPosX=0;

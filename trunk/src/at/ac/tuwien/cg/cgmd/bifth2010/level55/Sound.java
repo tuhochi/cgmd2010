@@ -38,11 +38,11 @@ public class Sound {
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		}*/
-		if (sound.isPlaying()) {
+		/*if (sound.isPlaying()) {
 			sound.seekTo(0);
 		} else {
 			sound.start();
-		}
+		}*/
 	}
 	
 	void pause() {
