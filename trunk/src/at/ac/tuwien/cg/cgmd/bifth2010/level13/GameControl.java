@@ -7,6 +7,7 @@ import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BackgroundObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerObject;
+import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.BeerStatusBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.CopObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.DrunkBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects.GameObject;
@@ -141,6 +142,9 @@ public class GameControl implements IPersistence {
 
 	/** status bar to show remaining time in jail */
 	private JailBar jailStatusBar;
+	
+	/** status bar for drunken beer */
+	private BeerStatusBar beerStatusBar;
 
 	/** persistent properties saved at previous game */
 	private Bundle savedInstanceState;
@@ -283,8 +287,11 @@ public class GameControl implements IPersistence {
 
 			//create status bars
 			drunkStatusBar = new DrunkBar(200, 50);
+			drunkStatusBar.setPosition(new Vector2(0,50));
 			jailStatusBar = new JailBar(200, 50);
 			jailStatusBar.setPosition(new Vector2(0, 50));
+			beerStatusBar = new BeerStatusBar();
+			
 
 			//restore persistent values of game objects
 			if(savedInstanceState != null) {
@@ -505,6 +512,10 @@ public class GameControl implements IPersistence {
 			jailState = true;
 			//reset beer counter
 			consumedBeer = 0;
+			ratArsedState = false;
+			drunkState = false;
+			currentDrunkTime = 0;
+			sexState = false;
 		}
 	}
 
@@ -681,4 +692,11 @@ public class GameControl implements IPersistence {
 	public JailBar getJailStatusBar() {
 		return jailStatusBar;
 	}
+
+
+	public BeerStatusBar getBeerStatusBar() {
+		return beerStatusBar;
+	}
+	
+	
 }

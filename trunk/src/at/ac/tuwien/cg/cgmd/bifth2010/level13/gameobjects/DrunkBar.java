@@ -3,7 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13.gameobjects;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.os.Bundle;
-import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
 
 
 /**
@@ -15,9 +14,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level13.GameControl;
  */
 public class DrunkBar extends StatusBar{
 
-	/** beer blocks used */
-	private DrunkBarBlock[] beerBlocks;
-
 	/**
 	 * constructor inits members
 	 * 
@@ -26,12 +22,6 @@ public class DrunkBar extends StatusBar{
 	 */
 	public DrunkBar(float objectWidth, float objectHeight) {
 		super(objectWidth, objectHeight);
-		//create beer blocks
-		beerBlocks = new DrunkBarBlock[GameControl.MAX_DRUNK_LEVEL];
-		for(int i = 0; i < beerBlocks.length; i++){
-			beerBlocks[i] = new DrunkBarBlock(objectWidth/GameControl.MAX_DRUNK_LEVEL,objectHeight);
-			beerBlocks[i].position.x = i*objectWidth/GameControl.MAX_DRUNK_LEVEL;
-		}
 	}
 
 
@@ -41,10 +31,6 @@ public class DrunkBar extends StatusBar{
 	@Override
 	public void draw(GL10 gl) {
 		super.draw(gl);
-		//also draw beer blocks
-		for (int i = 0; i < GameControl.getInstance().getConsumedBeer();i++){
-			beerBlocks[i].draw(gl);
-		}
 	}
 
 	/**

@@ -50,7 +50,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 	/** zoom for drunk state */
 	private float zoom;
 
-
 	/** attached context */
 	private Context context;
 
@@ -213,6 +212,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 		//draw status-bars
 		gameControl.getDrunkStatusBar().draw(gl);
 		gameControl.getJailStatusBar().draw(gl);
+		gameControl.getBeerStatusBar().draw(gl);
 	}
 
 	/**
