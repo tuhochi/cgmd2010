@@ -168,26 +168,41 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
+		int width = getWidth();
+		int height = getHeight();
+		
+		/**
+		 * Workaround: In some cases (e.g. when locking the screen),
+		 * width and height are exchanged until the system realizes
+		 * that we want landscape mode. We simply detect this here,
+		 * and do the initialization with the values switched, because
+		 * the system will switch to landscape mode later on.
+		 **/
+		if (width < height) {
+			width = getHeight();
+			height = getWidth();
+		}
+		
 		Texture mainTexture = new Texture(gl, getContext(), R.drawable.l44_texture);
 		configureTexture(gl, mainTexture);
 		
-		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), new Sprite(TextureParts.makeCoin(mainTexture)), this.getWidth(), this.getHeight());
-		rabbit.setPosition(getWidth()/2, getHeight()/2);
+		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), new Sprite(TextureParts.makeCoin(mainTexture)), width, height);
+		rabbit.setPosition(width/2, height/2);
 		
-		crosshairs = new Crosshairs(this, mainTexture, this.getWidth(), this.getHeight());
-		crosshairs.setPosition(30, getHeight()/2);
+		crosshairs = new Crosshairs(this, mainTexture, width, height);
+		crosshairs.setPosition(30, height/2);
 		crosshairs.setRabbit(rabbit);
 		
-		landscape = new Landscape(mainTexture, getWidth(), getHeight());
+		landscape = new Landscape(mainTexture, width, height);
 		landscape.setRabbit((PhysicalRabbit)rabbit);
 		
 		coin = new Sprite(TextureParts.makeCoin(mainTexture));
 		
 		timeDisplay = new TimeDisplay(activity, mainTexture, timeManager);
-		timeDisplay.setPosition(getWidth()-timeDisplay.getWidth()-10, 10);
+		timeDisplay.setPosition(width-timeDisplay.getWidth()-10, 10);
 		
-		introBackground = new IntroBackground(mainTexture,getWidth(),getHeight());
-		virtualFinger = new VirtualFinger(mainTexture, getWidth(), getHeight());
+		introBackground = new IntroBackground(mainTexture, width, height);
+		virtualFinger = new VirtualFinger(mainTexture, width, height);
 		virtualFinger.setGesture(VirtualFinger.DemoGesture.SWIPE_RIGHT);
 		
 		if (gameState != null) {
