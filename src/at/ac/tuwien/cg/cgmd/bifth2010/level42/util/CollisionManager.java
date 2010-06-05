@@ -412,6 +412,7 @@ public class CollisionManager implements Persistable{
 										
 									}else{
 										satMotion.setSpeed(satMotion.getSpeed()-Config.UNDAMPED_SPEED_DECREMENT);
+										satSpeed = satMotion.getSpeed();
 									}
 									motionManager.addMotion(planetPartMotion,planetPart);
 									planetPartMotion.setInsidePlanet(true);
