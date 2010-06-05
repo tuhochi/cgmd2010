@@ -85,8 +85,7 @@ public class TextureParts {
 	}
 	
 	public static TexturePart makeIntroBackground(Texture texture) {
-		// TODO change texture and return real values
-		return new TexturePart(texture,1024-480,1024-320,1024,1024);
+		return new TexturePart(texture, 486, 689, 486+480, 689+320);
 	}
 	
 	public static TexturePart makeVirtualFinger(Texture texture) {
@@ -100,4 +99,21 @@ public class TextureParts {
     public static TexturePart makeYellowStar(Texture texture) {
         return new TexturePart(texture, 630, 554, 630+30, 554+30);
     }
+    
+    public static TexturePart makeIntroTouchArrows(Texture texture) {
+    	return new TexturePart(texture, 670, 519, 670+162, 519+75);
+    }
+    
+    public static TexturePart makeIntroLeftArrow(Texture texture) {
+    	return new TexturePart(texture, 849, 519, 849+45, 519+43);
+    }
+    
+    public static TexturePart makeIntroUpArrow(Texture texture) {
+    	return new TexturePart(texture, 917, 519, 917+32, 519+42);
+    }
+    
+    public static TexturePart makeIntroRightArrow(Texture texture) {
+    	return new TexturePart(texture, 963, 519, 963+41, 519+45);
+    }
+    
 }
