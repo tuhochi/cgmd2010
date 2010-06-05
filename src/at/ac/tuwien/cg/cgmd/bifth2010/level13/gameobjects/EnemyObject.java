@@ -22,8 +22,8 @@ public abstract class EnemyObject extends GameObject {
 	/** movement2 of object */
 	protected Vector2 movement2;
 
-	/** movement speed of object */
-	private static final float SPEED = 1.0f;
+	/** movement speed of enemies */
+	private static final float SPEED = 2.0f;
 
 	/** possible movement-directions of object */
 	private static final Vector2[] directionVectorArray = {
