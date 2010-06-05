@@ -17,15 +17,16 @@ public class Player {
 	public boolean doMoveLeft = false;
 		
 	protected float[] playerPos = {2, 0};
-	protected float[] lastPlayerPos = {2, 0};
+	//protected float[] lastPlayerPos = {2, 0};
 	protected float[] a = {0, 0};
 	protected float[] v = {0, 0};
-	protected float frictionFactor = 0.0005f;
+	protected float[] deltaPos = {0, 0};
+	protected float frictionFactor = 0.001f;
 	protected float breakForce = 10.0f;
 	
-	protected float moveForce = 500.0f;
-	protected float jumpSpeed = 6.0f;
-	protected float gForce = 300.0f;
+	protected float moveForce = 300.0f;
+	protected float jumpSpeed = 7.0f;
+	protected float gForce = 1000.0f;
 	protected float bounceFactor = 0.5f;
 	protected float bounceArea = 1.4f;
 	
@@ -65,13 +66,13 @@ public class Player {
 		collisionThreshold[COL_TOP] = 0.0f;
 		
 		playerPos[0] = 2.0f;
-		playerPos[1] = 0.0f;
+		playerPos[1] = 5.0f;
 		
 		lastPos[0] = playerPos[0];
 		lastPos[1] = playerPos[1];
 		
-		lastPlayerPos[0] = playerPos[0];
-		lastPlayerPos[1] = playerPos[1];
+		/*lastPlayerPos[0] = playerPos[0];
+		lastPlayerPos[1] = playerPos[1];*/
 		
 		jumpMode = JUMP_IDLE;
 	}
@@ -87,15 +88,15 @@ public class Player {
 		//Check for coinChange
 		checkCoinChange(dt);
 		
-		float[] deltaPos = {playerPos[0] - lastPlayerPos[0], playerPos[1] - lastPlayerPos[1]};
+		// = {playerPos[0] - lastPlayerPos[0], playerPos[1] - lastPlayerPos[1]};
 		float distance = (float) Math.sqrt(deltaPos[0]*deltaPos[0] + deltaPos[1]*deltaPos[1]);
 		
-		int nbSteps = (int) Math.max(Math.ceil(distance), 1.0f);
+		int nbSteps = (int) (10.0f*Math.min(100.0f, Math.max(Math.ceil(distance), 1.0f)));
 		
-		//float realDt = dt;
+		float realDt = dt;
 		dt /=nbSteps;
 		
-		//Log.d("Player", "realDt = "+realDt+" nbSteps = "+nbSteps+" newDt = "+dt + " distance = "+distance);
+		Log.d("Player", "realDt = "+realDt+" nbSteps = "+nbSteps+" newDt = "+dt + " distance = "+distance);
 		for(int i=0;i<nbSteps;i++) {	
 			if (doMoveLeft) {
 				a[0] = -moveForce*dt;
@@ -127,13 +128,18 @@ public class Player {
 			v[0] -= Math.signum(v[0])*frictionFactor*v[0]*v[0]*dt;
 			v[1] -= Math.signum(v[1])*frictionFactor*v[1]*v[1]*dt;
 			
-			if(!(doMoveLeft || doMoveRight) && jumpMode == JUMP_IDLE) 
+			if(!((doMoveLeft && v[0]<0) || (doMoveRight && v[0]>0))) 
 			{
-				v[0] -= v[0]*Math.min(1.0f, breakForce*dt);
+				if(!(jumpMode==JUMP_FLYING && !doMoveLeft && !doMoveRight)) {
+					v[0] -= v[0]*Math.min(1.0f, breakForce*dt);
+				}
 			}
-				
-			playerPos[0] += v[0]*dt;
-			playerPos[1] += v[1]*dt;
+			
+			deltaPos[0] = v[0]*dt;
+			deltaPos[1] = v[1]*dt;
+			
+			playerPos[0] += deltaPos[0];
+			playerPos[1] += deltaPos[1];
 			
 			//Performs collision detection and flips signs of v if necessary
 			doCollisionDetection(dt);
@@ -164,7 +170,7 @@ public class Player {
 				collisionThreshold[COL_BOTTOM] = Math.min(collisionThreshold[COL_BOTTOM], (float) Math.floor(playerPos[1]) + 0.5f);
 				if(v[1]>0) {
 					playerPos[1] = collisionThreshold[COL_BOTTOM];
-					v[1] *= -bounceFactor;
+					//v[1] *= -bounceFactor;
 					jumpMode = JUMP_IDLE;
 					break;
 				}
