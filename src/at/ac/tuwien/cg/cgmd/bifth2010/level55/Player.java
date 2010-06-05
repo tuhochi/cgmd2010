@@ -23,11 +23,11 @@ public class Player {
 	protected float frictionFactor = 0.0005f;
 	protected float breakForce = 10.0f;
 	
-	protected float moveForce = 300.0f;
-	protected float jumpSpeed = 7.0f;
+	protected float moveForce = 500.0f;
+	protected float jumpSpeed = 6.0f;
 	protected float gForce = 300.0f;
 	protected float bounceFactor = 0.5f;
-	protected float bounceArea = 0.4f;
+	protected float bounceArea = 1.4f;
 	
 	protected final int COL_BOTTOM = 0;
 	protected final int COL_TOP = 1;
@@ -35,6 +35,10 @@ public class Player {
 	protected final int COL_RIGHT = 3;
 	//protected boolean[][] collision = new boolean[2][4];
 	protected float[] collisionThreshold = new float[4];
+	
+	protected final int JUMP_IDLE = 0;
+	protected final int JUMP_FLYING = 1;
+	protected int jumpMode = JUMP_IDLE;
 	
 	
 	protected boolean canJump = false;
@@ -69,6 +73,7 @@ public class Player {
 		lastPlayerPos[0] = playerPos[0];
 		lastPlayerPos[1] = playerPos[1];
 		
+		jumpMode = JUMP_IDLE;
 	}
 	
 	public void draw(GL10 gl) {
@@ -87,7 +92,7 @@ public class Player {
 		
 		int nbSteps = (int) Math.max(Math.ceil(distance), 1.0f);
 		
-		float realDt = dt;
+		//float realDt = dt;
 		dt /=nbSteps;
 		
 		//Log.d("Player", "realDt = "+realDt+" nbSteps = "+nbSteps+" newDt = "+dt + " distance = "+distance);
@@ -99,7 +104,7 @@ public class Player {
 				a[0] = moveForce*dt;
 			}
 			
-			if (doJump && canJump) {
+			if (doJump && canJump && jumpMode == JUMP_IDLE) {
 				
 				//level.changeCoinState(2, 4);
 				
@@ -107,6 +112,7 @@ public class Player {
 				v[1] = -jumpSpeed;
 				doJump=false;
 				canJump = false;
+				jumpMode = JUMP_FLYING;
 			}
 			
 			//Add gravity
@@ -118,10 +124,10 @@ public class Player {
 			v[0] += a[0]*dt;
 			v[1] += a[1]*dt;
 			
-			v[0] -= Math.signum(v[0])*frictionFactor*v[0]*v[0];
-			v[1] -= Math.signum(v[1])*frictionFactor*v[1]*v[1];
+			v[0] -= Math.signum(v[0])*frictionFactor*v[0]*v[0]*dt;
+			v[1] -= Math.signum(v[1])*frictionFactor*v[1]*v[1]*dt;
 			
-			if(!(doMoveLeft || doMoveRight) && canJump) 
+			if(!(doMoveLeft || doMoveRight) && jumpMode == JUMP_IDLE) 
 			{
 				v[0] -= v[0]*Math.min(1.0f, breakForce*dt);
 			}
@@ -159,6 +165,8 @@ public class Player {
 				if(v[1]>0) {
 					playerPos[1] = collisionThreshold[COL_BOTTOM];
 					v[1] *= -bounceFactor;
+					jumpMode = JUMP_IDLE;
+					break;
 				}
 			} else {
 				collisionThreshold[COL_BOTTOM] = 10000.0f;
@@ -187,6 +195,7 @@ public class Player {
 				if(v[1]<0) {
 					playerPos[1] = collisionThreshold[COL_TOP];
 					v[1] *= -bounceFactor;
+					break;
 				}
 			} else {
 				collisionThreshold[COL_TOP] = 0.0f;
@@ -208,6 +217,7 @@ public class Player {
 				if(v[0]<0) {
 					playerPos[0] = collisionThreshold[COL_LEFT];
 					v[0] *= -bounceFactor;
+					break;
 				}
 			} else {
 				collisionThreshold[COL_LEFT] = 0.0f;
@@ -229,6 +239,7 @@ public class Player {
 				if(v[0]>0) {
 					playerPos[0] = collisionThreshold[COL_RIGHT];
 					v[0] *= -bounceFactor;
+					break;
 				}
 			} else {
 				collisionThreshold[COL_RIGHT] = 100000.0f;
