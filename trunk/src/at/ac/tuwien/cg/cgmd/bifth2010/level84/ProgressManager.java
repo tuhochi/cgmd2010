@@ -25,6 +25,11 @@ public class ProgressManager extends SessionState {
 		return remainingValue;
 	}
 	
+	public int getStartValue()
+	{
+		return totalValue;
+	}
+	
 	/**
 	 * define how much money is lost dependent on the draintype
 	 * @param drainType

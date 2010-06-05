@@ -18,7 +18,6 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 public class RenderManager implements Renderer {
 
@@ -35,7 +34,6 @@ public class RenderManager implements Renderer {
 	
 	private int fps = 0;
 	private ProgressManager progman;
-	private SoundManager soundman;
 	private Toast toast;
 	
 	/** Handler for FPS timer */
@@ -64,10 +62,11 @@ public class RenderManager implements Renderer {
 		this.gems = gems;
 		this.accelerometer = accelerometer;
 		this.progman = progman;
-		this.soundman = soundManager;
 		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
+		
+		
 		
 		//start playing background sounds
 
@@ -134,9 +133,8 @@ public class RenderManager implements Renderer {
 	{
 		if (streetPos < ((-street.width / 2) + 8f))
 		{
-			//TODO: maybe show a result before kicking the player out of the activity
 			toast.show();
-			progman.setProgress(50);
+			//progman.setProgress(50);
 			this.activity.finish();
 		}
 	}
