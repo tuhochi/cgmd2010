@@ -139,9 +139,9 @@ public class Background implements SceneEntity
 	public void update(float dt)
 	{
 		if(!repeat)
-			positionY -= dt*scrollSpeed;
+			positionY -= dt*Settings.BALLOON_SPEED/4.0f;
 		else
-			positionY -= dt*scrollSpeed/(RenderView.instance.getTopBounds()*2);
+			positionY -= (dt*Settings.BALLOON_SPEED/4.0f)/(RenderView.instance.getTopBounds()*2);
 //		if(positionY <= renderView.getTopBounds()*-1)
 //		{
 //			positionY += renderView.getTopBounds(); 

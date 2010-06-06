@@ -1,13 +1,25 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
+import static android.opengl.GLES10.*;
+import static android.opengl.GLES10.glDrawArrays;
+import static android.opengl.GLES10.glTexCoordPointer;
+import static android.opengl.GLES10.glVertexPointer;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.FloatBuffer;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBuffer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.TexturePart;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.BurnTimer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.PermaBoostTimer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ProgressVisibilityHandle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
@@ -47,6 +59,15 @@ public class Hud
 	
 	private ProgressVisibilityHandle progressVisibilityHandle;
 	
+	private TexturePart screenCrackTexture;
+	private FloatBuffer screenCrackVertexBuffer;
+	private int screenCrackVboId;
+
+	public boolean renderScreenCrack;
+	public float screenCrackPosX;
+	public float screenCrackPosY;
+	private GeometryManager geometryManager = GeometryManager.instance;;
+	
 	/**
 	 * Instantiates a new hud, including the buttons and the timer for boost operation.
 	 */
@@ -54,6 +75,7 @@ public class Hud
 	{
 		init();
 		boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
+		MainChar.instance.audioIdBoostSound = boostAudioId;
 		burnTimer = new BurnTimer(boostAudioId);
 		goldTimer = new PermaBoostTimer();
 		progressVisibilityHandle = new ProgressVisibilityHandle();
@@ -82,6 +104,13 @@ public class Hud
 	public void readFromStream(DataInputStream dis) throws IOException
 	{
 		moneyButton.setActive(dis.readBoolean());
+		goldButton.setActive(dis.readBoolean());
+		renderScreenCrack = dis.readBoolean();
+		if(renderScreenCrack)
+		{
+			screenCrackPosX = dis.readFloat();
+			screenCrackPosY = dis.readFloat();
+		}
 	}
 	
 	/**
@@ -91,6 +120,13 @@ public class Hud
 	public void writeFromStream(DataOutputStream dos) throws IOException
 	{
 		dos.writeBoolean(moneyButton.isActive());
+		dos.writeBoolean(goldButton.isActive());
+		dos.writeBoolean(renderScreenCrack);
+		if(renderScreenCrack)
+		{
+			dos.writeFloat(screenCrackPosX);
+			dos.writeFloat(screenCrackPosY);
+		}
 		wasRestored=true;
 	}
 	
@@ -127,21 +163,30 @@ public class Hud
 	 */
 	public boolean testPressed(float x, float y)
 	{
-		if(goldButton.isPressed(x, y) && goldButton.isActive())
+		if(goldButton.isPressed(x, y))
 		{
-			Settings.BALLOON_SPEED *= Settings.GOLD_BOOST;
-			goldButton.setActive(false);
-			timeUtil.scheduleTimer(goldTimer);
+			if(goldButton.isActive())
+			{
+				Settings.BALLOON_SPEED *= Settings.GOLD_BOOST;
+				goldButton.setActive(false);
+				moneyButton.setActive(false);
+				timeUtil.scheduleTimer(goldTimer);
+				MainChar.instance.playGoldBarAnimation = true;
+			}
 			return true;
 		}
 			
-		if(moneyButton.isPressed(x, y) && moneyButton.isActive())
+		if(moneyButton.isPressed(x, y))
 		{
-			moneyButton.setActive(false);
-			Settings.BALLOON_SPEED *= Settings.BURN_BOOST;
-			timeUtil.scheduleTimer(burnTimer);
-			SoundManager.instance.startPlayer(boostAudioId);
-			LevelActivity.handler.post(progressVisibilityHandle);
+			if(moneyButton.isActive())
+			{
+				goldButton.setActive(false);
+				moneyButton.setActive(false);
+				Settings.BALLOON_SPEED *= Settings.BURN_BOOST;
+				timeUtil.scheduleTimer(burnTimer);
+				LevelActivity.handler.post(progressVisibilityHandle);
+				MainChar.instance.playTimeBoostAnimation = true;
+			}
 			return true;
 		}
 		
@@ -155,6 +200,24 @@ public class Hud
 	{
 		goldButton.render();
 		moneyButton.render();
+		if(renderScreenCrack)
+		{
+			glPushMatrix();
+			glTranslatef(screenCrackPosX, screenCrackPosY, 0);
+			if(!Settings.GLES11Supported) 
+			{			
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0, screenCrackTexture.texCoords);
+				glVertexPointer(3, GL10.GL_FLOAT, 0, screenCrackVertexBuffer);
+				glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+			
+			} 
+			else 
+			{
+				geometryManager.bindVBO(screenCrackVboId);
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+			}
+			glPopMatrix();
+		}
 	}
 	
 	
@@ -165,6 +228,14 @@ public class Hud
 	{
 		moneyButton.preprocess();
 		goldButton.preprocess();
+		screenCrackVertexBuffer = geometryManager.createVertexBufferQuad(MainChar.instance.getWidth(), MainChar.instance.getHeight());
+
+		screenCrackTexture = TextureAtlas.instance.getScreenCrackTextur();
+		
+		if(Settings.GLES11Supported) 
+		{
+			screenCrackVboId = geometryManager.createVBO(screenCrackVertexBuffer, screenCrackTexture.texCoords);
+		}
 	}
 	
 	/**

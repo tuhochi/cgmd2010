@@ -32,7 +32,7 @@ public class Settings
 	public static final long BURN_BOOST_TIME = 2500;
 	
 	/** The Constant GOLD_BOOST_TIME. */
-	public static final long GOLD_BOOST_TIME = 3000;
+	public static final long GOLD_BOOST_TIME = 5000;
 	
 	/** The Constant GOLD_BOOST. */
 	public static final float GOLD_BOOST = 1.2f;

@@ -199,9 +199,9 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         decorationManager = DecorationManager.instance;
         
         balloonHeight=0;   
-
+        mainChar = new MainChar();
         hud = new Hud();
-		mainChar = new MainChar();
+		
 		background = new Background();
 		
 		startAudioId = SoundManager.instance.requestPlayer(R.raw.l23_timerandstart, false);
