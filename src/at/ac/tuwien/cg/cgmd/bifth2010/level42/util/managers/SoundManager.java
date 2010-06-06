@@ -12,7 +12,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.datastructures.Pair;
 
 /**
- * The Class manages audio output
+ * The Class manages audio output.
  *
  * @author Alex Druml
  * @author Lukas Roessler
@@ -20,34 +20,36 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.datastructures.Pair;
 public class SoundManager 
 {
 	
-	/**
-	 * Instance of this Manager
-	 */
+	/** Instance of this Manager. */
 	public static final SoundManager instance = new SoundManager();
 	
-	/**
-	 * The context
-	 */
+	/** The context. */
 	private Context context;
 			
-	/**
-	 * Currently ready MediaPlayers for each resID
-	 */
+	/** Currently ready MediaPlayers for each resID. */
 	private HashMap<Integer, ArrayList<MediaPlayer>> players;
 	
+	/** The available players. */
 	private ArrayList<Pair<MediaPlayer,Integer>> availablePlayers;
 	
+	/** The paused players. */
 	private ArrayList<MediaPlayer> pausedPlayers;
 	
 	/**
-	 * Default Constructor
-	 * @param context
+	 * Default Constructor.
+	 *
 	 */
 	private SoundManager()
 	{
 		
 	}
 	
+	/**
+	 * Prepare player for a given res id
+	 *
+	 * @param resID the res id
+	 * @return the media player
+	 */
 	private synchronized MediaPlayer preparePlayer(int resID)
 	{
 		LogManager.i("Preparing player for " + resID);
@@ -132,6 +134,12 @@ public class SoundManager
 		return myPlayer;
 	}
 	
+	/**
+	 * Play sound.
+	 *
+	 * @param resID the res id
+	 * @return the media player
+	 */
 	public synchronized MediaPlayer playSound(int resID)
 	{
 		if(!LevelActivity.SOUND_ENABLED)
@@ -167,6 +175,11 @@ public class SoundManager
 		return myPlayer;
 	}
 	
+	/**
+	 * On create.
+	 *
+	 * @param context the context
+	 */
 	public synchronized void onCreate(Context context)
 	{
 		this.context = context;
@@ -186,6 +199,9 @@ public class SoundManager
 		}
 	}
 	
+	/**
+	 * On resume.
+	 */
 	public synchronized void onResume()
 	{
 		ArrayList<MediaPlayer> pausedPlayers = this.pausedPlayers;
@@ -195,6 +211,9 @@ public class SoundManager
 			pausedPlayers.get(i).start();
 	}
 	
+	/**
+	 * On pause.
+	 */
 	public synchronized void onPause()
 	{
 		ArrayList<Pair<MediaPlayer, Integer>> availablePlayers = this.availablePlayers;
@@ -213,6 +232,9 @@ public class SoundManager
 		}
 	}
 	
+	/**
+	 * On destroy.
+	 */
 	public synchronized void onDestroy()
 	{
 		ArrayList<Pair<MediaPlayer, Integer>> availablePlayers = this.availablePlayers;

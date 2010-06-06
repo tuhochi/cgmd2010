@@ -71,7 +71,6 @@ public class OGLManager
 	/** The unprojected pos vec. */
 	private Vector3 unprojectedPosVec;
 
-	
 	/**
 	 * Instantiates a new OGL manager.
 	 */

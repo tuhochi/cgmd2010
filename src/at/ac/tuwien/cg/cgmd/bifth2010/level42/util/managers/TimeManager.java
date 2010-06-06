@@ -10,7 +10,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
  */
 public class TimeManager
 {
-	
 	/** The time of the last frame. */
 	long t;
 	
