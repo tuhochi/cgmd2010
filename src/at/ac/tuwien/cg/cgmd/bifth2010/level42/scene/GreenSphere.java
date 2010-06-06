@@ -10,8 +10,18 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 
+/**
+ * The Class GreenSphere, represents a green sphere (for bounding sphere visualization).
+ *
+ * @author Alex Druml
+ * @author Lukas Roessler
+ */
 public class GreenSphere extends Model
 {
+	
+	/**
+	 * Instantiates a new green sphere.
+	 */
 	public GreenSphere()
 	{
 		super();
