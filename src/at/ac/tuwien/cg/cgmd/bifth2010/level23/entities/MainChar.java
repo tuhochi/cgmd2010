@@ -57,10 +57,7 @@ public class MainChar implements SceneEntity {
 	
 	/** The unique vertex buffer id. */
 	private int vboId; 
-	
-	/** The vertex buffer time boost animation. */
-	private FloatBuffer timeBoostvertexBuffer;
-	
+		
 	/** The texturePart for the time boost animation. */
 	private TexturePart timeBoostTexture;
 	
