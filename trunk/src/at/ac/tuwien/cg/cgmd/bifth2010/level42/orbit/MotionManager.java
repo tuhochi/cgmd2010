@@ -20,6 +20,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
  */
 public class MotionManager {
 	
+	/** The list containing the movable obj. with motions */
 	private final ArrayList<Movable> list;
 	
 	/** Manager Singleton */
