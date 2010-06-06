@@ -17,7 +17,6 @@ public class Player {
 	public boolean doMoveLeft = false;
 		
 	protected float[] playerPos = {2, 0};
-	//protected float[] lastPlayerPos = {2, 0};
 	protected float[] a = {0, 0};
 	protected float[] v = {0, 0};
 	protected float[] deltaPos = {0, 0};
@@ -25,16 +24,18 @@ public class Player {
 	protected float breakForce = 10.0f;
 	
 	protected float moveForce = 300.0f;
-	protected float jumpSpeed = 7.0f;
+	protected float jumpSpeed = 11.0f;
 	protected float gForce = 1000.0f;
 	protected float bounceFactor = 0.5f;
 	protected float bounceArea = 1.4f;
+	
+	protected final float timeStep = 0.016f;
+	protected float restTime = 0.0f;
 	
 	protected final int COL_BOTTOM = 0;
 	protected final int COL_TOP = 1;
 	protected final int COL_LEFT = 2;
 	protected final int COL_RIGHT = 3;
-	//protected boolean[][] collision = new boolean[2][4];
 	protected float[] collisionThreshold = new float[4];
 	
 	protected final int JUMP_IDLE = 0;
@@ -70,10 +71,7 @@ public class Player {
 		
 		lastPos[0] = playerPos[0];
 		lastPos[1] = playerPos[1];
-		
-		/*lastPlayerPos[0] = playerPos[0];
-		lastPlayerPos[1] = playerPos[1];*/
-		
+				
 		jumpMode = JUMP_IDLE;
 	}
 	
@@ -88,28 +86,22 @@ public class Player {
 		//Check for coinChange
 		checkCoinChange(dt);
 		
-		// = {playerPos[0] - lastPlayerPos[0], playerPos[1] - lastPlayerPos[1]};
-		float distance = (float) Math.sqrt(deltaPos[0]*deltaPos[0] + deltaPos[1]*deltaPos[1]);
+		dt += restTime;
+		int nbSteps = (int) Math.floor(dt/timeStep);
 		
-		int nbSteps = (int) (10.0f*Math.min(100.0f, Math.max(Math.ceil(distance), 1.0f)));
+		restTime = dt-nbSteps*timeStep;
 		
-		float realDt = dt;
-		dt /=nbSteps;
+		//Log.d("Player", "dt = "+dt+" nbSteps = "+nbSteps+" restTime = "+restTime);
 		
-		Log.d("Player", "realDt = "+realDt+" nbSteps = "+nbSteps+" newDt = "+dt + " distance = "+distance);
 		for(int i=0;i<nbSteps;i++) {	
 			if (doMoveLeft) {
-				a[0] = -moveForce*dt;
+				a[0] = -moveForce*timeStep;
 			}
 			if (doMoveRight) {
-				a[0] = moveForce*dt;
+				a[0] = moveForce*timeStep;
 			}
 			
 			if (doJump && canJump && jumpMode == JUMP_IDLE) {
-				
-				//level.changeCoinState(2, 4);
-				
-				//a[1] = 0.0f;
 				v[1] = -jumpSpeed;
 				doJump=false;
 				canJump = false;
@@ -117,32 +109,30 @@ public class Player {
 			}
 			
 			//Add gravity
-			//Log.d("player", "canJump = "+canJump);
-	
-			a[1] += gForce*dt;
+			a[1] += gForce*timeStep;
 	
 					
-			v[0] += a[0]*dt;
-			v[1] += a[1]*dt;
+			v[0] += a[0]*timeStep;
+			v[1] += a[1]*timeStep;
 			
-			v[0] -= Math.signum(v[0])*frictionFactor*v[0]*v[0]*dt;
-			v[1] -= Math.signum(v[1])*frictionFactor*v[1]*v[1]*dt;
+			v[0] -= Math.signum(v[0])*frictionFactor*v[0]*v[0]*timeStep;
+			v[1] -= Math.signum(v[1])*frictionFactor*v[1]*v[1]*timeStep;
 			
 			if(!((doMoveLeft && v[0]<0) || (doMoveRight && v[0]>0))) 
 			{
 				if(!(jumpMode==JUMP_FLYING && !doMoveLeft && !doMoveRight)) {
-					v[0] -= v[0]*Math.min(1.0f, breakForce*dt);
+					v[0] -= v[0]*Math.min(1.0f, breakForce*timeStep);
 				}
 			}
 			
-			deltaPos[0] = v[0]*dt;
-			deltaPos[1] = v[1]*dt;
+			deltaPos[0] = v[0]*timeStep;
+			deltaPos[1] = v[1]*timeStep;
 			
 			playerPos[0] += deltaPos[0];
 			playerPos[1] += deltaPos[1];
 			
 			//Performs collision detection and flips signs of v if necessary
-			doCollisionDetection(dt);
+			doCollisionDetection(timeStep);
 					
 			a[0] = 0.0f;
 			a[1] = 0.0f;
@@ -170,7 +160,6 @@ public class Player {
 				collisionThreshold[COL_BOTTOM] = Math.min(collisionThreshold[COL_BOTTOM], (float) Math.floor(playerPos[1]) + 0.5f);
 				if(v[1]>0) {
 					playerPos[1] = collisionThreshold[COL_BOTTOM];
-					//v[1] *= -bounceFactor;
 					jumpMode = JUMP_IDLE;
 					break;
 				}
