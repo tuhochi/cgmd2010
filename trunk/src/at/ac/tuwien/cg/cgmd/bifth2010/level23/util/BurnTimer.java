@@ -1,7 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
+import java.io.Serializable;
+
 import android.widget.ProgressBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Hud;
 
 /**
@@ -13,9 +16,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Hud;
  */
 public class BurnTimer extends TimingTask 
 {
-	class ProgressHandle implements Runnable{
+	class ProgressHandle implements Runnable,Serializable{
 		  
-    	@Override
+    	/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
         public void run() {
             LevelActivity.instance.boostProgress.setProgress(((int)(remainingTime*100/time)));
         }
@@ -51,11 +59,13 @@ public class BurnTimer extends TimingTask
 	@Override
 	public void run() {
 		Settings.BALLOON_SPEED /= Settings.BURN_BOOST;
+		Hud.instance.setGoldButtonActive(true);
 		Hud.instance.setMoneyButtonActive(true);
 		isDead = true;
 		remainingTime = time;
 		SoundManager.instance.pausePlayer(audioPlayerId);
 		LevelActivity.handler.post(progressVisibilityHandle);
+		MainChar.instance.playTimeBoostAnimation=false;
 	}
 
 	/* (non-Javadoc)

@@ -18,8 +18,10 @@ public class PermaBoostTimer extends TimingTask {
 	public void run() 
 	{
 		Hud.instance.setGoldButtonActive(true);
+		Hud.instance.setMoneyButtonActive(true);
 		isDead = true;
 		remainingTime = time;	
+		Hud.instance.renderScreenCrack = false;
 	}
 
 	@Override

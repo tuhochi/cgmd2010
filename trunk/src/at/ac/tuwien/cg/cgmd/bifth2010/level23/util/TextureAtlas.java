@@ -102,7 +102,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getMainCharTextur()
 	{
-		return generateTexturePart(new Vector2(512,0), new Vector2(512+128,256));
+		return generateTexturePart(new Vector2(896,256), new Vector2(896+128,256+256));
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getCowTextur()
 	{
-		return generateTexturePart(new Vector2(256,256), new Vector2(256+256,256+192));
+		return generateTexturePart(new Vector2(0,512), new Vector2(0+256,512+192));
 	}
 	
 	/**
@@ -183,7 +183,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getChuckTextur()
 	{
-		return generateTexturePart(new Vector2(256+0.5f,0), new Vector2(256+128,256));
+		return generateTexturePart(new Vector2(128 + 0.5f,704), new Vector2(128+128,704+256));
 	}
 	
 	/**
@@ -192,7 +192,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getLokusTextur()
 	{
-		return generateTexturePart(new Vector2(384,0), new Vector2(384+128,256));
+		return generateTexturePart(new Vector2(0,704), new Vector2(0+128,704+256));
 	}
 	
 	/**
@@ -202,5 +202,32 @@ public class TextureAtlas
 	public TexturePart getElkTextur()
 	{
 		return generateTexturePart(new Vector2(768,256), new Vector2(798+96,256+128));
+	}
+	
+	/**
+	 * Returns the part of the texture for the boost animation (first frame)
+	 * @return the texture part for the boost animation (first frame)
+	 */
+	public TexturePart getBoostAnimationTextur()
+	{
+		return generateTexturePart(new Vector2(512,0), new Vector2(512+128,0+256));
+	}
+	
+	/**
+	 * Returns the part of the texture for the goldbar animation (first frame)
+	 * @return the texture part for the goldbar animation (first frame)
+	 */
+	public TexturePart getGoldBarAnimationTextur()
+	{
+		return generateTexturePart(new Vector2(256,0), new Vector2(256+128,0+256));
+	}
+	
+	/**
+	 * Returns the part of the texture for the screen crack
+	 * @return the texture part for the screen crack
+	 */
+	public TexturePart getScreenCrackTextur()
+	{
+		return generateTexturePart(new Vector2(896,768), new Vector2(896+128,768+256));
 	}
 }

@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Hud;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
@@ -26,6 +27,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Vector2;
  */
 
 public class MainChar implements SceneEntity {
+	
+	/** Table that contains the texture shifts for animation in *width or *height. */
+	private final float[][] animationTable = {{0,0},{0,1},{0,2},{0,3},
+											{1,0},{1,1},{1,2},{1,3}};
+	
+	public static MainChar instance;
 	
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -8661277209785862751L;
@@ -50,6 +57,15 @@ public class MainChar implements SceneEntity {
 	
 	/** The unique vertex buffer id. */
 	private int vboId; 
+	
+	/** The vertex buffer time boost animation. */
+	private FloatBuffer timeBoostvertexBuffer;
+	
+	/** The texturePart for the time boost animation. */
+	private TexturePart timeBoostTexture;
+	
+	/** The unique vertex buffer id for time boost animation. */
+	private int timeBoostVboId; 
 	
 	/** The texture id. */
 	public int textureID = -1;
@@ -93,6 +109,22 @@ public class MainChar implements SceneEntity {
 	/** GeometryManager creating vertexbuffers */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
+	private float animationTime;
+	private int animationFrame;
+	
+	public boolean playTimeBoostAnimation = false;
+	public boolean playGoldBarAnimation = false;
+
+	private TexturePart goldBoostTexture;
+
+	private int goldBarVboId;
+	
+	/** id for the audio for the glass break in the goldbar animation. */
+	private int audioIdGlassBreakSound; 
+	
+	/** id for the audio for the glass break in the boost animation. */
+	public int audioIdBoostSound; 
+	
 	/**
 	 * Default constructor
 	 * Instantiates a new main char.
@@ -108,7 +140,9 @@ public class MainChar implements SceneEntity {
 		
 		position = new Vector2();		
 		position.x = Settings.MAINCHAR_STARTPOSX;
-		position.y = Settings.MAINCHAR_STARTPOSY*RenderView.instance.getAspectRatio();	
+		position.y = Settings.MAINCHAR_STARTPOSY*RenderView.instance.getAspectRatio();
+		
+		instance = this;
 	}
 	
 	/**
@@ -146,6 +180,10 @@ public class MainChar implements SceneEntity {
 				dos.writeFloat(gameOverAngle);
 				dos.writeFloat(gameOverScale);
 			}
+			dos.writeBoolean(playGoldBarAnimation);
+			dos.writeBoolean(playTimeBoostAnimation);
+			dos.writeInt(animationFrame);
+			dos.writeFloat(animationTime);
 			
 		} catch (Exception e) {
 			System.out.println("Error writing to stream in MainChar.java: "+e.getMessage());
@@ -169,6 +207,10 @@ public class MainChar implements SceneEntity {
 				gameOverScale = dis.readFloat();
 			}
 			wasRestored=true;
+			playGoldBarAnimation = dis.readBoolean();
+			playTimeBoostAnimation = dis.readBoolean();
+			animationFrame = dis.readInt();
+			animationTime = dis.readFloat();
 			
 		} catch (Exception e) {
 			System.out.println("Error reading from stream in MainChar.java: "+e.getMessage());
@@ -184,15 +226,20 @@ public class MainChar implements SceneEntity {
 		vertexBuffer = geometryManager.createVertexBufferQuad(width, height);
 
 		texture = TextureAtlas.instance.getMainCharTextur();
+		timeBoostTexture = TextureAtlas.instance.getBoostAnimationTextur();
+		goldBoostTexture = TextureAtlas.instance.getGoldBarAnimationTextur();
 		
 		if(Settings.GLES11Supported) 
 		{
 			vboId = geometryManager.createVBO(vertexBuffer, texture.texCoords);
+			timeBoostVboId = geometryManager.createVBO(vertexBuffer, timeBoostTexture.texCoords);
+			goldBarVboId = geometryManager.createVBO(vertexBuffer, goldBoostTexture.texCoords);
 		}
 		
 		soundPlayed = false; 
 		soundManager = SoundManager.instance; 
-		audioIdGameOverSound = soundManager.requestPlayer(R.raw.l23_crashsound, false);	
+		audioIdGameOverSound = soundManager.requestPlayer(R.raw.l23_crashsound, false);
+		audioIdGlassBreakSound = soundManager.requestPlayer(R.raw.l23_glassbreak, false);
 	}
 	
 
@@ -292,6 +339,14 @@ public class MainChar implements SceneEntity {
 	 */
 	public void update(float dt, int moveDir)
 	{
+		if(playTimeBoostAnimation || playGoldBarAnimation)
+			animationTime+=dt;
+		else
+		{
+			animationTime=0;
+			animationFrame=0;
+		}
+		
 		RenderView renderer = RenderView.instance;
 		float rightBounds = renderer.getRightBounds();
 		
@@ -341,28 +396,111 @@ public class MainChar implements SceneEntity {
 	 */
 	@Override
 	public void render() 
-	{
+	{	
+		if(playTimeBoostAnimation || playGoldBarAnimation)
+		{
+			if(animationTime >= 100)
+			{
+				animationTime -=100;
+				if(animationFrame == 7)
+				{
+					if(playGoldBarAnimation)
+					{
+						Hud hud = Hud.instance;
+						playGoldBarAnimation = false;
+						hud.screenCrackPosX = position.x;
+						hud.screenCrackPosY = position.y;
+						hud.renderScreenCrack = true;
+						soundManager.startPlayer(audioIdGlassBreakSound);
+												
+					}
+					if(playTimeBoostAnimation)
+					{
+						if(!soundManager.isPlaying(audioIdBoostSound))
+						{
+							soundManager.startPlayer(audioIdBoostSound);
+						}
+						animationFrame--;
+					}
+				}
+				else				
+					animationFrame++;
+			}
+			if(playTimeBoostAnimation || playGoldBarAnimation)
+			{
+				glMatrixMode(GL_TEXTURE);
+				glPushMatrix();
+				glTranslatef(texture.dimension.x*animationTable[animationFrame][0], -texture.dimension.y*animationTable[animationFrame][1], 0);	
+				glMatrixMode(GL_MODELVIEW);
+			}
+		}	
+			
 		glPushMatrix();
 		
 		glTranslatef(position.x, position.y, 0);
 		
-		if(!Settings.GLES11Supported) 
-		{			
-			glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
-		
-			glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-			glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-		
-		} 
-		else 
+		if(!playTimeBoostAnimation)
 		{
-			geometryManager.bindVBO(vboId);
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+			if(!playGoldBarAnimation)
+			{
+				if(!Settings.GLES11Supported) 
+				{			
+					glTexCoordPointer(2, GL10.GL_FLOAT, 0, texture.texCoords);
+					glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+					glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+					
+				} 
+				else 
+				{
+					geometryManager.bindVBO(vboId);
+					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+				}
+			}
+			else
+			{
+				if(!Settings.GLES11Supported) 
+				{			
+					glTexCoordPointer(2, GL10.GL_FLOAT, 0, goldBoostTexture.texCoords);
+					glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+					glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+				
+				} 
+				else 
+				{
+					geometryManager.bindVBO(goldBarVboId);
+					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+				}
+				
+
+				glMatrixMode(GL_TEXTURE);
+				glPopMatrix();
+				glMatrixMode(GL_MODELVIEW);
+			}
+		}
+		else
+		{
+			if(!Settings.GLES11Supported) 
+			{			
+				glTexCoordPointer(2, GL10.GL_FLOAT, 0, timeBoostTexture.texCoords);
+				glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+				glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+			
+			} 
+			else 
+			{
+				geometryManager.bindVBO(timeBoostVboId);
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4 vertices
+			}
+			
+
+			glMatrixMode(GL_TEXTURE);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
 		}
 		
 		glPopMatrix();
 	}
-	
+		
 	/**
 	 * Renders the gameover animation
 	 */

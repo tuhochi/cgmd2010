@@ -113,7 +113,7 @@ public class Button
 		{
 			glMatrixMode(GL_TEXTURE);
 			glPushMatrix();
-			glTranslatef(0, -texture.dimension.x, 0);		
+			glTranslatef(0, -texture.dimension.y, 0);		
 		}
 		
 		glMatrixMode(GL_MODELVIEW);
