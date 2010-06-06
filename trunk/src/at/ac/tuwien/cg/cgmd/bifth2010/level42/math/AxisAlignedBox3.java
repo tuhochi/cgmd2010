@@ -8,6 +8,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  */
 public class AxisAlignedBox3
 {
+	
+	/** The min and max. */
 	public final Vector3 min,max;
 	
 	/**
@@ -20,7 +22,7 @@ public class AxisAlignedBox3
 	}
 
 	/**
-	 * Copy Constructor
+	 * Copy Constructor.
 	 *
 	 * @param other the other
 	 */
@@ -53,7 +55,7 @@ public class AxisAlignedBox3
 	}
 	
 	/**
-	 * Resizes the box to include a Vector3
+	 * Resizes the box to include a Vector3.
 	 *
 	 * @param v the Vector3
 	 */
@@ -64,7 +66,7 @@ public class AxisAlignedBox3
 	}
 	
 	/**
-	 * Resizes the box to include box
+	 * Resizes the box to include box.
 	 *
 	 * @param box the box
 	 */
@@ -91,7 +93,7 @@ public class AxisAlignedBox3
 	}
 
 	/**
-	 * Checks if a Box is inside
+	 * Checks if a Box is inside.
 	 *
 	 * @param box the box
 	 * @return true, if box is inside
@@ -107,7 +109,7 @@ public class AxisAlignedBox3
 	}
 	
 	/**
-	 * Sets min to the minimum of min and candidate
+	 * Sets min to the minimum of min and candidate.
 	 *
 	 * @param min will be set to the minimum
 	 * @param candidate the candidate
@@ -123,7 +125,7 @@ public class AxisAlignedBox3
 	}
 
 	/**
-	 * Sets max to the maximum of max and candidate
+	 * Sets max to the maximum of max and candidate.
 	 *
 	 * @param max will be set to the maximum
 	 * @param candidate the candidate
@@ -138,9 +140,22 @@ public class AxisAlignedBox3
 			max.v[2] = candidate.v[2];
 	}
 	
+	/**
+	 * native center.
+	 *
+	 * @param minx the minx
+	 * @param maxx the maxx
+	 * @param miny the miny
+	 * @param maxy the maxy
+	 * @param minz the minz
+	 * @param maxz the maxz
+	 * @return a new Vector3
+	 */
 	private native Vector3 center(float minx, float maxx, float miny, float maxy, float minz, float maxz);
 	
 	/**
+	 * Center.
+	 *
 	 * @return the center of this box
 	 */
 	public Vector3 center()
