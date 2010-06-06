@@ -27,6 +27,7 @@ public class Scene implements Persistable
 	/** The Constant RENDERMODE_VBO. */
 	public static final int RENDERMODE_VBO = 1;
 	
+	/** A bounding Sphere */
 	public static final Model SPHERE = new GreenSphere();
 
 	/** The OpenGL Manager. */
@@ -46,11 +47,11 @@ public class Scene implements Persistable
 
 	/** if this is initialized. */
 	private boolean initialized;
-		
-	/*
-	 * Action stuff
-	 */
+	
+	/** contains all Models that should be untied from their SceneEntities */
 	private final LinkedList<Pair<SceneEntity,Model>> toUntie;
+	
+	/** contains all Models that have already been untied from their SceneEntities, written as their indices (SceneEntity first) */
 	private final LinkedList<Pair<Integer,Integer>> untied;
 	
 	/**
@@ -255,6 +256,11 @@ public class Scene implements Persistable
 		this.hud = hud;
 	}
 	
+	/**
+	 * schedules a Model to be untied from its scene entity
+	 * @param se the scene entity of the model-to-untie
+	 * @param m the model-to-untie
+	 */
 	public void unTie(SceneEntity se, Model m)
 	{
 		synchronized(toUntie)

@@ -26,7 +26,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
  */
 public class SceneEntity implements Movable,Persistable
 {
-	
 	/** The name. */
 	private String name;
 	
@@ -226,20 +225,6 @@ public class SceneEntity implements Movable,Persistable
 		}
 
 		transformation.copy(transformation_temp);
-		
-		/*
-		 * TODO: actually it would be cleaner if the bounding sphere of 
-		 * a SceneEntity would be resized to contain all of this SceneEntities models.
-		 * Currently this is only done during scene loading, but it should be done in every frame.
-		 * 
-		 * But resizing the Sphere would cause troubles because of the parts of the planet that fly away.
-		 * If those would be considered in the bounding sphere calculation, the planets bounding sphere
-		 * would grow -> infinite after the first part flies away.
-		 * 
-		 * Possible Solutions:
-		 * 	1) don't resize the SceneEntities bounding sphere (currently done)
-		 * 	2) mark the flying parts in some way, so that they're not considered when recalculating the bounding sphere.
-		 */
 
 		boundingSphere.setSphereSet(modelBoundingSpheres);
 		modelBoundingSpheres.clear();
@@ -273,6 +258,10 @@ public class SceneEntity implements Movable,Persistable
 		boundingBox.include(model.getBoundingBox());
 	}
 	
+	/**
+	 * Removes a Model from this SceneEntity
+	 * @param model the model to remove
+	 */
 	public void remove(Model model)
 	{
 		models.remove(model);
@@ -343,6 +332,9 @@ public class SceneEntity implements Movable,Persistable
 		return basicOrientation;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable#getCurrentPosition()
+	 */
 	@Override
 	public Vector3 getCurrentPosition() {
 		currentPos.set( transformation.m[12],
@@ -353,7 +345,7 @@ public class SceneEntity implements Movable,Persistable
 	}
 
 	/**
-	 * @return the disabled
+	 * @return true if this is disabled
 	 */
 	public boolean isDisabled()
 	{
@@ -361,7 +353,7 @@ public class SceneEntity implements Movable,Persistable
 	}
 
 	/**
-	 * @param disabled the disabled to set
+	 * @param en/disables this
 	 */
 	public void setDisabled(boolean disabled)
 	{

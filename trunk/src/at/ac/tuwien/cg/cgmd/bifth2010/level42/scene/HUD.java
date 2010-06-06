@@ -13,7 +13,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.MathUtil;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 
 /**
@@ -29,8 +28,6 @@ public class HUD extends Model
 	
 	/** The time manager */
 	final TimeManager timeManager = TimeManager.instance;
-	
-	final SoundManager soundManager = SoundManager.instance;
 	
 	/** The height. */
 	private float width,height;
@@ -49,8 +46,6 @@ public class HUD extends Model
 	
 	/** whether a circle should drawn now */
 	private boolean circleRender;
-	
-//	private MediaPlayer chargePlayer;
 	
 	/**
 	 * Instantiates a new HUD.
