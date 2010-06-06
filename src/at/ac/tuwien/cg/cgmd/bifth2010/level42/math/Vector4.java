@@ -8,6 +8,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  */
 public class Vector4
 {
+	
+	/** The v. */
 	public float[] v = new float[4];
 	
 	/**
@@ -34,7 +36,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Sets the new values
+	 * Sets the new values.
 	 *
 	 * @param x the x
 	 * @param y the y
@@ -62,7 +64,7 @@ public class Vector4
 	}
 	
 	/**
-	 * copy constructor
+	 * copy constructor.
 	 *
 	 * @param other the other Vector4
 	 */
@@ -82,7 +84,7 @@ public class Vector4
 	}
 
 	/**
-	 * Instantiates a new vector4(0,0,0,1)
+	 * Instantiates a new vector4(0,0,0,1).
 	 */
 	public Vector4()
 	{
@@ -99,12 +101,32 @@ public class Vector4
 		this(arr[0],arr[1],arr[2],arr[3]);
 	}
 	
+	/**
+	 * native vector + vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void add(float[] v, float[] otherV);
+	
+	/**
+	 * native vector + vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void add3(float[] v, float[] otherV);
+	
+	/**
+	 * native vector + skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void add(float[] v, float s);
 	
 	/**
-	 * Adds another Vector4 to this
+	 * Adds another Vector4 to this.
 	 *
 	 * @param other the other Vector4
 	 * @return this
@@ -116,7 +138,8 @@ public class Vector4
 	}
 	
 	/**
-	 * Adds a skalar to this
+	 * Adds a skalar to this.
+	 *
 	 * @param s the skalar
 	 * @return this
 	 */
@@ -127,7 +150,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Adds two Vector4
+	 * Adds two Vector4.
 	 *
 	 * @param a the first Vector4
 	 * @param b the second Vector4
@@ -139,7 +162,8 @@ public class Vector4
 	}
 	
 	/**
-	 * Adds a skalar to a Vector4
+	 * Adds a skalar to a Vector4.
+	 *
 	 * @param a the Vector4
 	 * @param s the skalar
 	 * @return a new Vector4, set to a+s
@@ -150,7 +174,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Adds a Vector3 to this
+	 * Adds a Vector3 to this.
 	 *
 	 * @param other a Vector3
 	 * @return this
@@ -162,7 +186,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Adds a Vector4 and a Vector3
+	 * Adds a Vector4 and a Vector3.
 	 *
 	 * @param a the Vector4
 	 * @param b the Vector3
@@ -173,12 +197,32 @@ public class Vector4
 		return new Vector4(a).add(b);
 	}
 	
+	/**
+	 * native vector - vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void subtract(float[] v, float[] otherV);
+	
+	/**
+	 * native vector - vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void subtract3(float[] v, float[] otherV);
+	
+	/**
+	 * native vector - skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void subtract(float[] v, float s);
 	
 	/**
-	 * Subtracts a Vector4 from this
+	 * Subtracts a Vector4 from this.
 	 *
 	 * @param other the other Vector4
 	 * @return this
@@ -190,7 +234,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Subtracts a skalar from this
+	 * Subtracts a skalar from this.
 	 *
 	 * @param s the skalar
 	 * @return this
@@ -202,7 +246,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Subtracts two Vector4
+	 * Subtracts two Vector4.
 	 *
 	 * @param a the first Vector4
 	 * @param b the second Vector4
@@ -214,7 +258,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Subtracts a skalar from a Vector4
+	 * Subtracts a skalar from a Vector4.
 	 *
 	 * @param a the Vector4
 	 * @param s the skalar
@@ -226,7 +270,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Subtracts a Vector3 from this
+	 * Subtracts a Vector3 from this.
 	 *
 	 * @param other the Vector3
 	 * @return this
@@ -238,7 +282,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Subtract a Vector3 from a Vector4
+	 * Subtract a Vector3 from a Vector4.
 	 *
 	 * @param a the Vector4
 	 * @param b the Vector3
@@ -249,12 +293,32 @@ public class Vector4
 		return new Vector4(a).subtract(b);
 	}
 	
+	/**
+	 * native vector * vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void multiply(float[] v, float[] otherV);
+	
+	/**
+	 * native vector * vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void multiply3(float[] v, float[] otherV);
+	
+	/**
+	 * native vector * skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void multiply(float[] v, float s);
 	
 	/**
-	 * Multiply this with a Vector4
+	 * Multiply this with a Vector4.
 	 *
 	 * @param other the other Vector4
 	 * @return this
@@ -266,7 +330,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Multiply this with a factor
+	 * Multiply this with a factor.
 	 *
 	 * @param s the factor
 	 * @return this
@@ -278,7 +342,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Multiply two Vector4
+	 * Multiply two Vector4.
 	 *
 	 * @param a the first Vector4
 	 * @param b the second Vector4
@@ -290,8 +354,8 @@ public class Vector4
 	}
 	
 	/**
-	 * Multiply a Vector4 with a skalar
-	 * 
+	 * Multiply a Vector4 with a skalar.
+	 *
 	 * @param a the first Vector4
 	 * @param s the skalar
 	 * @return a new Vector4, set to a*s
@@ -302,7 +366,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Multiply this with a Vector3
+	 * Multiply this with a Vector3.
 	 *
 	 * @param other the Vector3
 	 * @return this
@@ -314,7 +378,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Multiply a Vector4 and a Vector3
+	 * Multiply a Vector4 and a Vector3.
 	 *
 	 * @param a the Vector4
 	 * @param b the Vector3
@@ -325,12 +389,32 @@ public class Vector4
 		return new Vector4(a).multiply(b);
 	}
 
+	/**
+	 * native vector / vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void divide(float[] v, float[] otherV);
+	
+	/**
+	 * native vector / vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void divide3(float[] v, float[] otherV);
+	
+	/**
+	 * native vector / skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void divide(float[] v, float s);
 	
 	/**
-	 * Divide this by another Vector4
+	 * Divide this by another Vector4.
 	 *
 	 * @param other the other Vector4
 	 * @return this
@@ -342,7 +426,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Divide this by a factor
+	 * Divide this by a factor.
 	 *
 	 * @param s the the factor
 	 * @return this
@@ -354,7 +438,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Divide two Vector4
+	 * Divide two Vector4.
 	 *
 	 * @param a the first Vector4
 	 * @param b the second Vector4
@@ -366,7 +450,8 @@ public class Vector4
 	}
 	
 	/**
-	 * Divide a Vector4 by a skalar
+	 * Divide a Vector4 by a skalar.
+	 *
 	 * @param a the Vector4
 	 * @param s the skalar
 	 * @return a new Vector4, set to a/s
@@ -377,7 +462,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Divide this by a Vector3
+	 * Divide this by a Vector3.
 	 *
 	 * @param other the Vector3
 	 * @return this
@@ -389,7 +474,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Divide a Vector4 by a Vector3
+	 * Divide a Vector4 by a Vector3.
 	 *
 	 * @param a the Vector4
 	 * @param b the Vector3
@@ -400,10 +485,17 @@ public class Vector4
 		return new Vector4(a).divide(b);
 	}
 	
+	/**
+	 * native dot product.
+	 *
+	 * @param a the first vector
+	 * @param b the second vector
+	 * @return the dot product
+	 */
 	private static native float dotProduct(float[] a, float[] b);
 	
 	/**
-	 * Calculates the dot product of two Vector3
+	 * Calculates the dot product of two Vector3.
 	 *
 	 * @param a the first Vector4
 	 * @param b the second Vector4
@@ -414,10 +506,15 @@ public class Vector4
 		return dotProduct(a.v, b.v);
 	}
 	
+	/**
+	 * native normalize.
+	 *
+	 * @param v the vector
+	 */
 	private native void normalize(float[] v);
 	
 	/**
-	 * Normalizes this
+	 * Normalizes this.
 	 *
 	 * @return this
 	 */
@@ -428,7 +525,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Normalizes a Vector4
+	 * Normalizes a Vector4.
 	 *
 	 * @param a the Vector4
 	 * @return a new Vector4, set to a, normalized.
@@ -438,10 +535,15 @@ public class Vector4
 		return new Vector4(a).normalize();
 	}
 	
+	/**
+	 * native homogenize.
+	 *
+	 * @param v the vector
+	 */
 	private native void homogenize(float[] v);
 	
 	/**
-	 * Homogenizes this
+	 * Homogenizes this.
 	 *
 	 * @return this
 	 */
@@ -452,7 +554,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Homogenizes a Vector4
+	 * Homogenizes a Vector4.
 	 *
 	 * @param a the Vector4
 	 * @return a new Vector4, set to a, homogenized.
@@ -462,10 +564,15 @@ public class Vector4
 		return new Vector4(a).homogenize();
 	}
 
+	/**
+	 * native invert
+	 *
+	 * @param v the vector
+	 */
 	private native void invert(float[] v);
 	
 	/**
-	 * Inverts this
+	 * Inverts this.
 	 *
 	 * @return this
 	 */
@@ -475,9 +582,17 @@ public class Vector4
 		return this;
 	}
 	
+	/**
+	 * native length.
+	 *
+	 * @param v the vector
+	 * @return the length
+	 */
 	private native float length(float[] v);
 	
 	/**
+	 * Length.
+	 *
 	 * @return the length of this
 	 */
 	public float length()

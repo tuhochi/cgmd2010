@@ -14,6 +14,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
  */
 public class Vector3 implements Persistable
 {
+	
+	/** The v. */
 	public float[] v = new float[3];
 	
 	/**
@@ -57,11 +59,12 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Sets the new values
+	 * Sets the new values.
 	 *
 	 * @param x the x
 	 * @param y the y
 	 * @param z the z
+	 * @return the vector3
 	 */
 	public Vector3 set(float x, float y, float z)
 	{
@@ -72,9 +75,10 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Sets the new values
+	 * Sets the new values.
 	 *
 	 * @param other contains the values to set
+	 * @return the vector3
 	 */
 	public Vector3 set(Vector3 other)
 	{
@@ -82,7 +86,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * copy constructor
+	 * copy constructor.
 	 *
 	 * @param other the other Vector3
 	 */
@@ -92,7 +96,7 @@ public class Vector3 implements Persistable
 	}
 
 	/**
-	 * Instantiates a new vector3(0,0,0)
+	 * Instantiates a new vector3(0,0,0).
 	 */
 	public Vector3()
 	{
@@ -109,11 +113,24 @@ public class Vector3 implements Persistable
 		this(arr[0],arr[1],arr[2]);
 	}
 	
+	/**
+	 * native vector + vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void add(float[] v, float[] otherV);
+	
+	/**
+	 * native vector + skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void add(float[] v, float s);
 	
 	/**
-	 * Adds another Vector3 to this
+	 * Adds another Vector3 to this.
 	 *
 	 * @param other the Vector3 to add
 	 * @return this
@@ -125,7 +142,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Adds a skalar to this
+	 * Adds a skalar to this.
 	 *
 	 * @param s the skalar to add
 	 * @return this
@@ -137,7 +154,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Adds two Vector3
+	 * Adds two Vector3.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -149,7 +166,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Adds a skalar to a Vector3
+	 * Adds a skalar to a Vector3.
 	 *
 	 * @param a the first Vector3
 	 * @param s the skalar
@@ -160,14 +177,27 @@ public class Vector3 implements Persistable
 		return new Vector3(a).add(s);
 	}
 	
+	/**
+	 * native vector - vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void subtract(float[] v, float[] otherV);
+	
+	/**
+	 * native vector - skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the s
+	 */
 	private native void subtract(float[] v, float s);
 	
 	/**
-	 * Subtracts a Vector3 from this
+	 * native vector - skalar.
 	 *
-	 * @param other the Vector3 to subtract
-	 * @return this
+	 * @param other the other
+	 * @return the vector3
 	 */
 	public Vector3 subtract(Vector3 other)
 	{
@@ -176,9 +206,9 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Subtracts a skalar from this
+	 * Subtracts a skalar from this.
 	 *
-	 * @param other the skalar to subtract
+	 * @param s the s
 	 * @return this
 	 */
 	public Vector3 subtract(float s)
@@ -188,7 +218,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Subtract a Vector3 from another
+	 * Subtract a Vector3 from another.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -200,7 +230,8 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Subtract a skalar from a Vector3
+	 * Subtract a skalar from a Vector3.
+	 *
 	 * @param a the Vector3
 	 * @param s the skalar
 	 * @return a new Vector3, set to a-s
@@ -210,11 +241,24 @@ public class Vector3 implements Persistable
 		return new Vector3(a).subtract(s);
 	}
 	
+	/**
+	 * native vector + vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void multiply(float[] v, float[] otherV);
+	
+	/**
+	 * native vector + skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void multiply(float[] v, float s);
 	
 	/**
-	 * Multiply this with another Vector3
+	 * Multiply this with another Vector3.
 	 *
 	 * @param other the Vector3 to multiply
 	 * @return this
@@ -226,7 +270,7 @@ public class Vector3 implements Persistable
 	}
 
 	/**
-	 * Multiplies this with a factor
+	 * Multiplies this with a factor.
 	 *
 	 * @param s the factor
 	 * @return this
@@ -238,7 +282,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Multiplies two Vector3
+	 * Multiplies two Vector3.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -250,7 +294,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Multiplies a Vector3 with a factor
+	 * Multiplies a Vector3 with a factor.
 	 *
 	 * @param a the Vector3
 	 * @param b the factor
@@ -261,11 +305,24 @@ public class Vector3 implements Persistable
 		return new Vector3(a).multiply(b);
 	}
 	
+	/**
+	 * native vector / vector.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void divide(float[] v, float[] otherV);
+	
+	/**
+	 * native vector / skalar.
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s ths skalar
+	 */
 	private native void divide(float[] v, float s);
 	
 	/**
-	 * Divides this by another Vector3
+	 * Divides this by another Vector3.
 	 *
 	 * @param other the Vector3
 	 * @return this
@@ -277,7 +334,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Divides this by a divisor
+	 * Divides this by a divisor.
 	 *
 	 * @param s the divisor
 	 * @return this
@@ -289,7 +346,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Divides two Vector3
+	 * Divides two Vector3.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -301,7 +358,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Divides a Vector3 by a skalar
+	 * Divides a Vector3 by a skalar.
 	 *
 	 * @param a the Vector3
 	 * @param s the skalar
@@ -312,10 +369,17 @@ public class Vector3 implements Persistable
 		return new Vector3(a).divide(s);
 	}
 
+	/**
+	 * native Dot product.
+	 *
+	 * @param a the first vector
+	 * @param b the second vector
+	 * @return the dot product
+	 */
 	private static native float dotProduct(float[] a, float[] b);
 	
 	/**
-	 * Calculates the dot product of two Vector3
+	 * Calculates the dot product of two Vector3.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -326,10 +390,17 @@ public class Vector3 implements Persistable
 		return dotProduct(a.v, b.v);
 	}
 
+	/**
+	 * native cross product.
+	 *
+	 * @param a the first vector
+	 * @param b the second vector
+	 * @param result the result
+	 */
 	private static native void crossProduct(float[] a, float[] b, float[] result);
 	
 	/**
-	 * Calculates the cross product of two Vector3 and writes it back into a parameter
+	 * Calculates the cross product of two Vector3 and writes it back into a parameter.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -341,7 +412,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Calculates the cross product of two Vector3
+	 * Calculates the cross product of two Vector3.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -354,10 +425,15 @@ public class Vector3 implements Persistable
 		return result;
 	}
 
+	/**
+	 * native normalize.
+	 *
+	 * @param v the vector
+	 */
 	private native void normalize(float[] v);
 	
 	/**
-	 * Normalizes this
+	 * Normalizes this.
 	 *
 	 * @return this
 	 */
@@ -368,7 +444,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Normalizes a Vector3
+	 * Normalizes a Vector3.
 	 *
 	 * @param a the Vector3
 	 * @return a new Vector3, set to a, normalized
@@ -378,10 +454,17 @@ public class Vector3 implements Persistable
 		return new Vector3(a).normalize();
 	}
 	
+	/**
+	 * native gets the angle between two vectors
+	 *
+	 * @param a the first vector
+	 * @param b the second vector
+	 * @return the angle
+	 */
 	private native float getAngle(float[] a, float[] b);
 	
 	/**
-	 * Gets the angle between this and another Vector3
+	 * Gets the angle between this and another Vector3.
 	 *
 	 * @param other the second Vector3
 	 * @return the angle between this and other
@@ -392,7 +475,7 @@ public class Vector3 implements Persistable
 	}
 	
 	/**
-	 * Gets the angle between two Vector3
+	 * Gets the angle between two Vector3.
 	 *
 	 * @param a the first Vector3
 	 * @param b the second Vector3
@@ -403,10 +486,15 @@ public class Vector3 implements Persistable
 		return a.getAngle(b);
 	}
 
+	/**
+	 * native invert
+	 *
+	 * @param v the vector
+	 */
 	private native void invert(float[] v);
 	
 	/**
-	 * Inverts this
+	 * Inverts this.
 	 *
 	 * @return this
 	 */
@@ -416,9 +504,17 @@ public class Vector3 implements Persistable
 		return this;
 	}
 	
+	/**
+	 * native length.
+	 *
+	 * @param v the vector
+	 * @return the length
+	 */
 	private native float length(float[] v);
 	
 	/**
+	 * Length.
+	 *
 	 * @return the length of this
 	 */
 	public float length()

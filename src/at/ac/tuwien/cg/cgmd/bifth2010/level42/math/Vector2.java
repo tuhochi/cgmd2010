@@ -8,6 +8,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
  */
 public class Vector2
 {
+	
+	/** The v. */
 	public float v[] = new float[2];
 	
 	/**
@@ -32,7 +34,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Sets the new values
+	 * Sets the new values.
 	 *
 	 * @param x the x
 	 * @param y the y
@@ -44,7 +46,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Copy Constructor
+	 * Copy Constructor.
 	 *
 	 * @param other the other Vector2
 	 */
@@ -54,7 +56,7 @@ public class Vector2
 	}
 
 	/**
-	 * Instantiates a new vector2(0,0)
+	 * Instantiates a new vector2(0,0).
 	 */
 	public Vector2()
 	{
@@ -71,11 +73,24 @@ public class Vector2
 		this(arr[0],arr[1]);
 	}
 	
+	/**
+	 * native vector + vector
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void add(float[] v, float[] otherV);
+	
+	/**
+	 * native vector + skalar
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void add(float[] v, float s);
 	
 	/**
-	 * Adds the another Vector2 to this
+	 * Adds the another Vector2 to this.
 	 *
 	 * @param other the other Vector2
 	 * @return this
@@ -87,9 +102,9 @@ public class Vector2
 	}
 	
 	/**
-	 * Adds a skalar to this
+	 * Adds a skalar to this.
 	 *
-	 * @param other skalar
+	 * @param s the s
 	 * @return this
 	 */
 	public Vector2 add(float s)
@@ -99,7 +114,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Adds two Vector2
+	 * Adds two Vector2.
 	 *
 	 * @param a the first Vector2
 	 * @param b the second Vector2
@@ -111,7 +126,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Adds a skalar to a Vector2
+	 * Adds a skalar to a Vector2.
 	 *
 	 * @param a the first Vector2
 	 * @param s the skalar
@@ -122,11 +137,24 @@ public class Vector2
 		return new Vector2(a).add(s);
 	}
 	
+	/**
+	 * native vector - vector
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void subtract(float[] v, float[] otherV);
+	
+	/**
+	 * native vector - skalar
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void subtract(float[] v, float s);
 	
 	/**
-	 * Subtracts the another Vector2 from this
+	 * Subtracts the another Vector2 from this.
 	 *
 	 * @param other the other Vector2
 	 * @return this
@@ -138,9 +166,9 @@ public class Vector2
 	}
 	
 	/**
-	 * Subtracts a skalar from this
+	 * Subtracts a skalar from this.
 	 *
-	 * @param other skalar
+	 * @param s the s
 	 * @return this
 	 */
 	public Vector2 subtract(float s)
@@ -150,7 +178,7 @@ public class Vector2
 	}
 	
 	/**
-	 * subtracts two Vector2
+	 * subtracts two Vector2.
 	 *
 	 * @param a the first Vector2
 	 * @param b the second Vector2
@@ -162,7 +190,7 @@ public class Vector2
 	}
 	
 	/**
-	 * subtracts a skalar from a Vector2
+	 * subtracts a skalar from a Vector2.
 	 *
 	 * @param a the first Vector2
 	 * @param s the skalar
@@ -173,11 +201,24 @@ public class Vector2
 		return new Vector2(a).subtract(s);
 	}
 	
+	/**
+	 * native vector * vector
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void multiply(float[] v, float[] otherV);
+	
+	/**
+	 * native vector * skalar
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void multiply(float[] v, float s);
 	
 	/**
-	 * Multiply this by another Vector2
+	 * Multiply this by another Vector2.
 	 *
 	 * @param other the other Vector2
 	 * @return this
@@ -189,7 +230,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Multiplies this by a factor
+	 * Multiplies this by a factor.
 	 *
 	 * @param s the factor
 	 * @return this
@@ -201,7 +242,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Multiplies two Vector2
+	 * Multiplies two Vector2.
 	 *
 	 * @param a the first Vector2
 	 * @param b the second Vector2
@@ -213,7 +254,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Multiply a Vector2 by a factor
+	 * Multiply a Vector2 by a factor.
 	 *
 	 * @param a the Vector2
 	 * @param b the factor
@@ -224,11 +265,24 @@ public class Vector2
 		return new Vector2(a).multiply(b);
 	}
 	
+	/**
+	 * native vector / vector
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param otherV the other vector
+	 */
 	private native void divide(float[] v, float[] otherV);
+	
+	/**
+	 * native vector / skalar
+	 *
+	 * @param v the vector (result written back into this)
+	 * @param s the skalar
+	 */
 	private native void divide(float[] v, float s);
 	
 	/**
-	 * Divides this by another Vector2
+	 * Divides this by another Vector2.
 	 *
 	 * @param other the other Vector2
 	 * @return this
@@ -240,7 +294,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Divides this by a divisor
+	 * Divides this by a divisor.
 	 *
 	 * @param s the divisor
 	 * @return this
@@ -252,7 +306,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Divides two Vector2
+	 * Divides two Vector2.
 	 *
 	 * @param a the first Vector2
 	 * @param b the second Vector2
@@ -264,7 +318,7 @@ public class Vector2
 	}
 
 	/**
-	 * Divides a Vector2 by a factor
+	 * Divides a Vector2 by a factor.
 	 *
 	 * @param a the Vector2
 	 * @param b the factor
@@ -275,10 +329,17 @@ public class Vector2
 		return new Vector2(a).divide(b);
 	}
 	
+	/**
+	 * native dot product.
+	 *
+	 * @param a the first vector
+	 * @param b the second vector
+	 * @return the dot product
+	 */
 	private static native float dotProduct(float[] a, float[] b);
 	
 	/**
-	 * Calculates the dot product of two Vector2
+	 * Calculates the dot product of two Vector2.
 	 *
 	 * @param a the first Vector2
 	 * @param b the second Vector2
@@ -289,10 +350,15 @@ public class Vector2
 		return dotProduct(a.v, b.v);
 	}
 	
+	/**
+	 * native Normalize.
+	 *
+	 * @param v the vector
+	 */
 	private native void normalize(float[] v);
 	
 	/**
-	 * Normalizes this
+	 * Normalizes this.
 	 *
 	 * @return this
 	 */
@@ -303,7 +369,7 @@ public class Vector2
 	}
 	
 	/**
-	 * Normalizes a Vector2
+	 * Normalizes a Vector2.
 	 *
 	 * @param a the Vector2
 	 * @return a new Vector2, set to a, normalized
@@ -313,10 +379,15 @@ public class Vector2
 		return new Vector2(a).normalize();
 	}
 
+	/**
+	 * native Invert.
+	 *
+	 * @param v the vector
+	 */
 	private native void invert(float[] v);
 
 	/**
-	 * Inverts this
+	 * Inverts this.
 	 *
 	 * @return this
 	 */
@@ -326,9 +397,17 @@ public class Vector2
 		return this;
 	}
 
+	/**
+	 * native Length.
+	 *
+	 * @param v the vector
+	 * @return the length
+	 */
 	private native float length(float[] v);
 
 	/**
+	 * Length.
+	 *
 	 * @return the length of this
 	 */
 	public float length()

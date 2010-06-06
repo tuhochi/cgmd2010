@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.math;
 
 import java.util.ArrayList;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Sphere.
  *
@@ -70,6 +69,14 @@ public class Sphere
 		this.radius = other.radius;
 	}
 	
+	/**
+	 * Checks if is point inside.
+	 *
+	 * @param center the center
+	 * @param radius the radius
+	 * @param point the point
+	 * @return true, if point is inside
+	 */
 	private native boolean isPointInside(float[] center, float radius, float[] point);
 	
 	/**
@@ -83,8 +90,13 @@ public class Sphere
 		return isPointInside(center.v, radius, point.v);
 	}
 	
-	/*
+	/**
+	 * Sets the point set.
 	 * uses the centroid as center
+	 * 
+	 * @param vertices the vertices
+	 * @param center the calculated center is written back into this
+	 * @return the calculated radius
 	 */
 	private native float setPointSet(float[] vertices, float[] center);
 	
@@ -106,6 +118,14 @@ public class Sphere
 		radius = setPointSet(verticesFloats, center.v);
 	}
 	
+	/**
+	 * Sets the sphere set.
+	 *
+	 * @param centers the centers
+	 * @param radii the radii
+	 * @param center the calculated center is written back into this
+	 * @return the calculated radius
+	 */
 	private native float setSphereSet(float[] centers, float[] radii, float[] center);
 	
 	/**
