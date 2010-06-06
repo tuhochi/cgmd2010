@@ -82,10 +82,10 @@ public class CollisionManager implements Persistable{
 	 * 	sorted by the distance to the planet center. */
 	public Vector<Model> remainingPlanetParts;
 	
-	/** Singelton */
+	/** Singleton */
 	public static CollisionManager instance = new CollisionManager();
 	
-	/** The comperator for sorting the remainingPlanetParts. */
+	/** The comparator for sorting the remainingPlanetParts. */
 	public static NearestEntityComperator comperator;
 	
 	/** The game manager. */
@@ -562,7 +562,7 @@ public class CollisionManager implements Persistable{
 	
 	
 	/**
-	 * The Class NearestEntityComperator - Comperator used to sort the 
+	 * The Class NearestEntityComperator - Comparator used to sort the 
 	 * <code>remainingPlanetParts</code> list
 	 *
 	 * @author Alex Druml
