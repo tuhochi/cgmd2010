@@ -88,6 +88,6 @@ public class Obstacle implements Serializable
 	{
 		float dt = TimeUtil.instance.getDt();
 		time += dt;
-		position.y -= (0.5f*accel*(time*time)*0.5 + Settings.BALLOON_SPEED*dt);
+		position.y -= (0.35f*accel*(time*time) + Settings.BALLOON_SPEED*dt);
 	}
 }

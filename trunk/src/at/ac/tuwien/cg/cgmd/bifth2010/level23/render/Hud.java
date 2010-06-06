@@ -1,8 +1,11 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.render;
 
-import static android.opengl.GLES10.*;
+import static android.opengl.GLES10.GL_TRIANGLE_STRIP;
 import static android.opengl.GLES10.glDrawArrays;
+import static android.opengl.GLES10.glPopMatrix;
+import static android.opengl.GLES10.glPushMatrix;
 import static android.opengl.GLES10.glTexCoordPointer;
+import static android.opengl.GLES10.glTranslatef;
 import static android.opengl.GLES10.glVertexPointer;
 
 import java.io.DataInputStream;
@@ -13,7 +16,6 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.VertexBuffer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Button;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
@@ -44,28 +46,39 @@ public class Hud
 	/** The money button. */
 	private Button moneyButton;
 	
-	/** The class handling time utilities */
+	/** The class handling time utilities. */
 	private TimeUtil timeUtil; 
 	
-	private BurnTimer burnTimer;
+	/** The timer for burn boost animation. */
+	private BurnTimer burnTimer; 
 	
+	/** The timer for goldbar animation. */
 	private PermaBoostTimer goldTimer;
 
+	/** Indicates if the Hud was restored from Bundle */
 	private boolean wasRestored=false;
 	
-	private int boostAudioId;
-	
+	/** The progress for the boost progressbar 0-1. */
 	public float burnProgress = 1;
 	
+	/** The Handle for setting the progress for the boost progressbar. */
 	private ProgressVisibilityHandle progressVisibilityHandle;
 	
+	/** The texture part for the screen crack. */
 	private TexturePart screenCrackTexture;
+	/** The vertexbuffer for the screen crack. */
 	private FloatBuffer screenCrackVertexBuffer;
+	/** The vbo id for the screen crack. */
 	private int screenCrackVboId;
 
+	/** Indicates if the screen crack should be rendered. */
 	public boolean renderScreenCrack;
+	/** The x-position for the screen crack */
 	public float screenCrackPosX;
+	/** The y-position for the screen crack */
 	public float screenCrackPosY;
+	
+	/** The GeometryManager handling geometry loading. */
 	private GeometryManager geometryManager = GeometryManager.instance;;
 	
 	/**
@@ -74,7 +87,7 @@ public class Hud
 	public Hud()
 	{
 		init();
-		boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
+		int boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
 		MainChar.instance.audioIdBoostSound = boostAudioId;
 		burnTimer = new BurnTimer(boostAudioId);
 		goldTimer = new PermaBoostTimer();
