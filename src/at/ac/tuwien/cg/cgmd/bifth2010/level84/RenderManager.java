@@ -71,7 +71,7 @@ public class RenderManager implements Renderer {
 		//start playing background sounds
 
 		//init toast for later usage	
-		CharSequence endtext = "The end is near";
+		CharSequence endtext = "Result";
 		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
 		
 		Timer fpsUpdateTimer = new Timer();
@@ -133,8 +133,8 @@ public class RenderManager implements Renderer {
 	{
 		if (streetPos < ((-street.width / 2) + 8f))
 		{
+			toast.setText("You lost $" + String.valueOf(progman.getStartValue()-progman.getRemainingValue()));
 			toast.show();
-			//progman.setProgress(50);
 			this.activity.finish();
 		}
 	}
