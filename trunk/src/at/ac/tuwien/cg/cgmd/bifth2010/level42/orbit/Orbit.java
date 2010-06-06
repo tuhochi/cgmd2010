@@ -557,7 +557,7 @@ public class Orbit extends Motion
 	public void morphSpeed(float newSpeed,float dynamicMorphSpeed){
 
 		//CAP
-		float tempMaxSpeedLimit = Config.UNIVERSE_SPEED_LIMIT*Config.ORBIT_TEMP_MAXSPEED_FAC;
+		float tempMaxSpeedLimit = Config.UNIVERSE_SPEED_LIMIT*Config.ORBIT_TEMP_MAXSPEED_FACTOR;
 		if(newSpeed>tempMaxSpeedLimit)
 			newSpeed = tempMaxSpeedLimit;
 		if(newSpeed<=0)

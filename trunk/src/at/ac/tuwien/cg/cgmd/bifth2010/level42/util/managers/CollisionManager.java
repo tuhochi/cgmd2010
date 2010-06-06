@@ -395,7 +395,7 @@ public class CollisionManager implements Persistable{
 											morphPlanetPushVec.set(tempMorphPlanetPushVec).normalize();
 										}
 																				
-										morphPlanetPushVec.multiply(satMotion.getSpeed()*Config.PLANETPART_BOUNCE_FAC);
+										morphPlanetPushVec.multiply(satMotion.getSpeed()*Config.PLANETPART_BOUNCE_FACTOR);
 										satMotion.morph(morphPlanetPushVec);
 										
 										//COLLISION FILTER
