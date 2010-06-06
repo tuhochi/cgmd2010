@@ -41,10 +41,7 @@ public class Background implements SceneEntity
 	
 	/** The texture part. */
 	private TexturePart[] textures;
-	
-	/** The scroll speed (texture space). */
-	private float scrollSpeed = 0.01f;
-	
+		
 	/** The current y coordinate. */
 	private float positionY;
 	
@@ -77,10 +74,8 @@ public class Background implements SceneEntity
 	public void writeToStream(DataOutputStream dos) {
 		try {
 			dos.writeFloat(positionY);
-			dos.writeFloat(scrollSpeed);
 			dos.writeInt(textureLoopValue);
-			dos.writeBoolean(repeat);
-			
+			dos.writeBoolean(repeat);			
 		} catch (Exception e) {
 			System.out.println("Error writing to stream in Background.java: "+e.getMessage());
 		}
@@ -95,7 +90,6 @@ public class Background implements SceneEntity
 	public void readFromStream(DataInputStream dis) {
 		try {
 			positionY = dis.readFloat(); 
-			scrollSpeed = dis.readFloat(); 
 			textureLoopValue = dis.readInt();
 			repeat = dis.readBoolean();
 			
@@ -139,9 +133,9 @@ public class Background implements SceneEntity
 	public void update(float dt)
 	{
 		if(!repeat)
-			positionY -= dt*Settings.BALLOON_SPEED/20.0f;
+			positionY -= dt*Settings.BALLOON_SPEED/16.0f;
 		else
-			positionY -= (dt*Settings.BALLOON_SPEED/20.0f)/(RenderView.instance.getTopBounds()*2);
+			positionY -= (dt*Settings.BALLOON_SPEED/15.0f)/(RenderView.instance.getTopBounds()*2);
 //		if(positionY <= renderView.getTopBounds()*-1)
 //		{
 //			positionY += renderView.getTopBounds(); 
