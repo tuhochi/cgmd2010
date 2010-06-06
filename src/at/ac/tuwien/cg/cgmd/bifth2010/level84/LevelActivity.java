@@ -88,6 +88,9 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		initLevelParams();
 		initLevel();
 		
+		//IntroDialog introdialog = new IntroDialog(this);
+		//introdialog.show();
+		
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);	
 		renderManager = new RenderManager(this, street, gems, accelerometer, progman, soundManager);	

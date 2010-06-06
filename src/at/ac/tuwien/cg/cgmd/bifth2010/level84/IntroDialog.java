@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -15,7 +16,9 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 	private View view;
 	private ImageView image;
 	private TextView text;
-	private int introstage = 1;
+	private Button button;
+	private int introstage = 0;
+	
 	
 	public IntroDialog(Context context)
 	{
@@ -26,9 +29,13 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 		
 		text = (TextView) view.findViewById(R.id.l84_dialogtext);
 		image = (ImageView) view.findViewById(R.id.l84_dialogimage);
-
+		button = (Button) view.findViewById(R.id.l84_dialogbutton);
+		button.setOnTouchListener(this);
+		
 		setTitle(R.string.l84_intro_title);
 		setView(view);
+		
+		showFirstIntroStep();
 	}
 
 	@Override
@@ -41,25 +48,33 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 		super.show();
 	}
 
+	public void showFirstIntroStep()
+	{
+		introstage = 0;
+		text.setText(R.string.l84_intro_step1);
+		image.setImageResource(R.drawable.l84_tex_gem_oct);
+	}
+	
 	public void showNextIntroStep()
 	{
+		introstage++;
 		switch(introstage) 
 		{
-			case 1: 
-					text.setText(R.string.l84_intro_step1);
-					image.setImageResource(R.drawable.l84_tex_gem_oct);
-			case 2:
-					text.setText(R.string.l84_intro_step2);
+			case 1: text.setText(R.string.l84_intro_step2);
 					image.setImageResource(R.drawable.l84_tex_gem_diamond);
+					break;
+			case 2: dismiss(); break;
 		}
-		introstage++;
-		
 	}
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			showNextIntroStep();
+			if (v.getId() == button.getId())
+			{
+				showNextIntroStep();
+			}
+			
 		}
 		return false;
 	}
