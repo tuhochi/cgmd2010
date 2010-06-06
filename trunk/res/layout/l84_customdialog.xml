@@ -7,13 +7,14 @@
               android:padding="10dp"
               >
     <ImageView android:id="@+id/l84_dialogimage"
-               android:layout_width="80dp"
-               android:layout_height="80dp"
                android:layout_marginRight="10dp"
-               />
+               android:layout_height="60dp" android:layout_width="60dp"/>
     <TextView android:id="@+id/l84_dialogtext"
               android:layout_width="250dp"
-              android:layout_height="80dp"
               android:textColor="#FFF"
-              />
+              android:layout_height="60dp"/>
+	<Button android:text=">"
+	 		android:id="@+id/l84_dialogbutton"
+	  		android:layout_height="50dp" android:gravity="center_vertical|center_horizontal" android:layout_width="60dp">
+	   </Button>
 </LinearLayout>
