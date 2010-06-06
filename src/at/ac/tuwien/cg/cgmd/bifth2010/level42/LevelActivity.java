@@ -49,17 +49,21 @@ public class LevelActivity extends Activity
 		initNative();
 	}
 
+	/**
+	 * Inits the native library.
+	 */
 	private static native void initNative();
 	
 	/** The Constant SCENE_STATE_KEY. */
 	public static final String SCENE_STATE_KEY = "l42_state";
 	
-	/** The Loglevel Dialog id */
+	/** The Loglevel Dialog id. */
 	private static final int DIALOG_ID_LOGLEVEL = 0;
 	
 	/** The instance. */
 	private static LevelActivity instance;
 	
+	/** The Constant sessionState. */
 	private static final SessionState sessionState = new SessionState();
 	
 	/** The render view. */
@@ -71,7 +75,10 @@ public class LevelActivity extends Activity
 	/** The fps TextView. */
 	private TextView fps;
 	
+	/** The score progress. */
 	private ProgressBar scoreProgress;
+	
+	/** The time progress. */
 	private ProgressBar timeProgress;
 	
 	/** The handler. */
@@ -88,22 +95,26 @@ public class LevelActivity extends Activity
 	
 	/** The time manager. */
 	private final TimeManager timeManager = TimeManager.instance;
+	
+	/** The sound manager. */
 	private final SoundManager soundManager = SoundManager.instance;
 	
+	/** Whether sound is enabled or not. */
 	public static boolean SOUND_ENABLED = true;
 	
 	/** The vibrator. */
 	private Vibrator vibrator;
 	
-	/** The PowerManagers Wake Lock */
+	/** The PowerManagers Wake Lock. */
 	private PowerManager.WakeLock wakeLock;
 	
-	/** The Milliseconds since the game was considered complete */
+	/** The Milliseconds since the game was considered complete. */
 	private float timeSinceComplete;
 	
-	/** indicating that the level has been completed */
+	/** indicating that the level has been completed. */
 	private boolean levelComplete;
 	
+	/** The loglevel dialog. */
 	private Dialog dialog_Loglevel;
 	
 	/**
@@ -181,7 +192,7 @@ public class LevelActivity extends Activity
 	}
 	
 	/**
-	 * triggers the Vibrator
+	 * triggers the Vibrator.
 	 *
 	 * @param millis The Milliseconds the Vibrator will be turned on for
 	 */
@@ -392,6 +403,9 @@ public class LevelActivity extends Activity
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateDialog(int)
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id)
 	{
@@ -402,6 +416,9 @@ public class LevelActivity extends Activity
 		return super.onCreateDialog(id);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -430,6 +447,9 @@ public class LevelActivity extends Activity
 		return false;
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu)
 	{
@@ -469,6 +489,9 @@ public class LevelActivity extends Activity
 		return super.onPrepareOptionsMenu(menu);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
