@@ -57,6 +57,9 @@ public class LevelActivity extends Activity
 	/** The Constant SCENE_STATE_KEY. */
 	public static final String SCENE_STATE_KEY = "l42_state";
 	
+	/** The current version of the scene state file */
+	public static final int SCENE_STATE_VERSION = 1;
+	
 	/** The Loglevel Dialog id. */
 	private static final int DIALOG_ID_LOGLEVEL = 0;
 	
@@ -284,6 +287,62 @@ public class LevelActivity extends Activity
 		super.onResume();
 		LogManager.v("onResume()");
 		
+		// try to read settings from file
+		DataInputStream dis = null;
+		try
+		{
+			dis = new DataInputStream(openFileInput(SCENE_STATE_KEY));
+			
+			boolean SHOW_FPS = Config.SHOW_FPS;
+			boolean SHOW_SCENEENTITY_BOUNDING_SPHERES = Config.SHOW_SCENEENTITY_BOUNDING_SPHERES;
+			boolean SHOW_MODEL_BOUNDING_SPHERES = Config.SHOW_MODEL_BOUNDING_SPHERES;
+			boolean EASY_MODE = Config.EASY_MODE;
+			boolean VIBRATE = Config.VIBRATE;
+			int LOGLEVEL = Config.LOGLEVEL;
+			
+			// switch by version
+			switch(dis.readInt())
+			{
+			case 1:
+				SHOW_FPS = dis.readBoolean();
+				SHOW_SCENEENTITY_BOUNDING_SPHERES = dis.readBoolean();
+				SHOW_MODEL_BOUNDING_SPHERES = dis.readBoolean();
+				EASY_MODE = dis.readBoolean();
+				VIBRATE = dis.readBoolean();
+				LOGLEVEL = dis.readInt();
+				break;
+			}
+			
+			// if we came so far without exception, we can safely write the settings
+			// the config object
+			// special case fps:
+			if(Config.SHOW_FPS != SHOW_FPS)
+				fps.setVisibility(SHOW_FPS ? TextView.VISIBLE : TextView.INVISIBLE);
+			Config.SHOW_FPS = SHOW_FPS;
+			Config.SHOW_SCENEENTITY_BOUNDING_SPHERES = SHOW_SCENEENTITY_BOUNDING_SPHERES;
+			Config.SHOW_MODEL_BOUNDING_SPHERES = SHOW_MODEL_BOUNDING_SPHERES;
+			Config.EASY_MODE = EASY_MODE;
+			Config.VIBRATE = VIBRATE;
+			Config.LOGLEVEL = LOGLEVEL;
+			
+			dis.close();
+		}
+		catch (Throwable t)
+		{
+			LogManager.w("Could not read config file, defaults are used", t);
+		}
+		finally
+		{
+			if(dis != null)
+			{
+				try
+				{
+					dis.close();
+				}
+				catch(Throwable t) {}
+			}
+		}
+		
 		wakeLock.acquire();
 		soundManager.onResume();
 		renderView.synchronizer.setActive(true);
@@ -298,6 +357,40 @@ public class LevelActivity extends Activity
 	{
 		super.onPause();
 		LogManager.v("onPause()");
+		
+		// try to write settings to file
+		DataOutputStream dos = null;
+		try
+		{
+			dos = new DataOutputStream(openFileOutput(SCENE_STATE_KEY, MODE_PRIVATE));
+			
+			// version
+			dos.writeInt(SCENE_STATE_VERSION);
+			dos.writeBoolean(Config.SHOW_FPS);
+			dos.writeBoolean(Config.SHOW_SCENEENTITY_BOUNDING_SPHERES);
+			dos.writeBoolean(Config.SHOW_MODEL_BOUNDING_SPHERES);
+			dos.writeBoolean(Config.EASY_MODE);
+			dos.writeBoolean(Config.VIBRATE);
+			dos.writeInt(Config.LOGLEVEL);
+			
+			dos.close();
+		}
+		catch (Throwable t)
+		{
+			LogManager.w("Could not write config file, defaults will be used on next start", t);
+		}
+		finally
+		{
+			if(dos != null)
+			{
+				try
+				{
+					dos.close();
+				}
+				catch(Throwable t) {}
+			}
+		}
+		
 		renderView.synchronizer.setActive(false);
 		renderView.onPause();
 		soundManager.onPause();
