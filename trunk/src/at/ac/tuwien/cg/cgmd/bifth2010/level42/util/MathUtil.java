@@ -1,6 +1,3 @@
-/**
- * 
- */
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 /**

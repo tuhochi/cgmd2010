@@ -23,14 +23,18 @@ public class Synchronizer
 	/** The disable Condition */
 	private Condition disableCond = lock.newCondition();
 	
+	/** whether the logic frame is finished */
 	private boolean logicFinished = false;
 
 	// init lastLogicFrame one lower than lastPreRenderFrame,
 	// to let the logic frame run once before starting to render
+	/** the last frame the logic thread processed */
 	private int lastLogicFrame = -1;
 	
+	/** the last frame the render frame processed */
 	private int lastPreRenderFrame = 0;
 	
+	/** whether the threads are running or not */
 	public boolean running = true;
 
 	/**
@@ -108,6 +112,9 @@ public class Synchronizer
 		lock.unlock();
 	}
 
+	/**
+	 * called from the logic thread just before it exists
+	 */
 	public void logicThreadFinished()
 	{
 		lock.lock();
@@ -117,7 +124,8 @@ public class Synchronizer
 	}
 	
 	/**
-	 * Toggles this Synchronizer active
+	 * Toggles this Synchronizer active.
+	 * waits for threads to finish on disable
 	 *
 	 * @param running the new active
 	 */
