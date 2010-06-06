@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import static android.opengl.GLES10.*;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
@@ -9,11 +10,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.MathUtil;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.OGLManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.TimeManager;
 
 /**
  * The Class HUD.
@@ -73,9 +72,9 @@ public class HUD extends Model
 		int numVertices = 6;
 		
 		Geometry circle = new Geometry(
-				SceneLoader.instance.arrayToBuffer(vertices),
+				AOMLoader.instance.arrayToBuffer(vertices),
 				null,
-				SceneLoader.instance.arrayToBuffer(texcoords),
+				AOMLoader.instance.arrayToBuffer(texcoords),
 				new AxisAlignedBox3(new Vector3(-0.5f, -0.5f, 0.0f), new Vector3(0.5f, 0.5f, 0.0f)),
 				new Sphere(new Vector3(0,0,0), 0.707106781f),
 				numVertices);

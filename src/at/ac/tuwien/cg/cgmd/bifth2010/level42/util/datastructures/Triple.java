@@ -1,14 +1,15 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.datastructures;
 
 /**
- * The Class Pair.
+ * The Class Triple.
  *
  * @param <A> the generic type
  * @param <B> the generic type
+ * @param <C> the generic Type
  * @author Alex Druml
  * @author Lukas Roessler
  */
-public class Pair<A,B>
+public class Triple<A,B,C>
 {
 	
 	/** The first. */
@@ -17,16 +18,21 @@ public class Pair<A,B>
 	/** The second. */
 	private B second;
 	
+	/** The third. */
+	private C third;
+	
 	/**
-	 * Instantiates a new pair.
+	 * Instantiates a new triple.
 	 *
 	 * @param first the first
 	 * @param second the second
+	 * @param third the third
 	 */
-	public Pair(A first, B second)
+	public Triple(A first, B second, C third)
 	{
 		this.first = first;
 		this.second = second;
+		this.third = third;
 	}
 
 	/**
@@ -68,4 +74,22 @@ public class Pair<A,B>
 	{
 		this.second = second;
 	}
+
+	/**
+	 * @return the third
+	 */
+	public C getThird()
+	{
+		return third;
+	}
+
+	/**
+	 * @param third the third to set
+	 */
+	public void setThird(C third)
+	{
+		this.third = third;
+	}
+	
+	
 }

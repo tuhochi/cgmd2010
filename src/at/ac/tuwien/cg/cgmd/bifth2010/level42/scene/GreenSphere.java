@@ -2,13 +2,12 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import java.nio.FloatBuffer;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
 
 /**
  * The Class GreenSphere, represents a green sphere (for bounding sphere visualization).
@@ -96,7 +95,7 @@ public class GreenSphere extends Model
 			}
 		}
 		
-		FloatBuffer vertNormalBuffer = SceneLoader.instance.arrayToBuffer(vertnormals);
+		FloatBuffer vertNormalBuffer = AOMLoader.instance.arrayToBuffer(vertnormals);
 		Geometry sphereGeom = new Geometry(vertNormalBuffer, 
 				vertNormalBuffer, 
 				null, 

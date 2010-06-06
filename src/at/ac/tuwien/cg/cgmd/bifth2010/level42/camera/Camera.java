@@ -7,8 +7,8 @@ import java.io.IOException;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.OGLManager;
 
 //static imports
 import static android.opengl.GLES10.*;

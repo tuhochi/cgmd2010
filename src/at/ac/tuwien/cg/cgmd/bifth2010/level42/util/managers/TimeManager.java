@@ -1,4 +1,6 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 
 /**
  * The Class TimeManager.

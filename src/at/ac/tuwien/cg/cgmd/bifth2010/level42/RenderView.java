@@ -16,26 +16,26 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.AOMLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.HUD;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.MathUtil;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SceneLoader;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Synchronizer;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomOnGestureListener;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.CollisionManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.GameManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.OGLManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.SoundManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.TimeManager;
 
 /**
  * The Class RenderView.
@@ -147,7 +147,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 		//init temp vars
 		selectionDirection = new Vector3();
 		
-		scene = SceneLoader.instance.readScene(Config.LEVELNAME);
+		scene = AOMLoader.instance.readScene(Config.LEVELNAME);
 		scene.setHud(hud);
 		motionManager.generateRandomOrbits(scene,Config.UNIVERSE_SPEED_LIMIT/2,Config.UNIVERSE_SPEED_LIMIT,0,(float)Math.PI/4,0,(float)Math.PI/4,15,20,0.7f,1.3f);
 		collManager = CollisionManager.instance;

@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import static android.opengl.GLES10.*;
 
@@ -9,6 +9,7 @@ import android.opengl.GLES11;
 import android.opengl.GLU;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.datastructures.Triple;
 
 /**
  * The Class OGLManager.
