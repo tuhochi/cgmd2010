@@ -160,6 +160,7 @@ public class Player {
 				collisionThreshold[COL_BOTTOM] = Math.min(collisionThreshold[COL_BOTTOM], (float) Math.floor(playerPos[1]) + 0.5f);
 				if(v[1]>0) {
 					playerPos[1] = collisionThreshold[COL_BOTTOM];
+					v[1] = 0;
 					jumpMode = JUMP_IDLE;
 					break;
 				}
