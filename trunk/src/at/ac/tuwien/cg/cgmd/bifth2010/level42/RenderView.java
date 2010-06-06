@@ -74,6 +74,7 @@ public class RenderView extends GLSurfaceView implements Renderer
 	/** The motion manager. */
 	private final MotionManager motionManager = MotionManager.instance;
 	
+	/** The game manager. */
 	private final GameManager gameManager;
 	
 	/** The ogl manager. */
