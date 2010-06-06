@@ -29,17 +29,24 @@ public abstract class Motion implements Persistable
 	/** flag used to play the collision sound only once */
 	boolean playedCollSound = false;
 	
+	/** The collision counter */
 	int collCount = 0;
 	
+	/**
+	 * Sets the collision counter.
+	 * @param newCollCount the new collision count
+	 */
 	public void setCollCount(int newCollCount){
 		collCount = newCollCount;
 	}
 	
+	/**
+	 * Gets the collision counter.
+	 * @return the collision counter
+	 */
 	public int getCollCount(){
 		return collCount;
 	}
-	
-	public abstract void setSpeed(float newSpeed);
 	
 	/**
 	 * Do the next iteration step 
@@ -82,6 +89,13 @@ public abstract class Motion implements Persistable
 	 * @return the speed of the motion
 	 */
 	public abstract float getSpeed();
+	
+	/**
+	 * Sets the motion speed
+	 * @param newSpeed the new speed
+	 */
+	public abstract void setSpeed(float newSpeed);
+	
 	
 	/**
 	 * Dynamic change of the motion by the given push vector

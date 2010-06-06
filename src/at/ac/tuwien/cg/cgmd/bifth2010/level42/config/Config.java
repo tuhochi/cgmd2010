@@ -112,7 +112,7 @@ public class Config
 	/** The name of the Planet SceneEntity. */
 	public static String PLANET_NAME = "GoldPlanet";
 	
-	/** The name of the Skysphere SceneEntity Name. */
+	/** The name of the Skysphere SceneEntity. */
 	public static String SKYSPHERE_NAME = "Skysphere";
 	
 	/** prefix for the satellite SceneEntities. */
@@ -130,23 +130,23 @@ public class Config
 	/** defines the maximum of the orbit secondary axis. */
 	public static float FORCEFIELD_DIRLENGTH_LIMIT = 11;
 	
-	/** The force fields new centerlength. */
+	/** defines the new length of the main axis after the contact with the force field */
 	public static float FORCEFIELD_NEW_CENTERLENGTH = 15;
-	
-	/** The force fields new direction length. */
+
+	/** defines the new length of the secondary axis after the contact with the force field */
 	public static float FORCEFIELD_NEW_DIRLENGTH = 15;
 	
-	/** The force fields center length scale speed. */
+	/** defines the speed of axis change/morphing */
 	public static float FORCEFIELD_CENTERLENGTH_SCALESPEED = 25;
 	
-	/** The force fields direction length scale speed. */
+	/** defines the speed of axis change/morphing */
 	public static float FORCEFIELD_DIRLENGTH_SCALESPEED = 25;
 	
 	/** defines the maximum relative speed for satellites. */
 	public static float UNIVERSE_SPEED_LIMIT = 7.5f;
 	
-	/** The orbit temp maxspeed factor. */
-	public static float ORBIT_TEMP_MAXSPEED_FAC = 3;
+	/** defines the factor for the temporary max. speed. */
+	public static float ORBIT_TEMP_MAXSPEED_FACTOR = 3;
 	
 	/** The minimal speed of an orbit. */
 	public static float ORBIT_MIN_SPEED = 0.5f;
@@ -163,28 +163,34 @@ public class Config
 	/** minimal force to change the motion into a directional motion. */
 	public static float MIN_STRENGTH_FOR_DIRECTIONAL = 0.4f * MAX_FORCE;
 	
-	/** minimal force to change the motion into a directional motion. */
+	/** required speed for an undeflected motion - if the speed of a object 
+	 * is beneath this threshold, a bounce motion follows */
 	public static float MIN_SPEED_FOR_UNDAMPED_DIRECTIONAL = 0.6f * MAX_FORCE;
 	
 	/** the selection vector gets divided by this factor. */
 	public static float SELECTION_FORCE_FACTOR = 1f;
 	
-	/** The directional orbit transform direction vector factor. */
+	/** The directional vector is multiplied by this factor during the direction 
+	 * to orbit transformation */
 	public static final float DIRORBITTRANSFORM_DIRVEC_FACTOR = 2;
 	
-	/** The Transformation Distance. */
+	/** The motion of a satellite with <code>TRANSFORMATION_DISTANCE</code> 
+	 * to the planet center is converted into an orbital motion*/
 	public static final float TRANSFORMATION_DISTANCE = 10;
 	
-	/** The Orbit speedmorph push vector factor. */
+	/** The speed of an orbit is influenced by this value during a 
+	 * morph operation*/
 	public static final float ORBIT_SPEEDMORPH_PUSHVECFACTOR = 0.25f;
 	
 	/** The orbit dynamic speed factor. */
 	public static final float ORBIT_DYNAMIC_SPEEDFACTOR = 120f;
 	
-	/** The planet collision speed from satellite factor. */
+	/** The speed of the planet part is defined through the speed of the 
+	 * satellite which hit the part * <code>PLANETCOLL_SPEED_FROM_SAT_FACTOR</code>. */
 	public static final float PLANETCOLL_SPEED_FROM_SAT_FACTOR = 0.25f;
 	
-	/** The Planetpart culling distance. */
+	/** The distance to the universe center after which a planet part could 
+	 * be culled. */
 	public static final float PLANETPART_CULL_DISTANCE = 30;
 	
 	/** The suffix of untied planet parts. */
@@ -194,15 +200,17 @@ public class Config
 	public static final float PLANETPART_REUSE_MINDISTANCE = 1f;
 	
 	/** The planet part bounce factor. */
-	public static final float PLANETPART_BOUNCE_FAC = 3.5f;
+	public static final float PLANETPART_BOUNCE_FACTOR = 3.5f;
 	
-	/** The damped max collision count factor. */
+	/** This factor influences the number of parts a satellite is allowed to hit */
 	public static final float DAMPED_MAX_COLLISION_COUNT_FACTOR = 0.3333f;
 	
-	/** The undamped speed decrement. */
+	/** The speed of a satellite is decreased by this value on each hit with
+	 * the planet */
 	public static final float UNDAMPED_SPEED_DECREMENT = 0.3f*MAX_FORCE;
 	
-	/** The selection bounding sphere increment. */
+	/** The bounding sphere is incremented by this value during the selection
+	 * process */
 	public static final float SELECTION_BSPHERE_INCREMENT = 0.5f;
 	
 	/** The normal impact sound. */
