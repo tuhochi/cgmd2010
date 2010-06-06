@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 	<!--
 		use this file to describe the used resources (licensed under CC, special permission, etc.). 
 		Fields: 
@@ -15,26 +15,42 @@
 	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
 	usage="map texture" license="CC" />
 
-
+<!-- Level 42 -->	
 <credit type="sound" name="possiblelazer" author="aust_paul"
 	url="http://www.freesound.org/samplesViewSingle.php?id=30935"
-	usage="sound effect" license="CC" />
+	usage="level 42 - force effect" license="CC" />
 	
 <credit type="sound" name="Blast" author="Benboncan"
 	url="http://www.freesound.org/samplesViewSingle.php?id=73005"
-	usage="sound effect" license="CC" />
+	usage="level 42 - collision effect" license="CC" />
 	
 <credit type="sound" name="yeah" author="totya"
 	url="http://www.freesound.org/samplesViewSingle.php?id=19446"
-	usage="sound effect" license="CC" />
+	usage="level 42 - level finish" license="CC" />
 	
 <credit type="sound" name="phaser2" author="impactuniversal"
 	url="http://www.freesound.org/samplesViewSingle.php?id=63373"
-	usage="sound effect" license="CC" />
-	
+	usage="level 42 - collision sound" license="CC" />
+
 <credit type="sound" name="Explosion" author="steveygos93"
 	url="http://www.freesound.org/samplesViewSingle.php?id=80400"
-	usage="sound effect" license="CC" />
+	usage="level 42 - collision sound" license="CC" />
+
+<credit type="3D model" name="Dolphin Small3" author="hoeq"
+	url="http://www.3dvia.com/models/8D79B18395A7B98B"
+	usage="level 42 - Satellite" license="CC" />
+	
+<credit type="3D model" name="Ducky" author="ratafu"
+	url="http://www.3dvia.com/models/0496283A0C1E3002"
+	usage="level 42 - Satellite" license="CC" />
+	
+<credit type="texture" name="S.P.A.C.E. Photoshop Brushes" author="JaneDoeStock"
+	url="http://janedoestock.deviantart.com/art/S-P-A-C-E-Photoshop-Brushes-55948175"
+	usage="level 42 - space texture" license="Credit" />
+
+<credit type="texture" name="Rabies Star" author="Rabieshund"
+	url="http://qbrushes.net/nature/rabies-star-ps-brush/"
+	usage="level 42 - space texture" license="CC" />
 	
 <!-- Level 70 - credits -->
 <credit type="sound" name="Short swish button sound." author="junggle"
@@ -62,7 +78,10 @@
 	license="CC" />
 <credit type="sound" name="Voices bie bie I'll be off then"
 	author="ingsey101" url="http://www.freesound.org/samplesViewSingle.php?id=49981"
-	usage="Lenny Must Die: by by lenny" license="CC" /><!--Level 88 - credits--><credit
+	usage="Lenny Must Die: by by lenny" license="CC" />
+
+<!--Level 88 - credits-->
+<credit
 		type="" name="" author="" url="" usage="" license="">
 </credit>
 	<credit
@@ -76,6 +95,3 @@
 </credit>
 
 </credits>
-
-
-	
