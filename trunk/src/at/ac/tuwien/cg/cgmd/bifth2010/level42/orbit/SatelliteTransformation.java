@@ -5,8 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
 
 /**
  * Class SatelliteTransformation

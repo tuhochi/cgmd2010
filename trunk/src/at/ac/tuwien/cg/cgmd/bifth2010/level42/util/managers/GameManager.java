@@ -1,8 +1,10 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 
 public class GameManager implements Persistable{
 

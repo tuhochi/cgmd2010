@@ -1,6 +1,7 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 
 public class LogManager
 {

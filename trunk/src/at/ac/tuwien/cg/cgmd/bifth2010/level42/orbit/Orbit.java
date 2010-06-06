@@ -4,12 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Ellipse;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
 
 /**
  * The Class Orbit represents a elliptic motion.

@@ -3,14 +3,14 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
 import java.util.ArrayList;
 import java.util.Random;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.CollisionManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
 
 /**
  * The MotionManager handles the linking between objects 

@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.config;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;

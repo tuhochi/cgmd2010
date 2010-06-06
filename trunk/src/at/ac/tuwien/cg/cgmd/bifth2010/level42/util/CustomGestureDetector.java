@@ -1,6 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
 
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
 
 /**
  * The Class CustomGestureDetector.

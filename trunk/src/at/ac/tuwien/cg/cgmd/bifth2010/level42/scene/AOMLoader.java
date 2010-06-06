@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.scene;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -15,12 +15,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Color4;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Geometry;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Model;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
 
 /**
  * # AndroidModel format (*.aom) layout. The whole thing is usually GZIPed.
@@ -123,19 +119,19 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
  * @author Alex Druml
  * @author Lukas Roessler
  */
-public class SceneLoader
+public class AOMLoader
 {
 	
 	/** The Constant CURRENT_VERSION. */
 	private static final int CURRENT_VERSION = 6;
 	
 	/** The Constant instance. */
-	public static final SceneLoader instance = new SceneLoader();
+	public static final AOMLoader instance = new AOMLoader();
 	
 	/**
 	 * Instantiates a new scene loader.
 	 */
-	private SceneLoader()
+	private AOMLoader()
 	{
 		
 	}

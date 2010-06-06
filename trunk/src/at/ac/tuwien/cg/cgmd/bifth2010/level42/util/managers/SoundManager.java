@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.util;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.LevelActivity;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.datastructures.Pair;
 
 /**
  * The Class manages audio output

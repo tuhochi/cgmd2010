@@ -26,14 +26,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CollisionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.GameManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.LogManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.SoundManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.TimeManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.CollisionManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.GameManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.SoundManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.TimeManager;
 
 /**
  * The Class LevelActivity.

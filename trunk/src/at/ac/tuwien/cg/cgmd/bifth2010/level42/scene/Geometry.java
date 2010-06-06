@@ -7,11 +7,11 @@ import java.io.DataOutputStream;
 import java.nio.FloatBuffer;
 
 import android.opengl.GLES11;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.AxisAlignedBox3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.OGLManager;
 
 /**
  * The Class Geometry.
