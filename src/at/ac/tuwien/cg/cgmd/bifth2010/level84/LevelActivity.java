@@ -319,7 +319,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	    		resultdialog.setResultValues(msg.arg1, msg.arg2);
 	    		resultdialog.setOnDismissListener(new OnDismissListener() {
 					@Override
-					public void onDismiss(DialogInterface dialog) {
+					public void onDismiss(DialogInterface resultdialog) {
 						levelActivity.finish();
 					}
 				});
