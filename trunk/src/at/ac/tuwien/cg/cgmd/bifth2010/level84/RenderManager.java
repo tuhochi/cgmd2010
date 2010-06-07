@@ -64,8 +64,8 @@ public class RenderManager implements Renderer,OnDismissListener {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			tfFps.setText(df.format(streetMeter) + "m");
 			if (street.isStreetActive()) { streetMeter --; }
+			tfFps.setText(df.format(streetMeter) + "m");
 		}
 	};
 	
@@ -80,7 +80,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 		this.tfPoints = (TextView) levelActivity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) levelActivity.findViewById(R.id.l84_PointsShadow);
 		
-		streetMeter = street.getStreetWidth();
+		streetMeter = street.getStreetWidth()-16f;
 		
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
@@ -140,7 +140,8 @@ public class RenderManager implements Renderer,OnDismissListener {
 	
 	private void checkStreetEnd(float streetPos)
 	{
-		if (streetPos < ((-street.width / 2) + 8f))
+		//if (streetPos < ((-street.width / 2) + 8f))
+		if (streetMeter < 1)
 		{
 			//stop street translation
 			street.stopStreet();
