@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	private ImageView image;
 	private TextView text;
 	private Button button;
+	private Activity activity;
 	
 	public ResultDialog(Context context)
 	{
@@ -45,8 +47,13 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	public void show() {
 		super.show();
 	}
+	
+	public void setActivity(Activity activity)
+	{
+		this.activity = activity;
+	}
 
-	public void showResults(int totalmoney, int remainingmoney)
+	public void setResults(int totalmoney, int remainingmoney)
 	{
 		int lostmoney = totalmoney - remainingmoney;
 		text.setText(R.string.l84_result_totalmoney + "$ " + String.valueOf(totalmoney) + "\n" +
@@ -60,7 +67,7 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (v.getId() == button.getId())
 			{
-				//finish
+				this.activity.finish();
 			}
 			
 		}
