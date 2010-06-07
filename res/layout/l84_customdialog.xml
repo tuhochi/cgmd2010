@@ -5,16 +5,14 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:padding="10dp"
-              >
+              android:background="@drawable/l84_transparent">
     <ImageView android:id="@+id/l84_dialogimage"
-               android:layout_marginRight="10dp"
-               android:layout_height="60dp" android:layout_width="60dp"/>
+               android:layout_height="60dp" android:layout_width="60dp" android:layout_marginRight="10dp" android:layout_gravity="center_vertical"/>
     <TextView android:id="@+id/l84_dialogtext"
-              android:layout_width="250dp"
               android:textColor="#FFF"
-              android:layout_height="60dp"/>
+              android:layout_gravity="center_vertical" android:layout_height="60dp" android:layout_width="200dp"/>
 	<Button android:text=">"
 	 		android:id="@+id/l84_dialogbutton"
-	  		android:layout_height="50dp" android:gravity="center_vertical|center_horizontal" android:layout_width="60dp">
+	  		android:layout_height="50dp" android:layout_width="60dp" android:layout_gravity="center_vertical">
 	   </Button>
 </LinearLayout>

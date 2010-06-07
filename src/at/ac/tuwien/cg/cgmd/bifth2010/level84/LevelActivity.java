@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
@@ -82,6 +81,8 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		
+		
 		setContentView(R.layout.l84_level);
 		
 		drains = new HashMap<Integer, ModelDrain>();
@@ -93,8 +94,6 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		initLevelParams();
 		initLevel();
 		
-		
-		
 		openglview = (GLSurfaceView) findViewById(R.id.l84_openglview);
 		accelerometer = new Accelerometer(this);	
 		renderManager = new RenderManager(this, street, gems, accelerometer, progman, soundManager);	
@@ -105,6 +104,8 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		IntroDialog introdialog = new IntroDialog(this);
 		introdialog.setOnDismissListener(renderManager);
 		introdialog.show();
+		
+		
 	}
 	
 	@Override
