@@ -21,4 +21,8 @@
      aber überzeugt sind, dass alles passt, können Sie auch den Fall beschleunigen (Tap auf den Screen). 
      Nach jedem geworfenen Stein wandern Sie weiter in der Hoffnung, ihr Vermögen den Kanal runterzuspülen ...
     </string> 
+    <string name="l84_intro_title">Spielanleitung</string>
+    <string name="l84_intro_step1">Wähle einen Stein aus</string>
+    <string name="l84_intro_step2">Rotiere das Smartphone, um den Edelstein auszurichten</string>
+    <string name="l84_intro_step3">Lass den Edelstein fallen.</string>
 </resources>
