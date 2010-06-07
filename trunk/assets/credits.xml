@@ -80,6 +80,26 @@
 	author="ingsey101" url="http://www.freesound.org/samplesViewSingle.php?id=49981"
 	usage="Lenny Must Die: by by lenny" license="CC" />
 
+<!-- Level 84 -->	
+<credit type="sound" name="" author=""
+	url="" usage="Level 84 - Gem sound - breaking gem"
+	license="" />
+<credit type="sound" name="button-19" author="www.soundjay.com"
+	url="http://www.soundjay.com/button/sounds/button-19.mp3" usage="Level 84 - Button sound"
+	license="Credit" />
+<credit type="sound" name="water-splash-3" author="www.soundjay.com"
+	url="http://www.soundjay.com/nature/sounds/water-splash-3.mp3" usage="Level 84 - Gem sound - drain hit"
+	license="Credit" />
+<credit type="sound" name="Concrete block hitting the ground.flac" author="CFEffex"
+	url="http://www.freesound.org/samplesViewSingle.php?id=93959" usage="Level 84 - Gem sound - drain miss"
+	license="CC Sampling Plus 1.0" />
+<credit type="sound" name="spring-weather-1" author="www.soundjay.com"
+	url="http://www.soundjay.com/ambient/sounds/spring-weather-1.mp3" usage="Level 84 - Background music"
+	license="Credit" />
+<credit type="sound" name="swosh-26" author="qubodup"
+	url="http://www.freesound.org/samplesViewSingle.php?id=60013" usage="Level 84 - Gem sound - falling"
+	license="CC Sampling Plus 1.0" />
+	
 <!--Level 88 - credits-->
 <credit
 		type="" name="" author="" url="" usage="" license="">
