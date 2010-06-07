@@ -62,7 +62,8 @@ public class SoundManager
 	 */
 	public void startPlayer(int id)
 	{
-		players.get(id).start();
+		if(Settings.SOUND_ENABLED)
+			players.get(id).start();
 	}
 	
 	/**

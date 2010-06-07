@@ -21,12 +21,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.MainChar;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.RenderView;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.PersistentSettings;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
 
 /**
@@ -95,12 +97,11 @@ public class LevelActivity extends Activity implements OrientationListener {
 		fpsText = (TextView)findViewById(R.id.l23_TextViewFps);
 		scoreText = (TextView)findViewById(R.id.l23_TextViewScore);
 		boostProgress = (ProgressBar)findViewById(R.id.l23_BoostProgress);
-		System.out.println(boostProgress);
         CONTEXT = this; 
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         
-        instance = this;
+        Settings.SOUND_ENABLED = getIntent().getBooleanExtra(MenuActivity.PREFERENCE_MUSIC, false);
 
 		  // only register the listener if there is no entry or the entry is ON in the properties for this level
         if (PersistentSettings.instance.getValue(PersistentSettings.ORIENTATION_SENSOR).equals(PersistentSettings.ON))
@@ -112,7 +113,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 		SessionState s = new SessionState();
 		s.setProgress(0); 
 		setResult(Activity.RESULT_OK, s.asIntent());
-		
+		instance = this;
 	}
 	
 	/**
