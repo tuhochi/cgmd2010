@@ -30,6 +30,8 @@ public class ModelStreet extends Model {
 	/** Horizontal translation speed */
 	private float speed;
 	
+	private boolean streetActive = false;
+	
 	/**
 	 * Creates a new street.
 	 * @param width The street's length
@@ -83,11 +85,21 @@ public class ModelStreet extends Model {
 	 * @param deviceRotation Current device's rotation in degrees.
 	 */
 	public void update(double deltaTime, float deviceRotation) {
-		super.update(deltaTime, deviceRotation);
-		float deltaSpeed = (float)((double)speed * deltaTime);
-		this.posX -= deltaSpeed;
+			super.update(deltaTime, deviceRotation);
+			float deltaSpeed = (float)((double)speed * deltaTime);
+			
+			if (streetActive){ this.posX -= deltaSpeed;}
 	}
 	
+	public void activateStreet()
+	{
+		streetActive = true;
+	}
+	
+	public void deactivateStreet()
+	{
+		streetActive = false;
+	}
 	
 	/**
 	 * Draws the street and all drains.

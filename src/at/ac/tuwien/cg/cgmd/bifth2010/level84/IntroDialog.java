@@ -18,6 +18,7 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 	private TextView text;
 	private Button button;
 	private int introstage = 0;
+	private boolean introfinished = false;
 	
 	
 	public IntroDialog(Context context)
@@ -32,10 +33,16 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 		button = (Button) view.findViewById(R.id.l84_dialogbutton);
 		button.setOnTouchListener(this);
 		
+		setIcon(R.drawable.l84_transparent);
 		setTitle(R.string.l84_intro_title);
 		setView(view);
 		
 		showFirstIntroStep();
+	}
+	
+	public boolean isFinished()
+	{
+		return introfinished;
 	}
 
 	@Override
@@ -63,7 +70,9 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 			case 1: text.setText(R.string.l84_intro_step2);
 					image.setImageResource(R.drawable.l84_tex_gem_diamond);
 					break;
-			case 2: dismiss(); break;
+			case 2: introfinished = true;
+					dismiss();
+					break;
 		}
 	}
 	
