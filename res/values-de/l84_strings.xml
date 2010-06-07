@@ -25,7 +25,7 @@
     <string name="l84_intro_step1">Wähle einen Stein aus</string>
     <string name="l84_intro_step2">Rotiere das Smartphone, um den Edelstein auszurichten</string>
     <string name="l84_intro_step3">Lass den Edelstein fallen.</string>
-    <string name="l84_result_title">Resultat</string>
+    <string name="l84_result_title">Ergebnis</string>
     <string name="l84_result_totalmoney">Gesamt:</string>
     <string name="l84_result_remainingmoney">Rest:</string>
     <string name="l84_result_lostmoney">Verloren:</string>

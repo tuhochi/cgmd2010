@@ -10,7 +10,7 @@
                android:layout_height="60dp" android:layout_width="60dp" android:layout_marginRight="10dp" android:layout_gravity="center_vertical"/>
     <TextView android:id="@+id/l84_dialogtext"
               android:textColor="#FFF"
-              android:layout_gravity="center_vertical" android:layout_height="60dp" android:layout_width="200dp"/>
+              android:layout_gravity="center_vertical" android:layout_width="200dp" android:layout_height="80dp"/>
 	<Button android:text=">"
 	 		android:id="@+id/l84_dialogbutton"
 	  		android:layout_height="50dp" android:layout_width="60dp" android:layout_gravity="center_vertical">
