@@ -230,4 +230,13 @@ public class TextureAtlas
 	{
 		return generateTexturePart(new Vector2(896,768), new Vector2(896+128,768+256));
 	}
+	
+	/**
+	 * Returns the part of the texture for the finish
+	 * @return the texture part for the finish
+	 */
+	public TexturePart getFinishTextur()
+	{
+		return generateTexturePart(new Vector2(768,128), new Vector2(768+256,128+64));
+	}
 }
