@@ -101,6 +101,11 @@ public class ModelStreet extends Model {
 		streetActive = false;
 	}
 	
+	public boolean isStreetActive()
+	{
+		return streetActive;
+	}
+	
 	/**
 	 * Draws the street and all drains.
 	 * @param gl OpenGL ES context

@@ -18,7 +18,6 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	private ImageView image;
 	private TextView text;
 	private Button button;
-	private Activity activity;
 	
 	public ResultDialog(Context context)
 	{
@@ -35,11 +34,6 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		setIcon(R.drawable.l84_transparent);
 		setTitle(R.string.l84_result_title);
 		setView(view);
-	}
-	
-	public void setActivity(Activity activity)
-	{
-		this.activity = activity;
 	}
 	
 	public void setResultValues(int totalmoney, int remainingmoney)

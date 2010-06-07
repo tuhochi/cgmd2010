@@ -37,8 +37,8 @@ public class RenderManager implements Renderer,OnDismissListener {
 	private ProgressManager progman;
 	
 	float streetMeter = 0;
-	DecimalFormat df = new DecimalFormat( "0.0" );
-	
+	DecimalFormat df = new DecimalFormat("0");
+
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
 		@Override
@@ -64,8 +64,8 @@ public class RenderManager implements Renderer,OnDismissListener {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			streetMeter --;
-			tfFps.setText(df.format(streetMeter)+"m");
+			tfFps.setText(df.format(streetMeter) + "m");
+			if (street.isStreetActive()) { streetMeter --; }
 		}
 	};
 	
@@ -80,7 +80,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 		this.tfPoints = (TextView) levelActivity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) levelActivity.findViewById(R.id.l84_PointsShadow);
 		
-		streetMeter = ((street.getStreetWidth() - 8f ) * 2);;
+		streetMeter = street.getStreetWidth();
 		
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
