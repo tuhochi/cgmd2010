@@ -18,7 +18,7 @@ public abstract class Projectile extends GLObject{
 	protected short mRadius = 4;
 	protected short mSpeed = 5;
 	protected short mDmg = 10;
-	protected int mTexture = R.drawable.l12_basic_projectile;
+	protected int mTexture = -1;
 	long ms;
 	double dt;
 	int distance;

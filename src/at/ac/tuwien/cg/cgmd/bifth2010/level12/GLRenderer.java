@@ -43,7 +43,6 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		System.out.println("ON SURFACE CHANGED!");
 		 gl.glMatrixMode(GL10.GL_PROJECTION);    
 	     gl.glOrthof(0.0f, width, 0.0f, height, -1.0f, 10.0f);
 	     gl.glViewport(0, 0, width, height);   
@@ -64,7 +63,6 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		System.out.println("ON SURFACE CREATED!");	
 		TextureManager.getSingletonObject().initializeGL(gl);
 		TextureManager.getSingletonObject().loadTextures();
 	}

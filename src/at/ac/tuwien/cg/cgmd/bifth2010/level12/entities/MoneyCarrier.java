@@ -21,6 +21,10 @@ public abstract class MoneyCarrier extends GLObject {
 	protected short mStrength = 1; //how much damage it can do
 	protected int mType = 0; //zombie type
 	protected int mTexture = R.drawable.l12_enemie_lvl0;
+	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1;
+	protected int mDyingTextur2 = R.drawable.l12_enemie_dying2;
+	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
+	protected int mDyingTextur4 = R.drawable.l12_enemie_dying4;
 	protected int mSound = R.raw.l12_enemie1_dying;
 	protected short mMoney = 10;
 	protected short mSpeed = 5;
@@ -28,16 +32,21 @@ public abstract class MoneyCarrier extends GLObject {
 	long ms;
 	double dt;
 	double distance;
+	protected long mStartDyingTime = -1;
+	boolean mReadyToRemove = false;
 	
 	public void activate(){
 		super.setActiveState(true);
 		mLastFrametime = System.currentTimeMillis();
+		mReadyToRemove = false;
+		mStartDyingTime = -1;
 	}
 
 	public void deactivate(){
 		super.setActiveState(false);
 		mMovePos = 0;
 		mLastFrametime = -1;
+		mReadyToRemove = true;
 	}
 	
 	public void setXY(int xCentr, int yCentr ){
@@ -97,13 +106,28 @@ public abstract class MoneyCarrier extends GLObject {
 		dt = (ms - mLastFrametime) * 0.001;
 		if( GameMechanics.getSingleton().running() == false ) dt = 0;
 		mLastFrametime = ms;
-		distance = mSpeed * dt;
+		if( mStartDyingTime != -1 )distance = 0;
+		else distance = mSpeed * dt;
 		mMovePos -= distance;
 		//calculate actual position
 		mX = (int)(mStartPos + mMovePos);
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
-		TextureManager.getSingletonObject().setTexture( mTexture );
+		
+		if( mStartDyingTime == -1) TextureManager.getSingletonObject().setTexture( mTexture );
+		else{
+			long dyt = System.currentTimeMillis() - mStartDyingTime;
+			//System.out.println("DYT: "+dyt+" cycle time: "+Definitions.DIE_ANIMTE_CYCLE_TIME);
+			if( dyt > (0 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur1 );
+			if( dyt > (1 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur2 );
+			if( dyt > (2 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur3 );
+			if( dyt > (3 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
+			if( dyt > (4 * Definitions.DIE_ANIMTE_CYCLE_TIME) ) {
+				mReadyToRemove = true;
+				System.out.println("ready to remove - dyt : " + dyt);
+				return;
+			}
+		}
 		super.draw(gl);
 		gl.glPopMatrix();
 	}
@@ -127,7 +151,15 @@ public abstract class MoneyCarrier extends GLObject {
 	}
 	
 	public void die(){
-		SoundHandler.getSingleton().play(mSound);
-		GameMechanics.getSingleton().addIron(mIronToDrop);
+		if( mStartDyingTime == -1 ){
+			SoundHandler.getSingleton().play(mSound);
+			GameMechanics.getSingleton().addIron(mIronToDrop);
+			System.out.println("DIE");
+			mStartDyingTime = System.currentTimeMillis();
+		}
+	}
+
+	public boolean toRemove() {
+		return mReadyToRemove;
 	}
 }

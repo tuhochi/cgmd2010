@@ -40,7 +40,7 @@ public abstract class GLObject {
 			gl.glColorPointer( 4, GL10.GL_FLOAT, 0, mColorBuffer );	
 			gl.glEnable(GL10.GL_BLEND);
 			gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-			TextureManager.getSingletonObject().setTexture(mTexture);
+			//TextureManager.getSingletonObject().setTexture(mTexture);
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
 			
 			gl.glDrawElements(GL10.GL_TRIANGLES, mIndicesCounter, GL10.GL_UNSIGNED_SHORT, mIndicesBuffer);
