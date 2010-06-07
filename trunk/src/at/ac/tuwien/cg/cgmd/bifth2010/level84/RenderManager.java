@@ -10,6 +10,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
@@ -19,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class RenderManager implements Renderer {
+public class RenderManager implements Renderer,OnDismissListener {
 
 	private LevelActivity activity;
 	private ModelStreet street;
@@ -35,6 +37,8 @@ public class RenderManager implements Renderer {
 	private int fps = 0;
 	private ProgressManager progman;
 	private Toast toast;
+	
+	private boolean introActive = true;
 	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
@@ -66,10 +70,6 @@ public class RenderManager implements Renderer {
 		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
 		
-		
-		
-		//start playing background sounds
-
 		//init toast for later usage	
 		CharSequence endtext = "Result";
 		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
@@ -181,5 +181,12 @@ public class RenderManager implements Renderer {
 		gl.glDepthFunc(GL10.GL_LEQUAL);*/
 		
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+	}
+
+
+
+	@Override
+	public void onDismiss(DialogInterface dialog) {
+		street.activateStreet();
 	}
 }
