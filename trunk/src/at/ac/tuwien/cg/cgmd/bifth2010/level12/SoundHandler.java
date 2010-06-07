@@ -59,9 +59,12 @@ public class SoundHandler {
 	
 	
 	public void play( int resID ){
-		System.out.println("Trying to play: resID - "+resID+" sampleID - "+mSoundIDs.get(resID));
+		
 		if( mSoundOn == false || mSP == null ) return;
-		if( mSoundIDs.containsKey(resID) == false ) return;
+		if( mSoundIDs.containsKey(resID) == false ){
+			System.out.println("Trying to play: resID - "+resID+", but sample not found in SoundMap.");
+			return;
+		}
 		mSP.play(mSoundIDs.get(resID), mStreamVolume, mStreamVolume, 1, 0, 1.0f);
 	}
 	
@@ -73,7 +76,6 @@ public class SoundHandler {
 	
 	
 	public void stop(){
-		//mSoundIDs.clear();
 		mSingleton = null;
 		if( mSP == null ) return;
 		mSP.release();

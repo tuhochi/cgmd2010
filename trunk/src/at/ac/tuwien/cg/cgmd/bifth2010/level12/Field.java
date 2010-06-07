@@ -24,6 +24,9 @@ public class Field extends GLObject{
 		mYEnd = yend;
 		mX = ( xend - xstart ) / 2 + xstart;
 		mY = ( yend - ystart ) / 2 + ystart;
+	   	TextureManager.getSingletonObject().add(R.drawable.l12_grass);
+    	TextureManager.getSingletonObject().add(R.drawable.l12_road);		
+    	TextureManager.getSingletonObject().add(R.drawable.l12_house);
 	}
 	
 	public void initVBOs(){

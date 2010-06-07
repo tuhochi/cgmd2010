@@ -25,7 +25,6 @@ public class LevelActivity extends Activity{
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	System.out.println("ON CREATE ACTIVITY");
     	//Debug.startMethodTracing("Tracefile");
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -36,7 +35,6 @@ public class LevelActivity extends Activity{
     
     @Override
     public void onStart(){   
-       	System.out.println("ON START ACTIVITY");
         super.onStart();
     }
     
@@ -67,29 +65,8 @@ public class LevelActivity extends Activity{
     	
     	//SoundHandler.getSingleton().addResource(R.raw.l12_music);
     	TextureManager.getSingletonObject().initializeContext(this);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_grass1);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_grass2);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_basic_tower);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_advanced_tower);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_hyper_tower);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_advanced_tower);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_basic_projectile);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_advanced_projectile);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_hyper_projectile);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl0);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl1);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl2);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_enemie_lvl3);
-    	TextureManager.getSingletonObject().add(R.drawable.l12_icon);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_road);		
-    	TextureManager.getSingletonObject().add(R.drawable.l12_house);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny1);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny2);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny3);		
-    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny1_icon);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny2_icon);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_bunny3_icon);	
-    	TextureManager.getSingletonObject().add(R.drawable.l12_grass);
+    	TextureManager.getSingletonObject().add(R.drawable.l12_icon);			
+ 
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
     	int fieldheight = (int)( mDisplay.getHeight() * 0.9 ) ;
     	int menuheight = mDisplay.getHeight() - fieldheight;

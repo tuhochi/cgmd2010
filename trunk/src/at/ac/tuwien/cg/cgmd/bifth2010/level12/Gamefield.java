@@ -136,7 +136,7 @@ public class Gamefield extends GLObject{
 	public int getFieldCount( float xpos, float ypos ){
 		int xf = (int)(Math.floor(xpos / mSegLength));
 		int yf = (int)(Math.floor(ypos / mSegLength)) * mXSegCount;
-		System.out.println("xpos: "+xpos+" ypos: "+ypos+" xf: "+xf+" yf: "+yf+" f: "+(xf+yf)+" fmax: "+mFields.length);
+		//System.out.println("xpos: "+xpos+" ypos: "+ypos+" xf: "+xf+" yf: "+yf+" f: "+(xf+yf)+" fmax: "+mFields.length);
 		if( (xf + yf)>mFields.length) return mFields.length-1;
 		return (xf+yf);
 	}

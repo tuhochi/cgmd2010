@@ -31,14 +31,17 @@ public class GameWorld {
 	static int res[];
 	        
 	boolean remove;
-	//private long mLastCollDetDone = 0;
-	
-	//private static LevelActivity mGameContext = null;
+	private long mLastCollDetDone = 0;
 	
 	
 	private GameWorld(){
 		initGameField();
 		initTower();
+		//for initializing textures:
+		MoneyCarrier c= new CarrierRoundOne();
+		c = new CarrierRoundTwo();
+		c = new CarrierRoundThree();
+		c = new CarrierRoundFour();
 	}
 	
 	public static void setDisplay( int height, int width){
@@ -304,7 +307,8 @@ public class GameWorld {
 	
 	
 	public void calcCollisions(){
-		//mLastCollDetDone = System.currentTimeMillis();
+		if( (System.currentTimeMillis() - mLastCollDetDone) < Definitions.COLLISION_DETECTION_TIMEOUT) return;
+		mLastCollDetDone = System.currentTimeMillis();
 		if( mEnemies == null ) return;
 		//simple stupid way
 		for( int i = 0; i < mBasicTower.length; i++){
@@ -388,28 +392,39 @@ public class GameWorld {
                 if( mEnemies.get(i).getX() <= 1.0f) {
                     GameMechanics.getSingleton().addMoney( mEnemies.get(i).getMoney() );
                     mEnemies.get(i).deactivate();
-                    remove = true;
+                    mEnemies.remove(i);
+                    i--;
                 }
-                if( mEnemies.get(i).getHP() <= 0 ){
+                else if( mEnemies.get(i).getHP() <= 0 ){
                     GameMechanics.getSingleton().removeMoney( mEnemies.get(i).getMoney() );
-                    mEnemies.get(i).deactivate();
+                    //mEnemies.get(i).deactivate();
                     mEnemies.get(i).die();
-                    remove = true;
+                    if ( mEnemies.get(i).toRemove() ){
+                       	mEnemies.get(i).deactivate();
+                    	mEnemies.remove(i);
+                    	i--;
+                    }
+                    
                 }
-                if( remove ) mEnemies.remove(i);
             }
         }
 }
 
    public void drawTowers(GL10 gl){
         for ( int i = 0; i < mBasicTower.length; i++){
-            if( mBasicTower[i].getActiveState()) mBasicTower[i].draw(gl);
+            if( mBasicTower[i].getActiveState()){
+            	mBasicTower[i].draw(gl);
+            }
         }
         for ( int i = 0; i < mAdvancedTower.length; i++){
-            if( mAdvancedTower[i].getActiveState() )mAdvancedTower[i].draw(gl);
+            if( mAdvancedTower[i].getActiveState() ){
+            	mAdvancedTower[i].draw(gl);
+            }
         }
         for ( int i = 0; i < mHyperTower.length; i++){
-            if( mHyperTower[i].getActiveState()) mHyperTower[i].draw(gl);
+            if( mHyperTower[i].getActiveState()){
+            	mHyperTower[i].draw(gl);
+            }
         }
     }
 

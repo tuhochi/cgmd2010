@@ -2,10 +2,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 public final class Definitions {
 	public static final int SOUND_CHANNEL_NUMBER = 25;
+	public static final int DIE_ANIMTE_CYCLE_TIME = 250;
 	
 	public static int FIELD_SEGMENT_LENGTH = 10;
 	public static final short FIELD_HEIGHT_SEGMENTS = 5;	
-	public static final int COLLISION_DETECTION_TIMEOUT = 10;
+	public static final int COLLISION_DETECTION_TIMEOUT = 100;
 	
 	//Game Mechanics:
 	public static final int STARTING_MONEY = 90;
@@ -108,6 +109,7 @@ public final class Definitions {
 		public static final short FOURTH_ROUND_ENEMIE_MONEY = 20;
 		public static final short FOURTH_ROUND_ENEMIE_SPEED = 50;
 		public static final short FOURTH_ROUND_ENEMIE_IRON = 40;
+
 
 		
 }

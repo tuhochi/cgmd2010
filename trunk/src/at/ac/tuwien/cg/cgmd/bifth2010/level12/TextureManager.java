@@ -9,31 +9,34 @@ import android.graphics.BitmapFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.Integer;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 import android.opengl.GLUtils;
 
 public class TextureManager {
 
-	public static java.util.HashMap <Integer, Integer> textureMap; 
-	private int[] textureFiles;
-	private GL10 gl;
-	private Context context;
-	private int[] textures;
-	private static TextureManager singletonObject;
-	int textureid;
+	public static HashMap <Integer, Integer> mTextureMap = null; 
+	private GL10 mGl;
+	private Context mContext;
+	private static TextureManager singletonObject = null;
+	private int mTextures[] = null;
 	
 	public void initializeGL(GL10 gl){		
-		this.gl = gl;
+		mGl = gl;
+	}
+	
+
+	private TextureManager() {
+		mTextureMap = new HashMap<Integer, Integer>();
 	}
 	
 	public void initializeContext( Context context ){
-		this.context = context;
-		this.textureMap = new java.util.HashMap<Integer, Integer> ();
-	}
-
-	private TextureManager() {
+		mContext = context;
 	}
 	
-	public static synchronized TextureManager getSingletonObject() {
+	public static TextureManager getSingletonObject() {
 		if (singletonObject == null) {
 			singletonObject = new TextureManager();
 		}
@@ -45,19 +48,9 @@ public class TextureManager {
 	 * 
 	 * @param resource
 	 */
-	public void add(int resource) {	
-		if(textureFiles==null) {
-			textureFiles = new int[1];
-			textureFiles[0]=resource;		
-		} else {
-			int[] newarray = new int[textureFiles.length+1];
-			
-			for(int i=0;i<textureFiles.length;i++) {
-				newarray[i]=textureFiles[i];
-			}		
-			newarray[textureFiles.length]=resource;
-			textureFiles = newarray;
-		}
+	public void add(int resID) {	
+		if( mTextureMap.containsKey(resID)) return;
+		mTextureMap.put(resID, 0 );
 	}
 	
 	/**
@@ -65,59 +58,48 @@ public class TextureManager {
 	 * 
 	 */
 	public void loadTextures() {
-		
-		// generate one texture pointer...
-		int[] temp_texture = new int[textureFiles.length]; 
-		gl.glGenTextures(textureFiles.length, temp_texture, 0);
-		textures = temp_texture;
-		
-		for(int i=0;i<textureFiles.length;i++) {
-			// get the texture from the Android resource directory
-			InputStream is = context.getResources().openRawResource(textureFiles[i]);
+		Set<Integer> keys = mTextureMap.keySet();
+		mTextures = new int[ keys.size() ];
+		int counter = 0;
+		mGl.glGenTextures(keys.size(), mTextures, 0);
+		if( keys.isEmpty() ) return;
+		Iterator<Integer> keysiter = keys.iterator();
+		do{
+			int resID = keysiter.next();
+			InputStream is = mContext.getResources().openRawResource(resID);
 			Bitmap bitmap = null;
 			try {
-				// BitmapFactory is an Android graphics utility for images
-				bitmap = BitmapFactory.decodeStream(is);
-				
+				bitmap = BitmapFactory.decodeStream(is);	
 			} finally {
 				try {
 					is.close();
 				} catch (IOException e) {
 				}
-			}			
-
-			this.textureMap.put(new Integer(textureFiles[i]),new Integer(i));
-			
-			//...and bind it to our array
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[i]);
-			
-			//Create Nearest Filtered Texture
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-			gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-			
-			
-			//Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
+			}		
+			mGl.glBindTexture(GL10.GL_TEXTURE_2D, counter);
+			mGl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+			mGl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 	        bitmap.recycle();
-		}
-		
+			mTextureMap.put(resID, counter);
+			counter++;
+		} while( keysiter.hasNext());	
 	}
+	
 	/**
 	 * sets active texture according to id
 	 * @param id
 	 */
-	public void setTexture(int id) {
-		
-		try {
-			textureid = this.textureMap.get((Integer)id).intValue();
-	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, this.textures[textureid]);
-		
-		}
-		catch(Exception e) {
+	public void setTexture(int resID) {
+		if( mTextureMap == null ) System.out.println("mTEXTUREMAP == NULL ");
+		if( mTextureMap.containsKey(resID) == false){
+			System.out.println("Key not found! key:"+resID);
 			return;
 		}
+		int val = mTextureMap.get(resID);
+		if( val == -1 ) return;
+		mGl.glBindTexture(GL10.GL_TEXTURE_2D, val);
 	}
 	
-
 }
 
