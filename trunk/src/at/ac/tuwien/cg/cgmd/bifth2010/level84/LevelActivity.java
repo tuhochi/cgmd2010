@@ -6,9 +6,13 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.drawable.AnimationDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +23,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level83.FinishDialog;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 /**
@@ -77,9 +82,14 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private Vibrator vibrator;
 	
+	protected static Activity levelActivity;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//static variable needed for handler to show results at the end of the game
+		levelActivity = this;
 		
 		setContentView(R.layout.l84_level);
 		
@@ -301,6 +311,21 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		setResult(Activity.RESULT_OK, progman.asIntent());
 		super.finish();
 	}
+	
+	 public static Handler showResults = new Handler() {
+	    	@Override
+	    	public void handleMessage(Message msg) {
+	    		ResultDialog resultdialog = new ResultDialog(levelActivity);
+	    		resultdialog.setResultValues(msg.arg1, msg.arg2);
+	    		resultdialog.setOnDismissListener(new OnDismissListener() {
+					@Override
+					public void onDismiss(DialogInterface dialog) {
+						levelActivity.finish();
+					}
+				});
+	    		resultdialog.show();	
+	    	}
+	    };
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
@@ -17,7 +18,6 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
-import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class RenderManager implements Renderer,OnDismissListener {
@@ -35,9 +35,9 @@ public class RenderManager implements Renderer,OnDismissListener {
 	
 	private int fps = 0;
 	private ProgressManager progman;
-	private Toast toast;
-	private ResultDialog resultdialog;
-	private boolean showresults = false;
+	
+	float streetMeter = 0;
+	DecimalFormat df = new DecimalFormat( "0.0" );
 	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
@@ -59,6 +59,15 @@ public class RenderManager implements Renderer,OnDismissListener {
 		}
 	};
 	
+	/** Handler for gameTime */
+	private Handler updateGameTime = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			streetMeter --;
+			tfFps.setText(df.format(streetMeter)+"m");
+		}
+	};
 	
 	
 	public RenderManager(at.ac.tuwien.cg.cgmd.bifth2010.level84.LevelActivity levelActivity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman, SoundManager soundManager) {
@@ -71,9 +80,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 		this.tfPoints = (TextView) levelActivity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) levelActivity.findViewById(R.id.l84_PointsShadow);
 		
-		//init toast for later usage	
-		CharSequence endtext = "Result";
-		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_LONG);
+		streetMeter = ((street.getStreetWidth() - 8f ) * 2);;
 		
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
@@ -81,6 +88,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 			public void run() {
 				updateFps.sendEmptyMessage(0);
 				updatePoints.sendEmptyMessage(0);
+				updateGameTime.sendEmptyMessage(0);
 			}
 		}, 1000, 1000);
 	}
@@ -134,17 +142,14 @@ public class RenderManager implements Renderer,OnDismissListener {
 	{
 		if (streetPos < ((-street.width / 2) + 8f))
 		{
-			toast.setText("You lost $" + String.valueOf(progman.getStartValue()-progman.getRemainingValue()));
-			toast.show();
-			this.activity.finish();
-//			
-			//this.activity.finishLevel.sendEmptyMessage(0);
-//				resultdialog = new ResultDialog(levelActivity.getApplicationContext());
-//				resultdialog.setActivity(levelActivity);
-//				resultdialog.setOnDismissListener(this);
-//				resultdialog.setResults(progman.getStartValue(), progman.getRemainingValue());
-//				resultdialog.show();
-//			
+			//stop street translation
+			street.stopStreet();
+			
+			//get money values and show resultdialog
+			Message moneyvalues = new Message();
+			moneyvalues.arg1 = progman.getStartValue();
+			moneyvalues.arg2 = progman.getRemainingValue();
+			LevelActivity.showResults.sendMessage(moneyvalues);
 		}
 	}
 	
