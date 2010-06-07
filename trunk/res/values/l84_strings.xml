@@ -22,8 +22,4 @@
     <string name="l84_intro_step2">Rotate your device to align the gem to the drain</string>
     <string name="l84_intro_step3">Release the gem</string>
     <string name="l84_result_title">Results</string>
-    <string name="l84_result_totalmoney">Total money:</string>
-    <string name="l84_result_remainingmoney">Remaining money:</string>
-    <string name="l84_result_lostmoney">Lost money:</string>
-    
 </resources>
