@@ -180,9 +180,9 @@ public class ModelGem extends Model {
 		if (drainToCheck != null) {
 			boolean drainHit = false;
 			
-			Log.i("checking", "deltaPos: " + deltaPos + " - maxDeltaHolePos: " + maxDeltaHolePos);
+			//Log.i("checking", "deltaPos: " + deltaPos + " - maxDeltaHolePos: " + maxDeltaHolePos);
 			if (deltaPos < maxDeltaHolePos) {
-				Log.i("checking", "deeper!");
+				//Log.i("checking", "deeper!");
 				float deltaAngle = Math.abs(drainToCheck.getOrientationAngle() - deviceRotation);
 						
 				switch (drainToCheck.getStyle()) {

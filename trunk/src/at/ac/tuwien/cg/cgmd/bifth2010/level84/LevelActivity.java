@@ -269,8 +269,8 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		AnimationDrawable ani = null;
 		
 		switch(type) {
-		case SPLASH: ani = (AnimationDrawable)aniViewWatersplash.getBackground();
-		case DUST: ani = (AnimationDrawable)aniViewDust.getBackground();
+		case SPLASH: ani = (AnimationDrawable)aniViewWatersplash.getBackground(); break;
+		case DUST: ani = (AnimationDrawable)aniViewDust.getBackground(); break;
 		}
 		
 		if (ani != null) {

@@ -38,8 +38,6 @@ public class RenderManager implements Renderer,OnDismissListener {
 	private ProgressManager progman;
 	private Toast toast;
 	
-	private boolean introActive = true;
-	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
 		@Override
@@ -111,7 +109,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 		
 		checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
 		
-		Log.i("streetPos", "position: " + street.getStreetPos());
+		//Log.i("streetPos", "position: " + street.getStreetPos());
 		
 		//DRAW ---------------------------
 		gl.glLoadIdentity();
