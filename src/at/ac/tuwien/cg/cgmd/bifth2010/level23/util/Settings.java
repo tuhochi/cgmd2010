@@ -51,4 +51,6 @@ public class Settings
 	public static final float SCOREHEIGHT_MODIFIER = 0.01f;
 	
 	public static final int MAX_HEIGHT = 4000;
+	
+	public static boolean SOUND_ENABLED;
 }
