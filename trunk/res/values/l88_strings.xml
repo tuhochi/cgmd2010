@@ -8,14 +8,14 @@
 <string name="l88_help_game_end">The game ends, if all gold is hidden or if the bunny get caught.</string>
 
 <string name="l88_help_controls_title">Controls</string>
-<string name="l88_help_controls_moving_bunny">The game is played with the touchscreen. The bunny moves on it's own, tell him where to go by touching the screen.</string>
+<string name="l88_help_controls_moving_bunny">The game is played with the touchscreen. The bunny moves on it\'s own, tell him where to go by touching the screen.</string>
 <string name="l88_help_controls_pause">Touch the bunny itself and the game will be paused. To continue the game, just tell the bunny a new direction it shall go.</string>
 
 <string name="l88_help_powerups_title">Shortcuts and Power-ups</string>
 <string name="l88_help_powerups_shortcuts">Several shortcuts can be found in the game, some are for the bunny, but some are for the police.</string>
 <string name="l88_help_powerups_bunny_shortcuts">Taverns and universities allow the bunny to pass, but not the police.</string>
-<string name="l88_help_powerups_police_shortcuts">Fortresses and churches on the other hand are a shortcut for the police, the bunny can't use them.</string>
-<string name="l88_help_powerups_speed">Gallows are like a power-up for the bunny. If the bunny passes over one it get's motivated not to get caught, and therefore will move faster for several seconds.</string>
+<string name="l88_help_powerups_police_shortcuts">Fortresses and churches on the other hand are a shortcut for the police, the bunny can\'t use them.</string>
+<string name="l88_help_powerups_speed">Gallows are like a power-up for the bunny. If the bunny passes over one it get\'s motivated not to get caught, and therefore will move faster for several seconds.</string>
 
 
 <string name="l88_mode_ready">Bank Heist Bunny \nPress up to play</string>

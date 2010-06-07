@@ -59,7 +59,12 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private TextView tfPoints;
 	private TextView tfPointsShadow;
-	private ImageView aniView;
+	private ImageView aniViewRoundBreak;
+	private ImageView aniViewOctBreak;
+	private ImageView aniViewRectBreak;
+	private ImageView aniViewDiamondBreak;
+	private ImageView aniViewWatersplash;
+	private ImageView aniViewDust;
 	/*private AnimationDrawable roundGemBreakAni;
 	private AnimationDrawable octGemBreakAni;
 	private AnimationDrawable rectGemBreakAni;
@@ -108,7 +113,21 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		
 		soundManager.playMusic();
 
-		aniView = (ImageView) findViewById(R.id.l84_imageView);
+		aniViewRoundBreak = (ImageView) findViewById(R.id.l84_aniViewRoundBreak);
+		aniViewOctBreak = (ImageView) findViewById(R.id.l84_aniViewOctBreak);
+		aniViewRectBreak = (ImageView) findViewById(R.id.l84_aniViewRectBreak);
+		aniViewDiamondBreak = (ImageView) findViewById(R.id.l84_aniViewDiamondBreak);
+		
+		aniViewWatersplash = (ImageView) findViewById(R.id.l84_aniViewWatersplash);
+		aniViewDust = (ImageView) findViewById(R.id.l84_aniViewDust);
+		
+		aniViewRoundBreak.setBackgroundResource(R.drawable.l84_ani_gembreak_round);
+		aniViewOctBreak.setBackgroundResource(R.drawable.l84_ani_gembreak_oct);
+		aniViewRectBreak.setBackgroundResource(R.drawable.l84_ani_gembreak_rect);
+		aniViewDiamondBreak.setBackgroundResource(R.drawable.l84_ani_gembreak_diamond);
+		
+		aniViewWatersplash.setBackgroundResource(R.drawable.l84_ani_watersplash);
+		aniViewDust.setBackgroundResource(R.drawable.l84_ani_dust);
 		
 	/*case ModelDrain.ROUND: breakAnimationImageView.setBackgroundResource(R.drawable.l84_animation_intro); break;
 		roundGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
@@ -229,28 +248,35 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	}
 	
 	public void showBreakAni(int type) {
+
+		AnimationDrawable ani = null;
 		
 		switch(type) {
-		case ModelDrain.ROUND: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_round); break;
-		case ModelDrain.OCT: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_oct); break;
-		case ModelDrain.RECT: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_rect); break;
-		case ModelDrain.DIAMOND: aniView.setBackgroundResource(R.drawable.l84_ani_gembreak_diamond); break;
+		case ModelDrain.ROUND: ani = (AnimationDrawable)aniViewRoundBreak.getBackground(); break;
+		case ModelDrain.OCT: ani = (AnimationDrawable)aniViewOctBreak.getBackground(); break;
+		case ModelDrain.RECT: ani = (AnimationDrawable)aniViewRectBreak.getBackground(); break;
+		case ModelDrain.DIAMOND: ani = (AnimationDrawable)aniViewDiamondBreak.getBackground(); break;
 		}
 		
-		AnimationDrawable ani = (AnimationDrawable)aniView.getBackground();
-		ani.stop();
-		ani.start();
+		if (ani != null) {
+			ani.stop();
+			ani.start();
+		}
 	}
 	
 	public void showAni(AnimationType type) {
+		
+		AnimationDrawable ani = null;
+		
 		switch(type) {
-		case SPLASH: aniView.setBackgroundResource(R.drawable.l84_ani_watersplash); break;
-		case DUST: aniView.setBackgroundResource(R.drawable.l84_ani_dust); break;
+		case SPLASH: ani = (AnimationDrawable)aniViewWatersplash.getBackground();
+		case DUST: ani = (AnimationDrawable)aniViewDust.getBackground();
 		}
 		
-		AnimationDrawable ani = (AnimationDrawable)aniView.getBackground();
-		ani.stop();
-		ani.start();
+		if (ani != null) {
+			ani.stop();
+			ani.start();
+		}
 	}
 	
 	@Override

@@ -6,10 +6,44 @@
 	<android.opengl.GLSurfaceView android:id="@+id/l84_openglview"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" />
 
+	
 	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="160dp" android:layout_height="160dp" 
 		android:layout_gravity="center" 
-		android:id="@+id/l84_imageView" />
+		android:id="@+id/l84_aniViewRoundBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewOctBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewRectBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewDiamondBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewWatersplash" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewDust" />
+		
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_crosshair" 
+		 android:background="@drawable/l84_crosshair" />
+		 
 
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/l84_TableLayout" android:layout_width="fill_parent"
