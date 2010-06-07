@@ -26,18 +26,23 @@ public class LevelRenderer implements Renderer {
 	private final float BUNNY_DEFAULT_MOVEMENT_UNIT = 6.0f;
 	private final float COP_DEFAULT_MOVEMENT_UNIT = 4.0f;
 	private final float DEFAULT_FPS = 22.0f;
-	public final static int BUNNY_WIDTH = 60;
-	public final static int BUNNY_HEIGHT = 60;
+	public final static int BUNNY_WIDTH = 50;
+	public final static int BUNNY_HEIGHT = 50;
+	public final static int BUNNY_INIT_X = 0;
+	public final static int BUNNY_INIT_Y = 0;
 	public final static int COP_WIDTH = 50;
 	public final static int COP_HEIGHT = 50;
-	private final static int LEVEL_WIDTH = 5;
-	private final static int LEVEL_HEIGHT = 6;
-	private final static int LEVEL_TILESIZE = 100;
+	public final static int LEVEL_WIDTH = 5;
+	public final static int LEVEL_HEIGHT = 6;
+	public final static int LEVEL_TILESIZE = 100;
 	private final static int ACTION_WIDTH = 5;
 	private final static int ACTION_HEIGHT = 6;
 	private final static int ACTION_TILESIZE = 100;
 	public final static int CONTROL_SIZE = 150;
 	private final static float CATCH_DISTANCE = COP_WIDTH/2;
+	private final static int NUMBER_OF_CARS = 2;
+	private final static int CAR_LENGTH = 60;
+	private final static int CAR_WIDTH = 40;
 	
 	private boolean drawLock = false;
 	private float[] keystates = new float[4];
@@ -129,10 +134,10 @@ public class LevelRenderer implements Renderer {
 			put(5, "TintersectionBottom");
 			put(6, "TintersectionLeft");
 			put(7, "TintersectionRight");
-			put(8, "smallHousefl");
-			put(9, "smallHousefr");
-			put(10, "smallHousebl");
-			put(11, "smallHousebr");
+			put(8, "houseGlass");
+			put(9, "houseDoor1");
+			put(10, "houseDoor2");
+			put(11, "houseWall");
 			put(12, "housefl");
 			put(13, "housefr");
 			put(14, "housebl");
@@ -170,13 +175,8 @@ public class LevelRenderer implements Renderer {
 		cars = new ArrayList<Tablet>();
 	}
 
-	public void setKey (int code, float amount) {
-		keystates[code] = amount;
-	}
-
-	public void releaseKey(int code) {
-		keystates[code] = 0;
-	}
+	public void setKey (int code, float amount) {	keystates[code] = amount; }
+	public void releaseKey(int code) { keystates[code] = 0; }
 
 	public void onTouch(MotionEvent event) {
 		int centerX = CONTROL_X + (int)((float)CONTROL_SIZE*scale)/2;
@@ -213,6 +213,7 @@ public class LevelRenderer implements Renderer {
 		//see where the bunny is to find out what we can do
 		float xPos = bunny.getX()+BUNNY_WIDTH/2;
 		float yPos = bunny.getY()+BUNNY_HEIGHT/2;
+		Point bunnyPos = new Point(xPos, yPos);
 		int tile_x = (int)((xPos) / (float)ACTION_TILESIZE);
 		int tile_y = (int)((yPos) / (float)ACTION_TILESIZE);
 
@@ -226,6 +227,18 @@ public class LevelRenderer implements Renderer {
 		}
 
 		if (!proximity && !drawLock) {
+			it = cars.iterator();
+			float leastproximity = LEVEL_WIDTH*LEVEL_TILESIZE;
+			Tablet n; 
+			while (it.hasNext()) {
+				Tablet t = it.next();
+				Point tabletpos = new Point(t.getX()+t.getWidth()/2.0f, t.getY()+t.getHeight()/2.0f);
+				if (Point.distance(tabletpos, bunnyPos) < leastproximity) {
+					leastproximity = Point.distance(tabletpos, bunnyPos);
+					n = t;
+				}
+			}
+			
 			switch (actionMap[tile_y][tile_x]) {
 			case 1:	//spraytag action
 				// 	put spraytag tablet here 
@@ -233,7 +246,7 @@ public class LevelRenderer implements Renderer {
 				acted = true;
 				break;
 			}
-
+			
 			if (acted) {	
 				if (copCounter == 0 || Math.ceil(crime/20)>copCounter)
 					cops.add(new Tablet(context, COP_WIDTH, COP_HEIGHT, 0, 0, manager.getTexture("cop_front_l"), gl));
@@ -262,12 +275,11 @@ public class LevelRenderer implements Renderer {
 		}
 
 		int coll = checkCollision(xPos,yPos,x,y, BUNNY_WIDTH, BUNNY_HEIGHT); 
-		if (coll == 0)	{
+		if (coll == Point.IDENT)	{
 			bunny.move(x, y);
 			posX = x; posY = y;
 			myX = x; myY = y;
-		}
-		else {
+		} else {
 			//strafe along edges
 			if (x > 0) newX = BUNNY_MOVEMENT_UNIT;
 			else if (x < 0) newX = -BUNNY_MOVEMENT_UNIT;
@@ -276,8 +288,8 @@ public class LevelRenderer implements Renderer {
 			else if (y < 0) newY = -BUNNY_MOVEMENT_UNIT;
 			else newY = 0;
 			
-			if ((coll & 1) > 0 || (coll & 2) > 0) newX = 0; // left/right
-			if ((coll & 4) > 0 || (coll & 8) > 0) newY = 0; // up/down
+			if ((coll & Point.RIGHT) > 0 || (coll & Point.LEFT) > 0) newX = 0; // left/right
+			if ((coll & Point.UPPER) > 0 || (coll & Point.LOWER) > 0) newY = 0; // up/down
 				
 			bunny.move(newX, newY);
 			myX = newX; myY = newY;
@@ -302,10 +314,7 @@ public class LevelRenderer implements Renderer {
 		float altY;
 
 		int coll = checkCollision(xPos,yPos,x,y, COP_WIDTH, COP_HEIGHT);
-		if (coll==0 && 
-				xPos+x >= 0 && yPos+y >= 0 && 
-				xPos+x <= LEVEL_WIDTH*LEVEL_TILESIZE && 
-				yPos+y <= LEVEL_HEIGHT*LEVEL_TILESIZE)	{
+		if (coll==Point.IDENT)	{
 			cop.move(x, y);
 			cnewX = 0; cnewY = 0;
 		} else {
@@ -313,31 +322,25 @@ public class LevelRenderer implements Renderer {
 				if (bunnyX > xPos) { //RIGHT
 					newX = COP_MOVEMENT_UNIT;
 					newY = 0;
-				}
-				else { //LEFT
+				} else { //LEFT
 					newX = -COP_MOVEMENT_UNIT;
 					newY = 0;
 				}
-
 				if (bunnyY > yPos) {//UP
 					altX = 0;
 					altY = COP_MOVEMENT_UNIT;
-				}
-				else { //DOWN
+				} else { //DOWN
 					altX = 0;
 					altY = -COP_MOVEMENT_UNIT;
 				}	
-			}
-			else {
+			} else {
 				if (bunnyY > yPos) {//UP
 					newX = 0;
 					newY = COP_MOVEMENT_UNIT;
-				}
-				else { //DOWN
+				} else { //DOWN
 					newX = 0;
 					newY = -COP_MOVEMENT_UNIT;
 				}
-
 				if (bunnyX > xPos) { //RIGHT
 					altX = COP_MOVEMENT_UNIT;
 					altY = 0;
@@ -355,14 +358,13 @@ public class LevelRenderer implements Renderer {
 				altX = cnewX; altY = cnewY;
 			}
 
-			if (checkCollision(xPos,yPos,newX,newY, COP_WIDTH, COP_HEIGHT)==0 && 
+			if (checkCollision(xPos,yPos,newX,newY, COP_WIDTH, COP_HEIGHT)==Point.IDENT && 
 					xPos+newX >= 0 && yPos+newY >= 0 && 
 					xPos+newX <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 					yPos+newY <= LEVEL_HEIGHT*LEVEL_TILESIZE) {
 				cop.move(newX, newY);
 				cnewX = newX; cnewY = newY;
-			}
-			else if (checkCollision(xPos,yPos,altX,altY, COP_WIDTH, COP_HEIGHT)==0 && 
+			} else if (checkCollision(xPos,yPos,altX,altY, COP_WIDTH, COP_HEIGHT)==Point.IDENT && 
 					xPos+altX >= 0 && yPos+altY >= 0 && 
 					xPos+altX <= LEVEL_WIDTH*LEVEL_TILESIZE && 
 					yPos+altY <= LEVEL_HEIGHT*LEVEL_TILESIZE) {
@@ -383,7 +385,63 @@ public class LevelRenderer implements Renderer {
 	}
 
 	private int checkCollision(float xPos, float yPos, float xwise, float ywise, float tabletWidth, float tabletHeight) {
-		//find out which tile we want to go to
+		// returns directions in which collisions happen when moving by xwise/ywise (Point. LEFT/RIGHT/UPPER/LOWER)
+		int result = 0;
+		
+		Rectangle targetPos = new Rectangle(new Point(xPos+xwise, yPos+ywise), tabletWidth, tabletHeight);
+		Rectangle targetPosX = new Rectangle(new Point(xPos+xwise, yPos), tabletWidth, tabletHeight);
+		Rectangle targetPosY = new Rectangle(new Point(xPos, yPos+ywise), tabletWidth, tabletHeight);
+
+		// check world boundaries
+		int ll = targetPos.getLowerLeft().getRelation(new Point(0, 0));
+		int ur = targetPos.getUpperRight().getRelation(new Point(LEVEL_WIDTH*LEVEL_TILESIZE, LEVEL_HEIGHT*LEVEL_TILESIZE));
+		if ((ll & Point.LEFT) > 0) result |= Point.LEFT;
+		if ((ll & Point.LOWER) > 0) result |= Point.LOWER;
+		if ((ur & Point.RIGHT) > 0) result |= Point.RIGHT;
+		if ((ur & Point.UPPER) > 0) result |= Point.UPPER;
+		
+		// check against all blocking tiles
+		for (int i=0;i<levelMap.length;i++) {
+			for (int j=0;j<levelMap[i].length;j++) {
+				if (levelMap[i][j] == 0 || levelMap[i][j] > 7) {	// only check against _blocking_ tiles
+					Rectangle tile = new Rectangle(new Point(j*LEVEL_TILESIZE, i*LEVEL_TILESIZE), LEVEL_TILESIZE, LEVEL_TILESIZE);
+					int ol = tile.overlap(targetPos);
+					if (ol != Point.IDENT) {
+						int olx = tile.overlap(targetPosX);
+						int oly = tile.overlap(targetPosY);
+						if (olx != Point.IDENT) {
+							if (xwise > 0) result |= Point.RIGHT;
+							else result |= Point.LEFT;
+						}
+						if (oly != Point.IDENT) {
+							if (ywise > 0) result |= Point.UPPER;
+							else result |= Point.LOWER;
+						}
+					}
+				}
+			}
+		}
+		
+		// check against arbitrary objects -- cars
+		Iterator<Tablet> it = cars.iterator();
+		while (it.hasNext()) {
+			Tablet c = it.next();
+			Rectangle tile = new Rectangle(new Point(c.getX(), c.getY()), c.getWidth(), c.getHeight());
+			int ol = tile.overlap(targetPos);
+			if (ol != Point.IDENT) {
+				int olx = tile.overlap(targetPosX);
+				int oly = tile.overlap(targetPosY);
+				if (olx != Point.IDENT) {
+					if (xwise > 0) result |= Point.RIGHT;
+					else result |= Point.LEFT;
+				}
+				if (oly != Point.IDENT) {
+					if (ywise > 0) result |= Point.UPPER;
+					else result |= Point.LOWER;
+				}
+			}
+		}
+	/*	//find out which tile we want to go to
 		//ul ur ol or
 		int result = 0;
 		int b1=0, b2=0, b3=0, b4=0, c1=0, c2=0, c3=0, c4=0, d1=0, d2=0, d3=0, d4=0;
@@ -452,8 +510,32 @@ public class LevelRenderer implements Renderer {
 				else result |= 8;
 			}
 		}
-		
 		// here you may insert code to check for collisions against arbitrary objects
+		Iterator<Tablet> it = cars.iterator();
+		while (it.hasNext()) {
+			Tablet c = it.next();
+			float cx = c.getX(); float cy = c.getY(); float cw = c.getWidth(); float ch = c.getHeight();
+			float pdb1x = xPos, pdb2x = xPos+tabletWidth;
+			float pc1x = xPos-xwise, pc2x = xPos-xwise+tabletWidth;
+			float pdc1y = yPos, pdc2y = yPos+tabletHeight;
+			float pb1y = yPos-ywise, pb2y = yPos-ywise+tabletHeight;
+			
+			if (((pdb1x >= cx && pdb1x <= cx+cw) || (pdb2x >= cx && pdb2x <= cx+cw)) &&
+				((pdc1y >= cy && pdc1y <= cy+ch) || (pdc2y >= cy && pdc2y <= cy+ch))) {
+				
+					if (((pdb1x >= cx && pdb1x <= cx+cw) || (pdb2x >= cx && pdb2x <= cx+cw)) &&
+						(pb1y >= cy && pb1y <= cy+ch) || (pb2y >= cy && pb2y <= cy+ch)) {
+							if (xwise > 0) result |= 1;
+							else result |= 2;
+					}
+					
+					if (((pc1x >= cx && pc1x <= cx+cw) || (pc2x >= cx && pc2x <= cx+cw)) &&
+							(pdc1y >= cy && pdc1y <= cy+ch) || (pdc2y >= cy && pdc2y <= cy+ch)) {
+								if (ywise > 0) result |= 4;
+								else result |= 8;
+					}
+			}
+		}*/
 		return result;
 	}
 
@@ -568,7 +650,7 @@ public class LevelRenderer implements Renderer {
 				block = manager.getGameObject(tileLUT.get(levelMap[i][j]));
 
 				if (block != null) {
-					block.setXY(j*100, i*100);
+					block.setXY(j*LEVEL_TILESIZE, i*LEVEL_TILESIZE);
 					block.draw(gl);
 				}
 
@@ -687,7 +769,6 @@ public class LevelRenderer implements Renderer {
 		gold_0 = 0;
 
 		control = manager.getGameObject("control");
-		//button = manager.getGameObject("button");
 		
 		oldFrameTime = 0;
 		startFrameTime = 0;
@@ -727,34 +808,29 @@ public class LevelRenderer implements Renderer {
 		} else {
 			score = 100;
 			mapOffset_x = mapOffset_y = 0;
-			bunny.setXY(100, 20);
+			bunny.setXY(BUNNY_INIT_X, BUNNY_INIT_Y);
 			Tablet.setMapOffset(mapOffset_x, mapOffset_y);
 			
 			//create cars
 			Random rnd = new Random();
-			int rnr11=0, rnr12=0, rnr21=0, rnr22=0;
-			do { 
-				rnr11 = rnd.nextInt(LEVEL_WIDTH);
-				rnr12 = rnd.nextInt(LEVEL_HEIGHT);
+			int rnr1=0, rnr2=0;
+			for (int i=0;i<NUMBER_OF_CARS;i++) {
+				do { 
+					rnr1 = rnd.nextInt(LEVEL_WIDTH);
+					rnr2 = rnd.nextInt(LEVEL_HEIGHT);
+				}
+				while ((rnr1 == 0 && rnr2 == 0) || 
+					   (levelMap[rnr2][rnr1] < 1 || levelMap[rnr2][rnr1] > 7) ||
+						levelMap[rnr2][rnr1] == 3);
+				// now that we know which tile to put the car on, place it there
+				Tablet newcar = new Tablet(context, CAR_WIDTH, CAR_LENGTH, rnr1*LEVEL_TILESIZE*scale, rnr2*LEVEL_TILESIZE*scale, manager.getTexture("car0"), gl);
+				if (levelMap[rnr2][rnr1] == 1 || levelMap[rnr2][rnr1] == 4 || levelMap[rnr2][rnr1] == 5) {
+					newcar.rotate(90.0f);
+					newcar.setWidthHeight(CAR_LENGTH, CAR_WIDTH);
+					newcar.setOffset(CAR_LENGTH, 0);
+				}
+				cars.add(newcar);
 			}
-			while ((rnr11 == 0 && rnr12 == 0) || 
-				   (levelMap[rnr12][rnr11] < 1 && levelMap[rnr12][rnr11] > 7) ||
-					levelMap[rnr12][rnr11] == 3);
-			do { 
-				rnr21 = rnd.nextInt(LEVEL_WIDTH);
-				rnr22 = rnd.nextInt(LEVEL_HEIGHT);
-			}
-			while ((rnr21 == 0 && rnr22 == 0) || 
-				   (levelMap[rnr22][rnr21] < 1 && levelMap[rnr22][rnr21] > 7) ||
-					levelMap[rnr22][rnr21] == 3);
-			// now that we know which tile to put the car on, place it there
-			Tablet newcar1 = new Tablet(context, 50, 75, rnr11*LEVEL_TILESIZE*scale, rnr12*LEVEL_TILESIZE*scale, manager.getTexture("car0"), gl);
-			if (levelMap[rnr12][rnr11] == 1 || levelMap[rnr12][rnr11] == 4 || levelMap[rnr12][rnr11] == 5) newcar1.rotate(90.0f);
-
-			Tablet newcar2 = new Tablet(context, 50, 75, rnr21*LEVEL_TILESIZE*scale, rnr22*LEVEL_TILESIZE*scale, manager.getTexture("car0"), gl);
-			if (levelMap[rnr22][rnr21] == 1 || levelMap[rnr22][rnr21] == 4 || levelMap[rnr22][rnr21] == 5) newcar2.rotate(90.0f);
-			cars.add(newcar1);
-			cars.add(newcar2);
 		}
 	}
 

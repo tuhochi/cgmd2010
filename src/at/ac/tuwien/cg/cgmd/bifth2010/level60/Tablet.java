@@ -35,8 +35,8 @@ public class Tablet {
 //	IntBuffer texture = IntBuffer.allocate(1);
 	private Context context;
 	
-	private int width;
-	private int height;
+	private float width;
+	private float height;
 	private float x;
 	private float y;
 	private int texture;
@@ -44,9 +44,10 @@ public class Tablet {
 	private static float scale = 1.0f;
 	private static float mapOffset_x = 0;
 	private static float mapOffset_y = 0;
+	private float offset_x=0, offset_y=0;
 	private boolean sticky = false;
-	public static final int INTENDED_RES_X = 400;
-	public static final int INTENDED_RES_Y = 520;
+	public static final int INTENDED_RES_X = 540;
+	public static final int INTENDED_RES_Y = 360;
 	
 	public Tablet(Context context, int width, int height, float x, float y, int texture, GL10 gl) {
 		this(context, width, height, x, y, texture, false, gl);
@@ -96,18 +97,21 @@ public class Tablet {
 		mapOffset_y = y;
 	}
 	
+	public void setWidthHeight(float width, float height) {
+		this.width = width;
+		this.height = height;
+	}
+	
 	public static void setResolution(int width, int height) {
 		if (width > height) Tablet.scale = (float)width/(float)INTENDED_RES_X;
 		else Tablet.scale = (float)height/(float)INTENDED_RES_Y;
 	}
 	
-	public float getX() {
-		return x;
-	}
-	
-	public float getY() {
-		return y;
-	}
+	public float getX() { return x; }
+	public float getY() { return y;	}
+	public float getWidth() { return width; }
+	public float getHeight() { return height; }
+	public void setOffset(float ox, float oy) { offset_x = ox; offset_y = oy; }
 	
 	public void move(float xwise, float ywise) {
 		x += xwise;
@@ -146,7 +150,7 @@ public class Tablet {
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 		
 		gl.glPushMatrix();
-		gl.glTranslatef(drawtoX, drawtoY, 0);
+		gl.glTranslatef(drawtoX+offset_x, drawtoY+offset_y, 0);
 		gl.glScalef(Tablet.scale, Tablet.scale, 0);
 		gl.glRotatef(rotation_angle, 0, 0, 1);
 		

@@ -62,10 +62,10 @@ public class textureManager {
 		createTexture("TintersectionBottom", R.drawable.l60_t_intersect_bottom, 100, 100);
 		createTexture("TintersectionLeft", R.drawable.l60_t_intersect_left, 100, 100);
 		createTexture("TintersectionRight", R.drawable.l60_t_intersect_right, 100, 100);
-		createTexture("smallHousefl", R.drawable.l60_smallhouse_fl, 100, 100);
-		createTexture("smallHousefr", R.drawable.l60_smallhouse_fr, 100, 100);
-		createTexture("smallHousebl", R.drawable.l60_smallhouse_bl, 100, 100);
-		createTexture("smallHousebr", R.drawable.l60_smallhouse_br, 100, 100);
+		createTexture("houseGlass", R.drawable.l60_glass, 100, 100);
+		createTexture("houseDoor1", R.drawable.l60_house1, 100, 100);
+		createTexture("houseDoor2", R.drawable.l60_wall, 100, 100);
+		createTexture("houseWall", R.drawable.l60_wall, 100, 100);
 		createTexture("housefl", R.drawable.l60_t_intersect_right, 100, 100);
 		createTexture("housefr", R.drawable.l60_t_intersect_right, 100, 100);
 		createTexture("housebl", R.drawable.l60_t_intersect_right, 100, 100);
