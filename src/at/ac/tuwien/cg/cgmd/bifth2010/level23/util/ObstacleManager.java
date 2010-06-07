@@ -11,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -43,7 +44,7 @@ public class ObstacleManager
 	public static ObstacleManager instance = new ObstacleManager();
 	
 	/** The array filled with random numbers. */
-	private int[] randomArray; 
+	private Integer[] randomArray; 
 	
 	/** The random generator. */
 	private Random randomGenerator;
@@ -56,7 +57,7 @@ public class ObstacleManager
 	private int leastRenderedObstacle;
 	
 	/** The number of obstacles to be rendered. */
-	public final int NR_OF_OBSTACLES = 50;
+	public int NR_OF_OBSTACLES = 0;
 	
 	/** The constant for obstacle type FINISH */
 	public static final int OBSTACLE_TYPE_FINISH = 0;
@@ -88,7 +89,7 @@ public class ObstacleManager
 
 	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
 	/** The Constant HORIZONTAL_SPACING to define the horizontal spacing between obstacles. */
-	public final static float HORIZONTAL_SPACING = 60*RenderView.instance.getAspectRatio();
+	public final static float HORIZONTAL_SPACING = 15*RenderView.instance.getAspectRatio();
 	
 	public int finishPosition;
 	
@@ -122,7 +123,7 @@ public class ObstacleManager
 	public ObstacleManager()
 	{
 		randomGenerator = new Random(System.currentTimeMillis());
-		randomArray = new int[100];
+		randomArray = new Integer[100];
 		obstacles = new ArrayList<Obstacle>();
 		genArrayWithProbability();
 		currentPosition = 80;
@@ -183,15 +184,19 @@ public class ObstacleManager
 	 */
 	private void genArrayWithProbability()
 	{
+		ArrayList<Integer> tempList = new ArrayList<Integer>();
 		//distribute values according to probabilities
 		for(int i=0; i <TYPE1_PROB;i++)
-			randomArray[i] = OBSTACLE_TYPE1;
+			tempList.add(OBSTACLE_TYPE1);
 		for(int i=TYPE1_PROB; i <TYPE1_PROB+TYPE2_PROB;i++)
-			randomArray[i] = OBSTACLE_TYPE2;
+			tempList.add(OBSTACLE_TYPE2);
 		for(int i=TYPE1_PROB+TYPE2_PROB; i <TYPE1_PROB+TYPE2_PROB+TYPE3_PROB;i++)
-			randomArray[i] = OBSTACLE_TYPE3;
+			tempList.add(OBSTACLE_TYPE3);
 		for(int i=TYPE1_PROB+TYPE2_PROB+TYPE3_PROB; i <TYPE1_PROB+TYPE2_PROB+TYPE3_PROB+TYPE4_PROB;i++)
-			randomArray[i] = OBSTACLE_TYPE4;
+			tempList.add(OBSTACLE_TYPE4);
+		
+		Collections.shuffle(tempList);
+		randomArray = tempList.toArray(randomArray);
 	}
 	
 	/**
@@ -209,13 +214,14 @@ public class ObstacleManager
 	 */
 	public void generateObstacles()
 	{
-		for(int i=0; i < NR_OF_OBSTACLES-1;i++)
+		while(currentPosition< Settings.MAX_HEIGHT)
 		{
 			obstacles.add(new Obstacle(currentPosition, selectRandomType()));
-			currentPosition += randomGenerator.nextInt((int)(50f*RenderView.instance.getAspectRatio())) + HORIZONTAL_SPACING;
+			currentPosition += randomGenerator.nextInt((int)(30f*RenderView.instance.getAspectRatio())) + HORIZONTAL_SPACING;
 		}
 		
 		obstacles.add(new Obstacle(currentPosition, OBSTACLE_TYPE_FINISH));
+		NR_OF_OBSTACLES = obstacles.size();
 	}
 	
 	/**
@@ -275,6 +281,8 @@ public class ObstacleManager
 				
 				if(testCollisionWithMainChar(tempObstacle) && !gameOver)
 				{
+					if(tempObstacle.type == 0)
+					{
 					RenderView.instance.setGameOver(true);
 					LevelActivity.handler.post(
 							new Runnable()
@@ -285,6 +293,7 @@ public class ObstacleManager
 						            LevelActivity.instance.triggerVibrate(200);
 						        }
 							});
+					}
 				}
 				i++;
 			}
@@ -310,13 +319,13 @@ public class ObstacleManager
 		textures = new TexturePart[5];
 		float aspectRatio = RenderView.instance.getAspectRatio();
 		//wird noch umgebaut nur für testzwecke hier hardcoded
-		vertexBuffers[0] = geometryManager.createVertexBufferQuad(100f, 5f*aspectRatio);
+		vertexBuffers[0] = geometryManager.createVertexBufferQuad(100f, 25f);
 		vertexBuffers[1] = geometryManager.createVertexBufferQuad(25f*aspectRatio, 25f*aspectRatio/1.333f);
-		vertexBuffers[2] = geometryManager.createVertexBufferQuad(15f*aspectRatio, 15f*aspectRatio);
+		vertexBuffers[2] = geometryManager.createVertexBufferQuad(17f*aspectRatio,17f*aspectRatio);
 		vertexBuffers[3] = geometryManager.createVertexBufferQuad(35f*aspectRatio*0.5f,35f*aspectRatio);
-		vertexBuffers[4] = geometryManager.createVertexBufferQuad(20f*aspectRatio*0.5f, 20f*aspectRatio);
+		vertexBuffers[4] = geometryManager.createVertexBufferQuad(25f*aspectRatio*0.5f, 25f*aspectRatio);
 		
-		textures[0] = TextureAtlas.instance.getCowTextur();
+		textures[0] = TextureAtlas.instance.getFinishTextur();
 		textures[1] = TextureAtlas.instance.getCowTextur();
 		textures[2] = TextureAtlas.instance.getAmbossTextur();
 		textures[3] = TextureAtlas.instance.getChuckTextur();
@@ -390,6 +399,7 @@ public class ObstacleManager
 		{
 			leastRenderedObstacle=0;
 			currentPosition=Settings.OBSTACLE_START;
+			NR_OF_OBSTACLES = 0;
 			obstacles.clear();
 			generateObstacles();
 		}

@@ -42,6 +42,9 @@ public class Obstacle implements Serializable
 	/** The time the obstacle since the obstacle. */
 	public float time = 0;
 	
+	private static float lastObstaclePosX=-1;
+	private static float lastObstacleWidth=-1;
+	
 	/**
 	 * Instantiates a new obstacle.
 	 *
@@ -68,20 +71,66 @@ public class Obstacle implements Serializable
 				height = 25f*aspectRatio/1.333f;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE2):
-				width = 15f*aspectRatio;
-				height = 15f*aspectRatio;
+				width = 17f*aspectRatio;
+				height = 17f*aspectRatio;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE3):
 				width = 35f*aspectRatio*0.5f;
 				height = 35f*aspectRatio;
 				break;
 			case(ObstacleManager.OBSTACLE_TYPE4):
-				width = 20f*aspectRatio*0.5f;
-				height = 20f*aspectRatio;
+				width = 25f*aspectRatio*0.5f;
+				height = 25f*aspectRatio;
 				break;			
 		}
 		
-		position.x = randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-(int)width);
+		if(lastObstaclePosX ==-1)
+		{
+			position.x = randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-(int)width);
+		}
+		else
+		{
+			float leftSpace = 0+lastObstaclePosX;
+			float rightSpace = 100-lastObstaclePosX-lastObstacleWidth;
+			float mainCharWidth = MainChar.instance.getWidth();
+
+				if(leftSpace<mainCharWidth)
+				{
+					position.x = lastObstaclePosX+lastObstacleWidth + randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-(int)width);
+					if(position.x > (int)RenderView.instance.getRightBounds()-(int)width)
+						position.x = RenderView.instance.getRightBounds()-width;
+				}
+				else
+				{
+					if(rightSpace<mainCharWidth)
+					{
+						if((int)lastObstaclePosX-(int)width <= 0)
+							position.x = 0;
+						else
+							position.x = randomGenerator.nextInt((int)lastObstaclePosX-(int)width);
+					}
+					else
+					{
+						boolean chooseOne = randomGenerator.nextBoolean();
+						if(chooseOne)
+						{
+							position.x = lastObstaclePosX+lastObstacleWidth + randomGenerator.nextInt((int)RenderView.instance.getRightBounds()-(int)width);
+							if(position.x > (int)RenderView.instance.getRightBounds()-(int)width)
+								position.x = RenderView.instance.getRightBounds()-width;
+						
+						}
+						else
+						{
+							if((int)lastObstaclePosX-(int)width <= 0)
+								position.x = 0;
+							else
+								position.x = randomGenerator.nextInt((int)lastObstaclePosX-(int)width);
+						}
+					}
+				}                  
+		}
+		lastObstaclePosX = position.x;
+		lastObstacleWidth = width;
 	}
 	
 	public void update()
