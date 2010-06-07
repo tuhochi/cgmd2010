@@ -39,10 +39,10 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	public void setResultValues(int totalmoney, int remainingmoney)
 	{
 		int lostmoney = totalmoney - remainingmoney;
-		CharSequence resulttext = R.string.l84_result_totalmoney + "$ " + String.valueOf(totalmoney) + "\n" + "- " +
-								  R.string.l84_result_remainingmoney + "$ " + String.valueOf(remainingmoney) + "\n" +
+		CharSequence resulttext = "$ " + String.valueOf(totalmoney) + "\n" +
+								  "- $ " + String.valueOf(remainingmoney) + "\n" +
 								  "----------------------\n" + 
-								  R.string.l84_result_lostmoney + "$ " + String.valueOf(lostmoney);
+								  "$ " + String.valueOf(lostmoney);
 		text.setText(resulttext);
 		image.setImageResource(R.drawable.l00_coin);
 	}
