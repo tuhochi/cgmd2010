@@ -91,12 +91,12 @@ public class ModelStreet extends Model {
 			if (streetActive){ this.posX -= deltaSpeed;}
 	}
 	
-	public void activateStreet()
+	public void startStreet()
 	{
 		streetActive = true;
 	}
 	
-	public void deactivateStreet()
+	public void stopStreet()
 	{
 		streetActive = false;
 	}

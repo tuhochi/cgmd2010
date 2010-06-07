@@ -16,7 +16,6 @@ import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -37,6 +36,8 @@ public class RenderManager implements Renderer,OnDismissListener {
 	private int fps = 0;
 	private ProgressManager progman;
 	private Toast toast;
+	private ResultDialog resultdialog;
+	private boolean showresults = false;
 	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
@@ -58,19 +59,21 @@ public class RenderManager implements Renderer,OnDismissListener {
 		}
 	};
 	
-	public RenderManager(LevelActivity activity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman, SoundManager soundManager) {
-		this.activity = activity;
+	
+	
+	public RenderManager(at.ac.tuwien.cg.cgmd.bifth2010.level84.LevelActivity levelActivity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman, SoundManager soundManager) {
+		this.activity = levelActivity;
 		this.street = street;
 		this.gems = gems;
 		this.accelerometer = accelerometer;
 		this.progman = progman;
-		this.tfFps = (TextView) activity.findViewById(R.id.l84_TfFps);
-		this.tfPoints = (TextView) activity.findViewById(R.id.l84_Points);
-		this.tfPointsShadow = (TextView) activity.findViewById(R.id.l84_PointsShadow);
+		this.tfFps = (TextView) levelActivity.findViewById(R.id.l84_TfFps);
+		this.tfPoints = (TextView) levelActivity.findViewById(R.id.l84_Points);
+		this.tfPointsShadow = (TextView) levelActivity.findViewById(R.id.l84_PointsShadow);
 		
 		//init toast for later usage	
 		CharSequence endtext = "Result";
-		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_SHORT);
+		toast = Toast.makeText(this.activity.getApplicationContext(), endtext, Toast.LENGTH_LONG);
 		
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
@@ -134,6 +137,14 @@ public class RenderManager implements Renderer,OnDismissListener {
 			toast.setText("You lost $" + String.valueOf(progman.getStartValue()-progman.getRemainingValue()));
 			toast.show();
 			this.activity.finish();
+//			
+			//this.activity.finishLevel.sendEmptyMessage(0);
+//				resultdialog = new ResultDialog(levelActivity.getApplicationContext());
+//				resultdialog.setActivity(levelActivity);
+//				resultdialog.setOnDismissListener(this);
+//				resultdialog.setResults(progman.getStartValue(), progman.getRemainingValue());
+//				resultdialog.show();
+//			
 		}
 	}
 	
@@ -185,6 +196,6 @@ public class RenderManager implements Renderer,OnDismissListener {
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		street.activateStreet();
+		street.startStreet();
 	}
 }
