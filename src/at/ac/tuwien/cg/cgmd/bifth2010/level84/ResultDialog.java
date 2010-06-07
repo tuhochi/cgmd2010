@@ -35,29 +35,19 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		setIcon(R.drawable.l84_transparent);
 		setTitle(R.string.l84_result_title);
 		setView(view);
-		
-	}
-	
-	@Override
-	public void dismiss() {
-		super.dismiss();
-	}
-
-	@Override
-	public void show() {
-		super.show();
 	}
 	
 	public void setActivity(Activity activity)
 	{
 		this.activity = activity;
 	}
-
-	public void setResults(int totalmoney, int remainingmoney)
+	
+	public void setResultValues(int totalmoney, int remainingmoney)
 	{
 		int lostmoney = totalmoney - remainingmoney;
-		text.setText(R.string.l84_result_totalmoney + "$ " + String.valueOf(totalmoney) + "\n" +
+		text.setText(R.string.l84_result_totalmoney + "$ " + String.valueOf(totalmoney) + "\n" + "- " +
 				R.string.l84_result_remainingmoney + "$ " + String.valueOf(remainingmoney) + "\n" +
+				"----------------------\n" + 
 				R.string.l84_result_lostmoney + "$ " + String.valueOf(lostmoney));
 		image.setImageResource(R.drawable.l00_coin);
 	}
@@ -67,7 +57,7 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (v.getId() == button.getId())
 			{
-				this.activity.finish();
+				dismiss();
 			}
 			
 		}
