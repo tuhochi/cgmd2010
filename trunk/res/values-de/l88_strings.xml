@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
 <string name="l88_help_title">Bank Heist Bunny</string>
-<string name="l88_help_part2">Als vermeintlicher Bankräuber muss sich der Hase darum kümmern, soviel Gold wie möglich zu verstecken. Ziel des Games ist es, soviele verschiedene Verstecke wie möglich aufzusuchen, um dort Gold zu verstecken, ohne von der Polizei erwischt zu werden. Die Verstecke gibt es in unterschiedlichen Größenordnungen: klein, mittel, groß. Wichtig ist diese Unterscheidung für die Menge von Gold, die dort deponiert werden kann. Doch auch für die Erreichbarkeit gilt – je größer ein Versteck, umso schwieriger ist es zu erreichen. </string>
-<string name="l88_help_part1">„Vorsicht! Die Bullen sind hinter uns her – Schnell weg mit der Beute!“ </string>
-<string name="l88_help_part3">Das Spiel endet, sobald man alles Gold versteckt hat oder von der Polizei erwischt wurde. </string>
-<string name="l88_help_part4">Zusätzlich gibt es mehrere Spielereignisse wie eine Taverne oder Universitäten, wo man sich vor der Polizei verstecken kann bzw. sie als Abkürzungen nutzen kann; Festungen oder Kirchen, die eine Abkürzung für die Polizei bieten; Galgen, die einen Geschwinddigkeitsanstieg für eine kurze Zeit bei dem Hasen bewirken. </string>
-<string name="l88_help_part5">Die Steuerung der Spielfigur wird mithilfe des Touchscreens erreicht. Man muss auf die Richtung drücken, in die sich der Hase bewegen soll.</string>
+<string name="l88_help_subtitle">„Vorsicht! Die Bullen sind hinter uns her – Schnell weg mit der Beute!“</string>
+<string name="l88_help_introtext">Als Bankräuber muss sich der Hase darum kümmern, soviel Gold wie möglich zu verstecken. Ziel des Spiels ist es, soviele verschiedene Verstecke wie möglich aufzusuchen, um dort Gold zu verstecken, ohne von der Polizei erwischt zu werden.</string>
+<string name="l88_help_stashes">Die Verstecke gibt es in drei Größen: klein, mittel, groß. Umso größer ein Versteck ist umso mehr Gold kann man darin verstecken, jedoch umso schwieriger ist es zu erreichen.</string>
+<string name="l88_help_game_end">Das Spiel endet, sobald man alles Gold versteckt hat oder von der Polizei erwischt wurde.</string>
+
+<string name="l88_help_controls_title">Steuerung</string>
+<string name="l88_help_controls_moving_bunny">Das Spiel wird mittels Touchscreen gespielt. Der Hase bewegt sich von selbst durch die Welt, drückt man auf den Bildschirm so ändert der Hase seine Richtung.</string>
+<string name="l88_help_controls_pause">Drückt man jedoch auf den Hasen selbst so wird das Spiel pausiert. Weiter geht es dann in dem man dem Hasen wieder eine Richtung gibt in die er sich bewegen soll.</string>
+
+<string name="l88_help_powerups_title">Abkürzungen und Power-Ups</string>
+<string name="l88_help_powerups_shortcuts">Im Spiel lassen sich verschiedene Abkürzungen finden, sowohl für die Polizei als auch für den Hasen.</string>
+<string name="l88_help_powerups_bunny_shortcuts">Tavernen und Universitäten erlauben dem Hasen zu passieren, nicht jedoch der Polizei.</string>
+<string name="l88_help_powerups_police_shortcuts">Festungen und Kirchen jedoch kann nur die Polizei passieren, der Hase nicht.</string>
+<string name="l88_help_powerups_speed">Galgen sind für den Hasen wie ein Power-Up. Fährt der Hase über einen Galgen ist er motivierter nicht erwischt zu werden und er wird für ein paar Sekunden lang schneller.</string>
+
+
+
 <string name="l88_mode_ready">Bank Heist Bunny \nDruecke rauf um das Level zu beginnen</string>
 <string name="l88_mode_pause">Paused \nDruecke rauf um weiterzuspielen</string>
 <string name="l88_mode_loose">Spiel vorbei\nScore: </string>
