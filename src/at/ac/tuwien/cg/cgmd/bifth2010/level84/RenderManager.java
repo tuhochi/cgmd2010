@@ -80,7 +80,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 		this.tfPoints = (TextView) levelActivity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) levelActivity.findViewById(R.id.l84_PointsShadow);
 		
-		streetMeter = street.getStreetWidth()-16f;
+		streetMeter = street.getStreetWidth()-8f;
 		
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
