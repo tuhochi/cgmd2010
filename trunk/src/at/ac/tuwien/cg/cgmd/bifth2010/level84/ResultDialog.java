@@ -11,16 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class IntroDialog extends AlertDialog implements OnTouchListener {
+public class ResultDialog extends AlertDialog implements OnTouchListener {
 
 	private View view;
 	private ImageView image;
 	private TextView text;
 	private Button button;
-	private int introstage = 0;
 	
-	
-	public IntroDialog(Context context)
+	public ResultDialog(Context context)
 	{
 		super(context);
 		
@@ -33,10 +31,9 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 		button.setOnTouchListener(this);
 		
 		setIcon(R.drawable.l84_transparent);
-		setTitle(R.string.l84_intro_title);
+		setTitle(R.string.l84_result_title);
 		setView(view);
 		
-		showFirstIntroStep();
 	}
 	
 	@Override
@@ -49,27 +46,13 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 		super.show();
 	}
 
-	public void showFirstIntroStep()
+	public void showResults(int totalmoney, int remainingmoney)
 	{
-		introstage = 0;
-		text.setText(R.string.l84_intro_step1);
-		image.setImageResource(R.drawable.l84_button_gem_oct);
-	}
-	
-	public void showNextIntroStep()
-	{
-		introstage++;
-		switch(introstage) 
-		{
-			case 1: text.setText(R.string.l84_intro_step2);
-					image.setImageResource(R.drawable.l84_tex_gemshape_oct);
-					break;
-			case 2: text.setText(R.string.l84_intro_step3);
-					image.setImageResource(R.drawable.l84_tex_gem_oct);
-					break;
-			case 3: dismiss();
-					break;
-		}
+		int lostmoney = totalmoney - remainingmoney;
+		text.setText(R.string.l84_result_totalmoney + "$ " + String.valueOf(totalmoney) + "\n" +
+				R.string.l84_result_remainingmoney + "$ " + String.valueOf(remainingmoney) + "\n" +
+				R.string.l84_result_lostmoney + "$ " + String.valueOf(lostmoney));
+		image.setImageResource(R.drawable.l00_coin);
 	}
 	
 	@Override
@@ -77,7 +60,7 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (v.getId() == button.getId())
 			{
-				showNextIntroStep();
+				//finish
 			}
 			
 		}
