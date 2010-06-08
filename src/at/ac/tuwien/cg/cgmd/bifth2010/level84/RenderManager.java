@@ -35,10 +35,13 @@ public class RenderManager implements Renderer,OnDismissListener {
 	
 	private int fps = 0;
 	private ProgressManager progman;
-	
+		
 	float streetMeter = 0;
 	DecimalFormat df = new DecimalFormat("0");
-
+	
+	private boolean gamefinished = false;
+	
+	
 	/** Handler for FPS timer */
 	private Handler updateFps = new Handler() {
 		@Override
@@ -101,52 +104,57 @@ public class RenderManager implements Renderer,OnDismissListener {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		
-		Date time = new Date();
-		long currentTime = time.getTime();
-		
-		if (lastTime == -1)
+
+		if (!gamefinished)
+		{
+			Date time = new Date();
+			long currentTime = time.getTime();
+			
+			if (lastTime == -1)
+				lastTime = time.getTime();
+			
+			double deltaTime = (double)(currentTime - lastTime) / 1000.0;
 			lastTime = time.getTime();
-		
-		double deltaTime = (double)(currentTime - lastTime) / 1000.0;
-		lastTime = time.getTime();
-		
-		fps++;
-		
-		//TODO: lifecycle ... Timer Bug beheben.
-		
-		//UPDATE -------------------------
-		street.update(deltaTime, accelerometer.getOrientation());
-		
-		checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
-		
-		//Log.i("streetPos", "position: " + street.getStreetPos());
-		
-		//DRAW ---------------------------
-		gl.glLoadIdentity();
-		
-		//At first: Render street with drains
-		street.draw(gl);
-		
-		//Afterwards: Render gems.
-		ListIterator<Model> i = gems.listIterator();
-		while(i.hasNext()) {
-			Model m = i.next();
-			if (m instanceof ModelGem)
-				((ModelGem)m).update(deltaTime, street.getStreetPos(), accelerometer.getOrientation(), progman);
-			m.draw(gl);
+			
+			fps++;
+			
+			//TODO: lifecycle ... Timer Bug beheben.
+			
+			//UPDATE -------------------------
+			street.update(deltaTime, accelerometer.getOrientation());
+			
+			checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
+			
+			//Log.i("streetPos", "position: " + street.getStreetPos());
+			
+			//DRAW ---------------------------
+			gl.glLoadIdentity();
+			
+			//At first: Render street with drains
+			street.draw(gl);
+			
+			//Afterwards: Render gems.
+			ListIterator<Model> i = gems.listIterator();
+			while(i.hasNext()) {
+				Model m = i.next();
+				if (m instanceof ModelGem)
+					((ModelGem)m).update(deltaTime, street.getStreetPos(), accelerometer.getOrientation(), progman);
+				m.draw(gl);
+			}
 		}
 	}
 	
 	private void checkStreetEnd(float streetPos)
 	{
-		//if (streetPos < ((-street.width / 2) + 8f))
 		if (streetMeter < 1)
 		{
+			//set flag to true and disable onDrawFrame-update
+			
+			gamefinished = true;
 			//stop street translation
 			street.stopStreet();
 			
-			//get money values and show resultdialog
+			//pass moneyvalues to the resultdialog and show it
 			Message moneyvalues = new Message();
 			moneyvalues.arg1 = progman.getStartValue();
 			moneyvalues.arg2 = progman.getRemainingValue();
