@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
 public class ResultDialog extends AlertDialog implements OnTouchListener {
 
@@ -19,11 +20,17 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	private Button button;
 	private ProgressManager progman;
 	private int resultstage = 0;
+	private String sHit;
+	private String sBreak;
+	private String sMoneyTotal;
+	private String sMoneyRemaining;
+	private String sMoneyLost;
+	
 	
 	public ResultDialog(Context context, ProgressManager progman)
 	{
 		super(context);
-
+		
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.l84_customdialog, null);
 		
@@ -36,6 +43,13 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		setTitle(R.string.l84_result_title);
 		setView(view);
 		
+		//read out localized strings
+		sHit = context.getString(R.string.l84_result_hits);
+		sBreak = context.getString(R.string.l84_result_breaks);
+		sMoneyTotal = context.getString(R.string.l84_result_mtotal);
+		sMoneyRemaining = context.getString(R.string.l84_result_mremaining);
+		sMoneyLost = context.getString(R.string.l84_result_mlost);
+		
 		this.progman = progman;
 		showNextResultStep();
 	}
@@ -46,20 +60,22 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		resultstage++;
 		switch(resultstage) 
 		{
-			case 1: text.setText(progman.getGemStatsHit(1) + " Hits\n\n" + progman.getGemStatsBreak(1) + " Breaks");
+			case 1: text.setText(progman.getGemStatsHit(1) + " " + sHit + "\n\n" + progman.getGemStatsBreak(1) + " " + sBreak);
 					image.setImageResource(R.drawable.l84_tex_gem_round);
 					break;
-			case 2: text.setText(progman.getGemStatsHit(2) + " Hits\n\n" + progman.getGemStatsBreak(2) + " Breaks");
+			case 2: text.setText(progman.getGemStatsHit(2) + " " +  sHit + "\n\n" + progman.getGemStatsBreak(2) + " " + sBreak);
 					image.setImageResource(R.drawable.l84_tex_gem_oct);
 					break;
-			case 3: text.setText(progman.getGemStatsHit(3) + " Hits\n\n" + progman.getGemStatsBreak(3) + " Breaks");
+			case 3: text.setText(progman.getGemStatsHit(3) + " " +  sHit + "\n\n" + progman.getGemStatsBreak(3) + " " + sBreak);
 					image.setImageResource(R.drawable.l84_tex_gem_rect);
 					break;
-			case 4: text.setText(progman.getGemStatsHit(4) + " Hits\n\n" + progman.getGemStatsBreak(4) + " Breaks");
+			case 4: text.setText(progman.getGemStatsHit(4) + " " +  sHit + "\n\n" + progman.getGemStatsBreak(4) + " " + sBreak);
 					image.setImageResource(R.drawable.l84_tex_gem_diamond);
 					break;
-			case 5: text.setText("  $ " + progman.getStartValue() + " - $ " + progman.getRemainingValue() +
-									"\n" + "  -----------------------\n" + "  $ " + (progman.getStartValue()-progman.getRemainingValue()));
+			case 5: text.setText(sMoneyTotal + " $ " + progman.getStartValue() + "\n" +
+								 sMoneyRemaining + " $ " + progman.getRemainingValue() + "\n" +
+								 "----------------------------\n" +
+								 sMoneyLost + " $ " + (progman.getStartValue()-progman.getRemainingValue()));
 					image.setImageResource(R.drawable.l00_coin);
 					break;
 			case 6: dismiss();
