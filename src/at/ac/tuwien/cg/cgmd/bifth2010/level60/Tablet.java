@@ -123,11 +123,9 @@ public class Tablet {
 		y = newY;
 	}
 	
-	public void changeTexture(int texture) {
-		this.texture = texture;
-	}
-	
-	
+	public void changeTexture(int texture) { this.texture = texture; }
+	public int getTexture() { return texture; }
+		
 	public void rotate(float angle) {
 		this.rotation_angle = angle;
 	}
