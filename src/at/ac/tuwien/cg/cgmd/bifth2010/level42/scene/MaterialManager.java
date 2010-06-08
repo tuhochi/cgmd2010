@@ -270,6 +270,7 @@ public class MaterialManager
 		void deInit()
 		{
 			initialized = false;
+			glDeleteTextures(1, new int[]{texId}, 0);
 		}
 		
 		/* (non-Javadoc)
