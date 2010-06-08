@@ -1,12 +1,15 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
 import java.io.BufferedInputStream;
+import java.util.prefs.Preferences;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
+import android.preference.Preference;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -20,10 +23,13 @@ public class GameView extends GLSurfaceView
 
 	protected static final String	TAG	= "GameView";
 	L77Renderer renderer;
+	
+	
 	Native jni;
 	Audio audio;
 	private int score;
 	private Callback<Integer> deleteMe;
+	private SharedPreferences prefs;
 	
 	public GameView(Context context, Callback<Integer> gameEnded)
 	{
@@ -57,13 +63,29 @@ public class GameView extends GLSurfaceView
 		
 		// native depends on renderer vars initialised
 		setRenderer(new L77Renderer(true, context, jni));
-
-		
 		
 	}
+	/**
+	 * TODO Javadoc
+	 * @param sharedPreferences 
+	 */
+	public void onPause(SharedPreferences sharedPreferences) {
+		super.onPause();
+		SharedPreferences.Editor ed = sharedPreferences.edit();
+		ed.putString("native", jni.nativeGetSavedState());
+		ed.putInt("score", score);
+	}
+
+	/**
+	 * TODO Javadoc
+	 */
+	public void onResume(SharedPreferences sharedPreferences) {
+		super.onResume();
+		score = sharedPreferences.getInt("score", 0);
+		jni.nativeRestoreSavedState(sharedPreferences.getString("native", ""));
+	}
+
 	
-
-
 	/**
 	 * Touch Events are catched and sent to a native call.
 	 */

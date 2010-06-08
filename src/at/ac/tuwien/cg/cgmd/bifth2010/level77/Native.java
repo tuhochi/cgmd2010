@@ -17,6 +17,10 @@ public class Native
 	public native void nativeTouchesMoved(int [] touches);
 	public native void nativeTouchesEnded(int [] touches);
 	
+	// Getting and saving state
+	public native String nativeGetSavedState();
+	public native void nativeRestoreSavedState(String string);
+	
 	//drawing moved from render
 	private static native void nativeInit();
 	private static native void nativeInitClasses();
@@ -209,5 +213,6 @@ public class Native
 		else
 			callbackGameEnded.onFailure(new Throwable("Game ended with negative score: " + score));
 	}
+
 
 }

@@ -74,13 +74,13 @@ public class LevelActivity extends Activity
     @Override
 	protected void onPause() {
 		super.onPause();
-		gameView.onPause();		
+		gameView.onPause(this.getPreferences(MODE_PRIVATE));		
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		gameView.onResume();
+		gameView.onResume(this.getPreferences(MODE_PRIVATE));
 	}
 	
 
