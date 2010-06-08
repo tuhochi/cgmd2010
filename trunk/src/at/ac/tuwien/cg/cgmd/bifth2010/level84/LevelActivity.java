@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -143,6 +145,19 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		octGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
 		rectGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
 		diamondGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();*/
+	}
+	
+	/**
+	 * cleanup imageview resources
+	 */
+	private void cleanUpViews()
+	{
+		aniViewRoundBreak.setBackgroundDrawable(null);
+		aniViewOctBreak.setBackgroundDrawable(null);
+		aniViewRectBreak.setBackgroundDrawable(null);
+		aniViewDiamondBreak.setBackgroundDrawable(null);
+		aniViewWatersplash.setBackgroundDrawable(null);
+		aniViewDust.setBackgroundDrawable(null);
 	}
 
 	/**
@@ -308,6 +323,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	public void finish() {
 		progman.setProgress(Math.min(Math.max(progman.getProgress(), 0), 100));
 		soundManager.releaseSounds();
+		cleanUpViews();
 		setResult(Activity.RESULT_OK, progman.asIntent());
 		super.finish();
 	}
