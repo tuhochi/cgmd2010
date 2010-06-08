@@ -46,19 +46,20 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		resultstage++;
 		switch(resultstage) 
 		{
-			case 1: text.setText("Hits " + progman.getGemStatsHit(1) + "\n\n" + "Breaks " + progman.getGemStatsMiss(1));
+			case 1: text.setText(progman.getGemStatsHit(1) + " Hits\n\n" + progman.getGemStatsMiss(1) + " Breaks");
 					image.setImageResource(R.drawable.l84_tex_gem_round);
 					break;
-			case 2: text.setText("Hits " + progman.getGemStatsHit(2) + "\n\n" + "Breaks " + progman.getGemStatsMiss(2));
+			case 2: text.setText(progman.getGemStatsHit(2) + " Hits\n\n" + progman.getGemStatsMiss(2) + " Breaks");
 					image.setImageResource(R.drawable.l84_tex_gem_oct);
 					break;
-			case 3: text.setText("Hits " + progman.getGemStatsHit(3) + "\n\n" + "Breaks " + progman.getGemStatsMiss(3));
+			case 3: text.setText(progman.getGemStatsHit(3) + " Hits\n\n" + progman.getGemStatsMiss(3) + " Breaks");
 					image.setImageResource(R.drawable.l84_tex_gem_rect);
 					break;
-			case 4: text.setText("Hits " + progman.getGemStatsHit(4) + "\n\n" + "Breaks " + progman.getGemStatsMiss(4));
+			case 4: text.setText(progman.getGemStatsHit(4) + " Hits\n\n" + progman.getGemStatsMiss(4) + " Breaks");
 					image.setImageResource(R.drawable.l84_tex_gem_diamond);
 					break;
-			case 5: text.setText("$ " + (progman.getStartValue()-progman.getRemainingValue()));
+			case 5: text.setText("  $ " + progman.getStartValue() + " - $ " + progman.getRemainingValue() +
+									"\n" + "  -----------------------\n" + "  $ " + (progman.getStartValue()-progman.getRemainingValue()));
 					image.setImageResource(R.drawable.l00_coin);
 					break;
 			case 6: dismiss();
