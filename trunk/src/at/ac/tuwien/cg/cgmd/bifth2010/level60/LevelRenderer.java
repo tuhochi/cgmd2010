@@ -60,7 +60,7 @@ public class LevelRenderer implements Renderer {
 	private LevelSurfaceView glv;
 	private textureManager manager;
 	private ArrayList<Tablet> cops;
-	private ArrayList<Tablet> cars;
+	private ArrayList<GameObject> cars;
 	private Tablet bunny;
 	private Tablet gold;
 	private Tablet control;
@@ -172,7 +172,7 @@ public class LevelRenderer implements Renderer {
 		for (int i=0;i<4;i++) keystates[i] = 0;
 		actiontextures = new ArrayList<Tablet>();
 		cops = new ArrayList<Tablet>();
-		cars = new ArrayList<Tablet>();
+		cars = new ArrayList<GameObject>();
 	}
 
 	public void setKey (int code, float amount) {	keystates[code] = amount; }
@@ -227,29 +227,40 @@ public class LevelRenderer implements Renderer {
 		}
 
 		if (!proximity && !drawLock) {
-			it = cars.iterator();
+			Iterator<GameObject>git = cars.iterator();
 			float leastproximity = LEVEL_WIDTH*LEVEL_TILESIZE;
-			Tablet n; 
+			GameObject n = cars.get(0); 
 			while (it.hasNext()) {
-				Tablet t = it.next();
+				GameObject t = git.next();
 				Point tabletpos = new Point(t.getX()+t.getWidth()/2.0f, t.getY()+t.getHeight()/2.0f);
 				if (Point.distance(tabletpos, bunnyPos) < leastproximity) {
 					leastproximity = Point.distance(tabletpos, bunnyPos);
 					n = t;
 				}
 			}
-			
-			switch (actionMap[tile_y][tile_x]) {
-			case 1:	//spraytag action
-				// 	put spraytag tablet here 
-				actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
+			if (n.getTexture() == manager.getTexture("car0")) {
+				//destroy the car
+				n.destroy();
 				acted = true;
-				break;
+				crime += 30;
+				crimeCounter++;
+			}
+			
+			if (!acted) {
+				switch (actionMap[tile_y][tile_x]) {
+				case 1:	//spraytag action
+					// 	put spraytag tablet here 
+					actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
+					acted = true;
+					break;
+				}
 			}
 			
 			if (acted) {	
-				if (copCounter == 0 || Math.ceil(crime/20)>copCounter)
+				if (copCounter == 0 || Math.ceil((float)crime/20.0f)>copCounter) {
 					cops.add(new Tablet(context, COP_WIDTH, COP_HEIGHT, 0, 0, manager.getTexture("cop_front_l"), gl));
+					copCounter++;
+				}
 
 				crime += keks.get(actionMap[tile_y][tile_x]);
 				crimeCounter++;
@@ -423,7 +434,7 @@ public class LevelRenderer implements Renderer {
 		}
 		
 		// check against arbitrary objects -- cars
-		Iterator<Tablet> it = cars.iterator();
+		Iterator<GameObject> it = cars.iterator();
 		while (it.hasNext()) {
 			Tablet c = it.next();
 			Rectangle tile = new Rectangle(new Point(c.getX(), c.getY()), c.getWidth(), c.getHeight());
@@ -658,14 +669,18 @@ public class LevelRenderer implements Renderer {
 		}
 		
 		//draw cars
-		Iterator<Tablet> it = cars.iterator();
-		while (it.hasNext()) it.next().draw(gl);
+		Iterator<GameObject> it = cars.iterator();
+		while (it.hasNext()) {
+			GameObject n = it.next();
+			n.update();	
+			n.draw(gl);
+		}
 
 		//draw action stuff
 		drawLock = true;
-		it = actiontextures.iterator();
-		while (it.hasNext()) {
-			it.next().draw(gl);
+		Iterator<Tablet> tit = actiontextures.iterator();
+		while (tit.hasNext()) {
+			tit.next().draw(gl);
 		}
 
 		// render
@@ -823,7 +838,7 @@ public class LevelRenderer implements Renderer {
 					   (levelMap[rnr2][rnr1] < 1 || levelMap[rnr2][rnr1] > 7) ||
 						levelMap[rnr2][rnr1] == 3);
 				// now that we know which tile to put the car on, place it there
-				Tablet newcar = new Tablet(context, CAR_WIDTH, CAR_LENGTH, rnr1*LEVEL_TILESIZE*scale, rnr2*LEVEL_TILESIZE*scale, manager.getTexture("car0"), gl);
+				GameObject newcar = new GameObject(GameObject.OBJECTCLASS_CAR, context, CAR_WIDTH, CAR_LENGTH, rnr1*LEVEL_TILESIZE*scale, rnr2*LEVEL_TILESIZE*scale, manager.getTexture("car0"), manager, gl);
 				if (levelMap[rnr2][rnr1] == 1 || levelMap[rnr2][rnr1] == 4 || levelMap[rnr2][rnr1] == 5) {
 					newcar.rotate(90.0f);
 					newcar.setWidthHeight(CAR_LENGTH, CAR_WIDTH);
