@@ -214,19 +214,9 @@ public class LevelActivity extends Activity
 		super.onCreate(savedInstanceState);
 		LogManager.v("onCreate(" + savedInstanceState + ")");
 		
-		final CharSequence[] items = {"Verbose", "Debug", "Info", "Warn", "Error", getString(R.string.l42_Loglevel_none)};
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.l42_Select_Loglevel);
-		builder.setSingleChoiceItems(items, Config.LOGLEVEL, new DialogInterface.OnClickListener()
-		{
-		    public void onClick(DialogInterface dialog, int item)
-		    {
-		    	Config.LOGLEVEL = item;
-		    	dialog_Loglevel.dismiss();
-		    }
-		});
-		dialog_Loglevel = builder.create();
+		initLoglevelDialog();
+		
+		System.gc();
 		
 		SOUND_ENABLED = getIntent().getBooleanExtra(MenuActivity.PREFERENCE_MUSIC, false);
 		
@@ -256,6 +246,23 @@ public class LevelActivity extends Activity
         
         sessionState.setProgress(0); 
 		setResult(Activity.RESULT_OK, sessionState.asIntent());
+	}
+	
+	private void initLoglevelDialog()
+	{
+		final CharSequence[] items = {"Verbose", "Debug", "Info", "Warn", "Error", getString(R.string.l42_Loglevel_none)};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.l42_Select_Loglevel);
+		builder.setSingleChoiceItems(items, Config.LOGLEVEL, new DialogInterface.OnClickListener()
+		{
+		    public void onClick(DialogInterface dialog, int item)
+		    {
+		    	Config.LOGLEVEL = item;
+		    	dialog_Loglevel.dismiss();
+		    }
+		});
+		dialog_Loglevel = builder.create();
 	}
 	
 	/* (non-Javadoc)
