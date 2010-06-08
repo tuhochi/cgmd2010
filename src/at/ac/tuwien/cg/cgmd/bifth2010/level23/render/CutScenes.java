@@ -53,14 +53,19 @@ public class CutScenes
 	/** The time a full fade takes in millseconds */
 	private final float FADE_TIME = 3000;
 	
+	/** The texture id for the intro texture. */
 	public int introTexId;
 	
+	/** The texture shift for switching between 3-2-1-GO */
 	private float introTexShift=0;
 	
+	/** Indicates if the intro is currently showing GO. */
 	private boolean introInGoState=false;
 	
+	/** The scaling of the intro texture animation. */
 	private float introTexScale = 1;
 	
+	/** The GeometryManager handles geometry loading. */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
 	/**

@@ -106,14 +106,21 @@ public class MainChar implements SceneEntity {
 	/** GeometryManager creating vertexbuffers */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
+	/** The relativ animation time. */
 	private float animationTime;
+	/** The currently shown animation frame. */
 	private int animationFrame;
 	
+	/** Indicates if the time boost animation is playing. */
 	public boolean playTimeBoostAnimation = false;
+	
+	/** Indicates if the time goldbar animation is playing. */
 	public boolean playGoldBarAnimation = false;
 
+	/** The texture part for the goldbar animation (first frame). */
 	private TexturePart goldBoostTexture;
 
+	/** The vbo id for the goldbar animation (first frame). */
 	private int goldBarVboId;
 	
 	/** id for the audio for the glass break in the goldbar animation. */

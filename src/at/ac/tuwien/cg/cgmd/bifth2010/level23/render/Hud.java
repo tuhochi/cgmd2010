@@ -81,6 +81,12 @@ public class Hud
 	/** The GeometryManager handling geometry loading. */
 	private GeometryManager geometryManager = GeometryManager.instance;;
 	
+	/** Counts how often the burn boost was used */
+	public int nrOfBurnBoostsUsed;
+	
+	/** Counts how often the goldbar boost was used */
+	public int nrOfGoldBoostsUsed;
+	
 	/**
 	 * Instantiates a new hud, including the buttons and the timer for boost operation.
 	 */
@@ -124,6 +130,8 @@ public class Hud
 			screenCrackPosX = dis.readFloat();
 			screenCrackPosY = dis.readFloat();
 		}
+		nrOfBurnBoostsUsed = dis.readInt();
+		nrOfGoldBoostsUsed = dis.readInt();
 	}
 	
 	/**
@@ -140,6 +148,9 @@ public class Hud
 			dos.writeFloat(screenCrackPosX);
 			dos.writeFloat(screenCrackPosY);
 		}
+		dos.writeInt(nrOfBurnBoostsUsed);
+		dos.writeInt(nrOfGoldBoostsUsed);	
+		
 		wasRestored=true;
 	}
 	
@@ -185,6 +196,7 @@ public class Hud
 				moneyButton.setActive(false);
 				timeUtil.scheduleTimer(goldTimer);
 				MainChar.instance.playGoldBarAnimation = true;
+				nrOfGoldBoostsUsed++;
 			}
 			return true;
 		}
@@ -199,6 +211,7 @@ public class Hud
 				timeUtil.scheduleTimer(burnTimer);
 				LevelActivity.handler.post(progressVisibilityHandle);
 				MainChar.instance.playTimeBoostAnimation = true;
+				nrOfBurnBoostsUsed++;
 			}
 			return true;
 		}
