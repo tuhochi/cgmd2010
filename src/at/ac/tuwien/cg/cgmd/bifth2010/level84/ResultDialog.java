@@ -22,7 +22,7 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	public ResultDialog(Context context)
 	{
 		super(context);
-		
+
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.l84_customdialog, null);
 		
