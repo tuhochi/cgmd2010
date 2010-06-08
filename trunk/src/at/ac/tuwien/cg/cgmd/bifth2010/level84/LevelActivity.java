@@ -8,8 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -25,7 +23,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level83.FinishDialog;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 /**
@@ -329,10 +326,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	}
 	
 	 public static Handler showResults = new Handler() {
-	    	@Override
+		 	@Override
 	    	public void handleMessage(Message msg) {
 	    		ResultDialog resultdialog = new ResultDialog(levelActivity);
 	    		resultdialog.setResultValues(msg.arg1, msg.arg2);
+	    		
 	    		resultdialog.setOnDismissListener(new OnDismissListener() {
 					@Override
 					public void onDismiss(DialogInterface resultdialog) {

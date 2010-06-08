@@ -40,10 +40,10 @@ public class ProgressManager extends SessionState {
 	public void loseMoneyByHit(int drainType) {
 		remainingValue -= drainType * LevelActivity.GEM_BASE_VALUE;
 		updateGemStatsByHit(drainType);
-		if (remainingValue <= 0) {
-			remainingValue = 0;
-			this.activity.finish();
-		}
+//		if (remainingValue <= 0) {
+//			remainingValue = 0;
+//			this.activity.finish();
+//		}
 	}
 	
 	
@@ -55,10 +55,10 @@ public class ProgressManager extends SessionState {
 	{
 		remainingValue -= drainType * LevelActivity.GEM_BASE_VALUE / 10;
 		updateGemStatsByMiss(drainType);
-		if (remainingValue <= 0) {
-			remainingValue = 0;
-			this.activity.finish();
-		}
+//		if (remainingValue <= 0) {
+//			remainingValue = 0;
+//			this.activity.finish();
+//		}
 	}
 	
 	private void updateGemStatsByHit(int drainType)
