@@ -144,6 +144,10 @@ public class Model {
 	 */
 	public void loadGLTexture(GL10 gl, Context context) {
 		
+		//use this if there are any memory errors
+		BitmapFactory.Options bmpOpts = new BitmapFactory.Options();
+		bmpOpts.inSampleSize = 2;
+		
 		if (textureResource != -1) {			
 			//Get the texture from the Android resource directory
 			InputStream is = context.getResources().openRawResource(textureResource);
@@ -151,7 +155,10 @@ public class Model {
 			try {
 				//BitmapFactory is an Android graphics utility for images
 				bitmap = BitmapFactory.decodeStream(is);
-	
+				
+				// use this line if there are any memory errors
+				//bitmap = BitmapFactory.decodeStream(is, null, bmpOpts);
+				
 			} finally {
 				//Always clear and close
 				try {

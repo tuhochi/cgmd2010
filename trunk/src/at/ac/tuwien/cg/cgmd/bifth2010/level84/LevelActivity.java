@@ -306,7 +306,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	public void finish() {
 		progman.setProgress(Math.min(Math.max(progman.getProgress(), 0), 100));
 		soundManager.releaseSounds();
-		//cleanUpViews();
+		cleanUpViews();
 		setResult(Activity.RESULT_OK, progman.asIntent());
 		super.finish();
 	}
