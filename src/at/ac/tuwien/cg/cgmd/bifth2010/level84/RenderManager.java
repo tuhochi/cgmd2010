@@ -63,7 +63,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 	};
 	
 	/** Handler for gameTime */
-	private Handler updateGameTime = new Handler() {
+	private Handler updateGameMeter = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
@@ -75,8 +75,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 	 private Handler showResultDialog = new Handler() {
 		 	@Override
 	    	public void handleMessage(Message msg) {
-	    		ResultDialog resultdialog = new ResultDialog(activity);
-	    		resultdialog.setResultValues(msg.arg1, msg.arg2);
+	    		ResultDialog resultdialog = new ResultDialog(activity,progman);
 	    		
 	    		resultdialog.setOnDismissListener(new OnDismissListener() {
 					@Override
@@ -105,9 +104,9 @@ public class RenderManager implements Renderer,OnDismissListener {
 		fpsUpdateTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				updateFps.sendEmptyMessage(0);
+				//updateFps.sendEmptyMessage(0);
 				updatePoints.sendEmptyMessage(0);
-				updateGameTime.sendEmptyMessage(0);
+				updateGameMeter.sendEmptyMessage(0);
 			}
 		}, 1000, 1000);
 	}
@@ -171,11 +170,10 @@ public class RenderManager implements Renderer,OnDismissListener {
 			street.stopStreet();
 			
 			//pass moneyvalues to the resultdialog and show it
-			Message moneyvalues = new Message();
-			moneyvalues.arg1 = progman.getStartValue();
-			moneyvalues.arg2 = progman.getRemainingValue();
-			showResultDialog.sendMessage(moneyvalues);
-			//LevelActivity.showResults.sendMessage(moneyvalues);
+//			Message moneyvalues = new Message();
+//			moneyvalues.arg1 = progman.getStartValue();
+//			moneyvalues.arg2 = progman.getRemainingValue();
+			showResultDialog.sendEmptyMessage(0);
 		}
 	}
 	

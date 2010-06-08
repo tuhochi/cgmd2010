@@ -26,4 +26,7 @@
     <string name="l84_intro_step2">Rotiere das Smartphone, um den Edelstein auszurichten</string>
     <string name="l84_intro_step3">Lass den Edelstein fallen.</string>
     <string name="l84_result_title">Ergebnis</string>
+    <string name="l84_result_hit">Getroffen</string>
+    <string name="l84_result_miss">Zerbrochen</string>
+    <string name="l84_result_lost">Verloren</string>
 </resources>
