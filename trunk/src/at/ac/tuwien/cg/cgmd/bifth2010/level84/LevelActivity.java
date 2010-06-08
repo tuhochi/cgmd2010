@@ -149,12 +149,12 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	 */
 	private void cleanUpViews()
 	{
-		aniViewRoundBreak.setBackgroundDrawable(null);
-		aniViewOctBreak.setBackgroundDrawable(null);
-		aniViewRectBreak.setBackgroundDrawable(null);
-		aniViewDiamondBreak.setBackgroundDrawable(null);
-		aniViewWatersplash.setBackgroundDrawable(null);
-		aniViewDust.setBackgroundDrawable(null);
+		aniViewRoundBreak.setBackgroundResource(0);
+		aniViewOctBreak.setBackgroundResource(0);
+		aniViewRectBreak.setBackgroundResource(0);
+		aniViewDiamondBreak.setBackgroundResource(0);
+		aniViewWatersplash.setBackgroundResource(0);
+		aniViewDust.setBackgroundResource(0);
 	}
 
 	/**
@@ -189,17 +189,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 			accelBar.setVisibility(View.GONE);
 	}
 	
-
-	/*private void initIntro()
-	{
-		CharSequence introtext = "";
-		for (int i=3; i > 0; i--) {
-			introtext = String.valueOf(i);
-			introToast = Toast.makeText(this.getApplicationContext(), introtext, Toast.LENGTH_SHORT);
-			introToast.show();
-		}
-	}*/
-
+	
 	/**
 	 * create the street and the drains of the level
 	 */
@@ -320,7 +310,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	public void finish() {
 		progman.setProgress(Math.min(Math.max(progman.getProgress(), 0), 100));
 		soundManager.releaseSounds();
-		cleanUpViews();
+		//cleanUpViews();
 		setResult(Activity.RESULT_OK, progman.asIntent());
 		super.finish();
 	}

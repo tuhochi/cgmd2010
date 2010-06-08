@@ -72,6 +72,22 @@ public class RenderManager implements Renderer,OnDismissListener {
 		}
 	};
 	
+	 private Handler showResultDialog = new Handler() {
+		 	@Override
+	    	public void handleMessage(Message msg) {
+	    		ResultDialog resultdialog = new ResultDialog(activity);
+	    		resultdialog.setResultValues(msg.arg1, msg.arg2);
+	    		
+	    		resultdialog.setOnDismissListener(new OnDismissListener() {
+					@Override
+					public void onDismiss(DialogInterface resultdialog) {
+						activity.finish();
+					}
+				});
+	    		resultdialog.show();	
+	    	}
+	    };
+	
 	
 	public RenderManager(at.ac.tuwien.cg.cgmd.bifth2010.level84.LevelActivity levelActivity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman, SoundManager soundManager) {
 		this.activity = levelActivity;
@@ -148,17 +164,18 @@ public class RenderManager implements Renderer,OnDismissListener {
 	{
 		if (streetMeter < 1)
 		{
-			//set flag to true and disable onDrawFrame-update
+			//this.activity.finish();
 			
+			//set flag to true and disable onDrawFrame-update
 			gamefinished = true;
-			//stop street translation
 			street.stopStreet();
 			
 			//pass moneyvalues to the resultdialog and show it
 			Message moneyvalues = new Message();
 			moneyvalues.arg1 = progman.getStartValue();
 			moneyvalues.arg2 = progman.getRemainingValue();
-			LevelActivity.showResults.sendMessage(moneyvalues);
+			showResultDialog.sendMessage(moneyvalues);
+			//LevelActivity.showResults.sendMessage(moneyvalues);
 		}
 	}
 	

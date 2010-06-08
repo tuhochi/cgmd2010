@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;

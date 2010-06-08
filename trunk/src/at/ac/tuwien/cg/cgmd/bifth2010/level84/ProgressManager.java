@@ -10,8 +10,8 @@ public class ProgressManager extends SessionState {
 	private int totalValue;
 	private Activity activity;
 	
-	private int[] gemsHit = new int[3];
-	private int[] gemsMiss = new int[3];
+	private int[] gemsHit = new int[4];
+	private int[] gemsMiss = new int[4];
 	
 	public ProgressManager(Activity activity) {
 		this.activity = activity;
@@ -63,12 +63,12 @@ public class ProgressManager extends SessionState {
 	
 	private void updateGemStatsByHit(int drainType)
 	{
-		gemsHit[drainType]++;
+		gemsHit[drainType-1]++;
 	}
 	
 	private void updateGemStatsByMiss(int drainType)
 	{
-		gemsMiss[drainType]++;
+		gemsMiss[drainType-1]++;
 	}
 	
 	public int getGemStatsHit(int drainType)
