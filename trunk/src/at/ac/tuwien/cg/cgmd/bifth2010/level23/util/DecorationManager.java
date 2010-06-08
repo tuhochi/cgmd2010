@@ -90,18 +90,25 @@ public class DecorationManager
 	/** The vboID for tree. */
 	private int treeVboID;	
 	
+	/** The vbo id for elk. */
 	private int elkVboID;
 	
+	/** The texture part for elk. */
 	private TexturePart elkTexture;
 	
+	/** The vertexBuffer for elk. */
 	private FloatBuffer elkVertexBuffer;
 	
+	/** The animation time for elk. */
 	private float elkAnimationTime;
 	
+	/** Switch for the 2 frames in the elk animation. */
 	private boolean elkTexSwitch = false;
 	
+	/** The times when the elk animation should switch frames. */
 	private int[] elkAnimationSwitchTimes;
 	
+	/** Counts how often the elk animation has switched frames. */
 	private int elkAnimationSteps;
 	
 	/**
@@ -230,6 +237,9 @@ public class DecorationManager
 		}
 	}
 	
+	/**
+	 * Renders the mountain decoration.
+	 */
 	public void renderMountains()
 	{		
 		glPushMatrix();
@@ -251,6 +261,9 @@ public class DecorationManager
 		glPopMatrix();
 	}
 	
+	/**
+	 * Renders the tree decoration.
+	 */
 	public void renderTree()
 	{				
 		glPushMatrix();
@@ -272,6 +285,9 @@ public class DecorationManager
 		glPopMatrix();
 	}
 	
+	/**
+	 * Renders the elk decoration (with animation).
+	 */
 	public void renderElk()
 	{		
 		if(elkAnimationTime >= elkAnimationSwitchTimes[elkAnimationSteps])
@@ -316,6 +332,9 @@ public class DecorationManager
 		glPopMatrix();
 	}
 	
+	/**
+	 * Renders the whole background decoration (mountains,tree,elk).
+	 */
 	public void renderBackgroundDecoration()
 	{
 		renderMountains();
@@ -380,6 +399,9 @@ public class DecorationManager
 		wasRestored = true;
 	}
 	
+	/**
+	 * Resets the DecorationManager.
+	 */
 	public void reset()
 	{
 		if(!wasRestored)
@@ -395,6 +417,10 @@ public class DecorationManager
 			wasRestored=false;
 	}
 	
+	/**
+	 * Updates the DecorationManager (needed for animation and parallax effect).
+	 * @param dt the time between the last frame and the current frame
+	 */
 	public void update(float dt)
 	{
 		elkAnimationTime +=dt;

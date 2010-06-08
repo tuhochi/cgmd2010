@@ -296,7 +296,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 				fetchKeyMoveData();
 				
 				balloonHeight += dt*Settings.BALLOON_SPEED/aspectRatio;
-				score = (int)(balloonHeight*Settings.SCOREHEIGHT_MODIFIER);
+				score = (int)(balloonHeight*Settings.SCOREHEIGHT_MODIFIER)+hud.nrOfBurnBoostsUsed+hud.nrOfGoldBoostsUsed*2;
+				
+				if(score > 100)
+					score = 100;
 				
 				if(lastScore != score)
 				{

@@ -54,8 +54,10 @@ public class Background implements SceneEntity
 	/** The Geometry Manager. */
 	private GeometryManager geometryManager = GeometryManager.instance;
 	
+	/** Indicates which texture part is currently shown. */
 	private int textureLoopValue;
 	
+	/** Indicates if the bg texture is repeated (night sky). */
 	private boolean repeat = false;
 	
 	/**
