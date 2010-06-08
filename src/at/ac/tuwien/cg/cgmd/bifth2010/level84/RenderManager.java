@@ -159,6 +159,8 @@ public class RenderManager implements Renderer,OnDismissListener {
 		}
 	}
 	
+
+	
 	private void checkStreetEnd(float streetPos)
 	{
 		if (streetMeter < 1)
@@ -222,9 +224,9 @@ public class RenderManager implements Renderer,OnDismissListener {
 	}
 
 
-
 	@Override
 	public void onDismiss(DialogInterface dialog) {
+		//start street translation when introdialog is finished
 		street.startStreet();
 	}
 }
