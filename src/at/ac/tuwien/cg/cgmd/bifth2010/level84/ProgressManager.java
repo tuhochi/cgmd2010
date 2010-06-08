@@ -11,7 +11,7 @@ public class ProgressManager extends SessionState {
 	private Activity activity;
 	
 	private int[] gemsHit = new int[4];
-	private int[] gemsMiss = new int[4];
+	private int[] gemsBreak = new int[4];
 	
 	public ProgressManager(Activity activity) {
 		this.activity = activity;
@@ -54,7 +54,7 @@ public class ProgressManager extends SessionState {
 	public void loseMoneyByBreak(int drainType)
 	{
 		remainingValue -= drainType * LevelActivity.GEM_BASE_VALUE / 10;
-		updateGemStatsByMiss(drainType);
+		updateGemStatsByBreak(drainType);
 //		if (remainingValue <= 0) {
 //			remainingValue = 0;
 //			this.activity.finish();
@@ -66,9 +66,9 @@ public class ProgressManager extends SessionState {
 		gemsHit[drainType-1]++;
 	}
 	
-	private void updateGemStatsByMiss(int drainType)
+	private void updateGemStatsByBreak(int drainType)
 	{
-		gemsMiss[drainType-1]++;
+		gemsBreak[drainType-1]++;
 	}
 	
 	public int getGemStatsHit(int drainType)
@@ -76,9 +76,9 @@ public class ProgressManager extends SessionState {
 		return gemsHit[drainType-1];
 	}
 	
-	public int getGemStatsMiss(int drainType)
+	public int getGemStatsBreak(int drainType)
 	{
-		return gemsMiss[drainType-1];
+		return gemsBreak[drainType-1];
 	}
 	
 	public int getProgress()
