@@ -22,4 +22,9 @@
     <string name="l84_intro_step2">Rotate your device to align the gem to the drain</string>
     <string name="l84_intro_step3">Release the gem to through it into the drain</string>
     <string name="l84_result_title">Results</string>
+    <string name="l84_result_hits">Hit(s)</string>
+    <string name="l84_result_breaks">Breaks</string>
+    <string name="l84_result_mtotal">Total: </string>
+    <string name="l84_result_mremaining">Remaining: </string>
+    <string name="l84_result_mlost">Lost: </string>
 </resources>
