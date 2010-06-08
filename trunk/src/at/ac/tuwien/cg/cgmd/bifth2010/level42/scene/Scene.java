@@ -82,7 +82,8 @@ public class Scene implements Persistable
 			hud.init();
 			SPHERE.init();
 
-			oglManager.compileVBO();
+			if(Config.GLES11)
+				oglManager.init();
 			
 			initialized = true;
 		}
@@ -102,6 +103,9 @@ public class Scene implements Persistable
 		
 		hud.deInit();
 		SPHERE.deInit();
+		
+		if(Config.GLES11)
+			oglManager.deInit();
 	}
 	
 	/* (non-Javadoc)

@@ -116,7 +116,7 @@ public class OGLManager
 	/**
 	 * Compiles all added Buffers into a single VBO
 	 */
-	public void compileVBO()
+	public void init()
 	{
 		int[] bufferIDs = new int[1];
 		GLES11.glGenBuffers(1, bufferIDs, 0);
@@ -135,6 +135,12 @@ public class OGLManager
 					triple.getSecond(),		// size
 					triple.getThird());		// data
 		}
+	}
+	
+	public void deInit()
+	{
+		GLES11.glDeleteBuffers(1, new int[]{vbo}, 0);
+		vboBuffers.clear();
 	}
 	
 	/**
