@@ -81,14 +81,10 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	private Vibrator vibrator;
 	
-	protected static Activity levelActivity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//static variable needed for handler to show results at the end of the game
-		levelActivity = this;
 		
 		setContentView(R.layout.l84_level);
 		
@@ -315,22 +311,6 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		super.finish();
 	}
 	
-	 public static Handler showResults = new Handler() {
-		 	@Override
-	    	public void handleMessage(Message msg) {
-	    		ResultDialog resultdialog = new ResultDialog(levelActivity);
-	    		resultdialog.setResultValues(msg.arg1, msg.arg2);
-	    		
-	    		resultdialog.setOnDismissListener(new OnDismissListener() {
-					@Override
-					public void onDismiss(DialogInterface resultdialog) {
-						levelActivity.finish();
-					}
-				});
-	    		resultdialog.show();	
-	    	}
-	    };
-
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		accelerometer.setOrientation(progress);
