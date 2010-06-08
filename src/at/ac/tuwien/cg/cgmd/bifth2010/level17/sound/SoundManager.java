@@ -20,6 +20,7 @@ public class SoundManager {
 
 	public void init(Context context) {
 		mContext = context;
+		mPlayers.clear();
 	}
 	
 	public int getPlayer(int resId,boolean isLooping)
@@ -67,10 +68,11 @@ public class SoundManager {
 		for(int i=0;i<mPlayers.size();i++)
 		{
 			MediaPlayer tempPlayer = mPlayers.get(i);
-			if(tempPlayer.isPlaying())
+			if(tempPlayer != null && tempPlayer.isPlaying())
 				tempPlayer.stop();
 			tempPlayer.release();
 		}
+		mPlayers.clear();
 	}
 	
 	/**
