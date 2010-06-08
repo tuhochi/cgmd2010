@@ -18,11 +18,21 @@ public class SoundManager {
 	private Context mContext;
 	private List<MediaPlayer> mPlayers = new ArrayList<MediaPlayer>();
 
+	/**
+	 * Initializes the Soundmanager
+	 * @param context The app context
+	 */
 	public void init(Context context) {
 		mContext = context;
 		mPlayers.clear();
 	}
 	
+	/**
+	 * Get a player out of the List
+	 * @param resId The resource id for the player
+	 * @param isLooping Should this player play the sound in loop
+	 * @return the id of the player
+	 */
 	public int getPlayer(int resId,boolean isLooping)
 	{
 		MediaPlayer newPlayer = MediaPlayer.create(mContext, resId);
@@ -33,11 +43,19 @@ public class SoundManager {
 		return mPlayers.size()-1;
 	}
 	
+	/**
+	 * Start playback
+	 * @param id id of the player
+	 */
 	public void startPlayer(int id)
 	{
 		mPlayers.get(id).start();
 	}
 
+	/**
+	 * Pause playback
+	 * @param id The id of the player
+	 */
 	public void pausePlayer(int id)
 	{
 		mPlayers.get(id).pause();
