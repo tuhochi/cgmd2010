@@ -22,11 +22,8 @@
      Nach jedem geworfenen Stein wandern Sie weiter in der Hoffnung, ihr Vermögen den Kanal runterzuspülen ...
     </string> 
     <string name="l84_intro_title">Spielanleitung</string>
-    <string name="l84_intro_step1">Wähle einen Edelstein aus</string>
+    <string name="l84_intro_step1">Wähle einen Edelstein von links durch Halten des Buttons aus</string>
     <string name="l84_intro_step2">Rotiere das Smartphone, um den Edelstein auszurichten</string>
-    <string name="l84_intro_step3">Lass den Edelstein fallen.</string>
-    <string name="l84_result_title">Ergebnis</string>
-    <string name="l84_result_hit">Getroffen</string>
-    <string name="l84_result_miss">Zerbrochen</string>
-    <string name="l84_result_lost">Verloren</string>
+    <string name="l84_intro_step3">Lass den Edelstein in den Kanal fallen</string>
+    <string name="l84_result_title">Resultat</string>
 </resources>
