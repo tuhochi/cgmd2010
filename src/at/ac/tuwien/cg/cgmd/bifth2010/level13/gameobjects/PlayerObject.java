@@ -32,10 +32,32 @@ public class PlayerObject extends GameObject {
 	 */
 	@Override
 	public void draw(GL10 gl) {
-		//use absolute drawing
-		this.position.add(GameObject.offset);
-		super.draw(gl);
-		this.position.sub(GameObject.offset);
+		//reset modelview matrix
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+
+		//enable client state
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+
+		//bind texture
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, this.texture.textures[0]);
+
+		//define texture coordinates
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, this.texture.textureBuffer);
+
+		//point to vertex buffer
+		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+
+		//translate to correct position
+		gl.glTranslatef(this.position.x, this.position.y, 0.0f);
+
+		//draw
+		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
+
+		//disable client state
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
 	
@@ -57,8 +79,8 @@ public class PlayerObject extends GameObject {
 	 * @return position of player in pixels
 	 */
 	public Vector2 getRealPosition() {
-		float x = (position.x + GameObject.offset.x);
-		float y = (position.y + GameObject.offset.y);
+		int x = (position.x + GameObject.offset.x);
+		int y = (position.y + GameObject.offset.y);
 		return new Vector2(x, y);
 	}
 	
@@ -69,8 +91,8 @@ public class PlayerObject extends GameObject {
 	@Override
 	public void restore(Bundle savedInstanceState) {
 		Vector2 currentTile = new Vector2();
-		currentTile.x = savedInstanceState.getFloat("l13_playerObject_currentTileX");
-		currentTile.y = savedInstanceState.getFloat("l13_playerObject_currentTileY");
+		currentTile.x = savedInstanceState.getInt("l13_playerObject_currentTileX");
+		currentTile.y = savedInstanceState.getInt("l13_playerObject_currentTileY");
 		GameObject.setStartTile(currentTile);
 	}
 	
@@ -81,7 +103,7 @@ public class PlayerObject extends GameObject {
 	@Override
 	public void save(Bundle outState) {
 		Vector2 currentTile = getCurrentTile();
-		outState.putFloat("l13_playerObject_currentTileX", currentTile.x);
-		outState.putFloat("l13_playerObject_currentTileY", currentTile.y);
+		outState.putInt("l13_playerObject_currentTileX", currentTile.x);
+		outState.putInt("l13_playerObject_currentTileY", currentTile.y);
 	}
 }

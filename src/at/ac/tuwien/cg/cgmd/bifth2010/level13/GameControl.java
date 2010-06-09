@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level13.SoundManager.SoundFX;
@@ -31,13 +32,13 @@ public class GameControl implements IPersistence {
 	private static final int SPEED = 4;
 
 	/** amount of beers required for drunk state */
-	private static final int MIN_DRUNK_LEVEL = 3; 
+	private static final int MIN_DRUNK_LEVEL = 2; 
 
 	/** amount of beers required for rat-arsed state */
-	public static final int MAX_DRUNK_LEVEL = 6;
+	public static final int MAX_DRUNK_LEVEL = 4;
 
 	/** duration of rat-arsed state */
-	private static final int DRUNKTIME = 200;
+	private static final int DRUNKTIME = 80;
 
 	/** duration of jail state */
 	private static final int BUSTTIME = 50;
@@ -51,45 +52,68 @@ public class GameControl implements IPersistence {
 	/** starting position of player */
 	private static final Vector2 STARTTILE = new Vector2(3, 1);
 
+	/** map code for beer objects */
+	private static final int BEERCODE = 2;
+
+	/** number of beer objects in map */
+	private static final int BEERAMOUNT = 24;
+
+	/** map code for cop objects */
+	private static final int COPCODE = 3;
+
+	/** number of cop objects in map */
+	private static final int COPAMOUNT = 10;
+
+	/** map code for mistress objects */
+	private static final int MISTRESSCODE = 4;
+
+	/** number of mistress objects in map */
+	private static final int MISTRESSAMOUNT = 4;
+
+	/** price of a beer */
+	private static final int BEERPRICE = 3;
+
+	/** price of a mistress */
+	private static final int MISTRESSPRICE = 7;
+
 	/** level map 
-	 * 1 = solid tile
-	 * 2 = beer object
-	 * 3 = cop object
-	 * 4 = mistress object 
+	 * 
+	 * 0 = path
+	 * 1 = wall / solid tile 
 	 */
-	public static final int MAP[][] = {
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, 
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 3, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
-		{ 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, 
-		{ 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1 }, 
-		{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 }, 
-		{ 1, 0, 1, 1, 2, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 3, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
-		{ 1, 0, 0, 3, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 2, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 2, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 4, 0, 0, 1, 1, 1, 1, 1 },
-		{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 2, 0, 3, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
-		{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+	private int map[][] = {
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 }, 
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
+			{ 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 }, 
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1 }, 
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1 }, 
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 }, 
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1 },
+			{ 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 },
+			{ 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+			{ 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 },
+			{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1 },
+			{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
+			{ 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
+			{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 	};
 
 	/** amount of beer the player has drunken */
@@ -142,7 +166,7 @@ public class GameControl implements IPersistence {
 
 	/** status bar to show remaining time in jail */
 	private JailBar jailStatusBar;
-	
+
 	/** status bar for drunken beer */
 	private BeerStatusBar beerStatusBar;
 
@@ -166,14 +190,10 @@ public class GameControl implements IPersistence {
 		this.currentDrunkTime = savedInstanceState.getInt("l13_gameControl_currentDrunkTime");
 		this.currentBustTime = savedInstanceState.getInt("l13_gameControl_currentBustTime");
 		this.money = savedInstanceState.getInt("l13_gameControl_money");
-		this.movement.x = savedInstanceState.getFloat("l13_gameControl_movementX");
-		this.movement.y = savedInstanceState.getFloat("l13_gameControl_movementY");
-		this.oldMovement.x = savedInstanceState.getFloat("l13_gameControl_oldMovementX");
-		this.oldMovement.y = savedInstanceState.getFloat("l13_gameControl_oldMovementY");
 
-		GameObject.offset.x = savedInstanceState.getFloat("l13_gameObject_offsetX");
-		GameObject.offset.y = savedInstanceState.getFloat("l13_gameObject_offsetY");
-
+		for(int i = 0; i < map.length; i++) {
+			this.map[i] = savedInstanceState.getIntArray("l13_gameControl_map" + i);
+		}
 		//save bundle for restoring game-objects (must be done later)
 		this.savedInstanceState = savedInstanceState;
 	}
@@ -197,13 +217,10 @@ public class GameControl implements IPersistence {
 			outState.putInt("l13_gameControl_currentDrunkTime", currentDrunkTime);
 			outState.putInt("l13_gameControl_currentBustTime", currentBustTime);
 			outState.putInt("l13_gameControl_money", money);
-			outState.putFloat("l13_gameControl_movementX", this.movement.x);
-			outState.putFloat("l13_gameControl_movementY", this.movement.y);
-			outState.putFloat("l13_gameControl_oldMovementX", this.oldMovement.x);
-			outState.putFloat("l13_gameControl_oldMovementY", this.oldMovement.y);
 
-			outState.putFloat("l13_gameObject_offsetX", GameObject.offset.x);
-			outState.putFloat("l13_gameObject_offsetY", GameObject.offset.y);
+			for(int i = 0; i < map.length; i++) {
+				outState.putIntArray("l13_gameControl_map" + i, map[i]);
+			}
 
 			for(GameObject gameObject : gameObjects) {
 				gameObject.save(outState);
@@ -253,53 +270,69 @@ public class GameControl implements IPersistence {
 	}
 
 
+	private void populateMap(int code, int amount) {
+		Random random = new Random();
+		for(int i = 0; i < amount;) {
+			int x = random.nextInt(map.length);
+			int y = random.nextInt(map[x].length);
+			if(map[x][y] == 0) {
+				map[x][y] = code;
+				i++;
+			}
+		}
+	}
 	/**
 	 * creates all game objects
 	 */
 	public void createGameObjects() {
-		//only create objects if they do not exist
-		if(gameObjects.isEmpty()) {
-			//background object
-			gameObjects.add(new BackgroundObject());
 
-			for(int i = 0; i < MAP.length; i++) {
-				for(int j = 0; j < MAP[i].length; j++) {
-					//create beer object
-					if(MAP[i][j] == 2) {
-						gameObjects.add(new BeerObject(j, Math.abs(i - MAP.length + 1), i + "." + j));
-					}
-					//create cop object
-					else if(MAP[i][j] == 3){
-						gameObjects.add(new CopObject(j, Math.abs(i - MAP.length+1), i + "." + j));
-					}
-					//create mistress object
-					else if(MAP[i][j] == 4){
-						gameObjects.add(new MistressObject(j, Math.abs(i - MAP.length+1), i + "." + j));
-					}
+		if(savedInstanceState == null) {
+			populateMap(BEERCODE, BEERAMOUNT);
+			populateMap(COPCODE, COPAMOUNT);
+			populateMap(MISTRESSCODE, MISTRESSAMOUNT);
+		}
+
+		//background object
+		gameObjects.add(new BackgroundObject());
+
+		for(int i = 0; i < map.length; i++) {
+			for(int j = 0; j < map[i].length; j++) {
+				//create beer object
+				if(map[i][j] == BEERCODE) {
+					gameObjects.add(new BeerObject(j, Math.abs(i - map.length + 1), i + "." + j));
 				}
-			}
-
-			//create player object
-			player = new PlayerObject();
-			gameObjects.add(player);
-			//set starting position of player
-			GameObject.setStartTile(STARTTILE);
-
-			//create status bars
-			drunkStatusBar = new DrunkBar(200, 50);
-			drunkStatusBar.setPosition(new Vector2(0,50));
-			jailStatusBar = new JailBar(200, 50);
-			jailStatusBar.setPosition(new Vector2(0, 50));
-			beerStatusBar = new BeerStatusBar();
-			
-
-			//restore persistent values of game objects
-			if(savedInstanceState != null) {
-				for(GameObject gameObject : gameObjects) {
-					gameObject.restore(savedInstanceState);
+				//create cop object
+				else if(map[i][j] == COPCODE){
+					gameObjects.add(new CopObject(j, Math.abs(i - map.length+1), i + "." + j));
+				}
+				//create mistress object
+				else if(map[i][j] == MISTRESSCODE){
+					gameObjects.add(new MistressObject(j, Math.abs(i - map.length+1), i + "." + j));
 				}
 			}
 		}
+
+		//create player object
+		player = new PlayerObject();
+		gameObjects.add(player);
+		//set starting position of player
+		GameObject.setStartTile(STARTTILE);
+
+		//create status bars
+		drunkStatusBar = new DrunkBar(200, 50);
+		drunkStatusBar.setPosition(new Vector2(0,50));
+		jailStatusBar = new JailBar(200, 50);
+		jailStatusBar.setPosition(new Vector2(0, 50));
+		beerStatusBar = new BeerStatusBar();
+
+
+		//restore persistent values of game objects
+		if(savedInstanceState != null) {
+			for(GameObject gameObject : gameObjects) {
+				gameObject.restore(savedInstanceState);
+			}
+		}
+
 	}
 
 
@@ -308,7 +341,7 @@ public class GameControl implements IPersistence {
 	 */
 	public void update(){
 		//update offset due to player movement
-		GameObject.updateOffset(movement);
+		GameObject.updateOffset();
 
 		//update possible states
 		handleDrunkState();
@@ -339,7 +372,7 @@ public class GameControl implements IPersistence {
 		drunkStatusBar.updateScale( 1.0f/(float)DRUNKTIME * (float)currentDrunkTime);
 	}
 
-	
+
 	/**
 	 * updates the jail status-bar (correct scale)
 	 */
@@ -352,7 +385,7 @@ public class GameControl implements IPersistence {
 		}
 	}
 
-	
+
 	/**
 	 * moves the player according to user-input
 	 * @param x x-value of screen touch
@@ -373,23 +406,23 @@ public class GameControl implements IPersistence {
 				//move left
 				if(x < MyRenderer.getScreenWidth() / 2.0f) {
 					movement.x = -SPEED;
-					movement.y = 0.0f;
+					movement.y = 0;
 				}
 				//move right
 				else if(x > MyRenderer.getScreenWidth() / 2.0f) {
 					movement.x = SPEED;
-					movement.y = 0.0f;
+					movement.y = 0;
 				}
 			}
 			else {
 				//move down
 				if(y < MyRenderer.getScreenHeight() / 2.0f) {
-					movement.x = 0.0f;
+					movement.x = 0;
 					movement.y = SPEED;
 				}
 				//move up
 				else if(y > MyRenderer.getScreenHeight() / 2.0f) {
-					movement.x = 0.0f;
+					movement.x = 0;
 					movement.y = -SPEED;
 				}
 			}
@@ -409,14 +442,12 @@ public class GameControl implements IPersistence {
 		}
 
 		//player transitions in rat-arsed state if he has drunken a specified amount of beer (max_drunk_level)
-		if(consumedBeer >= MAX_DRUNK_LEVEL && !ratArsedState){
+		if(consumedBeer == MAX_DRUNK_LEVEL && !ratArsedState){
 			ratArsedState = true;
 			//set duration to be in state
 			currentDrunkTime = DRUNKTIME;
 			//player drunk sound
 			SoundManager.getInstance().playSound(SoundFX.DRUNK);
-			//reset beer counter
-			consumedBeer = 0;
 		}	
 
 		if(ratArsedState){
@@ -429,6 +460,12 @@ public class GameControl implements IPersistence {
 			else {
 				drunkState = false;
 				ratArsedState = false;
+
+				//update spent money
+				money -= consumedBeer * BEERPRICE;
+				//reset beer counter
+				consumedBeer = 0;
+
 			}
 		}
 	}
@@ -451,7 +488,7 @@ public class GameControl implements IPersistence {
 		}
 	}
 
-	
+
 	/**
 	 * handles the invincible state
 	 * called every frame
@@ -467,7 +504,7 @@ public class GameControl implements IPersistence {
 		}
 	}
 
-	
+
 	/**
 	 * handles the sex state
 	 * called every frame
@@ -485,6 +522,10 @@ public class GameControl implements IPersistence {
 			//leave state if time is up
 			else {
 				sexState = false;
+				//update spent money
+				if(!jailState) {
+					money -= MISTRESSPRICE;
+				}
 			}
 		}
 		//set normal player texture if not in this state
@@ -493,7 +534,7 @@ public class GameControl implements IPersistence {
 		}
 	}
 
-	
+
 	/**
 	 * method that is called by the collision detection routine when the player encounters a cop.
 	 *
@@ -503,6 +544,8 @@ public class GameControl implements IPersistence {
 	public void encounterCop(CopObject cop){
 		//only encounter cop if player is drunken or has sex (and is not in jail or is invincible)
 		if(((ratArsedState || drunkState) && !jailState && !invincibleState) || (sexState && !jailState && !invincibleState)){
+			//stop other sounds
+			SoundManager.getInstance().stopSounds();
 			//player police sound
 			SoundManager.getInstance().playSound(SoundFX.POLICE);
 
@@ -519,7 +562,7 @@ public class GameControl implements IPersistence {
 		}
 	}
 
-	
+
 	/**
 	 * method that is called by the collision detection routine when the player encounters a prostitute.
 	 *
@@ -530,8 +573,6 @@ public class GameControl implements IPersistence {
 		if(!sexState && !jailState && !invincibleState) {
 			//remove mistress from rendering
 			mistress.setActive(false);
-			//update spent money
-			money = money - 10;
 			//play orgasm sound
 			SoundManager.getInstance().playSound(SoundFX.ORGASM);
 			//transition into sex state and update sex-state duration
@@ -544,13 +585,18 @@ public class GameControl implements IPersistence {
 	/**
 	 * called when the player encounters a beer object
 	 */
-	public void encounterBeer(){
+	public void encounterBeer(BeerObject beerObject){
+		//dont drink beer when invincible or already totally drunken
+		if(invincibleState || ratArsedState) {
+			return;
+		}
 		//play beer sound
 		SoundManager.getInstance().playSound(SoundFX.BURP);
 		//increase beer counter
 		consumedBeer++;
-		//update spent money
-		money--;
+
+		//set beer inactive
+		beerObject.setActive(false);
 	}
 
 
@@ -563,7 +609,7 @@ public class GameControl implements IPersistence {
 		return money;
 	}
 
-	
+
 	/**
 	 * getter for drunkstate-member variable
 	 * 
@@ -694,9 +740,22 @@ public class GameControl implements IPersistence {
 	}
 
 
+	/**
+	 * getter for beerstatusbar member-variable
+	 * 
+	 * @return beerstatusbar member-variable
+	 */
 	public BeerStatusBar getBeerStatusBar() {
 		return beerStatusBar;
 	}
-	
-	
+
+
+	/**
+	 * getter for map member-variable
+	 * 
+	 * @return map member-variable
+	 */
+	public int[][] getMap() {
+		return map;
+	}
 }

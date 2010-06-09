@@ -34,19 +34,24 @@ public class CopObject extends EnemyObject{
 	@Override
 	public void update() {
 		//try movement2
-		this.position.add(movement2);
-		if(CollisionHelper.checkBackgroundCollision((GameObject)this)) {
-			this.position.sub(movement2);
+		Vector2 tempPosition = this.position.clone();
+		tempPosition.add(movement2);
+		if(CollisionHelper.checkBackgroundCollision((GameObject)this, GameObject.offset, tempPosition)) {
+			tempPosition.sub(movement2);
 
 			//try movement1
-			this.position.add(movement1);
-			if(CollisionHelper.checkBackgroundCollision((GameObject)this)) {
-				this.position.sub(movement1);
+			tempPosition.add(movement1);
+			if(CollisionHelper.checkBackgroundCollision((GameObject)this, GameObject.offset, tempPosition)) {
+				//this.position.sub(movement1);
 				//generate new random movements
 				super.setRandomDirection();
 			}
+			else {
+				this.position.add(movement1);
+			}
 		}
 		else {
+			this.position.add(movement2);
 			Vector2 temp = movement1.clone();
 			movement1 = movement2.clone();
 			movement2 = temp.clone();
@@ -64,12 +69,12 @@ public class CopObject extends EnemyObject{
 	 */
 	@Override
 	public void restore(Bundle savedInstanceState) {
-		this.position.x = savedInstanceState.getFloat("l13_copObject" + id + "_positionX");
-		this.position.y = savedInstanceState.getFloat("l13_copObject" + id + "_positionY");
-		this.movement1.x = savedInstanceState.getFloat("l13_copObject" + id + "_movement1X");
-		this.movement1.y = savedInstanceState.getFloat("l13_copObject" + id + "_movement1Y");
-		this.movement2.x = savedInstanceState.getFloat("l13_copObject" + id + "_movement2X");
-		this.movement2.y = savedInstanceState.getFloat("l13_copObject" + id + "_movement2Y");
+		this.position.x = savedInstanceState.getInt("l13_copObject" + id + "_positionX");
+		this.position.y = savedInstanceState.getInt("l13_copObject" + id + "_positionY");
+		this.movement1.x = savedInstanceState.getInt("l13_copObject" + id + "_movement1X");
+		this.movement1.y = savedInstanceState.getInt("l13_copObject" + id + "_movement1Y");
+		this.movement2.x = savedInstanceState.getInt("l13_copObject" + id + "_movement2X");
+		this.movement2.y = savedInstanceState.getInt("l13_copObject" + id + "_movement2Y");
 
 	}
 
@@ -79,11 +84,11 @@ public class CopObject extends EnemyObject{
 	 */
 	@Override
 	public void save(Bundle outState) {
-		outState.putFloat("l13_copObject" + id + "_positionX", this.position.x);
-		outState.putFloat("l13_copObject" + id + "_positionY", this.position.y);
-		outState.putFloat("l13_copObject" + id + "_movement1X", this.movement1.x);
-		outState.putFloat("l13_copObject" + id + "_movement1Y", this.movement1.y);
-		outState.putFloat("l13_copObject" + id + "_movement2X", this.movement2.x);
-		outState.putFloat("l13_copObject" + id + "_movement2Y", this.movement2.y);
+		outState.putInt("l13_copObject" + id + "_positionX", this.position.x);
+		outState.putInt("l13_copObject" + id + "_positionY", this.position.y);
+		outState.putInt("l13_copObject" + id + "_movement1X", this.movement1.x);
+		outState.putInt("l13_copObject" + id + "_movement1Y", this.movement1.y);
+		outState.putInt("l13_copObject" + id + "_movement2X", this.movement2.x);
+		outState.putInt("l13_copObject" + id + "_movement2Y", this.movement2.y);
 	}
 }
