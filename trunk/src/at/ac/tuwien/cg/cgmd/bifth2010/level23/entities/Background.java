@@ -226,6 +226,9 @@ public class Background implements SceneEntity
 		this.gameOver = isGameOver;
 	}
 	
+	/**
+	 * Calls the preprocess() method to reset states
+	 */
 	public void reset()
 	{
 		preprocess();

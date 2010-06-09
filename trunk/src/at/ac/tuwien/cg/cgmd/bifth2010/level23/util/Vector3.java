@@ -1,14 +1,20 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
 import java.io.Serializable;
-
+/**
+ * This class implements an 3-dimensional vector
+ * @author Markus Ernst
+ * @author Florian Felberbauer
+ *
+ */
 public class Vector3 implements Serializable {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 4672024666143605699L;
 	
+	/**
+	 * the x,y and z data fields
+	 */
 	public float x,y,z; 
 	
 	/**

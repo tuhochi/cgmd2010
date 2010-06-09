@@ -133,6 +133,7 @@ public class Obstacle implements Serializable
 		lastObstacleWidth = width;
 	}
 	
+
 	/**
 	 * Updates the position of the obstacle
 	 * This method is called in every frame when the obstacle is visible
