@@ -11,6 +11,36 @@
 		* acknowledgement: the text that the author requires to be printed
 	-->
 <credits>
+
+<!-- Level 23 --> 
+<credit type="sound" author="shawshank73" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=87380" 
+	usage="l23 - starting sound" 
+	license="CC Sampling Plus 1.0" 
+	name="Let it begin ">
+</credit>
+
+<credit type="sound" author="Dynamicell" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=17548" 
+	usage="l23 - temporary boost" 
+	license="CC Sampling Plus 1.0" 
+	name="Temporary boost">
+</credit>
+
+<credit type="sound" author="Tomlija" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=97669" 
+	usage="l23 - permanent boost" 
+	license="CC Sampling Plus 1.0" 
+	name="Permanent boost">
+</credit>
+
+<credit type="photography" author="ronnie44052" 
+	url="http://www.flickr.com/photos/ronnie44052/2730972472/" 
+	usage="l23 - balloon texture" 
+	license="CC" 
+	name="balloon">
+</credit>
+
 <credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
 	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
 	usage="map texture" license="CC" />
@@ -113,5 +143,6 @@
 	<credit
 		type="sound" name="Police Siren Sounds Sound Effect" author="FreeSounds.info" url="http://free-loops.com/download-free-loop-4823.html" usage="Bunny Heist: Getting caught by the police" license="CC">
 </credit>
+	
 
 </credits>
