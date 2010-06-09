@@ -12,7 +12,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level13;
 public class Vector2
 {
 	/** x/y value */
-	public float x, y;
+	public int x, y;
 
 
 	/**
@@ -34,47 +34,10 @@ public class Vector2
 	 * 
 	 * @return Vector2
 	 */
-	public Vector2 (float _x, float _y)
+	public Vector2 (int _x, int _y)
 	{
 		x = _x;
 		y = _y;
-	}
-
-	/**
-	 * constructor for copying a vector
-	 * 
-	 * @param v vector to be copied
-	 * 
-	 * @return Vector2
-	 */
-	public Vector2 (Vector2 v)
-	{
-		x = v.x;
-		y = v.y;
-	}
-
-
-	/**
-	 * setter for x/y-coordinate
-	 * 
-	 * @param x value of x-coordinate
-	 * @param y value of y-coordinate
-	 */
-	public void setXY(float x, float y){
-		this.x = x;
-		this.y = y;
-	}
-
-	/**
-	 * calculates dot-product
-	 * 
-	 * @param v1 argument of dot-product
-	 * 
-	 * @return result of dot-product
-	 */
-	public float dotProduct (Vector2 v1)
-	{
-		return x*v1.x + y*v1.y;
 	}
 
 
@@ -99,75 +62,6 @@ public class Vector2
 	{
 		this.x -= other.x;
 		this.y -= other.y;
-	}
-
-
-	/**
-	 * multiplies a vector with this vector
-	 * 
-	 * @param s operand of multiply
-	 */
-	public void mult (float s)
-	{
-		this.x *=s;
-		this.y *=s;
-	}
-
-
-	/**
-	 * calculates the length of this vector
-	 * 
-	 * @return length of vector
-	 */
-	public float length()
-	{
-		return (float) Math.sqrt (x*x + y*y);
-	}
-
-
-	/**
-	 * normalizes this vector
-	 */
-	public void normalize ()
-	{
-		float thelen = (float) Math.sqrt (x*x + y*y);
-		if (thelen != 0) 
-		{
-			x /= thelen;
-			y /= thelen;
-		}
-	}
-
-
-	/**
-	 * inverts this vector
-	 */
-	public void invert()
-	{
-		x = -x;
-		y = -y;
-	}
-
-
-	/**
-	 * calculates vector angle
-	 * 
-	 * @return angle of vector
-	 */
-	public float getAngle()
-	{
-		float angle = 0;
-		if(x < 0) {
-			angle = (float)(Math.atan(y / x) + Math.PI);
-		}
-		else if(y < 0) {
-			angle = (float)(Math.atan(y / x) + 2.0 * Math.PI);
-		}
-		else {
-			angle = (float)Math.atan(y / x);
-		}
-
-		return angle;
 	}
 
 
@@ -220,7 +114,6 @@ public class Vector2
 	 * 
 	 * @return string representation of this vector
 	 */
-
 	@Override
 	public String toString ()
 	{

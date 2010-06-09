@@ -27,7 +27,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 	private static final long STEP = 50;
 
 	/** rotation amount per fixed time step */
-	private static final float ROTATIONINC = 3f;
+	private static final float ROTATIONINC = 4.5f;
 
 	/** width of screen */
 	private static int screenWidth;
@@ -83,6 +83,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 
 	/**
 	 * constructor initializes all members
+	 * 
 	 * @param context attached context
 	 * @param attr the attributeset
 	 */
@@ -116,7 +117,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
-
 		//calculate and update fps
 		counter.update();
 		float dt = counter.getDt();
@@ -136,6 +136,10 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 			if(gameControl.isRatArsedState()) {
 				rotation += ROTATIONINC;
 			}
+			else {
+				//reset rotation
+				rotation = 0;
+			}
 
 			//zoom in/out if in drunk state
 			if(gameControl.isDrunkState()){
@@ -151,12 +155,6 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 			}
 			else {
 				zoomFactor = 1.0f;
-			}
-
-			//update rotation
-			if(rotation >= 360) {
-				int div = (int)rotation / 360;
-				rotation -= div * 360;
 			}
 
 			lastTime += STEP;

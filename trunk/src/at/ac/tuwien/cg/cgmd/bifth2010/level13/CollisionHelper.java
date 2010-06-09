@@ -16,10 +16,12 @@ public class CollisionHelper {
 	/**
 	 * checks if a collision between the player and the map would occur
 	 * 
+	 * @param offset the offset of the whole scene
+	 * 
 	 * @return true if a collision is detected
 	 */
-	public static boolean checkBackgroundCollision() {
-		return checkBackgroundCollision(null);
+	public static boolean checkBackgroundCollision(Vector2 offset) {
+		return checkBackgroundCollision(null, offset, null);
 	}
 
 	/**
@@ -27,10 +29,13 @@ public class CollisionHelper {
 	 * called within draw function of the object that needs to be checked against the background
 	 *
 	 * @param g0 object to check
+	 * @param offset the offset of the whole scene
+	 * @param position position of the object
+	 * 
 	 * @return true if a collision is detected
 	 */
 
-	public static boolean checkBackgroundCollision(GameObject gO) {
+	public static boolean checkBackgroundCollision(GameObject gO, Vector2 offset, Vector2 position) {
 		//max and min values of object which should be checked
 		int gameObjectXMin;
 		int gameObjectYMin;
@@ -38,8 +43,8 @@ public class CollisionHelper {
 		int gameObjectYMax;
 
 		//center of the screen
-		float centerX;
-		float centerY;
+		int centerX;
+		int centerY;
 
 		//calculate center of screen
 		centerX = ((MyRenderer.getScreenWidth() / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
@@ -49,14 +54,14 @@ public class CollisionHelper {
 		//calculate min/max values of object
 		if(gO == null){
 			//if object is the player, consider offset
-			gameObjectXMin = (int)(centerX + GameObject.offset.x);
-			gameObjectYMin = (int)(centerY + GameObject.offset.y);
+			gameObjectXMin = centerX + offset.x;
+			gameObjectYMin = centerY + offset.y;
 			gameObjectXMax = gameObjectXMin + GameObject.BLOCKSIZE;
 			gameObjectYMax = gameObjectYMin + GameObject.BLOCKSIZE;
 		}
 		else {
-			gameObjectXMin = (int)(gO.getPosition().x);
-			gameObjectYMin = (int)(gO.getPosition().y );
+			gameObjectXMin = position.x;
+			gameObjectYMin = position.y;
 			gameObjectXMax = gameObjectXMin + GameObject.BLOCKSIZE;
 			gameObjectYMax = gameObjectYMin + GameObject.BLOCKSIZE;
 		}
@@ -68,7 +73,7 @@ public class CollisionHelper {
 		int yMax = gameObjectYMax / GameObject.BLOCKSIZE;
 
 		//get level-map
-		int map[][] = GameControl.MAP;
+		int map[][] = GameControl.getInstance().getMap();
 		//transform to array indices (array starts top left, drawing starts bottom left)
 		yMax = map.length - yMax - 1;
 		yMin = map.length - yMin - 1;
@@ -107,16 +112,16 @@ public class CollisionHelper {
 	 */
 	public static boolean checkPlayerObjectCollision(int x, int y) {
 		//center of screen
-		float centerX;
-		float centerY;
+		int centerX;
+		int centerY;
 
 		//calculate center
 		centerX = ((MyRenderer.getScreenWidth() / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
 		centerY = ((MyRenderer.getScreenHeight() / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
 
 		//calculate player's min/max x/y - coordinates
-		int playerXMin = (int)(centerX + GameObject.offset.x);
-		int playerYMin = (int)(centerY + GameObject.offset.y);
+		int playerXMin = centerX + GameObject.offset.x;
+		int playerYMin = centerY + GameObject.offset.y;
 		int playerXMax = playerXMin + GameObject.BLOCKSIZE;
 		int playerYMax = playerYMin + GameObject.BLOCKSIZE;
 

@@ -106,9 +106,19 @@ public class SoundManager {
 	 */
 	public void playSound(SoundFX sound)
 	{
-		if (soundOn)
+		if(soundOn)
 		{
 			streamID = soundPool.play(soundMap.get(sound),1.0f, 1.0f, 1, 0, 1.0f);	
+		}
+	}
+	
+	
+	/**
+	 * stops currently playing sound
+	 */
+	public void stopSounds() {
+		if(soundOn) {
+			soundPool.stop(streamID);
 		}
 	}
 	

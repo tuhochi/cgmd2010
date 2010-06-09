@@ -45,8 +45,7 @@ public class BeerObject extends GameObject {
 	public void update() {
 		//check for player-collision
 		if(CollisionHelper.checkPlayerObjectCollision((int)this.position.x, (int)this.position.y)) {
-			active = false;
-			GameControl.getInstance().encounterBeer();
+			GameControl.getInstance().encounterBeer(this);
 		}
 	}
 

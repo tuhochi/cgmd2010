@@ -23,7 +23,7 @@ public abstract class EnemyObject extends GameObject {
 	protected Vector2 movement2;
 
 	/** movement speed of enemies */
-	private static final float SPEED = 2.0f;
+	private static final int SPEED = 2;
 
 	/** possible movement-directions of object */
 	private static final Vector2[] directionVectorArray = {
@@ -50,7 +50,7 @@ public abstract class EnemyObject extends GameObject {
 		this.id = id;
 		movement1 = new Vector2(0,0);
 		movement2 = new Vector2(0, 0);
-		random = new Random();
+		random = new Random(id.hashCode());
 		setRandomDirection();
 
 		//set position

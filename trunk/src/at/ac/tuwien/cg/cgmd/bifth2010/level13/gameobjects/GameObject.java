@@ -59,14 +59,14 @@ public abstract class GameObject implements IPersistence {
 	 */
 	public static void setStartTile(Vector2 tile) {
 		//calculcate center of screen (=player position)
-		float centerX = ((MyRenderer.getScreenWidth() / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
-		float centerY = ((MyRenderer.getScreenHeight() / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		int centerX = ((MyRenderer.getScreenWidth() / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
+		int centerY = ((MyRenderer.getScreenHeight() / GameObject.BLOCKSIZE) / 2) * GameObject.BLOCKSIZE;
 
 		//move starting tile to center
-		float startingTileX = tile.x * GameObject.BLOCKSIZE;
-		float startingTileY = tile.y * GameObject.BLOCKSIZE;
-		float offsetX = centerX - startingTileX;
-		float offsetY = centerY - startingTileY;
+		int startingTileX = tile.x * GameObject.BLOCKSIZE;
+		int startingTileY = tile.y * GameObject.BLOCKSIZE;
+		int offsetX = centerX - startingTileX;
+		int offsetY = centerY - startingTileY;
 		//set offset
 		GameObject.offset = new Vector2(-offsetX, -offsetY);
 	}
@@ -152,9 +152,7 @@ public abstract class GameObject implements IPersistence {
 		gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
 
 		//translate to correct position
-		this.position.sub(GameObject.offset);
-		gl.glTranslatef(this.position.x, this.position.y, 0.0f);
-		this.position.add(GameObject.offset);
+		gl.glTranslatef(this.position.x - GameObject.offset.x, this.position.y - GameObject.offset.y, 0.0f);
 
 		//draw
 		gl.glDrawElements(GL10.GL_TRIANGLES, 6, GL10.GL_UNSIGNED_SHORT, indexBuffer);
@@ -169,29 +167,33 @@ public abstract class GameObject implements IPersistence {
 	 * 
 	 * @param movement movement of player
 	 */
-	public static void updateOffset(Vector2 movement) {
+	public static void updateOffset() {
 		//dont move if player is in jail or has sex
 		if(GameControl.getInstance().isJailState() || GameControl.getInstance().isSexState()) {
 			return;
 		}
 
 		//try movement
-		offset.add(movement);		
+		Vector2 tempOffset = GameObject.offset.clone();
+		tempOffset.add(GameControl.getInstance().getMovement());		
 		//test for collision with solid tiles
-		if(CollisionHelper.checkBackgroundCollision()) {
+		if(CollisionHelper.checkBackgroundCollision(tempOffset)) {
 			//reset offset
-			GameObject.offset.sub(GameControl.getInstance().getMovement());
+			tempOffset.sub(GameControl.getInstance().getMovement());
 			//check if old movement is possible (only at corners)
 			if((GameControl.getInstance().getMovement().x == 0 && GameControl.getInstance().getOldMovement().x != 0)|| (GameControl.getInstance().getMovement().y == 0 && GameControl.getInstance().getOldMovement().y != 0)) {
-				GameObject.offset.add(GameControl.getInstance().getOldMovement());
-				if(CollisionHelper.checkBackgroundCollision()) {
-					GameObject.offset.sub(GameControl.getInstance().getOldMovement());
+				tempOffset.add(GameControl.getInstance().getOldMovement());
+				if(CollisionHelper.checkBackgroundCollision(tempOffset)) {
 					//stop movement
 					GameControl.getInstance().setOldMovement(new Vector2(0, 0));
+				}
+				else {
+					GameObject.offset.add(GameControl.getInstance().getOldMovement());
 				}
 			}
 		}
 		else {
+			GameObject.offset.add(GameControl.getInstance().getMovement());
 			GameControl.getInstance().setOldMovement(GameControl.getInstance().getMovement().clone());
 		}
 	}
