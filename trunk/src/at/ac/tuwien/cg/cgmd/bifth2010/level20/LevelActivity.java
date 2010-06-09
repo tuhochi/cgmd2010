@@ -93,6 +93,7 @@ public class LevelActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		gameManager.pause();
 		renderView.onPause();
 	}
 
@@ -102,8 +103,8 @@ public class LevelActivity extends Activity {
 	 */
 	@Override
 	protected void onResume() {
-		super.onResume();
-		gameManager.time.reset();
+		super.onResume();		
+		gameManager.resume();
 		renderView.onResume();		
 	}
 
@@ -114,7 +115,9 @@ public class LevelActivity extends Activity {
 	 */
 	@Override
 	protected void onStop() {
+		gameManager.stop();
 		super.onStop();		
+		
 	}
 	
 	/**
@@ -122,6 +125,7 @@ public class LevelActivity extends Activity {
 	 */
 	@Override
 	public void onDestroy() {
+		gameManager.stop();
 		super.onDestroy();	
 	}
 	

@@ -106,8 +106,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		productManager = new ProductManager();	
 		textSprites = new TextSprites();
 		
-		soundManager = new SoundManager((Context)LevelActivity.instance);
-		soundManager.playSound(SOUNDS.RUN);
+		soundManager = new SoundManager((Context)LevelActivity.instance);		
 		
 		obstacleManager = new ObstacleManager();
 		
@@ -248,6 +247,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	 * Handles all updates for this frame
 	 */
 	public void update() {
+		if (!renderView.running) return;
 		
 		// Advance in time
 		time.update();
@@ -279,6 +279,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	 * If called, the activity finishes and returns the result.
 	 */
 	private void gameOver() {
+		soundManager.stopMusic();
+		
 		SessionState s = new SessionState();
 		s.setProgress(100 - (int)totalMoney); 
 		activity.setResult(Activity.RESULT_OK, s.asIntent());
@@ -287,6 +289,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		if (finish) {
 			activity.finish();
 		}
+		
 	}
 
 	
@@ -473,4 +476,16 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 	}
 	
+	public void pause() {
+		soundManager.pauseMusic();
+	}
+	
+	public void stop() {
+		soundManager.stopMusic();
+	}
+	
+	public void resume() {
+		time.reset();
+		soundManager.playSound(SOUNDS.RUN);
+	}
 }
