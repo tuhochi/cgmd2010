@@ -255,7 +255,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 	public void onClick(View v) {
 		descriptionText.setVisibility(GLSurfaceView.INVISIBLE);
 		startButton.setVisibility(GLSurfaceView.INVISIBLE);
-		startButton.setClickable(false);
+		startButton.setClickable(false);		
 		running = true;
 	}
 
@@ -268,7 +268,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 	public void onPause() {
 		
 		running = false;
-		startButton.setText(R.string.l20_button_resume_text);
+		startButton.setText(R.string.l20_button_resume_text);		
 		super.onPause();
 	}
 
@@ -279,9 +279,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 	 * @see android.opengl.GLSurfaceView#onResume()
 	 */
 	@Override
-	public void onResume() {
-
-		
+	public void onResume() {	
 		descriptionText.setVisibility(GLSurfaceView.VISIBLE);
 		startButton.setVisibility(GLSurfaceView.VISIBLE);
 		startButton.setClickable(true);
