@@ -70,8 +70,8 @@
 			<ImageView
 				android:id="@+id/l23_screenshot"
 				android:src="@drawable/l23_screenshot"
-				android:layout_width="25dp"
-				android:layout_height="25dp"/>
+				android:layout_width="267dp"
+				android:layout_height="445dp"/>
 			
 				
 				</LinearLayout>
