@@ -27,7 +27,7 @@
 				android:paddingBottom="@dimen/l23_Help_TitlePadding"
 				android:textSize="@dimen/l23_Help_TitleSize"
 				android:text="@string/l23_Help_Title"
-				android:textColor="@color/l23_Help_TitleColor"/>
+				android:textColor="@color/l23_Help_TitleColor"></TextView>
 			
 			<!--Abstract-->
 			<TextView
@@ -67,6 +67,13 @@
 				android:textSize="@dimen/l23_Help_TextSize"
 				android:text="@string/l23_Help_Text3"
 				android:textColor="@color/l23_Help_TextColor"/>
-		</LinearLayout>
+			<ImageView
+				android:id="@+id/l23_screenshot"
+				android:src="@drawable/l23_screenshot"
+				android:layout_width="25dp"
+				android:layout_height="25dp"/>
+			
+				
+				</LinearLayout>
 	</ScrollView>
 </LinearLayout>
