@@ -68,10 +68,12 @@
 				android:text="@string/l23_Help_Text3"
 				android:textColor="@color/l23_Help_TextColor"/>
 			<ImageView
+			
 				android:id="@+id/l23_screenshot"
 				android:src="@drawable/l23_screenshot"
-				android:layout_width="267dp"
-				android:layout_height="445dp"/>
+				android:layout_width="240dp"
+				android:layout_height="400dp"
+				android:scaleType = "CENTER_INSIDE"/>
 			
 				
 				</LinearLayout>
