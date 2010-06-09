@@ -18,6 +18,9 @@ public class GeometryManager {
 	/** The geometry manager. */
 	public static GeometryManager instance = new GeometryManager(); 
 	
+	/** 
+	 * The VBO id of the current bound VBO
+	 */
 	private int currentBoundVBO =-1;
 	
 	/**
@@ -27,6 +30,10 @@ public class GeometryManager {
 		instance = this; 
 	}
 	
+	/**
+	 * Binds a VBO
+	 * @param vboID The id of the VBO to bind
+	 */
 	public void bindVBO(int vboID)
 	{
 		if(vboID != currentBoundVBO)
@@ -180,6 +187,9 @@ public class GeometryManager {
 			return vboId; 
 		}
 		
+		/**
+		 * Resets the VBO to avoid problems when getting a new OpenGL context
+		 */
 		public void reset()
 		{
 			currentBoundVBO = -1;

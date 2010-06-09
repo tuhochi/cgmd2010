@@ -32,6 +32,7 @@ public class MainChar implements SceneEntity {
 	private final float[][] animationTable = {{0,0},{0,1},{0,2},{0,3},
 											{1,0},{1,1},{1,2},{1,3}};
 	
+	/** the instance to pass around (like a Singleton) */
 	public static MainChar instance;
 	
 	/** The Constant serialVersionUID. */

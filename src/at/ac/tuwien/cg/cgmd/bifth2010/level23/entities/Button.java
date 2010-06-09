@@ -70,6 +70,9 @@ public class Button
 		this.texture = texture;
 	}
 	
+	/**
+	 * sets references
+	 */
 	public void preprocess()
 	{
 		geometryManager = GeometryManager.instance; 

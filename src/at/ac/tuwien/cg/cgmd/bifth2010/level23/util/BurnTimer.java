@@ -68,8 +68,8 @@ public class BurnTimer extends TimingTask
 		MainChar.instance.playTimeBoostAnimation=false;
 	}
 
-	/* (non-Javadoc)
-	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level23.util.TimingTask#update(float)
+	/**
+	 *  updates values over time 
 	 */
 	@Override
 	public void update(float dt) {

@@ -5,7 +5,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.render.Hud;
 public class PermaBoostTimer extends TimingTask {
 
 	/**
-	 * 
+	 * This class extends the TimingTask and is used to time the boost action
+	 * @author Markus Ernst
+	 * @author Florian Felberbauer
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -14,6 +16,9 @@ public class PermaBoostTimer extends TimingTask {
 	/** The remaining time till the timer triggers. */
 	public float remainingTime = Settings.GOLD_BOOST_TIME;
 	
+	/**
+	 * overrides the run method
+	 */
 	@Override
 	public void run() 
 	{
@@ -24,6 +29,9 @@ public class PermaBoostTimer extends TimingTask {
 		Hud.instance.renderScreenCrack = false;
 	}
 
+	/**
+	 * Overrides the update method and decreases the remaining time
+	 */
 	@Override
 	public void update(float dt) 
 	{
