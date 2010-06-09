@@ -73,7 +73,7 @@
 				android:src="@drawable/l23_screenshot"
 				android:layout_width="240dp"
 				android:layout_height="400dp"
-				android:scaleType = "CENTER_INSIDE"/>
+				android:scaleType = "centerInside"/>
 			
 				
 				</LinearLayout>
