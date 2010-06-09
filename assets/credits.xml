@@ -132,7 +132,27 @@
 	
 <!--Level 88 - credits-->
 <credit
-		type="" name="" author="" url="" usage="" license="">
+		type="texture"
+		name="RPG map symbols"
+		author="nicubunu"
+		url="http://www.openclipart.org, [search for: rpg map]"
+		usage="The game map"
+		license="CC">
+<credit
+		type="texture"
+		name="Crossed swords"
+		author="zeimusu"
+		url="http://www.openclipart.org/detail/3058"
+		usage="Icon for the police"
+		license="CC">
+<credit
+		type="texture"
+		name="Star"
+		author="nicubunu"
+		url="http://www.openclipart.org/detail/22428"
+		usage="Icon for stashes"
+		license="CC">
+
 </credit>
 	<credit
 		type="sound" name="Discount Funk Bass Riff _D_G_F_85 -01" author="enoe" url="http://audio.ibeat.org/?ccm=/files/enoe/617" usage="Bunny Heist: Background loop" license="CC">
