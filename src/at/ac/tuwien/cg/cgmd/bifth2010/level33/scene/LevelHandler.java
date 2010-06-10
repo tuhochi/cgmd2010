@@ -22,6 +22,7 @@ public class LevelHandler {
 	public static Vector2i worldDim;
 	Vector2f gameCharacterPosition; // actual Position
 	Vector2f gameCharacterTargetPosition; // target Position
+	public static int characterRotaion=0;
 	boolean characterMoves = false; // if Character is moving in this moment
 	float gameCharacterSpeed = 30;
 	public static ArrayList<int[]> worldEntry;
@@ -39,6 +40,7 @@ public class LevelHandler {
 	public static int numberOfGoodGoodies=0;
 	public static int collectedMap=-1;
 	String collectedMapText="";
+	
 	
 	StopTimer t;
 
@@ -98,23 +100,23 @@ public class LevelHandler {
 	public void updateLogic() {
 
 		
-		// START DEMO: random walk
-		if(demomode)
-		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
-			
-			boolean ok=false;
-			while(!ok)
-			{
-				Vector2i to = new Vector2i(rand.nextInt(worldDim.x),rand.nextInt(worldDim.y));
-				if(isDirectWayPossilbe(to))
-				{
-
-				gameCharacterTargetPosition.set(to.x,to.y);
-				ok=true;
-				}
-			}
-			
-		}
+//		// START DEMO: random walk
+//		if(demomode)
+//		if (gameCharacterPosition.equals(gameCharacterTargetPosition)){
+//			
+//			boolean ok=false;
+//			while(!ok)
+//			{
+//				Vector2i to = new Vector2i(rand.nextInt(worldDim.x),rand.nextInt(worldDim.y));
+//				if(isDirectWayPossilbe(to))
+//				{
+//
+//				gameCharacterTargetPosition.set(to.x,to.y);
+//				ok=true;
+//				}
+//			}
+//			
+//		}
 		// END DEMO: random walk
 
 		// update level
@@ -622,9 +624,21 @@ public class LevelHandler {
 				.round(gameCharacterPosition.x), Math
 				.round(gameCharacterPosition.y));
 		if (horizontal)
+		{
 			desiredPoint.add(new Vector2i(length, 0));
+			if(length<0)
+				characterRotaion=90;
+			else
+				characterRotaion=-90;
+		}
 		else
+		{
 			desiredPoint.add(new Vector2i(0, length));
+			if(length<0)
+				characterRotaion=0;
+			else
+				characterRotaion=180;
+		}
 
 		if (isDirectWayPossilbe(desiredPoint)) {
 			gameCharacterTargetPosition.set(desiredPoint.x, desiredPoint.y);
@@ -668,25 +682,45 @@ public class LevelHandler {
 		///  / \
 		else
 		{
-			float cx=((lastTouch.x-0.5f)*2);
-			float cy=((lastTouch.y-0.5f)*2);
+			float dx=((lastTouch.x-0.5f)*2);
+			float dy=((lastTouch.y-0.5f)*2);
+			
+			Log.d("dx/dy",dx+" "+dy);
+			
+			boolean hasSteered = false;
 			
 			// horizontal
-			if(Math.abs(cx)>Math.abs(cy))
+			if(Math.abs(dx)>Math.abs(dy))
 			{
-				if(cx>0)
-					steerCharacterTo(true, 1);
+				if(dx>0)
+					hasSteered = steerCharacterTo(true, 1);
 				else
-					steerCharacterTo(true, -1);
+					hasSteered = steerCharacterTo(true, -1);
+				
+				if(!hasSteered&& !demomode)
+				{
+					if(dy>0)
+						steerCharacterTo(false, 1);
+					else
+						steerCharacterTo(false, -1);
+				}
 				
 			}
 			// vertical
 			else
 			{
-				if(cy>0)
-					steerCharacterTo(false, 1);
+				if(dy>0)
+					hasSteered = steerCharacterTo(false, 1);
 				else
-					steerCharacterTo(false, -1);
+					hasSteered = steerCharacterTo(false, -1);
+				
+				if(!hasSteered&& !demomode)
+				{
+					if(dx>0)
+						steerCharacterTo(true, 1);
+					else
+						steerCharacterTo(true, -1);
+				}
 			}
 
 			

@@ -293,6 +293,7 @@
 		
 		<activity 
   			android:name=".level33.LevelActivity"
+  			android:screenOrientation="portrait"
   			android:label="@string/l33_GameName">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level33.LAUNCH_LEVEL"/>
@@ -471,4 +472,7 @@
 		android:largeScreens="true"
 		android:normalScreens="true" android:smallScreens="false"
 		android:anyDensity="true" />
+
+
+
 </manifest>

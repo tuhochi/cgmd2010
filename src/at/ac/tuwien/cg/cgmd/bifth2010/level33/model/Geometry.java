@@ -1,5 +1,16 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.model;
 
+import static android.opengl.GLES10.GL_LINEAR;
+import static android.opengl.GLES10.GL_LINEAR_MIPMAP_NEAREST;
+import static android.opengl.GLES10.GL_TEXTURE_2D;
+import static android.opengl.GLES10.GL_TEXTURE_MAG_FILTER;
+import static android.opengl.GLES10.GL_TEXTURE_MIN_FILTER;
+import static android.opengl.GLES10.GL_TRUE;
+import static android.opengl.GLES10.glBindTexture;
+import static android.opengl.GLES10.glGenTextures;
+import static android.opengl.GLES10.glTexParameterf;
+import static android.opengl.GLUtils.texImage2D;
+
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -182,17 +193,34 @@ public class Geometry {
 					
 					int[] textureIds = new int[1];
 					gl.glGenTextures(1, textureIds, 0);
-					textureId = textureIds[0];
-					gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+					this.textureId = textureIds[0];
+					gl.glBindTexture(GL10.GL_TEXTURE_2D, this.textureId);
+					
+					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
+					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+				
 					GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-							GL10.GL_LINEAR);
-					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-							GL10.GL_LINEAR);
-					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-							GL10.GL_CLAMP_TO_EDGE);
-					gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-							GL10.GL_CLAMP_TO_EDGE);
+
+					
+					gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
+										
+					/*
+					 * This is a change to the original tutorial, as buildMipMap does not exist anymore
+					 * in the Android SDK.
+					 * 
+					 * We check if the GL context is version 1.1 and generate MipMaps by flag.
+					 * Otherwise we call our own buildMipMap implementation
+					 */
+					if(gl instanceof GL11) {
+						gl.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
+						GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+						
+					//
+					} else {
+						buildMipmap(gl, bitmap);
+					}		
+					
+					//Clean up
 					bitmap.recycle();
 					
 						} catch (Exception ex) {
@@ -535,6 +563,47 @@ public class Geometry {
 		
 		System.out.println("end?");
 		
+	}
+	
+	/**
+	 * Our own MipMap generation implementation.
+	 * Scale the original bitmap down, always by factor two,
+	 * and set it as new mipmap level.
+	 * 
+	 * Thanks to Mike Miller (with minor changes)!
+	 * 
+	 * @param gl - The GL Context
+	 * @param bitmap - The bitmap to mipmap
+	 */
+	private void buildMipmap(GL10 gl, Bitmap bitmap) {
+		//
+		int level = 0;
+		//
+		int height = bitmap.getHeight();
+		int width = bitmap.getWidth();
+
+		//
+		while(height >= 1 || width >= 1) {
+			//First of all, generate the texture from our bitmap and set it to the according level
+			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, level, bitmap, 0);
+			
+			//
+			if(height == 1 || width == 1) {
+				break;
+			}
+
+			//Increase the mipmap level
+			level++;
+
+			//
+			height /= 2;
+			width /= 2;
+			Bitmap bitmap2 = Bitmap.createScaledBitmap(bitmap, width, height, true);
+			
+			//Clean up
+			bitmap.recycle();
+			bitmap = bitmap2;
+		}
 	}
 
 
