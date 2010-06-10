@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit;
+package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -7,10 +7,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Constants;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalSatelliteMotion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.SatelliteTransformation;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.VecAxisTransformation;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.SceneEntity;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.CollisionManager;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
 
 /**
  * The MotionManager handles the linking between objects 

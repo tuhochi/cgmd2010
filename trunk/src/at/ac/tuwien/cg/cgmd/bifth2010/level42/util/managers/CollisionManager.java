@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.Vector;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
@@ -14,7 +15,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.DirectionalPlanetMotion;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Model;
@@ -105,6 +105,9 @@ public class CollisionManager implements Persistable{
 	
 	/** Proceed the collision up to this index */
 	private int collOffsetLimit;
+	
+	/** Random Generator */
+	private final Random rand;
 
 	/**
 	 * Instantiates a new collision manager.
@@ -141,6 +144,8 @@ public class CollisionManager implements Persistable{
 		this.motionManager = MotionManager.instance;
 		this.timeManager = TimeManager.instance;
 		this.soundManager = SoundManager.instance;
+		
+		this.rand = new Random();
 	}
 	
 	/**
@@ -553,7 +558,7 @@ public class CollisionManager implements Persistable{
 		//printRemaingingPlanetParts();
 		if(remainingPlanetParts.size()>0){	
 			//pseudo random selection of next element
-			int index = (int)timeManager.getRemainingGameTime()%remainingPlanetParts.size();
+			int index = (int)(rand.nextFloat()*(remainingPlanetParts.size()-1));
 			LogManager.d("RANDOM SELECTION INDEX:"+index);
 			return remainingPlanetParts.get(index);
 		}else 

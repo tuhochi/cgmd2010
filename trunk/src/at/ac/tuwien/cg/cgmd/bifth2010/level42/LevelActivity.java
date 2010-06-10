@@ -27,11 +27,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.Scene;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.TimeManager;
 
