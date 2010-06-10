@@ -23,7 +23,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Orbit;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.AOMLoader;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.HUD;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager;
@@ -36,6 +35,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.CustomGestureDetector.CustomO
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.CollisionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.GameManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.OGLManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.SoundManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.TimeManager;

@@ -10,11 +10,11 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Sphere;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Vector3;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Motion;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.MotionManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.orbit.Movable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.scene.MaterialManager.Material;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.Persistable;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.LogManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.MotionManager;
 
 //static imports
 import static android.opengl.GLES10.*;
