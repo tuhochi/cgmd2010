@@ -77,20 +77,21 @@ public class textureManager {
 		createTexture("cloud2", R.drawable.l60_cloud2, 50, 50);
 		createTexture("cloud3", R.drawable.l60_cloud3, 50, 50);
 		
-		loadTexture("car0", R.drawable.l60_car);
-		loadTexture("car1", R.drawable.l60_car0);
-		loadTexture("car2", R.drawable.l60_car1);
-		loadTexture("car3", R.drawable.l60_car2);
-		loadTexture("car4", R.drawable.l60_car3);
-		loadTexture("car5", R.drawable.l60_car4);
-		loadTexture("car6", R.drawable.l60_car5);
+		loadTexture("car0", R.drawable.l60_car0);
+		loadTexture("car1", R.drawable.l60_car1);
+		
+		loadTexture("blow0", R.drawable.l60_blow0);
+		loadTexture("blow1", R.drawable.l60_blow1);
+		loadTexture("blow2", R.drawable.l60_blow2);
+		loadTexture("blow3", R.drawable.l60_blow3);
+		loadTexture("blow4", R.drawable.l60_blow4);
 
 		//add all texture elements
 	}
 	
 	public void createTexture(String name, int texId, int xSize, int ySize, boolean sticky) {
 		loadTexture (name, texId);
-		Tablet tex = new Tablet(context, xSize, ySize, 0, 0, texture.get(0), sticky, gl);
+		Tablet tex = new Tablet(xSize, ySize, 0, 0, texture.get(0), sticky);
 		
 		if (!gameObjectMap.containsKey(name)) {
 			gameObjectMap.put(name, tex);
