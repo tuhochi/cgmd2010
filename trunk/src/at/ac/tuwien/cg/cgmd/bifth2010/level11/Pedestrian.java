@@ -38,7 +38,7 @@ public class Pedestrian implements Target{
 	private Random rand;
 	private float bounceRadius;
 	private float bounceStrength = 0.0002f;
-	private float maxBounceVectorLength = 0.2f;
+	private float maxBounceVectorLength = 1f;
 	/**
 	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
 	 * @param gl
@@ -287,6 +287,6 @@ public class Pedestrian implements Target{
 		if(this.bounceVector.length() > this.maxBounceVectorLength)
 			this.bounceVector.normalize().mult(this.maxBounceVectorLength);
 		target = null;
-		System.out.println("bounceVector: "+bounceVector);
+		//System.out.println("bounceVector: "+bounceVector);
 	}
 }
