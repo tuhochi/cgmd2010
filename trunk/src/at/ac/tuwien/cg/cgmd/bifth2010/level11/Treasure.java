@@ -9,8 +9,12 @@ public class Treasure implements Target{
 	private float attractionRadius;
 	private Vector2 position;
 	private static final int treasure_texture_id = R.drawable.l11_treasure;
+	private static final int treasure_sound_01 = R.raw.l00_gold01;
 	private Square sprite;
 	private float startingValue;
+	
+
+	
 	public Treasure(float value, Vector2 position){
 		this(value, value, position);
 	}
@@ -20,12 +24,17 @@ public class Treasure implements Target{
 		this.attractionRadius = 200.0f;
 		this.position = position;
 		this.sprite = new Square();
+		
+		Sounds.singleton.play(treasure_sound_01);
+		
+		//audioStream.setRate((float)(Math.random() * 1.5f) + 0.5f);
+		
 	}
-	public float getAttracktionRadius(){
+	public float getAttractionRadius(){
 		return this.attractionRadius;
 	}
 	/**
-	 * subtracts value from the trasure and returns false if treasure is empty
+	 * subtracts value from the treasure and returns false if treasure is empty
 	 * @param value
 	 * @return
 	 */
