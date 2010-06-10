@@ -27,15 +27,15 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 		ga = (GameActivity)context;
 		
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = inflater.inflate(R.layout.l84_customdialog, null);
+		view = inflater.inflate(R.layout.l11_customdialog, null);
 		
-		text = (TextView) view.findViewById(R.id.l84_dialogtext);
-		image = (ImageView) view.findViewById(R.id.l84_dialogimage);
-		button = (Button) view.findViewById(R.id.l84_dialogbutton);
+		text = (TextView) view.findViewById(R.id.l11_dialogtext);
+		image = (ImageView) view.findViewById(R.id.l11_dialogimage);
+		button = (Button) view.findViewById(R.id.l11_dialogbutton);
 		button.setOnTouchListener(this);
 		
-		setIcon(R.drawable.l84_transparent);
-		setTitle(R.string.l84_intro_title);
+		setIcon(R.drawable.l11_transparent);
+		setTitle(R.string.l11_intro_title);
 		setView(view);
 		
 		showFirstIntroStep();

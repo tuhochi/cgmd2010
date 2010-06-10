@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import android.app.Activity;
@@ -8,7 +7,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -22,6 +20,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class GameActivity extends Activity {
 
+	public static GameActivity singleton;
+	
 	private static final String LOG_TAG = GameActivity.class.getSimpleName();
     private GameView _gameView;
     public Level _level;
@@ -44,6 +44,8 @@ public class GameActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 		//System.out.println("Create");
         super.onCreate(savedInstanceState);
+        
+        this.singleton = this;
         
         // set to fullscreen and no bars
         requestWindowFeature(Window.FEATURE_NO_TITLE); 
