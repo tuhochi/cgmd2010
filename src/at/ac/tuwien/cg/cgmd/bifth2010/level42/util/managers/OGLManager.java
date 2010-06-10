@@ -2,7 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import static android.opengl.GLES10.*;
 
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.nio.Buffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -304,12 +304,12 @@ public class OGLManager
         return unprojectedPosVec;
 	}
 	
-	public void saveScreenshot(FileOutputStream fos)
+	public void saveScreenshot(OutputStream fos)
 	{
 		saveScreenshot(viewport[0], viewport[1], viewport[2], viewport[3], fos);
 	}
 	
-	public static void saveScreenshot(int x, int y, int w, int h, FileOutputStream fos)
+	public static void saveScreenshot(int x, int y, int w, int h, OutputStream fos)
 	{
 		Bitmap bmp = getPixels(x,y,w,h);
 		try
