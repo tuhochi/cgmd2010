@@ -48,7 +48,7 @@ public class GameControl implements IPersistence {
 
 	/** duration of invincible state */
 	private static final int INVINCIBLETIME = 60;
-
+	
 	/** starting position of player */
 	private static final Vector2 STARTTILE = new Vector2(3, 1);
 
@@ -270,12 +270,19 @@ public class GameControl implements IPersistence {
 	}
 
 
+	/**
+	 * randomly populate the level map with cop, mistress and beer objects
+	 * 
+	 * @param code map code of object
+	 * @param amount number of objects
+	 */
 	private void populateMap(int code, int amount) {
 		Random random = new Random();
 		for(int i = 0; i < amount;) {
 			int x = random.nextInt(map.length);
 			int y = random.nextInt(map[x].length);
-			if(map[x][y] == 0) {
+			//only insert object if there is no wall and if it is not the starting position of the player
+			if(map[x][y] == 0 && x != STARTTILE.x && y!= STARTTILE.y) {
 				map[x][y] = code;
 				i++;
 			}
@@ -319,10 +326,10 @@ public class GameControl implements IPersistence {
 		GameObject.setStartTile(STARTTILE);
 
 		//create status bars
-		drunkStatusBar = new DrunkBar(200, 50);
-		drunkStatusBar.setPosition(new Vector2(0,50));
-		jailStatusBar = new JailBar(200, 50);
-		jailStatusBar.setPosition(new Vector2(0, 50));
+		drunkStatusBar = new DrunkBar(128, 32);
+		drunkStatusBar.setPosition(new Vector2(0, 0));
+		jailStatusBar = new JailBar(128, 32);
+		jailStatusBar.setPosition(new Vector2(0, 0));
 		beerStatusBar = new BeerStatusBar();
 
 
@@ -392,8 +399,7 @@ public class GameControl implements IPersistence {
 	 * @param y y-value of screen touch
 	 */
 	public void movePlayer(float x,float y){
-		//remember old movement
-		oldMovement = movement.clone();
+		Vector2 tempMovement = new Vector2();
 
 		//only move if player is not in jail and does not have sex
 		if(!jailState && !sexState){
@@ -401,32 +407,57 @@ public class GameControl implements IPersistence {
 			float deltaX = Math.abs( x - MyRenderer.getScreenWidth() / 2.0f);
 			float deltaY = Math.abs( y - MyRenderer.getScreenHeight() / 2.0f);
 
+			//calculate difference to player position
+			int stopX = (int)x - player.getPosition().x;
+			int stopY = (int)y - player.getPosition().y;
+			//if player was touched, stop movement
+			if(stopX > 0 && stopX < GameObject.BLOCKSIZE && stopY > 0 && stopY < GameObject.BLOCKSIZE) {
+				stopMovement();
+				return;
+			}
+				
 			//move in the direction which has a greater delta
 			if(deltaX >= deltaY) {
 				//move left
 				if(x < MyRenderer.getScreenWidth() / 2.0f) {
-					movement.x = -SPEED;
-					movement.y = 0;
+					tempMovement.x = -SPEED;
+					tempMovement.y = 0;
 				}
 				//move right
 				else if(x > MyRenderer.getScreenWidth() / 2.0f) {
-					movement.x = SPEED;
-					movement.y = 0;
+					tempMovement.x = SPEED;
+					tempMovement.y = 0;
 				}
 			}
 			else {
 				//move down
 				if(y < MyRenderer.getScreenHeight() / 2.0f) {
-					movement.x = 0;
-					movement.y = SPEED;
+					tempMovement.x = 0;
+					tempMovement.y = SPEED;
 				}
 				//move up
 				else if(y > MyRenderer.getScreenHeight() / 2.0f) {
-					movement.x = 0;
-					movement.y = -SPEED;
+					tempMovement.x = 0;
+					tempMovement.y = -SPEED;
 				}
 			}
+			
+			//check if new movement is different
+			if(tempMovement.x != movement.x || tempMovement.y != movement.y) {
+				//remember old movement
+				oldMovement = movement.clone();
+				movement = tempMovement.clone();
+			}
 		}
+	}
+	
+	
+	/**
+	 * stops player movement
+	 */
+	public void stopMovement() {
+		this.movement = new Vector2(0, 0);
+		this.oldMovement = new Vector2(0, 0);
 	}
 
 
