@@ -94,9 +94,6 @@ public class CollisionManager implements Persistable{
 	/** The motion manager. */
 	private MotionManager motionManager;
 	
-	/** The time manager. */
-	private TimeManager timeManager;
-	
 	/** The sound manager. */
 	private SoundManager soundManager;
 	
@@ -142,7 +139,6 @@ public class CollisionManager implements Persistable{
 		comperator = new NearestEntityComperator();
 				
 		this.motionManager = MotionManager.instance;
-		this.timeManager = TimeManager.instance;
 		this.soundManager = SoundManager.instance;
 		
 		this.rand = new Random();
