@@ -13,10 +13,10 @@ public class TimeDisplay extends Sprite {
 	private static final float TEXTURE_X = 0f;
 	private static final float TEXTURE_Y = 600f;
 	
-	/* Number of "clock fraction" parts in the texture */
+	/** Number of "clock fraction" parts in the texture */
 	private static final int CLOCK_PARTS = 8;
 	
-	/* Number of "countdown timer" parts in the texture */
+	/** Number of "countdown timer" parts in the texture */
 	private static final int COUNTDOWN_PARTS = 5;
 	
 	private Context context = null;

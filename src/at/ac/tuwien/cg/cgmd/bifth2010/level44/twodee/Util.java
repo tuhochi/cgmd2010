@@ -4,8 +4,14 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+/**
+ * Class that provides common functionality
+ * 
+ * @author thp
+ *
+ */
 public class Util {
-	/* The size of a native float variable in bytes */
+	/** The size of a native float variable in bytes */
 	private static final int FLOAT_SIZE = 4;
 
 	/**
