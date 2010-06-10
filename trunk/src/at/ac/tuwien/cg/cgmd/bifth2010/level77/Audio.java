@@ -105,6 +105,13 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	private void putMp(int resid)
 	{	
 		MediaPlayer mp = MediaPlayer.create(context, resid);
+		
+		if (mp == null)
+		{
+			Log.e("l77native", "mplayer could not be created  (null)!");
+			return;
+		}
+
 		mp.setOnCompletionListener(this);
 		mp.setOnPreparedListener(this);
 		mps.put(resid, mp);

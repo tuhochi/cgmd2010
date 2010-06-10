@@ -72,8 +72,14 @@ public class GameView extends GLSurfaceView
 	public void onPause(SharedPreferences sharedPreferences) {
 		super.onPause();
 		SharedPreferences.Editor ed = sharedPreferences.edit();
-		ed.putString("native", jni.nativeGetSavedState());
+		String state = jni.nativeGetSavedState();
+		//this does not work in java: if (state != "")
+		if (state.length() != 0)
+		{
+			ed.putString("native", state);
+		}
 		ed.putInt("score", score);
+		ed.commit();
 	}
 
 	/**
@@ -82,9 +88,9 @@ public class GameView extends GLSurfaceView
 	public void onResume(SharedPreferences sharedPreferences) {
 		super.onResume();
 		score = sharedPreferences.getInt("score", 0);
-		jni.nativeRestoreSavedState(sharedPreferences.getString("native", ""));
+		String state = sharedPreferences.getString("native", "");
+		jni.nativeRestoreSavedState(state);
 	}
-
 	
 	/**
 	 * Touch Events are catched and sent to a native call.

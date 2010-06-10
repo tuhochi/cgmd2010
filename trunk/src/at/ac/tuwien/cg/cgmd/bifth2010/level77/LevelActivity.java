@@ -14,6 +14,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 /**
  * Entry point for the Level 77 BunnyBlock
@@ -83,5 +84,19 @@ public class LevelActivity extends Activity
 		gameView.onResume(this.getPreferences(MODE_PRIVATE));
 	}
 	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		
+		Log.i("l77_state", "**stop activity");
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		Log.i("l77_state", "**onstart");
+	}
 
 }
