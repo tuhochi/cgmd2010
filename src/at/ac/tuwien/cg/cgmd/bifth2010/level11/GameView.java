@@ -27,18 +27,18 @@ public class GameView extends GLSurfaceView {
      * the value of the treasure is proportional to the time the display is touched.
      */
     public boolean onTouchEvent(final MotionEvent event) {
-    	if(!((GameActivity)_renderer.context)._level._isStarted){
+    	/*if(!((GameActivity)_renderer.context)._level._isStarted){
     		if (event.getAction() == MotionEvent.ACTION_UP){
     			((GameActivity)_renderer.context)._level.start();
     		}
     		return true;
-    	}
+    	}*//*
     	if(((GameActivity)_renderer.context)._level._isFinished){
     		if (event.getAction() == MotionEvent.ACTION_UP){
     			((GameActivity)_renderer.context).finish();
     		}
     		return true;
-    	}
+    	}*/
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             _x = event.getX();
             _y = event.getY();

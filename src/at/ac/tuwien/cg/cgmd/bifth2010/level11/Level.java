@@ -2,10 +2,17 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level84.ResultDialog;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
+
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 /**
@@ -67,6 +74,7 @@ public class Level extends Thread {
 		timing = new Timing();
 		timing.start();
 		timing.pause();
+		this.generatePedestrians(10, 40);
 
 	}
 	
@@ -83,7 +91,6 @@ public class Level extends Thread {
 		
 		this.initTextures();
 		
-		this.generatePedestrians(10, 40);
 		//this.addTreasure(new Treasure(10.0f, 200.0f, new Vector2(200.0f, 200.0f)));
 		
 		background = new Square();
@@ -205,6 +212,25 @@ public class Level extends Thread {
 	private  void update() {
 		//synchronized(this){
 		timing.update();
+		
+		updateObjects();
+		//((GameActivity)context).setTextTimeLeft(getRemainigTime());
+		
+		//calc already grabbed treasure value
+		this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
+		for (int j=0; j < treasureList.size(); j++){
+			this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
+		}
+		//}
+		((GameActivity)context).setResult(this.getGrabbedTreasureValue());
+		if(this.timing.getCurrTime() > this.maxPlayTime || this.grabbedTreasureValue>100) {
+			this._isRunning = false;
+			this._isActive = false;
+			this._isFinished = true;
+			showOutroDialog.sendEmptyMessage(0);
+		}
+	}
+	private void updateObjects(){
 		//System.out.println(timing.getDeltaTime());
 		for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
 			Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
@@ -245,25 +271,7 @@ public class Level extends Thread {
 				}
 			}
 		}
-		
-
-		//((GameActivity)context).setTextTimeLeft(getRemainigTime());
-		
-		//calc already grabbed treasure value
-		this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
-		for (int j=0; j < treasureList.size(); j++){
-			this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
-		}
-		//}
-		if(this.timing.getCurrTime() > this.maxPlayTime || this.grabbedTreasureValue>100) {
-			((GameActivity)context).setResult(this.getGrabbedTreasureValue());
-			this._isRunning = false;
-			this._isActive = false;
-			this._isFinished = true;
-		}
-		
 	}
-	
 	/**
 	 * generates specific amount of pedestrians with a minimal distance to each other
 	 * @param amount
@@ -289,6 +297,7 @@ public class Level extends Thread {
 				this.pedestrianList.add(pedestrian);
 			}
 		}
+		updateObjects();
 	}
 	
 	/**
@@ -322,7 +331,15 @@ public class Level extends Thread {
 		gl.glDisable(GL10.GL_BLEND);
 		
 	}
+
 	
+	 private Handler showOutroDialog = new Handler() {
+		 	@Override
+	    	public void handleMessage(Message msg) {
+		 		OutroDialog resultdialog = new OutroDialog(context, grabbedTreasureValue >100 );
+	    		resultdialog.show();	
+	    	}
+	    };
 	/**
 	 * returns amount of grabbed treasures
 	 * @return

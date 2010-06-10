@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l11_title">Get Poor Or Die Trying</string>
-<string name="l11_help_01">In this level you have to distribute your treasure among people.
-But be aware, most people are very envy and start fighting each other, when they get too close.</string>
-<string name="l11_help_02">Touch the screen at the position you want to drop some treasure. The longer you touch the screen, the more treasure you drop.
-All people close to the treasure heap you have just dropped start moving towards the heap to collect it.
-When one of them gets too close to another they start fighting. You have to prevent that, otherwise you loose.</string>
+<string name="l11_help_01">In this level you have to distribute your treasure among people. 
+But be beware, most people are very greedy and start fighting each other, when they get too close.</string>
+<string name="l11_help_02">Touch the screen at the position at which you want to drop some treasure. The longer you touch the screen, the more treasure you drop. 
+All people close to the gold heap start moving towards the heap to collect the gold.
+ When one of the pedestrians gets too close to another they start fighting and cannot collect gold during that. You have to prevent that, by sliding with your finger over the screen to push them around  so that they can calmly collect the gold.
+</string>
+	<string name="l11_intro_01">You have to distribute your money on the ground, so that pedestrians can collect it without starting fighting.</string>
+	<string name="l11_intro_02">Touch and hold to drop gold. Drag your finder to push the pedestrians away.</string>
+	<string name="l11_outro_01">Time Up!</string>
+	<string name="l11_outro_02">Congratulations, you distributed all treasure among the people!</string><string name="l11_outro_title">End</string>
 </resources>
