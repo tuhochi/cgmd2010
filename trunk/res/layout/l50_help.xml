@@ -38,7 +38,7 @@
 						android:paddingBottom="@dimen/l50_help_HelpActivityPadding"
 						android:textSize="@dimen/l50_help_HelpActivitySize"
 						android:text="@string/l50_HelpActivity1"
-						android:textColor="@color/l50_help_black"/>
+						android:textColor="@color/l50_help_black"/><ImageView android:id="@+id/ImageView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:baselineAlignBottom="true" android:layout_gravity="center_horizontal" android:background="@drawable/l50_coin_missing"></ImageView>
 			
 					<TextView
 						android:layout_width="fill_parent"
@@ -52,7 +52,7 @@
 						android:text="@string/l50_HelpActivity2"
 						android:textColor="@color/l50_help_black"/>
 					
-					<TextView
+					<ImageView android:id="@+id/ImageView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l50_enemy" android:layout_gravity="center_horizontal"></ImageView><TextView
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:textStyle="normal"
@@ -64,6 +64,9 @@
 						android:text="@string/l50_HelpActivity3"
 						android:textColor="@color/l50_help_black"/>
 				
-			</LinearLayout>
+			
+
+
+</LinearLayout>
 	</ScrollView>
 </LinearLayout>
