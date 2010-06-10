@@ -2,8 +2,7 @@
 <resources>
 <string name="l77_title">Bunny Block</string>
 <string name="l77__HelpActivity_Title">Bunny Block</string>
-<string name="l77_paragraph01">The idea of the game is to move valuable blocks by dragging them in the vertical direction. 
-Three blocks in a row cancel each other out. 
+<string name="l77_paragraph01">A stack of precious blocks moves up. Click between two blocks to swap them horizontally. Three blocks in a row cancel each other out. 
 Gold is lost to reinstate the value of the blocks!</string>
 <string name="l77_paragraph02">Try to cancel as many blocks as possible in one go and you will earn more points by having more Gold taken away.</string>
 <string name="l77_paragraph03">If there are more items above the affected blocks they fall down. 

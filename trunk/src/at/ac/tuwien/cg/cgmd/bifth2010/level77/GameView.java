@@ -56,8 +56,7 @@ public class GameView extends GLSurfaceView
 		};
 		
 		// Play the theme song
-		//audio.playSound(Audio.BUNNY_BLOCK_THEME);
-		audio.playSound(Audio.BLOCK_EXPLODE_SOUND_1);
+		audio.playSound(Audio.BUNNY_BLOCK_THEME);
 
 		jni = new Native(context, audio, gameEnded, updateScore);
 		
@@ -73,6 +72,8 @@ public class GameView extends GLSurfaceView
 		super.onPause();
 		SharedPreferences.Editor ed = sharedPreferences.edit();
 		String state = jni.nativeGetSavedState();
+		audio.stopAllSounds();
+		Log.i(TAG + " onPause", "Length of serialized game data: " + state.length());
 		//this does not work in java: if (state != "")
 		if (state.length() != 0)
 		{

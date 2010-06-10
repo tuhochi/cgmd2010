@@ -2,6 +2,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import android.R.bool;
 import android.content.Context;
@@ -184,6 +186,17 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	public void onPrepared(MediaPlayer mp)
 	{
 		mpBlocked.put(mp, false);
+	}
+
+	/**
+	 * Stops all playing sounds used by this class
+	 */
+	public void stopAllSounds()
+	{
+		Iterator<Entry<Integer, MediaPlayer>> it = mps.entrySet().iterator();
+		while (it.hasNext())
+			it.next().getValue().stop();
+		
 	}
 	
 }
