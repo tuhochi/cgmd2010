@@ -2,9 +2,14 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import static android.opengl.GLES10.*;
 
+import java.io.FileOutputStream;
 import java.nio.Buffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.opengl.GLES11;
 import android.opengl.GLU;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
@@ -297,5 +302,64 @@ public class OGLManager
         unprojectedPosVec.divide(unprojectedPos[3]);
    
         return unprojectedPosVec;
+	}
+	
+	public void saveScreenshot(FileOutputStream fos)
+	{
+		saveScreenshot(viewport[0], viewport[1], viewport[2], viewport[3], fos);
+	}
+	
+	public static void saveScreenshot(int x, int y, int w, int h, FileOutputStream fos)
+	{
+		Bitmap bmp = getPixels(x,y,w,h);
+		try
+		{
+			bmp.compress(CompressFormat.PNG, 100, fos);
+			fos.flush();
+		}
+		catch(Throwable t)
+		{
+			LogManager.eTag("ScreenShot","Saving PNG failed", t);
+		}
+	}
+
+	private static Bitmap getPixels(int x, int y, int w, int h)
+	{
+		int bitmap_ogl[] = new int[w*h];
+		for(int i=0; i<bitmap_ogl.length; i++)
+			bitmap_ogl[i] = -1;
+		int bitmap_android[] = new int[w*h];
+		IntBuffer bitmap_ogl_wrapper = IntBuffer.wrap(bitmap_ogl);
+		bitmap_ogl_wrapper.position(0);
+		
+		glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap_ogl_wrapper);
+		
+		/*
+		 * Pixelformat correction from OpenGLs ABGR to Android ARGB
+		 */
+		for(int i=0; i<h; i++)
+		{
+			for(int j=0; j<w; j++)
+			{
+				int color_ABGR = bitmap_ogl[i*w+j];
+				
+				int alpha	= (color_ABGR >> 24) & 0xff;
+				int blue	= (color_ABGR >> 16) & 0xff;
+				int green	= (color_ABGR >>  8) & 0xff;
+				int red		= (color_ABGR >>  0) & 0xff;
+				
+				int color_ARGB =	((alpha	& 0xff) << 24) |
+									((red	& 0xff) << 16) |
+									((green	& 0xff) <<  8) |
+									((blue	& 0xff) <<  0);
+				
+				// Android starts in the upper left corner, OpenGL starts in the lower left corner..
+				bitmap_android[(h-i-1)*w+j] = color_ARGB;
+			}
+		}
+		
+		Bitmap sb = Bitmap.createBitmap(bitmap_android, w, h, Config.ARGB_8888);
+		
+		return sb;
 	}
 }

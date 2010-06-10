@@ -246,6 +246,10 @@ public class LevelActivity extends Activity
         
         sessionState.setProgress(0); 
 		setResult(Activity.RESULT_OK, sessionState.asIntent());
+		
+		renderView.setFocusable(true);
+		renderView.setFocusableInTouchMode(true);
+		renderView.requestFocus();
 	}
 	
 	private void initLoglevelDialog()
