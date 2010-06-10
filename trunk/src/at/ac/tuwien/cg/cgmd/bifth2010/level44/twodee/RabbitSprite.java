@@ -1,16 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
-
-import java.util.Vector;
-
 import javax.microedition.khronos.opengles.GL10;
+
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 
 /**
  * This class is the visual representation of the Rabbit
  * 
  * @author Matthias
- *
+ * 
  */
 
 public class RabbitSprite extends SpriteContainer {
@@ -20,38 +18,54 @@ public class RabbitSprite extends SpriteContainer {
 	private static final float FLAP_DELTA = 3.5f;
 	/** maximum rotation the rabbit itself can have */
 	private static final float MAX_ROTATION = 30.f;
-	/** quotient to map a maximum swipe to ANGLE_MAX and every shorter swipe proportionally */
+	/**
+	 * quotient to map a maximum swipe to ANGLE_MAX and every shorter swipe
+	 * proportionally
+	 */
 	private static final float ANGLE_QUOTIENT = ANGLE_MAX / Swipe.MAX_MIN_DELTA_LENGTH;
-
-        private static final int CENTER_X = 45;
-        private static final int CENTER_Y = 42;
-
-        private Stars stars;
-
+	/** horizontal offset for center */
+	private static final int CENTER_X = 45;
+	/** vertical offset for center */
+	private static final int CENTER_Y = 42;
+	/** the stars that appear when the rabbit is hit */
+	private Stars stars;
+	/** sprite for the left wing */
 	private Sprite leftWing;
+	/** sprite for the right wing */
 	private Sprite rightWing;
+	/** sprite for the CoinBucket */
 	private CoinBucketSprite coinBucket;
 
 	/** left wing currently flapping up? */
 	private boolean leftFlapUp = false;
 	/** right wing currently flapping up? */
 	private boolean rightFlapUp = false;
-	/** current minimum angle of left wing (depends on the length of a swipe gesture, longer swipe -> longer flap on wing) */
+	/**
+	 * current minimum angle of left wing (depends on the length of a swipe
+	 * gesture, longer swipe -> longer flap on wing)
+	 */
 	private float currentLeftAngleMin = -ANGLE_MAX;
-	/** current maximum angle of right wing (depends on the length of a swipe gesture, longer swipe -> longer flap on wing) */
+	/**
+	 * current maximum angle of right wing (depends on the length of a swipe
+	 * gesture, longer swipe -> longer flap on wing)
+	 */
 	private float currentRightAngleMax = ANGLE_MAX;
 
+	/**
+	 * Creates the whole Sprite for the Rabbit
+	 * @param texture the texture for creating the Sprite
+	 */
 	public RabbitSprite(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
 		setCenter(CENTER_X, CENTER_Y);
 
 		leftWing = new Sprite(TextureParts.makeWing(texture));
-		leftWing.setCenter(leftWing.getWidth(), leftWing.getHeight()/2);
+		leftWing.setCenter(leftWing.getWidth(), leftWing.getHeight() / 2);
 		leftWing.setPosition(0, -5);
 		leftWing.setRotation(ANGLE_MAX);
 
 		rightWing = new Sprite(TextureParts.makeWing(texture).setMirror(Mirror.HORIZONTAL));
-		rightWing.setCenter(0, rightWing.getHeight()/2);
+		rightWing.setCenter(0, rightWing.getHeight() / 2);
 		rightWing.setPosition(0, -5);
 		rightWing.setRotation(-ANGLE_MAX);
 
@@ -62,9 +76,12 @@ public class RabbitSprite extends SpriteContainer {
 		addChild(rightWing);
 		addChild(coinBucket);
 
-                stars = new Stars(texture);
+		stars = new Stars(texture);
 	}
-	
+
+	/**
+	 * @return Sprite for the CoinBucket
+	 */
 	public CoinBucketSprite getCoinBucket() {
 		return coinBucket;
 	}
@@ -78,35 +95,41 @@ public class RabbitSprite extends SpriteContainer {
 		currentRightAngleMax = ANGLE_MAX;
 		leftFlapUp = rightFlapUp = false;
 	}
-	
+
 	/**
 	 * @return true, if both wings are on top, otherwise false
 	 */
 	public boolean bothWingsOnTop() {
 		return leftWing.getRotation() >= ANGLE_MAX && rightWing.getRotation() <= -ANGLE_MAX && !leftFlapUp && !rightFlapUp;
 	}
-	
+
 	/**
-	 * @return true, if the rabbit is flying (one or both wing(s) not in topright position, otherwise false
+	 * @return true, if the rabbit is flying (one or both wing(s) not in
+	 *         topright position, otherwise false
 	 */
 	public boolean isFlying() {
-		return leftWing.getRotation() < ANGLE_MAX || rightWing.getRotation() > -ANGLE_MAX; 
+		return leftWing.getRotation() < ANGLE_MAX || rightWing.getRotation() > -ANGLE_MAX;
 	}
-	
+
+	/**
+	 * @return true, if one of the two wings is moving down currently
+	 */
 	public boolean wingsMovingDown() {
-		return (leftWing.getRotation() < ANGLE_MAX && !leftFlapUp) || 
-		       (rightWing.getRotation() > -ANGLE_MAX && !rightFlapUp);
+		return (leftWing.getRotation() < ANGLE_MAX && !leftFlapUp) || (rightWing.getRotation() > -ANGLE_MAX && !rightFlapUp);
 	}
 	
+	/**
+	 * @return true, if one of the two wings is moving up currently
+	 */
 	public boolean wingsMovingUp() {
-		return (leftWing.getRotation() < ANGLE_MAX && leftFlapUp) || 
-	          (rightWing.getRotation() > -ANGLE_MAX && rightFlapUp);
+		return (leftWing.getRotation() < ANGLE_MAX && leftFlapUp) || (rightWing.getRotation() > -ANGLE_MAX && rightFlapUp);
 	}
-	
+
 	/**
 	 * sets the angle of both wings simultaneously
 	 * 
-	 * @param angle the new angle
+	 * @param angle
+	 *            the new angle
 	 */
 	public void setWingAngle(float angle) {
 		leftWing.setRotation(-angle);
@@ -116,7 +139,9 @@ public class RabbitSprite extends SpriteContainer {
 	/**
 	 * sets the current maximum angle of a wing depending on a swipe
 	 * 
-	 * @param swipe if the swipe is in the left half, the max angle of the left wing is set, otherwise the one of the right wing
+	 * @param swipe
+	 *            if the swipe is in the left half, the max angle of the left
+	 *            wing is set, otherwise the one of the right wing
 	 */
 	public void setCurrentAngleMax(Swipe swipe) {
 		if (swipe.isLeft()) {
@@ -129,12 +154,20 @@ public class RabbitSprite extends SpriteContainer {
 		}
 	}
 
+	/**
+	 * sets the current maximum angle for the left wing
+	 * @param swipeLength the length of the swipe is used for setting the angle max
+	 */
 	private void setCurrentLeftAngleMax(float swipeLength) {
 		float max = (swipeLength - Swipe.MIN_LENGTH) * ANGLE_QUOTIENT;
 
 		this.currentLeftAngleMin = -max;
 	}
 
+	/**
+	 * sets the current maximum angle for the right wing
+	 * @param swipeLength the length of the swipe is used for setting the angle max
+	 */
 	private void setCurrentRightAngleMax(float swipeLength) {
 		float max = (swipeLength - Swipe.MIN_LENGTH) * ANGLE_QUOTIENT;
 
@@ -144,8 +177,9 @@ public class RabbitSprite extends SpriteContainer {
 	/**
 	 * performs one step of flapping the left wing
 	 * 
-	 * @param swipeLength the length of the swipe (longer swipe -> longer flap)
-	 * @return true, if the flap is finished (wing in top-position again (45 �)
+	 * @param swipeLength
+	 *            the length of the swipe (longer swipe -> longer flap)
+	 * @return true, if the flap is finished (wing in top-position again (45 degrees)
 	 */
 	public boolean flapLeftWing(float swipeLength) {
 		float newAngle = leftWing.getRotation();
@@ -172,6 +206,13 @@ public class RabbitSprite extends SpriteContainer {
 		return false;
 	}
 
+	/**
+	 * performs one step of flapping the right wing
+	 * 
+	 * @param swipeLength
+	 *            the length of the swipe (longer swipe -> longer flap)
+	 * @return true, if the flap is finished (wing in top-position again (45 degrees)
+	 */
 	public boolean flapRightWing(float swipeLength) {
 		float newAngle = rightWing.getRotation();
 
@@ -207,57 +248,73 @@ public class RabbitSprite extends SpriteContainer {
 	 * @param swipe
 	 */
 	public void rotate(Swipe swipe) {
-			float angleDelta = (swipe.getPower() - Swipe.MIN_LENGTH) / 90.f;
+		float angleDelta = (swipe.getPower() - Swipe.MIN_LENGTH) / 90.f;
 
-			angleDelta *= MAX_ROTATION / Swipe.MAX_MIN_DELTA_LENGTH;
+		angleDelta *= MAX_ROTATION / Swipe.MAX_MIN_DELTA_LENGTH;
 
-			if (swipe.isRight()) {
-				angleDelta *= -1.f;
-			} 
+		if (swipe.isRight()) {
+			angleDelta *= -1.f;
+		}
 
-			if (Math.abs(this.getRotation() + angleDelta) < MAX_ROTATION) {
-				setRotation(this.getRotation() + angleDelta);
-			}
+		if (Math.abs(this.getRotation() + angleDelta) < MAX_ROTATION) {
+			setRotation(this.getRotation() + angleDelta);
+		}
 	}
-	
+
+	/**
+	 * @return the width of the Rabbit-Sprite
+	 */
 	public float getWidth() {
 		return 50.f;
 	}
-	
+
+	/**
+	 * @return the height of the Rabbit-Sprite
+	 */
 	public float getHeight() {
 		return 60.f;
 	}
-	
+
+	/**
+	 * check if the rabbit is under a specific position
+	 * @param y the position to check against
+	 * @return true, if the lower bound of the rabbit is under the specific position
+	 */
 	public boolean isUnder(float y) {
 		return this.getY() + this.getHeight() > y;
 	}
-	
+
+	/**
+	 * loose a coin of the rabbit
+	 */
 	public boolean looseCoin() {
 		boolean result = coinBucket.looseCoin();
-		
+
+		// change the texture according to number of hits
 		switch (coinBucket.getCoinCount()) {
-			case 8:
-                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 0));
-                            setCenter(CENTER_X, CENTER_Y);
-                            break;
-			case 6:
-                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 1));
-                            setCenter(CENTER_X, CENTER_Y);
-                            break;
-			case 4:
-                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 2));
-                            setCenter(CENTER_X, CENTER_Y);
-                            break;
-			case 2:
-                            setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 3));
-                            setCenter(CENTER_X, CENTER_Y);
-                            break;
-                        default:
-                            /* do nothing */
-                            break;
+		case 8:
+			setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 0));
+			setCenter(CENTER_X, CENTER_Y);
+			break;
+		case 6:
+			setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 1));
+			setCenter(CENTER_X, CENTER_Y);
+			break;
+		case 4:
+			setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 2));
+			setCenter(CENTER_X, CENTER_Y);
+			break;
+		case 2:
+			setTexturePart(TextureParts.makeDamagedRabbitHead(getTexture(), 3));
+			setCenter(CENTER_X, CENTER_Y);
+			break;
+		default:
+			/* do nothing */
+			break;
 		}
 
-                stars.show();
+		// show the stars when he was hit
+		stars.show();
 
 		return result;
 	}
@@ -268,10 +325,16 @@ public class RabbitSprite extends SpriteContainer {
 		stars.draw(gl);
 	}
 
-        public void tick() {
-            stars.tick();
-        }
+	/**
+	 * move the stars by one position
+	 */
+	public void tick() {
+		stars.tick();
+	}
 
+	/**
+	 * @return the number of left coins
+	 */
 	public int getCoinCount() {
 		return coinBucket.getCoinCount();
 	}

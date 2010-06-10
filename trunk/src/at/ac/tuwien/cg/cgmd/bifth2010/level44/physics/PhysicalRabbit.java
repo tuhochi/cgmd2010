@@ -48,6 +48,14 @@ public class PhysicalRabbit implements PhysicalObject {
 	/** check screen boundaries during movement */
 	private boolean boundaryCheck = true;;
 
+	/**
+	 * Creates the physical object for the Rabbit
+	 * 
+	 * @param rabbit sprite for the rabbit
+	 * @param coinSprite sprite for a dropping coin
+	 * @param screenWidth width of the phone's screen
+	 * @param screenHeight height of the phone's screen
+	 */
 	public PhysicalRabbit(RabbitSprite rabbit, Sprite coinSprite, int screenWidth, int screenHeight) {
 		this.sprite = rabbit;
 		this.coinSprite = coinSprite;
@@ -55,17 +63,21 @@ public class PhysicalRabbit implements PhysicalObject {
 		this.screenHeight = screenHeight;
 	}
 
+	/**
+	 * @return the sprite of the rabbit
+	 */
 	public RabbitSprite getSprite() {
 		return sprite;
 	}
 
-	@Override
+	
 	/**
 	 * let the rabbit fly
 	 * perform gravitation, movement of flapping wings
 	 * 
 	 * @param time milliseconds bygone since the last flap of wings
 	 */
+	@Override
 	public void move() {
 		// time since last reset
 		float time = (System.currentTimeMillis() - startTime) / VELOCITY_FACTOR * 2;
@@ -267,6 +279,9 @@ public class PhysicalRabbit implements PhysicalObject {
 		}
 	}
 
+	/**
+	 * clear all saved input gestures
+	 */
 	public void clearInputQueue() {
 		inputQueue.clear();
 	}
@@ -282,20 +297,32 @@ public class PhysicalRabbit implements PhysicalObject {
 			coinSprite.draw(gl);
 	}
 
+	/**
+	 * set the position of the rabbit
+	 */
 	@Override
 	public void setPosition(float x, float y) {
 		if (sprite != null)
 			sprite.setPosition(x, y);
 	}
 
+	/**
+	 * @return the x-position of the rabbit
+	 */
 	public float getX() {
 		return sprite.getX();
 	}
 
+	/**
+	 * @return the y-position of the rabbit
+	 */
 	public float getY() {
 		return sprite.getY();
 	}
 
+	/**
+	 * @return the current velocity of the rabbit
+	 */
 	public float getVelocity() {
 		return velocity;
 	}
@@ -327,6 +354,9 @@ public class PhysicalRabbit implements PhysicalObject {
 		this.setVelocity(0.f);
 	}
 
+	/**
+	 * @return number of coins left
+	 */
 	public int getCoinCount() {
 		return sprite.getCoinCount();
 	}
@@ -353,6 +383,9 @@ public class PhysicalRabbit implements PhysicalObject {
 		return sprite.isUnder(screenHeight - 5);
 	}
 
+	/**
+	 * reset all movement-dependent variables to inital values
+	 */
 	@Override
 	public void resetMovement() {
 		setVelocity(0.f);
@@ -362,6 +395,10 @@ public class PhysicalRabbit implements PhysicalObject {
 		clearInputQueue();
 	}
 	
+	/**
+	 * changes the boundary-check of the rabbit
+	 * @param check the new value for the boundary-check
+	 */
 	public void setBoundaryCheck(boolean check) {
 		this.boundaryCheck  = check;
 	}

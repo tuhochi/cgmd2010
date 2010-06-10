@@ -7,6 +7,12 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * Class for playing SoundEffects
+ * 
+ * @author Matthias
+ */
+
 public class SoundPlayer {
 	/** The Sound Effects we support */
 	public enum SoundEffect { LOAD, SHOT, FLAP, DROP, BEEP, END };
@@ -95,6 +101,9 @@ public class SoundPlayer {
 		}
 	}
 	
+	/**
+	 * @return true, if music shall be played, otherwise false
+	 */
 	public boolean isMusicOn() {
 		return musicOn;
 	}
