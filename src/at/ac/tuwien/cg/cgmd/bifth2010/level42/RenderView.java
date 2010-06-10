@@ -2,6 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42;
 
 import static android.opengl.GLES10.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -119,6 +122,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 	// temp vars
 	/** The selection direction. */
 	private final Vector3 selectionDirection;
+	
+	/** whether or not a screenshot should be created after the next frame. */
+	private boolean screenshot = false;
 	
 	/**
 	 * Instantiates a new render view.
@@ -264,7 +270,10 @@ public class RenderView extends GLSurfaceView implements Renderer
 				case KeyEvent.KEYCODE_DPAD_RIGHT:
 					Orbit test1 = (Orbit) motionManager.getMotion(1).getMotion();
 					test1.morphAxisScale(1.6f,1.5f,100,100);
-				break;
+					break;
+				case KeyEvent.KEYCODE_CAMERA:
+					screenshot = true;
+					break;
 				}
 			}
 		}
@@ -404,6 +413,47 @@ public class RenderView extends GLSurfaceView implements Renderer
 	private void render()
 	{
 		scene.render();
+		if(screenshot)
+		{
+			takeScreenshot();
+			screenshot = false;
+		}
+	}
+	
+	/**
+	 * Take screenshot.
+	 */
+	private void takeScreenshot()
+	{
+		FileOutputStream fos = null;
+		try
+		{
+			File myAppDir = context.getFilesDir();
+			int counter = 0;
+			File screenshotFile = null;
+			do
+			{
+				String counterString = "" + counter;
+				for(int i=counterString.length(); i<5; i++)
+					counterString = "0" + counterString;
+				
+				screenshotFile = new File(myAppDir, "l42_Screenshot_" + counterString + ".png");
+				counter++;
+			}
+			while(screenshotFile.exists());
+			fos = new FileOutputStream(screenshotFile);
+			oglManager.saveScreenshot(fos);
+			LogManager.i("Saved Screenshot to " + screenshotFile.getAbsolutePath());
+		}
+		catch(Throwable t)
+		{
+			LogManager.e("Error creating screenshot",t);
+		}
+		finally
+		{
+			if(fos != null)
+				try { fos.close(); } catch (IOException e){}
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -488,6 +538,8 @@ public class RenderView extends GLSurfaceView implements Renderer
 		synchronized(keyEvents)
 		{
 			keyEvents.addLast(event);
+			if(event.getKeyCode() == KeyEvent.KEYCODE_CAMERA)
+				return true;
 		}
 		return false;
 	}
