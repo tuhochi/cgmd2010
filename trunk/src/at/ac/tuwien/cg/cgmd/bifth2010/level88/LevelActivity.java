@@ -162,16 +162,24 @@ public class LevelActivity extends Activity{
         updateTexts();
 	}
 	
+	/*
+	 * Update the game progress
+	 */
+	public void updateProgress() {
+		//the SessionState is a convenience class to set a result
+		SessionState s = new SessionState();
+		//we set the progress the user has made (must be between 0-100)
+		s.setProgress(100-game.gold);		
+		//we call the activity's setResult method 
+		setResult(Activity.RESULT_OK, s.asIntent());
+	}
+	
 	/**
 	 * End the LevelActivity and set progress as result 
 	 */
 	public void endLevel() {
-		//the SessionState is a convenience class to set a result
-		SessionState s = new SessionState();
-		//we set the progress the user has made (must be between 0-100)
-		s.setProgress(100-game.gold);
-		//we call the activity's setResult method 
-		setResult(Activity.RESULT_OK, s.asIntent());
+		updateProgress();
+		
 		//stop the sounds
 		game.player.destroy();
 		LevelActivity.this.finish();
@@ -183,6 +191,7 @@ public class LevelActivity extends Activity{
 	 */
 	public void updateTexts() {
 		goldText.setText(" " + getString(getResources().getIdentifier("l88_gold_text", "string", "at.ac.tuwien.cg.cgmd.bifth2010")) + game.gold + " ");
+		updateProgress();
 	}
 
 	/* (non-Javadoc)
