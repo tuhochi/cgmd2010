@@ -11,4 +11,5 @@ All people close to the gold heap start moving towards the heap to collect the g
 	<string name="l11_intro_02">Touch and hold to drop gold. Drag your finder to push the pedestrians away.</string>
 	<string name="l11_outro_01">Time Up!</string>
 	<string name="l11_outro_02">Congratulations, you distributed all treasure among the people!</string><string name="l11_outro_title">End</string>
+	<string name="l11_intro_title">How to play</string>
 </resources>
