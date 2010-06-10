@@ -25,6 +25,7 @@ public class LevelActivity extends Activity
 {
 	protected static final String	TAG	= "LevelActivity";
 	private GameView gameView;
+	private boolean showsInitScreen = false;
 	
 	// for c++ code
     static {
@@ -35,11 +36,16 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-	
-		Intent i = new Intent("at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_INTRO");
-		this.startActivity(i);
 		
-		Log.d(TAG, "Starting LevelActivity 77");
+		
+//		TODO Show info Screen
+		showsInitScreen = true;
+//		Intent i = new Intent("at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_INTRO");
+//		this.startActivity(i);
+//		Log.d(TAG, "Starting LevelActivity 77");
+		showsInitScreen = false;
+		
+	
 
 		setResult(RESULT_CANCELED);
 		
@@ -63,25 +69,23 @@ public class LevelActivity extends Activity
 			}
 		};
 		
-		gameView = new GameView(this, gameEnded);
-		
+		gameView = new GameView(this, gameEnded);		
 
-		setContentView( gameView );		
-		
+		setContentView( gameView );				
 	}
-	
-
 
     @Override
 	protected void onPause() {
 		super.onPause();
-		gameView.onPause(this.getPreferences(MODE_PRIVATE));		
+		if (!showsInitScreen)
+			gameView.onPause(this.getPreferences(MODE_PRIVATE));		
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		gameView.onResume(this.getPreferences(MODE_PRIVATE));
+		if (!showsInitScreen)
+			gameView.onResume(this.getPreferences(MODE_PRIVATE));
 	}
 	
 	@Override
