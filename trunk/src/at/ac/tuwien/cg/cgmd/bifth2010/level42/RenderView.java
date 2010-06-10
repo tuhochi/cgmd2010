@@ -5,6 +5,7 @@ import static android.opengl.GLES10.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.LinkedList;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -14,10 +15,12 @@ import javax.microedition.khronos.opengles.GL11;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.camera.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
 import at.ac.tuwien.cg.cgmd.bifth2010.level42.math.Matrix44;
@@ -126,6 +129,9 @@ public class RenderView extends GLSurfaceView implements Renderer
 	/** whether or not a screenshot should be created after the next frame. */
 	private boolean screenshot = false;
 	
+	/** the number formatter for the numbering of the screenshots */
+	NumberFormat screenshotFormatter;
+	
 	/**
 	 * Instantiates a new render view.
 	 *
@@ -162,11 +168,16 @@ public class RenderView extends GLSurfaceView implements Renderer
 		gameManager = GameManager.instance;
 		collManager.initAndSetGameManager(gameManager);
 
-		
 		guiThreadHandler = this.context.handler;
 		fpsUpdateRunnable = this.context.fpsUpdateRunnable;
 		scoreUpdateRunnable = this.context.scoreUpdateRunnable;
 		remainingGameTimeRunnable = this.context.remainingGameTimeRunnable;
+		
+		screenshotFormatter = NumberFormat.getInstance();
+		screenshotFormatter.setMinimumIntegerDigits(5);
+		screenshotFormatter.setMaximumFractionDigits(0);
+		screenshotFormatter.setGroupingUsed(false);
+		screenshotFormatter.setParseIntegerOnly(true);
 	}
 	
 	/**
@@ -428,19 +439,19 @@ public class RenderView extends GLSurfaceView implements Renderer
 		FileOutputStream fos = null;
 		try
 		{
-			File myAppDir = context.getFilesDir();
+			File screenshotDir = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.l42_nameofthegame_full));
+			if(!screenshotDir.exists())
+				screenshotDir.mkdirs();
 			int counter = 0;
+			
 			File screenshotFile = null;
 			do
 			{
-				String counterString = "" + counter;
-				for(int i=counterString.length(); i<5; i++)
-					counterString = "0" + counterString;
-				
-				screenshotFile = new File(myAppDir, "l42_Screenshot_" + counterString + ".png");
+				screenshotFile = new File(screenshotDir, "screenshot_" + screenshotFormatter.format(counter) + ".png");
 				counter++;
 			}
 			while(screenshotFile.exists());
+			
 			fos = new FileOutputStream(screenshotFile);
 			oglManager.saveScreenshot(fos);
 			LogManager.i("Saved Screenshot to " + screenshotFile.getAbsolutePath());
