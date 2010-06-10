@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l44_GameName">MireRabbit</string>
-<string name="l44_GameDetail">The shaman reacts (as soon as he recognizes the fraud) accordingly: Full of rage, he takes out his rifle and shoots (in good old "Moorhuhn" style) the rabbit, who obviously wants to apply his newly-learned flight skills. But soon after leaving the shaman, he feels remorse and wants to return the money to the shaman. In order to achieve this, he tries to be hit as often as possible - losing a part of the stolen money with every hit.</string>
+<string name="l44_GameDetail">The shaman reacts (as soon as he recognizes the fraud) accordingly: Full of rage, he takes out his rifle and shoots (in good old "Moorhuhn" style) the rabbit, who obviously wants to apply his newly-learned flight skills. But soon after leaving the shaman, he feels remorse and wants to return the money to the shaman. In order to achieve this, he tries to be hit as often as possible - losing a part of the stolen money with every hit. Now it's your turn: try to loose as much money as possible by controlling the rabbit!</string>
 <string name="l44_nameofthegame_full">MireRabbit</string>
 <string name="l44_GameSummary">Our rabbit was taught to fly by a shaman. This fact alone cost him enough money - he got small change in a pot. Affected by his everlasting kleptomania, he leaves the shaman with more than just the change he is entitled to.</string>
 </resources>
