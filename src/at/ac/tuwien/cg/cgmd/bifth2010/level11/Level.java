@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnDismissListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level84.ResultDialog;
 
+import java.security.acl.LastOwnerException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -49,6 +50,8 @@ public class Level extends Thread {
 	private Timing timing;
 	private float grabbedTreasureValueOfDeletedTreasures;
 	private float grabbedTreasureValue;
+	private float intervallOfAddingPed = 10;
+	private float timeOfLastAddingPed = 0;
 	
 	/**
 	 * Level constructor
@@ -135,6 +138,8 @@ public class Level extends Thread {
 	public void run() {
 		this._isStarted = true;
 		this.timing.resume();
+		this.timing.update();
+		timeOfLastAddingPed = this.timing.getCurrTime();
 		while (_isActive) {
 			while (_isRunning) {
 				while (isPaused) {
@@ -213,21 +218,30 @@ public class Level extends Thread {
 		//synchronized(this){
 		timing.update();
 		
-		updateObjects();
-		//((GameActivity)context).setTextTimeLeft(getRemainigTime());
+		addPedestrian();
 		
-		//calc already grabbed treasure value
-		this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
-		for (int j=0; j < treasureList.size(); j++){
-			this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
-		}
-		//}
-		((GameActivity)context).setResult(this.getGrabbedTreasureValue());
-		if(this.timing.getCurrTime() > this.maxPlayTime || this.grabbedTreasureValue>100) {
-			this._isRunning = false;
-			this._isActive = false;
-			this._isFinished = true;
-			showOutroDialog.sendEmptyMessage(0);
+		updateObjects();
+
+		updateStats();
+		
+	}
+	private void addPedestrian(){
+		if(timeOfLastAddingPed + intervallOfAddingPed < timing.getCurrTime()){
+			Pedestrian pedestrian = new Pedestrian(this.gl, this.context);
+			this.pedestrianList.add(pedestrian);
+			if(Math.random()>Level.sizeX/Level.sizeY){
+				if(Math.random()>0.5)
+					pedestrian.setPosition(new Vector2((float)Math.random()*Level.sizeX, 0));
+				else
+					pedestrian.setPosition(new Vector2((float)Math.random()*Level.sizeX, Level.sizeY));
+			}else{
+				if(Math.random()>0.5)
+					pedestrian.setPosition(new Vector2(0, (float)Math.random()*Level.sizeY));
+				else
+					pedestrian.setPosition(new Vector2(Level.sizeX, (float)Math.random()*Level.sizeY));
+				
+			}
+			timeOfLastAddingPed = timing.getCurrTime();
 		}
 	}
 	private void updateObjects(){
@@ -271,6 +285,22 @@ public class Level extends Thread {
 				}
 			}
 		}
+	}
+	private void updateStats(){
+		//calc already grabbed treasure value
+		this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
+		for (int j=0; j < treasureList.size(); j++){
+			this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
+		}
+		//}
+		((GameActivity)context).setResult(this.getGrabbedTreasureValue());
+		if(this.timing.getCurrTime() > this.maxPlayTime || this.grabbedTreasureValue>100) {
+			this._isRunning = false;
+			this._isActive = false;
+			this._isFinished = true;
+			showOutroDialog.sendEmptyMessage(0);
+		}
+		
 	}
 	/**
 	 * generates specific amount of pedestrians with a minimal distance to each other

@@ -61,7 +61,7 @@ public class Treasure implements Target{
 		
 		gl.glPushMatrix();
 			gl.glTranslatef(position.x, position.y, 0.0f);
-			gl.glScalef(10.0f+this.value, 10.0f+this.value, 1.0f);
+			gl.glScalef(10.0f+this.value*2, 10.0f+this.value*2, 1.0f);
 			sprite.draw(gl);
 		gl.glPopMatrix();
 	}

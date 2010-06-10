@@ -13,14 +13,13 @@ public class GameView extends GLSurfaceView {
     private float _y = 0;
     private float _value = 0.0f;
     private boolean isBouncing = false;
+    private int minTouchTimeToDropTreasure = 100;
+    private float treasureDroppedPerSecond = 2.0f;
     public GameView(Context context, Vector2 resolution) {
         super(context);
         _renderer = new GameRenderer(context, resolution);
         setRenderer(_renderer);
-        this.touchedTime = 0;
-       
-
-        
+        this.touchedTime = 0;        
     }
     /**
      * places a treasure by touch and hold and release display at the release positions.
@@ -72,16 +71,15 @@ public class GameView extends GLSurfaceView {
         	//System.out.println("deltaX: "+Math.abs(_x-x));
     		//System.out.println("out");
         	if(!isBouncing){
-                _x = event.getX();
-                _y = event.getY();
-	            _value = (System.currentTimeMillis()-this.touchedTime)/100.0f;
-	        	((GameActivity)_renderer.context)._level.
-	        	addTreasure(new Treasure(_value,
-	        			new Vector2(_x/_renderer._width*Level.sizeX,
-	        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY)))));
-	   
-	
-	
+        		if(touchedTime>minTouchTimeToDropTreasure){
+	                _x = event.getX();
+	                _y = event.getY();
+		            _value = (System.currentTimeMillis()-this.touchedTime)/1000.0f*treasureDroppedPerSecond;
+		        	((GameActivity)_renderer.context)._level.
+		        	addTreasure(new Treasure(_value,
+		        			new Vector2(_x/_renderer._width*Level.sizeX,
+		        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY)))));
+        		}
 	        	//((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
         	}else{
         		isBouncing = false;
