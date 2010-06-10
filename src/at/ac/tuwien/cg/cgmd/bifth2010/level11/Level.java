@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import javax.microedition.khronos.opengles.GL10;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -30,6 +31,8 @@ public class Level extends Thread {
     public boolean _isFinished;
     
 	private Textures textures;
+	private Sounds sounds;
+	
 	
 	private Pedestrian pedestrian;
 	
@@ -46,6 +49,8 @@ public class Level extends Thread {
 	public static float sizeY;
 	private GL10 gl;
 	private Context context;
+	
+	//public static SoundFile f;
 	
 	private Timing timing;
 	private float grabbedTreasureValueOfDeletedTreasures;
@@ -91,15 +96,27 @@ public class Level extends Thread {
 		 
 		this.gl = gl;
 		this.context = context;
+		//GameAudio gA = new GameAudio();
+		// f = gA.createSoundFile(R.raw.l00_gold01);
 		
 		this.initTextures();
+		this.initSounds();
+		
+	
+		
 		
 		//this.addTreasure(new Treasure(10.0f, 200.0f, new Vector2(200.0f, 200.0f)));
 		
 		background = new Square();
-		
+
+		//f.play();
 		this._isRunning = true;
-		
+	}
+	
+	public void initSounds() {
+		sounds = new Sounds();
+		sounds.add(R.raw.l00_gold01);
+		sounds.add(R.raw.l00_menu);
 	}
 	
 	/**
@@ -266,7 +283,7 @@ public class Level extends Thread {
 					(tempDist = pedestrian.getPosition().distance(treasure.getPosition()))
 					/ (treasure.getValue()+1)) //TODO: determine, how to rate a target
 						< bestRating){
-					if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttracktionRadius()){
+					if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttractionRadius()){
 						pedestrian.setTarget(treasure);
 						bestRating = rating;
 					}
