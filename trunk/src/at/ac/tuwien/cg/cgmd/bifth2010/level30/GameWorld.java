@@ -4,13 +4,18 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.opengl.GLU;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector3;
@@ -73,6 +78,33 @@ public class GameWorld extends Thread {
 		quitThread = _quitThread;
 	}
 	
+	//for the sounds
+	private SoundPool soundPool;
+	private HashMap<Integer, Integer> soundPoolMap;
+	private boolean playedOutOfTimeWarning = false;
+
+	private void initSounds() {
+	     soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+	     soundPoolMap = new HashMap<Integer, Integer>();
+	     soundPoolMap.put(0, soundPool.load(context, R.raw.l30_yeah, 1));
+	     soundPoolMap.put(1, soundPool.load(context, R.raw.l30_ohno, 1));
+	     soundPoolMap.put(2, soundPool.load(context, R.raw.l30_win, 2));
+	     soundPoolMap.put(3, soundPool.load(context, R.raw.l30_outoftime, 3));
+	}
+	          
+	public void playSound(int sound) {
+	    /* Updated: The next 4 lines calculate the current volume in a scale of 0.0 to 1.0 */
+	    AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+	    float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+	    float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);    
+	    float volume = streamVolumeCurrent / streamVolumeMax;
+	    
+	    /* Play the sound with the correct volume */
+	    soundPool.play(soundPoolMap.get(sound), volume, volume, 1, 0, 1f);     
+	}
+
+ 
+	  
 	/* Implements the game loop.
 	 * (non-Javadoc)
 	 * @see java.lang.Thread#run()
@@ -89,15 +121,15 @@ public class GameWorld extends Thread {
 			
 			if (quitThread==true)
 				return;
-    	}
+    	}    	
     	
-    	
-    	Log.d("l30", "level finished");
+    	Log.d("l30", "level finished");    	
     	
     	if (currentMoney<0.0f)
     	{
+    		playSound(2);
     		try {
-				sleep(1500);
+				sleep(5000);
 			} catch (InterruptedException e) {				
 			}
     	}
@@ -177,6 +209,8 @@ public class GameWorld extends Thread {
         Date date = new Date();
         time = date.getTime();
         oldTime = time;
+        
+        initSounds();
 
     }	
     
@@ -216,6 +250,13 @@ public class GameWorld extends Thread {
         }		
         
         moneyChanged(currentMoney);
+        
+        if ((progress-5.0)>((float)numElements)*pointDistance)
+        {
+        	if (playedOutOfTimeWarning==false)
+        		playSound(3);
+        	playedOutOfTimeWarning = true;
+		}
         
         if (progress>((float)numElements)*pointDistance)
         {
@@ -676,6 +717,12 @@ public class GameWorld extends Thread {
 			if (transactionType[graphNum]==TransactionType.BUY)
 				{
 					transactionType[graphNum]=TransactionType.SELL;	
+					
+					if (getCurrentPrice(graphNum)>transactionAmount[graphNum])
+						playSound(1);
+					else
+						playSound(0);
+					
 					transactionAmount[graphNum] = 0.0f;
 				}			
 			break;		
