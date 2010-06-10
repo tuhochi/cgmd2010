@@ -92,7 +92,7 @@ public class LevelActivity extends Activity
 	public void onStop()
 	{
 		super.onStop();
-		
+		setResult(RESULT_CANCELED);
 		Log.i("l77_state", "**stop activity");
 	}
 	
