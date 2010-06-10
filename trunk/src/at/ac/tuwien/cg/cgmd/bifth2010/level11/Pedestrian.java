@@ -76,7 +76,7 @@ public class Pedestrian implements Target{
 		
 		rand = new Random();
 		
-		this.angle = (float)(rand.nextFloat()*360.0);
+		this.angle = (float)(Math.random()*360.0);
 		this.moveSpeed = 4.0f;
 		this.target = null;
 		this.setColors();

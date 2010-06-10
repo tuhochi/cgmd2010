@@ -16,6 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class GameActivity extends Activity {
@@ -25,7 +27,6 @@ public class GameActivity extends Activity {
     public Level _level;
 	private TextView _textTimeLeft;
 	private TextView _textTreasureLeft;
-	public TextView _textIntro;
 	private int _result = 0;
 	private int textUpdateTime = 100;
 	private Vector2 _displayResolution;
@@ -66,8 +67,7 @@ public class GameActivity extends Activity {
         llayout.setOrientation(LinearLayout.HORIZONTAL);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
         addContentView(llayout, params);
-       
-    	
+        
         _textTimeLeft = new TextView(this);
         _textTimeLeft.setText("");
         _textTimeLeft.setTextSize(25);
@@ -81,11 +81,11 @@ public class GameActivity extends Activity {
         _textTreasureLeft.setGravity(Gravity.CENTER);
         _textTreasureLeft.setTextColor(Color.BLACK);
         
-        _textIntro = new TextView(this);
+      /*  _textIntro = new TextView(this);
         _textIntro.setText("");
         _textIntro.setTextSize(25);
         _textIntro.setGravity(Gravity.CENTER);
-        _textIntro.setTextColor(Color.BLACK);
+        _textIntro.setTextColor(Color.BLACK);*/
          
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams.setMargins(10, 10, 10, 10);
@@ -97,12 +97,21 @@ public class GameActivity extends Activity {
         
         LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams3.setMargins(10, 10, 10, 10);
-        llayout.addView(_textIntro, layoutParams3);
+        //llayout.addView(_textIntro, layoutParams3);
         /*if(savedInstanceState.containsKey("isLoadable"))
         	this.onRestoreInstanceState(savedInstanceState);*/
         //_level.start();
         handler.removeCallbacks(updateTimeTask);
-        handler.postDelayed(updateTimeTask, textUpdateTime); 
+        handler.postDelayed(updateTimeTask, textUpdateTime);
+        //_level.start();
+        //toast.show();
+        if(savedInstanceState == null){
+        	new IntroDialog(this).show();
+        }else{
+        	_level.start();
+        }
+        //IntroDialog introDialog = new IntroDialog(this);
+        //introDialog.show();
     }
     
     @Override
@@ -272,17 +281,7 @@ public class GameActivity extends Activity {
 			if(!_level._isFinished){
 				_textTreasureLeft.setText(Integer.toString(Math.round(_level.getGrabbedTreasureValue())));
 				_textTimeLeft.setText(Integer.toString(Math.round(_level.getRemainigTime())));
-				_textIntro.setText("");
-			}else{
-				_textTreasureLeft.setText("");
-				_textTimeLeft.setText("");
-				if(_level.getGrabbedTreasureValue()>100)
-					_textIntro.setText("Congratulations, you distributed all treasure among the people!");
-				else if(_level.getRemainigTime()<=0)
-					_textIntro.setText("Time Up!");
 			}
-		}else{
-			_textIntro.setText("You have to distribute your money on the ground without letting the pedestrians fight.\nTouch and hold to drop gold. Drag to bounce pedestrians.");
 		}
 	}
 }
