@@ -28,6 +28,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 
 	/** rotation amount per fixed time step */
 	private static final float ROTATIONINC = 4.5f;
+	
+	/** limit for discarding track ball events */
+	private static final float TRACKBALLSENSITIVITY = 0.5f;
 
 	/** width of screen */
 	private static int screenWidth;
@@ -210,7 +213,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 		//draw status-bars
 		gameControl.getDrunkStatusBar().draw(gl);
 		gameControl.getJailStatusBar().draw(gl);
-		gameControl.getBeerStatusBar().draw(gl);
+		if(!gameControl.isJailState() && !gameControl.isRatArsedState()) {
+			gameControl.getBeerStatusBar().draw(gl);
+		}
 	}
 
 	/**
@@ -316,6 +321,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			gameControl.movePlayer(screenWidth, screenHeight / 2.0f);
 			break;
+			//stop movement
+		case KeyEvent.KEYCODE_DPAD_CENTER:
+			gameControl.stopMovement();
 		default:
 			return false;
 		}
@@ -335,27 +343,39 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 
 			//calculate dominating direction
 			if(Math.abs(x) > Math.abs(y)) {
-				if(x > 0) {
-					//move right
-					gameControl.movePlayer(screenWidth, screenHeight / 2.0f);
-				}
-				else {
-					//move left
-					gameControl.movePlayer(0, screenHeight / 2.0f);
+				//discard event if trackball was not enough moved
+				if(Math.abs(x) > TRACKBALLSENSITIVITY) {
+					if(x > 0) {
+						//move right
+						gameControl.movePlayer(screenWidth, screenHeight / 2.0f);
+					}
+					else {
+						//move left
+						gameControl.movePlayer(0, screenHeight / 2.0f);
+					}
 				}
 			}
 			else {
-				if(y > 0) {
-					//move up
-					gameControl.movePlayer(screenWidth / 2.0f, screenHeight);
-				}
-				else {
-					//move down
-					gameControl.movePlayer(screenWidth / 2.0f, 0);
+				//discard event if trackball was not enough moved
+				if(Math.abs(y) > TRACKBALLSENSITIVITY) {
+					if(y > 0) {
+						//move up
+						gameControl.movePlayer(screenWidth / 2.0f, screenHeight);
+					}
+					else {
+						//move down
+						gameControl.movePlayer(screenWidth / 2.0f, 0);
+					}
 				}
 			}
+			return true;
 		}
-		return true;
+		else if(event.getAction() == MotionEvent.ACTION_DOWN) {
+			//stop movement
+			gameControl.stopMovement();
+			return true;
+		}
+		return false;
 	}
 
 
