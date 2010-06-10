@@ -1,0 +1,3 @@
+set solib-search-path /Users/mike_vasiljevs/development/projects/EclipsWorkspace/treasure_hunt/bin/ndk/local/armeabi
+directory /Users/mike_vasiljevs/development/android/android-ndk-r4-crystax/build/platforms/android-4/arch-arm/usr/include
+directory /Users/mike_vasiljevs/development/projects/EclipsWorkspace/treasure_hunt/jni/level77
