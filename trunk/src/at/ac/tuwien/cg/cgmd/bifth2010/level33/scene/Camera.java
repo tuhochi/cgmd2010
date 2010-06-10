@@ -22,8 +22,8 @@ public class Camera {
 	public static float zoom = standardZoom;
 	private boolean somethingChanged = true;
 	
-	Vector3f eye = new Vector3f(0,zoom, 0.0000000001f);
-	Vector3f view = new Vector3f(0, 0, 0);
+	Vector3f eye = new Vector3f(0,zoom, 0);
+	Vector3f view = new Vector3f(0, 0, -0.00000001f);
 	Vector3f up = new Vector3f(0, 1, 0);
 	
 
@@ -52,9 +52,7 @@ public class Camera {
 
         
 
-        eye.set(0,zoom, 0.0000000001f);
-        view.set(0, 0, 0);
-       
+        eye.set(0,zoom, 0);
         
 
         	

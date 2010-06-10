@@ -216,41 +216,33 @@ public class SceneGraph  {
 		StopTimer t = new StopTimer();
 		SceneGraph.camera = new Camera();
 		// load Objects
-//		InputStream is = SceneGraph.activity.getResources().openRawResource(R.raw.l33_models);
+		ObjModel obj;
 		
 		StopTimer tload = new StopTimer();
-		
 
-//	String path="/sdcard/test.out";
+	obj = ObjModel.read(R.raw.l33_model, activity);
+	tload.logTime("Geometry laden dauerte:");
+	geometry = new Geometry(gl, obj,R.drawable.l33_textur);
+	tload.logTime("Textur laden dauerte:");
+		
 	
-		ObjModel obj = ObjModel.read(R.raw.l33_model, activity);
-		geometry = new Geometry(gl, obj,R.drawable.l33_textur);
-		geometry.render();
+
 	
-//		ObjModel obj = ObjModel.read(path, activity);
-//		if(obj!=null)
-//		{
-//			
-//			Log.d("load Model from:","sdcard/test.out");
-//			geometry = new Geometry(gl, obj,R.drawable.l33_textur);
-//			geometry.render();
-//			
-//			Log.e("load","ok");
-//			
-//		}
-//		else
-//		{
-//			
-//			Log.d("load Model from:","not found! must parse obj File!!");
+//			// save Object
+//			String path="/sdcard/modelOut.out";
+//			InputStream is = SceneGraph.activity.getResources().openRawResource(R.raw.l33_models);
 //			geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
 //			obj = geometry.GetObjModel();
 //			obj.write(path);
 //			Log.e("write","ok");
 //		
 //		}
+			
+			
 		
-		tload.logTime("Geometry laden dauerte:");
-
+	
+		geometry.render();
+		tload.logTime("und die Initialisierung der Geometry dauerte:");
 
 		t.logTime("Geometry laden und init dauerte:");
 		
@@ -495,7 +487,10 @@ public class SceneGraph  {
 			}
 			
 			// render Character
+			glPushMatrix();
+			gl.glRotatef(level.characterRotaion, 0, 1, 0);
 			geometry.render(5);
+			glPopMatrix();
 
 			// render collected Items
 			renderItems(gl);
@@ -519,7 +514,10 @@ public class SceneGraph  {
 				}
 			}
 			// render Character
+			glPushMatrix();
+			gl.glRotatef(level.characterRotaion, 0, 1, 0);
 			geometry.render(5);
+			glPopMatrix();
 			
 			// render collected Items
 			renderItems(gl);

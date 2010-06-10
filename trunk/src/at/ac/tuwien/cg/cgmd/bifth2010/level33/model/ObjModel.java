@@ -60,6 +60,7 @@ public class ObjModel implements Serializable{
 
 	/**
 	 * this method write this ObjModel as a Stream to the given File Path 
+	 * need permission: android.permission.WRITE_EXTERNAL_STORAGE
 	 * @param file is the desired File Path
 	 */
 	public void write(String file)
