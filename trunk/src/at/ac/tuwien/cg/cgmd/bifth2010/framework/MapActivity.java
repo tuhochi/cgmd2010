@@ -2,13 +2,15 @@ package at.ac.tuwien.cg.cgmd.bifth2010.framework;
 
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -36,13 +38,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.Path.PathPoint;
 
 /**
  * 
- * @author Peter Rautek
+ * 
  * This Activity displays a map showing the different levels.
  * It also visualizes the user's progress 
  *    
+ * @author Peter Rautek
  */
 
-public class MapActivity extends Activity {
+public class MapActivity extends Activity implements ShakeListener {
 
 	///////////////////////////////////////////////
 	//Constants
@@ -99,6 +102,13 @@ public class MapActivity extends Activity {
 
 	private static final int MESSAGE_UPDATE_UI = 0;
 
+	private static final String PREFERENCE_MAXPLAYEDLEVEL = "maxplayedlevel";
+	
+	ShakeDetector mShakeDetector = null;
+
+	private int mMaxPlayedLevel = 0;
+
+
 
 
 
@@ -147,7 +157,7 @@ public class MapActivity extends Activity {
 	 */
 	private int mProgress = 0;
 	/**
-	 * The reached level. At the start the reached level is 1 (i.e., only level one can be played)
+	 * The level the user already reached. At the start the reached level is 1 (i.e., only level one can be played)
 	 *  
 	 */
 	private int mMaxAllowedLevel = 1;
@@ -212,7 +222,17 @@ public class MapActivity extends Activity {
 				iLevel = 6;
 				break;
 			case R.id.l00_ImageButtonLevel07:
-				Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_02), Toast.LENGTH_LONG).show();;
+				Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_02), Toast.LENGTH_LONG).show();
+				mShakeDetector.resume();
+				TimerTask tt = new TimerTask(){
+					@Override
+					public void run() {
+						mShakeDetector.pause();
+					}
+				};
+				Timer t = new Timer();
+				t.schedule(tt, 3500);
+				
 				return;
 			};
 
@@ -221,6 +241,7 @@ public class MapActivity extends Activity {
 				s.setLevel(iLevel);
 				s.setProgress(mProgress);
 				s.setMusicAndSoundOn(mMusicOn);
+				mShakeDetector.resume();
 				//set appropriate level to start
 				String sAction = Constants.getLevelActionString(mLevelAssignment[iLevel-1]);
 				Intent levelIntent = new Intent();
@@ -313,7 +334,7 @@ public class MapActivity extends Activity {
 	private String INSTANCESTATE_IS_RESTARTING = "restarting";
 	///////////////////////////////////////////////
 
-
+	
 
 	///////////////////////////////////////////////
 	//Methods
@@ -325,7 +346,10 @@ public class MapActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
+		mShakeDetector = new ShakeDetector(this, this, 100, 3000, 5);
+		mShakeDetector.pause();
+		
+		
 		boolean bRestart = false;
 		if(savedInstanceState!=null){
 			bRestart = savedInstanceState.getBoolean(INSTANCESTATE_IS_RESTARTING, false);
@@ -335,7 +359,7 @@ public class MapActivity extends Activity {
 			if((!bRestart)&&(callingIntent.getBooleanExtra(EXTRA_STARTNEW, false))){
 				//init the game state
 				int[] iLevelAssignment = callingIntent.getIntArrayExtra(EXTRA_DEBUG_LEVELASSIGNMENT);
-				initGameState(iLevelAssignment);	
+				initGameState(iLevelAssignment);
 				Log.d(CLASS_TAG, "Initializing new game state!");
 			} else {
 				//resume game state 
@@ -423,7 +447,7 @@ public class MapActivity extends Activity {
 		l06.setOnClickListener(mLevelClickListener);
 		l07.setOnClickListener(mLevelClickListener);
 
-		// get the debug text view
+		// get the text view
 		mStateTextView = (TextView) findViewById(R.id.l00_TextViewFps);
 
 		mLoopPlayer = new MediaPlayer();
@@ -485,6 +509,7 @@ public class MapActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
+		
 		super.onResume();
 	}
 
@@ -495,6 +520,9 @@ public class MapActivity extends Activity {
 			if(mLoopPlayer.isPlaying()){
 				mLoopPlayer.pause();
 			}
+		}
+		if(mShakeDetector!=null){
+			mShakeDetector.pause();
 		}
 		super.onPause();
 	}
@@ -594,6 +622,7 @@ public class MapActivity extends Activity {
 		SharedPreferences.Editor editor = state.edit();
 		editor.putInt(PREFERENCE_PROGRESS, mProgress);
 		editor.putInt(PREFERENCE_MAXLEVEL, mMaxAllowedLevel);
+		editor.putInt(PREFERENCE_MAXPLAYEDLEVEL, mMaxPlayedLevel);
 		//although the level assignment is part of the game state it doesn't need to be stored each time the game state changes  
 		editor.commit();
 
@@ -603,8 +632,9 @@ public class MapActivity extends Activity {
 		SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_GAMESTATE_FILE, 0);
 		mProgress = state.getInt(PREFERENCE_PROGRESS, 0);
 		mMaxAllowedLevel = state.getInt(PREFERENCE_MAXLEVEL, 1);
+		mMaxPlayedLevel = state.getInt(PREFERENCE_MAXPLAYEDLEVEL, 0);
 		//set level assignment of current session
-		mLevelAssignment = getNewLevelAssignment();
+		mLevelAssignment = getNextLevelAssignment(mMaxPlayedLevel);
 		for(int i=0; i<Constants.NUMBER_OF_LEVELS_TO_PLAY; i++) {
 			mLevelAssignment[i]=state.getInt(PREFERENCE_LEVELASSIGNMENT+(i+1), mLevelAssignment[i]);
 		}
@@ -616,9 +646,14 @@ public class MapActivity extends Activity {
 		SharedPreferences.Editor editor = state.edit();
 		mProgress=0;
 		mMaxAllowedLevel=1;
+		mMaxPlayedLevel = state.getInt(PREFERENCE_MAXPLAYEDLEVEL, mMaxPlayedLevel);
+		if(mMaxPlayedLevel>=Constants.LEVELIDS.length){
+			mMaxPlayedLevel=mMaxPlayedLevel-Constants.LEVELIDS.length;
+		}
 		editor.putInt(PREFERENCE_PROGRESS, mProgress);
 		editor.putInt(PREFERENCE_MAXLEVEL, mMaxAllowedLevel);
-		mLevelAssignment = getNewLevelAssignment();
+		editor.putInt(PREFERENCE_MAXPLAYEDLEVEL, mMaxPlayedLevel);
+		mLevelAssignment = getNextLevelAssignment(mMaxPlayedLevel);
 		if(levelAssignment!=null) {
 			for(int i=0; i<Constants.NUMBER_OF_LEVELS_TO_PLAY; i++) {
 				if(levelAssignment.length>i){
@@ -635,11 +670,18 @@ public class MapActivity extends Activity {
 		editor.commit();
 	}
 
-	private int[] getNewLevelAssignment() {
-		//TODO change assignment everytime the user initializes a new game!
-		//different assignments can be hardcoded once the number of groups/levels is fixed
-		//for the moment it is simply always level 0
-		int[] assignment = {0,0,0,0,0,0};
+	private int[] getNextLevelAssignment(int iStartLevel) {
+		int[] assignment = new int[6];
+		int iCounter = 0;
+		int iLevel = iStartLevel;
+		while(iCounter < 6){
+			if(iLevel>=Constants.LEVELIDS.length){
+				iLevel = 0;
+			}
+			assignment[iCounter] = Integer.parseInt(Constants.LEVELIDS[iLevel]);
+			iLevel++;
+			iCounter++;
+		}
 		return assignment;
 	}
 
@@ -651,6 +693,51 @@ public class MapActivity extends Activity {
 			mProgress=0;
 			mMaxAllowedLevel++;
 		}		
+	}
+
+
+
+	@Override
+	public void onShakeDetected() {
+		Toast.makeText(this, "Ooohhhh!", Toast.LENGTH_LONG).show();
+		//increaseProgress(10);		
+		mMaxPlayedLevel++;
+		if(mMaxPlayedLevel >= Constants.LEVELIDS.length){
+			mMaxPlayedLevel = 0;
+		}
+		
+		if(mMusicOn) {
+			//play "level-unallowed"-sound
+			MediaPlayer soundPlayer = MediaPlayer.create(MapActivity.this, R.raw.l00_gold01);
+			try {
+				if(soundPlayer!=null){
+					soundPlayer.setOnCompletionListener(new OnCompletionListener(){
+						@Override
+						public void onCompletion(MediaPlayer mp) {
+							mp.release();
+						}
+
+					});
+
+					soundPlayer.start();
+				}
+			} catch (IllegalStateException e) {
+				//ignore this case
+			} 				
+		}
+		
+		SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_GAMESTATE_FILE, 0);
+		SharedPreferences.Editor editor = state.edit();
+		
+		editor.putInt(PREFERENCE_MAXPLAYEDLEVEL, mMaxPlayedLevel);
+		mLevelAssignment = getNextLevelAssignment(mMaxPlayedLevel);
+		for(int i=0; i<Constants.NUMBER_OF_LEVELS_TO_PLAY; i++) {
+			editor.putInt(PREFERENCE_LEVELASSIGNMENT+(i+1),mLevelAssignment[i]);
+		}
+		editor.commit();
+
+		mUiUpdateHandler.sendEmptyMessage(MESSAGE_UPDATE_UI);
+		storeGameState();
 	}
 
 
