@@ -5,13 +5,13 @@
 <string name="l50_GameName">Jump\'n\'Back</string>
 
 
-<string name="l50_HelpActivity1">Pay close attention to the preview, it won\'t be the last time you have to deal with the level.</string>
+<string name="l50_HelpActivity1">Try to place your coins. It is possible to get rid of all. Just pass the following symbol and you will be broke soon.</string>
 
 
 
 
 
 
-<string name="l50_HelpActivity2">Mr. Bunny, a successful Executive Jump\'n\'Runner, made a fortune by collecting left about gold coins. After he decided to change his views on filthy lucre he tries anything within his power to reverse his moral errors.</string>
-<string name="l50_HelpActivity3">Try to put all coins back to its places but remember that it is not going to be a walk in the park. If you get stuck don\'t fall into despair, there are always ways and means to get ahead... or back.</string>
+<string name="l50_HelpActivity2">But be aware of your enemies! You cannot conquer them, but your bunny is fast and swift – just avoid them.</string>
+<string name="l50_HelpActivity3">To go left and right, just touch the screen on the according side. If you want to jump, hit the screen at the upper part. To simplify controls, it is possible to jump left and right by touching the left upper or right upper corner.</string>
 </resources>
