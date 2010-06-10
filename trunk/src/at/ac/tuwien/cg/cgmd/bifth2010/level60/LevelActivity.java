@@ -4,15 +4,12 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 public class LevelActivity extends Activity {
 	private LevelSurfaceView glv;
-	private TextView txtView;
 	SharedPreferences prefs;
 	private Bundle myState;
 	
@@ -30,10 +27,6 @@ public class LevelActivity extends Activity {
 		setContentView(glv);
 		
 		myState = savedInstanceState;
-//		ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
-//		txtView = new TextView(this);
-//		this.addContentView(txtView,params);
-//		txtView.setText("juggling snowballs through hell....");
 		return;
 	}
 	

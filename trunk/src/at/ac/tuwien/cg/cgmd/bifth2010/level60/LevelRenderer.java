@@ -12,12 +12,11 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.ListView;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
+@SuppressWarnings({ "serial" })
 public class LevelRenderer implements Renderer {
 	private Context context;
 	private Bundle mSavedInstance;
@@ -26,23 +25,20 @@ public class LevelRenderer implements Renderer {
 	private final float BUNNY_DEFAULT_MOVEMENT_UNIT = 6.0f;
 	private final float COP_DEFAULT_MOVEMENT_UNIT = 4.0f;
 	private final float DEFAULT_FPS = 22.0f;
-	public final static int BUNNY_WIDTH = 50;
+	public final static int BUNNY_WIDTH = 45;
 	public final static int BUNNY_HEIGHT = 50;
 	public final static int BUNNY_INIT_X = 0;
 	public final static int BUNNY_INIT_Y = 0;
-	public final static int COP_WIDTH = 50;
+	public final static int COP_WIDTH = 45;
 	public final static int COP_HEIGHT = 50;
-	public final static int LEVEL_WIDTH = 5;
-	public final static int LEVEL_HEIGHT = 6;
+	public final static int LEVEL_WIDTH = 9;
+	public final static int LEVEL_HEIGHT = 7;
 	public final static int LEVEL_TILESIZE = 100;
-	private final static int ACTION_WIDTH = 5;
-	private final static int ACTION_HEIGHT = 6;
-	private final static int ACTION_TILESIZE = 100;
 	public final static int CONTROL_SIZE = 150;
 	private final static float CATCH_DISTANCE = COP_WIDTH/2;
 	private final static int NUMBER_OF_CARS = 2;
-	private final static int CAR_LENGTH = 60;
-	private final static int CAR_WIDTH = 40;
+	private final static int CAR_LENGTH = 70;
+	private final static int CAR_WIDTH = 30;
 	
 	private boolean drawLock = false;
 	private float[] keystates = new float[4];
@@ -68,8 +64,6 @@ public class LevelRenderer implements Renderer {
 	private int gold_00;
 	private int gold_0;
 
-	private float posX;
-	private float posY;
 	private float mapOffset_x;
 	private float mapOffset_y;
 	private float cnewX = 0;
@@ -97,34 +91,17 @@ public class LevelRenderer implements Renderer {
 	private ArrayList<Tablet> actiontextures;
 
 
-	private static int levelMap[][] = {  
-		{ 3, 1, 1, 3, 1 },
-		{ 2, 0, 0, 2, 0 },
-		{ 3, 1, 1, 3, 1 },
-		{ 2, 8, 9, 2, 0 },
-		{ 2,10,11, 2, 0 },
-		{ 3, 1, 1, 3, 1 }
+	private static int levelMap[][] = {
+		{ 3, 1, 1, 1, 1, 1, 1, 1, 3},
+		{ 2,10,10, 2, 9, 0,11, 8, 3},
+		{ 3, 1, 1, 2, 0, 0, 0, 1, 3},
+		{ 3, 9, 8, 3, 9, 0,11, 8, 2},
+		{ 3, 1, 1, 3, 1, 3, 1, 1, 3},
+		{ 2,10,11, 2, 8, 2, 9,11, 2},
+		{ 3, 1, 1, 3, 1, 1, 1, 1, 3}
 	};
 
-	private static int actionMap[][] = {
-		{ 1, 1, 1, 2, 1 },
-		{ 0, 0, 0, 2, 0 },
-		{ 1, 1, 1, 3, 1 },
-		{ 2, 0, 0, 2, 0 },
-		{ 2, 0, 0, 2, 0 },
-		{ 3, 1, 1, 3, 1 }
-	};
-
-	private final static HashMap<Integer, Integer> keks = new HashMap<Integer, Integer>() {
-		{
-			put(0, 0);
-			put(1, 5);
-			put(2, 20);
-			put(3, 50);
-		}
-	};
-
-	private final static HashMap<Integer, String> tileLUT = new HashMap<Integer, String>(){
+	private final HashMap<Integer, String> tileLUT = new HashMap<Integer, String>(){
 		{
 			put(0, "blank");
 			put(1, "streetHor");
@@ -148,7 +125,7 @@ public class LevelRenderer implements Renderer {
 		}
 	};
 
-	private final static HashMap<Integer, String> goldLUT = new HashMap<Integer, String>(){
+	private final HashMap<Integer, String> goldLUT = new HashMap<Integer, String>(){
 		{
 			put(0, "zero");
 			put(1, "one");
@@ -167,7 +144,6 @@ public class LevelRenderer implements Renderer {
 		this.context = context;
 		this.glv = glv;
 		mapOffset_x = mapOffset_y = 0 ;
-		posX = posY = 0;
 		mSavedInstance = msavedinstance;
 		for (int i=0;i<4;i++) keystates[i] = 0;
 		actiontextures = new ArrayList<Tablet>();
@@ -214,8 +190,6 @@ public class LevelRenderer implements Renderer {
 		float xPos = bunny.getX()+BUNNY_WIDTH/2;
 		float yPos = bunny.getY()+BUNNY_HEIGHT/2;
 		Point bunnyPos = new Point(xPos, yPos);
-		int tile_x = (int)((xPos) / (float)ACTION_TILESIZE);
-		int tile_y = (int)((yPos) / (float)ACTION_TILESIZE);
 
 		Iterator<Tablet> it = actiontextures.iterator();
 		boolean proximity = false;
@@ -223,22 +197,22 @@ public class LevelRenderer implements Renderer {
 
 		while(it.hasNext()) {
 			Tablet t = it.next();
-			if (Math.abs(t.getX() - xPos) < ACTION_TILESIZE/2 && Math.abs(t.getY() - yPos) < ACTION_TILESIZE/2) proximity = true; 
+			if (Math.abs(t.getX() - xPos) < LEVEL_TILESIZE/2 && Math.abs(t.getY() - yPos) < LEVEL_TILESIZE/2) proximity = true; 
 		}
 
 		if (!proximity && !drawLock) {
 			Iterator<GameObject>git = cars.iterator();
-			float leastproximity = LEVEL_WIDTH*LEVEL_TILESIZE;
+			float leastdistance = LEVEL_WIDTH*LEVEL_TILESIZE;
 			GameObject n = cars.get(0); 
-			while (it.hasNext()) {
+			while (git.hasNext()) {
 				GameObject t = git.next();
 				Point tabletpos = new Point(t.getX()+t.getWidth()/2.0f, t.getY()+t.getHeight()/2.0f);
-				if (Point.distance(tabletpos, bunnyPos) < leastproximity) {
-					leastproximity = Point.distance(tabletpos, bunnyPos);
+				if (Point.distance(tabletpos, bunnyPos) < leastdistance) {
+					leastdistance = Point.distance(tabletpos, bunnyPos);
 					n = t;
 				}
 			}
-			if (n.getTexture() == manager.getTexture("car0")) {
+			if (leastdistance <= LEVEL_TILESIZE && n.getTexture() == manager.getTexture("car0")) {
 				//destroy the car
 				n.destroy();
 				acted = true;
@@ -247,23 +221,18 @@ public class LevelRenderer implements Renderer {
 			}
 			
 			if (!acted) {
-				switch (actionMap[tile_y][tile_x]) {
-				case 1:	//spraytag action
-					// 	put spraytag tablet here 
-					actiontextures.add(new Tablet(this.context, 36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag"), gl));
-					acted = true;
-					break;
-				}
+				// 	put spraytag tablet here 
+				actiontextures.add(new Tablet(36, 36, (int)xPos-18, (int)yPos-18, manager.getTexture("spraytag")));
+				acted = true;
+				crime += 5;
+				crimeCounter++;
 			}
 			
 			if (acted) {	
 				if (copCounter == 0 || Math.ceil((float)crime/20.0f)>copCounter) {
-					cops.add(new Tablet(context, COP_WIDTH, COP_HEIGHT, 0, 0, manager.getTexture("cop_front_l"), gl));
+					cops.add(new Tablet(COP_WIDTH, COP_HEIGHT, 10, 10, manager.getTexture("cop_front_l")));
 					copCounter++;
 				}
-
-				crime += keks.get(actionMap[tile_y][tile_x]);
-				crimeCounter++;
 			}
 		}
 	}
@@ -277,18 +246,29 @@ public class LevelRenderer implements Renderer {
 		float myY = 0;
 
 		if (frameCounter%10==0) {
-			if (y<0) bunny.changeTexture(manager.getTexture("bunny_front_l"));
-			else if (y>0) bunny.changeTexture(manager.getTexture("bunny_back_l"));
+			if (y<0 && (bunny.getTexture() == manager.getTexture("bunny_back_l") || bunny.getTexture() == manager.getTexture("bunny_back_r"))) {
+				bunny.changeTexture(manager.getTexture("bunny_front_l"));
+				bunny.setXY(bunny.getX()+5*scale, bunny.getY());
+
+			} else if (y>0 && (bunny.getTexture() == manager.getTexture("bunny_front_l") || bunny.getTexture() == manager.getTexture("bunny_front_r"))) {
+				bunny.changeTexture(manager.getTexture("bunny_back_l"));
+				bunny.setXY(bunny.getX()-5*scale, bunny.getY());
+
+			}
 
 		} else if (frameCounter%10==5) {
-			if (y<0) bunny.changeTexture(manager.getTexture("bunny_front_r"));
-			else if (y>0) bunny.changeTexture(manager.getTexture("bunny_back_r"));
+			if (y<0 && (bunny.getTexture() == manager.getTexture("bunny_back_l") || bunny.getTexture() == manager.getTexture("bunny_back_r"))) {
+				bunny.changeTexture(manager.getTexture("bunny_front_r"));
+				bunny.setXY(bunny.getX()+5*scale, bunny.getY());
+			} else if (y>0 && (bunny.getTexture() == manager.getTexture("bunny_front_l") || bunny.getTexture() == manager.getTexture("bunny_front_r"))) {
+				bunny.changeTexture(manager.getTexture("bunny_back_r"));
+				bunny.setXY(bunny.getX()-5*scale, bunny.getY());
+			}
 		}
 
 		int coll = checkCollision(xPos,yPos,x,y, BUNNY_WIDTH, BUNNY_HEIGHT); 
 		if (coll == Point.IDENT)	{
 			bunny.move(x, y);
-			posX = x; posY = y;
 			myX = x; myY = y;
 		} else {
 			//strafe along edges
@@ -452,108 +432,14 @@ public class LevelRenderer implements Renderer {
 				}
 			}
 		}
-	/*	//find out which tile we want to go to
-		//ul ur ol or
-		int result = 0;
-		int b1=0, b2=0, b3=0, b4=0, c1=0, c2=0, c3=0, c4=0, d1=0, d2=0, d3=0, d4=0;
-		
-		// calculate where we would be if we go xwise&ywise(d), only xwise(b) and only ywise(c)
-		xPos += xwise;
-		int btile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile1_y = (int)((yPos) / (float)LEVEL_TILESIZE), btile2_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), btile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), btile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), btile3_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE), btile4_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), btile4_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE);
-		xPos -= xwise;
-		yPos += ywise;
-		int ctile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile1_y = (int)((yPos) / (float)LEVEL_TILESIZE), ctile2_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), ctile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), ctile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), ctile3_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE), ctile4_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), ctile4_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE);
-		xPos += xwise;
-		int dtile1_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile1_y = (int)((yPos) / (float)LEVEL_TILESIZE), dtile2_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), dtile2_y = (int)((yPos) / (float)LEVEL_TILESIZE), dtile3_x = (int)((xPos) / (float)LEVEL_TILESIZE), dtile3_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE), dtile4_x = (int)((xPos+tabletWidth) / (float)LEVEL_TILESIZE), dtile4_y = (int)((yPos+tabletHeight) / (float)LEVEL_TILESIZE);
-		
-		if (xPos <= 0) result |= 2;
-		if (xPos+tabletWidth >= LEVEL_WIDTH*LEVEL_TILESIZE) result |= 1;
-		if (yPos <= 0) result |= 8;
-		if (yPos+tabletHeight >= LEVEL_HEIGHT*LEVEL_TILESIZE) result |= 4;
-		
-		// check if we're out of boundaries in any of those cases
-		if (btile1_x < 0 || btile2_x < 0 || btile3_x < 0 || btile4_x < 0) result |= 2;
-		if (btile1_x >= LEVEL_WIDTH || btile2_x >= LEVEL_WIDTH || btile3_x >= LEVEL_WIDTH || btile4_x >= LEVEL_WIDTH) result |= 1;
-		if (ctile1_y < 0 || ctile2_y < 0 || ctile3_y < 0 || ctile4_y < 0) result |= 8;
-		if (ctile1_y >= LEVEL_HEIGHT || ctile2_y >= LEVEL_HEIGHT || ctile3_y >= LEVEL_HEIGHT || ctile4_y >= LEVEL_HEIGHT) result |= 4;
-		
-		if ((result & 1) > 0) { b2=20; b4=20; d2=20; d4=20; }
-		if ((result & 2) > 0) { b1=20; b3=20; d1=20; d3=20; }
-		if ((result & 4) > 0) { c3=20; c4=20; d3=20; d4=20; }
-		if ((result & 8) > 0) { c1=20; c2=20; d3=20; d4=20; }
-		if (btile1_y < 0 || btile1_y >= LEVEL_HEIGHT || btile1_x < 0 || btile1_x >= LEVEL_WIDTH) b1 = 20;
-		if (btile2_y < 0 || btile2_y >= LEVEL_HEIGHT || btile2_x < 0 || btile2_x >= LEVEL_WIDTH) b2 = 20;
-		if (btile3_y < 0 || btile3_y >= LEVEL_HEIGHT || btile3_x < 0 || btile3_x >= LEVEL_WIDTH) b3 = 20;
-		if (btile4_y < 0 || btile4_y >= LEVEL_HEIGHT || btile4_x < 0 || btile4_x >= LEVEL_WIDTH) b4 = 20;
-		if (ctile1_y < 0 || ctile1_y >= LEVEL_HEIGHT || ctile1_x < 0 || ctile1_x >= LEVEL_WIDTH) c1 = 20;
-		if (ctile2_y < 0 || ctile2_y >= LEVEL_HEIGHT || ctile2_x < 0 || ctile2_x >= LEVEL_WIDTH) c2 = 20;
-		if (ctile3_y < 0 || ctile3_y >= LEVEL_HEIGHT || ctile3_x < 0 || ctile3_x >= LEVEL_WIDTH) c3 = 20;
-		if (ctile4_y < 0 || ctile4_y >= LEVEL_HEIGHT || ctile4_x < 0 || ctile4_x >= LEVEL_WIDTH) c4 = 20;
-		if (dtile1_y < 0 || dtile1_y >= LEVEL_HEIGHT || dtile1_x < 0 || dtile1_x >= LEVEL_WIDTH) d1 = 20;
-		if (dtile2_y < 0 || dtile2_y >= LEVEL_HEIGHT || dtile2_x < 0 || dtile2_x >= LEVEL_WIDTH) d2 = 20;
-		if (dtile3_y < 0 || dtile3_y >= LEVEL_HEIGHT || dtile3_x < 0 || dtile3_x >= LEVEL_WIDTH) d3 = 20;
-		if (dtile4_y < 0 || dtile4_y >= LEVEL_HEIGHT || dtile4_x < 0 || dtile4_x >= LEVEL_WIDTH) d4 = 20;
-		
-		// now let's see what's there
-		if (b1 != 20) b1 = levelMap[btile1_y][btile1_x]; 
-		if (b2 != 20) b2 = levelMap[btile2_y][btile2_x]; 
-		if (b3 != 20) b3 = levelMap[btile3_y][btile3_x]; 
-		if (b4 != 20) b4 = levelMap[btile4_y][btile4_x];
-		if (c1 != 20) c1 = levelMap[ctile1_y][ctile1_x]; 
-		if (c2 != 20) c2 = levelMap[ctile2_y][ctile2_x]; 
-		if (c3 != 20) c3 = levelMap[ctile3_y][ctile3_x]; 
-		if (c4 != 20) c4 = levelMap[ctile4_y][ctile4_x];
-		if (d1 != 20) d1 = levelMap[dtile1_y][dtile1_x]; 
-		if (d2 != 20) d2 = levelMap[dtile2_y][dtile2_x]; 
-		if (d3 != 20) d3 = levelMap[dtile3_y][dtile3_x]; 
-		if (d4 != 20) d4 = levelMap[dtile4_y][dtile4_x];
-		
-		// rechts=1 links=2 oben=4 unten=8
-		if (d1 >= 8 || d1 == 0 || d2 >= 8 || d2 == 0 || d3 >= 8 || d3 == 0 || d4 >= 8 || d4 == 0) {
-			//only xwise
-			if (b1 >= 8 || b1 == 0 || b2 >= 8 || b2 == 0 || b3 >= 8 || b3 == 0 || b4 >= 8 || b4 == 0) {
-				if (xwise > 0) result |= 1;
-				else result |= 2;
-			}
-			//only ywise
-			if (c1 >= 8 || c1 == 0 || c2 >= 8 || c2 == 0 || c3 >= 8 || c3 == 0 || c4 >= 8 || c4 == 0) {
-				if (ywise > 0) result |= 4;
-				else result |= 8;
-			}
-		}
-		// here you may insert code to check for collisions against arbitrary objects
-		Iterator<Tablet> it = cars.iterator();
-		while (it.hasNext()) {
-			Tablet c = it.next();
-			float cx = c.getX(); float cy = c.getY(); float cw = c.getWidth(); float ch = c.getHeight();
-			float pdb1x = xPos, pdb2x = xPos+tabletWidth;
-			float pc1x = xPos-xwise, pc2x = xPos-xwise+tabletWidth;
-			float pdc1y = yPos, pdc2y = yPos+tabletHeight;
-			float pb1y = yPos-ywise, pb2y = yPos-ywise+tabletHeight;
-			
-			if (((pdb1x >= cx && pdb1x <= cx+cw) || (pdb2x >= cx && pdb2x <= cx+cw)) &&
-				((pdc1y >= cy && pdc1y <= cy+ch) || (pdc2y >= cy && pdc2y <= cy+ch))) {
-				
-					if (((pdb1x >= cx && pdb1x <= cx+cw) || (pdb2x >= cx && pdb2x <= cx+cw)) &&
-						(pb1y >= cy && pb1y <= cy+ch) || (pb2y >= cy && pb2y <= cy+ch)) {
-							if (xwise > 0) result |= 1;
-							else result |= 2;
-					}
-					
-					if (((pc1x >= cx && pc1x <= cx+cw) || (pc2x >= cx && pc2x <= cx+cw)) &&
-							(pdc1y >= cy && pdc1y <= cy+ch) || (pdc2y >= cy && pdc2y <= cy+ch)) {
-								if (ywise > 0) result |= 4;
-								else result |= 8;
-					}
-			}
-		}*/
 		return result;
 	}
 
 	private void bunnyWasCaught () {
-		score -= crime*crimeCounter;
+		score -= crime*((float)crimeCounter/(float)crimeCounter+2);
 		crimeCounter = 0;
 		crime = 0;
+		copCounter = 0;
 		//poff
 		makeCopsPuff = 1;
 		if (score <= 0) endGame();
@@ -575,20 +461,26 @@ public class LevelRenderer implements Renderer {
 			dy /= d_len;
 
 			if (frameCounter%10==0) {
-				if (dy<0) cop.changeTexture(manager.getTexture("cop_front_l"));
-				else cop.changeTexture(manager.getTexture("cop_back_l"));
+				if (dy<0 && (cop.getTexture() == manager.getTexture("cop_back_l") || cop.getTexture() == manager.getTexture("cop_back_r"))) {
+					cop.changeTexture(manager.getTexture("cop_front_l"));
+					cop.setXY(cop.getX()-5*scale, cop.getY());
+				} else if (dy>0 && (cop.getTexture() == manager.getTexture("cop_front_l") || cop.getTexture() == manager.getTexture("cop_front_r"))) {
+					cop.changeTexture(manager.getTexture("cop_back_l"));
+					cop.setXY(cop.getX()+5*scale, cop.getY());
+				}
 			} else if (frameCounter%10==5) {
-				if (dy<0) cop.changeTexture(manager.getTexture("cop_front_r"));
-				else cop.changeTexture(manager.getTexture("cop_back_r"));
+				if (dy<0 && (cop.getTexture() == manager.getTexture("cop_back_l") || cop.getTexture() == manager.getTexture("cop_back_r"))) {
+					cop.changeTexture(manager.getTexture("cop_front_r"));
+					cop.setXY(cop.getX()-5*scale, cop.getY());
+				} else if (dy>0 && (cop.getTexture() == manager.getTexture("cop_front_l") || cop.getTexture() == manager.getTexture("cop_front_r"))) {
+					cop.changeTexture(manager.getTexture("cop_back_r"));
+					cop.setXY(cop.getX()+5*scale, cop.getY());
+				}
 			}
 
 			if (bx != cx && by != cy) {
 				moveCop(dx*COP_MOVEMENT_UNIT, dy*COP_MOVEMENT_UNIT, cop);
-
-				//check if cop catches bunny
-				if (d_len-3.0f <= CATCH_DISTANCE)
-					bunnyWasCaught();
-
+				if (d_len-3.0f <= CATCH_DISTANCE) bunnyWasCaught();
 			}
 		}
 	}
@@ -808,7 +700,7 @@ public class LevelRenderer implements Renderer {
 			copCounter = mSavedInstance.getInt(COP_NUMBER);
 			
 			for (int i=0;i<copCounter;i++)
-				cops.add(new Tablet(context, COP_WIDTH, COP_HEIGHT, mSavedInstance.getFloat(COP_X + i), mSavedInstance.getFloat(COP_Y + i), manager.getTexture("cop_front_l"), gl));
+				cops.add(new Tablet(COP_WIDTH, COP_HEIGHT, mSavedInstance.getFloat(COP_X + i), mSavedInstance.getFloat(COP_Y + i), manager.getTexture("cop_front_l")));
 
 			Log.d("LevelRenderer", "Load bunny pos: x " + mSavedInstance.getFloat(BUNNY_X) + " y " + mSavedInstance.getFloat(BUNNY_Y));
 			Log.d("LevelRenderer", "Load cop pos: x " + mSavedInstance.getFloat(COP_X) + " y " + mSavedInstance.getFloat(COP_Y));
@@ -829,16 +721,17 @@ public class LevelRenderer implements Renderer {
 			//create cars
 			Random rnd = new Random();
 			int rnr1=0, rnr2=0;
+			int oldcar1=0, oldcar2=0;
 			for (int i=0;i<NUMBER_OF_CARS;i++) {
 				do { 
 					rnr1 = rnd.nextInt(LEVEL_WIDTH);
 					rnr2 = rnd.nextInt(LEVEL_HEIGHT);
 				}
-				while ((rnr1 == 0 && rnr2 == 0) || 
+				while ((rnr1 == 0 && rnr2 == 0 && (oldcar1 != rnr1 || oldcar2 != rnr2)) || 
 					   (levelMap[rnr2][rnr1] < 1 || levelMap[rnr2][rnr1] > 7) ||
 						levelMap[rnr2][rnr1] == 3);
 				// now that we know which tile to put the car on, place it there
-				GameObject newcar = new GameObject(GameObject.OBJECTCLASS_CAR, context, CAR_WIDTH, CAR_LENGTH, rnr1*LEVEL_TILESIZE*scale, rnr2*LEVEL_TILESIZE*scale, manager.getTexture("car0"), manager, gl);
+				GameObject newcar = new GameObject(GameObject.OBJECTCLASS_CAR, CAR_WIDTH, CAR_LENGTH, rnr1*LEVEL_TILESIZE*scale, rnr2*LEVEL_TILESIZE*scale, manager.getTexture("car0"), manager);
 				if (levelMap[rnr2][rnr1] == 1 || levelMap[rnr2][rnr1] == 4 || levelMap[rnr2][rnr1] == 5) {
 					newcar.rotate(90.0f);
 					newcar.setWidthHeight(CAR_LENGTH, CAR_WIDTH);

@@ -3,15 +3,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-//import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.microedition.khronos.opengles.GL10;
-
-import android.content.Context;
-//import android.graphics.Bitmap;
-//import android.graphics.BitmapFactory;
-//import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class Tablet {
 	private float vertices[] = {
@@ -32,8 +28,6 @@ public class Tablet {
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer indexBuffer;
 	private FloatBuffer texCoordBuffer;
-//	IntBuffer texture = IntBuffer.allocate(1);
-	private Context context;
 	
 	private float width;
 	private float height;
@@ -49,12 +43,13 @@ public class Tablet {
 	public static final int INTENDED_RES_X = 540;
 	public static final int INTENDED_RES_Y = 360;
 	
-	public Tablet(Context context, int width, int height, float x, float y, int texture, GL10 gl) {
-		this(context, width, height, x, y, texture, false, gl);
+	protected ArrayList<Tablet> overlays;
+	
+	public Tablet(float width, float height, float x, float y, int texture) {
+		this(width, height, x, y, texture, false);
 	}
 	
-	public Tablet(Context context, int width, int height, float x, float y, int texture, boolean sticky, GL10 gl) {
-		this.context = context;
+	public Tablet(float width, float height, float x, float y, int texture, boolean sticky) {
 		this.sticky = sticky;
 		
 		vertices[1] = height;
@@ -67,6 +62,7 @@ public class Tablet {
 		this.x = x;
 		this.y = y;
 		this.texture = texture;
+		overlays = new ArrayList<Tablet>();
 		
 		ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
 		vbb.order(ByteOrder.nativeOrder());
@@ -106,6 +102,9 @@ public class Tablet {
 		if (width > height) Tablet.scale = (float)width/(float)INTENDED_RES_X;
 		else Tablet.scale = (float)height/(float)INTENDED_RES_Y;
 	}
+	
+	public void addOverlay(Tablet overlay) { overlays.add(overlay); }
+	public void clearOverlays() { overlays.clear(); }
 	
 	public float getX() { return x; }
 	public float getY() { return y;	}
@@ -156,5 +155,8 @@ public class Tablet {
 
 		gl.glPopMatrix();
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		
+		Iterator<Tablet> oit = overlays.iterator();
+		while (oit.hasNext()) oit.next().draw(gl);
 	}
 }
