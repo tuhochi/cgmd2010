@@ -12,6 +12,7 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.Cylinder;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.Rectangle;
 
 //one of the bloody things needed for getResources()
 import android.content.Context;
@@ -26,6 +27,9 @@ public class L77Renderer implements Renderer
 	private boolean	mTranslucentBackground;
 	private Context	mContext;
 	private Native	jni;
+	private Rectangle timeBar;
+	private Rectangle goldBar;
+	private Rectangle barBorder;
 
 	/**
 	 * constructor for Level 77 Renderer
@@ -58,23 +62,36 @@ public class L77Renderer implements Renderer
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glTranslatef(0, 0, -3.0f);
-		gl.glRotatef(mAngle, 0, 1, 0);
-		gl.glRotatef(mAngle * 0.25f, 1, 0, 0);
-
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-
-		mCube.draw(gl);
-
-		gl.glRotatef(mAngle * 2.0f, 0, 1, 1);
-		gl.glTranslatef(0.5f, 0.5f, 0.5f);
-
-		mCube.draw(gl);
-
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
-
-		mAngle += 1.2f;
+		
+		gl.glTranslatef(6.75f, 4.5f, 5.0f);
+		gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+		//barBorder.draw(gl);
+		
+		gl.glTranslatef(-0.25f, 0, -0.5f);
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);		
+		timeBar.draw(gl);
+		
+		gl.glTranslatef(0.5f, 0.0f, 0.0f);
+		
+		timeBar.draw(gl);
+		
+//		gl.glTranslatef(0, 0, -3.0f);
+//		gl.glRotatef(mAngle, 0, 1, 0);
+//		gl.glRotatef(mAngle * 0.25f, 1, 0, 0);
+//
+//		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+//		gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+//
+//		mCube.draw(gl);
+//
+//		gl.glRotatef(mAngle * 2.0f, 0, 1, 1);
+//		gl.glTranslatef(0.5f, 0.5f, 0.5f);
+//
+//		mCube.draw(gl);
+//
+//		gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
+//
+//		mAngle += 1.2f;
 
 		gl.glFlush();
 	}
@@ -94,6 +111,14 @@ public class L77Renderer implements Renderer
 		jni.init();
 		jni.init2();
 
+		timeBar = new Rectangle(0.5f, 9.0f);
+		timeBar.setTexture(gl, mContext.getResources(), R.drawable.l77_time_bar);
+		
+		barBorder = new Rectangle(1.0f, 9.0f);
+		
+
+		
+		
 		mCube = new Cylinder(0.5f, 0.10f, (short) 10);
 		mCube.setTexture(gl, mContext.getResources(), R.drawable.l00_coin);
 		mCube.setColor(0.85f, 0.68f, 0.22f, 1.f);

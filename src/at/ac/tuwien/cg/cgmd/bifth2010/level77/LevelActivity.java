@@ -1,5 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
+import java.io.ObjectOutputStream.PutField;
+
 import android.app.Activity;
 
 //import android.content.Intent;
@@ -26,6 +28,8 @@ public class LevelActivity extends Activity
 	protected static final String	TAG	= "LevelActivity";
 	private GameView gameView;
 	private boolean showsInitScreen = false;
+
+	
 	
 	// for c++ code
     static {
@@ -36,6 +40,8 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
+		
+		
 		
 		
 //		TODO Show info Screen
@@ -69,7 +75,7 @@ public class LevelActivity extends Activity
 			}
 		};
 		
-		gameView = new GameView(this, gameEnded);		
+		gameView = new GameView(this, gameEnded, new SessionState(getIntent().getExtras()));		
 
 		setContentView( gameView );				
 	}

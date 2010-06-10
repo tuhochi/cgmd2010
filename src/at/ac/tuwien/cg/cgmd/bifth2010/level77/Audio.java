@@ -14,6 +14,7 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level88.game.Map;
 
 /**
@@ -49,15 +50,19 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	private static java.util.Map<Integer, MediaPlayer> mps = new HashMap<Integer, MediaPlayer>();
 	private static java.util.Map<MediaPlayer, Boolean> mpBlocked = new HashMap<MediaPlayer, Boolean>();
 
+	private static SessionState sessionState;
+	
 	
 	/**
 	 * ctor - loads game sounds using android MediaPlayer
 	 * @param context
 	 */
-	public Audio (Context context)
+	public Audio (Context context, SessionState sessionState)
 	{
 		this.context = context;
 		test_var = 0xdeadbeef;
+		
+		this.sessionState = sessionState;
 
 		putMp(BUNNY_BLOCK_THEME);
 		putMp(BLOCK_DROPPED_SOUND);
@@ -126,7 +131,8 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	 */
 	public void playSound(int soundid)
 	{
-		playSound(soundid, false);
+		if (sessionState.isMusicAndSoundOn())
+			playSound(soundid, false);
 	}
 	
 	public void playSound(int soundid, boolean stopSound)

@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.util.prefs.Preferences;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -30,11 +31,16 @@ public class GameView extends GLSurfaceView
 	private int score;
 	private Callback<Integer> deleteMe;
 	private SharedPreferences prefs;
+	private SessionState sessionState;
 	
-	public GameView(Context context, Callback<Integer> gameEnded)
+	public GameView(Context context, Callback<Integer> gameEnded, SessionState sessionState)
 	{
 		super(context);
-		audio = new Audio(context);
+		
+		this.sessionState = sessionState;
+	
+		
+		audio = new Audio(context, sessionState);
 		deleteMe = gameEnded;
 		
 		Callback<Integer> updateScore = new Callback<Integer>()
