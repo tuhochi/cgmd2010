@@ -10,7 +10,9 @@ public class Cop extends Tablet {
 	private textureManager texman;
 	
 	public Cop(int initPosX, int initPosY, Context context, GL10 gl, textureManager man) {
-		super(context, 50, 50, initPosX, initPosY, man.getTexture("cop_front_l"), gl);
+		// by Matthias (Level 44): commented out, wasn't able to compile
+		//super(context, 50, 50, initPosX, initPosY, man.getTexture("cop_front_l"), gl);
+		super(50, 50, initPosX, initPosY, man.getTexture("cop_front_l"));
 		texman = man;
 	}
 	
