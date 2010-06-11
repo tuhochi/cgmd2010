@@ -16,6 +16,10 @@ public class HyperProjectile extends Projectile {
 		mActive = false;
 		mTexture = R.drawable.l12_hyper_projectile;
 		TextureManager.getSingletonObject().add(mTexture);
+		TextureManager.getSingletonObject().add(mDyingTextur1);
+		TextureManager.getSingletonObject().add(mDyingTextur2);
+		TextureManager.getSingletonObject().add(mDyingTextur3);
+		TextureManager.getSingletonObject().add(mDyingTextur4);
 		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 * Definitions.HYPER_PROJECTILE_RADIUS);
 	}
 	

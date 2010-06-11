@@ -1,48 +1,59 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
+
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
+
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
 public class GameUI extends LinearLayout implements OnClickListener{
 	
-
+	private Context mContext = null;
 	private static TextView mTV;
 	private static ImageButton mBasicTowerButton;
+	//private static TextView mBasicTowerTextView;
 	private static ImageButton mAdvancedTowerButton;
 	private static ImageButton mHyperTowerButton;
+	private static ImageButton mFreezeTowerButton;
 	private static final Handler mHandler = new Handler();
 	
 	private static GameUI mSingleton = null;
 	
 	private GameUI(Context context, int height, int width) {
 		super(context);	
+		mContext = context;
 		int elementWidth = (int)width / 7;		
 		this.setOrientation(LinearLayout.HORIZONTAL);
 		this.setGravity(Gravity.CENTER_HORIZONTAL);
-	       
+	    	
+		//LinearLayout ll = new LinearLayout( mContext );
+		//ll.setGravity(Gravity.CENTER_HORIZONTAL);
+		//ll.setOrientation(VERTICAL);
 		mBasicTowerButton = new ImageButton( context );
-	    mBasicTowerButton.setMinimumHeight(height);
-	    mBasicTowerButton.setMaxHeight(height);
-	    mBasicTowerButton.setMinimumWidth( elementWidth );
+	    mBasicTowerButton.setMaxHeight(height - 10);
 	    mBasicTowerButton.setMaxWidth( elementWidth );
-	    mBasicTowerButton.setImageResource(R.drawable.l12_bunny1_icon);
 	    mBasicTowerButton.setId( 1 );
+	    mBasicTowerButton.setImageResource(R.drawable.l12_bunny1_icon);
 	    mBasicTowerButton.setOnClickListener(this);
+	    mBasicTowerButton.setEnabled(false);
 	    this.addView( mBasicTowerButton );
+	    //mBasicTowerTextView = new TextView(mContext);
+	    //mBasicTowerTextView.setText(GameMechanics.getSingleton().getPossibleBasicTowerCount());
+	    //ll.addView(mBasicTowerTextView);
+	    //this.addView(ll);
 	        
 	    mAdvancedTowerButton = new ImageButton( context );
-	    mAdvancedTowerButton.setMinimumHeight(height);
 	    mAdvancedTowerButton.setMaxHeight(height);
-	    mAdvancedTowerButton.setMinimumWidth( elementWidth );
 	    mAdvancedTowerButton.setMaxWidth( elementWidth );
 	    mAdvancedTowerButton.setImageResource(R.drawable.l12_bunny3_icon);
 	    mAdvancedTowerButton.setId( 2 );
@@ -50,19 +61,24 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    this.addView( mAdvancedTowerButton );
 	        
 	    mHyperTowerButton = new ImageButton( context );
-	    mHyperTowerButton.setMinimumHeight(height);
 	    mHyperTowerButton.setMaxHeight(height);
-	    mHyperTowerButton.setMinimumWidth( elementWidth );
 	    mHyperTowerButton.setMaxWidth( elementWidth );
 	    mHyperTowerButton.setImageResource(R.drawable.l12_bunny2_icon);
 	    mHyperTowerButton.setId( 3 );
 	    mHyperTowerButton.setOnClickListener(this);
 	    this.addView( mHyperTowerButton );
+	    
+	    mFreezeTowerButton = new ImageButton( context );
+	    mFreezeTowerButton.setMaxHeight(height);
+	    mFreezeTowerButton.setMaxWidth( elementWidth );
+	    mFreezeTowerButton.setImageResource(R.drawable.l12_bunny4_icon);
+	    mFreezeTowerButton.setId( 4 );
+	    mFreezeTowerButton.setOnClickListener(this);
+	    this.addView( mFreezeTowerButton );
 	        
 	    mTV = new TextView( context );
 	    mTV.setHeight( height );
 	    updateText();
-	    basicTowerButtonPressed();
 	    this.addView(mTV);
 	}
 	
@@ -76,33 +92,39 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	
 	
 	public void basicTowerButtonPressed(){
-		mBasicTowerButton.setPressed(true);
-		mAdvancedTowerButton.setPressed(false);
-		mHyperTowerButton.setPressed(false);
-		mBasicTowerButton.setColorFilter(Color.DKGRAY, Mode.MULTIPLY);
-		mAdvancedTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
-		mHyperTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
+		mBasicTowerButton.isPressed();
+		mBasicTowerButton.setEnabled(false);
+		mAdvancedTowerButton.setEnabled(true);
+		mHyperTowerButton.setEnabled(true);
+		mFreezeTowerButton.setEnabled(true);
 		GameMechanics.getSingleton().setBasicTowerSelected();
 	}
 	
 	public void advancedTowerButtonPressed(){
-		mBasicTowerButton.setPressed(false);
-		mAdvancedTowerButton.setPressed(true);
-		mHyperTowerButton.setPressed(false);
-		mAdvancedTowerButton.setColorFilter(Color.DKGRAY, Mode.MULTIPLY);
-		mBasicTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
-		mHyperTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
+		mAdvancedTowerButton.isPressed();
+		mBasicTowerButton.setEnabled(true);
+		mAdvancedTowerButton.setEnabled(false);
+		mHyperTowerButton.setEnabled(true);
+		mFreezeTowerButton.setEnabled(true);
 		GameMechanics.getSingleton().setAdvancedTowerSelected();
 	}
 	
 	public void hyperTowerButtonPressed(){
-		mBasicTowerButton.setPressed(false);
-		mAdvancedTowerButton.setPressed(false);
-		mHyperTowerButton.setPressed(true);
-		mHyperTowerButton.setColorFilter(Color.DKGRAY, Mode.MULTIPLY);
-		mAdvancedTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
-		mBasicTowerButton.setColorFilter(Color.WHITE, Mode.MULTIPLY);
+		mHyperTowerButton.isPressed();
+		mBasicTowerButton.setEnabled(true);
+		mAdvancedTowerButton.setEnabled(true);
+		mHyperTowerButton.setEnabled(false);
+		mFreezeTowerButton.setEnabled(true);
 		GameMechanics.getSingleton().setHyperTowerSelected();
+	}
+	
+	public void freezeTowerButtonPressed(){
+		mFreezeTowerButton.isPressed();
+		mBasicTowerButton.setEnabled(true);
+		mAdvancedTowerButton.setEnabled(true);
+		mHyperTowerButton.setEnabled(true);
+		mFreezeTowerButton.setEnabled(false);
+		GameMechanics.getSingleton().setFreezeTowerSelected();
 	}
 	
 	private static Runnable mTVUpdater = new Runnable(){
@@ -113,6 +135,7 @@ public class GameUI extends LinearLayout implements OnClickListener{
 				"Iron: "+GameMechanics.getSingleton().getIron()+" "+
 				"Rounds left: "+(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber()) +" " +
 				" Countdown: "+(int)(GameMechanics.getSingleton().getRemainingWaitTime()));
+			//mBasicTowerTextView.setText(GameMechanics.getSingleton().getPossibleBasicTowerCount());
 		}
 	};
 	
@@ -129,6 +152,8 @@ public class GameUI extends LinearLayout implements OnClickListener{
 			advancedTowerButtonPressed();
 		} else if( v.getId() == mHyperTowerButton.getId() ){
 			hyperTowerButtonPressed();
+		} else if( v.getId() == mFreezeTowerButton.getId() ){
+			freezeTowerButtonPressed();
 		}
 	}
 

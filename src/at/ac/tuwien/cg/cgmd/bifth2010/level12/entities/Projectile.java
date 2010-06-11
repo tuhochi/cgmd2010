@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
@@ -18,10 +19,15 @@ public abstract class Projectile extends GLObject{
 	protected short mRadius = 4;
 	protected short mSpeed = 5;
 	protected short mDmg = 10;
+	protected short mSlowing = 0;
 	protected int mTexture = -1;
-	long ms;
-	double dt;
-	int distance;
+	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1;
+	protected int mDyingTextur2 = R.drawable.l12_enemie_dying2;
+	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
+	protected int mDyingTextur4 = R.drawable.l12_enemie_dying4;
+	protected long mStartDyingTime = -1;
+	protected boolean mReadyToRemove = false;
+	protected boolean mIsExploding = false;
 	
 	public float getSpeed(){
 		return mSpeed;
@@ -30,6 +36,9 @@ public abstract class Projectile extends GLObject{
 	public void setXY( int x, int y){
 		mX = x;
 		mY = y;
+		mReadyToRemove = false;
+		mStartDyingTime = -1;
+		mIsExploding = false;
 		initVBOs();
 	}
 	
@@ -80,17 +89,31 @@ public abstract class Projectile extends GLObject{
 	
 	@Override
 	public void draw( GL10 gl ){
-		TextureManager.getSingletonObject().setTexture( mTexture );
-		ms = System.currentTimeMillis();
-		dt = (ms - mLastFrametime) * 0.001;
+		long ms = System.currentTimeMillis();
+		double dt = (ms - mLastFrametime) * 0.001;
 		//pause
 		if( GameMechanics.getSingleton().running() == false ) dt = 0;		
 		mLastFrametime = ms;
-		distance = (int)(this.getSpeed() * dt);
+		int distance = 0;
+		if( mStartDyingTime != -1 )distance = 0;
+		else distance = (int)(mSpeed * dt);
 		mXTranslate += distance;		
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
 		gl.glTranslatef( mXTranslate, 0.0f, 0.0f);
+		if( mStartDyingTime == -1) TextureManager.getSingletonObject().setTexture( mTexture );
+		else{
+			mIsExploding = true;
+			long dyt = System.currentTimeMillis() - mStartDyingTime;
+			if( dyt > (0 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur1 );
+			if( dyt > (1 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur2 );
+			if( dyt > (2 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur3 );
+			if( dyt > (3 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
+			if( dyt > (4 * Definitions.ANIMTE_CYCLE_TIME) ) {
+				mReadyToRemove = true;
+				TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
+			}
+		}
 		super.draw(gl);
 		gl.glPopMatrix();	
 	}
@@ -105,9 +128,27 @@ public abstract class Projectile extends GLObject{
 		return mDmg;
 	}
 	
+	public short getSlow(){
+		return mSlowing;
+	}
+	
 	public void reset(){
 		mXTranslate = 0;
 		this.setActiveState(false);
+	}
+	
+	public void die(){
+		if( mStartDyingTime == -1 ){
+			mStartDyingTime = System.currentTimeMillis();
+		}
+	}
+
+	public boolean toRemove() {
+		return mReadyToRemove;
+	}
+
+	public boolean isExploding() {
+		return mIsExploding;
 	}
 	
 }

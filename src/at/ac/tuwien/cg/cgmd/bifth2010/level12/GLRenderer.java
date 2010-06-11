@@ -31,7 +31,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 				GameMechanics.getSingleton().nextRound();
 			}
 		}
-		if( GameMechanics.getSingleton().getRoundNumber() >= Definitions.MAX_ROUND_NUMBER && GameWorld.getSingleton().getEnemies() == 0 ){
+		if( GameMechanics.getSingleton().getRoundNumber() >= Definitions.MAX_ROUND_NUMBER && GameWorld.getSingleton().getEnemiesSize() == 0 ){
 			GameMechanics.getSingleton().finishGame(); //bit dirty hack
 		} else {
 			GameWorld.getSingleton().drawTowers(gl);

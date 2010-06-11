@@ -134,6 +134,10 @@ public class GameMechanics {
 	public void setHyperTowerSelected() {
 		mSelectedTower = Definitions.HYPER_TOWER;
 	}
+	
+	public void setFreezeTowerSelected() {
+		mSelectedTower = Definitions.FREEZE_TOWER;
+	}
 
 	public void addIron(int mIronDropped) {
 		mIron += mIronDropped;
@@ -146,4 +150,25 @@ public class GameMechanics {
 	public void subIron(short price) {
 		mIron -= price;
 	}
+
+	public CharSequence getPossibleBasicTowerCount() {
+		Integer count = (int)Math.floor( Definitions.BASIC_TOWER_IRON_NEED / mIron );
+		return count.toString();
+	}
+	
+	public CharSequence getPossibleAdvancedTowerCount() {
+		Integer count = (int)Math.floor( Definitions.ADVANCED_TOWER_IRON_NEED / mIron );
+		return count.toString();
+	}
+	
+	public CharSequence getPossibleHyperTowerCount() {
+		Integer count = (int)Math.floor( Definitions.HYPER_TOWER_IRON_NEED / mIron );
+		return count.toString();
+	}
+	
+	public CharSequence getPossibleFreezeTowerCount() {
+		Integer count = (int)Math.floor( Definitions.FREEZE_TOWER_IRON_NEED / mIron );
+		return count.toString();
+	}
+
 }

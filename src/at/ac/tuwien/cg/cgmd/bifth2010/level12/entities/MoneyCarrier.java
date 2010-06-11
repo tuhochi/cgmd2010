@@ -26,12 +26,10 @@ public abstract class MoneyCarrier extends GLObject {
 	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
 	protected int mDyingTextur4 = R.drawable.l12_enemie_dying4;
 	protected int mSound = R.raw.l12_enemie1_dying;
+	protected short mSlowed = 0;
 	protected short mMoney = 10;
 	protected short mSpeed = 5;
 	protected int mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
-	long ms;
-	double dt;
-	double distance;
 	protected long mStartDyingTime = -1;
 	boolean mReadyToRemove = false;
 	
@@ -40,6 +38,7 @@ public abstract class MoneyCarrier extends GLObject {
 		mLastFrametime = System.currentTimeMillis();
 		mReadyToRemove = false;
 		mStartDyingTime = -1;
+		mSlowed = 0;
 	}
 
 	public void deactivate(){
@@ -102,12 +101,14 @@ public abstract class MoneyCarrier extends GLObject {
 	
 	@Override
 	public void draw(GL10 gl){	
-		ms = System.currentTimeMillis();
-		dt = (ms - mLastFrametime) * 0.001;
+		long ms = System.currentTimeMillis();
+		double dt = (ms - mLastFrametime) * 0.001;
 		if( GameMechanics.getSingleton().running() == false ) dt = 0;
 		mLastFrametime = ms;
+		int distance = 0;
 		if( mStartDyingTime != -1 )distance = 0;
-		else distance = mSpeed * dt;
+		else if( mSlowed == 0) distance = (int)(mSpeed * dt);
+		else distance = (int)( mSpeed * 0.01 * (100 - mSlowed) * dt);
 		mMovePos -= distance;
 		//calculate actual position
 		mX = (int)(mStartPos + mMovePos);
@@ -118,14 +119,13 @@ public abstract class MoneyCarrier extends GLObject {
 		else{
 			long dyt = System.currentTimeMillis() - mStartDyingTime;
 			//System.out.println("DYT: "+dyt+" cycle time: "+Definitions.DIE_ANIMTE_CYCLE_TIME);
-			if( dyt > (0 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur1 );
-			if( dyt > (1 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur2 );
-			if( dyt > (2 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur3 );
-			if( dyt > (3 * Definitions.DIE_ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
-			if( dyt > (4 * Definitions.DIE_ANIMTE_CYCLE_TIME) ) {
+			if( dyt > (0 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur1 );
+			if( dyt > (1 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur2 );
+			if( dyt > (2 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur3 );
+			if( dyt > (3 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
+			if( dyt > (4 * Definitions.ANIMTE_CYCLE_TIME) ) {
+				TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
 				mReadyToRemove = true;
-				System.out.println("ready to remove - dyt : " + dyt);
-				return;
 			}
 		}
 		super.draw(gl);
@@ -133,8 +133,12 @@ public abstract class MoneyCarrier extends GLObject {
 	}
 	
 	
-	public void hit( short dmg ){
+	public void hit( short dmg, short slow ){
 		mHp -= dmg;
+		if( mSlowed == 0 && slow != 0 ){
+			mSlowed = slow;
+			setFrozenColor();
+		}
 	}
 
 	public int getMoney() {
@@ -154,12 +158,34 @@ public abstract class MoneyCarrier extends GLObject {
 		if( mStartDyingTime == -1 ){
 			SoundHandler.getSingleton().play(mSound);
 			GameMechanics.getSingleton().addIron(mIronToDrop);
-			System.out.println("DIE");
 			mStartDyingTime = System.currentTimeMillis();
 		}
 	}
 
 	public boolean toRemove() {
 		return mReadyToRemove;
+	}
+	
+	public void setFrozenColor(){
+		mColor[0] = 0.0f;
+		mColor[1] = 0.0f;
+		mColor[2] = 1.0f;
+		float[] colors = { mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f,
+				mColor[0], mColor[1], mColor[2], 1.0f};
+		ByteBuffer cbb = ByteBuffer.allocateDirect( colors.length * 4 );
+		cbb.order( ByteOrder.nativeOrder() );
+		mColorBuffer = cbb.asFloatBuffer();
+		mColorBuffer.put( colors );
+		mColorBuffer.position( 0 );
+	}
+
+	public int getFrontX() {
+		return mX - mRadius;
+	}
+	
+	public int getBackX(){
+		return mX + mRadius;
 	}
 }
