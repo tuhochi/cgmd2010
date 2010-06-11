@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -24,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector2;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector3;
@@ -70,6 +72,7 @@ public class GameWorld extends Thread {
 	private float stockMarket[][];		
 	private float currentMoney;
 	
+	//stockmarket state
 	enum TransactionType {BUY, SELL, NOTHING};	
 	private TransactionType transactionType[];
 	private float transactionAmount[];
@@ -85,14 +88,17 @@ public class GameWorld extends Thread {
 	private int texCoin; //store texture id
 	private Map<Integer,ArrayList<ParticleSystem>> graphToParticleSystems;
 	
-	boolean quitThread;
-	
 	//keep track of the level state
 	private int gameState = 0;
+	boolean quitThread;	
+	boolean soundEnabled = true;
 
 	//speed of level
 	float progressScale = 0.5f;
 
+	/*
+	 * When quitThread==true the gameloop whil exit
+	 */
 	void SetQuitThread(boolean _quitThread)
 	{
 		quitThread = _quitThread;
@@ -103,6 +109,9 @@ public class GameWorld extends Thread {
 	private HashMap<Integer, Integer> soundPoolMap;
 	private boolean playedOutOfTimeWarning = false;
 
+	/*
+	 * Initialize all sounds into a soundpool
+	 */
 	private void initSounds() {
 	     soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 100);
 	     soundPoolMap = new HashMap<Integer, Integer>();
@@ -115,7 +124,13 @@ public class GameWorld extends Thread {
 	     soundPoolMap.put(6, soundPool.load(context, R.raw.l30_beep, 2));
 	}
 	          
+	/*
+	 * Play one sound
+	 */
 	public void playSound(int sound) {
+		if (soundEnabled==false)
+			return;
+		
 	    /* Updated: The next 4 lines calculate the current volume in a scale of 0.0 to 1.0 */
 	    AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 	    float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -146,7 +161,7 @@ public class GameWorld extends Thread {
 				return;
     	}    	
     	
-    	Log.d("l30", "level finished");    	
+    	//Log.d("l30", "level finished");    	
     	
     	if (currentMoney<0.0f)
     	{
@@ -178,11 +193,12 @@ public class GameWorld extends Thread {
 	 * @param _handler A handler for callbacks
 	 * @param _savedInstance Saved instance information
 	 */
-    public GameWorld(LevelActivity levelActivity, Handler _handler, Bundle _savedInstance)
+    public GameWorld(LevelActivity levelActivity, Handler _handler, Bundle _savedInstance,
+    		boolean _soundEnabled)
     {
     	quitThread = false;
     	
-    	Log.d("l30", "GameWorld constructor");
+    	//Log.d("l30", "GameWorld constructor");
     	
     	isFinished = false;
     	
@@ -233,18 +249,21 @@ public class GameWorld extends Thread {
 			stockMarket[i][numElements] = current;
 		}
 		
-		graphToParticleSystems = new  HashMap<Integer,ArrayList<ParticleSystem>>();
-		
+		//init particle systems
+		graphToParticleSystems = new  HashMap<Integer,ArrayList<ParticleSystem>>();		
 		for (int i=0; i<numGraphs; i++)
 			graphToParticleSystems.put(i, new ArrayList<ParticleSystem>());
 		
-		
-		
+		//init timesteps
         Date date = new Date();
         time = date.getTime();
         oldTime = time;
         
-        initSounds();
+        //init sounds
+        initSounds();        
+    	soundEnabled = _soundEnabled;
+			
+
        
     }	
     
@@ -262,17 +281,17 @@ public class GameWorld extends Thread {
 		if (isFinished==true)
 			return;
 		
+		//calc timestep
 		oldTime = time;        
         Date date = new Date();
         time = date.getTime();
         elapsedSeconds = (time - oldTime) / 1000.0f;
         
-        
+        //add to level progress
         float oldProgress = progress;
         progress += elapsedSeconds*progressScale;
         	
-        //update the money
-        
+        //update the money        
         for (int i=0; i<numGraphs; i++)
         {  
         	float oldPrice = getPrice(i, oldProgress);
@@ -284,8 +303,10 @@ public class GameWorld extends Thread {
         	}        
         }		
         
+        //notify the gui
         moneyChanged(currentMoney);
         
+        //progress near the end? -> play a warning
         if ((progress+8.5)>((float)numElements)*pointDistance)
         {
         	if (playedOutOfTimeWarning==false)
@@ -296,14 +317,17 @@ public class GameWorld extends Thread {
         	playedOutOfTimeWarning = true;
 		}
         
+        //finished?
         if (progress>((float)numElements)*pointDistance)
         {
         	isFinished = true;
 		}
         
+        //all money lost?
         if (currentMoney<0.0f)
         	isFinished = true;
 		
+        //update particle systems
         List<ParticleSystem> particleSystemsToDelete = new ArrayList<ParticleSystem>();
         
         for(ParticleSystem particleSys: particleSystems)
@@ -317,6 +341,7 @@ public class GameWorld extends Thread {
         	}
 		}
         
+        //remove particle systems after explosion
         for(ParticleSystem particleSys: particleSystemsToDelete)
 		{
         	particleSystems.remove(particleSys);
@@ -330,40 +355,44 @@ public class GameWorld extends Thread {
         
         //change level states
         if ( (gameState==0) && (progress/progressScale > 15.0f) )
-        {        	
-       
+        {
+        	//start "more" blinking
         	gameState = 1;
         	playSound(6);
         	ChangeGameState(gameState);
         }
         else if ( (gameState==1) && (progress/progressScale > 17.0f) )
         {
+        	//start "more" phase
         	gameState = 2;
         	ChangeGameState(gameState);        	
         }
         else if ( (gameState==2) && (progress/progressScale > 70.0f) )
         {
+        	//start "faster" blinking
         	playSound(6);
         	gameState = 3;
         	ChangeGameState(gameState);        	
         }      	
         else if ( (gameState==3) && (progress/progressScale > 72.0f) )
         {
+        	//start "faster" phase
         	gameState = 4;
         	progressScale = 1.2f;
         	ChangeGameState(gameState);        	
         }   
         else if ( (gameState==4) && ((progress+5.0)>((float)numElements)*pointDistance) )
         {
+        	//start "hurry up" blinking
         	playSound(6);
         	gameState = 5;        	
         	ChangeGameState(gameState);        	
         }         
-        
-        
-        
 	}	
 	
+	/*
+	 * Load one texture from resources to opengl
+	 */
 	public int LoadOneTextures(GL10 gl, int resourceID)
 	{	
 		InputStream is = context.getResources().openRawResource(resourceID);
@@ -391,11 +420,13 @@ public class GameWorld extends Thread {
         return tex[0];
 	}
 	
+	
+	/*
+	 * Load all the textures
+	 */
 	public void LoadTextures(GL10 gl)
 	{	
-		texCoin = LoadOneTextures(gl, R.drawable.l30_coin);
-	
-	
+		texCoin = LoadOneTextures(gl, R.drawable.l30_coin);	
 	}
 	
 	/*
@@ -404,7 +435,7 @@ public class GameWorld extends Thread {
 	 */
 	public synchronized void Init(GL10 gl)
 	{				
-		Log.d("l30", "GameWorld init");
+		//Log.d("l30", "GameWorld init");
 		
 		//initialize the graphs and vbos
 		//create arrays for vbo data
@@ -589,7 +620,7 @@ public class GameWorld extends Thread {
 		//set camera position
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	
 		gl.glLoadIdentity();		
-		GLU.gluLookAt(gl, 0.0f, 1.0f, -3, 0, 0, 1, 0, 1, 0);
+		GLU.gluLookAt(gl, 0.0f, 1.0f, -3, 0, -0.2f, 1, 0, 1, 0);
 		
 		//initialize lights
 		float[] lightAmbient = {0.5f, 0.5f, 0.5f, 1.0f};
@@ -654,6 +685,9 @@ public class GameWorld extends Thread {
 	
 	}
 	
+	/*
+	 * Calculate the vertical drawing offset for one graph
+	 */
 	private float CalcGraphXCoord(int i)
 	{		
 		float totalWidth = 3.0f;
@@ -694,24 +728,13 @@ public class GameWorld extends Thread {
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	
 
-		
-		/*float[] fogColor = {1.0f,1.0f,1.0f,1.0f};
-		gl.glFogfv(GL10.GL_FOG_COLOR, fogColor, 0);
-		gl.glFogf(GL10.GL_FOG_START, 6.0f);
-		gl.glFogf(GL10.GL_FOG_END, 15.0f);
-		gl.glFogf(GL10.GL_FOG_DENSITY, 0.5f);
-		gl.glFogx(GL10.GL_FOG_MODE, GL10.GL_LINEAR);
-		gl.glEnable(GL10.GL_FOG);*/
-		
 		float[] red = {1.0f,0.0f,0.0f, 1.0f};
 		float[] green = {0.0f,1.0f,0.0f, 1.0f};
 		float[] blue = {0.0f,0.0f,1.0f, 1.0f};
 		float[] orange = {1.0f,0.5f,0.0f, 1.0f};		
 		float[] black = {0.0f,0.0f,0.0f, 1.0f};
 		float[] grey = {0.1f,0.1f,0.1f, 1.0f};
-		
-		
-		
+
 		for (int i=0; i<numGraphs; i++)
 		{
 			if ((gameState<2) && (i>0))
@@ -812,6 +835,7 @@ public class GameWorld extends Thread {
 		}
 		
 		//draw the particles
+		//init gl state
     	gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
     	gl.glEnable(GL10.GL_BLEND);    	
     	gl.glEnable(GL10.GL_ALPHA_TEST);
@@ -820,10 +844,11 @@ public class GameWorld extends Thread {
     	gl.glEnable(GL10.GL_TEXTURE_2D);
     	gl.glBindTexture(GL10.GL_TEXTURE_2D, texCoin);    	
     	
+    	//transform according to graph movement
     	gl.glPushMatrix();
-    	gl.glTranslatef(0, 0, -progress);
-    	
+    	gl.glTranslatef(0, 0, -progress);   	
    	
+    	//draw all particle systems
         for(ParticleSystem particleSys: particleSystems)
 		{
         	particleSys.Draw(quad, gl);
@@ -831,6 +856,7 @@ public class GameWorld extends Thread {
         
         gl.glPopMatrix();
 		
+        //reset state
         gl.glDisable(GL10.GL_ALPHA_TEST);
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);		
@@ -1010,7 +1036,7 @@ public class GameWorld extends Thread {
 
 	/*
 	 * Inform the GUI of a game state change
-	 * @state money The current game state
+	 * @state state The current game state
 	 */
 	public void ChangeGameState(int state)
 	{

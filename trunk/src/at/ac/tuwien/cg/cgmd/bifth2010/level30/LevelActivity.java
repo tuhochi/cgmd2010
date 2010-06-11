@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level30;
 import android.R.string;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -39,6 +40,7 @@ import java.util.Timer;
  */
 public class LevelActivity extends Activity implements OnClickListener {
 
+	//gui specific variables
 	private Vector2 windowSize;
 	private ViewGL view;
 	private GameWorld gameWorld;	
@@ -47,8 +49,14 @@ public class LevelActivity extends Activity implements OnClickListener {
 	private TextView uiInstructionText;
 	private Button[] uiButtonBuy;
 	private int buttonWidth;
+	Bundle bundle = null;
+	
+	//current money
 	private int money;
+	
+	//for background music
 	private MediaPlayer mp;
+	
 
 	/*
 	 * Handler for callbacks.
@@ -63,25 +71,30 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
    
-		Log.d("l30","onCreate");
+		bundle = savedInstanceState;
 		
+		//Log.d("l30","onCreate");
+        
+        //play sounds?
+		Intent callingIntent = getIntent();
+		SessionState s = new SessionState(callingIntent.getExtras());
+        gameWorld = new GameWorld(this, handler, savedInstanceState, s.isMusicAndSoundOn());
+        
+        //create windows
 	    super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        gameWorld = new GameWorld(this, handler, savedInstanceState);
         
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
         windowSize = new Vector2((float)d.getWidth(), (float)d.getHeight());
         
+        //add ui elements
         buttonWidth = d.getWidth()/4;
-
         view = new ViewGL(this, windowSize, gameWorld);
         setContentView(view);
         
-        //add ui elements 
-
-        
+        //layout for texts
         LinearLayout topLayout = new LinearLayout(this);
         topLayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         topLayout.setOrientation(LinearLayout.VERTICAL);
@@ -104,7 +117,7 @@ public class LevelActivity extends Activity implements OnClickListener {
         topLayout.addView(uiScoreText);       
         topLayout.addView(uiInstructionText);
         
-        
+        //layout for blinking big text
         LinearLayout topLayout2 = new LinearLayout(this);
         topLayout2.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         topLayout2.setOrientation(LinearLayout.VERTICAL);
@@ -120,6 +133,7 @@ public class LevelActivity extends Activity implements OnClickListener {
         
         topLayout2.addView(uiBlinkingText);        
         
+        //create buttons&layouts for them
         uiButtonBuy = new Button[4];
         
         LinearLayout bottomLayout = new LinearLayout(this);
@@ -150,19 +164,17 @@ public class LevelActivity extends Activity implements OnClickListener {
             
         uiButtonBuy[0].setVisibility(View.VISIBLE);
     		
-		SessionState s = new SessionState();
+        //init game state
 		s.setProgress(0);		
-		setResult(Activity.RESULT_OK, s.asIntent());	   
-	    
+		setResult(Activity.RESULT_OK, s.asIntent());
 		money = 1000000;
-		
-		
+				
 		gameWorld.start();
 		
+		//start music
 	    mp = MediaPlayer.create(this, R.raw.l00_menu);
 	    mp.setLooping(true);
 	    setMusicVolume(0.8f);
-
 	    playMusic();
 	    
 	}
@@ -220,7 +232,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	    super.onResume();
 	    view.onResume();
 	    playMusic();
-	    Log.d("l30","onResume");
+	    //Log.d("l30","onResume");
 	}
 	
 	/*
@@ -233,7 +245,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	    super.onPause();
 	    view.onPause();
 	    pauseMusic();
-	    Log.d("l30","onPause");
+	    //Log.d("l30","onPause");
 	}
 	
 	/*
@@ -245,9 +257,10 @@ public class LevelActivity extends Activity implements OnClickListener {
 		super.onStart();
 		view.onStart();
 		playMusic();
-		Log.d("l30","onStart");
+		//Log.d("l30","onStart");
 	}
 	
+
 	/*
 	 * (non-Javadoc)
 	 * @see android.app.Activity#onStop()
@@ -255,10 +268,11 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onStop() {
 		StopBlinkingText();
-		super.onStop();
-		view.onStop();
 		pauseMusic();
-		Log.d("l30","onStop");
+		
+		view.onStop();
+		super.onStop();
+		//Log.d("l30","onStop");
 	}
 	
 	/*
@@ -293,21 +307,21 @@ public class LevelActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		Log.d("l30","onSaveInstanceState");
+		//Log.d("l30","onSaveInstanceState");
 	}
 	
 	@Override
 	protected void  onRestoreInstanceState(Bundle state)
-	{
+	{		
 		onCreate(state);
-		Log.d("l30","onRestoreInstanceState");
+		//Log.d("l30","onRestoreInstanceState");
 	}
 	
 	@Override
 	protected void onDestroy() {
-		releaseMusic();
+		releaseMusic();		
 		super.onDestroy();
-		Log.d("l30","onDestroy");
+		//Log.d("l30","onDestroy");
 	}
 	
 	
@@ -332,7 +346,7 @@ public class LevelActivity extends Activity implements OnClickListener {
  	   public void run() { 	      
  			pauseMusic();
  			finish();
- 			Log.d("l30","finish");
+ 			//Log.d("l30","finish");
  			}
  	   };
  	
@@ -357,7 +371,7 @@ public class LevelActivity extends Activity implements OnClickListener {
     	uiBlinkingText.setTextSize(50);		
     	updateProgressResult();	
 		
-    	if (money>0.0f)
+    	if (money>0.0f) //game over? display gameover screen longer
     		handler.postDelayed(delayedFinish, 4000);
     	else
     		handler.postDelayed(delayedFinish, 0);
@@ -368,33 +382,36 @@ public class LevelActivity extends Activity implements OnClickListener {
 	 */
     private void updateProgressResult()
     {
+    	
 		//the SessionState is a convenience class to set a result
-		SessionState s = new SessionState();
+		SessionState s = new SessionState(bundle);
 		//we set the progress the user has made (must be between 0-100)
 		s.setProgress((int)Math.min(Math.max( (1000000.0f - money)/10000.0f, 0.0f), 100.0f));
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
     }
     
-
+    //handle blinking texts
     private boolean blinkingTextShouldQuit = false;
     private int blinkingTextQuitMode = 0;
     private Runnable blinkingTextRunnable = new Runnable() {
     	   public void run() {
     	       
+    		   //blink by changing visibility
 	    		if (uiBlinkingText.getVisibility()==View.INVISIBLE)
 	    		{
-	    			Log.d("l30","BlinkingTaskVis");
+	    			//Log.d("l30","BlinkingTaskVis");
 	    			uiBlinkingText.setVisibility(View.VISIBLE);
 	    		}
 	    		else
 	    		{
-	    			Log.d("l30","BlinkingTaskInVis");
+	    			//Log.d("l30","BlinkingTaskInVis");
 	    			uiBlinkingText.setVisibility(View.INVISIBLE);
 	    		}
 	    		
 	    		if (blinkingTextShouldQuit==true)
 	    		{
+	    			//should the text be visible after blinking stops?
 	    			if (blinkingTextQuitMode==0)
 	    				uiBlinkingText.setVisibility(View.INVISIBLE);
 	    			else
@@ -402,25 +419,32 @@ public class LevelActivity extends Activity implements OnClickListener {
 	    			
 	    			return;
 	    		}
-	    			    	     
+	    			    
+	    		//enqueue next blink event
     	       handler.postDelayed(this, 200);
     	   }
     	};
     	
     
+    /*
+    * Start blinking big texts
+    */
     private void StartBlinkingText(String text)
     {
     	blinkingTextQuitMode = 0;
     	blinkingTextShouldQuit = false;
-    	Log.d("l30","startBlink");
+    	//Log.d("l30","startBlink");
     	uiBlinkingText.setText(text);
     	handler.post(blinkingTextRunnable);   	
 
     }
     
+    /*
+     * Stop the blinking.
+     */
     private void StopBlinkingText()
     {
-    	Log.d("l30","stopBlink");    	
+    	//Log.d("l30","stopBlink");    	
     	blinkingTextShouldQuit = true;
     	
     }
@@ -474,13 +498,26 @@ public class LevelActivity extends Activity implements OnClickListener {
     	
     }
 	
+    /*
+     * Start music
+     */
     public void playMusic() {
+		
+    	//sounds enabled?
+		Intent callingIntent = getIntent();
+		SessionState s = new SessionState(callingIntent.getExtras());		
+		if (s.isMusicAndSoundOn()==false)
+			return;
+		
         if (!mp.isPlaying()) {
         	mp.seekTo(0);
         	mp.start();
         }
     }
     
+    /*
+     * Set music volume
+     */
     public void setMusicVolume(float volumeTarget) {
         if (mp.isPlaying())
         	{
@@ -489,10 +526,16 @@ public class LevelActivity extends Activity implements OnClickListener {
         	}
     }
     
+    /*
+     * pause music
+     */
     public void pauseMusic() {
         if (mp.isPlaying()) mp.pause();
     }
 
+    /*
+     * stop and release music
+     */
     public void releaseMusic() {
     
     	mp.stop();
