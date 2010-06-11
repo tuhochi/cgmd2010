@@ -15,7 +15,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class SoundPlayer {
 	/** The Sound Effects we support */
-	public enum SoundEffect { LOAD, SHOT, FLAP, DROP, BEEP, END };
+	public enum SoundEffect {
+		LOAD, SHOT, FLAP, DROP, BEEP, END
+	};
 
 	/** SoundPool for playing sounds */
 	private SoundPool soundPool;
@@ -32,8 +34,11 @@ public class SoundPlayer {
 
 	/**
 	 * create the Singleton-Object
-	 * @param context the context of the SoundPlayer
-	 * @param musicOn shall music be played
+	 * 
+	 * @param context
+	 *            the context of the SoundPlayer
+	 * @param musicOn
+	 *            shall music be played
 	 */
 	public static void createInstance(Context context, boolean musicOn) {
 		if (instance == null) {
@@ -41,27 +46,33 @@ public class SoundPlayer {
 			instance = new SoundPlayer(context, musicOn);
 		}
 	}
+
 	/**
 	 * Get the Singleton-Object
 	 * 
-	 * @param context needed for creation
+	 * @param context
+	 *            needed for creation
 	 * @return the SoundPlayer
 	 */
 	public static SoundPlayer getInstance() {
 		return instance;
 	}
-	
+
 	/**
-	 * set the context 
-	 * @param c the new context
+	 * set the context
+	 * 
+	 * @param c
+	 *            the new context
 	 */
 	public static void setContext(Context c) {
 		SoundPlayer.context = c;
 	}
-	
+
 	/**
 	 * internally creates the Soundplayer
-	 * @param context the context of the SoundPlayer
+	 * 
+	 * @param context
+	 *            the context of the SoundPlayer
 	 */
 	private SoundPlayer(Context context, boolean musicOn) {
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
@@ -72,11 +83,11 @@ public class SoundPlayer {
 
 		// get system volume
 		AudioManager mgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		volume = (float)mgr.getStreamVolume(AudioManager.STREAM_MUSIC)	/ (float)mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		volume = (float) mgr.getStreamVolume(AudioManager.STREAM_MUSIC) / (float) mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
 		this.musicOn = musicOn;
 	}
-	
+
 	/**
 	 * releases the memory and resources
 	 */
@@ -85,10 +96,10 @@ public class SoundPlayer {
 			soundPool.release();
 			soundPool = null;
 		}
-		
+
 		instance = null;
 	}
-	
+
 	/**
 	 * reload all sound samples
 	 */
@@ -114,16 +125,16 @@ public class SoundPlayer {
 		if (musicOn) {
 			float leftVolume = volume, rightVolume = volume;
 
-			if (position < 0.5f) { 
-				leftVolume = volume * position * 2.0f; 
-			} else { 
-				rightVolume = volume * (1.0f - (position - 0.5f) * 2.0f); 
+			if (position < 0.5f) {
+				leftVolume = volume * position * 2.0f;
+			} else {
+				rightVolume = volume * (1.0f - (position - 0.5f) * 2.0f);
 			}
-		
+
 			soundPool.play(sounds.get(sound), leftVolume, rightVolume, 1, 0, 1f);
 		}
 	}
-	
+
 	/**
 	 * @return true, if music shall be played, otherwise false
 	 */

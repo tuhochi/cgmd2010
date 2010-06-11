@@ -18,7 +18,7 @@ public class Crosshairs {
 	private static final int WAIT_TIME_BETWEEN_SHOTS = 3000;
 	/** amount of pixels for the maximum recoil position change */
 	private static final int RECOIL_STRENGTH = 50;
-	
+
 	/** the GameScene */
 	private GameScene scene = null;
 	/** the green crosshairs */
@@ -41,7 +41,7 @@ public class Crosshairs {
 	private long timeStamp = -1L;
 	/** timestamp of last shot */
 	private long timeOfLastShot = -1L;
-	
+
 	private AimBar aimBar = null;
 
 	public Crosshairs(GameScene scene, Texture texture, int width, int height) {
@@ -54,25 +54,26 @@ public class Crosshairs {
 
 		spriteGreen = new Sprite(TextureParts.makeCrosshairsGreen(texture));
 		spriteGreen.setCenter(24, 24);
-		
+
 		aimBar = new AimBar(texture);
-		aimBar.setPosition(screenWidth/2, screenHeight/8+aimBar.getHeight()/2);
+		aimBar.setPosition(screenWidth / 2, screenHeight / 8 + aimBar.getHeight() / 2);
 	}
 
 	public void setRabbit(PhysicalObject rabbit) {
-		this.rabbit = (PhysicalRabbit)rabbit;
+		this.rabbit = (PhysicalRabbit) rabbit;
 	}
 
 	public void draw(GL10 gl) {
-		// if the crosshairs are near the rabbit and the time since the last shot has exceeded a given value
+		// if the crosshairs are near the rabbit and the time since the last
+		// shot has exceeded a given value
 		if (isNearRabbit() && allowedToShoot())
 			spriteGreen.draw(gl);
 		else
 			spriteRed.draw(gl);
-		
+
 		// draw the progress of the loading
 		if (this.isLoaded) {
-			aimBar.setProgress(timeStamp > 0 ? Math.min(1.f, (float)(System.currentTimeMillis() - timeStamp) / (float)MILLISECONDS_TO_SHOOT) : 0f);
+			aimBar.setProgress(timeStamp > 0 ? Math.min(1.f, (float) (System.currentTimeMillis() - timeStamp) / (float) MILLISECONDS_TO_SHOOT) : 0f);
 			aimBar.draw(gl);
 		}
 	}
@@ -108,7 +109,8 @@ public class Crosshairs {
 	public boolean isNearRabbit() {
 		float dx = rabbit.getX() - getX();
 		float dy = rabbit.getY() - getY();
-		boolean near = dx*dx + dy*dy < MAX_DISTANCE_2; // if distance < 50 => is near
+		boolean near = dx * dx + dy * dy < MAX_DISTANCE_2; // if distance < 50
+															// => is near
 
 		return near;
 	}
@@ -117,7 +119,7 @@ public class Crosshairs {
 		desiredX = x;
 		desiredY = y;
 	}
-	
+
 	private boolean allowedToShoot() {
 		return (timeOfLastShot == -1 || (System.currentTimeMillis() - timeOfLastShot) > WAIT_TIME_BETWEEN_SHOTS);
 	}
@@ -125,16 +127,18 @@ public class Crosshairs {
 	/**
 	 * move the crosshairs if the rabbit has not landed
 	 * 
-	 * they follow the rabbit if they are near him, otherwise the move in the form of a lying 8
+	 * they follow the rabbit if they are near him, otherwise the move in the
+	 * form of a lying 8
 	 */
 	public void ai() {
 		// if rabbit has landed move out of the screen at the top
 		if (rabbit.hasLanded()) {
-			setDesiredPosition(screenWidth/2, -spriteRed.getHeight());
-		} 
+			setDesiredPosition(screenWidth / 2, -spriteRed.getHeight());
+		}
 		// rabbit is in the air
 		else {
-			// follow the rabbit if crosshairs are near and the last shot wasn't within last 1.5 seconds
+			// follow the rabbit if crosshairs are near and the last shot wasn't
+			// within last 1.5 seconds
 			if (isNearRabbit() && allowedToShoot()) {
 				setDesiredPosition(rabbit.getX(), rabbit.getY());
 
@@ -146,11 +150,11 @@ public class Crosshairs {
 					timeStamp = -1L;
 					isLoaded = false;
 				}
-			} 
+			}
 			// crosshairs are not near the rabbit -> move in form of lying 8
 			else {
-				setDesiredPosition((float)(screenWidth/2 + screenWidth/2.5*Math.sin((double)(System.currentTimeMillis()/4000.))),
-						(float)(screenHeight/2 + screenHeight/3*Math.sin((double)(System.currentTimeMillis()/2000.))));
+				setDesiredPosition((float) (screenWidth / 2 + screenWidth / 2.5 * Math.sin((System.currentTimeMillis() / 4000.))),
+						(float) (screenHeight / 2 + screenHeight / 3 * Math.sin((System.currentTimeMillis() / 2000.))));
 			}
 		}
 
@@ -158,7 +162,7 @@ public class Crosshairs {
 		float dx = desiredX - getX();
 		float dy = desiredY - getY();
 
-		move(dx/220.f, dy/220.f);
+		move(dx / 220.f, dy / 220.f);
 	}
 
 	/**
@@ -193,29 +197,31 @@ public class Crosshairs {
 	public void shoot() {
 		// play shooting sound
 		SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.SHOT, 0.5f);
-		
+
 		// position change caused by recoil of the rifle
-		setY(getY()-RECOIL_STRENGTH);
-		
+		setY(getY() - RECOIL_STRENGTH);
+
 		// if the rabbit was hit, loose one coin
 		if (this.hits(rabbit)) {
 			// loose a coin
 			rabbit.looseCoin();
-			
-			// vibrate after a short period of time (when shot-sound is finished)
+
+			// vibrate after a short period of time (when shot-sound is
+			// finished)
 			(new Thread() {
+				@Override
 				public void run() {
 					try {
 						Thread.sleep(300L);
-					} catch(Exception ex) {}
-					finally {
+					} catch (Exception ex) {
+					} finally {
 						scene.getVibrator().vibrate(100L);
 					}
 				}
 			}).start();
 		}
 	}
-	
+
 	public boolean hits(PhysicalObject o) {
 		// TODO: hit test
 		return true;

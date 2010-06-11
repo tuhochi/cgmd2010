@@ -10,17 +10,20 @@ public class SingleTap implements InputGesture {
 	private float x;
 	/** the y-position of the tap */
 	private float y;
-	
+
 	/**
 	 * creates a Single-Tap
-	 * @param x x-pos
-	 * @param y y-pos
+	 * 
+	 * @param x
+	 *            x-pos
+	 * @param y
+	 *            y-pos
 	 */
 	public SingleTap(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	@Override
 	public float getEndX() {
 		return x;
