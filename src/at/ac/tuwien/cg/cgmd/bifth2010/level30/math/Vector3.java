@@ -92,6 +92,20 @@ public class Vector3
 		}
 	}
 	
+	/**
+	 * Linear Interpolation
+	 */
+	public static Vector3 interpolate (Vector3 p1, Vector3 p2, float t)
+	{
+		float oneMinusT = 1.0f-t;
+		Vector3 res = new Vector3();
+		res.x = p1.x*t + p2.x*(oneMinusT);
+		res.y = p1.y*t + p2.y*(oneMinusT);
+		res.z = p1.z*t + p2.z*(oneMinusT);		
+		return res;
+		
+	}
+	
 	public float length ()
 	{
 		return (float) Math.sqrt (x*x + y*y + z*z);

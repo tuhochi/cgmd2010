@@ -1,17 +1,25 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level30;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.opengl.GLU;
+import android.opengl.GLUtils;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -71,7 +79,19 @@ public class GameWorld extends Thread {
 	private LevelActivity context;
 	private Bundle savedInstance;
 	
+	//for particle system
+	private List<ParticleSystem> particleSystems = new ArrayList<ParticleSystem>();
+	private RenderableQuad quad;
+	private int texCoin; //store texture id
+	private Map<Integer,ArrayList<ParticleSystem>> graphToParticleSystems;
+	
 	boolean quitThread;
+	
+	//keep track of the level state
+	private int gameState = 0;
+
+	//speed of level
+	float progressScale = 0.5f;
 
 	void SetQuitThread(boolean _quitThread)
 	{
@@ -84,12 +104,15 @@ public class GameWorld extends Thread {
 	private boolean playedOutOfTimeWarning = false;
 
 	private void initSounds() {
-	     soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+	     soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 100);
 	     soundPoolMap = new HashMap<Integer, Integer>();
 	     soundPoolMap.put(0, soundPool.load(context, R.raw.l30_yeah, 1));
 	     soundPoolMap.put(1, soundPool.load(context, R.raw.l30_ohno, 1));
 	     soundPoolMap.put(2, soundPool.load(context, R.raw.l30_win, 2));
 	     soundPoolMap.put(3, soundPool.load(context, R.raw.l30_outoftime, 3));
+	     soundPoolMap.put(4, soundPool.load(context, R.raw.l30_click, 1));
+	     soundPoolMap.put(5, soundPool.load(context, R.raw.l30_lose, 3));
+	     soundPoolMap.put(6, soundPool.load(context, R.raw.l30_beep, 2));
 	}
 	          
 	public void playSound(int sound) {
@@ -133,11 +156,15 @@ public class GameWorld extends Thread {
 			} catch (InterruptedException e) {				
 			}
     	}
+    	else
+    	{
+    		playSound(5);  
+    	}
     	
     	class FinishRunnable implements Runnable{
         	@Override
             public void run() {
-                context.finish();
+                context.prepareFinish();
             }
         };
         
@@ -172,7 +199,7 @@ public class GameWorld extends Thread {
 		numElements = 512;
 		elementsPerObject = 6; // two triangles per quad
 		graphWidth = 0.15f;
-		pointDistance = 0.1f;
+		pointDistance = 0.136f;
 		
 		transactionType = new TransactionType[numGraphs];
 		transactionAmount = new float[numGraphs];
@@ -196,7 +223,7 @@ public class GameWorld extends Thread {
 			{		
 				stockMarket[i][j] = current;
 				
-				float next = current + ((float)Math.random()-0.5f)/4.0f;
+				float next = current + ((float)Math.random()-0.5f)/3.0f;
 				
 				//clamp to sane values
 				next = Math.min(Math.max(next,-maxRange), maxRange);
@@ -206,12 +233,19 @@ public class GameWorld extends Thread {
 			stockMarket[i][numElements] = current;
 		}
 		
+		graphToParticleSystems = new  HashMap<Integer,ArrayList<ParticleSystem>>();
+		
+		for (int i=0; i<numGraphs; i++)
+			graphToParticleSystems.put(i, new ArrayList<ParticleSystem>());
+		
+		
+		
         Date date = new Date();
         time = date.getTime();
         oldTime = time;
         
         initSounds();
-
+       
     }	
     
     /*
@@ -233,8 +267,9 @@ public class GameWorld extends Thread {
         time = date.getTime();
         elapsedSeconds = (time - oldTime) / 1000.0f;
         
+        
         float oldProgress = progress;
-        progress += elapsedSeconds/2.0f;
+        progress += elapsedSeconds*progressScale;
         	
         //update the money
         
@@ -245,16 +280,19 @@ public class GameWorld extends Thread {
         	
         	if (transactionType[i] == TransactionType.BUY)
         	{
-        		currentMoney += (newPrice-oldPrice)*200000.0f;
+        		currentMoney += (newPrice-oldPrice)*130000.0f;
         	}        
         }		
         
         moneyChanged(currentMoney);
         
-        if ((progress-5.0)>((float)numElements)*pointDistance)
+        if ((progress+8.5)>((float)numElements)*pointDistance)
         {
         	if (playedOutOfTimeWarning==false)
+        	{
+        		//reduce music volume to make warning audible
         		playSound(3);
+        	}
         	playedOutOfTimeWarning = true;
 		}
         
@@ -265,8 +303,100 @@ public class GameWorld extends Thread {
         
         if (currentMoney<0.0f)
         	isFinished = true;
+		
+        List<ParticleSystem> particleSystemsToDelete = new ArrayList<ParticleSystem>();
+        
+        for(ParticleSystem particleSys: particleSystems)
+		{
+        	particleSys.Update(elapsedSeconds);
+        	
+        	//remove particle systems that have exploded
+        	if (particleSys.ExplosionFinished()==true)
+        	{        		
+        		particleSystemsToDelete.add(particleSys);        		
+        	}
+		}
+        
+        for(ParticleSystem particleSys: particleSystemsToDelete)
+		{
+        	particleSystems.remove(particleSys);
+        	
+        	for (ArrayList<ParticleSystem> systems: graphToParticleSystems.values())
+        	{        		
+        		systems.remove(particleSys);     	
+        	}
+        	
+		}
+        
+        //change level states
+        if ( (gameState==0) && (progress/progressScale > 15.0f) )
+        {        	
+       
+        	gameState = 1;
+        	playSound(6);
+        	ChangeGameState(gameState);
+        }
+        else if ( (gameState==1) && (progress/progressScale > 17.0f) )
+        {
+        	gameState = 2;
+        	ChangeGameState(gameState);        	
+        }
+        else if ( (gameState==2) && (progress/progressScale > 70.0f) )
+        {
+        	playSound(6);
+        	gameState = 3;
+        	ChangeGameState(gameState);        	
+        }      	
+        else if ( (gameState==3) && (progress/progressScale > 72.0f) )
+        {
+        	gameState = 4;
+        	progressScale = 1.2f;
+        	ChangeGameState(gameState);        	
+        }   
+        else if ( (gameState==4) && ((progress+5.0)>((float)numElements)*pointDistance) )
+        {
+        	playSound(6);
+        	gameState = 5;        	
+        	ChangeGameState(gameState);        	
+        }         
+        
+        
         
 	}	
+	
+	public int LoadOneTextures(GL10 gl, int resourceID)
+	{	
+		InputStream is = context.getResources().openRawResource(resourceID);
+		
+		int[] tex = new int[1];		
+		gl.glGenTextures(1, tex, 0);
+		
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, tex[0]); 
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR); 
+		gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR); 
+        
+		Bitmap bitmap;
+        try {
+            bitmap = BitmapFactory.decodeStream(is);
+        } finally {
+            try {
+                is.close();
+            } catch(IOException e) {
+            }
+        }
+
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+        bitmap.recycle();	
+        
+        return tex[0];
+	}
+	
+	public void LoadTextures(GL10 gl)
+	{	
+		texCoin = LoadOneTextures(gl, R.drawable.l30_coin);
+	
+	
+	}
 	
 	/*
 	 * Initialize graphs and OpenGL
@@ -475,8 +605,11 @@ public class GameWorld extends Thread {
         gl.glEnable(GL10.GL_LIGHT1);
         
 		gl.glEnable(GL10.GL_LIGHTING);
-		 
+       
 
+           
+        quad = new RenderableQuad(1.0f,1.0f);        
+        LoadTextures(gl);  
         
         isInitialized = true;
         
@@ -521,6 +654,22 @@ public class GameWorld extends Thread {
 	
 	}
 	
+	private float CalcGraphXCoord(int i)
+	{		
+		float totalWidth = 3.0f;
+		float graphXcoord = ((float)i/(float)(numGraphs-1))*totalWidth - totalWidth/2.0f;
+		graphXcoord = -graphXcoord - graphWidth/2.0f;
+		
+		//move graphs more outward => easier to see
+		if (i<(numGraphs/2))
+		{				
+			graphXcoord+=0.3f;
+		}
+		else
+			graphXcoord-=0.3f;
+		
+		return graphXcoord;
+	}
 
 	/*
 	 * Draw scene
@@ -561,10 +710,15 @@ public class GameWorld extends Thread {
 		float[] black = {0.0f,0.0f,0.0f, 1.0f};
 		float[] grey = {0.1f,0.1f,0.1f, 1.0f};
 		
-		float totalWidth = 3.0f;
+		
 		
 		for (int i=0; i<numGraphs; i++)
 		{
+			if ((gameState<2) && (i>0))
+			{
+				break;
+			}
+			
 			//draw graph
 			//1st: set material
 			switch (i%4)
@@ -577,22 +731,11 @@ public class GameWorld extends Thread {
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, grey,0);
 		
 			//calc offset for graph position		 
-			float graphXcoord = ((float)i/(float)(numGraphs-1))*totalWidth - totalWidth/2.0f;
-			graphXcoord = -graphXcoord - graphWidth/2.0f;
+			float graphXcoord = CalcGraphXCoord(i);
 			
-			//move graphs more outward => easier to see
-			if (i<(numGraphs/2))
-			{				
-				graphXcoord+=0.3f;
-			}
-			else
-				graphXcoord-=0.3f;
-				
-			
-			float graphYcoord = 0.0f;
 			
 			gl.glPushMatrix();			
-			gl.glTranslatef(graphXcoord, graphYcoord, -progress);
+			gl.glTranslatef(graphXcoord, 0.0f, -progress);
 			
 			//Point to our buffers
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer[i]);			
@@ -617,7 +760,7 @@ public class GameWorld extends Thread {
 			//draw quads at current price
 			float price = getCurrentPrice(i);
 			
-			gl.glTranslatef(graphXcoord  + graphWidth/2.0f,price+graphYcoord, 0.0f);
+			gl.glTranslatef(graphXcoord  + graphWidth/2.0f,price, 0.0f);
 			
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferIndicatorLine);			
 			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicatorLine);			
@@ -629,17 +772,70 @@ public class GameWorld extends Thread {
 			gl.glPushMatrix();
 			
 			if (transactionType[i]==TransactionType.BUY)
-				gl.glTranslatef(graphXcoord+graphWidth/2.0f,transactionAmount[i]+graphYcoord, 0.0f);
+				gl.glTranslatef(graphXcoord+graphWidth/2.0f,transactionAmount[i], 0.0f);
 			else
-				gl.glTranslatef(graphXcoord+graphWidth/2.0f,price+graphYcoord, 0.0f);					
+				gl.glTranslatef(graphXcoord+graphWidth/2.0f,price, 0.0f);					
 			
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferIndicator);			
 			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicator);						
 			gl.glDrawArrays(GL10.GL_LINES, 0, 2);			
-			gl.glPopMatrix();				
+			gl.glPopMatrix();		
 			
-			
+			//update particle system positions&sizes		
+	        for(ParticleSystem particleSys: graphToParticleSystems.get(i))
+			{
+	        	particleSys.SetCenter(new Vector3(graphXcoord, price, progress));
+	        	
+	        	//scale size according to ammount of money lost	        	
+	        	float deltaMoney = price-transactionAmount[i];	        	
+	        	particleSys.SetSize(0.05f + Math.min(Math.abs(deltaMoney)*0.2f,0.1f));
+	        	
+	        	//set color
+	        	float deltaMoneyScaled = Math.min(Math.abs(deltaMoney*2.0f),1.0f);
+	        	Vector3 white = new Vector3(1,1,1);
+	        	if (deltaMoney>=0)
+	        	{
+	        		//interpolate between red and white
+	        		Vector3 redV = new Vector3(1,0,0);	 
+	        		particleSys.SetColor(Vector3.interpolate(redV,white, deltaMoneyScaled));
+	        		
+	        	}
+	        	else
+	        	{
+	        		//interpolate between green and white
+	        		Vector3 greenV = new Vector3(0,1,0);	 
+	        		particleSys.SetColor(Vector3.interpolate(greenV,white, deltaMoneyScaled));
+	        	}
+			}
+	        
+	        
 		}
+		
+		//draw the particles
+    	gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+    	gl.glEnable(GL10.GL_BLEND);    	
+    	gl.glEnable(GL10.GL_ALPHA_TEST);
+    	gl.glAlphaFunc(GL10.GL_GREATER, 0.1f);
+    	gl.glDisable(GL10.GL_LIGHTING);
+    	gl.glEnable(GL10.GL_TEXTURE_2D);
+    	gl.glBindTexture(GL10.GL_TEXTURE_2D, texCoin);    	
+    	
+    	gl.glPushMatrix();
+    	gl.glTranslatef(0, 0, -progress);
+    	
+   	
+        for(ParticleSystem particleSys: particleSystems)
+		{
+        	particleSys.Draw(quad, gl);
+		}   
+        
+        gl.glPopMatrix();
+		
+        gl.glDisable(GL10.GL_ALPHA_TEST);
+		gl.glDisable(GL10.GL_TEXTURE_2D);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);		
+		gl.glEnable(GL10.GL_LIGHTING);		
+		gl.glDisable(GL10.GL_BLEND);
 		
 		
 		//Disable the client state before leaving
@@ -708,8 +904,27 @@ public class GameWorld extends Thread {
 			if ((transactionType[graphNum]==TransactionType.SELL)||
 				(transactionType[graphNum]==TransactionType.NOTHING)) //safety guards. only buy one time
 			{
+				playSound(4);
 				transactionType[graphNum]=TransactionType.BUY;	
 				transactionAmount[graphNum] = getCurrentPrice(graphNum);
+				
+				//add a particle system
+				
+		        ParticleSystem particleSys = new ParticleSystem(
+		        		new Vector3(0,0,0), new Vector3(0.05f,0.05f,0.0f), /* position */
+		        		0.1f, 0.05f, /* speed */
+		        		0.1f, 0.05f, /* size */
+		        		0.00f, 0.00f, /* sizeIncrease */
+		        		3.0f, 1.5f, /* lifetime */
+		        		20.0f,/* particlesPerSecond */
+		        		new Vector3(1.0f,1.0f,1.0f) /* color */
+		        		); 
+		        
+		        particleSys.SetCenter(new Vector3(CalcGraphXCoord(graphNum),transactionAmount[graphNum],progress));
+		        
+		        particleSystems.add(particleSys);
+		        graphToParticleSystems.get(graphNum).add(particleSys);
+		        
 			}
 			
 			break;
@@ -723,7 +938,14 @@ public class GameWorld extends Thread {
 					else
 						playSound(0);
 					
-					transactionAmount[graphNum] = 0.0f;
+					transactionAmount[graphNum] = 0.0f;					
+					//make associated particle system explode	
+					
+			        for(ParticleSystem particleSys: graphToParticleSystems.get(graphNum))
+					{
+			        	particleSys.StartExplosion();
+					}   
+					
 				}			
 			break;		
 		}
@@ -764,6 +986,49 @@ public class GameWorld extends Thread {
 	public void onSaveInstanceState(Bundle outState)
 	{	
 	}
+	
+	/*
+	 * Set background music volume
+	 */
+	public void setMusicVolume(float volume)
+	{	
+		class VolumeRunnable implements Runnable{
+	    	float  volume;
+	    	public VolumeRunnable(float  _volume)
+	    	{
+	    		 volume =  _volume;
+	    	}
+	    	@Override
+	        public void run() {
+	            context.setMusicVolume(volume);
+	        }
+	    };        
+	    Runnable volumeRunnable = new VolumeRunnable(volume);
+	    handler.post(volumeRunnable);
+	}
+	
+
+	/*
+	 * Inform the GUI of a game state change
+	 * @state money The current game state
+	 */
+	public void ChangeGameState(int state)
+	{
+		class StateRunnable implements Runnable{
+        	int state;
+        	public StateRunnable(int _state)
+        	{
+        		state = _state;
+        	}
+        	@Override
+            public void run() {
+                context.changeLevelState(state);
+            }
+        };        
+        Runnable stateRunnable = new StateRunnable(state);
+        handler.post(stateRunnable);        
+	}
+	
 	
 	/*
 	 * Call the GUI when the money changes through handlers

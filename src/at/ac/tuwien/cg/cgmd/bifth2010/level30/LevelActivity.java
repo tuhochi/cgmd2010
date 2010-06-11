@@ -1,8 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level30;
 
+import android.R.string;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -24,6 +26,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.GameWorld.TransactionType;
 import at.ac.tuwien.cg.cgmd.bifth2010.level30.math.Vector2;
+import java.util.TimerTask;
+import java.util.Timer;
+
 
 //i shamelessly use the vector math and opengl classes from group 17
 //
@@ -38,6 +43,8 @@ public class LevelActivity extends Activity implements OnClickListener {
 	private ViewGL view;
 	private GameWorld gameWorld;	
 	private TextView uiScoreText;
+	private TextView uiBlinkingText;
+	private TextView uiInstructionText;
 	private Button[] uiButtonBuy;
 	private int buttonWidth;
 	private int money;
@@ -67,12 +74,14 @@ public class LevelActivity extends Activity implements OnClickListener {
         Display d = wm.getDefaultDisplay();
         windowSize = new Vector2((float)d.getWidth(), (float)d.getHeight());
         
-        buttonWidth = d.getWidth()/6;
+        buttonWidth = d.getWidth()/4;
 
         view = new ViewGL(this, windowSize, gameWorld);
         setContentView(view);
         
-        //add ui elements        
+        //add ui elements 
+
+        
         LinearLayout topLayout = new LinearLayout(this);
         topLayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         topLayout.setOrientation(LinearLayout.VERTICAL);
@@ -81,11 +90,35 @@ public class LevelActivity extends Activity implements OnClickListener {
            
         uiScoreText = new TextView(this);
         uiScoreText.setText("1000000$");
-        uiScoreText.setTextSize(25);
+        uiScoreText.setTextSize(29);
         uiScoreText.setGravity(Gravity.CENTER);
         uiScoreText.setTextColor(Color.BLACK);
         
-        topLayout.addView(uiScoreText);
+        uiInstructionText = new TextView(this);
+        uiInstructionText.setText(R.string.l30_intro);
+        uiInstructionText.setTextSize(35);
+        uiInstructionText.setPadding(10, 80, 80, 10);
+        uiInstructionText.setGravity(Gravity.RIGHT);
+        uiInstructionText.setTextColor(Color.BLACK);
+        
+        topLayout.addView(uiScoreText);       
+        topLayout.addView(uiInstructionText);
+        
+        
+        LinearLayout topLayout2 = new LinearLayout(this);
+        topLayout2.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        topLayout2.setOrientation(LinearLayout.VERTICAL);
+        ViewGroup.LayoutParams params2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
+        addContentView(topLayout2, params2);
+        
+        uiBlinkingText = new TextView(this);
+        uiBlinkingText.setText("");
+        uiBlinkingText.setTextSize(100);
+        uiBlinkingText.setGravity(Gravity.CENTER);        
+        uiBlinkingText.setTextColor(Color.RED);
+        uiBlinkingText.setVisibility(View.INVISIBLE);
+        
+        topLayout2.addView(uiBlinkingText);        
         
         uiButtonBuy = new Button[4];
         
@@ -104,7 +137,7 @@ public class LevelActivity extends Activity implements OnClickListener {
         for (int i=0; i<4; i++)
         {
         	uiButtonBuy[i] = new Button(this);
-        	uiButtonBuy[i].setText("BUY");
+        	uiButtonBuy[i].setText(R.string.l30_buy);
         	uiButtonBuy[i].setTextSize(25);
         	uiButtonBuy[i].setGravity(Gravity.CENTER);
         	uiButtonBuy[i].setTextColor(Color.BLACK);
@@ -112,8 +145,10 @@ public class LevelActivity extends Activity implements OnClickListener {
         	buttonLayoutBuy.addView(uiButtonBuy[i]);
         	uiButtonBuy[i].setTag((Integer)i);       	
         	uiButtonBuy[i].setOnClickListener(this);
+        	uiButtonBuy[i].setVisibility(View.INVISIBLE);
         }
             
+        uiButtonBuy[0].setVisibility(View.VISIBLE);
     		
 		SessionState s = new SessionState();
 		s.setProgress(0);		
@@ -126,6 +161,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 		
 	    mp = MediaPlayer.create(this, R.raw.l00_menu);
 	    mp.setLooping(true);
+	    setMusicVolume(0.8f);
 
 	    playMusic();
 	    
@@ -147,21 +183,25 @@ public class LevelActivity extends Activity implements OnClickListener {
 			{
 				int num = (Integer)v.getTag() ;
 				
-				if (b.getText()=="BUY")
+				String buy = (String)getString(R.string.l30_buy);
+				String sell = (String)getString(R.string.l30_sell);
+
+				
+				if (b.getText()==buy)
 				{				
 					//inform gameworld of transaction
 					gameWorld.StockMarketTransaktion(num, TransactionType.BUY);
 		
 					//change button type
 					b.setTextColor(Color.MAGENTA);
-					b.setText("SELL");
+					b.setText(R.string.l30_sell);
 					b.setWidth(buttonWidth);
 				}
-				else if (b.getText()=="SELL")
+				else if (b.getText()==sell)
 				{				
 					gameWorld.StockMarketTransaktion(num, TransactionType.SELL);
 					b.setTextColor(Color.BLACK);
-					b.setText("BUY");
+					b.setText(R.string.l30_buy);
 					b.setWidth(buttonWidth);
 				}
 			}
@@ -189,6 +229,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	 */
 	@Override
 	protected void onPause() {
+		StopBlinkingText();
 	    super.onPause();
 	    view.onPause();
 	    pauseMusic();
@@ -213,6 +254,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	 */
 	@Override
 	protected void onStop() {
+		StopBlinkingText();
 		super.onStop();
 		view.onStop();
 		pauseMusic();
@@ -283,17 +325,42 @@ public class LevelActivity extends Activity implements OnClickListener {
     	}
     }
 
-    
+    /*
+     * Delayed finish
+     */
+    private Runnable delayedFinish = new Runnable() {
+ 	   public void run() { 	      
+ 			pauseMusic();
+ 			finish();
+ 			Log.d("l30","finish");
+ 			}
+ 	   };
+ 	
 	/*
-	 * Called from gameworld through handler. Save state&Quit
+	 * Quit the activity
 	 */
     @Override
-	public void finish() {	
+	public void finish() {
+    		pauseMusic();
+ 			super.finish();
+	}
+    
+	/*
+	 * Called from gameworld through handler. Initiate ending
+	 */
+	public void prepareFinish() {
+    	blinkingTextQuitMode = 1;    	
+    	StopBlinkingText();
+    	pauseMusic();
+    	
+    	uiBlinkingText.setText(R.string.l30_gameover);
+    	uiBlinkingText.setTextSize(50);		
+    	updateProgressResult();	
 		
-		updateProgressResult();
-		pauseMusic();
-		super.finish();
-		Log.d("l30","finish");
+    	if (money>0.0f)
+    		handler.postDelayed(delayedFinish, 4000);
+    	else
+    		handler.postDelayed(delayedFinish, 0);
 	}
 	
 	/*
@@ -308,12 +375,118 @@ public class LevelActivity extends Activity implements OnClickListener {
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
     }
+    
+
+    private boolean blinkingTextShouldQuit = false;
+    private int blinkingTextQuitMode = 0;
+    private Runnable blinkingTextRunnable = new Runnable() {
+    	   public void run() {
+    	       
+	    		if (uiBlinkingText.getVisibility()==View.INVISIBLE)
+	    		{
+	    			Log.d("l30","BlinkingTaskVis");
+	    			uiBlinkingText.setVisibility(View.VISIBLE);
+	    		}
+	    		else
+	    		{
+	    			Log.d("l30","BlinkingTaskInVis");
+	    			uiBlinkingText.setVisibility(View.INVISIBLE);
+	    		}
+	    		
+	    		if (blinkingTextShouldQuit==true)
+	    		{
+	    			if (blinkingTextQuitMode==0)
+	    				uiBlinkingText.setVisibility(View.INVISIBLE);
+	    			else
+	    				uiBlinkingText.setVisibility(View.VISIBLE);
+	    			
+	    			return;
+	    		}
+	    			    	     
+    	       handler.postDelayed(this, 200);
+    	   }
+    	};
+    	
+    
+    private void StartBlinkingText(String text)
+    {
+    	blinkingTextQuitMode = 0;
+    	blinkingTextShouldQuit = false;
+    	Log.d("l30","startBlink");
+    	uiBlinkingText.setText(text);
+    	handler.post(blinkingTextRunnable);   	
+
+    }
+    
+    private void StopBlinkingText()
+    {
+    	Log.d("l30","stopBlink");    	
+    	blinkingTextShouldQuit = true;
+    	
+    }
+    
+	/*
+	 * Change the level state
+	 */
+    public void changeLevelState(int state)
+    {
+    	if (state == 1)
+    	{    
+    		uiInstructionText.setVisibility(View.INVISIBLE); 
+    		//start blinking "more"
+    		StartBlinkingText(getString(R.string.l30_more));
+    	
+    	}
+    	else if (state == 2)
+    	{   
+    		
+    		StopBlinkingText();
+    		//start the "more" modus
+    		
+            for (int i=0; i<4; i++)
+            {
+            	uiButtonBuy[i].setVisibility(View.VISIBLE);
+            }    		
+    	
+    	}    
+    	else if (state == 3)
+    	{       		
+    		//start blinking "faster"
+    		StartBlinkingText(getString(R.string.l30_faster));
+    	
+    	}    
+    	else if (state == 4)
+    	{
+    		//start "faster" modus       		
+    	    mp = MediaPlayer.create(this, R.raw.l30_musicfast);
+    	    mp.setLooping(true);
+    	    setMusicVolume(0.8f);    	    
+    	    playMusic();
+    	    
+    		StopBlinkingText();
+    		 	
+    	}
+    	else if (state == 5)
+    	{    
+    		//start blinking "still money left"
+    		StartBlinkingText(getString(R.string.l30_hurry));    	
+    	}        	
+    	
+    }
 	
     public void playMusic() {
         if (!mp.isPlaying()) {
         	mp.seekTo(0);
         	mp.start();
         }
+    }
+    
+    public void setMusicVolume(float volumeTarget) {
+        if (mp.isPlaying())
+        	{
+    	    
+        		mp.setVolume(volumeTarget,volumeTarget);
+        	}
     }
     
     public void pauseMusic() {
