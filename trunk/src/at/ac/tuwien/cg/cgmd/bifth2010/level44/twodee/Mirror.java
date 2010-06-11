@@ -6,8 +6,5 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
  * @author thp
  */
 public enum Mirror {
-	NONE,
-	HORIZONTAL,
-	VERTICAL,
-	BOTH
+	NONE, HORIZONTAL, VERTICAL, BOTH
 }

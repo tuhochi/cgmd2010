@@ -51,10 +51,14 @@ public class PhysicalRabbit implements PhysicalObject {
 	/**
 	 * Creates the physical object for the Rabbit
 	 * 
-	 * @param rabbit sprite for the rabbit
-	 * @param coinSprite sprite for a dropping coin
-	 * @param screenWidth width of the phone's screen
-	 * @param screenHeight height of the phone's screen
+	 * @param rabbit
+	 *            sprite for the rabbit
+	 * @param coinSprite
+	 *            sprite for a dropping coin
+	 * @param screenWidth
+	 *            width of the phone's screen
+	 * @param screenHeight
+	 *            height of the phone's screen
 	 */
 	public PhysicalRabbit(RabbitSprite rabbit, Sprite coinSprite, int screenWidth, int screenHeight) {
 		this.sprite = rabbit;
@@ -70,12 +74,11 @@ public class PhysicalRabbit implements PhysicalObject {
 		return sprite;
 	}
 
-	
 	/**
-	 * let the rabbit fly
-	 * perform gravitation, movement of flapping wings
+	 * let the rabbit fly perform gravitation, movement of flapping wings
 	 * 
-	 * @param time milliseconds bygone since the last flap of wings
+	 * @param time
+	 *            milliseconds bygone since the last flap of wings
 	 */
 	@Override
 	public void move() {
@@ -172,6 +175,7 @@ public class PhysicalRabbit implements PhysicalObject {
 	 */
 	private void jiggle() {
 		(new Thread() {
+			@Override
 			public void run() {
 				for (int i = 0; i < 30; i++) {
 					if (i % 2 == 0) {
@@ -394,12 +398,14 @@ public class PhysicalRabbit implements PhysicalObject {
 		getSprite().resetWings();
 		clearInputQueue();
 	}
-	
+
 	/**
 	 * changes the boundary-check of the rabbit
-	 * @param check the new value for the boundary-check
+	 * 
+	 * @param check
+	 *            the new value for the boundary-check
 	 */
 	public void setBoundaryCheck(boolean check) {
-		this.boundaryCheck  = check;
+		this.boundaryCheck = check;
 	}
 }

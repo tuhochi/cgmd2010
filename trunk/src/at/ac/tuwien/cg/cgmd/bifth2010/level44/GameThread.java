@@ -8,21 +8,45 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
-import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.IntroBackground;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 
+/**
+ * The Thread running the Game-Logic
+ * 
+ * @author thp
+ * 
+ */
 public class GameThread extends Thread {
+	/** the GameScene where everything happens */
 	private GameScene scene;
+	/** the main character of the game */
 	private PhysicalRabbit rabbit;
+	/** the crosshairs which follow the rabbit */
 	private Crosshairs crosshairs;
+	/** the landscape to draw */
 	private Landscape landscape;
+	/** the timeManager which controls the elapsed time */
 	private TimeManager timeManager;
+	/** the background of the intro-screen */
 	private IntroBackground introBackground;
 	/** is the thread stopped? */
 	private boolean quit;
+	/** the current input-gesture to perform */
 	private InputGesture gesture = null;
 
-	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs, TimeManager timeManager, IntroBackground introBackground) {
+	/**
+	 * Creates the GameScene
+	 * 
+	 * @param scene
+	 * @param rabbit
+	 * @param landscape
+	 * @param crosshairs
+	 * @param timeManager
+	 * @param introBackground
+	 */
+	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs, TimeManager timeManager,
+			IntroBackground introBackground) {
 		this.scene = scene;
 		this.rabbit = (PhysicalRabbit) rabbit;
 		this.crosshairs = crosshairs;
@@ -42,6 +66,10 @@ public class GameThread extends Thread {
 		return rabbit.getCoinCount() == 0 || timeManager.timeIsUp();
 	}
 
+	/**
+	 * the game-logic
+	 */
+	@Override
 	public void run() {
 		while (!quit) {
 			scene.queueEvent(new Runnable() {
@@ -49,11 +77,11 @@ public class GameThread extends Thread {
 					// Currently in Intro-Mode
 					if (scene.getCurrentState().equals(GameScene.CurrentState.INTRO)) {
 						introBackground.step();
-						rabbit.setPosition((float) (scene.getWidth() / 2 + scene.getWidth() / 6 * Math.sin((double) (System.currentTimeMillis() / 10000.))),
-								(float) (scene.getHeight() / 3));
-						rabbit.getSprite().setScale((float) (.5 + .5 * Math.abs(Math.sin((double) (System.currentTimeMillis() / 5000.)))));
-						rabbit.getSprite().setWingAngle((float) (Math.sin((double) (System.currentTimeMillis() / 100.)) * 45));
-						rabbit.getSprite().setRotation((float) (10 - Math.sin((double) (System.currentTimeMillis() / 1000.)) * 20));
+						rabbit.setPosition((float) (scene.getWidth() / 2 + scene.getWidth() / 6 * Math.sin((System.currentTimeMillis() / 10000.))),
+								(scene.getHeight() / 3));
+						rabbit.getSprite().setScale((float) (.5 + .5 * Math.abs(Math.sin((System.currentTimeMillis() / 5000.)))));
+						rabbit.getSprite().setWingAngle((float) (Math.sin((System.currentTimeMillis() / 100.)) * 45));
+						rabbit.getSprite().setRotation((float) (10 - Math.sin((System.currentTimeMillis() / 1000.)) * 20));
 
 						// continue with single-tap
 						if (scene.getNextInputGesture() instanceof SingleTap) {
@@ -113,14 +141,15 @@ public class GameThread extends Thread {
 						if (rabbit.getSprite().getRotation() < -5.f) {
 							rabbit.processGesture(new Swipe(5, 0, scene.getHeight(), 5, Swipe.MAX_VELOCITY, InputGesture.Position.LEFT));
 						} else if (rabbit.getSprite().getRotation() > 5.f) {
-							rabbit.processGesture(new Swipe(scene.getWidth() - 5, scene.getHeight(), scene.getWidth() - 5, 0,Swipe.MAX_VELOCITY, InputGesture.Position.RIGHT));
+							rabbit.processGesture(new Swipe(scene.getWidth() - 5, scene.getHeight(), scene.getWidth() - 5, 0, Swipe.MAX_VELOCITY,
+									InputGesture.Position.RIGHT));
 						} else {
 							rabbit.processGesture(new DoubleTap(4.f, 4.f));
 						}
 
 						rabbit.move();
 						landscape.step();
-						
+
 						/* stars animation */
 						rabbit.getSprite().tick();
 
@@ -175,6 +204,7 @@ public class GameThread extends Thread {
 		// reload after a delay?
 		if (crosshairs.changeLoadingState()) {
 			(new Thread() {
+				@Override
 				public void run() {
 					try {
 						Thread.sleep(400L);

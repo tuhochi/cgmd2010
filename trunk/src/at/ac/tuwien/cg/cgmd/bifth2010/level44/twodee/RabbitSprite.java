@@ -53,7 +53,9 @@ public class RabbitSprite extends SpriteContainer {
 
 	/**
 	 * Creates the whole Sprite for the Rabbit
-	 * @param texture the texture for creating the Sprite
+	 * 
+	 * @param texture
+	 *            the texture for creating the Sprite
 	 */
 	public RabbitSprite(Texture texture) {
 		super(TextureParts.makeRabbitHead(texture));
@@ -117,7 +119,7 @@ public class RabbitSprite extends SpriteContainer {
 	public boolean wingsMovingDown() {
 		return (leftWing.getRotation() < ANGLE_MAX && !leftFlapUp) || (rightWing.getRotation() > -ANGLE_MAX && !rightFlapUp);
 	}
-	
+
 	/**
 	 * @return true, if one of the two wings is moving up currently
 	 */
@@ -156,7 +158,9 @@ public class RabbitSprite extends SpriteContainer {
 
 	/**
 	 * sets the current maximum angle for the left wing
-	 * @param swipeLength the length of the swipe is used for setting the angle max
+	 * 
+	 * @param swipeLength
+	 *            the length of the swipe is used for setting the angle max
 	 */
 	private void setCurrentLeftAngleMax(float swipeLength) {
 		float max = (swipeLength - Swipe.MIN_LENGTH) * ANGLE_QUOTIENT;
@@ -166,7 +170,9 @@ public class RabbitSprite extends SpriteContainer {
 
 	/**
 	 * sets the current maximum angle for the right wing
-	 * @param swipeLength the length of the swipe is used for setting the angle max
+	 * 
+	 * @param swipeLength
+	 *            the length of the swipe is used for setting the angle max
 	 */
 	private void setCurrentRightAngleMax(float swipeLength) {
 		float max = (swipeLength - Swipe.MIN_LENGTH) * ANGLE_QUOTIENT;
@@ -179,7 +185,8 @@ public class RabbitSprite extends SpriteContainer {
 	 * 
 	 * @param swipeLength
 	 *            the length of the swipe (longer swipe -> longer flap)
-	 * @return true, if the flap is finished (wing in top-position again (45 degrees)
+	 * @return true, if the flap is finished (wing in top-position again (45
+	 *         degrees)
 	 */
 	public boolean flapLeftWing(float swipeLength) {
 		float newAngle = leftWing.getRotation();
@@ -211,7 +218,8 @@ public class RabbitSprite extends SpriteContainer {
 	 * 
 	 * @param swipeLength
 	 *            the length of the swipe (longer swipe -> longer flap)
-	 * @return true, if the flap is finished (wing in top-position again (45 degrees)
+	 * @return true, if the flap is finished (wing in top-position again (45
+	 *         degrees)
 	 */
 	public boolean flapRightWing(float swipeLength) {
 		float newAngle = rightWing.getRotation();
@@ -264,6 +272,7 @@ public class RabbitSprite extends SpriteContainer {
 	/**
 	 * @return the width of the Rabbit-Sprite
 	 */
+	@Override
 	public float getWidth() {
 		return 50.f;
 	}
@@ -271,14 +280,18 @@ public class RabbitSprite extends SpriteContainer {
 	/**
 	 * @return the height of the Rabbit-Sprite
 	 */
+	@Override
 	public float getHeight() {
 		return 60.f;
 	}
 
 	/**
 	 * check if the rabbit is under a specific position
-	 * @param y the position to check against
-	 * @return true, if the lower bound of the rabbit is under the specific position
+	 * 
+	 * @param y
+	 *            the position to check against
+	 * @return true, if the lower bound of the rabbit is under the specific
+	 *         position
 	 */
 	public boolean isUnder(float y) {
 		return this.getY() + this.getHeight() > y;
