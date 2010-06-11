@@ -53,7 +53,7 @@ public class LevelActivity extends Activity {
 			SoundPlayer.createInstance(getApplicationContext(), false);
 		}
 		
-		System.out.println("Music: " + SoundPlayer.getInstance().isMusicOn());
+		System.out.println("##### Music: " + SoundPlayer.getInstance().isMusicOn());
 
 		scene = new GameScene(this);
 		
