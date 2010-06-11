@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<integer name="l20_level_time">60</integer>
-	<integer name="l20_scroll_speed">200</integer>
-	<integer name="l20_animation_speed">5</integer>
+	<integer name="l20_scroll_speed">25</integer>
+	<integer name="l20_animation_speed">40</integer>
 	<integer name="l20_shopping_cart_default_size">290</integer>
 	<integer name="l20_shopping_cart_bb_default_size_x">200</integer>
 	<integer name="l20_shopping_cart_bb_default_size_y">120</integer>
@@ -10,12 +10,22 @@
 	<integer name="l20_product_default_size">64</integer>
 	<integer name="l20_product_bb_default_size_x">120</integer>
 	<integer name="l20_product_bb_default_size_y">100</integer>
-	<integer name="l20_product_distance">100</integer>
+	<integer name="l20_product_distance">80</integer>
 	<integer name="l20_product_spawn_y_0">425</integer>
 	<integer name="l20_product_spawn_y_1">324</integer>
 	<integer name="l20_product_spawn_y_2">223</integer>
 	<integer name="l20_obstacle_size">180</integer>
 	<integer name="l20_bunny_size">136</integer>
-	<integer name="l20_crash_duration">5</integer> <!-- in seconds -->				
-	<bool name="l20_endgame">false</bool>
+	<integer name="l20_bunny_x">20</integer>
+	<integer name="l20_bunny_y">5</integer>
+	<integer name="l20_bunny_max_x">250</integer>
+	<integer name="l20_bunny_speed">10</integer>
+	<integer name="l20_bubble_size">182</integer>
+	<integer name="l20_crash_duration">5</integer> <!-- in seconds -->
+	<integer name="l20_particle_speed">4</integer>
+	<integer name="l20_particle_count">15</integer> 
+	<integer name="l20_particle_size">20</integer>						
+	<integer name="l20_particle_life">1000</integer>
+	<bool name="l20_catch_mode">true</bool>
+	<bool name="l20_endgame">true</bool>
 </resources>

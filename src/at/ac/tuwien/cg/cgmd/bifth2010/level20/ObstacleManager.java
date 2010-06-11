@@ -59,7 +59,7 @@ public class ObstacleManager {
 	 * @param dt 	 The passed time since the last update in milliseconds.
 	 * @param scroll The distance to move the obstacle along the x axis.
 	 * */
-	public void update(float dt, float scroll) {
+	public void update(float dt, float scroll) {		
 		if (!obstacle.visible || crashed) {
 			updateTime += dt;
 		}			
@@ -101,7 +101,9 @@ public class ObstacleManager {
 	public void touchEvent(float x, float y) {
 		if (obstacle.hitTest(x, y)) {
 			nAvoidedObstacles++;
+			obstacle.clickable = false;		
 			removeObstacle();
+			EventManager.getInstance().dispatchEvent(EventManager.OBSTACLE_AVOIDED, obstacle);
 		}
 	
 	}
@@ -114,7 +116,8 @@ public class ObstacleManager {
 	}
 
 	private void spawnObstacle() {
-		obstacle.visible = true;		
+		obstacle.visible = true;	
+		obstacle.clickable = true;
 	}
 
 	public void createObstacle(GL10 gl) {		
@@ -130,5 +133,9 @@ public class ObstacleManager {
 	
 	public void render(GL10 gl) {
 		obstacle.render(gl);	
+	}
+	
+	public void setCrashPosition(ShoppingCart cart) {
+		crashPosition = cart.x + cart.width*0.5f - LevelActivity.renderView.getWidth()*0.1f;
 	}
 }

@@ -131,6 +131,7 @@ public class ProductManager{
 			
 			// If animated, they are updated elsewhere
 			if (pe.animated) {
+				
 				continue;
 			}
 			
@@ -206,18 +207,15 @@ public class ProductManager{
 		
 		
 		Enumeration<Integer> keys = products.keys();		
-		while(keys.hasMoreElements()) {
-			
+		while(keys.hasMoreElements()) {			
 			ProductEntity pe = products.get(keys.nextElement());
 			
-			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {
-				
+			if (pe.visible && pe.clickable && pe.hitTest(x, y)) {				
 				pe.clickable = false;				
 				EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_COLLECTED, pe);
 				
 				//Mark neighbors as not clickable too
-				for (int i = 0; i < pe.neighbors.length; i++) {
-					
+				for (int i = 0; i < pe.neighbors.length; i++) {					
 					ProductEntity ne = products.get(pe.neighbors[i]);
 					ne.clickable = false;
 					
@@ -245,19 +243,20 @@ public class ProductManager{
 
 		// The product icons are optimized for a screen resolution of 800 x 480. Calculate the scale factor the items if the resolution is different.
 		float productSize = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_default_size);
-		productSize *= height / 480.0f;
+		productSize *= GameManager.screenRatio;
 		
 		// Calc bounding box size
 		float bbX = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_bb_default_size_x);
 		float bbY = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_bb_default_size_y);
-		bbX *= height / 480.0f;
-		bbY *= height / 480.0f;
+		bbX *= GameManager.screenRatio;
+		bbY *= GameManager.screenRatio;
 		
-		for (int i = 0; i < NUMBER_PRODUCTS; i++) {
-			
+		for (int i = 0; i < NUMBER_PRODUCTS; i++) {			
 			// TODO: Spawn rare products more often
 			int productType = (int)(Math.random() * ProductInfo.length);
-			ProductEntity pe = ProductInfo.createEntity(productType, productSpawnX, productSpawnY[i], 1, productSize);
+			// Try: Little offset so the products aren't in a straight line (not so boring)
+			float offset = (float) (Math.random()-0.5f * GameManager.screenRatio * 20f);
+			ProductEntity pe = ProductInfo.createEntity(productType, productSpawnX + offset, productSpawnY[i], 1, productSize);
 			pe.setBBDim(bbX, bbY);
 			
 			// Declaring neighbors
@@ -266,14 +265,11 @@ public class ProductManager{
 			for (int j = 0; j < NUMBER_PRODUCTS; j++) {
 				
 				// Don't mark yourself as neighbor
-				if (i != j) {
-				
+				if (i != j) {				
 					pe.neighbors[nIndex] = pe.id + j - i;
 					nIndex++;
 				}
-			}
-			
-			
+			}						
 			products.put(pe.id, pe);
 		}	
 	}
@@ -296,6 +292,29 @@ public class ProductManager{
 		movingShoppingCart.texture = LevelActivity.renderView.getTexture(RenderView.TEXTURE_CART);
 		movingShoppingCart.bb_hWidth = LevelActivity.gameManager.shoppingCarts[0].bb_hWidth;
 		movingShoppingCart.bb_hHeight = LevelActivity.gameManager.shoppingCarts[0].bb_hHeight;
+	}
+	
+	/** 
+	 * Performs a collision test with the animated products that might intersect the shopping cart.
+	 * @param cart The shopping cart to perform the test with.
+	 */
+	public void collisionTest(ShoppingCart cart) {
+		Enumeration<Integer> keys = products.keys();		
+		while(keys.hasMoreElements()) {
+			
+			ProductEntity pe = products.get(keys.nextElement());
+			
+			// Product was collected and is falling down.
+			if (pe.animated) {
+				float halfWidth = pe.width * 0.5f;
+				float halfHeight = pe.height * 0.5f;
+				//if (cart.collisionTest(pe.x-halfWidth, pe.y-halfHeight, pe.x+halfWidth, pe.y+halfHeight)) {
+				if (cart.hitTest(pe.x, pe.y)) {
+					EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_HIT_CART, pe);
+				}
+				
+			}
+		}
 	}
 }
 	

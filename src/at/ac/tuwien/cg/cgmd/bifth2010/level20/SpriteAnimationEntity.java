@@ -33,7 +33,12 @@ public class SpriteAnimationEntity extends RenderEntity {
 	protected boolean crashed;
 	/** Displays a cursing speech balloon for the bunny on crashes. */
 	protected RenderEntity curseBubble;
-	
+	/** The minimal position the bunny can move.*/
+	protected float minPosX;
+	/** The maximal position the bunny can move.*/
+	protected float maxPosX;
+	/** The movement speed of the bunny. */
+	protected float speed;
 
 	/**
 	 * Constructor of the class <code>SpriteAnimationEntity</code>.
@@ -50,7 +55,10 @@ public class SpriteAnimationEntity extends RenderEntity {
 		fps = 10;
 		timePassed = 0;
 		updateTime = 1.f/fps;	
-		crashDuration = LevelActivity.instance.getResources().getInteger(R.integer.l20_crash_duration) * 1000;
+		minPosX = x;
+		speed = 10;
+		maxPosX = minPosX + 200*GameManager.screenRatio;
+		crashDuration = LevelActivity.instance.getResources().getInteger(R.integer.l20_crash_duration);
 	}
 	
 	/**
@@ -70,7 +78,7 @@ public class SpriteAnimationEntity extends RenderEntity {
 	 * @param dt	The passed time since the last update.
 	 */
 	public void update(float dt) {
-		timePassed += dt;
+		timePassed += (dt/1000.f);
 		if(crashed)
 		{
 			if (timePassed >= crashDuration) {
@@ -84,6 +92,17 @@ public class SpriteAnimationEntity extends RenderEntity {
 				texture = textureIds[textureIdx];
 				timePassed = updateTime;
 				updateTime += 1.f/fps;
+			}
+			
+			// move the bunny
+			// TODO: find more robust solution. gets stuck some time.
+			if (GameManager.catchMode) {
+				if (x >= maxPosX || x <= minPosX) {
+					speed *= -1;
+				}
+				float pos = speed * dt / 1000f; 
+				x += pos;
+				curseBubble.x += pos;
 			}
 		}		
 	}

@@ -23,8 +23,8 @@ public class EventManager {
 	public static final int SHOPPING_CART_COLLECTED = 3;
 	public static final int OBSTACLE_CRASH = 4;
 	public static final int BUNNY_RUN = 5;
-//	public static final int SHOPPING_CART_IN_PLACE = 4;
-	
+	public static final int OBSTACLE_AVOIDED = 6;	
+	public static final int PRODUCT_HIT_CART = 7;	
 	
 	/**
 	 * The singleton instance of the event manager.

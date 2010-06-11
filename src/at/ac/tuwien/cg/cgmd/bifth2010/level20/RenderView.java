@@ -43,9 +43,9 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
        public void run() {
    			// TODO: Somehow,the rounding doesn't work 
    			float money = ((int)(LevelActivity.gameManager.totalMoney * 100)) * 0.01f;
-	   		moneyText.setText("Money: " + money + "$");
+	   		moneyText.setText(money + "$");
 	   		int time = (int)(LevelActivity.gameManager.remainingTime * 0.001f);
-	   		timeText.setText("Time: " + time);
+	   		timeText.setText("" + time);
        }
 	};
 	
@@ -149,6 +149,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 //			Log.d(getClass().getSimpleName(), "RenderView created");
 		} else {
 			LevelActivity.gameManager.reCreateEntities(gl);
+			LevelActivity.gameManager.resume();
 //			Log.d(getClass().getSimpleName(), "RenderView reCreated");
 		}
 	}
@@ -213,14 +214,6 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		// Render shopping carts
 		for (int i = 0; i < gameManager.shoppingCarts.length; i++) {			
 			if (gameManager.shoppingCarts[i] != null) {
-				
-				// Render shopping cart products
-				keys = gameManager.shoppingCarts[i].entities.keys();				
-				while(keys.hasMoreElements()) {
-					gameManager.shoppingCarts[i].entities.get(keys.nextElement()).render(gl);
-				}
-				
-				// And SC itself
 				gameManager.shoppingCarts[i].render(gl);
 			}
 		}
@@ -230,6 +223,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		}
 					
 		gameManager.bunny.render(gl);
+		gameManager.particleEngine.render(gl);
 		gameManager.textSprites.render(gl);
 		
 		// After all rendering is complete, update the UI TextViews
@@ -257,6 +251,7 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		startButton.setVisibility(GLSurfaceView.INVISIBLE);
 		startButton.setClickable(false);		
 		running = true;
+		LevelActivity.gameManager.resume();
 	}
 
 	
@@ -283,7 +278,6 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		descriptionText.setVisibility(GLSurfaceView.VISIBLE);
 		startButton.setVisibility(GLSurfaceView.VISIBLE);
 		startButton.setClickable(true);
-
 		super.onResume();
 	}
 

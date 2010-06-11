@@ -29,12 +29,16 @@ public class ShoppingCart extends RenderEntity implements Clickable {
 	 */
 	public ShoppingCart(float x, float y, float z, float width, float height) {
 		super(x, y, z, width, height);
- 
 		entities = new Hashtable<Integer, ProductEntity>();
 	}
 	
 	@Override
-	public void render(GL10 gl) {		
+	public void render(GL10 gl) {	
+		// Render shopping cart products
+		Enumeration<Integer> keys = entities.keys();				
+		while(keys.hasMoreElements()) {
+			entities.get(keys.nextElement()).render(gl);
+		}
 		
 		super.render(gl);
 	}
@@ -71,6 +75,18 @@ public class ShoppingCart extends RenderEntity implements Clickable {
 		pos[0] = (float) (x - width + Math.random()* width*2);
 		pos[1] = y + row*15;
 		return pos;
+	}
+
+	public void update(float bunnyPos) {
+		float oldPos = x;
+		x = bunnyPos + width*0.45f;
+		float posDiff = x - oldPos;
+		
+		// Reposition shopping cart products.
+		Enumeration<Integer> keys = entities.keys();				
+		while(keys.hasMoreElements()) {
+			entities.get(keys.nextElement()).x += posDiff;
+		}
 	}
 	
 }

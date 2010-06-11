@@ -51,13 +51,15 @@ public class Animator {
 		if (re == null)
 			return;
 		
+		float curSpeed = speed * (dt/1000.f);
+		
 		// Do a straight line		
 		float dx = destX - re.x;
 		float dy = destY - re.y;
 		
 		float dist = dx*dx + dy*dy;
 		
-		if (dist <= speed * speed) {
+		if (dist <= curSpeed * curSpeed) {
 			re.setPos(destX, destY);			
 
 			// Trigger an event or whatever
@@ -67,7 +69,7 @@ public class Animator {
 		}
 		
 		// Fasten up calculation by pre multiplying speed :P
-		dist = speed / (float)Math.sqrt(dist);
+		dist = curSpeed / (float)Math.sqrt(dist);
 		
 		dx *= dist;
 		dy *= dist;
