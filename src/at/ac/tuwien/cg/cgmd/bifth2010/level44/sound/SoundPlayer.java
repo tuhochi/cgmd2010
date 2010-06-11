@@ -27,6 +27,8 @@ public class SoundPlayer {
 	private boolean musicOn = true;
 	/** Singleton-Object */
 	private static SoundPlayer instance = null;
+	/** the Context */
+	private static Context context = null;
 
 	/**
 	 * create the Singleton-Object
@@ -35,6 +37,7 @@ public class SoundPlayer {
 	 */
 	public static void createInstance(Context context, boolean musicOn) {
 		if (instance == null) {
+			setContext(context);
 			instance = new SoundPlayer(context, musicOn);
 		}
 	}
@@ -49,6 +52,14 @@ public class SoundPlayer {
 	}
 	
 	/**
+	 * set the context 
+	 * @param c the new context
+	 */
+	public static void setContext(Context c) {
+		SoundPlayer.context = c;
+	}
+	
+	/**
 	 * internally creates the Soundplayer
 	 * @param context the context of the SoundPlayer
 	 */
@@ -57,12 +68,7 @@ public class SoundPlayer {
 		sounds = new HashMap<SoundEffect, Integer>();
 
 		// add all supported sounds
-		sounds.put(SoundEffect.LOAD, soundPool.load(context, R.raw.l44_load, 1));
-		sounds.put(SoundEffect.SHOT, soundPool.load(context, R.raw.l44_shot, 1));
-		sounds.put(SoundEffect.FLAP, soundPool.load(context, R.raw.l44_flap, 1));
-		sounds.put(SoundEffect.DROP, soundPool.load(context, R.raw.l44_drop, 1));
-		sounds.put(SoundEffect.BEEP, soundPool.load(context, R.raw.l44_beep, 1));
-		sounds.put(SoundEffect.END, soundPool.load(context, R.raw.l44_endding, 1));
+		reloadSounds();
 
 		// get system volume
 		AudioManager mgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -75,7 +81,24 @@ public class SoundPlayer {
 	 * releases the memory and resources
 	 */
 	public void release() {
-		soundPool.release();
+		if (soundPool != null) {
+			soundPool.release();
+			soundPool = null;
+		}
+		
+		instance = null;
+	}
+	
+	/**
+	 * reload all sound samples
+	 */
+	public void reloadSounds() {
+		sounds.put(SoundEffect.LOAD, soundPool.load(context, R.raw.l44_load, 1));
+		sounds.put(SoundEffect.SHOT, soundPool.load(context, R.raw.l44_shot, 1));
+		sounds.put(SoundEffect.FLAP, soundPool.load(context, R.raw.l44_flap, 1));
+		sounds.put(SoundEffect.DROP, soundPool.load(context, R.raw.l44_drop, 1));
+		sounds.put(SoundEffect.BEEP, soundPool.load(context, R.raw.l44_beep, 1));
+		sounds.put(SoundEffect.END, soundPool.load(context, R.raw.l44_endding, 1));
 	}
 
 	/**
