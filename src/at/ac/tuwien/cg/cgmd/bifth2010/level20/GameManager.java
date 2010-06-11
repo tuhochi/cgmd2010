@@ -74,6 +74,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	/** Our collection of shopping carts */
 	protected ShoppingCart[] shoppingCarts;
 	
+	/** The pop-ups for discounts. */
+	protected RenderEntity[] discountPopUps;
+	
 	/** The amount of shopping carts */
 	protected int nShoppingCarts;
 	
@@ -124,6 +127,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		animators = new Hashtable<Integer, Animator>();
 		shoppingCarts = new ShoppingCart[3];
 		nShoppingCarts = 0;
+		
+		discountPopUps = new RenderEntity[3];
 		
 		EventManager.getInstance().addListener(this);			
 		
@@ -218,6 +223,14 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		shoppingCarts[0].setBBDim(bbX, bbY);
 		nShoppingCarts = 1;
 		
+		// Discount Pop-Ups.
+		discountPopUps[0] = new RenderEntity(cartPos, cartPosY, 2, shoppingCartSize, shoppingCartSizeY);
+		discountPopUps[0].texture = renderView.getTexture(R.drawable.l20_discount, gl);
+		discountPopUps[0].visible = false;
+		discountPopUps[1] = new RenderEntity(cartPos, cartPosY, 2, shoppingCartSize, shoppingCartSizeY);
+		discountPopUps[1].texture = renderView.getTexture(R.drawable.l20_discount1, gl);
+		discountPopUps[1].visible = false;
+		
 		// Set crash pos for obstacle to the right of the shopping cart.
 		obstacleManager.setCrashPosition(shoppingCarts[0]);	
 		
@@ -278,6 +291,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		texIds[1] = renderView.getTexture(R.drawable.l88_stash_orange, gl);		
 		//texIds[2] = renderView.getTexture(R.drawable.l88_stash_red, gl);
 		particleEngine.textureIds = texIds;
+		
+		// Discount Pop-Ups.
+		discountPopUps[0].texture = renderView.getTexture(R.drawable.l20_discount, gl);
+		discountPopUps[1].texture = renderView.getTexture(R.drawable.l20_discount1, gl);
 	}
 
 
@@ -468,20 +485,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				float productPrice = ProductInfo.price(pe.type); 
 				totalMoney -= productPrice;
 				
-				// Get and animate number sprite.
-				RenderEntity numberSprite = textSprites.getNumberSprite((int)productPrice);
-				RenderEntity plusSprite = textSprites.getCharSprite("-");
-				numberSprite.x = pe.x + (((float)Math.random()-0.5f)*10);
-				numberSprite.y = pe.y + (((float)Math.random()-0.5f)*10);
-				plusSprite.x = numberSprite.x - numberSprite.width;
-				plusSprite.y = numberSprite.y;
-				plusSprite.visible = true;
-				numberSprite.visible = true;
-				Animator spriteAnim = new Animator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.1f);
-				spriteAnim.random(150);
-				Animator plusAnim = new Animator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);
-				animators.put(numberSprite.id, spriteAnim);
-				animators.put(plusSprite.id, plusAnim);
+				createTextAnimation(pe.x, pe.y, "-", (int)productPrice);
 				
 				// This prevents displaying a negative money count and exits the game.
 				if (totalMoney <= 0) {
@@ -522,20 +526,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				float productPrice = ProductInfo.price(pe.type); 
 				totalMoney -= productPrice;
 				
-				// Get and animate number sprite.
-				RenderEntity numberSprite = textSprites.getNumberSprite((int)productPrice);
-				RenderEntity plusSprite = textSprites.getCharSprite("-");
-				numberSprite.x = pe.x + (((float)Math.random()-0.5f)*10);
-				numberSprite.y = pe.y + (((float)Math.random()-0.5f)*10);
-				plusSprite.x = numberSprite.x - numberSprite.width;
-				plusSprite.y = numberSprite.y;
-				plusSprite.visible = true;
-				numberSprite.visible = true;
-				Animator spriteAnim = new Animator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.1f);
-				spriteAnim.random(150);
-				Animator plusAnim = new Animator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);
-				animators.put(numberSprite.id, spriteAnim);
-				animators.put(plusSprite.id, plusAnim);
+				createTextAnimation(pe.x, pe.y, "-", (int)productPrice);
 				
 				// This prevents displaying a negative money count and exits the game.
 				if (totalMoney <= 0) {
@@ -614,6 +605,71 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				animators.remove(key);
 			}
 		}
+	}
+
+
+	/**
+	 * Renders all objects the GameManager is responsible for.
+	 * @param gl The OpengGL Context to render to. 
+	 * */
+	public void render(GL10 gl) {
+		// Render all objects individually. NOTE: No more stacked renders
+		shelf.render(gl);		
+		obstacleManager.render(gl);	
+		
+		// Render products.	
+		Enumeration<Integer> keys = productManager.products.keys();
+		while(keys.hasMoreElements()) {
+			productManager.products.get(keys.nextElement()).render(gl);
+		}	
+		
+		
+		// Render shopping carts
+		for (int i = 0; i < shoppingCarts.length; i++) {			
+			if (shoppingCarts[i] != null) {
+				shoppingCarts[i].render(gl);
+			}
+		}
+		
+		if (productManager.movingShoppingCart != null) {
+			productManager.movingShoppingCart.render(gl);
+		}
+					
+		
+		bunny.render(gl);
+		for(int i = 0; i < discountPopUps.length; i++) {
+			if (null != discountPopUps[i]) {
+				discountPopUps[i].render(gl);
+			}
+		}
+		
+		particleEngine.render(gl);
+		textSprites.render(gl);
+		
+	}
+	
+	/** 
+	 * Creates an animated text sprite.
+	 * @param x The x origin.
+	 * @param y The y origin.
+	 * @param sign The first character (either '+' or '-').
+	 * @param number The number to animate.
+	 */
+	public void createTextAnimation(float x, float y, String sign, int number) {
+		// Get and animate number sprite.
+		RenderEntity numberSprite = textSprites.getNumberSprite(number);
+		RenderEntity plusSprite = textSprites.getCharSprite(sign);
+		numberSprite.x = x + (((float)Math.random()-0.5f)*10);
+		numberSprite.y = y + (((float)Math.random()-0.5f)*10);
+		plusSprite.x = numberSprite.x - numberSprite.width;
+		plusSprite.y = numberSprite.y;
+		plusSprite.visible = true;
+		numberSprite.visible = true;
+		Animator spriteAnim = new Animator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.1f);
+		spriteAnim.random(150);
+		Animator plusAnim = new Animator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);
+		animators.put(numberSprite.id, spriteAnim);
+		animators.put(plusSprite.id, plusAnim);
 	}
 
 }
