@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.media.MediaPlayer.OnErrorListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
@@ -16,40 +18,47 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  * @author Ferdinand Pilz
  * @author Reinhard Sprung
  * @author level13
+ * @author level33
  */
 public class SoundManager {
 	
 	/** Enumeration of used sounds. **/
-	protected enum SOUNDS { RUN, LAUGH_1, LAUGH_2, LAUGH_3, CRASH };
-	/** Number of used sounds. */
-	private int nSounds;	
+	protected enum SOUNDS { LAUGH_1, LAUGH_2, LAUGH_3, CRASH };
+	/** MediaPlayer responsible for playing the background music. */
+	private MediaPlayer musicPlayer;
+	/** MediaPlayer responsible for playing the running sound. */
+	private MediaPlayer runningPlayer;
 	/** Necessary for playing sounds. **/
 	private SoundPool soundPool;
 	/** Stores the loaded sounds. */
-	private HashMap<SOUNDS, Integer> sounds;
-	
-	private int musicID;
+	private HashMap<SOUNDS, Integer> sounds;	
 	/** Flag indicating if sound is en-/disabled. */
 	private boolean soundOn;
-	/** Flag whether music was initialized. */
-	private boolean musicInit = false;	
+	/** The global volume of the sounds and music. */
+	float volume;
 	
 	public SoundManager(Context context) {
 		soundOn = true;
-		musicInit = false;
-		nSounds = 5;
-		sounds = new HashMap<SOUNDS, Integer>(nSounds);
-		init();
+		volume = 1.0f;
+		sounds = new HashMap<SOUNDS, Integer>(SOUNDS.values().length);
+		init(context);
 	}
-
 	
+
 	/**
 	 * Initializes the SoundManager.
+	 * @param context The context of the game.
 	 */
-	private void init()
+	private void init(Context context)
 	{
-		soundPool = new SoundPool(nSounds, AudioManager.STREAM_MUSIC, 100);
+		soundPool = new SoundPool(SOUNDS.values().length, AudioManager.STREAM_MUSIC, 100);
 		loadSounds(LevelActivity.instance);
+		
+		musicPlayer = MediaPlayer.create(context, R.raw.l20_music);
+		musicPlayer.setLooping(true);	
+		
+		runningPlayer = MediaPlayer.create(context, R.raw.l20_bunny_run);
+		runningPlayer.setLooping(true);			
 		
 		// Get the calling intent & the session state
 		Intent callingIntent = LevelActivity.instance.getIntent();
@@ -58,7 +67,11 @@ public class SoundManager {
 		if (state != null) {
 			soundOn = state.isMusicAndSoundOn(); 
 		}		
-		soundOn = true;		
+		
+		AudioManager audioM = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+		volume = (float)audioM.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		musicPlayer.setVolume(volume, volume);
+		runningPlayer.setVolume(volume*0.3f, volume*0.3f);
 	}
 	
 	/**
@@ -66,12 +79,11 @@ public class SoundManager {
 	 * @param context The context needed to load the resources.
 	 */
 	private void loadSounds(Context context)
-	{			
-		sounds.put(SOUNDS.RUN, soundPool.load(context,R.raw.l20_bunny_run,1));
-		sounds.put(SOUNDS.LAUGH_1, soundPool.load(context,R.raw.l20_bunny_laugh1,1));
-		sounds.put(SOUNDS.LAUGH_2, soundPool.load(context,R.raw.l20_bunny_laugh2,2 ));
+	{	
+		sounds.put(SOUNDS.LAUGH_1, soundPool.load(context,R.raw.l20_bunny_laugh1, 1));
+		sounds.put(SOUNDS.LAUGH_2, soundPool.load(context,R.raw.l20_bunny_laugh2, 1));
 		sounds.put(SOUNDS.LAUGH_3, soundPool.load(context, R.raw.l20_bunny_laugh3, 1));
-		sounds.put(SOUNDS.CRASH, soundPool.load(context, R.raw.l20_bunny_crash, 1));
+		sounds.put(SOUNDS.CRASH, soundPool.load(context, R.raw.l20_bunny_crash, 2));
 		
 	}
 	
@@ -92,29 +104,13 @@ public class SoundManager {
 	{
 		if (soundOn)
 		{
-			if(sound == SOUNDS.RUN && !musicInit ){
-				musicInit = true;
-				musicID = soundPool.play(sounds.get(sound), 1.0f, 1.0f, 1, -1, 1.0f);
-			}else if(sound == SOUNDS.RUN){
-				soundPool.resume(musicID);
-			}else{
-				soundPool.play(sounds.get(sound), 1.0f, 1.0f, 1, 0, 1.0f);
-			}
+			soundPool.play(sounds.get(sound), volume, volume, 1, 0, 1.0f);
 		}
 	}
-	
-	/** Stops the continuously playing background sound. */
-	public void stopMusic(){
-		soundPool.stop(musicID);	
-	}
-	
-	/** Pauses the continuously playing background sound. */
-	public void pauseMusic(){
-		soundPool.pause(musicID);		
-	}
+
 	
 	/** Plays a laughing sound. */
-	public void laugh() {
+	public void laugh() {		
 		int laugh = ((int)(Math.random() * 10)) % 3;
 		switch (laugh) {
 		case 0:
@@ -131,4 +127,87 @@ public class SoundManager {
 		}
 	}
 	
+	/** Stops running sounds.*/
+	public void stopSounds() {
+		stopMusic();
+		stopRunSound();
+	}
+	
+	/**
+	 * Starts the MediaPlayer which plays the background music.
+	 */
+	public void startMusic() {		
+		if (soundOn && musicPlayer != null && !musicPlayer.isPlaying())
+		{
+			musicPlayer.start();
+		}
+	}
+	
+	/**
+	 * Pauses the MediaPlayer which plays the background music.
+	 */
+	public void pauseMusic() {		
+		if(musicPlayer != null && musicPlayer.isPlaying())
+			musicPlayer.pause();
+		
+	}
+	
+	/**
+	 * Resumes the MediaPlayer which plays the background music.
+	 */
+	public void resumeMusic() {		
+		if(soundOn &&  musicPlayer != null && !musicPlayer.isPlaying())
+			musicPlayer.start();		
+	}
+	
+	/**
+	 * Stops the MediaPlayer which plays the background music.
+	 */
+	public void stopMusic() {		
+		if(musicPlayer != null)
+			musicPlayer.stop();		
+	}
+	
+	/**
+	 * Starts the MediaPlayer which plays the background music.
+	 */
+	public void startRunSound() {		
+//		if(runningPlayer != null && !runningPlayer.isPlaying() )
+//		{
+//			runningPlayer.start();
+//		}
+	}
+	
+	
+	/**
+	 * Stops the MediaPlayer which plays the background music.
+	 */
+	public void stopRunSound() {		
+		if(runningPlayer != null)
+			runningPlayer.stop();		
+	}
+	
+	/**
+	 * Releases the MediaPlayer which plays the background music.
+	 */
+	public void destroy() {
+		
+		//Stop music if it's running
+		if (musicPlayer != null ) {
+			if (musicPlayer.isPlaying())
+				musicPlayer.stop();
+			musicPlayer.release();
+			musicPlayer = null;
+		}
+		if (runningPlayer != null ) {
+			if (runningPlayer.isPlaying())
+				runningPlayer.stop();
+			runningPlayer.release();
+			runningPlayer = null;
+		}
+		
+		//Release the SoundPool
+		soundPool.release();
+		
+	}
 }

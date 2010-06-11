@@ -145,7 +145,19 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 	public boolean hitTest(float hitX, float hitY) {
 		if (!visible) return false;
 		
-		return (hitX >= x - bb_hWidth && hitX < x + bb_hWidth   &&   hitY >= y - bb_hHeight && hitY < y + bb_hHeight);
+		return (hitX >= x - bb_hWidth && hitX < x + bb_hWidth && hitY >= y - bb_hHeight && hitY < y + bb_hHeight);
+	}
+	
+	/** 
+	 * Collision test with another quad.
+	 * */
+	public boolean collisionTest(float minX, float minY, float maxX, float maxY) {
+		if (!visible) return false;
+		
+		return ( ((minX >= x - bb_hWidth && minX <= x + bb_hWidth ) ||	 		// minX 
+				 (maxX >= x - bb_hWidth && maxX <= x + bb_hWidth )) &&   		// maxX
+				 ((minY >= y - bb_hHeight && minY <= y + bb_hHeight ) || 		// minY
+				 (maxY >= y - bb_hHeight && maxY <= y + bb_hHeight )) ); 		// maxY
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="l20_help_head">Stufe 20 - Bunny Shop</string>
+	<string name="l20_help_head">Shopping Bunny</string>
 	<string name="l20_help_text">Unser Bunny geht Shoppen!
 	Es muss versuchen möglichst teure Produkte in seinen Einkaufswagen zu packen, um soviel Geld als möglich auszugeben.
 	Aber Vorsicht! Der Einkaufswagen kann schon voll werden, bevor die Kasse erreicht wird. Also muss darauf geachtet werden,

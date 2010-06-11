@@ -81,6 +81,7 @@ public class LevelActivity extends Activity {
 	 */
 	@Override
 	protected void onStart() {
+		gameManager.resume();
 		super.onStart();
 	}
 
