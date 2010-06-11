@@ -89,4 +89,12 @@ public class ShoppingCart extends RenderEntity implements Clickable {
 		}
 	}
 	
+	
+	public void checkDiscounts() {
+		// TODO: check if there are 3/5/.. of the same products and dispatch an event or something. 
+		// display the discount graphic and add the price to the total money.
+		
+		
+	}
+	
 }
