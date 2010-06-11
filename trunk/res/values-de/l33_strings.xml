@@ -13,4 +13,8 @@
 <string name="l33_help_entry3_head">Stein</string>
 <string name="l33_help_entry4_head">Fass</string>
 <string name="l33_help_entry5_head">Brunnen</string>
+<string name="l33_tutorial_goodItems">Sammle alle Gegenstände die mit einem grünen Kreis hinterlegt sind ein um dein Gold zu verlieren</string>
+<string name="l33_tutorial_badItems">Vermeide Gegenstände die mit einem roten Kreis gekennzeichnet sind</string>
+<string name="l33_tutorial_loadingText">Ladevorgang läuft....</string>
+<string name="l33_tutorial_startGame">Berühre den Bildschirm um das Spiel zu starten....</string>
 </resources>

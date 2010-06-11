@@ -13,11 +13,13 @@ import android.view.Display;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.GestureDetector.OnGestureListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
@@ -39,6 +41,8 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	 */
 	public static final String PREFERENCE_MUSIC = "music";
 	
+	public static enum AllGameStates { LOADING, READY, PLAYING, FINISH };
+	
 	public static boolean IS_MUSIC_ON = false;
 	private GLSurfaceView openglview;
 	public static SoundHandler soundHandler = null;
@@ -55,6 +59,8 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	public static Vector2f lastTouchUp = new Vector2f(1,1);
 	public static Vector2f diffTouch = new Vector2f();	// difference to the last touch
 	public static boolean gameWasInit = false;
+	public static ViewSwitcher viewSwitcher = null;
+	public static AllGameStates GAME_STATE = AllGameStates.LOADING;
 	
 	
 	private TextView tvLevelFps;
@@ -70,15 +76,10 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); 
-		setContentView(R.layout.l33_level);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
-//		runOnUiThread(new Runnable() {public void run() {
-//			((ImageView)findViewById(R.id.l33_FullscreenImage)).setBackgroundResource(R.drawable.l33_textur);
-//	}});
-	
-//		setFocusable(true);
-//		requestFocus();
+		GAME_STATE = AllGameStates.LOADING;
+		setContentView(R.layout.l33_level);
 		
 		gestureScanner = new GestureDetector(this);
 		
@@ -90,11 +91,12 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		LevelHandler level = new LevelHandler();// init new Level here!
 		t.logTime("Level Generierung dauerte:");
 		sceneGraph = new SceneGraph(level,this);
-		renderer = new GameRenderer();
+		
+		//renderer = new GameRenderer(this);
         
         //Setting up the soundHandler and mainSoundSettings
         soundHandler = new SoundHandler(this);
-        gameRenderer = new GameRenderer();
+        gameRenderer = new GameRenderer(this,sceneGraph);
 
 		
         SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
@@ -115,6 +117,7 @@ public class LevelActivity extends Activity implements OnGestureListener{
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         
         tvLevelFps = (TextView)findViewById(R.id.l33_level_fps);
+        
         
 	}
 	
@@ -191,6 +194,7 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	 */
 	public boolean onTouchEvent(final MotionEvent e) {
 		
+		
 		System.out.println("onTouchEvent");
 		lastTouch.set(e.getX() / resolution.x, e.getY()/ resolution.y);
 		Log.w("resolution:",resolution.toString());
@@ -240,6 +244,13 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		// TODO Auto-generated method stub
 		
 		System.out.println("onSingleTapUp");
+		
+		if(GAME_STATE.equals(AllGameStates.READY))
+		{
+			GameRenderer.SWITCH_VIEW=true;
+			GAME_STATE=AllGameStates.PLAYING;
+		}
+		
 		return true;
 	}
 

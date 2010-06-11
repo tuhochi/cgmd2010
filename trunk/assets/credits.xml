@@ -45,6 +45,31 @@
 	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
 	usage="map texture" license="CC" />
 
+<!-- Level 33 -->	
+<credit type="sound" name="Never Heard a Rhyme Like This Before" author="scottaltham"
+	url="http://dig.ccmixter.org/music_for_games?dig-lic=safe"
+	usage="l33 - level_music" license="CC" />
+	
+<credit type="sound" name="Door opens and shuts" author="FreqMan"
+	url="http://www.freesound.org/samplesViewSingle.php?id=23168"
+	usage="l33 - trash" license="CC" />
+	
+<credit type="sound" name="Unrolling And Rolling Map" author="Benboncan"
+	url="http://www.freesound.org/samplesViewSingle.php?id=77319"
+	usage="l33 - map" license="CC" />
+	
+<credit type="sound" name="money down the toilet" author="juskiddink"
+	url="http://www.freesound.org/samplesViewSingle.php?id=61287"
+	usage="l33 - spring" license="CC" />
+
+<credit type="sound" name="spinning_coin" author="morgantj"
+	url="http://www.freesound.org/samplesViewSingle.php?id=58924"
+	usage="l33 - spring" license="CC" />
+
+<credit type="sound" name="d_chimes2" author="BristolStories"
+	url="http://www.freesound.org/samplesViewSingle.php?id=51695"
+	usage="l33 - spring" license="CC" />
+
 <!-- Level 42 -->	
 <credit type="sound" name="possiblelazer" author="aust_paul"
 	url="http://www.freesound.org/samplesViewSingle.php?id=30935"

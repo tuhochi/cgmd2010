@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -117,8 +119,15 @@ public class SceneGraph  {
 	private ImageButton ibGeneralViewButton;
 	public static ImageButton ibPathButton;
 	public static TextView tvPathCount;
+	private static TextView tvLoadingScreen;
+	private ProgressBar pbLoadingBar;
 	String collectedMapText="";
 	
+	private LinearLayout lTutorialTop;
+	private TableLayout lTtutorialTabel;
+	private LinearLayout lTutorialBottom;
+	private TableLayout lLevelTableTop;
+	private TableLayout lLevelTableMiddel;
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	private float lastZoom;
@@ -147,9 +156,16 @@ public class SceneGraph  {
 		this.ibPathButton = (ImageButton)activity.findViewById(R.id.l33_Path_Image_Button);
 		this.tvPathCount = (TextView)activity.findViewById(R.id.l33_path_counter);
 		
-		//TODO richtige Icons verwenden
+		this.lTutorialTop = (LinearLayout)activity.findViewById(R.id.l33_TutorialTop);
+		this.lTtutorialTabel = (TableLayout)activity.findViewById(R.id.l33_TutorialTableLayout);
+		this.lTutorialBottom = (LinearLayout)activity.findViewById(R.id.l33_TutorialBottom);
+		this.tvLoadingScreen = (TextView)activity.findViewById(R.id.l33_loadingScreen_statusText);
+		this.pbLoadingBar = (ProgressBar)activity.findViewById(R.id.l33_loading_bar);
+		
+		this.lLevelTableTop = (TableLayout)activity.findViewById(R.id.l33_TableLayoutTop);
+		this.lLevelTableMiddel = (TableLayout)activity.findViewById(R.id.l33_TableLayoutMiddle);
+		
 		ivMapTimeIcon.setImageResource(R.drawable.l33_arrow_small);
-		//Nur für Test 
 		ivItemIcon.setImageResource(R.drawable.l33_stone_small);
 		ibGeneralViewButton.setImageResource(R.drawable.l33_overview_map);
 		ibPathButton.setImageResource(R.drawable.l33_map);
@@ -196,8 +212,6 @@ public class SceneGraph  {
 	            }
 	        });
 
-		
-		
 		levelEndTimeInSeconds = (int)timeInSeconds+gameTimeInSeconds;
 
 	}
@@ -220,10 +234,10 @@ public class SceneGraph  {
 		
 		StopTimer tload = new StopTimer();
 
-	obj = ObjModel.read(R.raw.l33_model, activity);
-	tload.logTime("Geometry laden dauerte:");
-	geometry = new Geometry(gl, obj,R.drawable.l33_textur);
-	tload.logTime("Textur laden dauerte:");
+		obj = ObjModel.read(R.raw.l33_model, activity);
+		tload.logTime("Geometry laden dauerte:");
+		geometry = new Geometry(gl, obj,R.drawable.l33_textur);
+		tload.logTime("Textur laden dauerte:");
 		
 	
 
@@ -241,14 +255,32 @@ public class SceneGraph  {
 			
 		
 	
-		geometry.render();
+		//geometry.render();
 		tload.logTime("und die Initialisierung der Geometry dauerte:");
 
 		t.logTime("Geometry laden und init dauerte:");
 		
 	}
 	
-
+	public void loadingComplete() {
+		activity.runOnUiThread(new Runnable() {public void run() {
+			tvLoadingScreen.setText(R.string.l33_tutorial_startGame);
+			//pbLoadingBar.setVisibility(ProgressBar.INVISIBLE);
+		}});
+	}
+	
+	
+	public void switchView() {
+		
+		activity.runOnUiThread(new Runnable() {public void run() {
+			lTutorialTop.setVisibility(LinearLayout.INVISIBLE);
+			lTtutorialTabel.setVisibility(TableLayout.INVISIBLE);
+			lTutorialBottom.setVisibility(LinearLayout.INVISIBLE);
+			
+			lLevelTableTop.setVisibility(TableLayout.VISIBLE);
+			lLevelTableMiddel.setVisibility(TableLayout.VISIBLE);
+		}});
+	}
 	
 
 	/**
