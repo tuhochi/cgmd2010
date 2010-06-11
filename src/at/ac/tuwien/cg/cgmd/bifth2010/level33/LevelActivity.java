@@ -57,7 +57,7 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	public static Vector2f lastTouch = new Vector2f(1,1);	// coordinates of the last touch [0 1] 
 	public static Vector2f lastTouchDown = new Vector2f(1,1);
 	public static Vector2f lastTouchUp = new Vector2f(1,1);
-	public static Vector2f diffTouch = new Vector2f();	// difference to the last touch
+	public static Vector2f diffTouch = new Vector2f(0,0);	// difference to the last touch
 	public static boolean gameWasInit = false;
 	public static ViewSwitcher viewSwitcher = null;
 	public static AllGameStates GAME_STATE = AllGameStates.LOADING;
@@ -73,7 +73,6 @@ public class LevelActivity extends Activity implements OnGestureListener{
 
 		Log.d("_","onCreate");
 		super.onCreate(savedInstanceState);
-		
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -194,9 +193,27 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	 */
 	public boolean onTouchEvent(final MotionEvent e) {
 		
-		
+
+
 		System.out.println("onTouchEvent");
+		
+		if(e.getAction()==e.ACTION_UP)
+			lastTouchUp.set(e.getX() / resolution.x, e.getY()/ resolution.y);
+		
+		if(e.getAction()==e.ACTION_DOWN)
+			lastTouchDown.set(e.getX() / resolution.x, e.getY()/ resolution.y);
+		
+		
+		if(SceneGraph.camera.zoom==SceneGraph.camera.outZoom)
+		if(e.getAction()==e.ACTION_MOVE)
+			SceneGraph.moveCamera((lastTouch.x-(e.getX() / resolution.x)),
+					(lastTouch.y-( e.getY()/ resolution.y))*resolution.y/resolution.x);
+		
+			
+	
+		
 		lastTouch.set(e.getX() / resolution.x, e.getY()/ resolution.y);
+		
 		Log.w("resolution:",resolution.toString());
 		
 		if(SceneGraph.camera.zoom==SceneGraph.camera.standardZoom)
