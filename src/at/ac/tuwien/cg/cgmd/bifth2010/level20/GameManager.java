@@ -49,7 +49,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	protected SoundManager soundManager;
 	
 	/** Responsible for creating and managing particle systems. */
-	protected ParticleEngine particleEngine; 
+	// couldn't compile: protected ParticleEngine particleEngine;   
 	
 	/** Provides sprites containing characters for rendering. */
 	protected TextSprites textSprites;
@@ -117,10 +117,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		textSprites = new TextSprites();
 		
 		soundManager = new SoundManager((Context)LevelActivity.instance);	
-		particleEngine = new ParticleEngine();
-		particleEngine.speed = activity.getResources().getInteger(R.integer.l20_particle_speed);
-		particleEngine.nParticles = activity.getResources().getInteger(R.integer.l20_particle_count);
-		particleEngine.lifetime = activity.getResources().getInteger(R.integer.l20_particle_life);
+		// couldn't compile: particleEngine = new ParticleEngine();
+		// couldn't compile: particleEngine.speed = activity.getResources().getInteger(R.integer.l20_particle_speed);
+		// couldn't compile: particleEngine.nParticles = activity.getResources().getInteger(R.integer.l20_particle_count);
+		// couldn't compile: particleEngine.lifetime = activity.getResources().getInteger(R.integer.l20_particle_life);
 		
 		obstacleManager = new ObstacleManager();
 		
@@ -175,8 +175,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		texIds[0] = renderView.getTexture(R.drawable.l88_stash_yellow, gl);
 		texIds[1] = renderView.getTexture(R.drawable.l88_stash_orange, gl);		
 		//texIds[2] = renderView.getTexture(R.drawable.l88_stash_red, gl);
-		particleEngine.textureIds = texIds;		
-		particleEngine.size = (int) (activity.getResources().getInteger(R.integer.l20_particle_size) * screenRatio);
+		// couldn't compile: particleEngine.textureIds = texIds;		
+		// couldn't compile: particleEngine.size = (int) (activity.getResources().getInteger(R.integer.l20_particle_size) * screenRatio);
 		
 		// Create bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
@@ -290,7 +290,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		texIds[0] = renderView.getTexture(R.drawable.l88_stash_yellow, gl);
 		texIds[1] = renderView.getTexture(R.drawable.l88_stash_orange, gl);		
 		//texIds[2] = renderView.getTexture(R.drawable.l88_stash_red, gl);
-		particleEngine.textureIds = texIds;
+		// couldn't compile: particleEngine.textureIds = texIds;
 		
 		// Discount Pop-Ups.
 		discountPopUps[0].texture = renderView.getTexture(R.drawable.l20_discount, gl);
@@ -313,7 +313,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		float scroll = scrollSpeed * dt;
 		productManager.update(scroll);
 		obstacleManager.update(dt, scroll);
-		particleEngine.update(dt);
+		// couldn't compile: particleEngine.update(dt);
 		bunny.update(dt);
  
 		if (catchMode) {
@@ -497,7 +497,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			}
 			
 			// Create Particle System.
-			particleEngine.createParticleSystem(pe.x, pe.y);
+			// couldn't compile: particleEngine.createParticleSystem(pe.x, pe.y);
 
 		}
 		break;
@@ -643,7 +643,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			}
 		}
 		
-		particleEngine.render(gl);
+		// couldn't compile: particleEngine.render(gl);
 		textSprites.render(gl);
 		
 	}
