@@ -11,6 +11,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundFour;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundOne;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundThree;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundTwo;
+import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.FreezeTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.HyperTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
@@ -24,6 +25,7 @@ public class GameWorld {
 	private BasicTower[] mBasicTower = null; //tower types, wo gezeichnet in der towerklasse
 	private AdvancedTower[] mAdvancedTower = null;
 	private HyperTower[] mHyperTower = null;
+	private FreezeTower[] mFreezeTower = null;
 	
 	private int mXPos, mYPos; //picking	
 	private static int mWidth = -1;
@@ -63,13 +65,16 @@ public class GameWorld {
 	
 	
 	public void initVBOs(){
-		if( mEnemies != null )System.out.println("On Resume - Enemies count: "+mEnemies.size());
+		//if( mEnemies != null )System.out.println("On Resume - Enemies count: "+mEnemies.size());
 		if( mEnemies != null ) {
 			synchronized( mEnemies ){
 				for( int i = 0; i < mEnemies.size(); i++) mEnemies.get(i).initVBOs();
 			}	
 		}
 		if( mBasicTower != null) for( int i = 0; i < mBasicTower.length; i++) mBasicTower[i].initVBOs();
+		if( mAdvancedTower != null ) for( int i = 0; i < mAdvancedTower.length; i++) mAdvancedTower[i].initVBOs();
+		if( mHyperTower != null ) for( int i = 0; i < mHyperTower.length; i++) mHyperTower[i].initVBOs();
+		if( mFreezeTower != null ) for( int i = 0; i < mFreezeTower.length; i++) mFreezeTower[i].initVBOs();
 		if( mGamefield != null) mGamefield.onResume();
 	}
 	
@@ -127,6 +132,20 @@ public class GameWorld {
 								break;
 							}
 							if ( i == mHyperTower.length -1 ) last = true;
+						}
+					}
+					break;
+				case Definitions.FREEZE_TOWER:
+					if( mFreezeTower[0].getPrice() <= GameMechanics.getSingleton().getIron()){
+						for( int i = 0; i < Definitions.FREEZE_TOWER_POOL && !last; i++){
+							if( mFreezeTower[i].getActiveState() == false){
+								mFreezeTower[i].setXY(mXPos, mYPos);
+								last = true;
+								mGamefield.setFieldOccupied(mXPos, mYPos);
+								GameMechanics.getSingleton().subIron(mFreezeTower[i].getPrice());
+								break;
+							}
+							if ( i == mFreezeTower.length -1 ) last = true;
 						}
 					}
 					break;
@@ -303,6 +322,10 @@ public class GameWorld {
 			mHyperTower = new HyperTower[ Definitions.HYPER_TOWER_POOL ];
 			for ( int i = 0; i < mHyperTower.length; i++) mHyperTower[i] = new HyperTower();
 		}
+		if( mFreezeTower == null){
+			mFreezeTower = new FreezeTower[ Definitions.FREEZE_TOWER_POOL ];
+			for ( int i = 0; i < mFreezeTower.length; i++) mFreezeTower[i] = new FreezeTower();
+		}
 	}
 	
 	
@@ -315,45 +338,72 @@ public class GameWorld {
 			if( mBasicTower[i].getActiveState()){
 				synchronized( mEnemies ){
 					for( int j = 0; j < mEnemies.size() ; j++){
-						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mBasicTower[i].getY() ){
+						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mBasicTower[i].getY() && mEnemies.get(j).getBackX() >= mBasicTower[i].getFrontX() ){
 							mBasicTower[i].collideX( mEnemies.get(j) );
-							if(mEnemies.get(j).getX() <= mBasicTower[i].getFrontX() && mEnemies.get(j).getX() >= mBasicTower[i].getBackX() ){
-								mBasicTower[i].reset();
-								mGamefield.setFieldUnOccupied(mBasicTower[i].getX(), mBasicTower[i].getY());
+							if( mEnemies.get(j).getFrontX() <= mBasicTower[i].getFrontX() && mEnemies.get(j).getBackX() >= mBasicTower[i].getBackX() ){
+								mBasicTower[i].die();
+								}
 							}
 						}
 					}
 				}
+			if( mBasicTower[i].toRemove() ){
+				mBasicTower[i].reset();
+				mGamefield.setFieldUnOccupied(mBasicTower[i].getX(), mBasicTower[i].getY());
 			}
 		}
 		for( int i = 0; i < mAdvancedTower.length; i++){
 			if( mAdvancedTower[i].getActiveState()){
 				synchronized( mEnemies ){
 					for( int j = 0; j < mEnemies.size() ; j++){
-						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mAdvancedTower[i].getY() ){
+						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mAdvancedTower[i].getY() && mEnemies.get(j).getBackX() >= mAdvancedTower[i].getFrontX() ){
 							mAdvancedTower[i].collideX( mEnemies.get(j) );
-							if(mEnemies.get(j).getX() <= mAdvancedTower[i].getFrontX() && mEnemies.get(j).getX() >= mAdvancedTower[i].getBackX() ){
-								mAdvancedTower[i].reset();
-								mGamefield.setFieldUnOccupied(mAdvancedTower[i].getX(), mAdvancedTower[i].getY());
+							if( mEnemies.get(j).getFrontX() <= mAdvancedTower[i].getFrontX() && mEnemies.get(j).getBackX() >= mAdvancedTower[i].getBackX() ){
+								mAdvancedTower[i].die();
+								}
 							}
 						}
 					}
 				}
+			if( mAdvancedTower[i].toRemove() ){
+				mAdvancedTower[i].reset();
+				mGamefield.setFieldUnOccupied(mAdvancedTower[i].getX(), mAdvancedTower[i].getY());
 			}
 		}
 		for( int i = 0; i < mHyperTower.length; i++){
 			if( mHyperTower[i].getActiveState()){
 				synchronized( mEnemies ){
 					for( int j = 0; j < mEnemies.size() ; j++){
-						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mHyperTower[i].getY() ){
+						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mHyperTower[i].getY() && mEnemies.get(j).getBackX() >= mHyperTower[i].getFrontX() ){
 							mHyperTower[i].collideX( mEnemies.get(j) );
-							if(mEnemies.get(j).getX() <= mHyperTower[i].getFrontX() && mEnemies.get(j).getX() >= mHyperTower[i].getBackX() ){
-								mHyperTower[i].reset();
-								mGamefield.setFieldUnOccupied(mHyperTower[i].getX(), mHyperTower[i].getY());
+							if( mEnemies.get(j).getFrontX() <= mHyperTower[i].getFrontX() && mEnemies.get(j).getBackX() >= mHyperTower[i].getBackX() ){
+								mHyperTower[i].die();
+								}
 							}
 						}
 					}
 				}
+			if( mHyperTower[i].toRemove() ){
+				mHyperTower[i].reset();
+				mGamefield.setFieldUnOccupied(mHyperTower[i].getX(), mHyperTower[i].getY());
+			}
+		}
+		for( int i = 0; i < mFreezeTower.length; i++){
+			if( mFreezeTower[i].getActiveState()){
+				synchronized( mEnemies ){
+					for( int j = 0; j < mEnemies.size() ; j++){
+						if( mEnemies.get(j).getActiveState() && mEnemies.get(j).getY() == mFreezeTower[i].getY() && mEnemies.get(j).getBackX() >= mFreezeTower[i].getFrontX() ){
+							mFreezeTower[i].collideX( mEnemies.get(j) );
+							if( mEnemies.get(j).getFrontX() <= mFreezeTower[i].getFrontX() && mEnemies.get(j).getBackX() >= mFreezeTower[i].getBackX() ){
+								mFreezeTower[i].die();
+								}
+							}
+						}
+					}
+				}
+			if( mFreezeTower[i].toRemove() ){
+				mFreezeTower[i].reset();
+				mGamefield.setFieldUnOccupied(mFreezeTower[i].getX(), mFreezeTower[i].getY());
 			}
 		}
 	}
@@ -374,14 +424,13 @@ public class GameWorld {
 		for ( int i = 0; i < mHyperTower.length; i++){
 			if( mHyperTower[i].getActiveState()) ret.add( mHyperTower[i] ); 
 		}
+		for ( int i = 0; i < mFreezeTower.length; i++){
+			if( mFreezeTower[i].getActiveState()) ret.add( mFreezeTower[i] ); 
+		}
 		return ret;
 	}
 	
 	
-	
-	public int getEnemies(){
-        return mEnemies.size();
-	}
 
  	public void drawEnemies(GL10 gl){
         if( mEnemies == null ) return;
@@ -397,7 +446,6 @@ public class GameWorld {
                 }
                 else if( mEnemies.get(i).getHP() <= 0 ){
                     GameMechanics.getSingleton().removeMoney( mEnemies.get(i).getMoney() );
-                    //mEnemies.get(i).deactivate();
                     mEnemies.get(i).die();
                     if ( mEnemies.get(i).toRemove() ){
                        	mEnemies.get(i).deactivate();
@@ -426,7 +474,16 @@ public class GameWorld {
             	mHyperTower[i].draw(gl);
             }
         }
+        for ( int i = 0; i < mFreezeTower.length; i++){
+            if( mFreezeTower[i].getActiveState()){
+            	mFreezeTower[i].draw(gl);
+            }
+        }
     }
+   
+   public int getEnemiesSize(){
+	   return mEnemies.size();
+   }
 
 	
 

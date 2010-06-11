@@ -21,12 +21,19 @@ public abstract class Tower extends GLObject {
 	protected long mTimeLastProjectileShot = System.currentTimeMillis();
 	protected Projectile[] mProjectiles = null;
 	protected int mScreenWidth = 800;
-	protected short mDmg = 10;
 	protected int mSound = R.raw.l12_basic_tower_shooting_sound;
 	protected int mTexture = -1;
+	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1;
+	protected int mDyingTextur2 = R.drawable.l12_enemie_dying2;
+	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
+	protected int mDyingTextur4 = R.drawable.l12_enemie_dying4;
+	protected int mShootingTextur1 = R.drawable.l12_bunny1_shooting1;
+	protected int mShootingTextur2 = R.drawable.l12_bunny1_shooting2;
+	protected int mShootingTextur3 = R.drawable.l12_bunny1_shooting3;
+	protected long mStartShootingTime = -1;
 	protected short mPrice = Definitions.BASIC_TOWER_IRON_NEED;
-	long dt;
-	boolean found;
+	protected long mStartDyingTime = -1;
+	protected boolean mReadyToRemove = false;
 	
 	public void setXY( int xCentr, int yCentr ){
 		mX = xCentr;
@@ -93,10 +100,10 @@ public abstract class Tower extends GLObject {
 		//pause
 		if( GameMechanics.getSingleton().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
 		if( this.getActiveState() == false ) return;
-		dt =(System.currentTimeMillis() - mTimeLastProjectileShot );
-		if( dt >= mShootingInterval ){
+		long mDT =(System.currentTimeMillis() - mTimeLastProjectileShot );
+		if( mDT >= mShootingInterval && mStartDyingTime == -1 ){
 			if( mProjectiles != null ){
-				found = false;
+				boolean found = false;
 				for ( int  i = 0; i < mProjectiles.length && !found; i++){
 					if( mProjectiles[i].getActiveState() == false ){
 						found = true;
@@ -104,13 +111,13 @@ public abstract class Tower extends GLObject {
 						mProjectiles[i].setXY( this.getFrontX(), mY);
 						mTimeLastProjectileShot = System.currentTimeMillis();
 						SoundHandler.getSingleton().play(mSound);
+						mStartShootingTime = System.currentTimeMillis();
 						break;
 					}
 				}
 			}
 		}
 		for( int i = 0; i < mProjectiles.length; i++){
-
 			//all active sollen gezeichnet werden
 			if(mProjectiles[i].getActiveState() == true) {
 				mProjectiles[i].draw(gl);
@@ -118,17 +125,40 @@ public abstract class Tower extends GLObject {
 				if(  mProjectiles[i].getX() >= mScreenWidth ){
 					mProjectiles[i].reset();
 				}
+				if( mProjectiles[i].toRemove() ) mProjectiles[i].reset();
 			}
 		}
-		TextureManager.getSingletonObject().setTexture( mTexture );
+		if( mStartDyingTime == -1 && mStartShootingTime == -1 )TextureManager.getSingletonObject().setTexture( mTexture );
+		else if( mStartShootingTime != -1 ){
+			long dyt = System.currentTimeMillis() - mStartShootingTime;
+			if( dyt > (0 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mShootingTextur1 );
+			if( dyt > (1 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mShootingTextur2 );
+			if( dyt > (2 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mShootingTextur3 );
+			if( dyt > (3 * Definitions.ANIMTE_CYCLE_TIME) ) {
+				TextureManager.getSingletonObject().setTexture( mTexture );
+				mStartShootingTime = -1;
+			}
+		}
+		else if( mStartDyingTime != -1 ){
+			long dyt = System.currentTimeMillis() - mStartDyingTime;
+			if( dyt > (0 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur1 );
+			if( dyt > (1 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur2 );
+			if( dyt > (2 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur3 );
+			if( dyt > (3 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
+			if( dyt > (4 * Definitions.ANIMTE_CYCLE_TIME) ) {
+				TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
+				mReadyToRemove = true;
+			}
+		}
+		
 		super.draw(gl);
 	}
 	
 	public void collideX( MoneyCarrier carrier ){
 		for( int i = 0; i < mProjectiles.length; i++){
-			if( mProjectiles[i].getActiveState() && (mProjectiles[i].getX() >= carrier.getX()) ){
-				carrier.hit( mDmg );
-				mProjectiles[i].reset();
+			if( mProjectiles[i].getActiveState() && (mProjectiles[i].getX() >= carrier.getX()) && mProjectiles[i].isExploding() == false ){
+				carrier.hit( mProjectiles[i].getDamage(), mProjectiles[i].getSlow() );
+				mProjectiles[i].die();
 			}
 		}
 	}
@@ -136,6 +166,8 @@ public abstract class Tower extends GLObject {
 	
 	public void reset(){
 		this.setActiveState(false);
+		mReadyToRemove = false;
+		mStartDyingTime = -1;
 	}
 	
 
@@ -149,6 +181,16 @@ public abstract class Tower extends GLObject {
 	
 	public short getPrice(){
 		return mPrice;
+	}
+	
+	public void die(){
+		if( mStartDyingTime == -1 ){
+			mStartDyingTime = System.currentTimeMillis();
+		}
+	}
+	
+	public boolean toRemove() {
+		return mReadyToRemove;
 	}
 }
 
