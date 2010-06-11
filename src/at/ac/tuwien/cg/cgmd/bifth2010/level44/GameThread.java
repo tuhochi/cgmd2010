@@ -173,6 +173,9 @@ public class GameThread extends Thread {
 
 	}
 
+	/**
+	 * indicate that the tread should be stopped
+	 */
 	public void doQuit() {
 		this.quit = true;
 	}

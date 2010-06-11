@@ -74,7 +74,13 @@ public interface PhysicalObject {
 	 */
 	public void setPosition(float x, float y);
 
+	/**
+	 * @return the x-position of the object
+	 */
 	public float getX();
 
+	/**
+	 * @return the y-position of the object
+	 */
 	public float getY();
 }

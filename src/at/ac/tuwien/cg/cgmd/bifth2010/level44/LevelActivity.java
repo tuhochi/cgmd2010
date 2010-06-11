@@ -71,6 +71,10 @@ public class LevelActivity extends Activity {
 		setResult(Activity.RESULT_OK, s.asIntent());
 	}
 
+	/**
+	 * finish the level with a specific score
+	 * @param score the score the user achieved
+	 */
 	public void finishLevel(int score) {
 		// the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
@@ -119,11 +123,17 @@ public class LevelActivity extends Activity {
 		}
 	}
 
+	/**
+	 * is called when a touch event occurs
+	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
 	}
 
+	/**
+	 * is called when a trackball event occurs
+	 */
 	@Override
 	public boolean onTrackballEvent(MotionEvent event) {
 		if (scene != null) {
@@ -147,6 +157,9 @@ public class LevelActivity extends Activity {
 		return true;
 	}
 
+	/**
+	 * is called, when the instance-state is saved
+	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		if (scene != null) {
@@ -155,6 +168,9 @@ public class LevelActivity extends Activity {
 		super.onSaveInstanceState(outState);
 	}
 
+	/**
+	 * is called, when the instance-state is restored
+	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
@@ -164,6 +180,9 @@ public class LevelActivity extends Activity {
 		}
 	}
 
+	/**
+	 * is called, when a key is pressed
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {

@@ -4,6 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * The Help-Activity of the Level 44
+ * 
+ * @author Matthias
+ *
+ */
 public class HelpActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
