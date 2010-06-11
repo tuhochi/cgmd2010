@@ -9,6 +9,11 @@ import java.io.InputStream;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
+import android.opengl.GLUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -34,7 +39,7 @@ public class SceneGraph  {
 
 	public static LevelHandler level;
 
-	static Geometry geometry ;
+	static Geometry geometry;
 	public static Camera camera;
 	
 	static float deltaTime;
@@ -131,6 +136,7 @@ public class SceneGraph  {
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	private float lastZoom;
+	public static Vector2f cameraTranslation = new Vector2f(0,0);
 	
 	StopTimer frameTimer = new StopTimer();
 	
@@ -229,6 +235,7 @@ public class SceneGraph  {
 		
 		StopTimer t = new StopTimer();
 		SceneGraph.camera = new Camera();
+		SceneGraph.camera.reset();
 		// load Objects
 		ObjModel obj;
 		
@@ -262,6 +269,7 @@ public class SceneGraph  {
 		
 	}
 	
+
 	public void loadingComplete() {
 		activity.runOnUiThread(new Runnable() {public void run() {
 			tvLoadingScreen.setText(R.string.l33_tutorial_startGame);
@@ -281,6 +289,7 @@ public class SceneGraph  {
 			lLevelTableMiddel.setVisibility(TableLayout.VISIBLE);
 		}});
 	}
+
 	
 
 	/**
@@ -416,6 +425,7 @@ public class SceneGraph  {
 		
 		
 		//Set the progress
+		
 		pbProgressBar.setProgress(LevelActivity.progressHandler.getActualllyGold());
 		
 		// Clears the screen and depth buffer.
@@ -489,10 +499,10 @@ public class SceneGraph  {
 		
         if(Camera.zoom==Camera.outZoom)
         {
-                	float y = ((LevelActivity.lastTouch.y*2)-1)*25;
-                	float x = ((LevelActivity.lastTouch.x*2)-1)*25;
-                	gl.glTranslatef(x, 0, y);
-                	Log.d("out","zoom");
+                	//float y = ((LevelActivity.lastTouch.y*2)-1)*25;
+                	//float x = ((LevelActivity.lastTouch.x*2)-1)*25;
+                	gl.glTranslatef(cameraTranslation.x, 0, cameraTranslation.y);
+                //	Log.d("out","zoom");
         }
 		
 		// render world
@@ -535,7 +545,7 @@ public class SceneGraph  {
 //			if(lastZoom==Camera.zoom)
 //				return;
 			
-			Log.d("_","render overview");
+		//	Log.d("_","render overview");
 
 			for (int y = 0; y < level.worldDim.y; y++) {
 				for (int x = 0; x < level.worldDim.x; x++) {
@@ -880,6 +890,44 @@ public class SceneGraph  {
 			if(LevelHandler.collectedItemList.get(i)[2]>maxTranslation)
 				LevelHandler.collectedItemList.remove(i);
 		}
+	}
+
+	/**
+	 * this method moves the Camera in the overvie map view
+	 * @param x translation diff
+	 * @param y translation diff
+	 */
+	public static void moveCamera(float x, float y) {
+		
+		// calculate visible view dim xx yy
+		float xx =(float) (Camera.zoom/Math.sqrt(2)*(LevelActivity.resolution.x/LevelActivity.resolution.y));
+		float yy = xx/(LevelActivity.resolution.x/LevelActivity.resolution.y);
+		
+		SceneGraph.cameraTranslation.subtract(new Vector2f(x*xx,y*xx));
+
+		float dx = (int) (xx/2);
+		float dy = (int) (yy/2);
+		
+		Log.e("cameraTranlation",""+(SceneGraph.cameraTranslation.x));
+		Log.e("gameCharacterPosition",""+(level.gameCharacterPosition.x));
+		Log.e("xx",""+(xx));
+		Log.e("WorldDim",""+(level.worldDim.x));
+		
+		Log.e("diff",""+(level.gameCharacterPosition.x-SceneGraph.cameraTranslation.x));
+		
+		// left stop position
+		if(level.gameCharacterPosition.x-SceneGraph.cameraTranslation.x<dx)
+			SceneGraph.cameraTranslation.x=-dx+level.gameCharacterPosition.x;
+		// right stop position
+		if(level.gameCharacterPosition.x-SceneGraph.cameraTranslation.x>level.worldDim.x-dx-1)
+			SceneGraph.cameraTranslation.x=-level.worldDim.x+dx+level.gameCharacterPosition.x+1;
+		// upper stop position
+		if(level.gameCharacterPosition.y-SceneGraph.cameraTranslation.y<dy)
+			SceneGraph.cameraTranslation.y=-dy+level.gameCharacterPosition.y;
+		// lover stop position
+		if(level.gameCharacterPosition.y-SceneGraph.cameraTranslation.y>level.worldDim.y-dy-1)
+			SceneGraph.cameraTranslation.y=-level.worldDim.y+dy+level.gameCharacterPosition.y+1;
+
 	}
 
 

@@ -18,7 +18,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 public class Camera {
 	
 	public final static float standardZoom= 10.f;// standart Game zoom
-	public final static float outZoom = 50.f;// overview Zoom
+	public final static float outZoom = 22.f;// overview Zoom
 	public static float zoom = standardZoom;
 	private boolean somethingChanged = true;
 	
@@ -26,12 +26,26 @@ public class Camera {
 	Vector3f view = new Vector3f(0, 0, -0.00000001f);
 	Vector3f up = new Vector3f(0, 1, 0);
 	
-
+	/**
+	 * to init the Camera
+	 * @param gl
+	 * @param width of the Screen
+	 * @param height of the Screen
+	 */
     public void init(GL10 gl, int width, int height){
     	
 		 float aspectRatio = (float)width / height;
 	        GLU.gluPerspective( gl, 45, aspectRatio, 0.001f, 100 );
+	        reset();
     	
+    }
+    /**
+     * to reset the zoom/view
+     */
+    public void reset(){
+    	
+    	this.zoom=standardZoom;
+	        somethingChanged=true;
     }
     
     /**
@@ -50,12 +64,8 @@ public class Camera {
 
         Log.d("lookAt","2");
 
-        
-
         eye.set(0,zoom, 0);
         
-
-        	
         	
       //  DebugView
       //  	eye.set(((GameView.lastTouch.x*2)-1)*10,((GameView.lastTouch.y*2)-1)*10,((GameView.lastTouch.x*2)-1)*10);
@@ -74,11 +84,15 @@ public class Camera {
 		somethingChanged=true;
 	
 		if(zoom==standardZoom)
+		{
 			zoom=outZoom;
+			SceneGraph.cameraTranslation.set(0,0);// set camera Translation to 0,0 that when a map is pushed -> the character is in the center
+			SceneGraph.moveCamera(0, 0);// and moveCamera is called to cast the view, eq the character is on the edge
+		}
 		else
 			zoom=standardZoom;
-		
 	}
+
 
 
 }
