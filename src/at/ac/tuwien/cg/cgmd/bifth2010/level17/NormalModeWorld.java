@@ -289,6 +289,12 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	public synchronized void setPause(boolean pause) {
 		mPause = pause;
 	}
+	
+	@Override
+	public synchronized boolean getPause() {
+		return mPause;
+	}
+	
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
