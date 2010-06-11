@@ -13,7 +13,9 @@ import javax.microedition.khronos.opengles.GL10;
  * @author thp
  */
 public class AimBar extends SpriteContainer {
+	/** the sprite for the foreground of the AimBar */
 	private Sprite foreground = null;
+	/** the current progress between 0.0 and 1.0 */
 	private float progress = 0.0f;
 
 	/**

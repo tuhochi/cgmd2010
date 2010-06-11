@@ -9,6 +9,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
+/**
+ * CLass representing the crosshairs that follow the rabbit
+ * 
+ * @author Matthias
+ *
+ */
 public class Crosshairs {
 	/** the squared distance which the crosshairs mustn't exceed to stay green */
 	private static final int MAX_DISTANCE_2 = 2500;
@@ -41,9 +47,16 @@ public class Crosshairs {
 	private long timeStamp = -1L;
 	/** timestamp of last shot */
 	private long timeOfLastShot = -1L;
-
+	/** the progress-bar */
 	private AimBar aimBar = null;
 
+	/**
+	 * creates the Crosshairs
+	 * @param scene the gamescene
+	 * @param texture the texture
+	 * @param width width of the screen
+	 * @param height height of the screen
+	 */
 	public Crosshairs(GameScene scene, Texture texture, int width, int height) {
 		this.scene = scene;
 		this.screenWidth = width;
@@ -59,10 +72,18 @@ public class Crosshairs {
 		aimBar.setPosition(screenWidth / 2, screenHeight / 8 + aimBar.getHeight() / 2);
 	}
 
+	/**
+	 * sets the rabbit-reference
+	 * @param rabbit the rabbit
+	 */
 	public void setRabbit(PhysicalObject rabbit) {
 		this.rabbit = (PhysicalRabbit) rabbit;
 	}
 
+	/**
+	 * draw the crosshairs
+	 * @param gl OpenGL
+	 */
 	public void draw(GL10 gl) {
 		// if the crosshairs are near the rabbit and the time since the last
 		// shot has exceeded a given value
@@ -78,34 +99,61 @@ public class Crosshairs {
 		}
 	}
 
+	/**
+	 * set the position of the crosshairs
+	 * @param x the new x-position
+	 */
 	public void setX(float x) {
 		spriteRed.setX(x);
 		spriteGreen.setX(x);
 	}
 
+	/**
+	 * set the position of the crosshairs
+	 * @param y the new y-position
+	 */
 	public void setY(float y) {
 		spriteRed.setY(y);
 		spriteGreen.setY(y);
 	}
 
+	/**
+	 * @return the x-position of the crosshairs
+	 */
 	public float getX() {
 		return spriteRed.getX();
 	}
 
+	/**
+	 * @return the y-position of the crosshairs
+	 */
 	public float getY() {
 		return spriteGreen.getY();
 	}
 
+	/**
+	 * set the position of the crosshairs
+	 * @param x the new x-position
+	 * @param y the new y-position
+	 */
 	public void setPosition(float x, float y) {
 		setX(x);
 		setY(y);
 	}
 
+	/**
+	 * move the position of the crosshairs
+	 * @param dx the distance to current x-position
+	 * @param dy the distance to current y-position
+	 */
 	public void move(float dx, float dy) {
 		setX(spriteRed.getX() + dx);
 		setY(spriteRed.getY() + dy);
 	}
 
+	/**
+	 * @return true, if the crosshairs are near the rabbit
+	 */
 	public boolean isNearRabbit() {
 		float dx = rabbit.getX() - getX();
 		float dy = rabbit.getY() - getY();
@@ -115,11 +163,19 @@ public class Crosshairs {
 		return near;
 	}
 
+	/**
+	 * set the desired position of the crosshairs
+	 * @param x the new desired x-position
+	 * @param y the new desired y-position
+	 */
 	private void setDesiredPosition(float x, float y) {
 		desiredX = x;
 		desiredY = y;
 	}
 
+	/**
+	 * @return true, if the crosshairs are allowed to shoot
+	 */
 	private boolean allowedToShoot() {
 		return (timeOfLastShot == -1 || (System.currentTimeMillis() - timeOfLastShot) > WAIT_TIME_BETWEEN_SHOTS);
 	}
@@ -222,6 +278,10 @@ public class Crosshairs {
 		}
 	}
 
+	/**
+	 * @param o the physicalObject to make the hit-test against
+	 * @return true, if the crosshairs hit the object o
+	 */
 	public boolean hits(PhysicalObject o) {
 		// TODO: hit test
 		return true;

@@ -11,8 +11,11 @@ import java.util.Random;
  * @author thp
  */
 public class Cloud extends Sprite {
+	/** the id of the cloud */
 	private int id;
+	/** the width of the screen */
 	private float screenWidth;
+	/** the height of the screen */
 	private float screenHeight;
 
 	/**
