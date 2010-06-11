@@ -3,7 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.os.Vibrator;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.TimeManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 
