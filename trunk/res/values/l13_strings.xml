@@ -7,7 +7,7 @@
 	<string name="l13_helpGoal">Your goal in this game is to spend money by consuming beer and red light district services.</string> 
 
 	<string name="l13_helpControl1">You can control the game character in three different ways:</string>
-	<string name="l13_helpControl2">Touchscreen: Touch the screen at the desired direction to move the bunny. The movement stops if you touch the bunny.</string>
+	<string name="l13_helpControl2">Touchscreen: Touch the screen at the horizontal/vertical axis of the player to move the bunny in the desired direction. The movement stops if you touch the bunny.</string>
 	<string name="l13_helpControl3">D-Pad: Use the cursor buttons to navigate the bunny. By pressing the enter button of the D-Pad, the bunny stops walking.</string>
 	<string name="l13_helpControl4">Trackball: You can also use the trackball for navigation. Push the trackball down to stop movement.</string>
 

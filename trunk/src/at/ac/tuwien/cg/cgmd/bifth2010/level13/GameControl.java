@@ -403,15 +403,12 @@ public class GameControl implements IPersistence {
 
 		//only move if player is not in jail and does not have sex
 		if(!jailState && !sexState){
-			//calculate distance in x/y-direction between center of screen and screen touch
-			float deltaX = Math.abs( x - MyRenderer.getScreenWidth() / 2.0f);
-			float deltaY = Math.abs( y - MyRenderer.getScreenHeight() / 2.0f);
+			//calculate distance in x/y-direction between player and screen touch
+			float deltaX = Math.abs( x - player.getPosition().x - GameObject.BLOCKSIZE / 2);
+			float deltaY = Math.abs( y - ((MyRenderer.getScreenHeight() - player.getPosition().y) - GameObject.BLOCKSIZE / 2));
 
-			//calculate difference to player position
-			int stopX = (int)x - player.getPosition().x;
-			int stopY = (int)y - player.getPosition().y;
 			//if player was touched, stop movement
-			if(stopX > 0 && stopX < GameObject.BLOCKSIZE && stopY > 0 && stopY < GameObject.BLOCKSIZE) {
+			if(deltaX < GameObject.BLOCKSIZE / 2 && deltaY < GameObject.BLOCKSIZE / 2) {
 				stopMovement();
 				return;
 			}
@@ -424,7 +421,8 @@ public class GameControl implements IPersistence {
 					tempMovement.y = 0;
 				}
 				//move right
-				else if(x > MyRenderer.getScreenWidth() / 2.0f) {
+				else //if(x > MyRenderer.getScreenWidth() / 2.0f) {
+				{
 					tempMovement.x = SPEED;
 					tempMovement.y = 0;
 				}
@@ -436,7 +434,8 @@ public class GameControl implements IPersistence {
 					tempMovement.y = SPEED;
 				}
 				//move up
-				else if(y > MyRenderer.getScreenHeight() / 2.0f) {
+				else //if(y > MyRenderer.getScreenHeight() / 2.0f) {
+				{
 					tempMovement.x = 0;
 					tempMovement.y = -SPEED;
 				}

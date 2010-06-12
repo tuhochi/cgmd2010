@@ -7,7 +7,7 @@
 <string name="l13_helpGoal">Dein Ziel in diesem Spiel ist es, durch den Konsum von Bier und Inanspruchnahme von Dienstleistungen des Rotlichtmilieus Geld auszugeben.</string> 
 
 <string name="l13_helpControl1">Den Spielercharakter kannst du auf drei verschieden Arten steuern:</string>
-<string name="l13_helpControl2">Touchscreen: Bildschirm in der gewünschten Richtung antippen, um den Hasen zu bewegen. Die Bewegung stoppt, falls du den Hasen berührst.</string>
+<string name="l13_helpControl2">Touchscreen: Bildschirm an der horizontalen/vertikalen Spielerachse antippen, um den Hasen in die gewünschte Richtung zu bewegen. Die Bewegung stoppt, falls du den Hasen berührst.</string>
 <string name="l13_helpControl3">D-Pad: Durch die Pfeiltasten wandert der Hase in die entsprechende Richtung. Benutze die Eingabetase des D-Pads, um den Hasen anzuhalten.</string>
 <string name="l13_helpControl4">Trackball: Verwende den Trackball, um den Hasen zu navigieren. Ein Druck auf den Trackball stoppt die Spielerbewegung.</string>
 
