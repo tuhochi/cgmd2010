@@ -12,6 +12,51 @@
 	-->
 <credits>
 
+<!--  level 13 -->
+<credit type="music" author="harri" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=16174" 
+	usage="l13 - background music" 
+	license="CC Sampling Plus 1.0" 
+	name="digibass_loop_170bpm">
+</credit>
+<credit type="sound" author="epanody" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=86683" 
+	usage="l13 - prostitute sound" 
+	license="CC Sampling Plus 1.0" 
+	name="epanody--orgasm_and_breathing">
+</credit>
+<credit type="sound" author="NoiseCollector" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=63476" 
+	usage="l13 - beer sound" 
+	license="CC Sampling Plus 1.0" 
+	name="burpnice">
+</credit>
+<credit type="texture" author="Silveira Neto" 
+	url="http://silveiraneto.net/tag/tileset/" 
+	usage="l13 - background map" 
+	license="CC" 
+	name="My free Tileset, version 10">
+</credit>
+<credit type="texture" author="Nesusvet" 
+	url="http://commons.wikimedia.org/wiki/File:Beer_template.gif" 
+	usage="l13 - beer texture, level icon, wasted texture" 
+	license="Public domain" 
+	name="Beer_template">
+</credit>
+<credit type="texture" author="Ltljltlj" 
+	url="http://commons.wikimedia.org/wiki/File:Stop_sign_MUTCD.svg" 
+	usage="l13 - censored texture" 
+	license="Public domain" 
+	name="Stop_sign_MUTCD">
+</credit>
+<credit type="texture" author="Olek Remesz" 
+	url="http://commons.wikimedia.org/wiki/File:Police_handcuffs_alt.jpg" 
+	usage="l13 - busted texture" 
+	license=" GNU Free Documentation License, Version 1.2" 
+	name="Police_handcuffs">
+</credit>
+
+
 <!-- Level 23 --> 
 <credit type="sound" author="shawshank73" 
 	url="http://www.freesound.org/samplesViewSingle.php?id=87380" 
@@ -163,6 +208,7 @@
 		url="http://www.openclipart.org, [search for: rpg map]"
 		usage="The game map"
 		license="CC">
+</credit>
 <credit
 		type="texture"
 		name="Crossed swords"
@@ -170,6 +216,7 @@
 		url="http://www.openclipart.org/detail/3058"
 		usage="Icon for the police"
 		license="CC">
+</credit>
 <credit
 		type="texture"
 		name="Star"
