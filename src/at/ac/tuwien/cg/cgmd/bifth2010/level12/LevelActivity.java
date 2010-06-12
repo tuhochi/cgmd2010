@@ -135,7 +135,9 @@ public class LevelActivity extends Activity{
 		int gainedMoney = GameMechanics.getSingleton().getMoney();
 		int burnedMoney = GameMechanics.getSingleton().getBurnedMoney();
 		float totalMoneyPercent = (gainedMoney + burnedMoney)*0.01f;
-		s.setProgress((int)(burnedMoney/totalMoneyPercent));
+		if(totalMoneyPercent == 0.0f) s.setProgress(0);
+		else s.setProgress((int)(burnedMoney/totalMoneyPercent));
+		
 		System.out.println("burned: " + burnedMoney + " |gained: " + gainedMoney + "score: " + (int)(burnedMoney/totalMoneyPercent));
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
