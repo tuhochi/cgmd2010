@@ -12,7 +12,9 @@ public class GameMechanics {
 	private long mTimeGamePaused = -1;
 	private int mSelectedTower = 0;
 	private long mLastColDetDone = -1;
-	private LevelActivity mGameContext = null;	
+	private LevelActivity mGameContext = null;
+	private int mSpawndenemies = 0;
+	private int mKilledenemies = 0;
 	
 	
 	private static GameMechanics mSingleton = null;
@@ -169,6 +171,22 @@ public class GameMechanics {
 	public CharSequence getPossibleFreezeTowerCount() {
 		Integer count = (int)Math.floor( Definitions.FREEZE_TOWER_IRON_NEED / mIron );
 		return count.toString();
+	}
+
+	public int getKilledEnemies() {
+		return mKilledenemies;
+	}
+
+	public int getSpawnedEnemies() {
+		return mSpawndenemies;
+	}
+	
+	public void addSpawnedEnemie(){
+		mSpawndenemies++;
+	}
+	
+	public void addKilledEnemie(){
+		mKilledenemies++;
 	}
 
 }

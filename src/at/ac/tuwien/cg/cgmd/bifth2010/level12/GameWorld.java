@@ -179,6 +179,7 @@ public class GameWorld {
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
 					}
+					GameMechanics.getSingleton().addSpawnedEnemie();
 				}
 				break;
 			case(1):
@@ -199,6 +200,7 @@ public class GameWorld {
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
 					}
+					GameMechanics.getSingleton().addSpawnedEnemie();
 				}
 				break;
 			case(2):
@@ -219,6 +221,7 @@ public class GameWorld {
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
 					}
+					GameMechanics.getSingleton().addSpawnedEnemie();
 				}
 				break;
 			case(3):
@@ -239,6 +242,7 @@ public class GameWorld {
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
 					}
+					GameMechanics.getSingleton().addSpawnedEnemie();
 				}
 				break;
 			case(4):
@@ -259,6 +263,7 @@ public class GameWorld {
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
 					}
+					GameMechanics.getSingleton().addSpawnedEnemie();
 				}
 				break;
 			case(5):
@@ -279,6 +284,7 @@ public class GameWorld {
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
 					}
+					GameMechanics.getSingleton().addSpawnedEnemie();
 				}
 				break;
 			case(6):
@@ -299,6 +305,7 @@ public class GameWorld {
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
 					}
+					GameMechanics.getSingleton().addSpawnedEnemie();
 				}
 				break;
 			default:
@@ -450,6 +457,7 @@ public class GameWorld {
                     if ( mEnemies.get(i).toRemove() ){
                        	mEnemies.get(i).deactivate();
                     	mEnemies.remove(i);
+                    	GameMechanics.getSingleton().addKilledEnemie();
                     	i--;
                     }
                     
