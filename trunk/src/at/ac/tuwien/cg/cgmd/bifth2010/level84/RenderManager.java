@@ -22,23 +22,41 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class RenderManager implements Renderer,OnDismissListener {
 
+	/**
+	 * main render class
+	 * @author Georg, Gerald
+	 */
+	
+	/** our {@link LevelActivity}**/
 	private LevelActivity activity;
+	/** our street model**/
 	private ModelStreet street;
+	/** list with all gem models **/
 	private List<Model> gems;
 	
+	/** variable used for calculations of deltatime**/
 	private long lastTime = -1;
+	/** the {@link Accelerometer}**/
 	private Accelerometer accelerometer;
 	
+	/** {link {@link TextView} component for showing framerate**/
 	private TextView tfFps;
+	/** {link {@link TextView} component for showing money amount**/
 	private TextView tfPoints;
+	/** {link {@link TextView} component used as font shadow for money amount**/
 	private TextView tfPointsShadow;
 	
+	/** framerate variable**/
 	private int fps = 0;
+	/** variable for handling results {@link ProgressManager}**/
 	private ProgressManager progman;
 		
+	/** distance to the levelend**/
 	float streetMeter = 0;
+	/** format of the streetMeter output **/
 	DecimalFormat df = new DecimalFormat("0");
 	
+	/** if game is still active or at the end **/
 	private boolean gamefinished = false;
 	
 	
@@ -52,7 +70,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 		}
 	};
 	
-	/** Handler for points */
+	/** Handler for (money-) points  */
 	private Handler updatePoints = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -62,7 +80,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 		}
 	};
 	
-	/** Handler for gameTime */
+	/** Handler for gameTime - how many meters to the end of the level */
 	private Handler updateGameMeter = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -72,7 +90,9 @@ public class RenderManager implements Renderer,OnDismissListener {
 		}
 	};
 	
-	 private Handler showResultDialog = new Handler() {
+	 /**
+	 * Handler for showing the {@link ResultDialog} at the end of the level*/
+	private Handler showResultDialog = new Handler() {
 		 	@Override
 	    	public void handleMessage(Message msg) {
 	    		ResultDialog resultdialog = new ResultDialog(activity,progman);
@@ -88,6 +108,15 @@ public class RenderManager implements Renderer,OnDismissListener {
 	    };
 	
 	
+	/**
+	 * create a new RenderManager for handling the rendering
+	 * @param levelActivity {@link LevelActivity}
+	 * @param street {@link ModelStreet}
+	 * @param gems a list of gem {@link Model}s
+	 * @param accelerometer {@link Accelerometer}
+	 * @param progman {@link ProgressManager}
+	 * @param soundManager {@link SoundManager}
+	 */
 	public RenderManager(at.ac.tuwien.cg.cgmd.bifth2010.level84.LevelActivity levelActivity, ModelStreet street, List<Model> gems, Accelerometer accelerometer, ProgressManager progman, SoundManager soundManager) {
 		this.activity = levelActivity;
 		this.street = street;
@@ -98,8 +127,10 @@ public class RenderManager implements Renderer,OnDismissListener {
 		this.tfPoints = (TextView) levelActivity.findViewById(R.id.l84_Points);
 		this.tfPointsShadow = (TextView) levelActivity.findViewById(R.id.l84_PointsShadow);
 		
+		//init the initial state of the distance from start to endpoint of the level
 		streetMeter = street.getStreetWidth()-16f;
 		
+		//init and start the Timer and TimerTask for the level
 		Timer fpsUpdateTimer = new Timer();
 		fpsUpdateTimer.schedule(new TimerTask() {
 			@Override
@@ -122,6 +153,7 @@ public class RenderManager implements Renderer,OnDismissListener {
 
 		if (!gamefinished)
 		{
+			//calculate deltaTime
 			Date time = new Date();
 			long currentTime = time.getTime();
 			
@@ -133,12 +165,10 @@ public class RenderManager implements Renderer,OnDismissListener {
 			
 			fps++;
 			
-			//TODO: lifecycle ... Timer Bug beheben.
-			
 			//UPDATE -------------------------
 			street.update(deltaTime, accelerometer.getOrientation());
-			
-			checkStreetEnd(street.getStreetPos()); //if the street end is near -> call finish method to finish activity
+
+			checkStreetEnd(street.getStreetPos()); //check if the street end is reached
 			
 			//Log.i("streetPos", "position: " + street.getStreetPos());
 			
@@ -161,20 +191,19 @@ public class RenderManager implements Renderer,OnDismissListener {
 	
 
 	
+	/**
+	 * check if the end of the level has been reached
+	 * @param streetPos recent street Position
+	 */
 	private void checkStreetEnd(float streetPos)
 	{
 		if (streetMeter < 1)
 		{
-			//this.activity.finish();
-			
-			//set flag to true and disable onDrawFrame-update
+			//stop the animation and rendering of the street 
 			gamefinished = true;
 			street.stopStreet();
-			
-			//pass moneyvalues to the resultdialog and show it
-//			Message moneyvalues = new Message();
-//			moneyvalues.arg1 = progman.getStartValue();
-//			moneyvalues.arg2 = progman.getRemainingValue();
+
+			//show the results
 			showResultDialog.sendEmptyMessage(0);
 		}
 	}
@@ -224,9 +253,12 @@ public class RenderManager implements Renderer,OnDismissListener {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see android.content.DialogInterface.OnDismissListener#onDismiss(android.content.DialogInterface)
+	 */
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		//start street translation when introdialog is finished
+		//start street animation
 		street.startStreet();
 	}
 }

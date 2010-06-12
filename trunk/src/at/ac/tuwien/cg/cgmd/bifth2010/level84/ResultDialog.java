@@ -12,14 +12,26 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
+/**
+ * class which shows results at the end of the level
+ * @author Gerald
+ */
+
 public class ResultDialog extends AlertDialog implements OnTouchListener {
 
+	/** view **/
 	private View view;
+	/** ImageView component for showing images **/
 	private ImageView image;
+	/** TextView component for showing text **/
 	private TextView text;
+	/** Button for switching between different ResultDialog pages **/
 	private Button button;
+	/** ProgressManager for getting the results **/
 	private ProgressManager progman;
+	/** recent page which is shown **/
 	private int resultstage = 0;
+	/** variables for localized strings **/
 	private String sHit;
 	private String sBreak;
 	private String sMoneyTotal;
@@ -27,6 +39,11 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	private String sMoneyLost;
 	
 	
+	/**
+	 * creates a new ResultDialog
+	 * @param context {@link Context}
+	 * @param progman {@link ProgressManager}
+	 */
 	public ResultDialog(Context context, ProgressManager progman)
 	{
 		super(context);
@@ -34,11 +51,13 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.l84_customdialog, null);
 		
+		//get the components of the layout
 		text = (TextView) view.findViewById(R.id.l84_dialogtext);
 		image = (ImageView) view.findViewById(R.id.l84_dialogimage);
 		button = (Button) view.findViewById(R.id.l84_dialogbutton);
 		button.setOnTouchListener(this);
 		
+		//set initial params for the dialog
 		setIcon(R.drawable.l84_transparent);
 		setTitle(R.string.l84_result_title);
 		setView(view);
@@ -55,6 +74,9 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 	}
 	
 	
+	/**
+	 * show next result step - depends on the variable resultstage
+	 */
 	public void showNextResultStep()
 	{
 		resultstage++;
@@ -83,6 +105,9 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.view.View.OnTouchListener#onTouch(android.view.View, android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -90,7 +115,6 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 			{
 				showNextResultStep();
 			}
-			
 		}
 		return false;
 	}

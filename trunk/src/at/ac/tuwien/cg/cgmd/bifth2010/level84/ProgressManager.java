@@ -1,33 +1,57 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
 import android.app.Activity;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+/**
+ * main class for handling statistics and results
+ * @author Gerald, Georg
+ */
 
 public class ProgressManager extends SessionState {
 
+	/** remaining money **/
 	private int remainingValue;
+	/** total (start-) money **/
 	private int totalValue;
+	/** our activity **/
 	private Activity activity;
 	
+	/** array for storing hits per gem type **/
 	private int[] gemsHit = new int[4];
+	/** array for storing breaks per gem type **/
 	private int[] gemsBreak = new int[4];
 	
+	/**
+	 * create a new ProgressManager
+	 * @param activity
+	 */
 	public ProgressManager(Activity activity) {
 		this.activity = activity;
 	}
 	
+	/**
+	 * set the total (start-) amount of money
+	 * @param moneyToSpend
+	 */
 	public void setMaxMoney(int moneyToSpend)
 	{
 		totalValue = moneyToSpend;
 		remainingValue = moneyToSpend;
 	}
 	
+	/**
+	 * get the remaining money
+	 * @return remaining money
+	 */
 	public int getRemainingValue()
 	{
 		return remainingValue;
 	}
-	
+
+	/**
+	 * get the start amount of the money
+	 * @return total (start-) money
+	 */
 	public int getStartValue()
 	{
 		return totalValue;
@@ -46,7 +70,6 @@ public class ProgressManager extends SessionState {
 //		}
 	}
 	
-	
 	/**
 	 * define how much money is lost dependent on the draintype if the gem breaks
 	 * @param drainType
@@ -61,26 +84,47 @@ public class ProgressManager extends SessionState {
 //		}
 	}
 	
+	/**
+	 * increase the hit-statistic of the drainType 
+	 * @param drainType
+	 */
 	private void updateGemStatsByHit(int drainType)
 	{
 		gemsHit[drainType-1]++;
 	}
 	
+	/**
+	 * increase the break-statistic of the drainType 
+	 * @param drainType
+	 */
 	private void updateGemStatsByBreak(int drainType)
 	{
 		gemsBreak[drainType-1]++;
 	}
 	
+	/**
+	 * get the hit-statistic of the drainType 
+	 * @param drainType
+	 * @return
+	 */
 	public int getGemStatsHit(int drainType)
 	{
 		return gemsHit[drainType-1];
 	}
 	
+	/**
+	 * get the break-statistic of the drainType 
+	 * @param drainType
+	 * @return
+	 */
 	public int getGemStatsBreak(int drainType)
 	{
 		return gemsBreak[drainType-1];
 	}
 	
+	/* (non-Javadoc)
+	 * @see at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState#getProgress()
+	 */
 	public int getProgress()
 	{
 		return (int)(100f - (float)remainingValue/(float)totalValue * 100f);

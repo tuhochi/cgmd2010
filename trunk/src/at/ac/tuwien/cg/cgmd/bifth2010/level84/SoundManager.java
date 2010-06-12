@@ -10,37 +10,47 @@ import android.media.SoundPool;
 import android.media.MediaPlayer.OnErrorListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * main-class for handling soundeffects and music
+ * @author Gerald
+ */
+
 public class SoundManager {
 
 	private Context context;
 	
-	/** enumeration of existing sounds **/
+	/** enumeration of existing soundeffects **/
 	public enum SoundFX {BUTTON, HIT, MISS, BREAK, SWOOSH};
+	
+	/** amount of sounds - numer of sounds of the enumeration **/
 	private int soundsamount = 5;
-	/** soundpool for playing sounds **/
+	
+	/** soundpool for playing soundeffects **/
 	private SoundPool soundPool;
-	/** hashmap with all available sounds **/
+	
+	/** hashmap with all available soundeffects **/
 	private HashMap<SoundFX, Integer> soundMap;
 	
 	/** mediaplayer for playing background sounds **/
 	private MediaPlayer musicPlayerBG;
 	private MediaPlayer musicPlayerNature;
+	
+	/** set ressource variables for the background sounds **/
 	public static final int MUSIC_BACKGROUND = R.raw.l00_menu;
 	public static final int MUSIC_NATURE = R.raw.l84_nature;
 	
 	/** flag if sound is enabled/disabled **/
 	private boolean soundOn = true;
 	
-	
 	/**
 	 * create a new SoundManager
-	 * @param context
+	 * @param context {@link Context}
 	 */
 	public SoundManager(Context context)
 	{
 		this.context = context;
 	
-		//get soundsettings - if sound is on/off
+		//get soundsettings from framework - if sound is on/off
 		SharedPreferences audiosettings = context.getSharedPreferences(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
 		soundOn = audiosettings.getBoolean(at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity.PREFERENCE_MUSIC, true);
 
@@ -64,8 +74,6 @@ public class SoundManager {
 	private void initSoundMap(Context context)
 	{
 		soundMap = new HashMap<SoundFX, Integer>();
-	
-		//TODO: sound for drop, hit (watersplash), ev. streetnoise, ...
 		soundMap.put(SoundFX.BUTTON, soundPool.load(context,R.raw.l84_button,1));
 		soundMap.put(SoundFX.BREAK, soundPool.load(context,R.raw.l84_break,1));
 		soundMap.put(SoundFX.HIT, soundPool.load(context,R.raw.l84_hit,1));
@@ -73,20 +81,20 @@ public class SoundManager {
 		soundMap.put(SoundFX.SWOOSH, soundPool.load(context,R.raw.l84_swoosh,1));
 	}
 	
-	/**	SoundPool.play  (int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
-		soundID 	a soundID returned by the load() function
-		leftVolume 	left volume value (range = 0.0 to 1.0)
-		rightVolume 	right volume value (range = 0.0 to 1.0)
-		priority 	stream priority (0 = lowest priority)
-		loop 	loop mode (0 = no loop, -1 = loop forever)
-		rate 	playback rate (1.0 = normal playback, range 0.5 to 2.0)
-	**/
+	//		SoundPool.play  (int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
+	//		soundID 	a soundID returned by the load() function
+	//		leftVolume 	left volume value (range = 0.0 to 1.0)
+	//		rightVolume 	right volume value (range = 0.0 to 1.0)
+	//		priority 	stream priority (0 = lowest priority)
+	//		loop 	loop mode (0 = no loop, -1 = loop forever)
+	//		rate 	playback rate (1.0 = normal playback, range 0.5 to 2.0)
+	//	
 	
 	/**
-	 * play available sounds
-	 * @param sound available sound of type SoundFX 
-	 * @param leftVolume range = 0.0 to 1.0
-	 * @param rightVolume range = 0.0 to 1.0
+	 * play soundeffects
+	 * @param sound available sound of type {@link SoundFX} SoundFX 
+	 * @param leftVolume left channel volume range = 0.0 to 1.0
+	 * @param rightVolume right channel volume range = 0.0 to 1.0
 	 * @param loop 0 = no loop, -1 = loop forever
 	 */
 	public void playSound(SoundFX sound, float leftVolume, float rightVolume, int loop)
@@ -98,7 +106,7 @@ public class SoundManager {
 	}
 	
 	/**
-	 * release sounds and music
+	 * release soundeffects and music
 	 */
 	public void releaseSounds()
 	{
@@ -110,9 +118,8 @@ public class SoundManager {
 		}
 	}
 	
-	
 	/**
-	 * init background sound - ambient theme
+	 * init background sound - ambient background theme
 	 * @param context
 	 */
 	private void initMusicBG(Context context)
@@ -134,7 +141,7 @@ public class SoundManager {
 	}
 	
 	/**
-	 * start playing background sounds (ambient and nature)
+	 * start playing background sounds (ambient background and nature)
 	 */
 	public void playMusic()
 	{
@@ -162,7 +169,7 @@ public class SoundManager {
 	}
 	
 	/**
-	 * start background sound
+	 * start playing background sound
 	 */
 	public void startBackground() {
 		
@@ -173,7 +180,7 @@ public class SoundManager {
 	}
 	
 	/**
-	 * pause background sound
+	 * pause playing background sound
 	 */
 	public void pauseBackground()
 	{
@@ -184,7 +191,7 @@ public class SoundManager {
 	}
 
 	/**
-	 * resume background sound
+	 * resume playing background sound
 	 */
 	public void resumeBackground()
 	{
@@ -233,7 +240,7 @@ public class SoundManager {
 	}
 	
 	/**
-	 * start nature background sound
+	 * start playing nature background sound
 	 */
 	public void startNature() {
 		
@@ -244,7 +251,7 @@ public class SoundManager {
 	}
 	
 	/**
-	 * pause nature background sound
+	 * pause palying nature background sound
 	 */
 	public void pauseNature()
 	{
@@ -255,7 +262,7 @@ public class SoundManager {
 	}
 	
 	/**
-	 * resume nature background sound
+	 * resume playing nature background sound
 	 */
 	public void resumeNature()
 	{
@@ -264,7 +271,5 @@ public class SoundManager {
 			musicPlayerNature.start();
 		}
 	}
-
-	
 	
 }
