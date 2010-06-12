@@ -15,57 +15,191 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical">
 				
+				<!-- title -->
 					<TextView 
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:gravity="center"
 						android:textStyle="bold"
-						android:paddingLeft="@dimen/l13_HelpActivity_TitlePadding"
-						android:paddingTop="@dimen/l13_HelpActivity_TitlePadding"
-						android:paddingRight="@dimen/l13_HelpActivity_TitlePadding"
-						android:paddingBottom="@dimen/l13_HelpActivity_TitlePadding"
-						android:textSize="@dimen/l13_HelpActivity_TitleSize"
+						android:paddingLeft="@dimen/l13_helpTitlePadding"
+						android:paddingTop="@dimen/l13_helpTitlePadding"
+						android:paddingRight="@dimen/l13_helpTitlePadding"
+						android:paddingBottom="@dimen/l13_helpTitlePadding"
+						android:textSize="@dimen/l13_helpTitleSize"
 						android:text="@string/l13_GameName"
-						android:textColor="@color/l13_HelpActivity_TitleColor"/>
+						android:textColor="@color/l13_helpTitleColor"
+					/>
 						
+					<!-- introduction -->
 					<TextView
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:textStyle="italic"
-						android:paddingLeft="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingTop="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingRight="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingBottom="@dimen/l13_HelpActivity_TextPadding"
-						android:textSize="@dimen/l13_HelpActivity_TextSize"
-						android:text="@string/l13_HelpActivity_Text1"
-						android:textColor="@color/l13_HelpActivity_TextColor"/>
-			
-					<TextView
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:textStyle="normal"
-						android:paddingLeft="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingTop="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingRight="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingBottom="@dimen/l13_HelpActivity_TextPadding"
-						android:textSize="@dimen/l13_HelpActivity_TextSize"
-						android:text="@string/l13_HelpActivity_Text2"
-						android:textColor="@color/l13_HelpActivity_TextColor"/>
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpIntroduction"
+						android:textColor="@color/l13_helpTextColor"
+					/>
 					
+			
+					<!--  goal description -->
 					<TextView
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:textStyle="normal"
-						android:paddingLeft="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingTop="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingRight="@dimen/l13_HelpActivity_TextPadding"
-						android:paddingBottom="@dimen/l13_HelpActivity_TextPadding"
-						android:textSize="@dimen/l13_HelpActivity_TextSize"
-						android:text="@string/l13_HelpActivity_Text3"
-						android:textColor="@color/l13_HelpActivity_TextColor"/>
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpGoal"
+						android:textColor="@color/l13_helpTextColor"
+					/>
+					
+					
+					
+					<!--  prostitute image -->
+					<ImageView  
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:paddingTop="@dimen/l13_helpImagePadding"
+						android:src="@drawable/l13_mistress"
+					/>
+					
+					
+						<!--  prostitute description -->
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpProstitute"
+						android:textColor="@color/l13_helpTextColor"
+					/>
+					
+					<!-- beer image -->
+					<ImageView  
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:paddingTop="@dimen/l13_helpImagePadding"
+						android:src="@drawable/l13_beer"
+					/>
+					
+						<!--  beer description -->
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpBeer"
+						android:textColor="@color/l13_helpTextColor"
+					/>
+					
+					
+						<!--  police image -->
+					<ImageView  
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:paddingTop="@dimen/l13_helpImagePadding"
+						android:src="@drawable/l13_cop"
+					/>
+					
+						<!--  police description -->
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpPolice"
+						android:textColor="@color/l13_helpTextColor"
+					/>
+					
+			<!--  bunny image -->
+					<ImageView  
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:paddingTop="@dimen/l13_helpImagePadding"
+						android:src="@drawable/l13_bunny"
+					/>
+					
+					<!-- control description1 -->
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpControl1"
+						android:textColor="@color/l13_helpTextColor"
+					/>
+					
+						<!-- control description2 -->
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpControl2"
+						android:textColor="@color/l13_helpTextColor"
+					/>
+					
+						<!-- control description3 -->
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpControl3"
+						android:textColor="@color/l13_helpTextColor"
+					/>
+					
+							<!-- control description4 -->
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textStyle="normal"
+						android:paddingLeft="@dimen/l13_helpTextPadding"
+						android:paddingTop="@dimen/l13_helpTextPadding"
+						android:paddingRight="@dimen/l13_helpTextPadding"
+						android:paddingBottom="@dimen/l13_helpTextPadding"
+						android:textSize="@dimen/l13_helpTextSize"
+						android:text="@string/l13_helpControl4"
+						android:textColor="@color/l13_helpTextColor"
+					/>
 				
 			
-
-</LinearLayout>
-	</ScrollView>
-</LinearLayout>
+					
+					
+				</LinearLayout>
+			</ScrollView>
+		</LinearLayout>
