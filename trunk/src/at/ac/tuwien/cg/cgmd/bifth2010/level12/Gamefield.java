@@ -109,13 +109,13 @@ public class Gamefield extends GLObject{
 		res = GameWorld.getSingleton().getRes();
 		//gl.glTranslatef(res[0]*0.5f, res[1]*0.5f, 0.0f);
 		//gl.glScalef(res[0], res[1], 1.0f);
-		gl.glTranslatef(res[0]-res[0]*0.1f*0.5f, res[1]*0.5f, 0.0f);
-		gl.glScalef(res[0]*0.1f, res[1], 1.0f);
+		gl.glTranslatef(res[0]-res[0]*0.4f*0.5f, res[1]*0.5f, 0.0f);
+		gl.glScalef(res[0]*0.4f, res[1], 1.0f);
 		TextureManager.getSingletonObject().setTexture(R.drawable.l12_road);
 		super.draw(gl);
 		gl.glLoadIdentity();
-		gl.glTranslatef(res[0]*0.135f*0.5f, res[1]*0.5f, 0.0f);
-		gl.glScalef(res[0]*0.135f, res[1], 1.0f);
+		gl.glTranslatef(res[0]*0.4f*0.5f, res[1]*0.5f, 0.0f);
+		gl.glScalef(res[0]*0.4f, res[1], 1.0f);
 		TextureManager.getSingletonObject().setTexture(R.drawable.l12_house);
 		super.draw(gl);
 		gl.glLoadIdentity();
