@@ -75,9 +75,13 @@ public class LevelActivity extends Activity
 			}
 		};
 		
-		gameView = new GameView(this, gameEnded, new SessionState(getIntent().getExtras()));		
+		gameView = new GameView(this, gameEnded, new SessionState(getIntent().getExtras()));
+		gameView.setClickable(true);
+		gameView.setFocusable(true);
+		
 
-		setContentView( gameView );				
+		setContentView( gameView );	
+		gameView.requestFocus();
 	}
 
     @Override

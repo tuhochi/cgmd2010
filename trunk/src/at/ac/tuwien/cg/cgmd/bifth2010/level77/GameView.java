@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
 import java.io.BufferedInputStream;
+import java.util.Date;
 import java.util.prefs.Preferences;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -12,6 +13,7 @@ import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.preference.Preference;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 /**
@@ -29,11 +31,21 @@ public class GameView extends GLSurfaceView
 	Native jni;
 	Audio audio;
 	private int score;
+	/**
+	 * @return the score
+	 */
+	public int getScore()
+	{
+		return score;
+	}
+
+
 	private Callback<Integer> deleteMe;
 	private SharedPreferences prefs;
 	private SessionState sessionState;
+	private long startTime;
 	
-	public GameView(Context context, Callback<Integer> gameEnded, SessionState sessionState)
+	public GameView(Context context, final Callback<Integer> gameEnded, SessionState sessionState)
 	{
 		super(context);
 		
@@ -61,15 +73,39 @@ public class GameView extends GLSurfaceView
 			}
 		};
 		
+		Callback<Void> timeUp = new Callback<Void>()
+		{
+			
+			@Override
+			public void onSucces(Void result)
+			{
+				
+				gameEnded.onSucces(getScore());
+			}
+			
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				Log.e(TAG, "Error when ending game");
+				caught.printStackTrace();
+			}
+		}; 
+		
 		// Play the theme song
 		audio.playSound(Audio.BUNNY_BLOCK_THEME);
+		
+		// Set startDate
+		startTime = System.currentTimeMillis();
 
 		jni = new Native(context, audio, gameEnded, updateScore);
 		
 		// native depends on renderer vars initialised
-		setRenderer(new L77Renderer(true, context, jni));
+		renderer = new L77Renderer(true, context, jni, timeUp);
+		renderer.setStartTime(startTime);
+		setRenderer(renderer);
 		
 	}
+	
 	/**
 	 * TODO Javadoc
 	 * @param sharedPreferences 
@@ -86,6 +122,7 @@ public class GameView extends GLSurfaceView
 			ed.putString("native", state);
 		}
 		ed.putInt("score", score);
+		ed.putLong("dateOffset", System.currentTimeMillis() - startTime);
 		ed.commit();
 	}
 
@@ -97,6 +134,8 @@ public class GameView extends GLSurfaceView
 		score = sharedPreferences.getInt("score", 0);
 		String state = sharedPreferences.getString("native", "");
 		jni.nativeRestoreSavedState(state);
+		startTime = System.currentTimeMillis() - sharedPreferences.getLong("dateOffset", 0);
+		renderer.setStartTime(startTime);
 	}
 	
 	/**
@@ -105,13 +144,29 @@ public class GameView extends GLSurfaceView
 	@Override
 	public boolean onTouchEvent(final MotionEvent event)
 	{
+		float x = event.getX(), y = event.getY();
+		
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
-			jni.touchesBegan(event.getX(), event.getY());
+			jni.touchesBegan(x, y);
 		if (event.getAction() == MotionEvent.ACTION_MOVE)
-			jni.touchesMoved(event.getX(), event.getY());
+			jni.touchesMoved(x, y);
 		if (event.getAction() == MotionEvent.ACTION_UP)
-			jni.touchesEnded(event.getX(), event.getY());
-			
+			jni.touchesEnded(x, y);
+		
+		// For development only
+		renderer.onTouchEvent(event);
+		
+		return true;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		Log.d(TAG, "Key down: " + keyCode);
+		
 		return true;
 	}
 	
