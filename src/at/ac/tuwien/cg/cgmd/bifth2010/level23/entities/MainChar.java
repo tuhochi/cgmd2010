@@ -554,7 +554,7 @@ public class MainChar implements SceneEntity {
 		else
 		{
 			soundManager.pausePlayer(audioIdGameOverSound);
-			LevelActivity.instance.setScore((int)(RenderView.instance.balloonHeight*Settings.SCOREHEIGHT_MODIFIER));
+			LevelActivity.instance.setScore(RenderView.instance.score);
 		}
 	}
 	

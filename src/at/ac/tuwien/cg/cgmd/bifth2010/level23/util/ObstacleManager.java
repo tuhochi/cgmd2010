@@ -137,7 +137,7 @@ public class ObstacleManager
 	 */
 	public void writeToStream(DataOutputStream dos) {
 		try {
-			dos.writeInt(leastRenderedObstacle);
+			dos.writeInt(NR_OF_OBSTACLES);
 			
 		} catch(Exception e) {
 			System.out.println("Error writing to stream in ObstacleManager.java: "+e.getMessage());
@@ -162,7 +162,7 @@ public class ObstacleManager
 	 */
 	public void readFromStream(DataInputStream dis) {
 		try {
-			leastRenderedObstacle = dis.readInt(); 
+			NR_OF_OBSTACLES = dis.readInt(); 
 			
 		} catch(Exception e) {
 			System.out.println("Error reading from stream in ObstacleManager.java: "+e.getMessage());
@@ -238,11 +238,10 @@ public class ObstacleManager
 		//calculate current topBounds value for relative position
 		float topBounds = currentHeight+(int)renderView.getTopBounds();
 		//Log.v("topBounds Height: ", String.valueOf(topBounds));
-		boolean renderNext = true;
-		boolean leastRenderedFound = false;
+
 		int i = leastRenderedObstacle;
 		
-		while(renderNext && i != NR_OF_OBSTACLES)
+		while(i != NR_OF_OBSTACLES)
 		{
 			Obstacle tempObstacle = obstacles.get(i);
 			
@@ -253,13 +252,6 @@ public class ObstacleManager
 				if(renderView.gameState != 2)
 					tempObstacle.update();
 				
-				//find lowest index of a visible obstacle
-				if(!leastRenderedFound)
-				{
-					leastRenderedFound = !leastRenderedFound;
-					leastRenderedObstacle = i;
-				}
-
 				//render
 				glPushMatrix();		
 
@@ -292,17 +284,10 @@ public class ObstacleManager
 						        }
 							});
 				}
-				i++;
 			}
-			else
-			{
-				//invisible
-				if(leastRenderedFound)
-					renderNext = false;
-				else
-					i++;
-			}
+			i++;
 		}
+		
 	}
 	
 	/**
