@@ -19,6 +19,7 @@ public class ProgressHandler extends SessionState{
 	private int actuallyProgress = 0;
 	private int actuallyGold = 0;
 	
+	/** True if you loose the whole amount of gold*/
 	public static boolean isLevelCompleted = false;
 	
 	public ProgressHandler(){

@@ -14,30 +14,67 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
+/**
+ * This class handles all the logic-steps. After the level has been created every loop the time-based changes,
+ * like "show the shortest path to an item" or if you picked up a spring and it changes to an other item, will
+ * be updated.
+ * The second path contains to update the character's position. Therefore the target position will be considered
+ * and after checking if steering to this position is possible the movement will be calculated.
+ * After each step the actually level-field will be considered. If there is an item, it will be picked up. For each
+ * a sound will be played and the individual changes will be done.
+ *
+ */
 public class LevelHandler {
 	
 	
 
 	int world[];
+	
+	/** The level's size as a vector*/
 	public static Vector2i worldDim;
 	Vector2f gameCharacterPosition; // actual Position
 	Vector2f gameCharacterTargetPosition; // target Position
+	
+	/** In which direction the character looks*/
 	public static int characterRotaion=0;
+	
 	boolean characterMoves = false; // if Character is moving in this moment
 	float gameCharacterSpeed = 30;
+	
+	/** The whole level as ArrayList. Contains all informations about walls and items*/
 	public static ArrayList<int[]> worldEntry;
+	
+	/** Contains all field-numbers where the good items can be find in the level*/
 	public static List<Integer> goodiesIndex;
+	
+	/** The character's field*/
 	public static int gameCharacterField;
 	
 	List<int[]> springChangeList = new Vector<int[]>();
+	
+	/** The collected items, important for animation*/
 	public static List<float[]> collectedItemList = new Vector<float[]>();
+	
+	/** The thread which calculates the shortest path to an item*/
 	public static MapCalculationThread mapCalculationThread = null;
+	
+	/** True if the first map was collected */
 	public static boolean isFirstMap = false;
+	
+	/** Time in seconds how long the shortest path will be shown */
 	public static int mapIsActiveTimer = 0;
+	
+	/** True if the shortest way to an item will be shown*/
 	public static boolean mapIsActive = false;
 	int[][] mapResult;
+	
+	/** True if the thread which calculates the shortest way has been started*/
 	public static boolean isMapThreadStarted = false;
+	
+	/** Number of items which are available*/
 	public static int numberOfGoodGoodies=0;
+	
+	/** Number of collected maps*/
 	public static int collectedMap=-1;
 	String collectedMapText="";
 	
@@ -53,7 +90,7 @@ public class LevelHandler {
 	}
 
 	/**
-	 * this method generate the Level
+	 * this method generate the Level and all level-parameter will be initialized
 	 */
 	private void generateLevel() {
 
@@ -96,7 +133,14 @@ public class LevelHandler {
 	
 		
 	}
-
+	
+	/**
+	 * This method describes the main-update-logic. First all time-based-changes like a collected spring
+	 * will be updated.
+	 * The second path contains to update the character's position. Therefore the target position will be considered
+	 * and after checking if steering to this position is possible the movement will be calculated.
+	 * After each step the actually level-field will be considered.
+	 */
 	public void updateLogic() {
 
 		
@@ -198,7 +242,10 @@ public class LevelHandler {
 
 
 	/**
-	 * The world will be updated
+	 * The world will be updated after a step. If there is an item on the field, it will collected. The individual 
+	 * changes will be done, like playing sound, update the amount of gold, update the user interface-information
+	 * and update the list of collected items for animation.
+	 * 
 	 */
 	private void updateLevelAfterStep() {
 		
@@ -489,6 +536,15 @@ public class LevelHandler {
 		return position;
 	}
 	
+	/**
+	 * 
+	 * Checks if the field is in the frustum.
+	 * 
+	 * @param fieldNumber		the field-number which should be checked
+	 * @param frustumMin		the min-border of the frustum
+	 * @param frustumMax		the max-border of the frustum
+	 * @return 					true if field is in frustum?
+	 */
 	public boolean isFieldInFrustum(int fieldNumber,Vector2i frustumMin, Vector2i frustumMax){
 		
 		Vector2i position = getWorldCoordinate(fieldNumber);

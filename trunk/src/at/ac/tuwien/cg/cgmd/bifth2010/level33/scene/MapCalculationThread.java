@@ -30,7 +30,9 @@ public class MapCalculationThread extends Thread {
 	private int[][] newArrowOrder;
 	private LevelHandler level = null;
 	
+	/** True if the thread is ready to deliver a result */
 	public static boolean isThreadReady = false;
+	
 	private boolean done = true;
 	
 	public MapCalculationThread(LevelHandler level, int columnsRows){
