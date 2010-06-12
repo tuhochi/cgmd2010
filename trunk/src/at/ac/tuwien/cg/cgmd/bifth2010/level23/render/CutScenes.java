@@ -16,6 +16,9 @@ import static android.opengl.GLES10.glTexCoordPointer;
 import static android.opengl.GLES10.glTranslatef;
 import static android.opengl.GLES10.glVertexPointer;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -81,6 +84,47 @@ public class CutScenes
 		{
 			vboId = geometryManager.createVBO(vertexBuffer, texCoordBufferIntro);
 		}
+	}
+	
+	/**
+	 * Writes to DataOutputStream 
+	 * @param dos the stream to write to 
+	 */
+	public void writeToStream(DataOutputStream dos)
+	{
+		try {
+			dos.writeFloat(introTexScale);
+			dos.writeFloat(introScale);
+			dos.writeFloat(introTexShift);
+			dos.writeFloat(introTime);
+			dos.writeBoolean(introInGoState);
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Error writing from stream in CutScenes.java: "+e.getMessage());
+		}
+		
+	}
+	
+	/**
+	 * Reads from stream
+	 * @param dis the DataInputStream to read from
+	 */
+	public void readFromStream(DataInputStream dis)
+	{
+		try 
+		{
+			introTexScale = dis.readFloat();
+			introScale = dis.readFloat();
+			introTexShift = dis.readFloat();
+			introTime = dis.readFloat();
+			introInGoState = dis.readBoolean();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Error reading from stream in CutScenes.java: "+e.getMessage());
+		}
+	
 	}
 	
 	/**

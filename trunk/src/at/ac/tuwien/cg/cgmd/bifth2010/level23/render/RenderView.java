@@ -47,8 +47,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         }
     };
     /** ScoreHandle Class */
-    class ScoreHandle implements Runnable{
-		  
+    class ScoreHandle implements Runnable{ 
     	@Override
         public void run() {
             context.scoreChanged(score);
@@ -151,7 +150,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	private CutScenes cutScenes; 
 	
 	/** The score. */
-	private int score;
+	public int score;
 
 	/** The last shown score. */
 	private int lastScore;
@@ -161,6 +160,10 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	
 	/** Manager for decoration rendering (clouds etc.). */
 	private DecorationManager decorationManager;
+	
+	private int startAudioPosition = -1;
+	
+	private boolean startAudioWasPlaying;
 	
 //	private float fixedStep = 25;
 //	private float accuTime;
@@ -371,7 +374,14 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		cutScenes.introTexId = textureManager.getTextureId(context.getResources(), resID);
 		TextureAtlas.instance.loadAtlasTexture();
 		
-		setGameOver(false); 
+		setGameOver(false);
+		if(startAudioWasPlaying)
+		{
+			soundManager.setPlayerPosition(startAudioId, startAudioPosition);
+			soundManager.startPlayer(startAudioId);
+			startAudioPosition=-1;
+			startAudioWasPlaying=false;
+		}
 	}
 		
 	/* (non-Javadoc)
@@ -627,7 +637,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			decorationManager.reset();
 			timer.resetTimers();
 			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
-			gameState = INTRO;
+//			gameState = INTRO;
 			isInitialized = true;
 		}
 	}
@@ -641,6 +651,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			// local
 			dos.writeInt(gameState);
 			dos.writeBoolean(isInitialized);
+			dos.writeBoolean(firstStart);
 			dos.writeBoolean(released);
 			dos.writeInt(mainCharMoveDir);
 			dos.writeFloat(balloonHeight);
@@ -650,11 +661,21 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			dos.writeFloat(timer.getAccFrameTimes());
 			dos.writeBoolean(hud.isMoneyButtonActive());
 			
+			startAudioWasPlaying = soundManager.isPlaying(startAudioId);
+			dos.writeBoolean(startAudioWasPlaying);
+			
+			if(startAudioWasPlaying)
+			{
+				startAudioPosition =soundManager.getPlayerPosition(startAudioId);
+				dos.writeInt(startAudioPosition);
+			}
+			
 			// propagate
 			mainChar.writeToStream(dos); 
 			background.writeToStream(dos); 
 			obstacleManager.writeToStream(dos); 
 			decorationManager.writeToStream(dos);
+			cutScenes.writeToStream(dos);
 			
 		} catch (Exception e) {
 			System.out.println("Error writing to stream in RenderView: "+e.getMessage());
@@ -691,6 +712,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		try {
 			gameState = dis.readInt();
 			isInitialized = dis.readBoolean();
+			firstStart = dis.readBoolean();
 			released = dis.readBoolean(); 
 			mainCharMoveDir = dis.readInt(); 
 			balloonHeight = dis.readFloat(); 
@@ -698,10 +720,19 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			
 			timer.setAccFrameTime(dis.readFloat()); 
 			hud.setMoneyButtonActive(dis.readBoolean());
+			
+			startAudioWasPlaying = dis.readBoolean();
+			
+			if(startAudioWasPlaying)
+			{
+				startAudioPosition = dis.readInt();
+			}
+			
 			mainChar.readFromStream(dis); 
 			background.readFromStream(dis); 
 			obstacleManager.readFromStream(dis); 
 			decorationManager.readFromStream(dis);
+			cutScenes.readFromStream(dis);
 			
 		} catch (Exception e) {
 			System.out.println("Error reading from stream in RenderView.java: "+e.getMessage()); 

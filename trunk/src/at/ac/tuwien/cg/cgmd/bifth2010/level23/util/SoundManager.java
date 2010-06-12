@@ -107,6 +107,16 @@ public class SoundManager
 		}
 	}
 	
+	public int getPlayerPosition(int playerId)
+	{
+		return players.get(playerId).getCurrentPosition();
+	}
+	
+	public void setPlayerPosition(int playerId, int playerPos)
+	{
+		players.get(playerId).seekTo(playerPos);
+	}
+	
 	/**
 	 * Pause all players
 	 */
