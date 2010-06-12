@@ -238,6 +238,13 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 		gl.glLoadIdentity();
 		gl.glOrthof(0, width*zoomFactor, 0, height*zoomFactor, -1.0f, 1.0f);
 		gl.glViewport(0, 0, width, height);
+		
+		//create all game objects
+		gameControl.createGameObjects();
+
+		//start background music
+		SoundManager.init(context);
+		SoundManager.getInstance().startMusic();
 	}
 
 
@@ -273,12 +280,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 
-		//create all game objects
-		gameControl.createGameObjects();
-
-		//start background music
-		SoundManager.init(context);
-		SoundManager.getInstance().startMusic();
+		
 	}
 
 
