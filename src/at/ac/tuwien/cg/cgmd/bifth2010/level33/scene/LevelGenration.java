@@ -50,10 +50,19 @@ public class LevelGenration {
 	//Verhältniss Goodies/Wege
 	double goodiesWayRatio = 0.3;
 	
+	/** Number of maps */
 	public static int numberOfMaps=3;
+	
+	/** Number of stones */
 	public static int numberOfStone=20;
+	
+	/** Number of barrels */
 	public static int numberOfBarrel=5;
+	
+	/** Number of trashes */
 	public static int numberOfTrashes=4;
+	
+	/** Number of springs */
 	public static int numberOfSpring=4;
 	//double percentOfWay=0.2;
 	

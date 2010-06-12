@@ -54,60 +54,125 @@ public class SceneGraph  {
 	private float startItemAlpha = 0.90f;
 	private boolean playingFinalSound=true;
 	
+	/** Defines the value of an wall-element which will be stored in the world-array */
 	public final static byte GEOMETRY_WALL = 0;
-	public final static byte GEOMETRY_WAY = 1;
-	public final static byte GEOMETRY_WORLD = 2;
 	
+	/** Defines the value of an way-element which will be stored in the world-array */
+	public final static byte GEOMETRY_WAY = 1;
+	
+	//public final static byte GEOMETRY_WORLD = 2;
+	
+	/** Defines the value of an left-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_LEFT = 5;
+	
+	/** Defines the value of an left-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_DOWN = 6;
+	
+	/** Defines the value of an right-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_RIGHT = 7;
+	
+	/** Defines the value of an up-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_UP = 8;
 	
+	/** Defines the value of an corner-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_BOTTOM_TO_RIGHT = 21;
+	
+	/** Defines the value of an cornert-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_RIGHT_TO_TOP = 22;
+	
+	/** Defines the value of an corner-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_TOP_TO_LEFT = 23;
+	
+	/** Defines the value of an corner-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_LEFT_TO_BOTTOM = 24;
 	
+	/** Defines the value of an corner-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_BOTTOM_TO_LEFT = 25;
+	
+	/** Defines the value of an corner-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_LEFT_TO_TOP = 26;
+	
+	/** Defines the value of an corner-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_TOP_TO_RIGHT = 27;
+	
+	/** Defines the value of an corner-arrow-element which will be stored in the world-array */
 	public final static byte ARROW_RIGHT_TO_BOTTOM = 28;
 	
+	
+	
+	
+	/** Defines the value of an stone-element which will be stored in the world-array */
 	public final static byte GEOMETRY_STONE = 11;
+	
+	/** Defines the value of an barrel-element which will be stored in the world-array */
 	public final static byte GEOMETRY_BARREL = 12;
+	
+	/** Defines the value of an trash-element which will be stored in the world-array */
 	public final static byte GEOMETRY_TRASH = 13;
+	
+	/** Defines the value of an map-element which will be stored in the world-array */
 	public final static byte GEOMETRY_MAP = 14;
+	
+	/** Defines the value of an spring-element which will be stored in the world-array */
 	public final static byte GEOMETRY_SPRING = 15;
+	
+	/** Defines the value of the character which will be stored in the world-array */
 	public final static byte GEOMETRY_CHARACTER = 16;
 	
+	
+	
+	/** Defines the value a wall-element with special edges which will be stored in the world-array */
 	public final static int EDGE_NONE_SPECIAL_WALL = 0;
+	/** Defines the value a wall-element with special edges which will be stored in the world-array */
 	public final static int EDGE_ONE_SPECIAL_WALL = -1;
+	/** Defines the value a wall-element with special edges which will be stored in the world-array */
 	public final static int EDGE_TWO_SPECIAL_WALL = -2;
+	/** Defines the value a wall-element with special edges which will be stored in the world-array */
 	public final static int EDGE_THREE_SPECIAL_WALL = -3;
+	/** Defines the value a wall-element with special edges which will be stored in the world-array */
 	public final static int EDGE_FOUR_SPECIAL_WALL = -4;
+	/** Defines the value a wall-element with special edges which will be stored in the world-array */
 	public final static int EDGE_COUNTERPART_SPECIAL_WALL = -5;
 	
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int CORNER_NONE_SPECIAL = -6;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int CORNER_ONE_SPECIAL = -7;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int CORNER_TWO_SPECIAL = -8;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int CORNER_THREE_SPECIAL = -9;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int CORNER_FOUR_SPECIAL = -10;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int CORNER_COUNTERPART_SPECIAL = -11;
 	
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int SPECIAL_ONE_EDGE_ONE_RIGHT_CORNER_WALL = -12;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int SPECIAL_ONE_EDGE_ONE_LEFT_CORNER_WALL = -13;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int SPECIAL_ONE_EDGE_TWO_CORNER_WALL = -14;
+	/** Defines the value a wall-element with special corners which will be stored in the world-array */
 	public final static int SPECIAL_TWO_EDGE_ONE_CORNER_WALL = -15;
 	
+	/** Defines the value a wall-element with connection-elements which will be stored in the world-array */
 	public final static int CONNECTION_NONE_WALL = 0;
+	/** Defines the value a wall-element with connection-elements which will be stored in the world-array */
 	public final static int CONNECTION_ONE_WALL = 1;
+	/** Defines the value a wall-element with connection-elements which will be stored in the world-array */
 	public final static int CONNECTION_TWO_WALL = 2;
+	/** Defines the value a wall-element with connection-elements which will be stored in the world-array */
 	public final static int CONNECTION_THREE_WALL = 3;
+	/** Defines the value a wall-element with connection-elements which will be stored in the world-array */
 	public final static int CONNECTION_FOUR_WALL = 4;
+	/** Defines the value a wall-element with connection-elements which will be stored in the world-array */
 	public final static int CONNECTION_COUNTERPART_WALL = 5;
 	
+	/** Level-Activity */
 	public static LevelActivity activity;
 	public  static Vector2f touchDim = new Vector2f(0, 0);
+	/** Frustum's size */
 	public  static Vector2i frustumDim = new Vector2i(3, 5);
 	private Vector2i frustumMin = new Vector2i(0, 0);
 	private Vector2i frustumMax = new Vector2i(0, 0);
@@ -122,8 +187,12 @@ public class SceneGraph  {
 	private ImageView ivMapTimeIcon;
 	private ImageView ivItemIcon;
 	private ImageButton ibGeneralViewButton;
+	
+	/** Button for the shortest path to an item */
 	public static ImageButton ibPathButton;
+	/** Amount of collected maps */
 	public static TextView tvPathCount;
+	/** Status of loading-sequenze */
 	private static TextView tvLoadingScreen;
 	private ProgressBar pbLoadingBar;
 	String collectedMapText="";
@@ -136,14 +205,22 @@ public class SceneGraph  {
 	
 	private Vector2f lastPos = new Vector2f(0, 0);
 	private float lastZoom;
+	
+	/** Camera-Translation */
 	public static Vector2f cameraTranslation = new Vector2f(0,0);
 	
 	StopTimer frameTimer = new StopTimer();
 	
 	/**
 	 * constructor
-	 * @param level is the level to play
-	 * @param activity is the GameView 
+	 * All User-Interface-elements and the event-handlers for the buttons will be initialized.
+	 * If the overview-button is pressed, the camera zoom will be changed and isn't possible
+	 * to move the character.
+	 * If the the button to find the shortest path to an item is pressed, the user-interface
+	 * elements will be updated and the calculation-thread will be started.
+	 * 
+	 * @param level 		is the level to play
+	 * @param activity 		is the GameView 
 	 * @param tvLevelFps 
 	 */
 	
@@ -269,7 +346,9 @@ public class SceneGraph  {
 		
 	}
 	
-
+	/**
+	 * Updates the user-interface if the loading-sequence is over
+	 */
 	public void loadingComplete() {
 		activity.runOnUiThread(new Runnable() {public void run() {
 			tvLoadingScreen.setText(R.string.l33_tutorial_startGame);
@@ -277,7 +356,9 @@ public class SceneGraph  {
 		}});
 	}
 	
-	
+	/**
+	 * The user-interface-view will be changed if the user wants to start the game
+	 */
 	public void switchView() {
 		
 		activity.runOnUiThread(new Runnable() {public void run() {
@@ -293,7 +374,9 @@ public class SceneGraph  {
 	
 
 	/**
-	 * This Method represent the main render loop of the SceneGraph
+	 * This Method represent the main render loop of the SceneGraph.
+	 * In this loop the time will be calculated, the user-interface-elements which switch 
+	 * every seconds will be updated and the scene will be rendered.
 	 * 
 	 * @param gl
 	 */
@@ -422,10 +505,7 @@ public class SceneGraph  {
 			LevelHandler.collectedMap=0;
 		}
 		
-		
-		
 		//Set the progress
-		
 		pbProgressBar.setProgress(LevelActivity.progressHandler.getActualllyGold());
 		
 		// Clears the screen and depth buffer.
@@ -454,30 +534,30 @@ public class SceneGraph  {
 //		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		
 		
-		
-		
-		
-		/* TODO
 		if(timeInSeconds>levelEndTimeInSeconds || LevelActivity.progressHandler.isLevelCompleted || LevelHandler.numberOfGoodGoodies==0)
 		{
 			//GAME OVER
+			/*
 			if(playingFinalSound)
 			{
 				LevelActivity.soundHandler.playSoundEffect(SoundHandler.SoundEffect.FINAL);
 				playingFinalSound=false;
 			}
-			//TODO
 			//Anzeige
+			 
+			 */
+			activity.finish();
 		}
 		else
 		{
 			// updateLogic
-			level.updateLogic();
-		}*/
+			if (Camera.zoom == Camera.standardZoom)
+				level.updateLogic();
+		}
 		
 		// updateLogic
-		if (Camera.zoom == Camera.standardZoom)
-			level.updateLogic();
+		//if (Camera.zoom == Camera.standardZoom)
+		//	level.updateLogic();
 		
 		// upadate Camera
 		camera.lookAt(gl);
@@ -833,7 +913,7 @@ public class SceneGraph  {
 	}
 
 	/**
-	 * this method render the collected Items
+	 * this method render the collected Items and their animation
 	 * @param gl OpenGl GL10
 	 */
 	private void renderItems(GL10 gl) {
@@ -893,7 +973,7 @@ public class SceneGraph  {
 	}
 
 	/**
-	 * this method moves the Camera in the overvie map view
+	 * this method moves the Camera in the overview map view
 	 * @param x translation diff
 	 * @param y translation diff
 	 */

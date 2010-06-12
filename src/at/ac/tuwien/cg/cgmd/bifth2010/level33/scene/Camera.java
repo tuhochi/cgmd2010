@@ -17,9 +17,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
  */
 public class Camera {
 	
+	/** The Camera's standard distance*/
 	public final static float standardZoom= 10.f;// standart Game zoom
+	
+	/** The Camera's distance to see the whole level*/
 	public final static float outZoom = 22.f;// overview Zoom
+	
+	/** The actually camera-distance */
 	public static float zoom = standardZoom;
+	
 	private boolean somethingChanged = true;
 	
 	Vector3f eye = new Vector3f(0,zoom, 0);

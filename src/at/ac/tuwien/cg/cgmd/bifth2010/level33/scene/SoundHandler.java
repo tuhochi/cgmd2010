@@ -34,21 +34,11 @@ public class SoundHandler {
 	 */
 	public static final String PREFERENCE_MUSIC = "music";
 	
-	//Level-Music
+	
+	/** The level-music-file*/
 	public static final int LEVEL_MUSIC1 = R.raw.l33_levelmusic;
-	public static final int LEVEL_MUSIC2 = R.raw.l00_map;
-	
-	//Activity-Music
-	public static final int ACTIVITY_MUSIC_STONE = R.raw.l00_gold02;
-	public static final int ACTIVITY_MUSIC_BARREL = R.raw.l00_gold03;
-	public static final int ACTIVITY_MUSIC_TRASH = R.raw.l00_gold01;
-	public static final int ACTIVITY_MUSIC_SPRING = R.raw.l00_unallowed;
-	public static final int ACTIVITY_MUSIC_MAP = R.raw.l00_unallowed;
-	
 	
 	private MediaPlayer levelAudioPlayer = null;
-	private MediaPlayer activityAudioPlayer1 = null;
-	private MediaPlayer activityAudioPlayer2 = null;
 	
 	private SoundPool soundPool = null;
 	public enum SoundEffect { STONE, BARREL, TRASH,SPRING,MAP,FINAL };
