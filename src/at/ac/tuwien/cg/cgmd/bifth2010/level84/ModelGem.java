@@ -20,6 +20,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 public class ModelGem extends Model {
 
+	/** type of the gem */
 	private int gemType;
 	
 	/** width of the gem **/
@@ -36,6 +37,7 @@ public class ModelGem extends Model {
 	/** fall speed of the gem **/
 	private float fallSpeed = 0.0f;
 	
+	/** set precision params for collision handling **/
 	private float maxDeltaDrainPos = 1.6f;
 	private float maxDeltaHolePos = .7f;
 	private float maxDeltaAngle = 5f; 
@@ -51,13 +53,14 @@ public class ModelGem extends Model {
 	
 	/** vibrator for vibrations **/
 	private Vibrator vibrator;
-	
+	/** vibrator patterns for misses and breaks **/
 	private long[] vibrationPatternMiss = {0, 30, 30, 30};
 	private long[] vibrationPatternBreak = {0, 80, 30, 80};
 	
 	/** drainMap used for collision detection **/
 	private HashMap<Integer, ModelDrain> drains;
 	
+	/** our LevelActivity **/
 	private LevelActivity lvl;
 	
 	/** Handler for gem break animations */
@@ -117,11 +120,19 @@ public class ModelGem extends Model {
 		this.lvl = lvl;
 	}
 
+	/**
+	 * set the {@link SoundManager}
+	 * @param soundManager
+	 */
 	public void setSoundManager(SoundManager soundManager)
 	{
 		this.soundman = soundManager;
 	}
 	
+	/**
+	 * set the {@link Vibrator}
+	 * @param vibrator
+	 */
 	public void setVibrator(Vibrator vibrator)
 	{
 		this.vibrator = vibrator;
@@ -135,6 +146,10 @@ public class ModelGem extends Model {
 		fallSpeed = 0;
 	}
 	
+	/**
+	 * indicates if gem is falling
+	 * @return false or true
+	 */
 	public boolean isFalling() {
 		return isFalling;
 	}
@@ -155,6 +170,12 @@ public class ModelGem extends Model {
 		resetPosition();
 	}
 
+	/**
+	 * main collision handling method
+	 * @param streetPos recent position of the street
+	 * @param deviceRotation recent rotation of the device
+	 * @param progman {@link ProgressManager}
+	 */
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
 	{
 		ModelDrain drainToCheck = null;
@@ -194,17 +215,19 @@ public class ModelGem extends Model {
 				}
 				
 				if (drainHit) {
+					//show splash animation and update money-points
 					progman.loseMoneyByHit(gemType);
 					showSplashAni.sendEmptyMessage(0);	
 					if (vibrator != null) vibrator.vibrate(30);
 				}
-				else
+				else // show break animation if it is not the right gem for the drain
 					breakApart(progman);
 			}
-			else
+			else // show break animation
 				breakApart(progman);
 		}
 		else {
+			// show dust animation
 			this.soundman.playSound(SoundFX.MISS, 1f, 1f, 0);
 			showDustAni.sendEmptyMessage(0);
 			if (vibrator != null) vibrator.vibrate(vibrationPatternMiss, -1);
@@ -212,6 +235,10 @@ public class ModelGem extends Model {
 		}
 	}
 	
+	/**
+	 * do the break animation of the gem type
+	 * @param progman
+	 */
 	private void breakApart(ProgressManager progman) {
 		this.soundman.playSound(SoundFX.BREAK, 1f, 1f, 0);
 		

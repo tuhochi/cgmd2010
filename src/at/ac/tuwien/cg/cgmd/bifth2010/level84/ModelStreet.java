@@ -30,6 +30,7 @@ public class ModelStreet extends Model {
 	/** Horizontal translation speed */
 	private float speed;
 	
+	/** if true street is rendered - otherwise the animation is stopped*/
 	private boolean streetActive = false;
 	
 	/**
@@ -73,6 +74,9 @@ public class ModelStreet extends Model {
 		return this.posX;
 	}
 	
+	/**
+	 * @return get the width of the street
+	 */
 	public float getStreetWidth()
 	{
 		return this.width/2f + 8f;
@@ -91,16 +95,25 @@ public class ModelStreet extends Model {
 			if (streetActive){ this.posX -= deltaSpeed;}
 	}
 	
+	/**
+	 * set street animation active
+	 */
 	public void startStreet()
 	{
 		streetActive = true;
 	}
 	
+	/**
+	 * set street animation to false
+	 */
 	public void stopStreet()
 	{
 		streetActive = false;
 	}
 	
+	/**
+	 * check if street animation is active or stopped
+	 */
 	public boolean isStreetActive()
 	{
 		return streetActive;

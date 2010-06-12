@@ -1,8 +1,11 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 
-import java.util.HashMap;
-
 import javax.microedition.khronos.opengles.GL10;
+
+/**
+ * ModelGemShape representing the shape of the gem.
+ * @author Georg
+ */
 
 public class ModelGemShape extends Model {
 
@@ -38,6 +41,9 @@ public class ModelGemShape extends Model {
 		this.textureResource = textureResource;
 	}
 	
+	/**set gemshape (in)visible
+	 * @param v visible is true or false
+	 */
 	public void setVisible(boolean v) {
 		this.isVisible = v;
 	}
