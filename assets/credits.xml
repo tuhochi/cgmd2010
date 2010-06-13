@@ -193,6 +193,17 @@
 	url="http://qbrushes.net/nature/rabies-star-ps-brush/"
 	usage="level 42 - space texture" license="CC" />
 	
+<!-- Level 50 -->
+<credit type="sound" name="Vacance" author="internetfilm"
+	url="http://www.freesfx.co.uk/users/internetfilm/"
+	usage="level 50 - background sound" license="CC" />
+<credit type="sound" name="Comedy Trumpet Playing Sad Song Wah Wah Wah Wah" author="gr8sfx"
+	url="http://www.freesfx.co.uk/users/gr8sfx/"
+	usage="level 50 - losing sound" license="EULA Freesfx.co.uk" />
+<credit type="sound" name="Comedy Music Mexican Jumping Bean" author="gr8sfx"
+	url="http://www.freesfx.co.uk/users/gr8sfx/"
+	usage="level 50 - winning tune" license="EULA Freesfx.co.uk" />
+	
 <!-- Level 70 - credits -->
 <credit type="sound" name="Short swish button sound." author="junggle"
 	url="http://www.freesound.org/download/28819/28819_junggle_btn009.wav"
