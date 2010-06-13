@@ -9,7 +9,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 public class TimeDisplay extends Sprite {
 	private static final float WIDTH = 55f;
 	private static final float HEIGHT = 55f;
-	private static final float TEXTURE_X = 0f;
+	private static final float TEXTURE_X = 20f;
 	private static final float TEXTURE_Y = 600f;
 
 	/** Number of "clock fraction" parts in the texture */
