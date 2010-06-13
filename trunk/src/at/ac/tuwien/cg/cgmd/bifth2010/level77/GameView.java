@@ -121,6 +121,8 @@ public class GameView extends GLSurfaceView
 		{
 			ed.putString("native", state);
 		}
+	Log.v(TAG, "onPause receives length " + state.length());
+	
 		ed.putInt("score", score);
 		ed.putLong("dateOffset", System.currentTimeMillis() - startTime);
 		ed.commit();
@@ -133,6 +135,7 @@ public class GameView extends GLSurfaceView
 		super.onResume();
 		score = sharedPreferences.getInt("score", 0);
 		String state = sharedPreferences.getString("native", "");
+		Log.v(TAG, "*received from native state length " + state.length());
 		jni.nativeRestoreSavedState(state);
 		startTime = System.currentTimeMillis() - sharedPreferences.getLong("dateOffset", 0);
 		renderer.setStartTime(startTime);
