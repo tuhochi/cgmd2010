@@ -160,6 +160,7 @@ public class GameWorld {
 		short roundnr = GameMechanics.getSingleton().getRoundNumber();
 		if( mEnemies == null ) mEnemies = new Vector< MoneyCarrier >();
 		Random rand = new Random();
+		if( roundnr > Definitions.MAX_ROUND_NUMBER) return;
 		switch (roundnr) {
 			case (0):
 				for( int i = 0; i < Definitions.FIRST_ROUND_ENEMIE_NUMBER; i++){

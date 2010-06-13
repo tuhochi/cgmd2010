@@ -12,7 +12,7 @@ public final class Definitions {
 	public static final int STARTING_MONEY = 90;
 	public static final int STARTING_IRON = 900;
 	public static final int GAME_ROUND_WAIT_TIME = 20000;
-	public static final short MAX_ROUND_NUMBER = 7;
+	public static final short MAX_ROUND_NUMBER = 1;
 	
 	//Number of lanes:
 	public static final short LANE_COUNT = 5;

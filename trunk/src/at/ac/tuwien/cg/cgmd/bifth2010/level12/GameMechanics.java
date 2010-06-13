@@ -9,7 +9,6 @@ public class GameMechanics {
 	private long mLastCountdownCheck = -1;
 	private short mRound = 0;
 	private long mRoundStartedTime = System.currentTimeMillis();
-	private long mTimeGamePaused = -1;
 	private int mSelectedTower = 0;
 	private long mLastColDetDone = -1;
 	private LevelActivity mGameContext = null;
@@ -36,7 +35,6 @@ public class GameMechanics {
 	}
 	
 	public int addMoney( int amount ){
-		System.out.println("Adding Money, amount: "+amount+" sum: "+mMoney);
 		return mMoney += amount;
 	}
 	
@@ -51,16 +49,14 @@ public class GameMechanics {
 	}
 	
 	public void pause(){
-		System.out.println("GameMechanics: Game Paused!");
 		mGameRunning = false;
-		mTimeGamePaused = System.currentTimeMillis();
+		//mTimeGamePaused = System.currentTimeMillis();
 		mLastCountdownCheck = System.currentTimeMillis();
 	}
 	
 	public void unpause(){
-		System.out.println("Game Unpaused at "+System.currentTimeMillis()+" Game Paused at: "+mTimeGamePaused);
 		mGameRunning = true;
-		mTimeGamePaused = -1;
+		//mTimeGamePaused = -1;
 		mLastCountdownCheck = System.currentTimeMillis();
 	}
 	
@@ -115,7 +111,11 @@ public class GameMechanics {
 	}
 	
 	public void finishGame(){
-		if( mGameContext != null )mGameContext.finish();
+		
+		if( mGameContext != null ) {
+			mGameContext.showFinishDialog();
+			mGameContext.finish();
+		}
 		else System.out.println("Could not end game, no pointer to Context");
 	}
 
