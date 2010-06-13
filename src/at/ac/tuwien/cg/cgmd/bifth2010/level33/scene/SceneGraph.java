@@ -227,7 +227,7 @@ public class SceneGraph  {
 	public SceneGraph(LevelHandler level, LevelActivity activity) {
 		this.level = level;
 		this.activity = activity;
-		this.tvLevelFps = (TextView)activity.findViewById(R.id.l33_level_fps);
+//		this.tvLevelFps = (TextView)activity.findViewById(R.id.l33_level_fps);
 		this.ivFullscreenImage = (ImageView)activity.findViewById(R.id.l33_FullscreenImage);
 		this.pbProgressBar = (ProgressBar)activity.findViewById(R.id.l33_ProgressBar);
 		this.tvLevelTime = (TextView)activity.findViewById(R.id.l33_level_time);
@@ -352,7 +352,7 @@ public class SceneGraph  {
 	public void loadingComplete() {
 		activity.runOnUiThread(new Runnable() {public void run() {
 			tvLoadingScreen.setText(R.string.l33_tutorial_startGame);
-			//pbLoadingBar.setVisibility(ProgressBar.INVISIBLE);
+			pbLoadingBar.setVisibility(View.INVISIBLE);
 		}});
 	}
 	
@@ -401,7 +401,7 @@ public class SceneGraph  {
 			{
 				activity.runOnUiThread(new Runnable() {public void run() {
 					//FPS
-					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		
+//					tvLevelFps.setText("fps: "+String.valueOf(framesSinceLastSecound));		
 					ivFullscreenImage.setBackgroundResource(R.drawable.l33_nix);
 					
 					//Time 
@@ -651,7 +651,6 @@ public class SceneGraph  {
 			
 			geometry.render(32);
 			gl.glDisable(GL10.GL_BLEND);
-			
 			
 			// render collected Items
 			renderItems(gl);

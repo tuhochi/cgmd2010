@@ -13,10 +13,10 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.GestureDetector.OnGestureListener;
-import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
+import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.LevelHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.ProgressHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
@@ -58,11 +58,11 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	public static Vector2f diffTouch = new Vector2f(0,0);	// difference to the last touch and the current touch
 	public static boolean gameWasInit = false;	// notice if the game was initialized before
 	public static ViewSwitcher viewSwitcher = null;	// ViewSwitcher that switches between LoadView and GameView
-	public static AllGameStates GAME_STATE = AllGameStates.LOADING;
+	public static AllGameStates GAME_STATE = AllGameStates.LOADING; // Game Status from enum AllGameStates
 	
 	
-	private TextView tvLevelFps;
-	private Thread uiThread;
+//	private TextView tvLevelFps;
+//	private Thread uiThread;
 
 	
 	@Override
@@ -113,7 +113,7 @@ public class LevelActivity extends Activity implements OnGestureListener{
         // setup vibrator
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         
-        tvLevelFps = (TextView)findViewById(R.id.l33_level_fps);
+       // tvLevelFps = (TextView)findViewById(R.id.l33_level_fps);
         
         
 	}
@@ -195,15 +195,15 @@ public class LevelActivity extends Activity implements OnGestureListener{
 
 		System.out.println("onTouchEvent");
 		
-		if(e.getAction()==e.ACTION_UP)
+		if(e.getAction()==MotionEvent.ACTION_UP)
 			lastTouchUp.set(e.getX() / resolution.x, e.getY()/ resolution.y);
 		
-		if(e.getAction()==e.ACTION_DOWN)
+		if(e.getAction()==MotionEvent.ACTION_DOWN)
 			lastTouchDown.set(e.getX() / resolution.x, e.getY()/ resolution.y);
 		
 		
-		if(SceneGraph.camera.zoom==SceneGraph.camera.outZoom)
-		if(e.getAction()==e.ACTION_MOVE)
+		if(Camera.zoom==Camera.outZoom)
+		if(e.getAction()==MotionEvent.ACTION_MOVE)
 			SceneGraph.moveCamera((lastTouch.x-(e.getX() / resolution.x)),
 					(lastTouch.y-( e.getY()/ resolution.y))*resolution.y/resolution.x);
 		
@@ -214,7 +214,7 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		
 		Log.w("resolution:",resolution.toString());
 		
-		if(SceneGraph.camera.zoom==SceneGraph.camera.standardZoom)
+		if(Camera.zoom==Camera.standardZoom)
 			SceneGraph.level.steerTouchEvent(lastTouch);
 		
 		return gestureScanner.onTouchEvent(e);
@@ -274,39 +274,20 @@ public class LevelActivity extends Activity implements OnGestureListener{
     {
 		
 		if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT)
-//			queueEvent(new Runnable() {
-//				public void run() {
 					SceneGraph.level.steerCharacterTo(true, -1);
-//				}
-//			});
+
 		else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT)
-//			queueEvent(new Runnable() {
-//				public void run() {
-					sceneGraph.level.steerCharacterTo(true, 1);
-//				}
-//			});
+					SceneGraph.level.steerCharacterTo(true, 1);
 
 		else if (keyCode == KeyEvent.KEYCODE_DPAD_UP)
-//			queueEvent(new Runnable() {
-//				public void run() {
-					sceneGraph.level.steerCharacterTo(false, -1);
-//				}
-//			});
+					SceneGraph.level.steerCharacterTo(false, -1);
 
 		else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN)
-//			queueEvent(new Runnable() {
-//				public void run() {
-					sceneGraph.level.steerCharacterTo(false, 1);
-//				}
-//			});
-		
+					SceneGraph.level.steerCharacterTo(false, 1);
+
 		else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER)
-//			queueEvent(new Runnable() {
-//				public void run() {
-					sceneGraph.level.demomode=!sceneGraph.level.demomode;
-//				}
-//			});
-		
+					SceneGraph.level.demomode=!SceneGraph.level.demomode;
+
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
 	        Log.d(this.getClass().getName(), "back button pressed");
 	        return super.onKeyDown(keyCode, event);

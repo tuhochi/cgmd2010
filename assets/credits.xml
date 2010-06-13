@@ -145,6 +145,16 @@
 <credit type="sound" name="d_chimes2" author="BristolStories"
 	url="http://www.freesound.org/samplesViewSingle.php?id=51695"
 	usage="l33 - spring" license="CC" />
+	
+<credit type="3D model" name="White Rabbit" author="artist-3d.com"
+	url="http://artist-3d.com/free_3d_models/dnm/model_disp.php?uid=1825&ad=&op=op"
+	usage="l33 - Character" license="CC" />
+
+<credit type="texture" name="Sunburnt" author="pareeerica" 
+	url="http://free3dstextures.com/texture/*_Sunburnt_*/3279735323" 
+	usage="l33 - textur - floor" license="CC" />
+	
+	
 
 <!-- Level 42 -->	
 <credit type="sound" name="possiblelazer" author="aust_paul"
