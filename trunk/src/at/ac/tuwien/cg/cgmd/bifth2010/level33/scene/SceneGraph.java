@@ -326,15 +326,15 @@ public class SceneGraph  {
 	
 
 	
-//			// save Object
-//			String path="/sdcard/modelOut.out";
+//			// save Object to sdcard
+//			String path="/sdcard/l33_model.oos";
 //			InputStream is = SceneGraph.activity.getResources().openRawResource(R.raw.l33_models);
-//			geometry= GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
+//			geometry = GeometryLoader.loadObj(gl, is,R.drawable.l33_textur);
 //			obj = geometry.GetObjModel();
 //			obj.write(path);
 //			Log.e("write","ok");
 //		
-//		}
+		
 			
 			
 		
@@ -640,6 +640,18 @@ public class SceneGraph  {
 			gl.glRotatef(level.characterRotaion, 0, 1, 0);
 			geometry.render(5);
 			glPopMatrix();
+			
+			// render Arrow
+			
+			//Blending
+			gl.glEnable(GL10.GL_BLEND);
+			gl.glColor4f(1.0f, 1.0f, 1.0f, 0.6f); 
+			gl.glRotatef((System.nanoTime()/20000000.0f)%360, 0, 1, 0);
+			gl.glTranslatef(0, Math.abs(10-(System.nanoTime()/60000000.0f%20))/2, 0);
+			
+			geometry.render(32);
+			gl.glDisable(GL10.GL_BLEND);
+			
 			
 			// render collected Items
 			renderItems(gl);

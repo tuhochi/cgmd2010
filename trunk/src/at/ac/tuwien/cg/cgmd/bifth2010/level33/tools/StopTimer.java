@@ -11,19 +11,27 @@ public class StopTimer {
 	private long stopTime;
 	private int counter =0;
 	
+	/**
+	 * initialize a new StopTimer and set the stopTime to the current System Time
+	 */
 	public StopTimer() {
-		stopTime = System.nanoTime();
+		reset();
 	}
 	
+	/**
+	 * log the time delta-Time == difference from (init or reset) to the actual System Time
+	 * @param name
+	 */
 	public void logTime(String name){
 		counter++;
 		float deltaTime = (System.nanoTime()-stopTime) / 1000000000.0f;
 		Log.d("TIMER: "+name, String.valueOf(deltaTime));
-
 		reset();
-			
 	}
 
+	/**
+	 * set the stopTime to the actual System Time
+	 */
 	public void reset() {
 		stopTime = System.nanoTime();
 	}
