@@ -43,7 +43,7 @@ public class LevelObject {
 	int width, height;
 	int id;
 	float movement[] = new float[4];
-	int direction = 1;
+	public int direction = 1;
 	int textureID = -1;
 	GL10 gl;
 	static MediaPlayer mp[] = new MediaPlayer[5];
@@ -303,39 +303,43 @@ public class LevelObject {
 		
 		if ((ul&0x00ffffff) == 0x00ffff00) {
 			score+=5;
-			for (MediaPlayer a : mp) {
-				if (!a.isPlaying()) {
-					a.start();
-					break;
+			if (((LevelActivity)context).sound)
+				for (MediaPlayer a : mp) {
+					if (!a.isPlaying()) {
+						a.start();
+						break;
+					}
 				}
-			}
 		}
 		if ((ur&0x00ffffff) == 0x00ffff00) {
 			score+=5;
-			for (MediaPlayer a : mp) {
-				if (!a.isPlaying()) {
-					a.start();
-					break;
+			if (((LevelActivity)context).sound)
+				for (MediaPlayer a : mp) {
+					if (!a.isPlaying()) {
+						a.start();
+						break;
+					}
 				}
-			}
 		} 
 		if ((lr&0x00ffffff) == 0x00ffff00) {
 			score+=5;
-			for (MediaPlayer a : mp) {
-				if (!a.isPlaying()) {
-					a.start();
-					break;
+			if (((LevelActivity)context).sound)
+				for (MediaPlayer a : mp) {
+					if (!a.isPlaying()) {
+						a.start();
+						break;
+					}
 				}
-			}
 		}
 		if ((ll&0x00ffffff) == 0x00ffff00) {
 			score+=5;
-			for (MediaPlayer a : mp) {
-				if (!a.isPlaying()) {
-					a.start();
-					break;
+			if (((LevelActivity)context).sound)
+				for (MediaPlayer a : mp) {
+					if (!a.isPlaying()) {
+						a.start();
+						break;
+					}
 				}
-			}
 		}
 		
 		if (y>level.getHeight()*tileSizeY)

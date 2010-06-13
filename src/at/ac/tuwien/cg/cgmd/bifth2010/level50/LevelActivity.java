@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level50;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 public class LevelActivity extends Activity {
 	
 	MediaPlayer mp;
+	public boolean sound = false;
 	
 	/** 
      * Called when the activity is starting.
@@ -42,6 +44,12 @@ public class LevelActivity extends Activity {
         SessionState s = new SessionState();
 		s.setProgress(0);
 		setResult(Activity.RESULT_OK, s.asIntent());
+		
+		Intent callingIntent = getIntent();
+		SessionState state = new SessionState(callingIntent.getExtras());
+		if(state!=null){
+			sound = state.isMusicAndSoundOn();
+		}
 
         mGLView = new LevelSurfaceView(this); 
    		setContentView(mGLView);
@@ -126,11 +134,13 @@ public class LevelActivity extends Activity {
         super.onResume();
         mGLView.onResume();
         
-        if (mp!=null)
-        	mp.release();
-        mp = MediaPlayer.create(this, R.raw.l50_music);
-		mp.setLooping(true);
-		mp.start();
+        if (sound) {
+	        if (mp!=null)
+	        	mp.release();
+	        mp = MediaPlayer.create(this, R.raw.l50_music);
+			mp.setLooping(true);
+			mp.start();
+        }
         
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);        
         mGLView.setScore(mPrefs.getInt("L50_SCORE", 0));
@@ -146,14 +156,13 @@ public class LevelActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         
-        mp.release();
+        if (mp!=null)
+        	mp.release();
         mGLView.clear();
 		
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = mPrefs.edit();
         ed.putInt("L50_SCORE", 0);
-//        ed.putFloat("L50_POSX", mGLView.getPositionX());
-//        ed.putFloat("L50_POSY", mGLView.getPositionY());
         ed.clear();
         ed.commit();
     }
