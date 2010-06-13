@@ -3,23 +3,39 @@
     <string name="l84_help_title">Ich werfe meine Juwelen in den Kanal</string>
     <string name="l84_help_subtitle">
      Als Sie eines Tages eine ruhige Straße entlang wandern, 
-     verspüren Sie plötzlich den akuten Drang, Ihre <b>Juwelensammlung loszuwerden.</b> 
-     Die Straße verfügt glücklicherweise über <b>zahlreiche Kanaldeckel</b>, deren 
-     Öffnungen jedoch <b>verschieden geformt</b> sind. <b>Kurzum: Nicht jedes Juwel 
-     passt überall rein</b>. Falls aber doch, muss es beim Abwurf noch <b>passend 
-     ausgerichtet</b> sein!</string>
-    <string name="l84_help_contenttitle">Detailbeschreibung:</string>
-    <string name="l84_help_content">
+     verspüren Sie plötzlich den akuten Drang, Ihre Juwelensammlung loszuwerden. 
+     Geld macht schließlich nicht glücklich. 
+     Die Straße verfügt erfreulicherweise über zahlreiche Kanaldeckel, deren 
+     Öffnungen jedoch verschieden geformt sind. Kurzum: Nicht jedes Juwel 
+     passt überall rein. Falls aber doch, muss es beim Abwurf noch passend 
+     ausgerichtet sein!</string>
+    <string name="l84_help_content1">
      Sie wandern in Richtung des rechten Spielfeldrandes. Nach der Reihe finden Sie verschieden 
      gegossene Kanaldeckel und müssen somit den entsprechenden Edelstein erwischen. Dazu haben Sie
      am linken Bildschirmrand Ihre verschiedenen Juwelentypen im Überblick (4 an der Zahl) - 
-     die sich in Ihrer grundlegenden Form unterscheiden. Wählen Sie den aktuell passenden Typ durch 
-     Berührung aus. 
-     Doch damit ist es nicht getan: Das Juwel fliegt nun in Richtung Erde/Kanaldeckel - muss aber noch 
-     in seiner Orientierung beeinflusst werden (Sie haben dazu spezielles Jedi-Training absolviert). 
-     Drehen Sie Ihr Device solange, bis der Stein passt. Der Stein fällt grundsätzlich langsam, wenn Sie 
-     aber überzeugt sind, dass alles passt, können Sie auch den Fall beschleunigen (Tap auf den Screen). 
-     Nach jedem geworfenen Stein wandern Sie weiter in der Hoffnung, ihr Vermögen den Kanal runterzuspülen ...
+     die sich in ihrer Form unterscheiden.
+     </string> 
+     <string name="l84_help_content2a">
+     Wählen Sie den aktuell passenden Typ durch 
+     Berührung aus. Der Edelstein wird daraufhin transparent in der Bildmitte eingeblendet. Solange Sie 
+     den Finger gedrückt halten, wird der Edelstein \"gehalten\" (eingeblendet) und sie können durch Device-Rotation dessen Ausrichtung 
+     ändern.
+     </string>
+     <string name="l84_help_content2b">
+     Wenn Sie loslassen, fällt der Stein – hoffentlich passend – in den Kanal. Bedenken Sie, dass 
+     der Fall eine gewisse Zeit in anspruch nimmt und Sie den Abwurf dementsprechend timen müssen.
+     </string> 
+     <string name="l84_help_content3">
+     Für den Fall, dass Sie treffen, verlieren Sie dessen Wert zur Gänze (Runder Stein: $1.000,- Achteckiger: $2.000,- 
+     Rechteckiger: $3.000,- und letztlich der Diamant: $4.000,-). Zerbricht der Stein (z.B. durch falsche Ausrichtung 
+     oder Abwurf beim falschen Kanaldeckel), verlieren Sie ein zehntel des Wertes. Ein Aufprall auf der staubigen Straße 
+     zerstört den Stein nicht - sie verlieren daher gar nichts.
+     </string> 
+     <string name="l84_help_content4">
+     Das Spiel endet, wenn sie das Ende der Straße erreicht haben, oder Ihre gesamte Juwelensammlung losgeworden sind.
+    </string> 
+    <string name="l84_help_content5">
+     Viel Spaß!
     </string> 
     <string name="l84_intro_title">Spielanleitung</string>
     <string name="l84_intro_step1">Wähle einen Edelstein von links durch Halten des Buttons aus</string>
