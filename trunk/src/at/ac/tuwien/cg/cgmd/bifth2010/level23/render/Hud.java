@@ -93,9 +93,6 @@ public class Hud
 	public Hud()
 	{
 		init();
-		int boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
-		MainChar.instance.audioIdBoostSound = boostAudioId;
-		burnTimer = new BurnTimer(boostAudioId);
 		goldTimer = new PermaBoostTimer();
 		progressVisibilityHandle = new ProgressVisibilityHandle();
 		progressVisibilityHandle.visibility = android.widget.ProgressBar.VISIBLE;
@@ -149,7 +146,7 @@ public class Hud
 			dos.writeFloat(screenCrackPosY);
 		}
 		dos.writeInt(nrOfBurnBoostsUsed);
-		dos.writeInt(nrOfGoldBoostsUsed);	
+		dos.writeInt(nrOfGoldBoostsUsed);		
 		
 		wasRestored=true;
 	}
@@ -269,6 +266,9 @@ public class Hud
 	 */
 	public void reset()
 	{
+		int boostAudioId = SoundManager.instance.requestPlayer(R.raw.l23_boost_neu,true);
+		MainChar.instance.audioIdBoostSound = boostAudioId;
+		burnTimer = new BurnTimer(boostAudioId);
 		if(!wasRestored)
 			init();
 		else

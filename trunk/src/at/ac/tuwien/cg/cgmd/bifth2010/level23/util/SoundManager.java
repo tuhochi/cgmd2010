@@ -2,6 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level23.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -30,6 +31,11 @@ public class SoundManager
 	private ArrayList<MediaPlayer> players;
 
 	/**
+	 * resId to MediaPlayer mapping
+	 */
+	private HashMap<Integer,MediaPlayer> playerMapping;
+	
+	/**
 	 * Default Constructor
 	 * @param context
 	 */
@@ -37,6 +43,7 @@ public class SoundManager
 	{
 		this.context = context;
 		players = new ArrayList<MediaPlayer>();
+		playerMapping = new HashMap<Integer, MediaPlayer>();
 		instance = this;
 	}
 	
@@ -48,12 +55,15 @@ public class SoundManager
 	 */
 	public int requestPlayer(int resId,boolean isLooping)
 	{
-		MediaPlayer newPlayer = MediaPlayer.create(context,resId);
-		newPlayer.setLooping(isLooping);
-		
-		players.add(newPlayer);
-		
-		return players.size()-1;
+		if(!playerMapping.containsKey(resId))
+		{
+			MediaPlayer newPlayer = MediaPlayer.create(context,resId);
+			newPlayer.setLooping(isLooping);
+
+			playerMapping.put(resId,newPlayer);
+			players.add(newPlayer);
+		}
+		return resId;		
 	}
 	
 	/**
@@ -63,7 +73,7 @@ public class SoundManager
 	public void startPlayer(int id)
 	{
 		if(Settings.SOUND_ENABLED)
-			players.get(id).start();
+			playerMapping.get(id).start();
 	}
 	
 	/**
@@ -72,7 +82,7 @@ public class SoundManager
 	 */
 	public void pausePlayer(int id)
 	{
-		players.get(id).pause();
+		playerMapping.get(id).pause();
 	}
 	
 	/**
@@ -81,7 +91,7 @@ public class SoundManager
 	 * @return true if playing, false otherwise
 	 */
 	public boolean isPlaying(int id) {
-		return players.get(id).isPlaying();
+		return playerMapping.get(id).isPlaying();
 	}
 	/**
 	 * Sets the volume for a specific player
@@ -90,7 +100,7 @@ public class SoundManager
 	 */
 	public void setVolumeForPlayer(int id, float volume)
 	{
-		players.get(id).setVolume(volume, volume);
+		playerMapping.get(id).setVolume(volume, volume);
 	}
 	
 	/**
@@ -105,16 +115,19 @@ public class SoundManager
 				tempPlayer.stop();
 			tempPlayer.release();
 		}
+		
+		players.clear();
+		players.clear();
 	}
 	
 	public int getPlayerPosition(int playerId)
 	{
-		return players.get(playerId).getCurrentPosition();
+		return playerMapping.get(playerId).getCurrentPosition();
 	}
 	
 	public void setPlayerPosition(int playerId, int playerPos)
 	{
-		players.get(playerId).seekTo(playerPos);
+		playerMapping.get(playerId).seekTo(playerPos);
 	}
 	
 	/**

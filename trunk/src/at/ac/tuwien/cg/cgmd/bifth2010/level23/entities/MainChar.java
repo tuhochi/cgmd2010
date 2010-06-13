@@ -243,8 +243,6 @@ public class MainChar implements SceneEntity {
 		
 		soundPlayed = false; 
 		soundManager = SoundManager.instance; 
-		audioIdGameOverSound = soundManager.requestPlayer(R.raw.l23_crashsound, false);
-		audioIdGlassBreakSound = soundManager.requestPlayer(R.raw.l23_glassbreak, false);
 	}
 	
 
@@ -563,6 +561,8 @@ public class MainChar implements SceneEntity {
 	 */
 	public void reset()
 	{
+		audioIdGameOverSound = soundManager.requestPlayer(R.raw.l23_crashsound, false);
+		audioIdGlassBreakSound = soundManager.requestPlayer(R.raw.l23_glassbreak, false);
 		if(!wasRestored)
 		{
 			position.x = Settings.MAINCHAR_STARTPOSX;
