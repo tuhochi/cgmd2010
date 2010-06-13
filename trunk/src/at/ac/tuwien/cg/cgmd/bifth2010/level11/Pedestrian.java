@@ -4,11 +4,13 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
+//import android.R;
 import android.content.Context;
 import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
+
 /**
  * class pedestrians, who walk around, move towards a target, fight and grab treasure
- * @author askari
  *
  */
 public class Pedestrian implements Target{
@@ -39,6 +41,10 @@ public class Pedestrian implements Target{
 	private float bounceRadius;
 	private float bounceStrength = 0.0002f;
 	private float maxBounceVectorLength = 1f;
+	
+
+	private Square circle;
+	
 	/**
 	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
 	 * @param gl
@@ -75,6 +81,8 @@ public class Pedestrian implements Target{
 		arms = new Arms(gl, context);
 		
 		rand = new Random();
+		
+		circle = new Square();
 		
 		this.angle = (float)(Math.random()*360.0);
 		this.moveSpeed = 4.0f;
@@ -235,6 +243,7 @@ public class Pedestrian implements Target{
 	 */
 	public void draw(GL10 gl) {
 
+		
 		
 			legs.draw(gl);
 			arms.draw(gl);

@@ -7,11 +7,11 @@ public class Vector2 {
 	 * x and y is set to 0
 	 */
 	public Vector2 () {
-		x = 0;
-		y = 0;
+		x = 0.0f;
+		y = 0.0f;
 	}
 	/**
-	 * vector contructor. sets x and y component to the given parameters
+	 * vector constructor. sets x and y component to the given parameters
 	 * @param x x
 	 * @param y y
 	 */

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.level84.ResultDialog;
 
 import java.security.acl.LastOwnerException;
 import java.util.Iterator;
@@ -50,6 +49,8 @@ public class Level extends Thread {
 	private GL10 gl;
 	private Context context;
 	
+	private HUD hud;
+	
 	//public static SoundFile f;
 	
 	private Timing timing;
@@ -83,6 +84,8 @@ public class Level extends Thread {
 		timing.start();
 		timing.pause();
 		this.generatePedestrians(10, 40);
+		
+		hud = new HUD();
 
 	}
 	
@@ -283,7 +286,8 @@ public class Level extends Thread {
 					(tempDist = pedestrian.getPosition().distance(treasure.getPosition()))
 					/ (treasure.getValue()+1)) //TODO: determine, how to rate a target
 						< bestRating){
-					if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttractionRadius()){
+					//if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttractionRadius()){
+					if (tempDist < treasure.getAttractionRadius()/2) {
 						pedestrian.setTarget(treasure);
 						bestRating = rating;
 					}
@@ -304,7 +308,7 @@ public class Level extends Thread {
 		}
 	}
 	private void updateStats(){
-		//calc already grabbed treasure value
+		//calculate already grabbed treasure value
 		this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
 		for (int j=0; j < treasureList.size(); j++){
 			this.grabbedTreasureValue += ((Treasure)treasureList.get(j)).getGrabbedValue();
@@ -368,6 +372,9 @@ public class Level extends Thread {
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glDisable(GL10.GL_CULL_FACE);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
+		if(HUD.singleton.isDrawTouchTreasureCircle())
+		 HUD.singleton.draw(gl);
 
 		for (int i=0; i < treasureList.size(); i++){
 			((Treasure)treasureList.get(i)).draw(gl);
