@@ -56,6 +56,37 @@
 	name="Police_handcuffs">
 </credit>
 
+<credit type="sound" author="hanstimm" 
+	url="http://www.freesound.org" 
+	usage="l13 - Wasted sound" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_wasted_pt2">
+</credit>
+
+
+<credit type="sound" author="Paracelsus" 
+	url="http://www.freesound.org" 
+	usage="l13 - Wasted sound" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_wasted_pt1">
+</credit>
+
+
+<credit type="sound" author="ERH" 
+	url="http://www.freesound.org" 
+	usage="l13 - Police" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_police_pt2">
+</credit>
+
+<credit type="sound" author="Siren" 
+	url="http://www.freesound.org" 
+	usage="l13 - Police" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_police_pt1">
+</credit>
+
+
 
 <!-- Level 23 --> 
 <credit type="sound" author="shawshank73" 
