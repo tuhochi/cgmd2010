@@ -89,8 +89,6 @@ public class TileLayer {
 			}
 		}
 		
-		Log.d("changeCoinState", Integer.toString(result));
-		
 		return result;
 	}
 	
@@ -101,7 +99,6 @@ public class TileLayer {
 	 * @return The type of tile. -1 if there is no tile a the given position.
 	 */
 	public int getTypeAt(int x, int y) {
-		//Log.d("TileLayer", "x,y = "+x+", "+y);
 		if (x<numTilesX && x>=0 && y<numTilesY && y>=0) {
 			return tiles_vector[x][y];
 		} else {
@@ -114,9 +111,7 @@ public class TileLayer {
 	 * @param levelResource The level resource
 	 * @param context The Activity context
 	 */
-	private void loadLevel(int levelResource, Context context) {
-		Log.d("TileLayer", "loadLevel");
-		
+	private void loadLevel(int levelResource, Context context) {	
 		BufferedReader levelStream=new BufferedReader(new InputStreamReader(context.getResources().openRawResource(levelResource)));
 		String line;
 		try {
@@ -149,8 +144,6 @@ public class TileLayer {
 				row++;
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.e("loadLevel", "fileError");
 		}
 	}
 	
@@ -166,15 +159,12 @@ public class TileLayer {
 		
 		vbo_vector=new TilesVBO[maxVBOPosX+1][maxVBOPosY+1];
 		
-		Log.d("TileLayer", "createVBOs");
-		
 
 		for (int i=0; i<maxVBOPosX; i++) {
 			for (int j=0; j<maxVBOPosY; j++) {
 				vbo_vector[i][j]=new TilesVBO(gl, sizeFactor, i*VBO_WIDTH, j*VBO_HEIGHT, VBO_WIDTH, VBO_HEIGHT, tiles_vector, texture, texRows, texCols);
 			}
 		}
-		Log.d("TileLayer", "VBOs created");
 	}
 	
 	/**

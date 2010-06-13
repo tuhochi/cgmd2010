@@ -39,19 +39,9 @@ public class Texture {
 	 * Removes the loaded textures
 	 */
 	static void cleanUp() {
-		Log.d("Texture", "cleanUp");
 		loadedTex.clear();
 		activeTexture=-1;
 	}
-	
-	/*public void finalize() {
-		Log.d("Texture", "finalize");
-		IntBuffer textures=IntBuffer.allocate(1);
-		textures.put(0,texture);
-		gl.glDeleteTextures(1, textures);
-		
-		loadedTex.remove(texture);
-	}*/
 	
 	/**
 	 * Sets the activity context
@@ -108,14 +98,14 @@ public class Texture {
 				}
 				loadedTex.set(texture,new Integer(resourceID));
 				
-				Log.d("Texture","success");
+				//Log.d("Texture","success");
 				return true;
 			}
 			
-			Log.d("Texture","failed");
+			//Log.d("Texture","failed");
 			return false;
 		} else {
-			Log.d("Texture","already loaded");
+			//Log.d("Texture","already loaded");
 		}
 		return true;
 	}

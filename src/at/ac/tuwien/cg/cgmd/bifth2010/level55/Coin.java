@@ -30,7 +30,7 @@ public class Coin {
 	 * @param x1 The first x coordinate of the coin quad
 	 * @param y1 The first y coordinate of the coin quad
 	 * @param x2 The second x coordinate of the coin quad
-	 * @param y2 The second y coordiante of the coin quad
+	 * @param y2 The second y coordinate of the coin quad
 	 * @param texX1_A The first x texture-coordinate of the active coin 
 	 * @param texY1_A The first y texture-coordinate of the active coin
 	 * @param texX2_A The second x texture-coordinate of the active coin

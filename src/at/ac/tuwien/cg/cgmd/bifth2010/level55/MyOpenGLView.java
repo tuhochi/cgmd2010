@@ -15,6 +15,10 @@ import android.util.Log;
  */
 public class MyOpenGLView extends GLSurfaceView {
 	
+	/**
+	 * Constructor
+	 * @param context The Activity context
+	 */
     public MyOpenGLView(Context context) {
         super(context);
         this.setDebugFlags(DEBUG_CHECK_GL_ERROR);
@@ -27,10 +31,21 @@ public class MyOpenGLView extends GLSurfaceView {
 		this.setFocusableInTouchMode(true);
     }
 
+    /**
+     * Constructor
+     * @param context The Activity context
+     * @param attrs Attributes
+     */
     public MyOpenGLView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
     
+    /**
+     * Checks if an extension is supported by the device
+     * @param gl The OpenGL context
+     * @param extension The extension to check
+     * @return true if the extension is available, false otherwise
+     */
     static boolean isExtensionSupported(GL10 gl, String extension) {
     	String extensions;
     	if (gl instanceof GL11) {

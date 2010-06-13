@@ -23,7 +23,7 @@ public class MyTimer {
 		
 		if (lastTime!=0) {
 			dT=Math.min(1000,(currentTime-lastTime));
-			debug();
+			//debug();
 		}
 		
 		lastTime=currentTime;

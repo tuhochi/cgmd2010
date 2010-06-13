@@ -5,6 +5,11 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.util.Log;
 
+/**
+ * Represents the player
+ * @author Martin Knecht
+ *
+ */
 public class Player {
 	
 	Quad hase_right;
@@ -52,6 +57,14 @@ public class Player {
 	
 	protected float[] lastPos = new float[2];
 	
+	/**
+	 * Initializes the player
+	 * @param gl The OpenGL context
+	 * @param _level The level object
+	 * @param _camera The camera object
+	 * @param x Start position of the player in the x-axis
+	 * @param y Start position of the player in the y-axis
+	 */
 	public void init(GL10 gl, Level _level, Camera _camera, float x, float y) {
 		hase_right = new Quad();
 		hase_left = new Quad();
@@ -85,6 +98,9 @@ public class Player {
 		ohohSound.create(R.raw.l00_unallowed);
 	}
 	
+	/**
+	 * Resets the position of the player
+	 */
 	public void reset() {
 		a[0]=0;
 		a[1]=0;
@@ -107,6 +123,10 @@ public class Player {
 		jumpMode = JUMP_IDLE;
 	}
 	
+	/**
+	 * Draws the player
+	 * @param gl The OpenGL context
+	 */
 	public void draw(GL10 gl) {
 		haseTex.bind(gl);
 		gl.glTranslatef(playerPos[0],playerPos[1],0.0f);
@@ -117,6 +137,10 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Updates the player
+	 * @param dt Delta Time
+	 */
 	public void update(float dt) 
 	{		
 		//Check for coinChange
@@ -178,6 +202,10 @@ public class Player {
 		camera.lookAt(playerPos[0], playerPos[1]);
 	}
 	
+	/**
+	 * Does the collision detection
+	 * @param dt Delta Time
+	 */
 	protected void doCollisionDetection(float dt) 
 	{
 		int x;
@@ -281,6 +309,10 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Checks if the player hits a coin
+	 * @param dt Delta Time
+	 */
 	protected void checkCoinChange(float dt)
 	{
 		if((int)lastPos[0]!=(int)playerPos[0] || (int)lastPos[1]!= (int)playerPos[1]) 
@@ -307,14 +339,26 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Initiates the jump - action
+	 * @param btDown true if the button is pressed, false if the button is released
+	 */
 	public void jump(boolean btDown) {
 		doJump = btDown;
 	}
 	
+	/**
+	 * Initiates the right - action
+	 * @param btDown true if the button is pressed, false if the button is released
+	 */
 	public void moveRight(boolean btDown) {
 		doMoveRight = btDown;
 	}
 	
+	/**
+	 * Initiates the left - action
+	 * @param btDown true if the button is pressed, false if the button is released
+	 */
 	public void moveLeft(boolean btDown) {
 		doMoveLeft = btDown;
 	}
