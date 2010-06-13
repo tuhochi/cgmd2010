@@ -2,16 +2,20 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level50.LevelObject;
 
 public class LevelActivity extends Activity {
 	private LevelSurfaceView glv;
 	SharedPreferences prefs;
 	private Bundle myState;
+	MediaPlayer player;
 	
 	private final static String BUNNY_X = "BUNNY_X";
 	private final static String BUNNY_Y = "BUNNY_Y";
@@ -37,17 +41,37 @@ public class LevelActivity extends Activity {
     public void onPause() {
         super.onPause();
         glv.onPause();
+        
+        if (player!=null) {
+        	if (player.isPlaying())
+        		player.stop();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         glv.onResume();
+        
+        if (player!=null)
+        	player.release();
+        player = MediaPlayer.create(this, R.raw.l50_music);
+		player.setLooping(true);
+		player.start();
     }
     
 	 @Override
     protected void onDestroy() {
     	super.onDestroy();
+    	
+    	
+    	if (player!=null) {
+			if (player.isPlaying())
+				player.stop();
+			player.release();
+		}
+		LevelObject.clean();
+
     }
 	 
 	 public boolean onKeyDown(int keyCode, KeyEvent event) {
