@@ -3,7 +3,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level50;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 

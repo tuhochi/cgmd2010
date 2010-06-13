@@ -4,13 +4,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
@@ -71,11 +68,13 @@ public class LevelRenderer implements Renderer {
 		
 		if (bunny.getScore()>=100) {
 			if (darkness == fadeDuration) {
-				if (mp != null)
-					mp.release();
-				mp = MediaPlayer.create(context, R.raw.l50_finish);
-				if (mp != null)
-					mp.start();
+				if (((LevelActivity)context).sound) {
+					if (mp != null)
+						mp.release();
+					mp = MediaPlayer.create(context, R.raw.l50_finish);
+					if (mp != null)
+						mp.start();
+				}
 			}
 			gl.glClearColor((float)(darkness-fadeDuration)/fadeDuration,
 					Math.max((float)0x99/255.0f*(float)darkness/fadeDuration,(float)(darkness-fadeDuration)/fadeDuration),
@@ -149,11 +148,13 @@ public class LevelRenderer implements Renderer {
 			lbLine.setPosition(bunny.getPositionX()+tileSizeX/2-width/2, bunny.getPositionY()+tileSizeY/2+height/6-tileSizeY/8);
 		}  else {
 			if (darkness == fadeDuration) {
-				if (mp != null)
-					mp.release();
-				mp = MediaPlayer.create(context, R.raw.l50_wah);
-				if (mp != null)
-					mp.start();
+				if (((LevelActivity)context).sound) {
+					if (mp != null)
+						mp.release();
+					mp = MediaPlayer.create(context, R.raw.l50_wah);
+					if (mp != null)
+						mp.start();
+				}
 			}
 			if (bunny.update(gl,fps)) {
 				jumping = false;
@@ -198,11 +199,11 @@ public class LevelRenderer implements Renderer {
 			movementCounter = 0;
 		} else if (moving && bunny.getClimbable()) {
 			if (movementCounter%12==0) {
-				bunny.changeTexture(R.drawable.l50_rabbit_climb1, null);
+				bunny.changeTexture(R.drawable.l50_rabbit_climb3, null);
 			} else if (movementCounter%12==6) {
 				bunny.changeTexture(R.drawable.l50_rabbit_climb2, null);
 			}else if (movementCounter%6==3) {
-				bunny.changeTexture(R.drawable.l50_rabbit_climb3, null);
+				bunny.changeTexture(R.drawable.l50_rabbit_climb1, null);
 			}
 			movementCounter++;
 		} else if (bunny.getClimbable()) {
@@ -298,7 +299,7 @@ public class LevelRenderer implements Renderer {
 
 			if (positionX == -1.0f && positionY == -1.0f) {
 				positionX = (level.getWidth()-1.0f)*tileSizeX;
-				positionY = 0.0f;
+				positionY = (level.getHeight()-3.0f)*tileSizeY;
 				bunny.setPosition(positionX, positionY);
 			}
 			
@@ -621,7 +622,8 @@ public class LevelRenderer implements Renderer {
 	 * Resets the player position, and the level objects (coins) and the score.
 	 */
 	private void resetGame() {
-		bunny.setPosition((level.getWidth()-1.0f)*tileSizeX, 0.0f);
+		bunny.setPosition((level.getWidth()-1.0f)*tileSizeX, (level.getHeight()-3.0f)*tileSizeY);
+		bunny.direction = -1;
 		bunny.revive();
 		bunny.setScore(-1000);
 		level.reset();

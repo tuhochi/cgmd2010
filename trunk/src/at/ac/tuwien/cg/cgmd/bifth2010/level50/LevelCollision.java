@@ -1,14 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level50;
 
 import java.util.HashMap;
-import java.util.Vector;
-
 import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
@@ -84,12 +80,13 @@ public class LevelCollision {
                   int px1=(pix&0xff00ff00) | pr | pb;
                   //correction of rows
                   collisionArray[i*width+j]=px1;
+                  float epsilon = 0.001f;
                   if ((px1&0x00ffffff) == 0x00ffff00) { //blue
                 	  float texcoord[] = { //empty coin
-                			  tileCountInv,  2*tileCountInv,
-                			  tileCountInv,  tileCountInv,
-                			  2*tileCountInv,  tileCountInv,
-                			  2*tileCountInv,  2*tileCountInv
+                			  tileCountInv+epsilon,  2*tileCountInv-epsilon,
+                			  tileCountInv+epsilon,  tileCountInv+epsilon,
+                			  2*tileCountInv-epsilon,  tileCountInv+epsilon,
+                			  2*tileCountInv-epsilon,  2*tileCountInv-epsilon
                    	  };
                    	  LevelObject coin = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
                    	  coins.put(i*width+j,coin);
@@ -104,74 +101,74 @@ public class LevelCollision {
 //						levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x0000aaaa) { //dark yellow
 						float texcoord[] = { //middle floor
-								   tileCountInv,  3*tileCountInv,
-								   tileCountInv,  2*tileCountInv,
-								   2*tileCountInv,  2*tileCountInv,
-							       2*tileCountInv,  3*tileCountInv
+								   tileCountInv+epsilon,  3*tileCountInv-epsilon,
+								   tileCountInv+epsilon,  2*tileCountInv+epsilon,
+								   2*tileCountInv-epsilon,  2*tileCountInv+epsilon,
+							       2*tileCountInv-epsilon,  3*tileCountInv-epsilon
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x0000ffff) { //yellow
 						float texcoord[] = { //crates
-								   0.0f,  2*tileCountInv,
-							       0.0f,  tileCountInv,
-							       tileCountInv,  tileCountInv,
-							       tileCountInv,  2*tileCountInv
+								   0.0f+epsilon,  2*tileCountInv-epsilon,
+							       0.0f+epsilon,  tileCountInv+epsilon,
+							       tileCountInv-epsilon,  tileCountInv+epsilon,
+							       tileCountInv-epsilon,  2*tileCountInv-epsilon
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x0000dddd) {
 						float texcoord[] = { //right floor
-								2*tileCountInv,  3*tileCountInv,
-								2*tileCountInv,  2*tileCountInv,
-								3*tileCountInv,  2*tileCountInv,
-								3*tileCountInv,  3*tileCountInv
+								2*tileCountInv+epsilon,  3*tileCountInv-epsilon,
+								2*tileCountInv+epsilon,  2*tileCountInv+epsilon,
+								3*tileCountInv-epsilon,  2*tileCountInv+epsilon,
+								3*tileCountInv-epsilon,  3*tileCountInv-epsilon
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x00005555) {
 						float texcoord[] = { //left floor
-								   0.0f,  3*tileCountInv,
-							       0.0f,  2*tileCountInv,
-							       tileCountInv,  2*tileCountInv,
-							       tileCountInv,  3*tileCountInv
+								   0.0f+epsilon,  3*tileCountInv-epsilon,
+							       0.0f+epsilon,  2*tileCountInv+epsilon,
+							       tileCountInv-epsilon,  2*tileCountInv+epsilon,
+							       tileCountInv-epsilon,  3*tileCountInv-epsilon
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x00550055) {
 						float texcoord[] = { //left tree
-								2*tileCountInv,  2*tileCountInv,
-								2*tileCountInv,  tileCountInv,
-							    3*tileCountInv,  tileCountInv,
-							    3*tileCountInv,  2*tileCountInv
+								2*tileCountInv+epsilon,  2*tileCountInv-epsilon,
+								2*tileCountInv+epsilon,  tileCountInv+epsilon,
+							    3*tileCountInv-epsilon,  tileCountInv+epsilon,
+							    3*tileCountInv-epsilon,  2*tileCountInv-epsilon
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x00aa00aa) {
 						float texcoord[] = { //middle tree
-								3*tileCountInv,  2*tileCountInv,
-								3*tileCountInv,  tileCountInv,
-							    4*tileCountInv,  tileCountInv,
-							    4*tileCountInv,  2*tileCountInv
+								3*tileCountInv+epsilon,  2*tileCountInv-epsilon,
+								3*tileCountInv+epsilon,  tileCountInv+epsilon,
+							    4*tileCountInv-epsilon,  tileCountInv+epsilon,
+							    4*tileCountInv-epsilon,  2*tileCountInv-epsilon
 							};
 							collisionArray[i*width+j] = 0x00550055;
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x00dd00dd) {
 						float texcoord[] = { //right tree
-								4*tileCountInv,  2*tileCountInv,
-								4*tileCountInv,  tileCountInv,
-							    5*tileCountInv,  tileCountInv,
-							    5*tileCountInv,  2*tileCountInv
+								4*tileCountInv+epsilon,  2*tileCountInv-epsilon,
+								4*tileCountInv+epsilon,  tileCountInv+epsilon,
+							    5*tileCountInv-epsilon,  tileCountInv+epsilon,
+							    5*tileCountInv-epsilon,  2*tileCountInv-epsilon
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
 					} else if ((px1&0x00ffffff) == 0x00ff00ff) {
 						float texcoord[] = { //tree trunk
-								3*tileCountInv,  tileCountInv,
-								3*tileCountInv,  0.0f,
-							    4*tileCountInv,  0.0f,
-							    4*tileCountInv,  tileCountInv
+								3*tileCountInv+epsilon,  tileCountInv-epsilon,
+								3*tileCountInv+epsilon,  0.0f+epsilon,
+							    4*tileCountInv-epsilon,  0.0f+epsilon,
+							    4*tileCountInv-epsilon,  tileCountInv-epsilon
 							};
 							LevelObject levelPart = new LevelObject(gl, context, this, j*tileSizeX, i*tileSizeY, tileSizeX, tileSizeY, R.drawable.l50_tiles, texcoord);
 							levelParts.put(i*width+j,levelPart);
