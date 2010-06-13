@@ -452,15 +452,14 @@ public class GameWorld {
                     i--;
                 }
                 else if( mEnemies.get(i).getHP() <= 0 ){
-                    GameMechanics.getSingleton().removeMoney( mEnemies.get(i).getMoney() );
                     mEnemies.get(i).die();
                     if ( mEnemies.get(i).toRemove() ){
+                    	GameMechanics.getSingleton().removeMoney( mEnemies.get(i).getMoney() );
                        	mEnemies.get(i).deactivate();
                     	mEnemies.remove(i);
                     	GameMechanics.getSingleton().addKilledEnemie();
                     	i--;
                     }
-                    
                 }
             }
         }

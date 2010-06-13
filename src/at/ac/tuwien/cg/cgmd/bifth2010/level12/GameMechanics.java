@@ -41,7 +41,7 @@ public class GameMechanics {
 	}
 	
 	public int removeMoney( int amount){
-		System.out.println("Removing Money, amount: "+amount+" sum: "+mMoney);
+		System.out.println("Removing Money, amount: "+amount+" sum: "+mBurnedMoney);
 		return mBurnedMoney +=amount;
 	}
 	
@@ -78,7 +78,6 @@ public class GameMechanics {
 		return mSecondsToNextRound;
 	}
 
-
 	public short getRoundNumber() {
 		return mRound;
 	}
@@ -89,7 +88,6 @@ public class GameMechanics {
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
 	}
-
 
 	public int getMoney() {	
 		return mMoney;
