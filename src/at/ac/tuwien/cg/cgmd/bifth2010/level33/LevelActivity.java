@@ -50,14 +50,14 @@ public class LevelActivity extends Activity implements OnGestureListener{
 	private GestureDetector gestureScanner; // needed for advanced Gestures
 	public static GameRenderer renderer;	// Game's Renderer Loop
 	public static SceneGraph sceneGraph;	// Graph with Game Objects
-	public static GameRenderer gameRenderer;
+	public static GameRenderer gameRenderer;// opengl Renderer
 	public static Vector2f resolution;		// resolution of the screen
 	public static Vector2f lastTouch = new Vector2f(1,1);	// coordinates of the last touch [0 1] 
-	public static Vector2f lastTouchDown = new Vector2f(1,1);
-	public static Vector2f lastTouchUp = new Vector2f(1,1);
-	public static Vector2f diffTouch = new Vector2f(0,0);	// difference to the last touch
-	public static boolean gameWasInit = false;
-	public static ViewSwitcher viewSwitcher = null;
+	public static Vector2f lastTouchDown = new Vector2f(1,1);	// coordinate of the last touch down [0 1] 
+	public static Vector2f lastTouchUp = new Vector2f(1,1); // coordinate of the last touch up [0 1] 
+	public static Vector2f diffTouch = new Vector2f(0,0);	// difference to the last touch and the current touch
+	public static boolean gameWasInit = false;	// notice if the game was initialized before
+	public static ViewSwitcher viewSwitcher = null;	// ViewSwitcher that switches between LoadView and GameView
 	public static AllGameStates GAME_STATE = AllGameStates.LOADING;
 	
 	

@@ -10,6 +10,9 @@ import android.os.Bundle;
  */
 public class HelpActivity extends Activity {
 
+	/**
+	 * is called when Activity is created and set the ContentView with the Help View
+	 */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l33_help);
