@@ -28,7 +28,7 @@ public class TextureParts {
 	public static TexturePart makeDamagedRabbitHead(Texture texture, int severity) {
 		float x, y;
 
-		x = severity * 110.f;
+		x = 20f + severity * 110.f;
 		y = 661.f;
 
 		return new TexturePart(texture, x, y, x + 100.f, y + 72.f);
@@ -40,7 +40,7 @@ public class TextureParts {
 	 * @return the created TexturePart
 	 */
 	public static TexturePart makeWing(Texture texture) {
-		return new TexturePart(texture, 0, 519, 0 + 55, 519 + 60);
+		return new TexturePart(texture, 12, 519, 12 + 55, 519 + 60);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class TextureParts {
 	 * @return the created TexturePart
 	 */
 	public static TexturePart makeSky(Texture texture) {
-		return new TexturePart(texture, 5, 0, 5 + 1, 0 + 320);
+		return new TexturePart(texture, 5, 0, 5 + 1, 0 + 1024);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class TextureParts {
 	 * @return the created TexturePart
 	 */
 	public static TexturePart makeMeadow(Texture texture) {
-		return new TexturePart(texture, 0, 382, 0 + 930, 382 + 130);
+		return new TexturePart(texture, 20, 382, 20 + 930, 382 + 130);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class TextureParts {
 	 * @return the created TexturePart
 	 */
 	public static TexturePart makeCrosshairsRed(Texture texture) {
-		return new TexturePart(texture, 976, 426, 976 + 48, 426 + 48);
+		return new TexturePart(texture, 970, 426, 970 + 48, 426 + 48);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class TextureParts {
 	 * @return the created TexturePart
 	 */
 	public static TexturePart makeCrosshairsGreen(Texture texture) {
-		return new TexturePart(texture, 976, 376, 976 + 48, 376 + 48);
+		return new TexturePart(texture, 970, 376, 970 + 48, 376 + 48);
 	}
 
 	/**
