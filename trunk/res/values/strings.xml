@@ -67,8 +67,11 @@
     
     
     
-	<string name="l55_HelpTitle">Herohelper</string>
-	<string name="l55_HelpText">(English)Jeder kennt die Situation: Man spielt ein Jump \'n\' Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist du gefragt! Bestücke das leergeräumte Level wieder mit Münzen, und zwar so schnell, wie möglich. Denn etwas haben Helden nicht - und das ist Geduld.</string>
+	<string name="l55_HelpTitle">Hero assistant</string>
+	<string name="l55_HelpText_1">Everybody knows the situation: You’re playing a jump \’n\’ run level, busily collecting coins. But no one has ever thought about who’s the one that fills up all the empty levels again.\n\nThat’s exactly where you are needed! Fill up the empty level with coins again and do that as fast as possible. Because there’s one thing heros do not have – and that’s patience!\n\nMove your hero assistant with the right thumb through the level.</string>
+	<string name="l55_HelpText_2">Use the “left” and “right” buttons to move left or right. The jump-button is divided into three areas. Use the middle to just jump. Using the left or right area, you’re able to simultanously jump and move into the selected direction.\n\nYou have to fill in two different types of coins.</string>
+	<string name="l55_HelpText_3">These coins are easy to spread. Just put them into the level and they will stay there. On the other hand, there are diamonds.</string>
+	<string name="l55_HelpText_4">You’ll pick up these stones again if you jump into the same field again. However you’ll fill up the level, NEVER ever jump into the spikes!!!\n\nHave fun!</string>
 
 
 </resources>

@@ -40,11 +40,11 @@ public class TileLayer {
 	public int numTilesX=0;
 	private int numTilesY=0;
 	
-	private int maxVBOPosX=0;
-	private int maxVBOPosY=0;
+	public int maxVBOPosX=0;
+	public int maxVBOPosY=0;
 	
 	public int[][] tiles_vector;
-	private TilesVBO[][] vbo_vector;
+	public TilesVBO[][] vbo_vector;
 
 	/**
 	 * Initializes the layer
@@ -174,6 +174,7 @@ public class TileLayer {
 				vbo_vector[i][j]=new TilesVBO(gl, sizeFactor, i*VBO_WIDTH, j*VBO_HEIGHT, VBO_WIDTH, VBO_HEIGHT, tiles_vector, texture, texRows, texCols);
 			}
 		}
+		Log.d("TileLayer", "VBOs created");
 	}
 	
 	/**
@@ -185,7 +186,7 @@ public class TileLayer {
 		texture.bind(gl);
 		
 		float tempPosX=posX*scrollFactor;
-		float tempPosY=posY*scrollFactor;
+		float tempPosY=posY;//*scrollFactor;
 		
 		int minVisibleVBO_x=Math.max((int) (-tempPosX/(VBO_WIDTH*sizeFactor)), 0);
 		int maxVisibleVBO_x=Math.min((int) ((screenWidth-tempPosX)/(VBO_WIDTH*sizeFactor)),maxVBOPosX-1);
@@ -193,8 +194,9 @@ public class TileLayer {
 		int minVisibleVBO_y=Math.max((int) (-tempPosY/(VBO_HEIGHT*sizeFactor)), 0);
 		int maxVisibleVBO_y=Math.min((int) ((screenHeight-tempPosY)/(VBO_HEIGHT*sizeFactor)), maxVBOPosY-1);
 		
-		/*gl.glLoadIdentity();
-		gl.glTranslatef(tempPosX, tempPosY, 0.0f);*/
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+		gl.glTranslatef(tempPosX, tempPosY, 0.0f);
 		
 		// bind tilesatlas
 		// apply view frustum culling (adjust loops)
@@ -203,5 +205,6 @@ public class TileLayer {
 				vbo_vector[i][j].draw(gl);
 			}
 		}
+		gl.glPopMatrix();
     }	
 }

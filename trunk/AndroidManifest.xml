@@ -347,7 +347,8 @@
 		
 		<activity
 			android:name=".level55.LevelActivity"
-			android:screenOrientation="landscape">
+			android:screenOrientation="landscape"
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="at.ac.tuwien.cg.cgmd.bifth2010.level55.LAUNCH_LEVEL" />
 				<category android:name="android.intent.category.DEFAULT"/>

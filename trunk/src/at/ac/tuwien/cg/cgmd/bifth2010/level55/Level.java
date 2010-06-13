@@ -29,37 +29,40 @@ public class Level {
 	 * @param gl The OpenGL context
 	 * @param context The Activity context
 	 */
-	public void init(GL10 gl, Context context) {
-		textureTest = new Texture();
-		textureTest.create(R.drawable.l55_testtexture);
-		
+	public void init(GL10 gl, Context context, String coinStates) {
 		frontLayer=new TileLayer();
 		frontLayer.init(gl, 1.0f, 1.0f, R.raw.l55_level, R.drawable.l55_front_layer_tex, 4, 4, context);
 		
+		if (!coinStates.equals("")) {
+			int charPos=0;
+	        for (int i=0; i<frontLayer.maxVBOPosX; i++) {
+	        	for (int j=0; j<frontLayer.maxVBOPosY; j++) {
+	        		for (int k=0; k<frontLayer.vbo_vector[i][j].coinCount; k++) {
+	        			if (coinStates.charAt(charPos)=='1') {
+	        				frontLayer.vbo_vector[i][j].coins[k].active=true;
+	        			}
+	        			charPos++;
+	        		}
+	        	}
+	        }
+		}
+		
 		secondLayer=new TileLayer();
-		secondLayer.init(gl, 0.5f, 2.0f, R.raw.l55_level, R.drawable.l55_testtexture, 2, 4, context);
+		secondLayer.init(gl, 0.77f, 1.0f, R.raw.l55_middle, R.drawable.l55_middle_layer_tex, 4, 4, context);
 		
 		thirdLayer=new TileLayer();
-		thirdLayer.init(gl, 0.25f, 3.0f, R.raw.l55_level, R.drawable.l55_testtexture, 2, 4, context);
+		thirdLayer.init(gl, 0.25f, 1.0f, R.raw.l55_back, R.drawable.l55_back_layer_tex, 2, 4, context);
 		
 		handleUIChanges=((LevelActivity)context).handleUIChanges;
-		
-		((LevelActivity)context).cash=100;
-		Message msg=new Message();
-		msg.what=1;
-		msg.arg1=0;
-		handleUIChanges.sendMessage(msg);
 	}
 	
 	/**
 	 * Renders the level
 	 * @param gl The OpenGL context
 	 */
-	public void draw(GL10 gl) {   
-        textureTest.bind(gl);
-        
-        //thirdLayer.draw(gl);
-        //secondLayer.draw(gl);
+	public void draw(GL10 gl) {          
+        thirdLayer.draw(gl);
+        secondLayer.draw(gl);
         frontLayer.draw(gl);
 	}
 	
