@@ -29,6 +29,8 @@ public class LevelActivity extends Activity{
 	private Display mDisplay = null;
 	private GLRenderer mRenderer = null;
 	private boolean mTutShowed = false;
+	private int mKilledEnemies = 0;
+	private int mSpawnedEnemies = 0;
 	
 	
     /** Called when the activity is first created. */
@@ -46,12 +48,11 @@ public class LevelActivity extends Activity{
     public void onStart(){   
         super.onStart();
         if( mTutShowed == false ) {
+        	GameMechanics.getSingleton().pause();
         	AlertDialog tutorial = new StartDialog(this);
         	tutorial.show();
-        }
-        mTutShowed = true;
-        GameMechanics.getSingleton().pause();
-        
+        	 mTutShowed = true;	
+        }     
     }
     
     @Override
@@ -93,7 +94,6 @@ public class LevelActivity extends Activity{
  	   	GLSurfaceView glview = new GLSurfaceView(this);
  	   	if( mRenderer == null ) mRenderer = new GLRenderer();
  	   	glview.setRenderer(mRenderer);
-    	if( mTutShowed == true ) GameMechanics.getSingleton().unpause();
     	GameMechanics.getSingleton().setGameContext(this);
     	    
         LinearLayout l = new LinearLayout( this );
@@ -118,9 +118,6 @@ public class LevelActivity extends Activity{
     
     @Override
 	protected void onStop() {
-    	GameMechanics.getSingleton().pause();
-		FinishDialog f = new FinishDialog(this);
-		f.show();
 		//we finish this activity;
 		super.onStop();
     	//Debug.stopMethodTracing();
@@ -128,6 +125,9 @@ public class LevelActivity extends Activity{
     
 	@Override
 	public void finish() {	
+		GameMechanics.getSingleton().pause();
+		FinishDialog f = new FinishDialog(this);
+		f.show();
 		
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
@@ -242,13 +242,13 @@ public class LevelActivity extends Activity{
 			t.setText(R.string.l12_enemies_fended);
 			l.addView(t);
 			TextView t1 = new TextView(context);
-			t1.setText(GameMechanics.getSingleton().getKilledEnemies() + " / "+GameMechanics.getSingleton().getSpawnedEnemies()+"\n\n" );
+			t1.setText(mKilledEnemies + " / "+mSpawnedEnemies+"\n\n" );
 			
-			TextView t2 = new TextView(context);
+			/*TextView t2 = new TextView(context);
 			t.setText(R.string.l12_points);
 			l.addView(t2);
 			TextView t3 = new TextView(context);
-			t3.setText(GameMechanics.getSingleton().getBurnedMoney() + " / 100\n\n");
+			t3.setText(GameMechanics.getSingleton().getBurnedMoney() + " / 100\n\n");*/
 			
 			
 			Button btn = new Button(context);
@@ -262,7 +262,6 @@ public class LevelActivity extends Activity{
 
 		@Override
 		public void onClick(View v) {
-			GameMechanics.getSingleton().unpause();
 			this.dismiss();	
 		}
 
