@@ -48,7 +48,7 @@ public class ParallaxSprite extends Sprite {
 	public void update(float x, float y) {
 		float xpos = (x / screenWidth);
 		float ypos = (y / screenHeight);
-		setPosition(xpos * (screenWidth - getWidth()), screenHeight + yOffset + screenHeight * .3f * distance * (1 - ypos));
+		setPosition(xpos * (screenWidth - getWidth()), screenHeight + yOffset + 5 + screenHeight * .14f * distance * (1 - ypos));
 	}
 
 	public float getYOffset() {

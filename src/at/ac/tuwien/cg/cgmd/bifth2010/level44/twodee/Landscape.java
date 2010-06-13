@@ -22,7 +22,7 @@ public class Landscape extends SpriteContainer {
 	private ParallaxSprite meadow = null;
 	private Gradient sky = null;
 
-	private static final int CLOUDS = 3;
+	private static final int CLOUDS = 5;
 	private Vector<Cloud> clouds = new Vector<Cloud>();
 
 	private PhysicalRabbit rabbit = null;
@@ -75,8 +75,8 @@ public class Landscape extends SpriteContainer {
 			clouds.add(c);
 		}
 
-		hills.setYOffset(-50);
-		mountains.setYOffset(-40);
+		hills.setYOffset(-70);
+		mountains.setYOffset(-90);
 		meadow.setYOffset(-15);
 
 		parallaxSprites.add(mountains);
