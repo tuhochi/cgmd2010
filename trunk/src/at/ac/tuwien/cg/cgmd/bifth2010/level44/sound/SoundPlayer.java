@@ -5,6 +5,7 @@ import java.util.HashMap;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.media.MediaPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
@@ -15,9 +16,8 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class SoundPlayer {
 	/** The Sound Effects we support */
-	public enum SoundEffect {
-		LOAD, SHOT, FLAP, DROP, BEEP, END
-	};
+	public enum SoundEffect { LOAD, SHOT, FLAP, DROP, BEEP, END, DAMN, LAUGH, WTF,
+		DAMN0, DAMN1, LAUGH0, LAUGH1, WTF0, WTF1 };
 
 	/** SoundPool for playing sounds */
 	private SoundPool soundPool;
@@ -31,6 +31,11 @@ public class SoundPlayer {
 	private static SoundPlayer instance = null;
 	/** the Context */
 	private static Context context = null;
+
+	/** Media Player object for music */
+	private MediaPlayer mediaPlayer = null;
+
+	private int currentValue = 0;
 
 	/**
 	 * create the Singleton-Object
@@ -96,6 +101,9 @@ public class SoundPlayer {
 			soundPool.release();
 			soundPool = null;
 		}
+                if (mediaPlayer != null) {
+                        mediaPlayer.release();
+                }
 
 		instance = null;
 	}
@@ -104,12 +112,51 @@ public class SoundPlayer {
 	 * reload all sound samples
 	 */
 	public void reloadSounds() {
+		mediaPlayer = MediaPlayer.create(context, R.raw.l44_music);
+		mediaPlayer.setLooping(true);
+
 		sounds.put(SoundEffect.LOAD, soundPool.load(context, R.raw.l44_load, 1));
 		sounds.put(SoundEffect.SHOT, soundPool.load(context, R.raw.l44_shot, 1));
 		sounds.put(SoundEffect.FLAP, soundPool.load(context, R.raw.l44_flap, 1));
 		sounds.put(SoundEffect.DROP, soundPool.load(context, R.raw.l44_drop, 1));
 		sounds.put(SoundEffect.BEEP, soundPool.load(context, R.raw.l44_beep, 1));
 		sounds.put(SoundEffect.END, soundPool.load(context, R.raw.l44_endding, 1));
+
+		sounds.put(SoundEffect.DAMN0, soundPool.load(context, R.raw.l44_damn0, 1));
+		sounds.put(SoundEffect.DAMN1, soundPool.load(context, R.raw.l44_damn1, 1));
+		sounds.put(SoundEffect.LAUGH0, soundPool.load(context, R.raw.l44_laugh0, 1));
+		sounds.put(SoundEffect.LAUGH1, soundPool.load(context, R.raw.l44_laugh1, 1));
+		sounds.put(SoundEffect.WTF0, soundPool.load(context, R.raw.l44_wtf0, 1));
+		sounds.put(SoundEffect.WTF1, soundPool.load(context, R.raw.l44_wtf1, 1));
+	}
+
+	public void startMusic() {
+		if (musicOn && mediaPlayer != null) {
+			try {
+				mediaPlayer.start();
+			} catch (IllegalStateException ise) {
+				/**
+				 * Ignore for now - shouldn't happen, and the
+				 * music isn't essential for the gameplay.
+				 **/
+			}
+		}
+	}
+	
+	public void stopMusic() {
+		if (musicOn && mediaPlayer != null) {
+			try {
+				mediaPlayer.stop();
+			} catch (IllegalStateException ise) {
+				/**
+				 * Ignore for now - shouldn't happen, and the
+				 * music isn't essential for the gameplay. Also,
+				 * it most likely means that the music isn't
+				 * playing, so the "stopMusic()" call already
+				 * did it's thing. And that's why we are happy!
+				 **/
+			}
+		}
 	}
 
 	/**
@@ -123,6 +170,29 @@ public class SoundPlayer {
 	 */
 	public void play(SoundEffect sound, float position) {
 		if (musicOn) {
+			if (sound == SoundEffect.DAMN) {
+				if (currentValue % 2 == 0) {
+					sound = SoundEffect.DAMN0;
+				} else {
+					sound = SoundEffect.DAMN1;
+				}
+                                currentValue++;
+			} else if (sound == SoundEffect.LAUGH) {
+				if (currentValue % 2 == 0) {
+					sound = SoundEffect.LAUGH0;
+				} else {
+					sound = SoundEffect.LAUGH1;
+				}
+                                currentValue++;
+			} else if (sound == SoundEffect.WTF) {
+				if (currentValue % 2 == 0) {
+					sound = SoundEffect.WTF0;
+				} else {
+					sound = SoundEffect.WTF1;
+				}
+                                currentValue++;
+                        }
+
 			float leftVolume = volume, rightVolume = volume;
 
 			if (position < 0.5f) {

@@ -34,6 +34,7 @@ public class GameThread extends Thread {
 	private boolean quit;
 	/** the current input-gesture to perform */
 	private InputGesture gesture = null;
+	private long lastFlapSound = 0;
 
 	/**
 	 * Creates the GameScene
@@ -86,6 +87,7 @@ public class GameThread extends Thread {
 						// continue with single-tap
 						if (scene.getNextInputGesture() instanceof SingleTap) {
 							scene.setCurrentState(GameScene.CurrentState.RUNNING);
+							SoundPlayer.getInstance().startMusic();
 
 							// start time for physical movement is resetted
 							rabbit.resetStartTime(0);
@@ -200,8 +202,12 @@ public class GameThread extends Thread {
 					soundPosition = 0.8f;
 				}
 			}
-
-			SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
+			
+			long now = System.currentTimeMillis();
+			if (now > lastFlapSound + 500) {
+				SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
+				lastFlapSound = System.currentTimeMillis();
+			}
 		}
 
 		// reload after a delay?
@@ -213,8 +219,12 @@ public class GameThread extends Thread {
 						Thread.sleep(400L);
 					} catch (Exception ex) {
 					}
-
-					SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
+					
+					if (crosshairs.getIsLoaded()) {
+						SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
+					} else {
+						SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.DAMN, 0.5f);
+					}
 				}
 			}).start();
 		}

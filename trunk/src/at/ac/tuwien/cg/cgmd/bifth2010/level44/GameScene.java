@@ -26,20 +26,19 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.VirtualFinger;
 
 /**
  * The Surface View
- * 
+ *
  */
 
 public class GameScene extends GLSurfaceView implements Renderer {
 	/**
 	 * State of the Game
-	 * 
 	 * @author Matthias
-	 * 
+	 *
 	 */
 	public enum CurrentState {
 		INTRO, RUNNING, EXTRO
 	}
-
+	
 	/** the context of the scene */
 	private LevelActivity activity = null;
 	/** the flying rabbit */
@@ -66,7 +65,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private InputGesture input = null;
 	/** the system's vibrator */
 	private Vibrator vibrator = null;
-
+	
 	/** restored game state */
 	private GameState gameState = null;
 	/** current state of game */
@@ -74,22 +73,20 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	/**
 	 * Creates the GameScene
-	 * 
-	 * @param context
-	 *            The Context of the Scene
+	 * @param context The Context of the Scene
 	 */
 	public GameScene(LevelActivity context) {
 		super(context);
-
+		
 		this.activity = context;
-
+		
 		// get the system's vibrator
-		vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-
+		vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+		
 		setRenderer(this);
 		setRenderMode(RENDERMODE_CONTINUOUSLY);
 		System.err.println("GameScene created");
-
+		
 		rabbit = null;
 		landscape = null;
 		introBackground = null;
@@ -102,39 +99,39 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-
+		
 		// Intro-Mode
 		if (this.getCurrentState().equals(CurrentState.INTRO)) {
 			introBackground.draw(gl);
-			// rabbit.draw(gl);
-			// virtualFinger.draw(gl);
+			//rabbit.draw(gl);
+			//virtualFinger.draw(gl);
 		}
-
+		
 		// Running-Mode or Extro-Mode
 		else if (this.getCurrentState().equals(CurrentState.RUNNING) || this.getCurrentState().equals(CurrentState.EXTRO)) {
 			// first draw landscape and rabbit
 			if (landscape != null) {
 				landscape.draw(gl);
 			}
-
+			
 			// then draw the crosshairs
 			if (crosshairs != null && this.getCurrentState().equals(CurrentState.RUNNING)) {
 				crosshairs.draw(gl);
 			}
-
+			
 			// draw the coins that are left to loose
 			if (rabbit != null && coin != null) {
 				int coins = rabbit.getCoinCount();
-
-				for (int i = 0; i < coins; i++) {
-					coin.setPosition(20 + i * coin.getWidth() / 2, 20);
-					coin.draw(gl);
+				
+				for (int i=0; i<coins; i++) {
+					coin.setPosition(20+i*coin.getWidth()/2, 20);
+					coin.draw(gl);				
 				}
 			}
-
+			
 			// draw the time left
 			if (timeDisplay != null) {
 				timeDisplay.draw(gl);
@@ -148,12 +145,11 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		gl.glOrthof(0, width, height, 0, 0, 1);
-		gl.glClearColorx((int) (255 * .5), (int) (255 * .7), 255, 255);
+		gl.glClearColorx((int)(255*.5), (int)(255*.7), 255, 255);
 	}
-
+	
 	/**
 	 * Initializes a texture
-	 * 
 	 * @param gl
 	 * @param texture
 	 */
@@ -171,69 +167,69 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-
+		
 		int width = getWidth();
 		int height = getHeight();
-
+		
 		/**
-		 * Workaround: In some cases (e.g. when locking the screen), width and
-		 * height are exchanged until the system realizes that we want landscape
-		 * mode. We simply detect this here, and do the initialization with the
-		 * values switched, because the system will switch to landscape mode
-		 * later on.
+		 * Workaround: In some cases (e.g. when locking the screen),
+		 * width and height are exchanged until the system realizes
+		 * that we want landscape mode. We simply detect this here,
+		 * and do the initialization with the values switched, because
+		 * the system will switch to landscape mode later on.
 		 **/
 		if (width < height) {
 			width = getHeight();
 			height = getWidth();
 		}
-
+		
 		Texture mainTexture = new Texture(gl, getContext(), R.drawable.l44_texture);
 		configureTexture(gl, mainTexture);
-
+		
 		rabbit = new PhysicalRabbit(new RabbitSprite(mainTexture), new Sprite(TextureParts.makeCoin(mainTexture)), width, height);
-		rabbit.setPosition(width / 2, height / 2);
-
+		rabbit.setPosition(width/2, height/2);
+		
 		crosshairs = new Crosshairs(this, mainTexture, width, height);
-		crosshairs.setPosition(30, height / 2);
+		crosshairs.setPosition(30, height/2);
 		crosshairs.setRabbit(rabbit);
-
+		
 		landscape = new Landscape(mainTexture, width, height);
-		landscape.setRabbit(rabbit);
-
+		landscape.setRabbit((PhysicalRabbit)rabbit);
+		
 		coin = new Sprite(TextureParts.makeCoin(mainTexture));
-
+		
 		timeDisplay = new TimeDisplay(activity, mainTexture, timeManager);
-		timeDisplay.setPosition(width - timeDisplay.getWidth() - 10, 10);
-
+		timeDisplay.setPosition(width-timeDisplay.getWidth()-10, 10);
+		
 		introBackground = new IntroBackground(mainTexture, width, height);
 		virtualFinger = new VirtualFinger(mainTexture, width, height);
 		virtualFinger.setGesture(VirtualFinger.DemoGesture.SWIPE_RIGHT);
-
+		
 		if (gameState != null) {
 			/* consume restored values and remove gameState */
 			gameState.restoreTimeManger(timeManager);
 			gameState.restoreCrosshairs(crosshairs);
 			gameState.restoreRabbit(rabbit);
 			gameState.restoreCurrentState(this);
-
+			
 			gameState = null;
 		}
-
+		
 		restartGameThread();
 	}
-
+	
 	/**
 	 * restart the game thread
 	 */
 	private void restartGameThread() {
 		stopGameThread();
-
+		
 		if (rabbit != null && landscape != null && crosshairs != null && timeManager != null && introBackground != null) {
 			gameThread = new GameThread(this, rabbit, landscape, crosshairs, timeManager, introBackground);
 			gameThread.start();
 		}
 	}
-
+	
 	/**
 	 * stop the game thread
 	 */
@@ -241,53 +237,50 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		if (gameThread != null) {
 			gameThread.doQuit();
 			gameThread = null;
-		}
-
+		}	
+		
 		if (timeManager != null) {
 			timeManager.onPause();
 		}
 	}
-
+	
 	@Override
 	public void onPause() {
 		super.onPause();
 		stopGameThread();
 	}
-
+	
 	@Override
 	public void onResume() {
 		super.onResume();
 		restartGameThread();
 	}
-
+	
 	/**
-	 * @param gesture
-	 *            the new input gesture
+	 * @param gesture the new input gesture
 	 */
 	public void addInputGesture(InputGesture gesture) {
 		input = gesture;
 	}
-
+	
 	/**
 	 * @return the current input gesture
 	 */
 	public InputGesture getNextInputGesture() {
-		/*
-		 * get the next input gesture and remove it if it exists at all (set to
-		 * null)
-		 */
+		/* get the next input gesture and remove it
+		 * if it exists at all (set to null) */
 		InputGesture result = input;
 		input = null;
 		return result;
 	}
-
+	
 	/**
 	 * @return the device's vibrator
 	 */
 	public Vibrator getVibrator() {
 		return vibrator;
 	}
-
+	
 	/**
 	 * @return the rabbit the user controls
 	 */
@@ -299,9 +292,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	 * @return the current score, between 0 and 100
 	 */
 	public int getScore() {
-		return (CoinBucketSprite.FULL_COIN_COUNT - rabbit.getCoinCount()) * 10;
+		return (CoinBucketSprite.FULL_COIN_COUNT - rabbit.getCoinCount())*10;
 	}
-
+	
 	/**
 	 * finish the level
 	 */
@@ -311,41 +304,36 @@ public class GameScene extends GLSurfaceView implements Renderer {
 
 	/**
 	 * permanently store the current instance state
-	 * 
 	 * @param outState
 	 */
 	public void saveInstanceState(Bundle outState) {
 		System.err.println("Saving instance state");
-
+		
 		gameState = new GameState();
 		gameState.saveTimeManger(timeManager);
 		gameState.saveCrosshairs(crosshairs);
 		gameState.saveRabbit(rabbit);
 		gameState.saveCurrentState(this);
-
+		
 		outState.putSerializable(GameState.KEY, gameState);
 	}
 
 	/**
 	 * restore the saved instance state
-	 * 
 	 * @param savedInstanceState
 	 */
 	public void restoreInstanceState(Bundle savedInstanceState) {
 		System.err.println("Restoring instance state");
-
+		
 		Serializable restoredState = savedInstanceState.getSerializable(GameState.KEY);
-
+		
 		if (restoredState != null && restoredState instanceof GameState) {
-			gameState = (GameState) restoredState;
-		}
+			gameState = (GameState)restoredState;
+		}		
 	}
 
 	/**
-	 * sets the game state
-	 * 
-	 * @param currentState
-	 *            the new state of the game
+	 * @param currentState the new state of the game
 	 */
 	public synchronized void setCurrentState(CurrentState currentState) {
 		this.currentState = currentState;
