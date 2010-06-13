@@ -108,7 +108,7 @@ public abstract class MoneyCarrier extends GLObject {
 		int distance = 0;
 		if( mStartDyingTime != -1 )distance = 0;
 		else if( mSlowed == 0) distance = (int)(mSpeed * dt);
-		else distance = (int)( mSpeed * 0.01 * (100 - mSlowed) * dt);
+		else distance = (int)(mSpeed * dt * 0.5);//( mSpeed * 0.01 * (100 - mSlowed) * dt);
 		mMovePos -= distance;
 		//calculate actual position
 		mX = (int)(mStartPos + mMovePos);
