@@ -4,12 +4,22 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.microedition.khronos.opengles.GL10;
-
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.model.Geometry.Type;
 
+/**
+ * the Class GeometryLoader
+ * @author roman hochstoger & christoph fuchs
+ */
 public class GeometryLoader {
 
+	/**
+	 * this will load an geometry from an given InputStream
+	 * @param gl		opengl Object
+	 * @param is		InputStream
+	 * @param l33Textur	R-Id of the graphic
+	 * @return the initialized geometry
+	 */
 	public static Geometry loadObj(GL10 gl, InputStream is,int l33Textur) {
 		String line = "";
 
@@ -34,6 +44,13 @@ public class GeometryLoader {
 
 	}
 
+	/**
+	 * this will load an geometry from an given String
+	 * @param gl		opengl Object
+	 * @param obj		String that will be parsed
+	 * @param l33Textur	R-Id of the graphic
+	 * @return the initialized geometry
+	 */
 	public static Geometry loadObjFromString(GL10 gl, String obj, int l33Textur) {
 		String[] lines = obj.split("\n");
 		float[] vertices = new float[lines.length * 3];
@@ -131,9 +148,7 @@ public class GeometryLoader {
 		// if only one Group
 		if(numGroup==-1){
 //			type = new Type[1];
-//			type[0]= Geometry.Type.Triangles;
-//			
-//			
+//			type[0]= Geometry.Type.Triangles;	
 		}
 		else
 		// if multiple Groups
@@ -174,6 +189,12 @@ public class GeometryLoader {
 		return geometry;
 	}
 
+	/**
+	 * this will resolve the index from the parsed String
+	 * @param index		input String that will be parsed
+	 * @param size		number of the values
+	 * @return	the asked index
+	 */
 	private static int getIndex(String index, int size) {
 		if (index == null || index.length() == 0)
 			return 0;

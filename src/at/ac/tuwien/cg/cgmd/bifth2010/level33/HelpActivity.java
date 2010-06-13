@@ -4,6 +4,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * the Class HelpActivity
+ * @author roman hochstoger & christoph fuchs
+ */
 public class HelpActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {

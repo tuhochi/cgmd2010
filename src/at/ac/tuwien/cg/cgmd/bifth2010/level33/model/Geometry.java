@@ -1,90 +1,98 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33.model;
 
-import static android.opengl.GLES10.GL_LINEAR;
-import static android.opengl.GLES10.GL_LINEAR_MIPMAP_NEAREST;
-import static android.opengl.GLES10.GL_TEXTURE_2D;
-import static android.opengl.GLES10.GL_TEXTURE_MAG_FILTER;
-import static android.opengl.GLES10.GL_TEXTURE_MIN_FILTER;
-import static android.opengl.GLES10.GL_TRUE;
-import static android.opengl.GLES10.glBindTexture;
-import static android.opengl.GLES10.glGenTextures;
-import static android.opengl.GLES10.glTexParameterf;
-import static android.opengl.GLUtils.texImage2D;
-
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Color;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector3f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
-import at.ac.tuwien.cg.cgmd.bifth2010.level42.config.Config;
-//import at.ac.tuwien.cg.cgmd.bifth2010.level66.OBJModel;
 
+/**
+ * the Class Geometry
+ * @author roman hochstoger & christoph fuchs
+ */
 public class Geometry {
+	
+	// primitive opengl Type
 	public enum Type {
 		Points, Lines, Triangles, LineStrip, TriangleStrip, TriangleFan
 	}
-
+	
+	// opengl gl10
 	private GL10 gl;
 
+	// vertices objects
 	private float vertices[];
 	private int vertexHandle = -1;
 	private FloatBuffer vertexBuffer;
 
+	// color objects
 	private float colors[];
 	private int colorHandle = -1;
 	private FloatBuffer colorBuffer;
 
+	// text coordinate objects
 	private float texCoords[];
 	private int texHandle = -1;
 	private FloatBuffer texCoordBuffer;
 
+	// normals objects
 	private float normals[];
 	private int normalHandle = -1;
 	private FloatBuffer normalBuffer;
 
+	// indices oft the vertex, color, normal and text coordinates arrays
 	private int indexVertex = 0;
 	private int indexColor = 0;
 	private int indexNormal = 0;
 	private int indexTexCoords = 0;
 	
+	// the number of the vertices
 	private int numVertices = 0;
 
+	// to knew if this geometry is initialized
 	private boolean init = false;
 
+	// a pointer to the last rendered geometry, this is needed to improve the performance, if the last geometry was this geometry many gl switches must not be done
 	private static Geometry lastGeometry;
 
+	// this boolean decides if the vertex buffer object is used (fast buffer in the graphic card)
 	public static boolean useVBO = true;
 
-	public static int geometryCount = 0;
-	
-	
-	// if multible Geometry Objects are in one Geometry then the Offset Array is used
+
+	// if several Geometry Objects are in one Geometry then the geometryOffset Array is used
+	// the advantage is that it decrees gl switches 
 	// eg.: Obj1 & Obj2 =>  geometryOffset={16,32}  --> 0-16 & 16-32
 	// if only one Object eg: Obj1 then it is null;
 	public int geometryOffset[] = null;
 	
+	// if several Geometry Objects, then they can be from various primitive types (not testet yet) 
 	private Type type[];
 
+	// this is the texturId on the graphic card
 	private int textureId= -1;
+	// this is the texture resource-ID (R file) 
 	int textur = -1;
 
 
+	/**
+	 * this is the Geometry constructor
+	 * @param gl						the opengl gl object
+	 * @param type						primitive type of the geometry
+	 * @param numVertices				number of vertices (eq.: 1 triangle == 1 numVertices == 3 vertices == 4 colors == 2 texCoords == 3 normals )
+	 * @param hasColors					true if the geometry has colors
+	 * @param hasTextureCoordinates		true if the geometry has texture coordinates
+	 * @param hasNormals				true if the geometry has normals
+	 * @param textur					if this geometry has a texture this is the resource-Id of the file
+	 * @param geometryOffset			if multiple geometry«s in on geometry (sub groups) then this is the offset
+	 */
 	public Geometry(GL10 gl, Type[] type, int numVertices, boolean hasColors,
 			boolean hasTextureCoordinates, boolean hasNormals,int textur,int[] geometryOffset) {
 		
@@ -105,39 +113,49 @@ public class Geometry {
 	}
 	
 	/**
-	 * this constructor accept the ObjModel
-	 * @param gl
-	 * @param objModel Object Geometry
-	 * @param textur Texture ID
+	 * this constructor accept an ObjModel
+	 * @param gl		the opengl gl object
+	 * @param objModel 	Object Geometry
+	 * @param textur 	if this geometry has a texture this is the resource-Id of the file
 	 */
 	public Geometry(GL10 gl, ObjModel objModel, int textur) {
 		
 		this.gl = gl;
 		this.type = objModel.type;
 		this.geometryOffset=objModel.geometryOffset;
-		
 		this.vertices = objModel.vertices;
 		this.colors = objModel.colors;
 		this.texCoords = objModel.texCoords;
 		this.normals = objModel.normals;
 		this.numVertices = objModel.numVertices;
-		Log.d("numVertices","= "+objModel.numVertices);
-		
+		Log.d("numVertices","= "+objModel.numVertices);		
 		this.textur=textur;
 
 	}
 	
+	/**
+	 * this getter generate an ObjModel from this geometry and return it
+	 * @return		the ObjModel from this geometry
+	 */
 	public ObjModel GetObjModel(){
 		Log.d("numVertices","= "+numVertices);
 		return new ObjModel(type,geometryOffset,vertices,colors,texCoords,normals,numVertices);
 	}
 
+	/**
+	 * it will allocate a buffer with the given size
+	 * @param size 	of the buffer
+	 * @return	the allocated buffer
+	 */
 	private FloatBuffer allocateBuffer(int size) {
 		ByteBuffer buffer = ByteBuffer.allocateDirect(size * 4);
 		buffer.order(ByteOrder.nativeOrder());
 		return buffer.asFloatBuffer();
 	}
 
+	/**
+	 * this will initialize this geometry, allocate the needed buffers, initialize the vbo if used, bind texture
+	 */
 	private void init() {
 	
 		int[] buffer = new int[1];
@@ -224,7 +242,7 @@ public class Geometry {
 					bitmap.recycle();
 					
 						} catch (Exception ex) {
-					Log.d("Texture Sample", "Couldn't load bitmap");
+					Log.d("Texture", "Couldn't load bitmap");
 				}
 			}
 		}
@@ -286,6 +304,11 @@ public class Geometry {
 		init = true;
 	}
 
+	/**
+	 * return the adequate GL10 primitive opengl-Type of this geometry
+	 * @param type primitive type
+	 * @return GL10 type
+	 */
 	private int getPrimitiveType( Type type )
     {
 		if (type == Type.Lines)
@@ -303,16 +326,30 @@ public class Geometry {
             
     }
 
+	/**
+	 * this will render the whole geometry with this geometry-primitive type
+	 */
 	public void render() {
 		if(this.type==null)
 			render(Type.Triangles, 0, numVertices);
 		else
 			render(this.type[0], 0, numVertices);
 	}
+	
+	/**
+	 * this will render the whole geometry with the given type
+	 * @param type		opengl-primitive type
+	 */
+	public void render(Type type) {
+		render(type, 0, numVertices);
+	}
 
-	/*
+	
+	/**
 	 * This method render a specific Geometry, with a specific Type
 	 * if there are multiple Objects in this Geometry
+	 * 
+	 * @param id 	the id of the sub-geometry (group)
 	 */
 	public void render(int id){
 		if(geometryOffset!=null)
@@ -326,15 +363,23 @@ public class Geometry {
 			render(this.type[0]);
 	}
 
-	public void render(Type type) {
-		render(type, 0, numVertices);
-	}
-	
+
+	/**
+	 * this will render a specific sub geometry with given offset and numberOfVertices with this geometry primitive type
+	 * @param offset		beginning offset from the buffer/array
+	 * @param numVertices	length of the buffer/array
+	 */
 	public void render(int offset, int numVertices) {
 		
 		render(this.type[0],offset,numVertices);
 	}
 
+	/**
+	 * this will render a specific sub geometry with given offset and numberOfVertices with given geometry primitive type
+	 * @param type			opengl primitive type
+	 * @param offset		beginning offset from the buffer/array
+	 * @param numVertices	length of the buffer/array
+	 */
 	public void render(Type type, int offset, int numVertices) {
 			
 		boolean wasInit = init;
@@ -397,10 +442,20 @@ public class Geometry {
 		Geometry.lastGeometry = this;
 	}
 
+	/**
+	 * this will add an vertex from a vector
+	 * @param v		the given vector
+	 */
 	public void vertex(Vector3f v) {
 		vertex(v.x, v.y, v.z);
 	}
-
+	
+	/**
+	 * this will add an vertex from the given x,y,z values
+	 * @param x		x-coordinate
+	 * @param y		y-coordinate
+	 * @param z		z-coordinate
+	 */
 	public void vertex(float x, float y, float z) {
 		init = false;
 		int offset = indexVertex * 3;
@@ -411,13 +466,29 @@ public class Geometry {
 		numVertices=indexVertex;
 	}
 
+	/**
+	 * this will add an color to the given vertex from an Color Object
+	 * @param c	Color Object
+	 */
 	public void color(Color c) {
 		this.color(c.r, c.g, c.b, c.a);
 	}
+	
+	/**
+	 * this will add an color to the given vertex from an Color Object
+	 * @param c	Color Object
+	 */
 	public void color(float r, float g, float b) {
 		this.color(r, g, b, 1);
 	}
 	
+	/**
+	 * this will add an color to the given r g b a values
+	 * @param r		red value
+	 * @param g		green value	
+	 * @param b		blue value
+	 * @param a		alpha value (transparency)
+	 */
 	public void color(float r, float g, float b, float a) {
 		init = false;
 		int offset = indexColor * 4;
@@ -428,6 +499,12 @@ public class Geometry {
 		indexColor++;
 	}
 
+	/**
+	 * this will add an normal from the given x y z values
+	 * @param x		x coordinate
+	 * @param y		y coordinate
+	 * @param z		z coordinate
+	 */
 	public void normal(float x, float y, float z) {
 		init = false;
 		int offset = indexNormal * 3;
@@ -437,6 +514,11 @@ public class Geometry {
 		indexNormal++;
 	}
 
+	/**
+	 * this will add an texture coordinate (UV)
+	 * @param s		U coordinate
+	 * @param t		V coordinate
+	 */
 	public void texCoord(float s, float t) {
 		init = false;
 		int offset = indexTexCoords * 2;
@@ -445,10 +527,17 @@ public class Geometry {
 		indexTexCoords++;
 	}
 
+	/**
+	 * will return the maximum of vertices
+	 * @return maximum of vertices
+	 */
 	public int getMaximumVertices() {
 		return vertices.length / 3;
 	}
 
+	/**
+	 * will reset this geometry
+	 */
 	public void reset() {
 		indexVertex = 0;
 		indexColor = 0;
@@ -457,6 +546,9 @@ public class Geometry {
 		init = false;
 	}
 
+	/**
+	 * will dispose / delete used buffer on graphic card and set arrays to null for Garbage Collector
+	 */
 	public void dispose() {
 		if (useVBO) {
 			GL11 gl = (GL11) this.gl;
@@ -478,15 +570,14 @@ public class Geometry {
 		normalBuffer = null;
 		texCoords = null;
 		texCoordBuffer = null;
-		geometryCount--;
 	}
 	
 	/**
-	 * this method add another Geometry to this one, (only same type and with same textureId)
-	 * @param other 
-	 * @param rotation
-	 * @param scale
-	 * @param translation
+	 * this method add another Geometry to this one, (only same primitive type and with same textureId)
+	 * @param other 		geometry with will be added
+	 * @param rotation		orientation of the added geometry
+	 * @param scale			scale of the added geometry
+	 * @param translation	translation of the added geometry
 	 */
 	public void addGeometryAt(Geometry other, Vector3f rotation, Vector3f scale,Vector3f translation) {
 		

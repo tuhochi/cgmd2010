@@ -31,7 +31,11 @@ import java.util.Random;
  * [Parent NEIGHBOUR]			-	the way-point before this one
  * [WAY-COST]					-	how many steps are gone
  * [TEXTURE]					-	Random Texture-Index between 0 - 3
+ * 
+ *
+ * @author roman hochstoger & christoph fuchs
  */
+
 public class WallInformation {
 	
 	

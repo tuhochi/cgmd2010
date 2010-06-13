@@ -98,6 +98,12 @@ public class ObjModel implements Serializable{
 		return model;
 	}
 
+	/**
+	 * this method read the stored ObjModel from the given R-id file
+	 * @param resource	R-Id of the file
+	 * @param activity	the main Activity, needed to open the Raw Resource
+	 * @return the stored ObjModel
+	 */
 	public static ObjModel read(int resource, LevelActivity activity) {
 		ObjModel model = null;
     	try {
