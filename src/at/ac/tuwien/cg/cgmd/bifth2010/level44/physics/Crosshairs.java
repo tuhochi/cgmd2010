@@ -43,6 +43,11 @@ public class Crosshairs {
 	private float desiredY = 0.f;
 	/** is the weapon loaded? */
 	private boolean isLoaded = false;
+	
+	public boolean getIsLoaded() {
+		return isLoaded;
+	}
+
 	/** timestamp, since the crosshairs turned green or -1 if they are red */
 	private long timeStamp = -1L;
 	/** timestamp of last shot */
@@ -239,10 +244,15 @@ public class Crosshairs {
 			// already loaded, play no sound
 			return false;
 		} else {
-			// unload
-			timeStamp = -1L;
-			isLoaded = false;
-
+			// unload if loaded
+			if (isLoaded) {
+				timeStamp = -1L;
+				isLoaded = false;
+				
+				return true;
+			}
+			
+			// already loaded, do nothing
 			return false;
 		}
 	}
@@ -253,6 +263,16 @@ public class Crosshairs {
 	public void shoot() {
 		// play shooting sound
 		SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.SHOT, 0.5f);
+		(new Thread() {
+			public void run() {
+				try {
+					Thread.sleep(500L);
+				} catch (Exception ex) { }
+
+				SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.LAUGH, 0.5f);
+
+			}
+		}).start();
 
 		// position change caused by recoil of the rifle
 		setY(getY() - RECOIL_STRENGTH);
