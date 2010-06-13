@@ -55,11 +55,6 @@ public class Interface {
 	public void draw(GL10 gl) {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		
-		/*gl.glLoadIdentity();
-		gl.glTranslatef(gap, screenHeight-gap-fieldSize, 0.0f);
-		jumpFieldTex.bind(gl);
-		jumpQuad.draw(gl);*/
-		
 		gl.glLoadIdentity();
 		gl.glTranslatef(screenWidth-gap-fieldSize, screenHeight-gap-fieldSize, 0.0f);
 		rightFieldTex.bind(gl);

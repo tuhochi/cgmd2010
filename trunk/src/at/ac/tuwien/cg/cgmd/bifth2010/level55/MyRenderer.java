@@ -7,7 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 /**
  * The Renderer
@@ -36,10 +35,6 @@ class MyRenderer implements MyOpenGLView.Renderer {
 		context=_context;
 	}
 	
-    /*public MyRenderer(Player _player) {
-    	player=_player;
-    }*/
-	
 	/**
 	 * Constructor
 	 */
@@ -48,14 +43,14 @@ class MyRenderer implements MyOpenGLView.Renderer {
 		
     }
 
-    @Override
+    /**
+     * The main draw method
+     * @param gl The OpenGL context
+     */
 	public void onDrawFrame(GL10 gl) {
     	MyTimer.update();
     	gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
-    	
-    	//Ich hab jetzt dT auf Sekunden umgerechnet, weils sonst verwirrend ist...
-    	//Player updated früher weil sonst das Level um ein Frame nachhinkt.
     	float dt = MyTimer.dT*0.001f;
     	player.update(dt);
     	camera.update(dt);
@@ -73,13 +68,13 @@ class MyRenderer implements MyOpenGLView.Renderer {
     	ui.draw(gl);	  
     }
 
-    @Override
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-    	Log.d("Renderer","onSurfaceChanged");
-    	
-    	Log.d("Renderer width", Integer.toString(width));
-    	Log.d("Renderer height", Integer.toString(height));
-    	
+    /**
+     * Gets called on surface changes
+     * @param gl The OpenGL context
+     * @param width Surface width
+     * @param height Surface height
+     */
+	public void onSurfaceChanged(GL10 gl, int width, int height) {  	
          gl.glViewport(0, 0, width, height);
 
          /*
@@ -100,6 +95,8 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glOrthof(0.0f, numTilesHorizontal, numTilesVertical, 0.0f, 0.5f, 5.0f);
          //gl.glOrthof(-20f, 20, 20, -20.0f, 00.0f, 5.0f);
          
+         camera.offset[0] = (float) Math.floor(MyRenderer.numTilesHorizontal*0.5f);
+         
          Quad.screenWidth=numTilesHorizontal;
          Quad.screenHeight=numTilesVertical;
          
@@ -113,10 +110,11 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glLoadIdentity();
     }
 
-    @Override
-	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-    	Log.d("Renderer","onSurfaceCreate");
-    	
+    /**
+     * Gets called on surface creation, loads level and textures
+     * @param gl The OpenGL context
+     */
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {   	
         /*
          * By default, OpenGL enables features that improve quality
          * but reduce performance. One might want to tweak that

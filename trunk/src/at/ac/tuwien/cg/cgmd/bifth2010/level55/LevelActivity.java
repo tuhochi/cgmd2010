@@ -26,8 +26,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
  */
 public class LevelActivity extends Activity {
 	
-	//Player player=new Player();
-	
 	MyRenderer myRenderer;
 	TextView textTime;
 	TextView textPoints;
@@ -50,13 +48,10 @@ public class LevelActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		Log.d("Activity", "onCreate");
-		
 		 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); 
 	     requestWindowFeature(Window.FEATURE_NO_TITLE);
 	     
 		mGLSurfaceView = new MyOpenGLView(this);
-        //mGLSurfaceView.setRenderer(new MyRenderer(player));
 		myRenderer=new MyRenderer();
 		mGLSurfaceView.setRenderer(myRenderer);
 		setContentView(R.layout.l55_level);
@@ -110,6 +105,9 @@ public class LevelActivity extends Activity {
 		setResult(Activity.RESULT_OK, sessionState.asIntent());
 	}
 	
+	 /**
+     * Handler for UI changes (time and points)
+     */
 	public Handler handleUIChanges = new Handler() {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
@@ -136,13 +134,11 @@ public class LevelActivity extends Activity {
 		}
 	};
 	
-	
 	@Override
     protected void onResume() {
         // Ideally a game should implement onResume() and onPause()
         // to take appropriate action when the activity looses focus
 		
-		Log.d("Activity", "onResume");
 		mGLSurfaceView.onResume();
 		
 		SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
@@ -171,7 +167,6 @@ public class LevelActivity extends Activity {
         // to take appropriate action when the activity looses focus
     	paused=true;
         mGLSurfaceView.onPause();
-        Log.d("Activity", "onPause");
         
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = mPrefs.edit();
@@ -204,13 +199,11 @@ public class LevelActivity extends Activity {
     
     @Override
     protected void onStop() {
-    	Log.d("Activity", "onStop");
     	super.onStop();
     }
     
     @Override
     protected void onDestroy() {
-        Log.d("Activity", "onDestroy");
         
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = mPrefs.edit();
