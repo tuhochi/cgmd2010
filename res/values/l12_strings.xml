@@ -12,6 +12,9 @@
 <string name="l12_hyper_tower">RoboBunny3000 fighting with massive power, medium damage bullets but high shooting rate and high bullet velocity. </string>
 <string name="l12_freeze_tower">Freeze-Merc, freezes enemy to half speed. No damage, slow bullets.</string>
 <string name="l12_finish">GAME OVER</string>
-<string name="l12_enemies_fended">enemies fended off:</string>
-<string name="l12_points">Money lost:</string>
+<string name="l12_enemies_fended">enemies fended off: </string>
+<string name="l12_points">Money lost: </string>
+<string name="l12_iron">Iron: </string>
+<string name="l12_roundsleft">Rounds left: </string>
+<string name="l12_countdown">next Round in: </string>
 </resources>

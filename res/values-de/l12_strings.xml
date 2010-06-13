@@ -12,6 +12,9 @@
 <string name="l12_hyper_tower">RoboHase3000, teuer aber gute Schussrate bei schnellen Projektilen und mittlerem Schaden.</string>
 <string name="l12_freeze_tower">Eis-Söldner, friert Gegner ein, so dass sie nur mit der Hälfte der Geschwindigkeit laufen. Kein Schaden, langsame Projektile.</string>
 <string name="l12_finish">GAME OVER</string>
-<string name="l12_enemies_fended">Gegner abgewehrt:</string>
-<string name="l12_points">Geld verloren:</string>
+<string name="l12_enemies_fended">Gegner abgewehrt: </string>
+<string name="l12_points">Geld verloren: </string>
+<string name="l12_iron">Metall: </string>
+<string name="l12_roundsleft">noch Runden: </string>
+<string name="l12_countdown">nächste Runde in: </string>
 </resources>
