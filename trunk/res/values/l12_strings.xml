@@ -6,7 +6,7 @@
 <string name="l12_paragraph03">The game is played from a bird\'s eye view. Enemies approach from the right side of the screen and try to reach the door on the left. The lawn in the middle can be equipped with various types of soldiers that can be selected from the menu. All you have to do is place them and they will handle the "rest". The game\'s goal is to stop as many money carriers as possible from reaching your house before the counter is running out.</string>
 
 <string name="l12_tutorialtitle">Welcome to Bye Bye Bonuses!</string>
-<string name="l12_intro">Place bunny mercs on your lawn to fend of the monney carriers. Bunnies get paid with iron (I) that you earn by destroying money carriers.\n \n Availabe mercenaries:\n</string>
+<string name="l12_intro">Place bunny mercs on your lawn to fend of the money carriers. Bunnies get paid with iron (I) that you earn by destroying money carriers.\n \n Available mercenaries:\n</string>
 <string name="l12_basic_tower">Basic cheap mercenary, only small damage and medium shooting rate.</string>
 <string name="l12_advanced_tower">Better but more expensive elite soldier. slow projectiles, but good damage and shooting rate. 5 projectiles per volley.</string>
 <string name="l12_hyper_tower">RoboBunny3000 fighting with massive power, medium damage bullets but high shooting rate and high bullet velocity. </string>
