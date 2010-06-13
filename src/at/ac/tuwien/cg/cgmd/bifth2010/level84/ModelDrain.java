@@ -3,44 +3,49 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * Model representing a "Drain".
+ * Model representing a "drain".
  * @author Gerald, Georg
-  */
-
+ */
 public class ModelDrain extends Model {
 
+	/** Drain type: CLOSED */
 	public static final int CLOSED = 0;
+	/** Drain type: ROUND */
 	public static final int ROUND = 1;
+	/** Drain type: OCT */
 	public static final int OCT = 2;
+	/** Drain type: RECT */
 	public static final int RECT = 3;
+	/** Drain type: DIAMOND */
 	public static final int DIAMOND = 4;
 	
-	/** width of the drain **/
-	private float width = 3.1f;
-	/** texture for closed drain **/
-	private int textureClosed = R.drawable.l84_drain_closed;
-	/** texture for drain with round hole **/
-	private int textureRound = R.drawable.l84_drain_round;
-	/** texture for drain with diamond hole **/
-	private int textureDiamond = R.drawable.l84_drain_diamond;
-	/** texture for drain with rectangle hole **/
-	private int textureRect = R.drawable.l84_drain_rect;
-	/** texture for drain with octagon hole **/
-	private int textureOct = R.drawable.l84_drain_oct;
-	
+	/** Type of the drain */
 	private int type;
 	
-	/** orientation (angle) of the drain **/
+	/** Width of the drain **/
+	private float width = 3.1f;
+	/** Texture for closed drain **/
+	private int textureClosed = R.drawable.l84_drain_closed;
+	/** Texture for drain with round hole **/
+	private int textureRound = R.drawable.l84_drain_round;
+	/** Texture for drain with diamond hole **/
+	private int textureDiamond = R.drawable.l84_drain_diamond;
+	/** Texture for drain with rectangle hole **/
+	private int textureRect = R.drawable.l84_drain_rect;
+	/** Texture for drain with octagon hole **/
+	private int textureOct = R.drawable.l84_drain_oct;
+	
+	/** Orientation (angle in degrees) of the drain **/
 	private float orientation = 0;
 	
-	/** (horizontal) position of the drain**/
+	/** Horizontal position of the drain**/
 	private float pos;
 	
 	
 	/**
-	 * creates a new drain 
-	 * @param drainType style of the drain (closed, hole type, ...)
-	 * @param pos (horizontal) position 
+	 * Creates a new drain.
+	 * @param drainType style of the drain (closed, round, rect, ...)
+	 * @param pos horizontal position 
 	 * @param orientation 
 	 */
 	public ModelDrain(int drainType, float pos, float orientation)
@@ -62,7 +67,7 @@ public class ModelDrain extends Model {
 	}
 	
 	/**
-	 * set the drain texture
+	 * Sets the drain texture.
 	 * @param type texture is set dependent on the drain type
 	 */
 	public void setTexture(int type) { 
@@ -76,37 +81,41 @@ public class ModelDrain extends Model {
 	}
 	
 	/**
-	 * set the orientation of the drain
-	 * @param angle drain orientation
+	 * Sets the orientation of the drain.
+	 * @param angle drain orientation in degrees
 	 */
 	public void setOrientationAngle(float angle) {
 		this.orientation = angle;
 	}
 	
 	/**
-	 * @return orientation of the drain
+	 * Returns the drain's orientation.
+	 * @return orientation of the drain in degrees
 	 */
 	public float getOrientationAngle() {
 		return this.orientation;
 	}	
 	
-	/** set position of the drain
-	 * @param pos (horizontal) position
+	/** Sets position of the drain.
+	 * @param pos horizontal position
 	 */
 	public void setPosition(float pos) {
 		this.pos = pos;
 	}
 	
 	/**
-	 * @return (horizontal) position
+	 * Returns the drain's horizontal position.
+	 * @return horizontal position
 	 */
 	public float getPosition() {
 		return this.pos;
 	}
 	
-	public int getStyle()
-	{
+	/**
+	 * Returns the drain's style (closed, round, ...).
+	 * @return the drain's style
+	 */
+	public int getStyle() {
 		return this.type;
 	}
-	
 }

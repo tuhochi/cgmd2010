@@ -17,50 +17,53 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
  * Model representing a "Gem". Gets texture dependent on gem type.
  * @author Gerald, Georg
  */
-
 public class ModelGem extends Model {
 
-	/** type of the gem */
+	/** Type of the gem */
 	private int gemType;
 	
-	/** width of the gem **/
+	/** Width of the gem */
 	float width = 1.0f;
-	/** starting position where gem begins to fall **/
+	/** Starting position where gem begins to fall */
 	private final float startPosZ = -2f;
-	/** end position of gem - when falling into the drain **/
+	/** End position of gem - when falling into the drain */
 	private final float endPosZ = -13f;
 	
-	/** flag, if collision was already checked or not **/
+	/** Flag, if collision was already checked or not */
 	private boolean isCollisionChecked = false;
 	
+	/** Current z position */
 	private float posZ = startPosZ;
-	/** fall speed of the gem **/
+	/** Fall speed of the gem */
 	private float fallSpeed = 0.0f;
 	
-	/** set precision params for collision handling **/
+	/** Precision param for collision handling: delta that defines if gem hits drain at all */
 	private float maxDeltaDrainPos = 1.6f;
+	/** Precision param for collision handling: delta that defines if gem hits the drain's hole */
 	private float maxDeltaHolePos = .7f;
+	/** Precision param for collision handling: delta that defines if gem hits the drain's hole in the right angle */
 	private float maxDeltaAngle = 5f; 
 	
-	/** flag, if gem is falling or not **/
+	/** Flag, if gem is falling or not */
 	private boolean isFalling = false;
 	
-	/** z position of the street **/
+	/** Z-position of the street */
 	private float streetPosZ;
 	
-	/** soundmanager for executing soundfx **/
+	/** Executes sound effects */
 	private SoundManager soundman;
 	
-	/** vibrator for vibrations **/
+	/** Necessary for vibrations */
 	private Vibrator vibrator;
-	/** vibrator patterns for misses and breaks **/
+	/** Vibration pattern for a gem hitting the road/missing a drain */
 	private long[] vibrationPatternMiss = {0, 30, 30, 30};
+	/** Vibration pattern for a gem breaking apart */
 	private long[] vibrationPatternBreak = {0, 80, 30, 80};
 	
-	/** drainMap used for collision detection **/
+	/** Contains all the level's drains and is used for collision detection */
 	private HashMap<Integer, ModelDrain> drains;
 	
-	/** our LevelActivity **/
+	/** The @link LevelActivity */
 	private LevelActivity lvl;
 	
 	/** Handler for gem break animations */
@@ -81,7 +84,7 @@ public class ModelGem extends Model {
 		}
 	};
 	
-	/** Handler for dust/miss animation */
+	/** Handler for dust-cloud animation */
 	private Handler showDustAni = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -91,7 +94,7 @@ public class ModelGem extends Model {
 	};
 	
 	/**
-	 * Creates a new gem model.
+	 * Creates a new gem model and adjusts the inherited quad size.
 	 */
 	public ModelGem() {
 		
@@ -107,8 +110,12 @@ public class ModelGem extends Model {
 	}
 	
 	/**
-	 * Creates a new gem model with an initial texture resource.
-	 * @param textureResource
+	 * Creates a new gem model.
+	 * @param gemType gem's type
+	 * @param textureResource gem's texture
+	 * @param streetPosZ gem's z position
+	 * @param drains the level's drains
+	 * @param lvl our @LevelActivity
 	 */
 	public ModelGem(int gemType, int textureResource, float streetPosZ, HashMap<Integer, ModelDrain> drains, LevelActivity lvl) {
 		this();
@@ -121,8 +128,8 @@ public class ModelGem extends Model {
 	}
 
 	/**
-	 * set the {@link SoundManager}
-	 * @param soundManager
+	 * Sets the @link SoundManager.
+	 * @param soundManager the sound manager
 	 */
 	public void setSoundManager(SoundManager soundManager)
 	{
@@ -130,8 +137,8 @@ public class ModelGem extends Model {
 	}
 	
 	/**
-	 * set the {@link Vibrator}
-	 * @param vibrator
+	 * Sets the @link Vibrator.
+	 * @param vibrator the vibrator
 	 */
 	public void setVibrator(Vibrator vibrator)
 	{
@@ -139,7 +146,7 @@ public class ModelGem extends Model {
 	}
 	
 	/**
-	 * reset gem position
+	 * Resets the gem's position to its initial starting position.
 	 */
 	public void resetPosition() {
 		posZ = startPosZ;
@@ -147,22 +154,22 @@ public class ModelGem extends Model {
 	}
 	
 	/**
-	 * indicates if gem is falling
-	 * @return false or true
+	 * Flag, if the gem is falling or not.
+	 * @return true, if the gem is falling. Otherwise: false.
 	 */
 	public boolean isFalling() {
 		return isFalling;
 	}
 	
 	/**
-	 * start fall animation
+	 * Starts the falling animation.
 	 */
 	public void startFall()	{
 		this.isFalling = true;
 	}
 	
 	/**
-	 * end fall animation
+	 * Ends the falling animation and resets position.
 	 */
 	public void endFall() {
 		this.isFalling = false;
@@ -171,10 +178,10 @@ public class ModelGem extends Model {
 	}
 
 	/**
-	 * main collision handling method
-	 * @param streetPos recent position of the street
-	 * @param deviceRotation recent rotation of the device
-	 * @param progman {@link ProgressManager}
+	 * Main collision handling method
+	 * @param streetPos current position of the street
+	 * @param deviceRotation current rotation of the device
+	 * @param progman reference to the progress manager to update the score
 	 */
 	public void checkCollisionType(float streetPos, float deviceRotation, ProgressManager progman)
 	{
@@ -236,7 +243,9 @@ public class ModelGem extends Model {
 	}
 	
 	/**
-	 * do the break animation of the gem type
+	 * Handles everything that is relevant for a breaking gem: 
+	 * The adequate breaking animation is initialized, 
+	 * the score is updated, sound effects are played and the vibration is executed.
 	 * @param progman
 	 */
 	private void breakApart(ProgressManager progman) {
@@ -251,8 +260,11 @@ public class ModelGem extends Model {
 	}
 	
 	/**
-	 *
-	 * Update the model's transformations.
+	 * Update the gem's transformation - happens only if the gem is falling.
+	 * @param deltaTime passed time
+	 * @param streetPos position of the @link ModelStreet
+	 * @param deviceRotation device's rotation in degrees
+	 * @param progman progress manager
 	 */
 	public void update(double deltaTime, float streetPos, float deviceRotation, ProgressManager progman) {
 		if (this.isFalling) {
@@ -267,9 +279,9 @@ public class ModelGem extends Model {
 			}
 		}
 	}
-	
+
 	/**
-	 * Draw the gem if it was chosen and is falling
+	 * Draws the gem if it is falling (i.e., visible).
 	 */
 	public void draw(GL10 gl) {
 		if (this.isFalling) {

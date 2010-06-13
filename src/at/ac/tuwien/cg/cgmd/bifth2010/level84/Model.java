@@ -66,7 +66,7 @@ public class Model {
 	
 	/**
 	 * Creates a new model with an initial texture resource.
-	 * @param textureResource
+	 * @param textureResource texture resource
 	 */
 	public Model(int textureResource) {
 		this();
@@ -97,8 +97,9 @@ public class Model {
 	}
 
 	/**
-	 * Updates the model's transformation(s).
-	 * @param deltaTime
+	 * Updates the model's deltaTime and stores the deviceOrientation.
+	 * @param deltaTime time that has passed - necessary for correct animations
+	 * @param deviceRotation rotation of the device in degrees
 	 */
 	public void update(double deltaTime, float deviceRotation) {
 		this.deltaTime = deltaTime;
@@ -106,8 +107,8 @@ public class Model {
 	}
 	
 	/**
-	 * This function draws our square on screen.
-	 * @param gl
+	 * Draws the model.
+	 * @param gl OpenGL context
 	 */
 	public void draw(GL10 gl) {
 
@@ -138,9 +139,8 @@ public class Model {
 	
 	/**
 	 * Loads a texture.
-	 * 
-	 * @param gl - The GL Context
-	 * @param context - The Activity context
+	 * @param gl OpenGL context
+	 * @param context activity context
 	 */
 	public void loadGLTexture(GL10 gl, Context context) {
 		

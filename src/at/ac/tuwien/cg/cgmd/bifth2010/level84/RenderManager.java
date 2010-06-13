@@ -20,7 +20,7 @@ import android.os.Message;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-public class RenderManager implements Renderer,OnDismissListener {
+public class RenderManager implements Renderer, OnDismissListener {
 
 	/**
 	 * main render class

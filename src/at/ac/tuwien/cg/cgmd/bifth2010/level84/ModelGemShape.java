@@ -3,21 +3,22 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * ModelGemShape representing the shape of the gem.
- * @author Georg
+ * Model that represents a gem's shape. This is needed to display a transparent alternative of a 
+ * selected gem in order to simplify its alignment.
+ * @author Georg, Gerald
  */
 
 public class ModelGemShape extends Model {
 
-	/** width of the gem shape **/
+	/** Width of the gem shape */
 	float width = 1.0f;
-	/** flag, if gem is visible or not **/
+	/** Flag, if gem is visible or not */
 	private boolean isVisible = false;
-	/** z position **/
+	/** Z-position */
 	private final float posZ = -2f; 
 	
 	/**
-	 * Creates a new gem shape model.
+	 * Creates a new gem shape model and adjusts the inherited quad's size.
 	 */
 	public ModelGemShape() {
 		
@@ -34,22 +35,23 @@ public class ModelGemShape extends Model {
 	
 	/**
 	 * Creates a new gem shape model with an initial texture resource.
-	 * @param textureResource
+	 * @param textureResource texture resource
 	 */
 	public ModelGemShape(int textureResource) {
 		this();
 		this.textureResource = textureResource;
 	}
 	
-	/**set gemshape (in)visible
-	 * @param v visible is true or false
+	/**
+	 * Sets the gem shape's visibility.
+	 * @param v visibility: either true or false
 	 */
 	public void setVisible(boolean v) {
 		this.isVisible = v;
 	}
 	
 	/**
-	 * Draw the gem if it was chosen and is falling
+	 * Draws the gem if it is visible.
 	 */
 	public void draw(GL10 gl) {
 		if (this.isVisible) {
