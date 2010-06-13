@@ -628,7 +628,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		cutScenes.preprocess();
 		obstacleManager.preprocess();
 		decorationManager.preprocess();
-		
+		System.out.println("isInit: " + isInitialized);
 		if(!isInitialized)
 		{	
 			hud.reset();
@@ -650,9 +650,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		try {
 			// local
 			dos.writeInt(gameState);
-			dos.writeBoolean(isInitialized);
 			dos.writeBoolean(firstStart);
-			dos.writeBoolean(released);
 			dos.writeInt(mainCharMoveDir);
 			dos.writeFloat(balloonHeight);
 			dos.writeBoolean(gameOver);
@@ -711,9 +709,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	public void readFromStream(DataInputStream dis) {
 		try {
 			gameState = dis.readInt();
-			isInitialized = dis.readBoolean();
 			firstStart = dis.readBoolean();
-			released = dis.readBoolean(); 
 			mainCharMoveDir = dis.readInt(); 
 			balloonHeight = dis.readFloat(); 
 			gameOver = dis.readBoolean();

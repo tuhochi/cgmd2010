@@ -350,10 +350,11 @@ public class DecorationManager
 		try {
 			dos.writeFloat(mountainPositionY); 
 			dos.writeFloat(mountainMoveDir);
+			dos.writeFloat(mountainDelay);
 			dos.writeFloat(treePositionY);
 			
 		} catch (Exception e) {
-			System.out.println("Error writing to stream in MainChar.java: "+e.getMessage());
+			System.out.println("Error writing to stream in DecorationManager.java: "+e.getMessage());
 		}
 		
 	}
@@ -367,11 +368,12 @@ public class DecorationManager
 		try {
 			mountainPositionY = dis.readFloat();
 			mountainMoveDir = dis.readFloat();
+			mountainDelay = dis.readFloat();
 			treePositionY = dis.readFloat();
 			wasRestored=true;
 			
 		} catch (Exception e) {
-			System.out.println("Error reading from stream in MainChar.java: "+e.getMessage());
+			System.out.println("Error reading from stream in DecorationManager.java: "+e.getMessage());
 		}
 		
 	}
@@ -404,17 +406,14 @@ public class DecorationManager
 	 */
 	public void reset()
 	{
-		if(!wasRestored)
-		{
-			currentCloudHeight = 0;
-			clouds.clear();
-			generateRandomCloudPosition();
-			mountainPositionY = -RenderView.instance.getTopBounds()/4f;
-			treePositionY = 0f;
-			mountainTexture = TextureAtlas.instance.getMountainTextur();
-		}
-		else
-			wasRestored=false;
+		currentCloudHeight = 0;
+		clouds.clear();
+		generateRandomCloudPosition();
+		mountainPositionY = -RenderView.instance.getTopBounds()/4f;
+		treePositionY = 0f;
+		mountainTexture = TextureAtlas.instance.getMountainTextur();
+		mountainDelay = 400;
+		wasRestored=false;
 	}
 	
 	/**

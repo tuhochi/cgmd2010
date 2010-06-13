@@ -168,7 +168,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	public void onResume() {
 		super.onResume(); 
 		renderer.onResume();
-		SoundManager.instance.reset();
+//		SoundManager.instance.reset();
 		wakeLock.acquire();
 		//renderer.restoreSceneEntities();
 	}
