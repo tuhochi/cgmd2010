@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -125,10 +128,6 @@ public class LevelActivity extends Activity{
     
 	@Override
 	public void finish() {	
-		GameMechanics.getSingleton().pause();
-		FinishDialog f = new FinishDialog(this);
-		f.show();
-		
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
 		//we set the progress the user has made (must be between 0-100)
@@ -138,7 +137,7 @@ public class LevelActivity extends Activity{
 		if(totalMoneyPercent == 0.0f) s.setProgress(0);
 		else s.setProgress((int)(burnedMoney/totalMoneyPercent));
 		
-		System.out.println("burned: " + burnedMoney + " |gained: " + gainedMoney + "score: " + (int)(burnedMoney/totalMoneyPercent));
+		//System.out.println("burned: " + burnedMoney + " |gained: " + gainedMoney + "score: " + (int)(burnedMoney/totalMoneyPercent));
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
 		GameWorld.destroySingleton();
@@ -152,6 +151,15 @@ public class LevelActivity extends Activity{
 	public void onDestroy(){
 	   	super.onDestroy();
 	   	mDisplay = null;
+	}
+	
+	
+	public void showFinishDialog(){
+			GameMechanics.getSingleton().pause();
+			this.onPrepareDialog(10, new FinishDialog(this) );
+			this.onCreateDialog(10);
+			//FinishDialog f = new FinishDialog(this);
+			//f.show();
 	}
 	
 	
@@ -252,7 +260,7 @@ public class LevelActivity extends Activity{
 			
 			
 			Button btn = new Button(context);
-			btn.setText("Start");
+			btn.setText("End");
 			btn.setId(1);
 			btn.setOnClickListener(this);
 			l.addView(btn);
