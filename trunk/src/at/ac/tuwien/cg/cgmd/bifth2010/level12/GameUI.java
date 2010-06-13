@@ -19,7 +19,15 @@ import android.widget.TextView;
 public class GameUI extends LinearLayout implements OnClickListener{
 	
 	private Context mContext = null;
-	private static TextView mTV;
+	//private static TextView mTV;
+	private static TextView mIron;
+	private static TextView mIrontxt;
+	private static TextView mMoney;
+	private static TextView mMoneytxt;
+	private static TextView mRoundsleft;
+	private static TextView mRoundslefttxt;
+	private static TextView mCountdown;
+	private static TextView mCountdowntxt;
 	private static ImageButton mBasicTowerButton;
 	//private static TextView mBasicTowerTextView;
 	private static ImageButton mAdvancedTowerButton;
@@ -76,10 +84,50 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mFreezeTowerButton.setOnClickListener(this);
 	    this.addView( mFreezeTowerButton );
 	        
-	    mTV = new TextView( context );
-	    mTV.setHeight( height );
+	    //mTV = new TextView( context );
+	    //mTV.setHeight( height );
+	    //updateText();
+	    //this.addView(mTV);
+	    LinearLayout ltxt = new LinearLayout(context);
+	    ltxt.setOrientation(LinearLayout.VERTICAL);
+	    
+	    LinearLayout li = new LinearLayout(context);
+	    li.setOrientation(LinearLayout.HORIZONTAL);
+	    
+	    mIron = new TextView(context);
+	    mIron.setText(R.string.l12_iron);
+	    mIrontxt = new TextView(context);
+	    li.addView(mIron);
+	    li.addView(mIrontxt);
+	    
+	    mMoney = new TextView(context);
+	    mMoney.setText(R.string.l12_points);
+	    mMoneytxt = new TextView(context);
+	    li.addView(mMoney);
+	    li.addView(mMoneytxt);
+	    
+	    
+	    LinearLayout lr = new LinearLayout(context);
+	    lr.setOrientation(LinearLayout.HORIZONTAL);
+	    
+	    mRoundsleft = new TextView(context);
+	    mRoundsleft.setText(R.string.l12_roundsleft);
+	    mRoundslefttxt = new TextView(context);
+	    lr.addView(mRoundsleft);
+	    lr.addView(mRoundslefttxt);
+	    
+	    mCountdown = new TextView(context);
+	    mCountdown.setText(R.string.l12_countdown);
+	    mCountdowntxt = new TextView(context);
+	    lr.addView(mCountdown);
+	    lr.addView(mCountdowntxt);
+	    
+	    ltxt.addView(li);
+	    ltxt.addView(lr);
+	    
+	    this.addView(ltxt);
+	    
 	    updateText();
-	    this.addView(mTV);
 	}
 	
 	public static void createSingleton( Context context, int height, int width ){
@@ -129,13 +177,25 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	
 	private static Runnable mTVUpdater = new Runnable(){
 		public void run(){
-			mTV.setText( 
+			/*mTV.setText( 
 				FPSCounter.getSingleton().getFPS()+" FPS " +
 				"Money: "+GameMechanics.getSingleton().getMoney()+" " +
 				"Iron: "+GameMechanics.getSingleton().getIron()+" "+
 				"Rounds left: "+(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber()) +" " +
 				" Countdown: "+(int)(GameMechanics.getSingleton().getRemainingWaitTime()));
-			//mBasicTowerTextView.setText(GameMechanics.getSingleton().getPossibleBasicTowerCount());
+			//mBasicTowerTextView.setText(GameMechanics.getSingleton().getPossibleBasicTowerCount());*/
+			String it = new String();
+			it=" "+GameMechanics.getSingleton().getIron()+" ";
+			mIrontxt.setText(it);
+			String mt = new String();
+			mt=" "+GameMechanics.getSingleton().getBurnedMoney()+" ";
+			mMoneytxt.setText(mt);
+			String ct = new String();
+			ct=" "+GameMechanics.getSingleton().getRemainingWaitTime()+" ";
+			mCountdowntxt.setText(ct);
+			String rt = new String();
+			rt=" "+String.valueOf(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber())+" ";
+			mRoundslefttxt.setText(rt);
 		}
 	};
 	
