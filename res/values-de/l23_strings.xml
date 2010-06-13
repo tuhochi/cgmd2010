@@ -5,4 +5,5 @@
 <string name="l23_Help_Text3">Die Steuerung ist denkbar einfach: der Ballon bewegt sich langsam in Richtung Himmel. Mittels Touch links bzw. rechts des Ballons wird in diese Richtung gesteuert. Durch drücken der Symbole links bzw. rechts mittig wird die Steigung des Ballons kurzzeitig bzw. permanent beschleunigt.  Im Menu kann auf Orientation-Sensor-Steuerung umgeschalten werden. Wenn aktiviert, wird der Ballon durch Drehung des Phones um die y-Achse gesteuert. </string>
 <string name="l23_Help_Title">PimpStyle Airways</string>
 <string name="l23_nameofthegame_full">PimpStyle Airways</string>
+<string name="l23_controls_text">Steuerung</string>
 </resources>

@@ -5,4 +5,5 @@
 <string name="l23_Help_Text3">Controls are pretty easy: the balloon is arising slowly towards the sky.  By touching the left or right side of the balloon, you can steer the balloon to that direction. By tapping on the icons middle left and right, the climb rate is going to be increased temporary and permanently respectively.  In menu, you can switch from touch input to motion sensor steering. When motion steering is activated, the balloon can be steered by rolling the phone.</string>
 <string name="l23_Help_Title">PimpStyle Airways</string>
 <string name="l23_nameofthegame_full">PimpStyle Airways</string>
+<string name="l23_controls_text">Controls</string>
 </resources>
