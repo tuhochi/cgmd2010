@@ -30,7 +30,7 @@ public class ModelStreet extends Model {
 	/** Horizontal translation speed */
 	private float speed;
 	
-	/** if true street is rendered - otherwise the animation is stopped*/
+	/** If true, the street is rendered - otherwise the animation is stopped */
 	private boolean streetActive = false;
 	
 	/**
@@ -67,7 +67,8 @@ public class ModelStreet extends Model {
 	
 	
 	/**
-	 * @return actual horizontal street translation 
+	 * Gets the street's horizontal position.
+	 * @return current translation of the street on the x-axis 
 	 */
 	public float getStreetPos()
 	{
@@ -75,7 +76,8 @@ public class ModelStreet extends Model {
 	}
 	
 	/**
-	 * @return get the width of the street
+	 * Gets the street's width.
+	 * @return the width of the street
 	 */
 	public float getStreetWidth()
 	{
@@ -84,9 +86,9 @@ public class ModelStreet extends Model {
 	
 	
 	/**
-	 * Update the model's transformations.
+	 * Update the street's transformations. I.e., moves it to the left.
 	 * @param deltaTime Time that passed between the current and the last frame
-	 * @param deviceRotation Current device's rotation in degrees.
+	 * @param deviceRotation Current device's rotation in degrees
 	 */
 	public void update(double deltaTime, float deviceRotation) {
 			super.update(deltaTime, deviceRotation);
@@ -96,7 +98,7 @@ public class ModelStreet extends Model {
 	}
 	
 	/**
-	 * set street animation active
+	 * Activates the street's animation.
 	 */
 	public void startStreet()
 	{
@@ -104,7 +106,7 @@ public class ModelStreet extends Model {
 	}
 	
 	/**
-	 * set street animation to false
+	 * Stops the street's animation.
 	 */
 	public void stopStreet()
 	{
@@ -112,7 +114,8 @@ public class ModelStreet extends Model {
 	}
 	
 	/**
-	 * check if street animation is active or stopped
+	 * Returns the street's animation status.
+	 * @return true if the street is animated. Otherwise: false
 	 */
 	public boolean isStreetActive()
 	{

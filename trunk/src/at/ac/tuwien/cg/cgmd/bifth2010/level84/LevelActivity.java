@@ -27,61 +27,89 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level84.SoundManager.SoundFX;
 
 /**
  * Main part of our level. Contains all relevant objects and (level)parameters. Based on the android 
- * Activity baseclass, it instances the OpenGL ES rendering view, the necessary RenderManager and
- * also establishes the connection to the accelerometers. 
+ * @link Activity baseclass, it instances the OpenGL ES rendering view, the necessary @link RenderManager and
+ * also establishes the connection to the @link Accelerometer. It is also responsible for the whole gampeplay, 
+ * point-handling and timing. 
  * @author Georg, Gerald
  */
 public class LevelActivity extends Activity implements OnTouchListener, OnSeekBarChangeListener {
 
+	/** Available overlay animations */
 	public static enum AnimationType {SPLASH, DUST};
+	/** Base value of any gem. regarding its type, this value is later multiplied by 1 (round) to 4 (diamond) */
+	public static final int GEM_BASE_VALUE = 1000;
 	
-	/** The main part of the level */
+	/** The street */
 	private ModelStreet street;
 	/** Contains the different types of Gems */
 	private List<Model> gems;
 	
+	/** Contains the drains: key is the discretized horizontal position */
 	private HashMap<Integer, ModelDrain> drains;
 	
+	/** Round gem. shown, when the gem is dropped (finger released button) */
 	private ModelGem gemRound;
+	/** Diamond gem. shown, when the gem is dropped (finger released button) */
 	private ModelGem gemDiamond;
+	/** Rectangular gem. shown, when the gem is dropped (finger released button) */
 	private ModelGem gemRect;
+	/** Eight-sided gem. shown, when the gem is dropped (finger released button) */
 	private ModelGem gemOct;
 	
+	/** Round gem. overlayed, when the gem is selected (finger pressed button) */
 	private ModelGemShape gemRoundShape;
+	/** Diamond gem. overlayed, when the gem is selected (finger pressed button) */
 	private ModelGemShape gemDiamondShape;
+	/** Rectangular gem. overlayed, when the gem is selected (finger pressed button) */
 	private ModelGemShape gemRectShape;
+	/** Eight-sided gem. overlayed, when the gem is selected (finger pressed button) */
 	private ModelGemShape gemOctShape;
 	
+	/** Number of drains */
 	private int numDrains;
+	/** Width of the street (i.e., level) */
 	private float levelWidth;
+	/** Speed at which the street passes by */
 	private float levelSpeed;
+	/** Z-position of the street. the lower, the longer it takes until a gem hits the ground */ 
 	private float streetPosZ;
 	
-	public static final int GEM_BASE_VALUE = 1000;
+	/** Summarized value of all available gems */
 	private int moneyToSpend = 0;
 	
+	/** @link TextView for the points */
 	private TextView tfPoints;
+	/** @link TextView for the point-text's shadow */ 
 	private TextView tfPointsShadow;
+	/** @link ImageView that contains the animation of a breaking round gem */ 
 	private ImageView aniViewRoundBreak;
+	/** @link ImageView that contains the animation of a breaking round gem */ 
 	private ImageView aniViewOctBreak;
+	/** @link ImageView that contains the animation of a breaking rectangular gem */
 	private ImageView aniViewRectBreak;
+	/** @link ImageView that contains the animation of a breaking diamond gem */
 	private ImageView aniViewDiamondBreak;
+	/** @link ImageView that contains the animation of a watersplash */
 	private ImageView aniViewWatersplash;
+	/** @link ImageView that contains the animation of a dust cloud */
 	private ImageView aniViewDust;
-	/*private AnimationDrawable roundGemBreakAni;
-	private AnimationDrawable octGemBreakAni;
-	private AnimationDrawable rectGemBreakAni;
-	private AnimationDrawable diamondGemBreakAni;*/
 		
+	/** OpenGL surface view */
 	private GLSurfaceView openglview;
+	/** Responsible for - right - rendering and timing */
 	private RenderManager renderManager;
+	/** The link to the device's accelerometer */
 	private Accelerometer accelerometer;
+	/** Manages the player's progress during the game */
 	private ProgressManager progman;
+	/** Manages music and sound effects */
 	private SoundManager soundManager;
-	
+	/** Allows rumble/vibration effects */
 	private Vibrator vibrator;
 	
-	
+	/**
+	 * Initializes relevant parts of the level and shows the intro dialogue.
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,10 +135,11 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		IntroDialog introdialog = new IntroDialog(this);
 		introdialog.setOnDismissListener(renderManager);
 		introdialog.show();
-		
-		
 	}
 	
+	/**
+	 * Starts background music and initializes the animation @link ImageView's.
+	 */
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -132,16 +161,10 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		
 		aniViewWatersplash.setBackgroundResource(R.drawable.l84_ani_watersplash);
 		aniViewDust.setBackgroundResource(R.drawable.l84_ani_dust);
-		
-	/*case ModelDrain.ROUND: breakAnimationImageView.setBackgroundResource(R.drawable.l84_animation_intro); break;
-		roundGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
-		octGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
-		rectGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();
-		diamondGemBreakAni = (AnimationDrawable) breakAnimationImageView.getBackground();*/
 	}
 	
 	/**
-	 * cleanup imageview resources
+	 * Cleanup @link ImageView resources.
 	 */
 	private void cleanUpViews()
 	{
@@ -154,7 +177,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	}
 
 	/**
-	 * init level parameters
+	 * Init level parameters.
 	 */
 	private void initLevelParams() {
 		levelWidth = 240f;
@@ -164,7 +187,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	}
 
 	/**
-	 * init input options of the GUi
+	 * Init input options of the GUI.
 	 */
 	private void initGui() {
 		ImageButton btnGemRound = (ImageButton) findViewById(R.id.l84_ButtonGemRound);
@@ -187,7 +210,7 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 	
 	
 	/**
-	 * create the street and the drains of the level
+	 * Create the street and init the drains of the level.
 	 */
 	private void initLevel() {
 
@@ -254,6 +277,10 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		}
 	}
 	
+	/**
+	 * Displays a specific @ImageView-based gem-break animation.
+	 * @param type defines the type of animation (ROUND, OCT, RECT, DIAMOND)
+	 */
 	public void showBreakAni(int type) {
 
 		AnimationDrawable ani = null;
@@ -271,6 +298,10 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		}
 	}
 	
+	/**
+	 * Displays a specific @ImageView-based fx-animation.
+	 * @param type defines the type of animation (SPLASH or DUST)
+	 */
 	public void showAni(AnimationType type) {
 		
 		AnimationDrawable ani = null;
@@ -286,6 +317,9 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		}
 	}
 	
+	/**
+	 * Game is paused.
+	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -294,6 +328,9 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		soundManager.pauseNature();
 	}
 	
+	/**
+	 * Game is resumed.
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -302,6 +339,9 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		soundManager.resumeNature();
 	}
 
+	/**
+	 * Game is finished! Stop sounds, return progress, cleanup views and set result.
+	 */
 	@Override
 	public void finish() {
 		progman.setProgress(Math.min(Math.max(progman.getProgress(), 0), 100));
@@ -311,19 +351,33 @@ public class LevelActivity extends Activity implements OnTouchListener, OnSeekBa
 		super.finish();
 	}
 	
+	/**
+	 * Is called when the user changes the value of the orientation @link SeekBar. This SeekBar is only 
+	 * available if the used device does not provide an accelerometer for orientation sensing.
+	 */
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		accelerometer.setOrientation(progress);
 	}
 
+	/**
+	 * Just a stub. Nothing happens here.
+	 */
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
 	}
 
+	/**
+	 * Just a stub. Nothing happens here.
+	 */
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {	
 	}
 
+	/**
+	 * Responsible for button touch and release events. A touch displays the current gem's shape. A release
+	 * hides the gem's shape and starts the gem's drop-animation. This method also handles the related sound effects.
+	 */
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
