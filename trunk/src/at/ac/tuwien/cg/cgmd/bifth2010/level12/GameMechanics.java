@@ -113,7 +113,6 @@ public class GameMechanics {
 	public void finishGame(){
 		
 		if( mGameContext != null ) {
-			mGameContext.showFinishDialog();
 			mGameContext.finish();
 		}
 		else System.out.println("Could not end game, no pointer to Context");
