@@ -1,6 +1,5 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
-import java.util.Vector;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -8,8 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
 
 public class GLRenderer implements GLSurfaceView.Renderer{
 	

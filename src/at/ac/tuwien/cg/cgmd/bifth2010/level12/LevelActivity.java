@@ -13,6 +13,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -27,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
+import at.ac.tuwien.cg.cgmd.bifth2010.level83.FinishDialog;
 
 public class LevelActivity extends Activity{
 	private Display mDisplay = null;
@@ -34,6 +36,7 @@ public class LevelActivity extends Activity{
 	private boolean mTutShowed = false;
 	private int mKilledEnemies = 0;
 	private int mSpawnedEnemies = 0;
+	private LinearLayout mL;
 	
 	
     /** Called when the activity is first created. */
@@ -99,14 +102,14 @@ public class LevelActivity extends Activity{
  	   	glview.setRenderer(mRenderer);
     	GameMechanics.getSingleton().setGameContext(this);
     	    
-        LinearLayout l = new LinearLayout( this );
-        l.setLayoutParams( new LayoutParams( LayoutParams.FILL_PARENT,   LayoutParams.FILL_PARENT));
-        l.setOrientation(LinearLayout.VERTICAL);
+        mL = new LinearLayout( this );
+        mL.setLayoutParams( new LayoutParams( LayoutParams.FILL_PARENT,   LayoutParams.FILL_PARENT));
+        mL.setOrientation(LinearLayout.VERTICAL);
         GameUI.createSingleton( this, menuheight, mDisplay.getWidth() );
-        l.addView( GameUI.getSingleton() );
-        l.addView( glview );
+        mL.addView( GameUI.getSingleton() );
+        mL.addView( glview );
         
-        setContentView( l );
+        setContentView( mL );
     	//SoundHandler.getSingleton().playLoop(R.raw.l12_music);
         super.onResume();
     }
@@ -128,6 +131,18 @@ public class LevelActivity extends Activity{
     
 	@Override
 	public void finish() {	
+		GameMechanics.getSingleton().pause();
+		//FinishScreen f = new FinishScreen(this);
+		//setContentView(f);
+		mL.removeAllViews();		
+		TextView t = new TextView(this);
+		t.setText(R.string.l12_enemies_fended);
+		mL.addView(t);
+		TextView t1 = new TextView(this);
+		t1.setText(mKilledEnemies + " / "+mSpawnedEnemies+"\n\n" );
+		mL.addView(t1);
+		//setContentView(mL);
+		
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
 		//we set the progress the user has made (must be between 0-100)
@@ -153,14 +168,7 @@ public class LevelActivity extends Activity{
 	   	mDisplay = null;
 	}
 	
-	
-	public void showFinishDialog(){
-			GameMechanics.getSingleton().pause();
-			this.onPrepareDialog(10, new FinishDialog(this) );
-			this.onCreateDialog(10);
-			//FinishDialog f = new FinishDialog(this);
-			//f.show();
-	}
+	    
 	
 	
 	private class StartDialog extends AlertDialog implements android.view.View.OnClickListener{
@@ -236,13 +244,11 @@ public class LevelActivity extends Activity{
 		}
 	}
 	
-	private class FinishDialog extends AlertDialog implements android.view.View.OnClickListener{
+	private class FinishScreen  extends LinearLayout{
+		Button mBtn;
 
-		protected FinishDialog(Context context) {
+		protected FinishScreen(Context context) {
 			super(context);
-			this.setTitle(R.string.l12_finish);
-			this.setIcon(R.drawable.l12_icon);
-			
 			LinearLayout l = new LinearLayout(context);
 			l.setOrientation(LinearLayout.VERTICAL);
 			
@@ -258,19 +264,16 @@ public class LevelActivity extends Activity{
 			TextView t3 = new TextView(context);
 			t3.setText(GameMechanics.getSingleton().getBurnedMoney() + " / 100\n\n");*/
 			
-			
-			Button btn = new Button(context);
-			btn.setText("End");
-			btn.setId(1);
-			btn.setOnClickListener(this);
-			l.addView(btn);
-					
-			this.setView(l);
+			mBtn = new Button(context);
+			mBtn.setText("End");
+			mBtn.setId(1);
+			l.addView(mBtn);
 		}
 
-		@Override
-		public void onClick(View v) {
-			this.dismiss();	
+		public void onClick(View v){
+			if( v.getId() == mBtn.getId()){
+				finish();
+			}
 		}
 
 		

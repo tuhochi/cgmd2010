@@ -33,7 +33,6 @@ public class GameWorld {
 	static int res[];
 	        
 	boolean remove;
-	private long mLastCollDetDone = 0;
 	
 	
 	private GameWorld(){
@@ -338,8 +337,6 @@ public class GameWorld {
 	
 	
 	public void calcCollisions(){
-		if( (System.currentTimeMillis() - mLastCollDetDone) < Definitions.COLLISION_DETECTION_TIMEOUT) return;
-		mLastCollDetDone = System.currentTimeMillis();
 		if( mEnemies == null ) return;
 		//simple stupid way
 		for( int i = 0; i < mBasicTower.length; i++){
