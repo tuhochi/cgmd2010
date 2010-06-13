@@ -74,5 +74,8 @@
     <string name="l01_hello">TODO:  ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN ZUTUN </string>
     
     <string name="l55_HelpTitle">Heldenhelfer</string>
-	<string name="l55_HelpText">Jeder kennt die Situation: Man spielt ein Jump \'n\' Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist du gefragt! Bestücke das leergeräumte Level wieder mit Münzen, und zwar so schnell, wie möglich. Denn etwas haben Helden nicht - und das ist Geduld.</string>
+	<string name="l55_HelpText_1">Jeder kennt die Situation: Man spielt ein Jump \’n\’ Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist Du gefragt! Bestücke das leergeräumte Level wieder mit Münzen und zwar so schnell wie möglich. Denn etwas haben Helden nicht – und das ist Geduld!\n\nSteuer deinen Heldenhelfer mit dem rechten Daumen durch das Level.</string>
+	<string name="l55_HelpText_2">Die „Left“ und „Right“ Buttons bewegen die Spielfigur nach links bzw. rechts. Der Jump-Button ist in drei Teile unterteil. Wähle die Mitte um einfach nur zu springen. Links beziehungsweise rechts davon kannst Du gleichzeitig springen und dich in die gewählte Richtung bewegen.\n\nZwei verschiedene Arten von Münzen gibt’s zu verteilen.</string>
+	<string name="l55_HelpText_3">Diese Münzen sind einfach zu verteilen. Sind sie einmal im Level, bleiben sie auch dort. Ganz im Gegensatz zu den Diamanten.</string>
+	<string name="l55_HelpText_4">Diese verschwinden bei wiederholtem reinspringen in das Feld wieder! Wie auch immer Du dich anstellst, springe NICHT in die Stacheln!!!\n\nViel Spaß beim spielen!</string>
 </resources>

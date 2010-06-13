@@ -32,12 +32,12 @@ public class Camera {
 		pos[0] += (lookAtPos[0]-pos[0])*dt*approxFactor;
 		pos[1] += (lookAtPos[1]-pos[1])*dt*approxFactor;
 		
-		level.setPosition(-pos[0] + offset[0], 0.0f);//, -pos[1]+offset[1]);
+		level.setPosition(-pos[0] + offset[0], -1.0f);//, -pos[1]+offset[1]);
 	}
 	
 	public void draw(GL10 gl)
 	{
 		gl.glLoadIdentity();
-		gl.glTranslatef(-pos[0] + offset[0], 0.0f, 0.0f);//-pos[1] + offset[1], 0.0f);
+		gl.glTranslatef(-pos[0] + offset[0], -1.0f, 0.0f);//-pos[1] + offset[1], 0.0f);
 	}
 }

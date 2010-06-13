@@ -77,6 +77,7 @@ public class TilesVBO extends Mesh {
 		
 		int count=0;
 		coinCount=0;
+	
 		for (int i=x; i<Math.min(maxX,(x+width)); i++) {
 			for (int j=y; j<Math.min(maxY, (y+height)); j++) {
 				

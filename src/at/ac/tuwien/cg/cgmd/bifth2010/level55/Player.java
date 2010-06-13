@@ -7,7 +7,8 @@ import android.util.Log;
 
 public class Player {
 	
-	Quad hase;
+	Quad hase_right;
+	Quad hase_left;
 	Level level;
 	Camera camera;
 	Texture haseTex;
@@ -15,6 +16,8 @@ public class Player {
 	public boolean doJump = false;
 	public boolean doMoveRight = false;
 	public boolean doMoveLeft = false;
+	
+	int lastDirection=0;
 		
 	protected float[] playerPos = {2, 0};
 	protected float[] a = {0, 0};
@@ -42,20 +45,47 @@ public class Player {
 	protected final int JUMP_FLYING = 1;
 	protected int jumpMode = JUMP_IDLE;
 	
+	Sound ohohSound;
+	
 	
 	protected boolean canJump = false;
 	
 	protected float[] lastPos = new float[2];
 	
-	public void init(GL10 gl, Level _level, Camera _camera) {
-		hase = new Quad();
+	public void init(GL10 gl, Level _level, Camera _camera, float x, float y) {
+		hase_right = new Quad();
+		hase_left = new Quad();
 		haseTex = new Texture();
 		
-		hase.init(gl, -0.5f, -0.5f, 1.0f, 1.0f);
-		haseTex.create(R.drawable.l55_testtexture);
+		hase_right.init(gl, -0.5f, -0.5f, 1.0f, 1.0f);
+		hase_left.init(gl, 0.5f, -0.5f, -1.0f, 1.0f);
+		haseTex.create(R.drawable.l55_hase);
 		level = _level;
 		camera = _camera;
 		
+		a[0]=0;
+		a[1]=0;
+		v[0]=0;
+		v[1]=0;
+		
+		for(int i=0;i<4;i++)
+			collisionThreshold[i] = 10000.0f;
+		
+		collisionThreshold[COL_TOP] = 0.0f;
+		
+		playerPos[0] = x; //2.0f;
+		playerPos[1] = y; //5.0f;
+		
+		lastPos[0] = playerPos[0];
+		lastPos[1] = playerPos[1];
+				
+		jumpMode = JUMP_IDLE;
+		
+		ohohSound=new Sound();
+		ohohSound.create(R.raw.l00_unallowed);
+	}
+	
+	public void reset() {
 		a[0]=0;
 		a[1]=0;
 		v[0]=0;
@@ -71,14 +101,20 @@ public class Player {
 		
 		lastPos[0] = playerPos[0];
 		lastPos[1] = playerPos[1];
-				
+
+		lastDirection=0;
+		
 		jumpMode = JUMP_IDLE;
 	}
 	
 	public void draw(GL10 gl) {
 		haseTex.bind(gl);
 		gl.glTranslatef(playerPos[0],playerPos[1],0.0f);
-		hase.draw(gl);
+		if (lastDirection==0) {
+			hase_right.draw(gl);
+		} else {
+			hase_left.draw(gl);
+		}
 	}
 	
 	public void update(float dt) 
@@ -96,9 +132,11 @@ public class Player {
 		for(int i=0;i<nbSteps;i++) {	
 			if (doMoveLeft) {
 				a[0] = -moveForce*timeStep;
+				lastDirection=1;
 			}
 			if (doMoveRight) {
 				a[0] = moveForce*timeStep;
+				lastDirection=0;
 			}
 			
 			if (doJump && canJump && jumpMode == JUMP_IDLE) {
@@ -155,7 +193,7 @@ public class Player {
 			//Log.d("Player", "in loop");
 			x = (int) Math.floor(playerPos[0]+i);
 			quadId = level.getTypeAt(x, y);
-			if(quadId!=-1 && quadId!=10 && quadId!=11 && quadId!=12 && quadId!=13 && quadId!=14 && quadId!=15)
+			if(quadId!=-1 && quadId!=10 && quadId!=11 && quadId!=12 && quadId!=13 && quadId!=14 && quadId!=15 && quadId!=3)
 			{
 				collisionThreshold[COL_BOTTOM] = Math.min(collisionThreshold[COL_BOTTOM], (float) Math.floor(playerPos[1]) + 0.5f);
 				if(v[1]>0) {
@@ -260,6 +298,11 @@ public class Player {
 			
 			if (quadId == 14 || quadId == 15) {
 				level.finish();
+			}
+			
+			if (quadId == 3) {
+				ohohSound.start();
+				reset();
 			}
 		}
 	}

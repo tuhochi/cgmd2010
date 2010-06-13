@@ -1,10 +1,19 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 
-import java.io.IOException;
 import android.content.Context;
-import android.media.MediaPlayer;
+import android.media.AudioManager;
+import android.media.SoundPool;
 
 public class Sound {
+	
+	static SoundPool sp=new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+	
+	static boolean soundOn=true;
+	
+	int soundID=-1;
+	//MediaPlayer sound;
+	static Context context;
+	
 	public Sound () {
 		
 	}
@@ -14,45 +23,13 @@ public class Sound {
 	}
 	
 	boolean create(int resourceID) {
-		sound=MediaPlayer.create(context, resourceID);
+		soundID=sp.load(context, resourceID, 1);
 		
-		if (sound!=null) {
-			try {
-				sound.prepare();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return true;
-		} else {
-			return false;
-		}
+		return true;
 	}
 	
 	void start() {
-		/*try {
-			sound.prepareAsync();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		}*/
-		/*if (sound.isPlaying()) {
-			sound.seekTo(0);
-		} else {
-			sound.start();
-		}*/
+		if (soundOn)
+			sp.play(soundID, 1.0f, 1.0f, 1, 0, 1.0f);
 	}
-	
-	void pause() {
-		sound.pause();
-	}
-	
-	void stop() {
-		sound.stop();
-	}
-	
-	MediaPlayer sound;
-	static Context context;
 }

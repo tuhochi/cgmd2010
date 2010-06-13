@@ -4,7 +4,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level55;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 /**
@@ -21,7 +23,7 @@ class MyRenderer implements MyOpenGLView.Renderer {
 	Texture interfaceTexture;
 	static Context context;
 	static float numTilesHorizontal=15.0f;
-	static float numTilesVertical;
+	static float numTilesVertical=10.0f;
 	
 	static float resX;
 	static float resY;
@@ -92,12 +94,11 @@ class MyRenderer implements MyOpenGLView.Renderer {
          gl.glMatrixMode(GL10.GL_PROJECTION);
          gl.glLoadIdentity();
          
-         float ratio=(float)height/(float)width;
+         float ratio=(float)width/(float)height;
+         numTilesHorizontal=numTilesVertical*ratio;
          
-         gl.glOrthof(0.0f, numTilesHorizontal, numTilesHorizontal*ratio, 0.0f, 0.5f, 5.0f);
+         gl.glOrthof(0.0f, numTilesHorizontal, numTilesVertical, 0.0f, 0.5f, 5.0f);
          //gl.glOrthof(-20f, 20, 20, -20.0f, 00.0f, 5.0f);
-         
-         numTilesVertical = numTilesHorizontal*ratio;
          
          Quad.screenWidth=numTilesHorizontal;
          Quad.screenHeight=numTilesVertical;
@@ -147,15 +148,19 @@ class MyRenderer implements MyOpenGLView.Renderer {
          Texture.cleanUp();
          Texture.setGL(gl);
          
+         SharedPreferences mPrefs = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
+         float posx=mPrefs.getFloat("L55_POSX", 2.0f);
+         float posy=mPrefs.getFloat("L55_POSY", 5.0f);
          
+         String coinStates=mPrefs.getString("L55_COINSTATES", ""); 
          
          level=new Level();
-         level.init(gl, context);
+         level.init(gl, context, coinStates);
          
          camera = new Camera(level);
          
          player=new Player();
-         player.init(gl, level, camera);
+         player.init(gl, level, camera, posx, posy);
 
          gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
          gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
