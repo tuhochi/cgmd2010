@@ -56,6 +56,7 @@ public class DecorationManager
 	/** The TexturePart for clouds. */
 	private TexturePart cloudTexture;
 
+	/** Indicates if the paramters where restored from bundle */
 	private boolean wasRestored;
 	
 	private GeometryManager geometryManager = GeometryManager.instance;
@@ -406,6 +407,8 @@ public class DecorationManager
 	 */
 	public void reset()
 	{
+		if(!wasRestored)
+		{
 		currentCloudHeight = 0;
 		clouds.clear();
 		generateRandomCloudPosition();
@@ -413,6 +416,7 @@ public class DecorationManager
 		treePositionY = 0f;
 		mountainTexture = TextureAtlas.instance.getMountainTextur();
 		mountainDelay = 400;
+		}
 		wasRestored=false;
 	}
 	

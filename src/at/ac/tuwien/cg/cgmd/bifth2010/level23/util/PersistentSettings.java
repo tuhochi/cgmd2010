@@ -106,7 +106,7 @@ public class PersistentSettings {
 	 */
 	public String getValue(String key) {
 		
-		Log.v(key, "Wert ist: "+properties.getProperty(key, ""));
+//		Log.v(key, "Wert ist: "+properties.getProperty(key, ""));
 		return properties.getProperty(key, "");
 	}
 	
@@ -138,7 +138,7 @@ public class PersistentSettings {
 	 */
 	public void saveProperty(String key, String value) {
 		properties.setProperty(key, value);
-		Log.v(key, "Wert wird gespeichert: "+key+"/"+value);
+//		Log.v(key, "Wert wird gespeichert: "+key+"/"+value);
 	}
 	
 	/**
