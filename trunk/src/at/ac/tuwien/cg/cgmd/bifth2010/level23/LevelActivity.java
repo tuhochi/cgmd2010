@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -77,7 +77,7 @@ public class LevelActivity extends Activity implements OrientationListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.v("dasdf", "onCreate in LevelActivity.java");
+//		Log.v("dasdf", "onCreate in LevelActivity.java");
 		// thx @ lvl 11
 		/* Fullscreen window without title */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);

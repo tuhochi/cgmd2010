@@ -76,20 +76,19 @@ public class ObstacleManager
 	
 	//in numbers per 100, must sum up to 10
 	/** The probability for obstacle type 1. */
-	public final static int TYPE1_PROB = 25;
+	public final static int TYPE1_PROB = 20;
 	
 	/** The probability for obstacle type 2. */
 	public final static int TYPE2_PROB = 25;
 	
 	/** The probability for obstacle type 3. */
-	public final static int TYPE3_PROB = 25;
+	public final static int TYPE3_PROB = 30;
 	
 	/** The probability for obstacle type 4. */
 	public final static int TYPE4_PROB = 25;
 
-	//horizontal spacing between obstacles, do more advanced stuff with it (random?)
 	/** The Constant HORIZONTAL_SPACING to define the horizontal spacing between obstacles. */
-	public final static float HORIZONTAL_SPACING = 15*RenderView.instance.getAspectRatio();
+	public final static float HORIZONTAL_SPACING = 18*RenderView.instance.getAspectRatio();
 	
 	public int finishPosition;
 	
@@ -300,7 +299,7 @@ public class ObstacleManager
 		vboIDs = new int[5];
 		textures = new TexturePart[5];
 		float aspectRatio = RenderView.instance.getAspectRatio();
-		//wird noch umgebaut nur für testzwecke hier hardcoded
+
 		vertexBuffers[0] = geometryManager.createVertexBufferQuad(100f, 25f);
 		vertexBuffers[1] = geometryManager.createVertexBufferQuad(25f*aspectRatio, 25f*aspectRatio/1.333f);
 		vertexBuffers[2] = geometryManager.createVertexBufferQuad(17f*aspectRatio,17f*aspectRatio);

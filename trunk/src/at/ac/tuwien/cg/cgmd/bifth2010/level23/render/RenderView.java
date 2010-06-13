@@ -364,7 +364,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		aspectRatio = (float)display.getHeight()/(float)display.getWidth();
 		topBounds = rightBounds*aspectRatio;
 		
-		Log.v("RenderView.java", "onSurfaceCreated");
+//		Log.v("RenderView.java", "onSurfaceCreated");
 		
 		setupGL(gl);
 		
