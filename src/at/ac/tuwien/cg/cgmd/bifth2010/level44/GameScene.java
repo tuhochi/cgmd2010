@@ -70,6 +70,9 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private GameState gameState = null;
 	/** current state of game */
 	private CurrentState currentState = CurrentState.INTRO;
+	
+	/** The master object scaling value */
+	private float masterScale = 1f;
 
 	/**
 	 * Creates the GameScene
@@ -102,6 +105,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+
+		gl.glScalef(masterScale, masterScale, 1);
 		
 		// Intro-Mode
 		if (this.getCurrentState().equals(CurrentState.INTRO)) {
@@ -117,6 +122,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 				landscape.draw(gl);
 			}
 			
+
 			// then draw the crosshairs
 			if (crosshairs != null && this.getCurrentState().equals(CurrentState.RUNNING)) {
 				crosshairs.draw(gl);
@@ -156,8 +162,8 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	private void configureTexture(GL10 gl, Texture texture) {
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texture.getTextureName());
 		gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 	}
@@ -183,6 +189,23 @@ public class GameScene extends GLSurfaceView implements Renderer {
 			height = getWidth();
 		}
 		
+		/** 
+		 * Magnify the game field for Nexus One and other phones.
+		 * 
+		 * We do not yet have HDPI-resolution textures, because they
+		 * do not fit into the memory of the Nexus One (Memory allocation
+		 * error when trying to load the 2048x2048 texture). Instead,
+		 * we simply upscale the game field (and the "lo-res" textures)
+		 * to the screen size.
+		 **/
+		if (width == 800) {
+			masterScale = 1.3f;
+		}
+		
+		/** Scale the "virtual" screen size accordingly */
+		width /= masterScale;
+		height /= masterScale;
+
 		Texture mainTexture = new Texture(gl, getContext(), R.drawable.l44_texture);
 		configureTexture(gl, mainTexture);
 		

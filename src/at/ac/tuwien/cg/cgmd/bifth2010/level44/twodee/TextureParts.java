@@ -76,7 +76,7 @@ public class TextureParts {
 	 * @return the created TexturePart
 	 */
 	public static TexturePart makeSky(Texture texture) {
-		return new TexturePart(texture, 0, 0, 0 + 10, 0 + 320);
+		return new TexturePart(texture, 5, 0, 5 + 1, 0 + 320);
 	}
 
 	/**

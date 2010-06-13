@@ -137,13 +137,14 @@ public class Sprite {
 
 		/* Draw two triangles with our 4 coordinates */
 		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-		/* Draw more attached objects here */
-		onAfterDraw(gl);
 
 		/* Disable vertex array and texture array after drawing */
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
+		/* Draw more attached objects here */
+		onAfterDraw(gl);		
+		
 		/* Restore the Model-View matrix */
 		gl.glPopMatrix();
 	}

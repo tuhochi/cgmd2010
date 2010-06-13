@@ -30,6 +30,9 @@ public class IntroBackground extends SpriteContainer {
 		/* Center on screen */
 		setCenter(getWidth() / 2, getHeight() / 2);
 		setPosition(screenWidth / 2, screenHeight / 2);
+		
+		/* Scale the image to be full-screen */
+		setScale(screenHeight/getHeight());
 
 		/* Add arrows */
 		touchArrows = new Sprite(TextureParts.makeIntroTouchArrows(texture));
