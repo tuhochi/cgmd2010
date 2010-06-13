@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.media.AudioManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ public class GameActivity extends Activity {
 	private static final String LOG_TAG = GameActivity.class.getSimpleName();
     private GameView _gameView;
     public Level _level;
+    public boolean isMusicAndSoundOn;
 	private TextView _textTimeLeft;
 	private TextView _textTreasureLeft;
 	private int _result = 0;
@@ -56,6 +59,15 @@ public class GameActivity extends Activity {
        	WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         _displayResolution = new Vector2((float)display.getWidth(), (float)display.getHeight());
+        
+        Intent callingIntent = getIntent();
+        SessionState state = new SessionState(callingIntent.getExtras());
+        if(state!=null) {
+        	int progress = state.getProgress();
+        	int level = state.getLevel();
+        	isMusicAndSoundOn = state.isMusicAndSoundOn();
+        }
+        
         
     	
     	// create level

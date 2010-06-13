@@ -20,6 +20,8 @@ public class Sounds {
 		Sounds.singleton = this;
 		Sounds.soundMap = new java.util.HashMap<Integer, SoundFile> ();
 		gameAudio = new GameAudio();
+		if (!GameActivity.singleton.isMusicAndSoundOn)
+			gameAudio.mute();
 	}
 	
 	public void add(int id) {
@@ -49,6 +51,7 @@ public class Sounds {
 	
 	public void play(int id) {
 			audioStream = Sounds.soundMap.get(id).play();
-			audioStream.setRate(1.0f);
+			if (audioStream != null)
+				audioStream.setRate(1.0f);
 	}
 }

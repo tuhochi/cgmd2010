@@ -1,6 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import android.content.Context;
+import android.util.Log;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -13,13 +14,16 @@ public class GameView extends GLSurfaceView {
     private float _y = 0;
     private float _value = 0.0f;
     private boolean isBouncing = false;
-    private int minTouchTimeToDropTreasure = 100;
+    private int minTouchTimeToDropTreasure = 500;
     private float treasureDroppedPerSecond = 2.0f;
+    private boolean isDown;
+    
     public GameView(Context context, Vector2 resolution) {
         super(context);
         _renderer = new GameRenderer(context, resolution);
         setRenderer(_renderer);
-        this.touchedTime = 0;        
+        this.touchedTime = 0;  
+        isDown = false;
     }
     /**
      * places a treasure by touch and hold and release display at the release positions.
@@ -39,9 +43,17 @@ public class GameView extends GLSurfaceView {
     		return true;
     	}*/
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        	isDown = true;
             _x = event.getX();
             _y = event.getY();
-            this.touchedTime = System.currentTimeMillis();
+            this.touchedTime = System.currentTimeMillis();     
+            _value = (System.currentTimeMillis()-this.touchedTime)/1000.0f*treasureDroppedPerSecond;
+            
+            	HUD.singleton.setDrawTouchTreasureCircle(true);
+            
+   
+            
+            
             
         }
         
@@ -67,24 +79,39 @@ public class GameView extends GLSurfaceView {
         }
         
         if (event.getAction() == MotionEvent.ACTION_UP) {
+        	isDown = false;
         	//System.out.println("time: "+time);
         	//System.out.println("deltaX: "+Math.abs(_x-x));
     		//System.out.println("out");
+            _value = (System.currentTimeMillis()-this.touchedTime)/1000.0f*treasureDroppedPerSecond;
         	if(!isBouncing){
         		if(touchedTime>minTouchTimeToDropTreasure){
 	                _x = event.getX();
 	                _y = event.getY();
-		            _value = (System.currentTimeMillis()-this.touchedTime)/1000.0f*treasureDroppedPerSecond;
 		        	((GameActivity)_renderer.context)._level.
 		        	addTreasure(new Treasure(_value,
 		        			new Vector2(_x/_renderer._width*Level.sizeX,
 		        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY)))));
+		        	
+		        	HUD.singleton.setDrawTouchTreasureCircle(false);
         		}
 	        	//((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
         	}else{
         		isBouncing = false;
         	}
         }
+        
+        if (isDown) {
+            _x = event.getX();
+            _y = event.getY();
+            _value = (System.currentTimeMillis()-this.touchedTime)/1000.0f*treasureDroppedPerSecond;
+            HUD.singleton.setTouchTreasureCircleRadius(_value*Treasure.attractionRadiusMultiplacator);
+            HUD.singleton.setTouchTreasureCirclePositon(new Vector2(_x/_renderer._width*Level.sizeX,
+        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY))));
+            
+        
+        }
+        
         return true;
     }
 }

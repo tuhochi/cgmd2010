@@ -10,8 +10,11 @@ public class Treasure implements Target{
 	private Vector2 position;
 	private static final int treasure_texture_id = R.drawable.l11_treasure;
 	private static final int treasure_sound_01 = R.raw.l00_gold01;
+	public static final float attractionRadiusMultiplacator = 40.0f; 
 	private Square sprite;
 	private float startingValue;
+	
+	private Square circle;
 	
 
 	
@@ -21,9 +24,11 @@ public class Treasure implements Target{
 	public Treasure(float value, float startingValue, Vector2 position){
 		this.startingValue = value;
 		this.value = this.startingValue;
-		this.attractionRadius = 200.0f;
+		this.attractionRadius = value*attractionRadiusMultiplacator;
 		this.position = position;
 		this.sprite = new Square();
+		
+		circle = new Square();
 		
 		Sounds.singleton.play(treasure_sound_01);
 		
@@ -66,6 +71,7 @@ public class Treasure implements Target{
 	 */
 	public void draw(GL10 gl) {
 
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		Textures.tex.setTexture(treasure_texture_id);
 		
 		gl.glPushMatrix();
