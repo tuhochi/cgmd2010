@@ -39,7 +39,7 @@ public class Cloud extends Sprite {
 		this.screenHeight = screenHeight;
 
 		Random rand = new Random();
-		setPosition(rand.nextInt((int) screenWidth), rand.nextInt((int) (screenHeight / 2)) - screenHeight / 3);
+		setPosition(rand.nextInt((int) screenWidth), rand.nextInt((int) (screenHeight / 2)));
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class Cloud extends Sprite {
 	 * per loop iteration.
 	 */
 	public void step() {
-		float x = getX() + (1 + .5f * id) * .5f;
+		float x = getX() + (1 + .5f * id) * .2f;
 
 		if (x > screenWidth + getWidth()) {
 			x = -getWidth();
