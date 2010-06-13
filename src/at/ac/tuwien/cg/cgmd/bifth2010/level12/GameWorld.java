@@ -164,18 +164,18 @@ public class GameWorld {
 		switch (roundnr) {
 			case (0):
 				for( int i = 0; i < Definitions.FIRST_ROUND_ENEMIE_NUMBER; i++){
-					int carrierOneChance = rand.nextInt( 50 );
-					int carrierTwoChance = rand.nextInt( 25 );
-					int carrierThreeChance = rand.nextInt( 15 );
+					int carrierOneChance = 100;//rand.nextInt( 50 );
+					int carrierTwoChance = 0;//rand.nextInt( 25 );
+					int carrierThreeChance = 0;//rand.nextInt( 15 );
 					MoneyCarrier carrier;
 					if( carrierOneChance >= carrierTwoChance && carrierOneChance >= carrierThreeChance ) carrier = new CarrierRoundOne();
 					else if( carrierTwoChance > carrierOneChance && carrierTwoChance > carrierThreeChance) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierOneChance && carrierThreeChance > carrierTwoChance) carrier = new CarrierRoundThree();
 					else carrier = new CarrierRoundOne();
 					int lane = rand.nextInt(mHeight);
-					int xplus = rand.nextInt(100);
+					int xplus = 40;//rand.nextInt(100);
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -185,18 +185,18 @@ public class GameWorld {
 				break;
 			case(1):
 				for( int i = 0; i < Definitions.SECOND_ROUND_ENEMIE_NUMBER; i++){
-					int carrierTwoChance = rand.nextInt( 50 );
-					int carrierThreeChance = rand.nextInt( 25 );
-					int carrierFourChance = rand.nextInt( 15 );
+					int carrierTwoChance = 1;//rand.nextInt( 50 );
+					int carrierThreeChance = 0;//rand.nextInt( 25 );
+					int carrierFourChance = 0;//rand.nextInt( 15 );
 					MoneyCarrier carrier;
 					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
 					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
 					else carrier = new CarrierRoundTwo();
 					int lane = rand.nextInt(mHeight);
-					int xplus = rand.nextInt(100);
+					int xplus = 60;//rand.nextInt(100);
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -215,9 +215,9 @@ public class GameWorld {
 					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
 					else carrier = new CarrierRoundThree();
 					int lane = rand.nextInt(mHeight);
-					int xplus = rand.nextInt(100);
+					int xplus = 50;
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -236,9 +236,9 @@ public class GameWorld {
 					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
 					else carrier = new CarrierRoundFour();
 					int lane = rand.nextInt(mHeight);
-					int xplus = rand.nextInt(100);
+					int xplus = 50;
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -257,9 +257,9 @@ public class GameWorld {
 					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
 					else carrier = new CarrierRoundFour();
 					int lane = rand.nextInt(mHeight);
-					int xplus = rand.nextInt(100);
+					int xplus = 50;
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -278,9 +278,9 @@ public class GameWorld {
 					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
 					else carrier = new CarrierRoundFour();
 					int lane = rand.nextInt(mHeight);
-					int xplus = rand.nextInt(100);
+					int xplus = 50;
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
@@ -299,9 +299,9 @@ public class GameWorld {
 					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
 					else carrier = new CarrierRoundFour();
 					int lane = rand.nextInt(mHeight);
-					int xplus = rand.nextInt(100);
+					int xplus = 50;
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
-					carrier.setXY( correctXYpos[0] + xplus, correctXYpos[1] );
+					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
 					synchronized( mEnemies ){
 						mEnemies.add( carrier );
