@@ -3,25 +3,19 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnErrorListener;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.GestureDetector.OnGestureListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-import at.ac.tuwien.cg.cgmd.bifth2010.framework.MenuActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.LevelHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.ProgressHandler;
@@ -29,6 +23,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
+/**
+ * the Class LevelActivity 
+ * @author roman hochstoger & christoph fuchs
+ */
 public class LevelActivity extends Activity implements OnGestureListener{
 	
 	/**

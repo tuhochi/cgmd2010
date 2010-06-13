@@ -1,27 +1,23 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33;
 
-import static android.opengl.GLES10.GL_MODELVIEW;
-
 import static android.opengl.GLES10.GL_PROJECTION;
 import static android.opengl.GLES10.glLoadIdentity;
 import static android.opengl.GLES10.glMatrixMode;
-import static android.opengl.GLES10.glViewport;
 import static android.opengl.GLU.gluPerspective;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
+import android.opengl.GLSurfaceView;
+import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2f;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.math.Vector2i;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.Camera;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.scene.SceneGraph;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
-import android.util.Log;
-
-
-
+/**
+ * the Class GameRenderer
+ * @author roman hochstoger & christoph fuchs
+ */
 public class GameRenderer implements GLSurfaceView.Renderer {
 	
 	LevelActivity levelActivity = null;

@@ -2,7 +2,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level33.tools;
 
 import android.util.Log;
 
-
+/**
+ * the Class StopTimer 
+ * @author roman hochstoger & christoph fuchs
+ */
 public class StopTimer {
 	
 	private long stopTime;
