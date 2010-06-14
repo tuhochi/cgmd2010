@@ -138,6 +138,7 @@ public abstract class MoneyCarrier extends GLObject {
 		if( mSlowed == 0 && slow != 0 ){
 			mSlowed = slow;
 			setFrozenColor();
+			mHp = (short)(mHp*0.5f);
 		}
 	}
 

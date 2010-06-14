@@ -34,6 +34,10 @@ public class GameWorld {
 	        
 	boolean remove;
 	
+	private int carrierOneChance = 0;
+	private int carrierTwoChance = 0;
+	private int carrierThreeChance = 0;
+	private int carrierFourChance = 0;
 	
 	private GameWorld(){
 		initGameField();
@@ -167,9 +171,9 @@ public class GameWorld {
 		switch (roundnr) {
 			case (0):
 				for( int i = 0; i < Definitions.FIRST_ROUND_ENEMIE_NUMBER; i++){
-					int carrierOneChance = 100;//rand.nextInt( 50 );
-					int carrierTwoChance = 0;//rand.nextInt( 25 );
-					int carrierThreeChance = 0;//rand.nextInt( 15 );
+					carrierOneChance = 100;
+					carrierTwoChance = 0;
+					carrierThreeChance = 0;
 					MoneyCarrier carrier;
 					if( carrierOneChance >= carrierTwoChance && carrierOneChance >= carrierThreeChance ) carrier = new CarrierRoundOne();
 					else if( carrierTwoChance > carrierOneChance && carrierTwoChance > carrierThreeChance) carrier = new CarrierRoundTwo();
@@ -188,14 +192,21 @@ public class GameWorld {
 				break;
 			case(1):
 				for( int i = 0; i < Definitions.SECOND_ROUND_ENEMIE_NUMBER; i++){
-					int carrierTwoChance = 1;//rand.nextInt( 50 );
-					int carrierThreeChance = 0;//rand.nextInt( 25 );
-					int carrierFourChance = 0;//rand.nextInt( 15 );
+					if(i < Definitions.SECOND_ROUND_ENEMIE_NUMBER-1){
+						carrierOneChance = 1;
+						carrierTwoChance = 0;
+						carrierThreeChance = 0;
+					}
+					else {
+						carrierOneChance = 0;
+						carrierTwoChance = 1;
+						carrierThreeChance = 0;
+					}
 					MoneyCarrier carrier;
-					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
-					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
-					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
-					else carrier = new CarrierRoundTwo();
+					if( carrierOneChance >= carrierTwoChance && carrierOneChance >= carrierThreeChance ) carrier = new CarrierRoundOne();
+					else if( carrierTwoChance > carrierOneChance && carrierTwoChance > carrierThreeChance) carrier = new CarrierRoundTwo();
+					else if( carrierThreeChance > carrierOneChance && carrierThreeChance > carrierTwoChance) carrier = new CarrierRoundThree();
+					else carrier = new CarrierRoundOne();
 					int lane = rand.nextInt(mHeight);
 					int xplus = 60;//rand.nextInt(100);
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
@@ -209,9 +220,9 @@ public class GameWorld {
 				break;
 			case(2):
 				for( int i = 0; i < Definitions.THIRD_ROUND_ENEMIE_NUMBER; i++){
-					int carrierTwoChance = rand.nextInt( 25 );
-					int carrierThreeChance = rand.nextInt( 50 );
-					int carrierFourChance = rand.nextInt( 25 );
+					int carrierTwoChance = 1;
+					int carrierThreeChance = 0;
+					int carrierFourChance = 0;
 					MoneyCarrier carrier;
 					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
@@ -230,9 +241,16 @@ public class GameWorld {
 				break;
 			case(3):
 				for( int i = 0; i < Definitions.FOURTH_ROUND_ENEMIE_NUMBER; i++){
-					int carrierTwoChance = rand.nextInt( 15 );
-					int carrierThreeChance = rand.nextInt( 25 );
-					int carrierFourChance = rand.nextInt( 50 );
+					if(i < Definitions.FOURTH_ROUND_ENEMIE_NUMBER-2){
+						carrierTwoChance = 1;
+						carrierThreeChance = 0;
+						carrierFourChance = 0;
+					}
+					else {
+						carrierTwoChance = 0;
+						carrierThreeChance = 1;
+						carrierFourChance = 0;
+					}
 					MoneyCarrier carrier;
 					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
@@ -251,9 +269,16 @@ public class GameWorld {
 				break;
 			case(4):
 				for( int i = 0; i < Definitions.FIFTH_ROUND_ENEMIE_NUMBER; i++){
-					int carrierTwoChance = rand.nextInt( 5 );
-					int carrierThreeChance = rand.nextInt( 25 );
-					int carrierFourChance = rand.nextInt( 70 );
+					if(i < Definitions.FIFTH_ROUND_ENEMIE_NUMBER-1){
+						carrierTwoChance = 0;
+						carrierThreeChance = 1;
+						carrierFourChance = 0;
+					}
+					else {
+						carrierTwoChance = 0;
+						carrierThreeChance = 0;
+						carrierFourChance = 1;
+					}
 					MoneyCarrier carrier;
 					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
@@ -272,16 +297,16 @@ public class GameWorld {
 				break;
 			case(5):
 				for( int i = 0; i < Definitions.SIXTH_ROUND_ENEMIE_NUMBER; i++){
-					int carrierTwoChance = rand.nextInt( 5 );
-					int carrierThreeChance = rand.nextInt( 10 );
-					int carrierFourChance = rand.nextInt( 85 );
+					 carrierTwoChance = 0;
+					 carrierThreeChance = 0;
+					 carrierFourChance = 1;
 					MoneyCarrier carrier;
 					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
 					else if( carrierFourChance > carrierTwoChance && carrierFourChance > carrierThreeChance) carrier = new CarrierRoundFour();
 					else carrier = new CarrierRoundFour();
 					int lane = rand.nextInt(mHeight);
-					int xplus = 50;
+					int xplus = 100;
 					int[] correctXYpos = mGamefield.correctXYpos( mWidth, lane);
 					carrier.setXY( correctXYpos[0] + i*xplus, correctXYpos[1] );
 					carrier.activate();
@@ -293,9 +318,9 @@ public class GameWorld {
 				break;
 			case(6):
 				for( int i = 0; i < Definitions.SEVENTH_ROUND_ENEMIE_NUMBER; i++){
-					int carrierTwoChance = rand.nextInt( 5 );
-					int carrierThreeChance = rand.nextInt( 5 );
-					int carrierFourChance = rand.nextInt( 90 );
+					 carrierTwoChance = 0;
+					 carrierThreeChance = 0;
+					 carrierFourChance = 0;
 					MoneyCarrier carrier;
 					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();

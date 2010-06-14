@@ -10,10 +10,10 @@ public final class Definitions {
 	
 	//Game Mechanics:
 	public static final int STARTING_MONEY = 0;
-	public static final int STARTING_IRON = 40;
+	public static final int STARTING_IRON = 30;
 	public static final int GAME_ROUND_WAIT_TIME = 20000;
 	public static final int GAME_START_TIME = 5000;
-	public static final short MAX_ROUND_NUMBER = 0;
+	public static final short MAX_ROUND_NUMBER = 5;
 	
 	//Number of lanes:
 	public static final short LANE_COUNT = 5;
@@ -25,10 +25,10 @@ public final class Definitions {
 	public static final int FREEZE_TOWER = 3;
 	
 	//Tower Counts:
-	public static final short BASIC_TOWER_POOL = 7;
-	public static final short ADVANCED_TOWER_POOL = 5;
-	public static final short HYPER_TOWER_POOL = 5;
-	public static final int FREEZE_TOWER_POOL = 5;
+	public static final short BASIC_TOWER_POOL = 10;
+	public static final short ADVANCED_TOWER_POOL = 10;
+	public static final short HYPER_TOWER_POOL = 10;
+	public static final int FREEZE_TOWER_POOL = 10;
 	
 		//Basic Tower:
 		public static final short BASIC_TOWER_RADIUS = 35;
@@ -60,16 +60,16 @@ public final class Definitions {
 		
 		
 		//Damage
-		public static final int BASIC_TOWER_SHOOTING_INTERVALL = 1000;
+		public static final int BASIC_TOWER_SHOOTING_INTERVALL = 50;
 		public static final short BASIC_PROJECTILE_DAMAGE = 10;
 	
-		public static final int ADVANCED_TOWER_SHOOTING_INTERVALL = 1000;
+		public static final int ADVANCED_TOWER_SHOOTING_INTERVALL = 50;
 		public static final short ADVANCED_PROJECTILE_DAMAGE = 30;
 	
-		public static final int HYPER_TOWER_SHOOTING_INTERVALL = 1000;
+		public static final int HYPER_TOWER_SHOOTING_INTERVALL = 50;
 		public static final short HYPER_PROJECTILE_DAMAGE = 60;
 		
-		public static final int FREEZE_TOWER_SHOOTING_INTERVALL = 1000;
+		public static final int FREEZE_TOWER_SHOOTING_INTERVALL = 50;
 		public static final short FREEZE_PROJECTILE_DAMAGE = 0;
 		public static final short FREEZE_PROJECTILE_SLOWING = 70;
 		
@@ -80,19 +80,18 @@ public final class Definitions {
 		public static final short FREEZE_TOWER_IRON_NEED = 60;
 			
 		
-	
 	//Enemies:	
 	public static final short CARRIER_POOL = 5;
 
 	
 	//Enemies:
-	public static final short FIRST_ROUND_ENEMIE_NUMBER = 10;
+	public static final short FIRST_ROUND_ENEMIE_NUMBER = 5;
 	public static final short SECOND_ROUND_ENEMIE_NUMBER = 10;
-	public static final short THIRD_ROUND_ENEMIE_NUMBER = 13;
-	public static final short FOURTH_ROUND_ENEMIE_NUMBER = 15;
-	public static final int FIFTH_ROUND_ENEMIE_NUMBER = 14;
-	public static final int SIXTH_ROUND_ENEMIE_NUMBER = 10;
-	public static final int SEVENTH_ROUND_ENEMIE_NUMBER = 12;
+	public static final short THIRD_ROUND_ENEMIE_NUMBER = 7;
+	public static final short FOURTH_ROUND_ENEMIE_NUMBER = 10;
+	public static final int FIFTH_ROUND_ENEMIE_NUMBER = 12;
+	public static final int SIXTH_ROUND_ENEMIE_NUMBER = 5;
+	public static final int SEVENTH_ROUND_ENEMIE_NUMBER = 15;
 
 		//Round one
 		public static final short FIRST_ROUND_ENEMIE_HP = 10;
@@ -108,14 +107,14 @@ public final class Definitions {
 		public static final short SECOND_ROUND_ENEMIE_RADIUS = 25;
 		public static final short SECOND_ROUND_ENEMIE_MONEY = 40;
 		public static final short SECOND_ROUND_ENEMIE_SPEED = 70;
-		public static final short SECOND_ROUND_ENEMIE_IRON = 50;
+		public static final short SECOND_ROUND_ENEMIE_IRON = 40;
 	
 		//Round Three:
 		public static final short THIRD_ROUND_ENEMIE_HP = 60;
 		public static final short THIRD_ROUND_ENEMIE_STRENGTH = 30;
 		public static final short THIRD_ROUND_ENEMIE_RADIUS = 20;
 		public static final short THIRD_ROUND_ENEMIE_MONEY = 20;
-		public static final short THIRD_ROUND_ENEMIE_SPEED = 50;
+		public static final short THIRD_ROUND_ENEMIE_SPEED = 70;
 		public static final short THIRD_ROUND_ENEMIE_IRON = 80;
 	
 		//Round Four:
@@ -123,7 +122,7 @@ public final class Definitions {
 		public static final short FOURTH_ROUND_ENEMIE_STRENGTH = 40;
 		public static final short FOURTH_ROUND_ENEMIE_RADIUS = 20;
 		public static final short FOURTH_ROUND_ENEMIE_MONEY = 20;
-		public static final short FOURTH_ROUND_ENEMIE_SPEED = 50;
+		public static final short FOURTH_ROUND_ENEMIE_SPEED = 90;
 		public static final short FOURTH_ROUND_ENEMIE_IRON = 150;
 		
 }
