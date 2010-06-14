@@ -53,7 +53,6 @@ public class Texture {
 
 		width = bitmap.getWidth();
 		height = bitmap.getHeight();
-		System.err.println("Loaded texture: " + width + "x" + height);
 
 		int[] textures = new int[1];
 		gl.glGenTextures(1, textures, 0);
