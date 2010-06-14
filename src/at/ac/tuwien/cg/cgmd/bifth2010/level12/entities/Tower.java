@@ -18,7 +18,7 @@ import java.lang.System;
 public abstract class Tower extends GLObject {
 	protected short mRadius = -1;
 	protected int mShootingInterval = 3000;//ms
-	protected long mTimeLastProjectileShot = System.currentTimeMillis();
+	protected long mTimeLastProjectileShot = -1;
 	protected Projectile[] mProjectiles = null;
 	protected int mScreenWidth = 800;
 	protected int mSound = R.raw.l12_basic_tower_shooting_sound;
@@ -39,6 +39,7 @@ public abstract class Tower extends GLObject {
 		mX = xCentr;
 		mY = yCentr;
 		this.setActiveState(true);
+		mTimeLastProjectileShot = System.currentTimeMillis();
 		initVBOs();
 	}
 	

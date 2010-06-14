@@ -26,6 +26,7 @@ public class FreezeTower extends Tower {
 		TextureManager.getSingletonObject().add(mShootingTextur3);
 		mSound = R.raw.l12_freeze_tower_shooting_sound;
 		mPrice = Definitions.FREEZE_TOWER_IRON_NEED;
+		mShootingInterval = Definitions.FREEZE_TOWER_SHOOTING_INTERVALL;
 		initProjectiles();
 	}
 		
