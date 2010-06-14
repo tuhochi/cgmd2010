@@ -9,9 +9,14 @@ import android.media.MediaPlayer;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * Class for playing SoundEffects
+ * Class for playing SoundEffects and music
  * 
- * @author Matthias
+ * This class encapsulates the low-level sound management
+ * features that Android provides and provides a nice high-level
+ * abstraction for easily requesting sounds to be played.
+ * 
+ * @author Matthias Tretter
+ * @author Thomas Perl
  */
 
 public class SoundPlayer {
