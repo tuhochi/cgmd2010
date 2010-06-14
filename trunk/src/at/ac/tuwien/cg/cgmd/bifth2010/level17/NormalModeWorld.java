@@ -193,7 +193,6 @@ public class NormalModeWorld implements World, PlayerStateListener {
         mLevel.getPlayer().addPlayerStateListener(this);
         
         GLManager.getInstance().getTextures().loadTextures();
-		mNotInitialized = false;
 
 		mBackground = new Quad(20f,20f);
 	}
@@ -221,6 +220,11 @@ public class NormalModeWorld implements World, PlayerStateListener {
     
     public synchronized void fingerDown(Vector2 pos)
     {
+    	if (mNotInitialized)
+    	{
+    		mNotInitialized = false;
+    		mPlayTime = 0f;
+    	}
     	mTouchPos = new Vector2(pos);
     	mNewTouchPos = mTouchPos;
     }   
