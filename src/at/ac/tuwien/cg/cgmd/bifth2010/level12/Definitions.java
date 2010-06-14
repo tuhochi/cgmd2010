@@ -85,7 +85,7 @@ public final class Definitions {
 
 	
 	//Enemies:
-	public static final short FIRST_ROUND_ENEMIE_NUMBER = 5;
+	public static final short FIRST_ROUND_ENEMIE_NUMBER = 6;
 	public static final short SECOND_ROUND_ENEMIE_NUMBER = 10;
 	public static final short THIRD_ROUND_ENEMIE_NUMBER = 7;
 	public static final short FOURTH_ROUND_ENEMIE_NUMBER = 10;
@@ -97,7 +97,7 @@ public final class Definitions {
 		public static final short FIRST_ROUND_ENEMIE_HP = 10;
 		public static final short FIRST_ROUND_ENEMIE_STRENGTH = 10;
 		public static final short FIRST_ROUND_ENEMIE_RADIUS = 20;
-		public static final short FIRST_ROUND_ENEMIE_MONEY = 30;
+		public static final short FIRST_ROUND_ENEMIE_MONEY = 50;
 		public static final short FIRST_ROUND_ENEMIE_SPEED = 60;
 		public static final short FIRST_ROUND_ENEMIE_IRON = 15;
 	
@@ -105,7 +105,7 @@ public final class Definitions {
 		public static final short SECOND_ROUND_ENEMIE_HP = 30;
 		public static final short SECOND_ROUND_ENEMIE_STRENGTH = 20;
 		public static final short SECOND_ROUND_ENEMIE_RADIUS = 25;
-		public static final short SECOND_ROUND_ENEMIE_MONEY = 40;
+		public static final short SECOND_ROUND_ENEMIE_MONEY = 50;
 		public static final short SECOND_ROUND_ENEMIE_SPEED = 70;
 		public static final short SECOND_ROUND_ENEMIE_IRON = 40;
 	
@@ -113,16 +113,16 @@ public final class Definitions {
 		public static final short THIRD_ROUND_ENEMIE_HP = 60;
 		public static final short THIRD_ROUND_ENEMIE_STRENGTH = 30;
 		public static final short THIRD_ROUND_ENEMIE_RADIUS = 20;
-		public static final short THIRD_ROUND_ENEMIE_MONEY = 20;
+		public static final short THIRD_ROUND_ENEMIE_MONEY = 50;
 		public static final short THIRD_ROUND_ENEMIE_SPEED = 70;
-		public static final short THIRD_ROUND_ENEMIE_IRON = 80;
+		public static final short THIRD_ROUND_ENEMIE_IRON = 70;
 	
 		//Round Four:
-		public static final short FOURTH_ROUND_ENEMIE_HP = 120;
+		public static final short FOURTH_ROUND_ENEMIE_HP = 150;
 		public static final short FOURTH_ROUND_ENEMIE_STRENGTH = 40;
 		public static final short FOURTH_ROUND_ENEMIE_RADIUS = 20;
-		public static final short FOURTH_ROUND_ENEMIE_MONEY = 100;
+		public static final short FOURTH_ROUND_ENEMIE_MONEY = 50;
 		public static final short FOURTH_ROUND_ENEMIE_SPEED = 90;
-		public static final short FOURTH_ROUND_ENEMIE_IRON = 150;
+		public static final short FOURTH_ROUND_ENEMIE_IRON = 120;
 		
 }
