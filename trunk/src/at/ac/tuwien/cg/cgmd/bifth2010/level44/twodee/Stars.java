@@ -26,6 +26,8 @@ public class Stars {
 	private boolean visible;
 	/** The amount of stars displayed */
 	private static final int STARS = 18;
+	/** Maximum scaling value after which stars disappear */
+	private static final float MAXSCALE = 10f;
 
 	/**
 	 * Creates the stars from the big texture
@@ -89,7 +91,7 @@ public class Stars {
 		if (visible) {
 			redStar.setRotation(redStar.getRotation() + 5);
 			yellowStar.setRotation(yellowStar.getRotation() - 5);
-			if (scale > 2.f) {
+			if (scale > MAXSCALE) {
 				visible = false;
 			}
 			angle += 2.f;
