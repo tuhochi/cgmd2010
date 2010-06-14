@@ -272,14 +272,14 @@ public class Crosshairs {
 	 */
 	public void shoot() {
 		// play shooting sound
-		SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.SHOT, 0.5f);
+		SoundPlayer.play(SoundPlayer.SoundEffect.SHOT, 0.5f);
 		(new Thread() {
 			public void run() {
 				try {
 					Thread.sleep(500L);
 				} catch (Exception ex) { }
 
-				SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.LAUGH, 0.5f);
+				SoundPlayer.play(SoundPlayer.SoundEffect.LAUGH, 0.5f);
 
 			}
 		}).start();
