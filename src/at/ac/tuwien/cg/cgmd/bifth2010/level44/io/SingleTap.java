@@ -3,7 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.io;
 /**
  * Wrapper around the Input Gesture SingleTap
  * 
- * @author Matthias
+ * @author Matthias Tretter
  */
 public class SingleTap implements InputGesture {
 	/** the x-position of the tap */
@@ -47,6 +47,8 @@ public class SingleTap implements InputGesture {
 	@Override
 	/**
 	 * A SingleTap has no strength
+	 * 
+	 * @return Always 0
 	 */
 	public float getPower() {
 		return 0;

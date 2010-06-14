@@ -3,7 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.io;
 /**
  * Interface for all supported InputGestures
  * 
- * @author Matthias
+ * @author Matthias Tretter
  * 
  */
 public interface InputGesture {
