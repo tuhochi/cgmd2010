@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 public class HyperTower extends Tower {
@@ -27,6 +26,7 @@ public class HyperTower extends Tower {
 		TextureManager.getSingletonObject().add(mShootingTextur3);
 		mPrice = Definitions.HYPER_TOWER_IRON_NEED;
 		mSound = R.raw.l12_hyper_tower_shooting_sound;
+		mShootingInterval = Definitions.HYPER_TOWER_SHOOTING_INTERVALL;
 		initProjectiles();
 	}
 	
