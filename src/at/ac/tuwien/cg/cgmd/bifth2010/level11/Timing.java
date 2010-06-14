@@ -61,7 +61,7 @@ public class Timing {
 	 * pauses timer
 	 */
 	public void pause(){
-		//System.out.println("pause timer at "+currTime);
+		System.out.println("pause timer at "+currTime);
 		if(pauseTimeStamp == 0.0f)
 			pauseTimeStamp = (System.nanoTime()/1000000000.0f);
 		else{
@@ -73,13 +73,13 @@ public class Timing {
 	 * resumes timer. pause() must be called previously
 	 */
 	public void resume(){
-		//System.out.println("resume timer");
 		if(pauseTimeStamp != 0.0f){
 			pausedTime += (System.nanoTime()/1000000000.0f) - pauseTimeStamp;
 			currTime = (System.nanoTime()/1000000000.0f) - startTime - pausedTime;
 			pauseTimeStamp = 0.0f;
 			//System.out.println("resume in timer from paused; currTime: "+currTime);
 		}
+		System.out.println("resume timer at "+currTime+" and paused time is "+pausedTime);
 	}
 	/**
 	 * returns the time to the last update call
