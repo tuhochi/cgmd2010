@@ -5,7 +5,9 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.graphics.Rect;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.Rectangle;
 
 import java.security.acl.LastOwnerException;
 import java.util.Iterator;
@@ -58,6 +60,7 @@ public class Level extends Thread {
 	private float grabbedTreasureValue;
 	private float intervallOfAddingPed = 10;
 	private float timeOfLastAddingPed = 0;
+	//public Rect bounceRect = new Rect();
 	
 	/**
 	 * Level constructor
@@ -158,7 +161,7 @@ public class Level extends Thread {
 	 */
 	public void run() {
 		this._isStarted = true;
-		//this.timing.resume();
+		this.timing.resume();
 		//this.timing.update();
 		while (_isActive) {
 			while (_isRunning) {
@@ -210,6 +213,10 @@ public class Level extends Thread {
 		//float a = (y2-y1)/(x2-x1);
 		//float b = 1;
 		//float c = y1-(y2-y1)/(x2-x1)*x1;
+		/*bounceRect.left = (int)(Math.min(x1, x2)-pedestrian.getBounceRadius());
+		bounceRect.right = (int)(Math.max(x1, x2)+pedestrian.getBounceRadius());
+		bounceRect.bottom = (int)(Math.min(y1, y2)-pedestrian.getBounceRadius());
+		bounceRect.top = (int)(Math.max(y1, y2)+pedestrian.getBounceRadius());*/
 		for (int i=0; i < pedestrianList.size(); i++) {
 			Pedestrian pedestrian = pedestrianList.get(i);
 			//check if it is in bounding box
@@ -249,7 +256,6 @@ public class Level extends Thread {
 	private void addPedestrian(){
 		if(timeOfLastAddingPed + intervallOfAddingPed < timing.getCurrTime()){
 			Pedestrian pedestrian = new Pedestrian(this.gl, this.context);
-			this.pedestrianList.add(pedestrian);
 			if(Math.random()>Level.sizeX/Level.sizeY){
 				if(Math.random()>0.5)
 					pedestrian.setPosition(new Vector2((float)Math.random()*Level.sizeX, 0));
@@ -263,6 +269,8 @@ public class Level extends Thread {
 				
 			}
 			timeOfLastAddingPed = timing.getCurrTime();
+			pedestrian.update(0, 0);
+			this.pedestrianList.add(pedestrian);
 		}
 	}
 	private void updateObjects(){

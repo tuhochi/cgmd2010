@@ -10,6 +10,7 @@ public class GameView extends GLSurfaceView {
 	private static final String LOG_TAG = GameView.class.getSimpleName();
     private GameRenderer _renderer;
     private long touchedTime;
+    private long moveTime =0;
     private float _x = 0;
     private float _y = 0;
     private float _value = 0.0f;
@@ -60,16 +61,24 @@ public class GameView extends GLSurfaceView {
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
         	float x = event.getX();
         	float y = event.getY();
-        	float time = (System.currentTimeMillis()-this.touchedTime)/1000.0f;
+        	
+        	float time = 0;
+        	if(moveTime > 0){
+        		time = (System.currentTimeMillis()-this.moveTime)/1000.0f;
+        	}else{
+        		moveTime = System.currentTimeMillis();
+        		time = (System.currentTimeMillis()-this.touchedTime)/1000.0f;
+        	}
         	//System.out.println("time: "+time);
         	//System.out.println("deltaX: "+Math.abs(_x-x));
-        	if(Math.abs(_x-x)>time*500 || Math.abs(_y-y)>time*500){
-        		//System.out.println("in");
+        	double delta = Math.sqrt(Math.pow(Math.abs(_x-x),2)+Math.pow(Math.abs(_y-y), 2)); 
+        	if(delta/time>50 && delta > 10){
         		isBouncing = true;
+        		//System.out.println("in");
         		((GameActivity)_renderer.context)._level.bouncePedestrians(x/_renderer._width*Level.sizeX, Level.ratioFix*Level.sizeY-(y/_renderer._height*Level.sizeY), _x/_renderer._width*Level.sizeX, Level.ratioFix*Level.sizeY-(_y/_renderer._height*Level.sizeY), time);
         		_x = x;
                 _y = y;
-                this.touchedTime = System.currentTimeMillis();
+                this.moveTime = System.currentTimeMillis();
         	}
             /*queueEvent(new Runnable() {
                 public void run() {
@@ -99,9 +108,10 @@ public class GameView extends GLSurfaceView {
         	}else{
         		isBouncing = false;
         	}
+        	this.moveTime = 0;
         }
         
-        if (isDown) {
+        if (isDown && !isBouncing) {
             _x = event.getX();
             _y = event.getY();
             _value = (System.currentTimeMillis()-this.touchedTime)/1000.0f*treasureDroppedPerSecond;
