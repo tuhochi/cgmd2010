@@ -19,6 +19,8 @@
    inkscape:export-filename="/home/thp/src/cgmd2010--git/res/drawable/l44_texture.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
+  <title
+     id="title5599">MireRabbit Graphical Assets</title>
   <defs
      id="defs4">
     <linearGradient
@@ -4463,8 +4465,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="676.89137"
-     inkscape:cy="221.41848"
+     inkscape:cx="500.89137"
+     inkscape:cy="699.41848"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -4491,8 +4493,33 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title>MireRabbit Graphical Assets</dc:title>
+        <dc:date>2010-06-14</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Thomas Perl</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:source>http://thpinfo.com/2010/mirerabbit/</dc:source>
+        <dc:description>Graphical assets for the &quot;MireRabbit&quot; game. Includes all the UI elements displayed in the game.</dc:description>
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -12254,7 +12281,7 @@
        sodipodi:cy="861.5"
        sodipodi:rx="41.5"
        sodipodi:ry="41.5"
-       d="m 878,861.5 a 41.5,41.5 0 1 1 -83,0 41.5,41.5 0 1 1 83,0 z"
+       d="m 878,861.5 c 0,22.91982 -18.58018,41.5 -41.5,41.5 -22.91982,0 -41.5,-18.58018 -41.5,-41.5 0,-22.91982 18.58018,-41.5 41.5,-41.5 22.91982,0 41.5,18.58018 41.5,41.5 z"
        transform="translate(-340.51407,-23.060378)" />
     <rect
        style="color:#000000;fill:#a4a4a4;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter9091);enable-background:accumulate"

@@ -243,7 +243,28 @@
 <credit type="texture" name="Rabies Star" author="Rabieshund"
 	url="http://qbrushes.net/nature/rabies-star-ps-brush/"
 	usage="level 42 - space texture" license="CC" />
-	
+
+
+<!-- Level 44 -->
+<credit type="music" name="Flowers Simplistic Beats 2" author="hello_flowers"
+  url="http://www.freesound.org/samplesViewSingle.php?id=34517"
+  usage="Level 44 - Music" license="CC Sampling Plus 1.0"/>
+<credit type="sound" name="Ding Ding" author="ljudman"
+  url="http://www.freesound.org/samplesViewSingle.php?id=33244"
+  usage="Level 44 - End Ding" license="CC Sampling Plus 1.0"/>
+<credit type="sound" name="Wings Low" author="franchus"
+  url="http://www.freesound.org/samplesViewSingle.php?id=48647"
+  usage="Level 44 - Wing Flap" license="CC Sampling Plus 1.0"/>
+<credit type="sound" name="Laugh, Damn and WTF" author="thp"
+  url="http://thpinfo.com/2010/mirerabbit/"
+  usage="Level 44 - Shaman's Voice" license="CC-BY-SA 3.0"/>
+<credit type="texture" name="MireRabbit" author="thp"
+  url="http://thpinfo.com/2010/mirerabbit/"
+  usage="Level 44 - Visual Assets" license="CC-BY-SA 3.0"/>
+<!-- tbd: shot, beep, load, drop -->
+<!-- End Level 44 -->
+
+
 <!-- Level 50 -->
 <credit type="sound" name="Vacance" author="internetfilm"
 	url="http://www.freesfx.co.uk/users/internetfilm/"
