@@ -17,7 +17,6 @@ import java.util.ListIterator;
  */
 public class EventManager {
 	
-	// FERDI: Hast du dir das so gedacht? Oder Enum? Ich überlass das Design vom Eventmanager dir :P
 	public static final int ANIMATION_COMPLETE = 1;
 	public static final int PRODUCT_COLLECTED = 2;
 	public static final int SHOPPING_CART_COLLECTED = 3;
@@ -25,6 +24,8 @@ public class EventManager {
 	public static final int BUNNY_RUN = 5;
 	public static final int OBSTACLE_AVOIDED = 6;	
 	public static final int PRODUCT_HIT_CART = 7;	
+	public static final int DISCOUNT_ACQUIRED = 8;	
+	public static final int BUNNY_MOST_LEFT = 9;
 	
 	/**
 	 * The singleton instance of the event manager.

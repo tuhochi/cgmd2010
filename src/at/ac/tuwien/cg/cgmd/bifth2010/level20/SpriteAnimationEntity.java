@@ -95,14 +95,36 @@ public class SpriteAnimationEntity extends RenderEntity {
 			}
 			
 			// move the bunny
-			// TODO: find more robust solution. gets stuck some time.
+			// FERDI: (I think the error occurs, when the frame following the direction switch is not long enough to move the bunny out of the deadzone, thus reverting the direction again)
+			// Let's try this: 
 			if (GameManager.catchMode) {
-				if (x >= maxPosX || x <= minPosX) {
-					speed *= -1;
-				}
+				
+				// Move the bunny first
 				float pos = speed * dt / 1000f; 
 				x += pos;
-				curseBubble.x += pos;
+				
+				
+				
+				// If the bunny is over maxPosX
+				if (x > maxPosX) {					
+					// Calc how much it is outside
+					float dx = x - maxPosX;
+					// And subtract it again
+					x = maxPosX - dx;
+					// Then switch the speed for the next frame
+					speed *= -1;
+					
+					// Now the same for minPosX
+				} else if (x <= minPosX) {
+					
+					float dx = minPosX - x;
+					x = minPosX + dx;
+					speed *= -1;
+					
+					EventManager.getInstance().dispatchEvent(EventManager.BUNNY_MOST_LEFT, null);
+				}
+				
+				curseBubble.x = x + curseBubble.width*0.5f;
 			}
 		}		
 	}

@@ -91,10 +91,12 @@ public class TextSprites {
 	
 	/** Returns the RenderEntity with the texture representing the passed number. */
 	public RenderEntity getNumberSprite(int number) {
-		if (number > 9 || number < 0) {
+		
+		number = Math.abs(number);
+		
+		if (number > 9) {
 			return spriteNumbers.get(0);
-		}
-		else {
+		} else {
 			return spriteNumbers.get(number);
 		}
 	}

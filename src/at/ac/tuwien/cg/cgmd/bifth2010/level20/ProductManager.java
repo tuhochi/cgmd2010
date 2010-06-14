@@ -105,11 +105,11 @@ public class ProductManager{
 	 * Initializes the manager. 
 	 */
 	public void init() {
-		// TODO: Calc better values
-		float height = LevelActivity.renderView.getHeight();
+		// product spawn is overwritten in the upper method anyway. Check GameManager.createEntities() 
+//		float height = LevelActivity.renderView.getHeight();
 		float width = LevelActivity.renderView.getWidth();
-		float row = height / 8.f;
-		productSpawnY = new float[]{height - row, height - row*2.6f, height - row*4.3f};
+//		float row = height / 8.f;
+//		productSpawnY = new float[]{height - row, height - row*2.6f, height - row*4.3f};
 		
 		PRODUCT_DISTANCE = LevelActivity.instance.getResources().getInteger(R.integer.l20_product_distance) * width * 0.005f;
 	}
@@ -217,10 +217,10 @@ public class ProductManager{
 				//Mark neighbors as not clickable too
 				for (int i = 0; i < pe.neighbors.length; i++) {					
 					ProductEntity ne = products.get(pe.neighbors[i]);
-					ne.clickable = false;
-					
-					// TODO: Small hack, do something better:
+					ne.clickable = false;					
 					ne.visible = false;
+					// And remove them after this frame
+					removeFromProducts.add(ne);
 				}				
 				break;
 			}
@@ -302,6 +302,7 @@ public class ProductManager{
 		Enumeration<Integer> keys = products.keys();		
 		while(keys.hasMoreElements()) {
 			
+			// TODO: We could cycle through animators instead :-/
 			ProductEntity pe = products.get(keys.nextElement());
 			
 			// Product was collected and is falling down.

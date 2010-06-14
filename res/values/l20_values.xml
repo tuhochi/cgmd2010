@@ -2,7 +2,9 @@
 <resources>
 	<integer name="l20_level_time">60</integer>
 	<integer name="l20_scroll_speed">25</integer>
+	<integer name="l20_scroll_speed_incr">1</integer>
 	<integer name="l20_animation_speed">40</integer>
+	<integer name="l20_fall_acceleration">100</integer>
 	<integer name="l20_shopping_cart_default_size">290</integer>
 	<integer name="l20_shopping_cart_bb_default_size_x">200</integer>
 	<integer name="l20_shopping_cart_bb_default_size_y">120</integer>
@@ -18,14 +20,15 @@
 	<integer name="l20_bunny_size">136</integer>
 	<integer name="l20_bunny_x">20</integer>
 	<integer name="l20_bunny_y">5</integer>
-	<integer name="l20_bunny_max_x">250</integer>
+	<integer name="l20_bunny_max_x">250</integer> <!-- i'd like to move him across the whole screen. -->
 	<integer name="l20_bunny_speed">10</integer>
 	<integer name="l20_bubble_size">182</integer>
-	<integer name="l20_crash_duration">5</integer> <!-- in seconds -->
+	<integer name="l20_crash_duration">1</integer> <!-- in seconds -->
+	<integer name="l20_discount_duration">1</integer> <!-- in seconds -->
 	<integer name="l20_particle_speed">4</integer>
 	<integer name="l20_particle_count">15</integer> 
 	<integer name="l20_particle_size">20</integer>						
 	<integer name="l20_particle_life">1000</integer>
 	<bool name="l20_catch_mode">true</bool>
-	<bool name="l20_endgame">true</bool>
+	<bool name="l20_endgame">false</bool>
 </resources>

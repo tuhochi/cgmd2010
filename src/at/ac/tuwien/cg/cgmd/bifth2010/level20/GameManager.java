@@ -61,9 +61,22 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	protected Hashtable<Integer, Animator> animators;
 	
 	/** The moving speed of the background and the products */ 
-	protected float scrollSpeed;
-	/** The speed of tranform animations. */
+	protected float curScrollSpeed;
+	
+	/** The default speed of the background and the products */ 
+	protected float defaultScrollSpeed;
+	
+	/** Flag if to increase the scroll speed next frame */
+	protected boolean scrollSpeedIncr;
+	
+	/** The value to increase the scroll speed next frame */
+	protected float scrollSpeedIncrVal;
+	
+	/** The speed of transform animations. */
 	protected float animationSpeed;
+	
+	/** The gravity acceleration of fall animations. */
+	protected float fallAcceleration;
 	
 	/** The amount of all money spent on products */
 	protected float totalMoney;
@@ -77,6 +90,12 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	/** The pop-ups for discounts. */
 	protected RenderEntity[] discountPopUps;
 	
+	/** The pop-ups index for discounts. */
+	protected int discountPopUpsIndex;
+	
+	/** The time, the discount sprite is displayed */
+	protected float discountTime;
+	
 	/** The amount of shopping carts */
 	protected int nShoppingCarts;
 	
@@ -86,11 +105,15 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	/** Ratio to multiply object sizes with for proper size dependent on the current screen resolution. */
 	protected static float screenRatio;
 		
+	
 
 	/** If there's a touch on the screen */
 	protected boolean touchDown;
 	protected float touchX;
 	protected float touchY;
+	
+	/** If this is false, the game won't stop after the finish is reached */
+	protected boolean finish;
 	
 	/** If the Game has been run before. If this is not the first time, textures need to be rebuilt instead */
 	protected boolean firstRun;
@@ -128,7 +151,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		shoppingCarts = new ShoppingCart[3];
 		nShoppingCarts = 0;
 		
-		discountPopUps = new RenderEntity[3];
+		discountPopUps = new RenderEntity[2];
+		discountTime = -1;
+		discountPopUpsIndex = -1;
+		
 		
 		EventManager.getInstance().addListener(this);			
 		
@@ -140,11 +166,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		touchDown = false;
 		touchX = 0;
 		touchY = 0;
+		
+		finish = activity.getResources().getBoolean(R.bool.l20_endgame);
 	}
 	
 	
 	/**
-	 * 
+	 * Invoked at the beginning of the game
 	 */
 	public void createEntities(GL10 gl) {
 		
@@ -193,7 +221,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		bunny = new SpriteAnimationEntity(bunnyPosX, bunnyPosY, 2, bunnySize, bunnySize);
 		bunny.setFps(10);
 		bunny.setAnimationSequence(bunnySequence);
-		bunny.maxPosX = activity.getResources().getInteger(R.integer.l20_bunny_max_x) * screenRatio;
+		// reset below! (after shopping cart width is known)
+		bunny.maxPosX = activity.getResources().getInteger(R.integer.l20_bunny_max_x) * screenRatio;		
 		bunny.speed = activity.getResources().getInteger(R.integer.l20_bunny_speed) * widthPercent;
 		
 		float bubbleSize = activity.getResources().getInteger(R.integer.l20_bubble_size) * screenRatio;
@@ -212,6 +241,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		shoppingCarts[0] = new ShoppingCart(cartPos, cartPosY, 2, shoppingCartSize, shoppingCartSizeY);
 		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
 		shoppingCarts[0].clickable = false;
+		
+		// Move bunny around whole screen width
+		bunny.maxPosX = renderView.getWidth() - bunny.minPosX - shoppingCartSize * 0.9f;
 		
 		// Calc bounding box size
 //		float bbX = activity.getResources().getInteger(R.integer.l20_shopping_cart_bb_default_size_x);
@@ -236,14 +268,19 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		productManager.initProductSpawn();
 		// Pixel per second
-		scrollSpeed = activity.getResources().getInteger(R.integer.l20_scroll_speed) * widthPercent * 0.001f;
 		animationSpeed = activity.getResources().getInteger(R.integer.l20_animation_speed) * widthPercent;
+		fallAcceleration = activity.getResources().getInteger(R.integer.l20_fall_acceleration) * widthPercent;
+		
+		defaultScrollSpeed = activity.getResources().getInteger(R.integer.l20_scroll_speed) * widthPercent * 0.001f;
+		curScrollSpeed = defaultScrollSpeed;
+		scrollSpeedIncrVal = activity.getResources().getInteger(R.integer.l20_scroll_speed_incr) * widthPercent * 0.001f;
+		scrollSpeedIncr = false;
 		
 		firstRun = false;
 	}
 	
 	/**
-	 * 
+	 * Invoked, everytime the RenderView looses focus. (Textures need to be recreated)
 	 */
 	public void reCreateEntities(GL10 gl) {
 		
@@ -268,7 +305,12 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		}
 		
 		// ReCreate shopping cart texture.
-		shoppingCarts[0].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
+		for (int i = 0; i < shoppingCarts.length; i++) {
+			if (shoppingCarts[i] != null) {
+				shoppingCarts[i].texture = renderView.getTexture(RenderView.TEXTURE_CART, gl);
+			}
+		}
+		
 		
 		// ReCreate bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
@@ -305,27 +347,54 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		if (!renderView.running) return;
 		
 		// Advance in time
-		time.update();
-		
+		time.update();		
 		float dt = time.getDt();
 		
+		if (scrollSpeedIncr) {
+			scrollSpeedIncr = false;
+			curScrollSpeed += scrollSpeedIncrVal;
+		}
+		
 		// Difference in movement since last frame
-		float scroll = scrollSpeed * dt;
-		productManager.update(scroll);
+		float scroll = curScrollSpeed * dt;
+		
+		// Move only if not crashed
+		if (!bunny.crashed) {
+			productManager.update(scroll);		}
+		
 		obstacleManager.update(dt, scroll);
+		
 		// couldn't compile: particleEngine.update(dt);
-		bunny.update(dt);
+		
+		bunny.update(dt);		
  
 		if (catchMode) {
 			shoppingCarts[0].update(bunny.x);
 			obstacleManager.setCrashPosition(shoppingCarts[0]);
-			productManager.collisionTest(shoppingCarts[0]);
+			productManager.collisionTest(shoppingCarts[0]);			
 		}
 						
 		// Update all Animators
 		Enumeration<Integer> keys = animators.keys();		
 		while(keys.hasMoreElements()) {
 			animators.get(keys.nextElement()).update(dt);
+		}
+		
+		
+		// Update display of discount symbols
+		if (discountPopUpsIndex > -1) {
+			
+			discountPopUps[discountPopUpsIndex].x = shoppingCarts[0].x;
+			
+			if (time.getTotalTimeInSeconds() >= discountTime) {
+
+				discountTime = -1;
+				discountPopUpsIndex = -1;
+				
+				for (int i = 0; i < discountPopUps.length; i++) {
+					discountPopUps[i].visible = false;					
+				}
+			}
 		}
 		
 		remainingTime -= dt;
@@ -347,7 +416,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		s.setProgress(100 - (int)totalMoney); 
 		activity.setResult(Activity.RESULT_OK, s.asIntent());
 		
-		boolean finish = activity.getResources().getBoolean(R.bool.l20_endgame);
+		// Hopefully this will kill the game for sure
+		// No, theres a crash
+//		LevelActivity.instance = null;
+//		LevelActivity.gameManager = null;
+//		LevelActivity.renderView = null;
+		
+		
 		if (finish) {
 			activity.finish();
 		}
@@ -409,22 +484,19 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_SEARCH:
 			
-			scrollSpeed += 20f;
+			curScrollSpeed += 0.02f;
 			return true;
 			
 		case KeyEvent.KEYCODE_MENU:
 			
-			scrollSpeed -= 20f;
+			curScrollSpeed -= 0.02f;
 			return true;
 		
-//		case KeyEvent.KEYCODE_BACK:
-//			
-//			renderView.running = false;
-//			renderView.startButton.setText(R.string.l20_button_resume_text);
-//			renderView.descriptionText.setVisibility(GLSurfaceView.VISIBLE);
-//			renderView.startButton.setVisibility(GLSurfaceView.VISIBLE);
-//			renderView.startButton.setClickable(true);
-//			return true;
+		case KeyEvent.KEYCODE_BACK:
+			
+			// Return false, or it won't stop!
+			gameOver();
+			return false;
 			
 		default:
 			return false;
@@ -456,7 +528,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			else if (a.re.id >= TextSprites.TEXT_SPRITE) {
 				a.re.visible = false;
 			}
-		}	
+			
+			// Remove all those falling products from the screen
+			else if (a instanceof FallAnimator)
+			{
+				productManager.removeFromProducts.add((ProductEntity)a.re);
+			}
+		}
 		break;
 		
 		case EventManager.PRODUCT_COLLECTED:
@@ -469,11 +547,14 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			
 			if(catchMode) {
 				// Falling to the ground.
-				Animator a = new Animator(pe, pe.x, 0 - pe.height, animationSpeed);
+				Animator a = new FallAnimator(pe, fallAcceleration);
 				animators.put(a.id, a);
 			} else {
+				
+				//INFO: Don't disable catch mode anymore!!!
+				
 				// Move it to the basket. 
-				Animator a = new Animator(pe, pos[0], pos[1], animationSpeed);
+				Animator a = new LineAnimator(pe, pos[0], pos[1], animationSpeed);
 				animators.put(a.id, a);
 				
 				// Remove from products
@@ -481,11 +562,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				// And add to cart. (PE is now also rendered from here)
 				shoppingCarts[cartIndex].addProduct(pe);
 				
-				// Reduce total money.
-				float productPrice = ProductInfo.price(pe.type); 
-				totalMoney -= productPrice;
-				
-				createTextAnimation(pe.x, pe.y, "-", (int)productPrice);
+				// Check if there is a discount on the product.
+				int price = shoppingCarts[0].checkDiscounts(pe);
+				// And remove what it's worth
+				totalMoney -= price;
 				
 				// This prevents displaying a negative money count and exits the game.
 				if (totalMoney <= 0) {
@@ -493,7 +573,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 					
 					gameOver();
 					return;
-				}				
+				}
+				
+				createTextAnimation(pe.x, pe.y, "-", price);
 			}
 			
 			// Create Particle System.
@@ -514,7 +596,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				int cartIndex = (int)(pe.x * nShoppingCarts / renderView.getWidth());			
 				float[] pos = shoppingCarts[cartIndex].getNextProductPosition();
 				// Move it to the basket. 
-				Animator a = new Animator(pe, pos[0], pos[1], animationSpeed);
+				Animator a = new LineAnimator(pe, pos[0], pos[1], animationSpeed);
 				animators.put(a.id, a);
 
 				// Remove from products
@@ -522,11 +604,11 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				// And add to cart. (PE is now also rendered from here)
 				shoppingCarts[0].addProduct(pe);
 				
-				// Reduce total money.
-				float productPrice = ProductInfo.price(pe.type); 
-				totalMoney -= productPrice;
+				// Check if there is a discount on the product.
+				int price = shoppingCarts[0].checkDiscounts(pe);
+				// And remove what it's worth
+				totalMoney -= price;
 				
-				createTextAnimation(pe.x, pe.y, "-", (int)productPrice);
 				
 				// This prevents displaying a negative money count and exits the game.
 				if (totalMoney <= 0) {
@@ -534,10 +616,57 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 					
 					gameOver();
 					return;
-				}				
+				}
+				// Increase scrollSpeed next frame
+				scrollSpeedIncr = true;
+				// Now create a text label displaying the price or discount
+				createTextAnimation(pe.x, pe.y, (price >= 0 ? "-" : "+"), price);
 			}
 		}
 		break;
+		
+		case EventManager.DISCOUNT_ACQUIRED:
+		{
+			ProductEntity pe = (ProductEntity)eventData;
+		
+			int amount = ProductInfo.amount(pe.type);
+			int discount = ProductInfo.discount(pe.type);
+			
+			discountPopUpsIndex = 0;
+			
+			if (amount == 3 && discount == 2) {				
+				discountPopUpsIndex = 0;
+				
+			} else if (amount == 5 && discount == 3) {
+				discountPopUpsIndex = 1;				
+			}
+			
+			for (int j = 0; j < discountPopUps.length; j++) {
+				
+				if (j == discountPopUpsIndex) {
+					discountPopUps[j].visible = true;
+					discountPopUps[j].x = shoppingCarts[0].x;
+					
+				} else {
+					discountPopUps[j].visible = false;
+				}
+			}
+			
+			discountTime = time.getTotalTimeInSeconds() + activity.getResources().getInteger(R.integer.l20_discount_duration);
+		}
+		break;
+		
+		
+		case EventManager.BUNNY_MOST_LEFT:
+		{
+			// Here, the bunny is at it's left most position. Spawn an obstacle only here			
+			// Spawn only if not crashed and the first time after collecting 6 products
+			if (!obstacleManager.crashed && shoppingCarts[0].products.size() >= 6) {
+				obstacleManager.spawnObstacle();
+			}
+		}
+		break;
+		
 		
 		case EventManager.OBSTACLE_AVOIDED:
 		{
@@ -552,13 +681,14 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			ShoppingCart sc = (ShoppingCart)eventData;			
 			shoppingCarts[nShoppingCarts++] = sc;
 			
-			Animator a = new Animator(sc, shoppingCarts[0].x * nShoppingCarts, shoppingCarts[0].y, 30);
+			Animator a = new LineAnimator(sc, shoppingCarts[0].x * nShoppingCarts, shoppingCarts[0].y, 30);
 			animators.put(a.id, a);
 			
 		}
 		break;
 		
 		case EventManager.OBSTACLE_CRASH: {
+			curScrollSpeed = defaultScrollSpeed;
 			soundManager.stopRunSound();
 			soundManager.playSound(SOUNDS.CRASH);
 			bunny.crash();					
@@ -603,6 +733,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			Animator a = animators.get(key);
 			if (a.re == product) {
 				animators.remove(key);
+				a.re = null;
 			}
 		}
 	}
@@ -665,9 +796,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		plusSprite.y = numberSprite.y;
 		plusSprite.visible = true;
 		numberSprite.visible = true;
-		Animator spriteAnim = new Animator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.1f);
-		spriteAnim.random(150);
-		Animator plusAnim = new Animator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);
+		LineAnimator spriteAnim = new LineAnimator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.5f);
+		spriteAnim.random(50);
+		Animator plusAnim = new LineAnimator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);
 		animators.put(numberSprite.id, spriteAnim);
 		animators.put(plusSprite.id, plusAnim);
 	}
