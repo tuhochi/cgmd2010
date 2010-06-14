@@ -5,12 +5,17 @@ import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * The Help-Activity of the Level 44
+ * The Help-Activity of Level 44 (MireRabbit)
  * 
- * @author Matthias
+ * @author Matthias Tretter
  *
  */
 public class HelpActivity extends Activity {
+	/**
+	 * Set up the HelpActivity view
+	 * 
+	 * @param savedInstanceState Unused
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
