@@ -20,7 +20,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 
 /**
- * Entry-Point for Level 44
+ * Level 44 (MireRabbit) level activity
+ * 
+ * This class provides the entry point for Level 44.
+ * It also takes care of detecting gestures and managing
+ * the life-cycle as well as forwarding input gestures
+ * and managing the in-game music playback.
+ * 
+ * @author Matthias Tretter
+ * @author Thomas Perl
  */
 
 public class LevelActivity extends Activity {
@@ -30,6 +38,11 @@ public class LevelActivity extends Activity {
 	private GestureDetector gestureDetector;
 
 	/**
+	 * Create a new Level 44 LevelActivity
+	 * 
+	 * This will create a new full-screen landscape window and
+	 * set up a GameScene inside it and finally start the game.
+	 * 
 	 * @see Activity.onCreate(Bundle b)
 	 */
 	@Override
@@ -87,7 +100,7 @@ public class LevelActivity extends Activity {
 	}
 
 	/**
-	 * Resume the scene
+	 * Called when Android wants us to resume the game
 	 */
 	@Override
 	protected void onResume() {
@@ -110,7 +123,7 @@ public class LevelActivity extends Activity {
 	}
 
 	/**
-	 * Pause the scene
+	 * Called when Android wants us to pause the game
 	 */
 	@Override
 	protected void onPause() {
@@ -125,7 +138,10 @@ public class LevelActivity extends Activity {
 	}
 
 	/**
-	 * is called when a touch event occurs
+	 * Process an incoming touchscreen event
+	 * 
+	 * @param event The touchscreen event
+	 * @return The result of the gesture detector for this event
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -133,7 +149,10 @@ public class LevelActivity extends Activity {
 	}
 
 	/**
-	 * is called when a trackball event occurs
+	 * Process an incoming trackball event
+	 * 
+	 * @param event The trackball motion event
+	 * @return This function always returns true
 	 */
 	@Override
 	public boolean onTrackballEvent(MotionEvent event) {
@@ -159,7 +178,9 @@ public class LevelActivity extends Activity {
 	}
 
 	/**
-	 * is called, when the instance-state is saved
+	 * Called when Android wants us to save our state
+	 * 
+	 * @param outState A bundle into which to save the state
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -170,7 +191,9 @@ public class LevelActivity extends Activity {
 	}
 
 	/**
-	 * is called, when the instance-state is restored
+	 * Called when Android wants us to restore our state
+	 * 
+	 * @param savedInstanceState A bundle from where to restore the state
 	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -182,7 +205,14 @@ public class LevelActivity extends Activity {
 	}
 
 	/**
-	 * is called, when a key is pressed
+	 * Process a key input event
+	 * 
+	 * If the pressed key is the back button, finish
+	 * the level right now and return the current score.
+	 * 
+	 * @param keyCode The keycode of the key
+	 * @param event The event that occurred
+	 * @return See Activity.onKeyDown
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
