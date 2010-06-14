@@ -25,7 +25,16 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 			GameMechanics.getSingleton().finishGame(); //bit dirty hack
 			return;
 		}
-		if( GameMechanics.getSingleton().getRoundNumber() >= 0 && GameMechanics.getSingleton().getRoundNumber() <= Definitions.MAX_ROUND_NUMBER ) {
+		if( GameMechanics.getSingleton().getRoundNumber() == 0) {
+			
+			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+4000 ){
+				GameWorld.getSingleton().initEnemies();
+				GameMechanics.getSingleton().setRoundStartedTime();
+				GameMechanics.getSingleton().nextRound();
+			}
+		}
+		else if( GameMechanics.getSingleton().getRoundNumber() <= Definitions.MAX_ROUND_NUMBER ) {
+			
 			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_ROUND_WAIT_TIME ){
 				GameWorld.getSingleton().initEnemies();
 				GameMechanics.getSingleton().setRoundStartedTime();

@@ -151,4 +151,7 @@ public abstract class Projectile extends GLObject{
 		return mIsExploding;
 	}
 	
+	public void remove(){
+		mReadyToRemove = true;
+	}
 }
