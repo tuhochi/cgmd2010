@@ -13,8 +13,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level17.math.Vector2;
 public interface World {
 	/**
 	 * Is called to update the world
+	 * @param wasPaused If the game was paused since the last update
 	 */
-	public void update();
+	public void update(boolean wasPaused);
 	
 	/**
 	 * Is called every frame to render the world
