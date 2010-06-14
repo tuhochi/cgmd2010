@@ -4,8 +4,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/**
+ * Tower freezing enemies
+ *@see Tower
+ *@see FreezeProjectile
+ */
 public class FreezeTower extends Tower {
 
+	/** Constructor of the FreezeTower, initializes the values like adding needed texture/soundsample, calls the method for initalizing the projectiles */
 	public FreezeTower( ){
 		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 *  Definitions.FREEZE_TOWER_RADIUS );
 		mColor[0] = 1.0f;
@@ -30,7 +36,7 @@ public class FreezeTower extends Tower {
 		initProjectiles();
 	}
 		
-		
+	/** initializes an amount of freeze projectiles */	
 	public void initProjectiles(){
 		if( mProjectiles == null){
 			mProjectiles = new FreezeProjectile[ Definitions.FREEZE_PROJECTILE_POOL ];

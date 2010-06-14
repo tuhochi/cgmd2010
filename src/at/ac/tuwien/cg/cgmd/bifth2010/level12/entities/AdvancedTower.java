@@ -5,8 +5,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/**
+ * Better Tower 
+ *@see Tower
+ *@see AdvancedProjectile
+ */
 public class AdvancedTower extends Tower {
 
+	/** Constructor of the AdvancedTower, initializes the values like adding needed texture/soundsample, calls the method for initalizing the projectiles */
 	public AdvancedTower( ){
 		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 *  Definitions.ADVANCED_TOWER_RADIUS );
 		mColor[0] = 1.0f;
@@ -31,7 +37,7 @@ public class AdvancedTower extends Tower {
 		initProjectiles();
 	}
 	
-	
+	/** initializes an amount of advanced projectiles */	
 	public void initProjectiles(){
 		if( mProjectiles == null){
 			mProjectiles = new AdvancedProjectile[ Definitions.ADVANCED_PROJECTILE_POOL ];

@@ -4,9 +4,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/**
+ * projectile of the freeze tower
+ * @see FreezeTower
+ * @see Projectile
+ */
 public class FreezeProjectile extends Projectile {
 
-			
+			/** constructor setting values and adding needed textures */
 			public FreezeProjectile(){
 				mSpeed = Definitions.FREEZE_PROJECTILE_SPEED;
 				mDmg = Definitions.FREEZE_PROJECTILE_DAMAGE;

@@ -4,8 +4,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/** 
+ * strongest tower, no slowing effect
+ * @see HyperProjectile
+ * @see Tower
+ */
 public class HyperTower extends Tower {
 
+	/** Constructor of the HyperTower, initializes the values like adding needed texture/soundsample, calls the method for initalizing the projectiles */
 	public HyperTower( ){
 		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 * Definitions.HYPER_TOWER_RADIUS );
 		mColor[0] = 1.0f;
@@ -30,7 +36,7 @@ public class HyperTower extends Tower {
 		initProjectiles();
 	}
 	
-	
+	/** initializes an amount of hyper projectiles */	
 	public void initProjectiles(){
 		if( mProjectiles == null){
 			mProjectiles = new HyperProjectile[ Definitions.HYPER_PROJECTILE_POOL ];

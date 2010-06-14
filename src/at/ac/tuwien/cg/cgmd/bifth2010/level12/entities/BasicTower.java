@@ -5,8 +5,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/**
+ * Basic Tower
+ *@see Tower
+ *@see BasicProjectile
+ */
 public class BasicTower extends Tower {
 	
+	/** Constructor of the BasicTower, initializes the values like adding needed texture/soundsample, calls the method for initalizing the projectiles */
 	public BasicTower( ){
 		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 *  Definitions.BASIC_TOWER_RADIUS );
 		mColor[0] = 1.0f;
@@ -31,7 +37,7 @@ public class BasicTower extends Tower {
 		initProjectiles();	
 	}
 	
-	
+	/** initializes an amount of basic projectiles */	
 	public void initProjectiles(){
 		if( mProjectiles == null){
 			mProjectiles = new BasicProjectile[ Definitions.BASIC_PROJECTILE_POOL ];

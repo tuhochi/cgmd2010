@@ -14,35 +14,48 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 import java.lang.System;
 
 
-
+/**
+ * Tower skelet, responsible for drawing the tower and shooting the projectiles.
+ * @see GLObject
+ */
 public abstract class Tower extends GLObject {
-	protected short mRadius = -1;
-	protected int mShootingInterval = 3000;//ms
-	protected long mTimeLastProjectileShot = -1;
+	protected short mRadius = -1; /** radius of the quad to draw */
+	protected int mShootingInterval = 3000; /** intervall spawning projectiles in ms */
+	protected long mTimeLastProjectileShot = -1; 
+	protected boolean mHasShot = false;
 	protected Projectile[] mProjectiles = null;
 	protected int mScreenWidth = 800;
-	protected int mSound = R.raw.l12_basic_tower_shooting_sound;
-	protected int mTexture = -1;
-	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1;
+	protected int mSound = R.raw.l12_basic_tower_shooting_sound; /** Soundsample to be played when the tower shoots */
+	protected int mTexture = -1; /** texture to draw ib tge quad */
+	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1; /** texture to draw when the tower is destroyed */
 	protected int mDyingTextur2 = R.drawable.l12_enemie_dying2;
 	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
 	protected int mDyingTextur4 = R.drawable.l12_enemie_dying4;
-	protected int mShootingTextur1 = R.drawable.l12_bunny1_shooting1;
+	protected int mShootingTextur1 = R.drawable.l12_bunny1_shooting1;/** texture to draw when the tower shoots a projectile */
 	protected int mShootingTextur2 = R.drawable.l12_bunny1_shooting2;
 	protected int mShootingTextur3 = R.drawable.l12_bunny1_shooting3;
-	protected long mStartShootingTime = -1;
-	protected short mPrice = Definitions.BASIC_TOWER_IRON_NEED;
-	protected long mStartDyingTime = -1;
-	protected boolean mReadyToRemove = false;
+	protected long mStartShootingTime = -1; /** time projectile is created */
+	protected short mPrice = Definitions.BASIC_TOWER_IRON_NEED; /** price of the tower */
+	protected long mStartDyingTime = -1; /** starting time for dying animation texture cycle */
+	protected boolean mReadyToRemove = false; /** dying animation has finished, tower ready to remove from the gameworld */
 	
+	/**
+	 * Sets the tower to a specified place on the gamefield and calls the method for VBO initialization
+	 * @param xCentr x-coordinate centre of one field quad of the gamefield
+	 * @param yCentr y-coordinate centre of one field quad of the gamefield
+	 */
 	public void setXY( int xCentr, int yCentr ){
 		mX = xCentr;
 		mY = yCentr;
 		this.setActiveState(true);
 		mTimeLastProjectileShot = System.currentTimeMillis();
+		
 		initVBOs();
 	}
 	
+	/**
+	 * Creates the OpenGL VBOs
+	 */
 	public void initVBOs(){
 		SoundHandler.getSingleton().addResource(mSound);
 		float[] vertices = {
@@ -90,19 +103,25 @@ public abstract class Tower extends GLObject {
 		mTextureBuffer.position(0);
 	}
 	
-	
+	/**
+	 * sets the length of the gamefield 
+	 * @param width length of the gamefield
+	 */
 	public void setViewPortLength(int width) {
 		mScreenWidth = width;
 	}
 	
-	
+	/**
+	 * checks if the tower is ready to shoot, if so it spawns a projectile. draws the tower depending on the tower state (shooting, being destroyed)
+	 * removes projectiles > screenwidth
+	 */
 	@Override
 	public void draw( GL10 gl ){	
 		//pause
 		if( GameMechanics.getSingleton().running() == false) mTimeLastProjectileShot = System.currentTimeMillis();
 		if( this.getActiveState() == false ) return;
 		long mDT =(System.currentTimeMillis() - mTimeLastProjectileShot );
-		if( mDT >= mShootingInterval && mStartDyingTime == -1 ){
+		if( mDT >= mShootingInterval && mStartDyingTime == -1 && !mHasShot ){
 			if( mProjectiles != null ){
 				boolean found = false;
 				for ( int  i = 0; i < mProjectiles.length && !found; i++){
@@ -113,6 +132,7 @@ public abstract class Tower extends GLObject {
 						mTimeLastProjectileShot = System.currentTimeMillis();
 						SoundHandler.getSingleton().play(mSound);
 						mStartShootingTime = System.currentTimeMillis();
+						mHasShot = true;
 						break;
 					}
 				}
@@ -155,11 +175,15 @@ public abstract class Tower extends GLObject {
 		super.draw(gl);
 	}
 	
+	/**
+	 *  called from the collision detection, collides projectiles >= enemy position with the given enemy
+	 * @param carrier the enemy to collide with
+	 */
 	public void collideX( MoneyCarrier carrier ){
 		for( int i = 0; i < mProjectiles.length; i++){
 			if( mProjectiles[i].getActiveState() && (mProjectiles[i].getX() >= carrier.getX()) && mProjectiles[i].isExploding() == false ){
 				carrier.hit( mProjectiles[i].getDamage(), mProjectiles[i].getSlow() );
-				mProjectiles[i].remove();//die();
+				mProjectiles[i].reset();//die();
 				mReadyToRemove = true;
 				
 			}
@@ -167,25 +191,44 @@ public abstract class Tower extends GLObject {
 	}
 	
 	
+	/**
+	 * resets the tower to initial state, which means it is not drawn and spawns no projectiles
+	 */
 	public void reset(){
 		this.setActiveState(false);
 		mReadyToRemove = false;
+		mHasShot = false;
+		this.mTimeLastProjectileShot = System.currentTimeMillis();
 		mStartDyingTime = -1;
 	}
 	
-
+	/**
+	 * delivers the highest x-coordinate of the tower quad
+	 * @return int the x-coordinate
+	 */
 	public int getFrontX(){
 		return mX + mRadius;
 	}
 	
+	/**
+	 * delivers the lowest x-coordinate of the tower quad
+	 * @return int the x-coordinate
+	 */
 	public int getBackX(){
 		return mX - mRadius;
 	}
 	
+	/**
+	 * delivers the price of the tower
+	 * @return short the price
+	 */
 	public short getPrice(){
 		return mPrice;
 	}
 	
+	/**
+	 * if an enemie is inside the tower quad the tower dies (starts the dying animation texture cycle)
+	 */
 	public void die(){
 		if( mStartDyingTime == -1 ){
 			mStartDyingTime = System.currentTimeMillis();
@@ -193,6 +236,10 @@ public abstract class Tower extends GLObject {
 		}
 	}
 	
+	/**
+	 * is the tower ready to remove? either through finished shooting or through being destroyed from an enemy
+	 * @return boolean read to remove or not
+	 */
 	public boolean toRemove() {
 		return mReadyToRemove;
 	}

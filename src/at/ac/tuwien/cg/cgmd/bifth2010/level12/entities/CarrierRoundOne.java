@@ -6,13 +6,16 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/**
+ * one enemy
+ * @see MoneyCarrier
+ */
 public class CarrierRoundOne extends MoneyCarrier {
 	
+	/**constuctor setting values and adding needed textures */
 	public CarrierRoundOne(){
 		mHp = Definitions.FIRST_ROUND_ENEMIE_HP;
-		mStrength = Definitions.FIRST_ROUND_ENEMIE_STRENGTH;
 		mRadius = (short)Math.floor((float)Definitions.FIELD_SEGMENT_LENGTH / 100  * Definitions.FIRST_ROUND_ENEMIE_RADIUS) ;
-		mType = 1;
 		mMoney = Definitions.FIRST_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.FIRST_ROUND_ENEMIE_SPEED;
 		mColor[0] = 1.0f;
@@ -26,7 +29,6 @@ public class CarrierRoundOne extends MoneyCarrier {
 		TextureManager.getSingletonObject().add(mDyingTextur3);
 		TextureManager.getSingletonObject().add(mDyingTextur4);
 		mSound = R.raw.l12_enemie1_dying;
-		mType = 1;
 		mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
 	}
 

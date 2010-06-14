@@ -8,14 +8,17 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.GLObject;
 
-
+/**
+ * Responsible for the Gamefield
+ * @see GLObject
+ */
 public class Gamefield extends GLObject{
-	private Field[] mFields = null;
-	private int mXSegCount = -1;
-	private int mYSegCount = -1;
-	private float mSegLength = 1;
-	private float[] mSegCol1  = {1.0f, 1.0f, 1.0f };
-	private float[] mSegCol2  = {1.0f, 1.0f, 1.0f };
+	private Field[] mFields = null; /** array holding the fields */
+	private int mXSegCount = -1; /** amount of fields in the x direction */
+	private int mYSegCount = -1; /** amount of fields in the y direction */
+	private float mSegLength = 1; /** lenght of a fields */
+	private float[] mSegCol1  = {1.0f, 1.0f, 1.0f }; /** color of one segment */
+	private float[] mSegCol2  = {1.0f, 1.0f, 1.0f }; /** color of another segment */
 	int[] res;
 	
 	public void initVBOs(){
@@ -96,12 +99,17 @@ public class Gamefield extends GLObject{
 		}
 	}
 	
+	/**
+	 * (re)creates the VBOs
+	 */
 	public void onResume(){
 		for( int i = 0; i < mFields.length; i++) mFields[i].initVBOs();
 		this.initVBOs();
 	}
 	
-	
+	/**
+	 * draws the gamefield 
+	 */
 	public void draw( GL10 gl){
 		for( int i = 0; i < mFields.length; i++){
 			mFields[i].draw(gl);
@@ -121,18 +129,33 @@ public class Gamefield extends GLObject{
 		gl.glLoadIdentity();
 	}
 
-
+	/** 
+	 * corrects a given point to the center of the field in which the point lies
+	 * @param xpos x-coordinate of the point
+	 * @param ypos y-coordinate of the point
+	 * @return int[] the x/y coordinate of the center
+	 */
 	public int[] correctXYpos(float xpos, float ypos) {
 		int f = getFieldCount( xpos, ypos );
 		return mFields[ f ].getMiddle();
 	}
 
-
+	/** 
+	 * sets the field occupied in which the given x/y coordinate lies
+	 * @param xpos x-coordinate of the point of the field to set to occupied
+	 * @param ypos y-coordinate of the point of the field to set to occupied
+	 */
 	public void setFieldOccupied(float xpos, float ypos) {
 		int f = getFieldCount( xpos, ypos );
 		mFields[ f ].setOccupied(true);
 	}
 	
+	/**
+	 * delivers the number of the field in the array of a given coordinate values
+	 * @param xpos 
+	 * @param ypos
+	 * @return int the fieldcount
+	 */
 	public int getFieldCount( float xpos, float ypos ){
 		int xf = (int)(Math.floor(xpos / mSegLength));
 		int yf = (int)(Math.floor(ypos / mSegLength)) * mXSegCount;
@@ -141,7 +164,12 @@ public class Gamefield extends GLObject{
 		return (xf+yf);
 	}
 
-
+	/**
+	 * returns if the field in which coordinates lies is occupied or not
+	 * @param xpos
+	 * @param ypos
+	 * @return boolean occupied or not
+	 */
 	public boolean getOccupied(int xpos, int ypos) {
 		int f = getFieldCount( xpos, ypos );
 		if( f >= mFields.length) return true;
@@ -149,6 +177,11 @@ public class Gamefield extends GLObject{
 	}
 
 
+	/**
+	 * sets the field in which the given coordinates lie to unoccupied
+	 * @param xpos
+	 * @param ypos
+	 */
 	public void setFieldUnOccupied(int xpos, int ypos) {
 		int f = getFieldCount( xpos, ypos );
 		if( f >= mFields.length) return;

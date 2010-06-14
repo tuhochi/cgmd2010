@@ -5,34 +5,45 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
-import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/** 
+ * skeletal for the projectiles, responsible for drawing, moving and exploding
+ * @see GLObject
+ */
 public abstract class Projectile extends GLObject{
-	
-	private long mLastFrametime = -1;
-	private int mXTranslate = 0;
-	protected short mRadius = 4;
-	protected short mSpeed = 5;
-	protected short mDmg = 10;
-	protected short mSlowing = 0;
-	protected int mTexture = -1;
-	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1;
+	protected short mRadius = 4; /** radius of the quad to draw */
+	private long mLastFrametime = -1; /** time last frame got drawed */
+	private int mXTranslate = 0; /** position to move the projectile this frame */
+	protected short mSpeed = 5; /** speed on which the projectile moves */
+	protected short mDmg = 10; /** the damage done by the projectile */
+	protected short mSlowing = 0; /** the slowing done by the projectile */
+	protected int mTexture = -1; /** normale projectile texture */
+	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1; /** exploding texture for the dying animation cycle */
 	protected int mDyingTextur2 = R.drawable.l12_enemie_dying2;
 	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
 	protected int mDyingTextur4 = R.drawable.l12_enemie_dying4;
-	protected long mStartDyingTime = -1;
-	protected boolean mReadyToRemove = false;
-	protected boolean mIsExploding = false;
+	protected long mStartDyingTime = -1; /** time when the dying animation texture cycle starts */
+	protected boolean mReadyToRemove = false; /** is the bullet ready to remove or not */
+	protected boolean mIsExploding = false; /** is currently exploding or not */
 	
+	/**
+	 * delivers the speed the projectile travels on
+	 * @param float the speed
+	 */
 	public float getSpeed(){
 		return mSpeed;
 	}
 	
+	/**
+	 * the initial on which the projectile is spawned and initializes the variables and calls the method for creating the opengl VBOs
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 */
 	public void setXY( int x, int y){
 		mX = x;
 		mY = y;
@@ -42,7 +53,7 @@ public abstract class Projectile extends GLObject{
 		initVBOs();
 	}
 	
-	
+	/** creates the opengl VBOs	 */
 	public void initVBOs(){	
 		mLastFrametime = System.currentTimeMillis();
 		float[] vertices = {
@@ -87,6 +98,7 @@ public abstract class Projectile extends GLObject{
 		mTextureBuffer.position(0);
 	}
 	
+	/** moves the projectile further and draws it, or draws the dying animation texture cycle. */
 	@Override
 	public void draw( GL10 gl ){
 		long ms = System.currentTimeMillis();
@@ -118,39 +130,57 @@ public abstract class Projectile extends GLObject{
 		gl.glPopMatrix();	
 	}
 	
+	/** 
+	 * returns the actual furthes right x-coordinate of the quad 
+	 *  @return int the x-coordinate
+	 */
 	@Override
 	public int getX(){
 		return mXTranslate + mX + mRadius; //returns the bullet real position because it gets translated and not moved
 	}
 
-
+	/** 
+	 * the damage done by the projectile on the impact
+	 * @return short the projectiles damage
+	 */
 	public short getDamage() {
 		return mDmg;
 	}
 	
+	/**
+	 * the slowing done by the projectile on the impact
+	 * @return short the slowing
+	 */
 	public short getSlow(){
 		return mSlowing;
 	}
 	
+	/** reseting the projectile and uninitializes */ 
 	public void reset(){
 		mXTranslate = 0;
+		this.mStartDyingTime = -1;
+		mReadyToRemove = false;
 		this.setActiveState(false);
 	}
 	
+	/** starts the dying animation */
 	public void die(){
 		if( mStartDyingTime == -1 ){
 			mStartDyingTime = System.currentTimeMillis();
 		}
 	}
 
+	/** projectile is finished exploding and ready to remove */
 	public boolean toRemove() {
 		return mReadyToRemove;
 	}
 
+	/** projectile is currently in the exploding animation cycle */
 	public boolean isExploding() {
 		return mIsExploding;
 	}
 	
+	/** the projectile has finished exploding */
 	public void remove(){
 		mReadyToRemove = true;
 	}
