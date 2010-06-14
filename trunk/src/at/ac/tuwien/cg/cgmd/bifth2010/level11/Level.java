@@ -82,6 +82,7 @@ public class Level extends Thread {
 		this.maxPlayTime = 120;
 		timing = new Timing();
 		timing.start();
+		timeOfLastAddingPed = this.timing.getCurrTime();
 		timing.pause();
 		this.generatePedestrians(10, 40);
 		
@@ -157,9 +158,8 @@ public class Level extends Thread {
 	 */
 	public void run() {
 		this._isStarted = true;
-		this.timing.resume();
-		this.timing.update();
-		timeOfLastAddingPed = this.timing.getCurrTime();
+		//this.timing.resume();
+		//this.timing.update();
 		while (_isActive) {
 			while (_isRunning) {
 				while (isPaused) {
@@ -193,7 +193,8 @@ public class Level extends Thread {
 	 * @param pause
 	 */
 	public void resume_level() {
-		//this.timing.resume();
+		if(this.isPaused)
+			this.timing.resume();
 		this.isPaused = false;	
 	}
 	
@@ -212,8 +213,8 @@ public class Level extends Thread {
 		for (int i=0; i < pedestrianList.size(); i++) {
 			Pedestrian pedestrian = pedestrianList.get(i);
 			//check if it is in bounding box
-			System.out.println("start: "+x1+"; "+y1+"; end: "+x2+"; "+y2);
-			System.out.println("ped: "+pedestrian.getPosition().toString());
+			//System.out.println("start: "+x1+"; "+y1+"; end: "+x2+"; "+y2);
+			//System.out.println("ped: "+pedestrian.getPosition().toString());
 			if(pedestrian.getPosition().x > Math.min(x1, x2)-pedestrian.getBounceRadius()&&
 			   pedestrian.getPosition().x < Math.max(x1, x2)+pedestrian.getBounceRadius()&&
 			   pedestrian.getPosition().y > Math.min(y1, y2)-pedestrian.getBounceRadius()&&
@@ -225,7 +226,7 @@ public class Level extends Thread {
 				//				Math.sqrt(a*a+b*b));
 				//System.out.println("distance: "+dist);
 				//if(pedestrian.getBounceRadius() > dist){
-					System.out.println("hit pedestrian");
+					//System.out.println("hit pedestrian");
 					pedestrian.bounce(x1, y1, x2, y2, time);
 				//}
 			}
