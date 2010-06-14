@@ -50,6 +50,8 @@ public class GameWorld extends Thread {
 	private FloatBuffer vertexBuffer[];
 	/** VBO for graph normals*/
 	private FloatBuffer normalBuffer[];
+	/** VBO for graph texcoords*/
+	private FloatBuffer texcoordsBuffer[];
 	
 	/** VBO for line indicator vertices*/
 	private FloatBuffer vertexBufferIndicatorLine;
@@ -86,6 +88,8 @@ public class GameWorld extends Thread {
 	private List<ParticleSystem> particleSystems = new ArrayList<ParticleSystem>();
 	private RenderableQuad quad;
 	private int texCoin; //store texture id
+	private int texSteel; //store texture id
+	private int texTable; //store texture id
 	private Map<Integer,ArrayList<ParticleSystem>> graphToParticleSystems;
 	
 	//keep track of the level state
@@ -93,6 +97,9 @@ public class GameWorld extends Thread {
 	boolean quitThread;	
 	boolean soundEnabled = true;
 
+	//cylinder for stockmarket texture
+	FFModel cylinder;
+	
 	//speed of level
 	float progressScale = 0.5f;
 
@@ -262,8 +269,8 @@ public class GameWorld extends Thread {
         //init sounds
         initSounds();        
     	soundEnabled = _soundEnabled;
-			
-
+    	
+    	cylinder = new FFModel(1.0f,1.0f,2);
        
     }	
     
@@ -426,7 +433,9 @@ public class GameWorld extends Thread {
 	 */
 	public void LoadTextures(GL10 gl)
 	{	
-		texCoin = LoadOneTextures(gl, R.drawable.l30_coin);	
+		texCoin = LoadOneTextures(gl, R.drawable.l30_coin);
+		texSteel = LoadOneTextures(gl, R.drawable.l30_steel);
+		texTable = LoadOneTextures(gl, R.drawable.l30_table);	
 	}
 	
 	/*
@@ -441,9 +450,11 @@ public class GameWorld extends Thread {
 		//create arrays for vbo data
 		int verticesPerObject = elementsPerObject*3;		
 		float normals[][] = new float[numGraphs][numElements*verticesPerObject];
-		float vertices[][] = new float[numGraphs][numElements*verticesPerObject];		
+		float vertices[][] = new float[numGraphs][numElements*verticesPerObject];
+		float texcoords[][] = new float[numGraphs][numElements*elementsPerObject*2];
 		vertexBuffer = new FloatBuffer[numElements];
 		normalBuffer = new FloatBuffer[numElements];
+		texcoordsBuffer = new FloatBuffer[numElements];		
 		
 		//put stockmarket into vbo
 		for (int i=0; i<numGraphs; i++)
@@ -487,7 +498,8 @@ public class GameWorld extends Thread {
 			
 			
 		
-			//calc normals
+			//calc normals&texcoords
+			float texcoordV = 0.0f;
 			for (int j=0;j<numElements; j++)
 			{
 				int cnt = 0;
@@ -497,6 +509,8 @@ public class GameWorld extends Thread {
 				Vector3 v2 = new Vector3(0.0f, stockMarket[i][j+1], pointDistance);
 				
 				Vector3 direction = Vector3.diff(v2,v1);
+				float texcoordVdelta = direction.length();
+				float texcoordVnext = texcoordV+texcoordVdelta;
 				direction.normalize();
 				
 				Vector3 right = new Vector3(1.0f, 0.0f, 0.0f);
@@ -504,12 +518,36 @@ public class GameWorld extends Thread {
 				Vector3 normal = Vector3.crossProduct(direction, right);
 				normal.normalize();
 				
-				for (int k=0; k<6; k++)
+				for (int k=0; k<elementsPerObject; k++)
 				{
 					normals[i][offset+(cnt++)] = normal.x; //x
 					normals[i][offset+(cnt++)] = normal.y; //y
 					normals[i][offset+(cnt++)] = normal.z; //z
 				}
+				
+				int offsetTextures = j*elementsPerObject*2;
+				cnt = 0;
+				//triangle 1
+				texcoords[i][offsetTextures+(cnt++)] = 0.0f;  //u
+				texcoords[i][offsetTextures+(cnt++)] = texcoordV;  //v
+				
+				texcoords[i][offsetTextures+(cnt++)] = 1.0f;  //u
+				texcoords[i][offsetTextures+(cnt++)] = texcoordV;  //v	
+				
+				texcoords[i][offsetTextures+(cnt++)] = 1.0f;  //u
+				texcoords[i][offsetTextures+(cnt++)] = texcoordVnext;  //v	
+				
+				//triangle 2
+				texcoords[i][offsetTextures+(cnt++)] = 1.0f;  //u
+				texcoords[i][offsetTextures+(cnt++)] = texcoordVnext;  //v
+				
+				texcoords[i][offsetTextures+(cnt++)] = 0.0f;  //u
+				texcoords[i][offsetTextures+(cnt++)] = texcoordVnext;  //v
+				
+				texcoords[i][offsetTextures+(cnt++)] = 0.0f;  //u
+				texcoords[i][offsetTextures+(cnt++)] = texcoordV;  //v				
+
+				texcoordV = texcoordVnext;
 			}
 		
 		
@@ -525,6 +563,12 @@ public class GameWorld extends Thread {
 			normalBuffer[i] = byteBuf.asFloatBuffer();
 			normalBuffer[i].put(normals[i]);
 			normalBuffer[i].position(0);
+			
+			byteBuf = ByteBuffer.allocateDirect(texcoords[i].length*4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			texcoordsBuffer[i] = byteBuf.asFloatBuffer();
+			texcoordsBuffer[i].put(texcoords[i]);
+			texcoordsBuffer[i].position(0);			
 		
 		}
 		
@@ -727,13 +771,29 @@ public class GameWorld extends Thread {
 		gl.glFrontFace(GL10.GL_CCW);
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW); 	
+		
+		float ambient = 0.2f;
 
-		float[] red = {1.0f,0.0f,0.0f, 1.0f};
-		float[] green = {0.0f,1.0f,0.0f, 1.0f};
-		float[] blue = {0.0f,0.0f,1.0f, 1.0f};
-		float[] orange = {1.0f,0.5f,0.0f, 1.0f};		
-		float[] black = {0.0f,0.0f,0.0f, 1.0f};
+		float[] red = {1.0f,ambient,ambient, 1.0f};
+		float[] green = {ambient,1.0f,ambient, 1.0f};
+		float[] blue = {ambient,ambient,1.0f, 1.0f};
+		float[] orange = {1.0f,0.5f,ambient, 1.0f};		
+		float[] black = {ambient,ambient,ambient, 1.0f};
 		float[] grey = {0.1f,0.1f,0.1f, 1.0f};
+		
+    	gl.glEnable(GL10.GL_TEXTURE_2D);
+    	gl.glBindTexture(GL10.GL_TEXTURE_2D, texTable);  
+    	
+    	gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    	
+    	gl.glPushMatrix();
+		//draw the rotating background
+    	
+    	gl.glRotatef((float) Math.PI, 0.0f, 1.0f, 0.0f);
+		//cylinder.draw(gl);
+		
+		gl.glPopMatrix();
+		gl.glDisable(GL10.GL_TEXTURE_2D);
 
 		for (int i=0; i<numGraphs; i++)
 		{
@@ -753,9 +813,11 @@ public class GameWorld extends Thread {
 			}
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, grey,0);
 		
+	    	gl.glEnable(GL10.GL_TEXTURE_2D);
+	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, texSteel);  
+	    	
 			//calc offset for graph position		 
-			float graphXcoord = CalcGraphXCoord(i);
-			
+			float graphXcoord = CalcGraphXCoord(i);			
 			
 			gl.glPushMatrix();			
 			gl.glTranslatef(graphXcoord, 0.0f, -progress);
@@ -763,12 +825,15 @@ public class GameWorld extends Thread {
 			//Point to our buffers
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer[i]);			
 			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBuffer[i]);
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texcoordsBuffer[i]);
 			
 			//Draw the vertices as triangles, based on the Index Buffer information
 			gl.glDrawArrays(GL10.GL_TRIANGLES, 0, numElements*elementsPerObject);
 			
 			gl.glPopMatrix();			
 			gl.glPushMatrix();
+			
+			gl.glDisable(GL10.GL_TEXTURE_2D);
 
 			//set material for price indicators
 			switch (i%4)
@@ -786,7 +851,8 @@ public class GameWorld extends Thread {
 			gl.glTranslatef(graphXcoord  + graphWidth/2.0f,price, 0.0f);
 			
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferIndicatorLine);			
-			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicatorLine);			
+			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicatorLine);	
+			
 			gl.glDrawArrays(GL10.GL_TRIANGLES, 0, 6);
 			
 			//draw line of current price or transaction amount
