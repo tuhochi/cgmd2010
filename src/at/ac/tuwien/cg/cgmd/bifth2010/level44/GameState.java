@@ -66,8 +66,10 @@ public class GameState implements Serializable {
 	 *            the crosshairs, which position is saved
 	 */
 	public void saveCrosshairs(Crosshairs crosshairs) {
-		crosshairsX = crosshairs.getX();
-		crosshairsY = crosshairs.getY();
+		if (crosshairs != null) {
+			crosshairsX = crosshairs.getX();
+			crosshairsY = crosshairs.getY();
+		}
 	}
 
 	/**
@@ -90,11 +92,13 @@ public class GameState implements Serializable {
 	 *            the rabbit, which values are saved
 	 */
 	public void saveRabbit(PhysicalRabbit rabbit) {
-		RabbitSprite sprite = rabbit.getSprite();
-		rabbitX = sprite.getX();
-		rabbitY = sprite.getY();
-		CoinBucketSprite coinBucket = sprite.getCoinBucket();
-		coinCount = coinBucket.getCoinCount();
+		if (rabbit != null) {
+			RabbitSprite sprite = rabbit.getSprite();
+			rabbitX = sprite.getX();
+			rabbitY = sprite.getY();
+			CoinBucketSprite coinBucket = sprite.getCoinBucket();
+			coinCount = coinBucket.getCoinCount();
+		}
 	}
 
 	/**

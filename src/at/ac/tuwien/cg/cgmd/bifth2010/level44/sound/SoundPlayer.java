@@ -16,8 +16,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class SoundPlayer {
 	/** The Sound Effects we support */
-	public enum SoundEffect { LOAD, SHOT, FLAP, DROP, BEEP, END, DAMN, LAUGH, WTF,
-		DAMN0, DAMN1, LAUGH0, LAUGH1, WTF0, WTF1 };
+	public enum SoundEffect {
+		LOAD, SHOT, FLAP, DROP, BEEP, END, DAMN, LAUGH, WTF, DAMN0, DAMN1, LAUGH0, LAUGH1, WTF0, WTF1
+	};
 
 	/** SoundPool for playing sounds */
 	private SoundPool soundPool;
@@ -83,6 +84,9 @@ public class SoundPlayer {
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
 		sounds = new HashMap<SoundEffect, Integer>();
 
+		mediaPlayer = MediaPlayer.create(context, R.raw.l44_music);
+		mediaPlayer.setLooping(true);
+		
 		// add all supported sounds
 		reloadSounds();
 
@@ -101,9 +105,9 @@ public class SoundPlayer {
 			soundPool.release();
 			soundPool = null;
 		}
-                if (mediaPlayer != null) {
-                        mediaPlayer.release();
-                }
+		if (mediaPlayer != null) {
+			mediaPlayer.release();
+		}
 
 		instance = null;
 	}
@@ -112,9 +116,6 @@ public class SoundPlayer {
 	 * reload all sound samples
 	 */
 	public void reloadSounds() {
-		mediaPlayer = MediaPlayer.create(context, R.raw.l44_music);
-		mediaPlayer.setLooping(true);
-
 		sounds.put(SoundEffect.LOAD, soundPool.load(context, R.raw.l44_load, 1));
 		sounds.put(SoundEffect.SHOT, soundPool.load(context, R.raw.l44_shot, 1));
 		sounds.put(SoundEffect.FLAP, soundPool.load(context, R.raw.l44_flap, 1));
@@ -136,23 +137,22 @@ public class SoundPlayer {
 				mediaPlayer.start();
 			} catch (IllegalStateException ise) {
 				/**
-				 * Ignore for now - shouldn't happen, and the
-				 * music isn't essential for the gameplay.
+				 * Ignore for now - shouldn't happen, and the music isn't
+				 * essential for the gameplay.
 				 **/
 			}
 		}
 	}
-	
+
 	public void stopMusic() {
 		if (musicOn && mediaPlayer != null) {
 			try {
 				mediaPlayer.stop();
 			} catch (IllegalStateException ise) {
 				/**
-				 * Ignore for now - shouldn't happen, and the
-				 * music isn't essential for the gameplay. Also,
-				 * it most likely means that the music isn't
-				 * playing, so the "stopMusic()" call already
+				 * Ignore for now - shouldn't happen, and the music isn't
+				 * essential for the gameplay. Also, it most likely means that
+				 * the music isn't playing, so the "stopMusic()" call already
 				 * did it's thing. And that's why we are happy!
 				 **/
 			}
@@ -176,22 +176,22 @@ public class SoundPlayer {
 				} else {
 					sound = SoundEffect.DAMN1;
 				}
-                                currentValue++;
+				currentValue++;
 			} else if (sound == SoundEffect.LAUGH) {
 				if (currentValue % 2 == 0) {
 					sound = SoundEffect.LAUGH0;
 				} else {
 					sound = SoundEffect.LAUGH1;
 				}
-                                currentValue++;
+				currentValue++;
 			} else if (sound == SoundEffect.WTF) {
 				if (currentValue % 2 == 0) {
 					sound = SoundEffect.WTF0;
 				} else {
 					sound = SoundEffect.WTF1;
 				}
-                                currentValue++;
-                        }
+				currentValue++;
+			}
 
 			float leftVolume = volume, rightVolume = volume;
 

@@ -8,6 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.Crosshairs;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalObject;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
+import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer.SoundEffect;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.IntroBackground;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 
@@ -34,7 +35,10 @@ public class GameThread extends Thread {
 	private boolean quit;
 	/** the current input-gesture to perform */
 	private InputGesture gesture = null;
+	/** timestamp of last flap sound */
 	private long lastFlapSound = 0;
+	/** indicates whether the rabbit has just landed or not */
+	protected boolean justLanded = false;
 
 	/**
 	 * Creates the GameScene
@@ -87,7 +91,6 @@ public class GameThread extends Thread {
 						// continue with single-tap
 						if (scene.getNextInputGesture() instanceof SingleTap) {
 							scene.setCurrentState(GameScene.CurrentState.RUNNING);
-							SoundPlayer.getInstance().startMusic();
 
 							// start time for physical movement is resetted
 							rabbit.resetStartTime(0);
@@ -124,10 +127,17 @@ public class GameThread extends Thread {
 						// reset start time if rabbit sits at the bottom of the
 						// screen
 						if (rabbit.hasLanded()) {
+							if (!justLanded ) {
+								SoundPlayer.getInstance().play(SoundEffect.WTF, 0.5f);
+								justLanded = true;
+							}
+							
 							rabbit.resetStartTime(0);
 							rabbit.setVelocity(0.f);
+						} else {
+							justLanded = false;
 						}
-
+							
 						/* stars animation */
 						rabbit.getSprite().tick();
 
