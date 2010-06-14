@@ -99,7 +99,7 @@ public class LevelActivity extends Activity {
         llparams.setMargins(10, 10, 10, 10);
         LinearLayout.LayoutParams llparams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         llparams3.weight = 0;
-        llparams3.setMargins(10, 30, 10, 10);
+        llparams3.setMargins(10, 25, 10, 10);
         llayout.addView(mHealthIcon, llparams3);
         llayout.addView(mHealthText, llparams);
         LinearLayout.LayoutParams llparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
