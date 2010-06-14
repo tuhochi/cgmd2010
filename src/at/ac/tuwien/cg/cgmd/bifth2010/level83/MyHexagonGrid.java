@@ -60,7 +60,7 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 	private float jumpTimeScale=1;
 	private float jumpGrav=12f;
 	
-	private ArrayList choices = new ArrayList(12);
+	private ArrayList<MyWaypoint> choices = new ArrayList<MyWaypoint>(12);
 	
 	private ItemAnimated deadLenny;
 	private ItemAnimated itemBomb;
@@ -651,7 +651,8 @@ public class MyHexagonGrid extends Animatable implements Drawable{
 		if((xGrid<mapWidth) && (yGrid<mapHeight) && (yGrid >= 0) && (xGrid > xMin+CHARACTER_POSITION+3)){
 			switch(item){
 				case ItemQueue.DELETEWALL:	
-					if(map[xGrid][yGrid] == GRID_WALL){
+					
+					if(map[xGrid][yGrid] == GRID_WALL && yGrid > 0){
 						map[xGrid][yGrid] = GRID_NULL;
 						return true;
 					}

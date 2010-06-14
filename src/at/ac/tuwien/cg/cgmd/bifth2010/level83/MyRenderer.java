@@ -25,7 +25,7 @@ import android.content.DialogInterface.OnDismissListener;
  */
 public class MyRenderer implements Renderer, OnTouchListener,OnDismissListener {
 	
-	private static final String CLASS_TAG = MyRenderer.class.getName();
+//	private static final String CLASS_TAG = MyRenderer.class.getName();
 	AlertDialog alertDialog;
 	
 	//Private
