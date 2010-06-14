@@ -21,20 +21,20 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 			GameMechanics.getSingleton().setCollDetTime();
 			GameUI.updateText();
 		}
-		if( GameMechanics.getSingleton().getRoundNumber() >= 0) {
+		if( GameMechanics.getSingleton().getRoundNumber() > Definitions.MAX_ROUND_NUMBER && GameWorld.getSingleton().getEnemiesSize() == 0 ){
+			GameMechanics.getSingleton().finishGame(); //bit dirty hack
+			return;
+		}
+		if( GameMechanics.getSingleton().getRoundNumber() >= 0 && GameMechanics.getSingleton().getRoundNumber() <= Definitions.MAX_ROUND_NUMBER ) {
 			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_ROUND_WAIT_TIME ){
 				GameWorld.getSingleton().initEnemies();
 				GameMechanics.getSingleton().setRoundStartedTime();
 				GameMechanics.getSingleton().nextRound();
 			}
 		}
-		if( GameMechanics.getSingleton().getRoundNumber() >= Definitions.MAX_ROUND_NUMBER && GameWorld.getSingleton().getEnemiesSize() == 0 ){
-			GameMechanics.getSingleton().finishGame(); //bit dirty hack
-		} else {
-			GameWorld.getSingleton().drawTowers(gl);
-			GameWorld.getSingleton().drawEnemies(gl);
-			
-		}
+		
+		GameWorld.getSingleton().drawTowers(gl);
+		GameWorld.getSingleton().drawEnemies(gl);
 		FPSCounter.getSingleton().addFrame();
 	}
 

@@ -194,7 +194,7 @@ public class GameUI extends LinearLayout implements OnClickListener{
 			ct=" "+GameMechanics.getSingleton().getRemainingWaitTime()+" ";
 			mCountdowntxt.setText(ct);
 			String rt = new String();
-			rt=" "+String.valueOf(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber())+" ";
+			rt=" "+String.valueOf(Definitions.MAX_ROUND_NUMBER - GameMechanics.getSingleton().getRoundNumber() +1)+" ";
 			mRoundslefttxt.setText(rt);
 		}
 	};
