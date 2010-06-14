@@ -121,7 +121,7 @@ public final class Definitions {
 		public static final short FOURTH_ROUND_ENEMIE_HP = 120;
 		public static final short FOURTH_ROUND_ENEMIE_STRENGTH = 40;
 		public static final short FOURTH_ROUND_ENEMIE_RADIUS = 20;
-		public static final short FOURTH_ROUND_ENEMIE_MONEY = 20;
+		public static final short FOURTH_ROUND_ENEMIE_MONEY = 100;
 		public static final short FOURTH_ROUND_ENEMIE_SPEED = 90;
 		public static final short FOURTH_ROUND_ENEMIE_IRON = 150;
 		
