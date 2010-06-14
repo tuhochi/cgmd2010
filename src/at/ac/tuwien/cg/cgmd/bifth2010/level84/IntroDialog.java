@@ -84,7 +84,7 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 	}
 	
 	/**
-	 * show next result step - depends on the variable resultstage
+	 * show next intro step - depends on the variable introstage
 	 */
 	public void showNextIntroStep()
 	{

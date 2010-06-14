@@ -16,9 +16,9 @@ public class ProgressManager extends SessionState {
 	/** our activity **/
 	private Activity activity;
 	
-	/** array for storing hits per gem type **/
+	/** array for storing statistics of hits per gem type **/
 	private int[] gemsHit = new int[4];
-	/** array for storing breaks per gem type **/
+	/** array for storing statistics of breaks per gem type **/
 	private int[] gemsBreak = new int[4];
 	
 	/**
@@ -49,7 +49,7 @@ public class ProgressManager extends SessionState {
 	}
 
 	/**
-	 * get the start amount of the money
+	 * get the start-money-amount
 	 * @return total (start-) money
 	 */
 	public int getStartValue()
@@ -58,7 +58,7 @@ public class ProgressManager extends SessionState {
 	}
 	
 	/**
-	 * define how much money is lost dependent on the draintype
+	 * lose money if gem hits a drain (amount of money dependent on the draintype)
 	 * @param drainType
 	 */
 	public void loseMoneyByHit(int drainType) {
@@ -71,7 +71,7 @@ public class ProgressManager extends SessionState {
 	}
 	
 	/**
-	 * define how much money is lost dependent on the draintype if the gem breaks
+	 * lose money if gem breaks (amount of money dependent on the draintype)
 	 * @param drainType
 	 */
 	public void loseMoneyByBreak(int drainType)
