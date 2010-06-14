@@ -2,22 +2,35 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 import java.nio.FloatBuffer;
 
-public class TexturePart {
-	private Texture texture;
-	private float x1;
-	private float y1;
-	private float x2;
-	private float y2;
-	private float width = -1.f;
-	private float height = -1.f;
-	private Mirror mirror;
+/**
+ * Class that represents one part of the big texture
+ * 
+ * @author Matthias
+ */
 
+public class TexturePart {
+	/** the one big texture */
+	private Texture texture;
+	/** the x-coordinate of the top-left corner */
+	private float x1;
+	/** the y-coordinate of the top-left corner */
+	private float y1;
+	/** the x-coordinate of the bottom-right corner */
+	private float x2;
+	/** the y-coordinate of the bottom-right corner */
+	private float y2;
+	/** the width of the texture part */
+	private float width = -1.f;
+	/** the height of the texture part */
+	private float height = -1.f;
+	/** the mirror of the texture part */
+	private Mirror mirror;
+	/** buffer used for the texture coordinates */
 	private FloatBuffer texCoords;
 
 	/**
 	 * Describes a subsection of the given texture with (x1, y1) as the top left
-	 * corner and (x2, y2) as the lower right corner. The texture can optionally
-	 * be mirrored on both axes.
+	 * corner and (x2, y2) as the lower right corner.
 	 * 
 	 * @param texture
 	 *            A texture from where the image data is taken
@@ -34,6 +47,24 @@ public class TexturePart {
 		this(texture, Mirror.NONE, x1, y1, x2, y2);
 	}
 
+	/**
+	 * Describes a subsection of the given texture with (x1, y1) as the top left
+	 * corner and (x2, y2) as the lower right corner. The texture can be
+	 * mirrored on both axes.
+	 * 
+	 * @param texture
+	 *            A texture from where the image data is taken
+	 * @param mirror
+	 *            the mirror of the texture
+	 * @param x1
+	 *            The x-coordinate of the upper left corner
+	 * @param y1
+	 *            The y-coordinate of the upper left corner
+	 * @param x2
+	 *            The x-coordinate of the lower right corner
+	 * @param y2
+	 *            The y-coordinate of the lower right corner
+	 */
 	public TexturePart(Texture texture, Mirror mirror, float x1, float y1, float x2, float y2) {
 		this.texture = texture;
 		this.x1 = x1;
@@ -142,6 +173,9 @@ public class TexturePart {
 		texCoords = Util.floatArrayToBuffer(coords);
 	}
 
+	/**
+	 * @return the one big texture
+	 */
 	public Texture getTexture() {
 		return texture;
 	}

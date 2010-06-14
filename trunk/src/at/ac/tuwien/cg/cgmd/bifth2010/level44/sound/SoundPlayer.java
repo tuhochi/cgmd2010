@@ -35,7 +35,7 @@ public class SoundPlayer {
 
 	/** Media Player object for music */
 	private MediaPlayer mediaPlayer = null;
-
+	/** helper for retrieving which sound (Damn, WTf, Laugh) is played */
 	private int currentValue = 0;
 
 	/**
@@ -131,12 +131,15 @@ public class SoundPlayer {
 		sounds.put(SoundEffect.WTF1, soundPool.load(context, R.raw.l44_wtf1, 1));
 	}
 
+	/**
+	 * starts the background-music
+	 */
 	public void startMusic() {
 		if (musicOn && mediaPlayer != null) {
 			try {
 				mediaPlayer.start();
 			} catch (IllegalStateException ise) {
-				/**
+				/*
 				 * Ignore for now - shouldn't happen, and the music isn't
 				 * essential for the gameplay.
 				 **/
@@ -144,12 +147,15 @@ public class SoundPlayer {
 		}
 	}
 
+	/**
+	 * stops the background-music
+	 */
 	public void stopMusic() {
 		if (musicOn && mediaPlayer != null) {
 			try {
 				mediaPlayer.stop();
 			} catch (IllegalStateException ise) {
-				/**
+				/*
 				 * Ignore for now - shouldn't happen, and the music isn't
 				 * essential for the gameplay. Also, it most likely means that
 				 * the music isn't playing, so the "stopMusic()" call already

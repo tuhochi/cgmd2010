@@ -74,9 +74,9 @@ public class RabbitSprite extends SpriteContainer {
 		coinBucket = new CoinBucketSprite(texture);
 		coinBucket.setPosition(0, 20);
 
-		addChild(leftWing);
-		addChild(rightWing);
-		addChild(coinBucket);
+		addChildBack(leftWing);
+		addChildBack(rightWing);
+		addChildBack(coinBucket);
 
 		stars = new Stars(texture);
 	}

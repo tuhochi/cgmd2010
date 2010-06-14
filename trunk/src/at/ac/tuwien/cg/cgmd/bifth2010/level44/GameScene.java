@@ -177,7 +177,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		int width = getWidth();
 		int height = getHeight();
 		
-		/**
+		/*
 		 * Workaround: In some cases (e.g. when locking the screen),
 		 * width and height are exchanged until the system realizes
 		 * that we want landscape mode. We simply detect this here,
@@ -189,7 +189,7 @@ public class GameScene extends GLSurfaceView implements Renderer {
 			height = getWidth();
 		}
 		
-		/** 
+		/* 
 		 * Magnify the game field for Nexus One and other phones.
 		 * 
 		 * We do not yet have HDPI-resolution textures, because they
@@ -225,8 +225,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 		timeDisplay.setPosition(width-timeDisplay.getWidth()-10, 10);
 		
 		introBackground = new IntroBackground(mainTexture, width, height);
-		virtualFinger = new VirtualFinger(mainTexture, width, height);
-		virtualFinger.setGesture(VirtualFinger.DemoGesture.SWIPE_RIGHT);
 		
 		if (gameState != null) {
 			/* consume restored values and remove gameState */
