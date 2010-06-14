@@ -12,10 +12,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
  */
 
 public class IntroBackground extends SpriteContainer {
-	/** the width of the screen */
-	private float screenWidth;
-	/** the height of the screen */
-	private float screenHeight;
 	/** used for moving the arrows */
 	private int deltaValue;
 	/** the moving arrows */
@@ -55,8 +51,6 @@ public class IntroBackground extends SpriteContainer {
 	public IntroBackground(Texture texture, float screenWidth, float screenHeight) {
 		super(TextureParts.makeIntroBackground(texture));
 
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
 		this.deltaValue = 0;
 
 		/* Center on screen */

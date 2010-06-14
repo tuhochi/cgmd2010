@@ -21,8 +21,6 @@ public class InputListener extends SimpleOnGestureListener {
 	private static final int SWIPE_THRESHOLD_VELOCITY = 100;
 	/** width of the Screen */
 	private int width;
-	/** height of the Screen */
-	private int height;
 	/** the GameScene */
 	private GameScene scene;
 
@@ -38,7 +36,6 @@ public class InputListener extends SimpleOnGestureListener {
 	public InputListener(GameScene scene, int width, int height) {
 		this.scene = scene;
 		this.width = width;
-		this.height = height;
 	}
 
 	/**

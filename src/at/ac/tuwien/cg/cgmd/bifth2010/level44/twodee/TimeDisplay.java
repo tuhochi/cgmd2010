@@ -32,8 +32,6 @@ public class TimeDisplay extends Sprite {
 	/** Number of "countdown timer" parts in the texture */
 	private static final int COUNTDOWN_PARTS = 5;
 
-	/** the context of the game */
-	private Context context = null;
 	/** the one big texture */
 	private Texture texture;
 	/** the timeManager that is used for managing the time */
@@ -51,7 +49,6 @@ public class TimeDisplay extends Sprite {
 		super(new TexturePart(texture, TEXTURE_X, TEXTURE_Y, TEXTURE_X + WIDTH, TEXTURE_Y + HEIGHT));
 		setCenter(0, 0);
 
-		this.context = context;
 		this.texture = texture;
 		this.timeManager = timeManager;
 		this.offset = 0;
