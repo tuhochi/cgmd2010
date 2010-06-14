@@ -295,5 +295,6 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	public synchronized void onSaveInstanceState(Bundle outState) {
 		outState.putFloat(REMAINING_TIME, mPlayTime);
 		mLevel.onSaveInstanceState(outState);
+		mSavedInstance = outState;
 	}
 }
