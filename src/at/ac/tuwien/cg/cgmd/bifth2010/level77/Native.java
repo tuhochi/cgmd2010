@@ -29,6 +29,8 @@ public class Native
     private static native void nativeDone();
     private static native void nativeRender();
     private static native void nativeResize(int w, int h);
+    
+    // TODO @Mike can this be deleted?
     //debug
     private static native int nativeNumDrawn();
 	
@@ -65,35 +67,54 @@ public class Native
 	
 	}
 	
-	/* NOTE!! must be run after(!) renderer creates a context */
+	/**
+	 * Calls nativeInit()
+	 * <p>
+	 * This must be run after(!) renderer creates a context
+	 */
 	public void init()
 	{	
  		nativeInit();
-
-		//Audio.AudioTest();
 		nativeRegisterCallbacks(this.audio, this.images);
 	}
 	
-	/* second step of init */
-	public void init2()
+	/**
+	 * Loads images and calls nativeInitClasses()
+	 */
+	public void initClasses()
 	{
-		//TODO replace with callbacks! 
- 		this.images.loadImages();
- 		
+		//TODO @Mike replace with callbacks! 
+ 		this.images.loadImages(); 		
  		nativeInitClasses();
 	}
 	
-	/* call native render methods */
+	/**
+	 * Calls nativeRender()
+	 * <p>
+	 * OpenGl drawing in native code.
+	 */
 	public void render()
 	{
 		nativeRender();	
 	}
 	
+	/**
+	 * Calls nativeDone()
+	 * <P>
+	 * Finish everything in native part.
+	 */
 	public void deInit()
 	{
 		nativeDone();
 	}
 	
+	/**
+	 * Calls nativeResize(int, int)
+	 * <p>
+	 * Tells the native implementation that the view has resized.
+	 * @param w The width
+	 * @param h The height
+	 */
 	public void resizeView(int w, int h)
 	{
 		nativeResize(w, h);
@@ -193,6 +214,7 @@ public class Native
 	 * Called by native code to update the score
 	 * @param score
 	 */
+	@SuppressWarnings("unused")
 	private void updateScore(int score)
 	{
 		if (score >= 0)
