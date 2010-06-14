@@ -167,7 +167,7 @@ public class TextureParts {
 	 * @return the created TexturePart
 	 */
 	public static TexturePart makeIntroBackground(Texture texture) {
-		return new TexturePart(texture, 486, 689, 486 + 480, 689 + 320);
+		return new TexturePart(texture, 486, 689, 486 + 535, 689 + 320);
 	}
 
 	/**

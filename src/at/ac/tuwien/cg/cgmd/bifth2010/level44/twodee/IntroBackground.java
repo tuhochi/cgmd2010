@@ -11,13 +11,13 @@ public class IntroBackground extends SpriteContainer {
 
 	private static final int DELTA_MAX = 5;
 
-	private static final int TOUCH_ARROWS_X = 44;
+	private static final int TOUCH_ARROWS_X = 71;
 	private static final int TOUCH_ARROWS_Y = 112;
-	private static final int LEFT_ARROW_X = 273;
+	private static final int LEFT_ARROW_X = 296;
 	private static final int LEFT_ARROW_Y = 143;
-	private static final int RIGHT_ARROW_X = 390;
+	private static final int RIGHT_ARROW_X = 413;
 	private static final int RIGHT_ARROW_Y = 144;
-	private static final int UP_ARROW_X = 336;
+	private static final int UP_ARROW_X = 359;
 	private static final int UP_ARROW_Y = 97;
 
 	public IntroBackground(Texture texture, float screenWidth, float screenHeight) {
