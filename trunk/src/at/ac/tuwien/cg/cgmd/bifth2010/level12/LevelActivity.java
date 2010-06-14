@@ -131,17 +131,35 @@ public class LevelActivity extends Activity{
     
 	@Override
 	public void finish() {	
-		GameMechanics.getSingleton().pause();
+		//System.out.println("FINISH");
+		//GameMechanics.getSingleton().pause();
 		//FinishScreen f = new FinishScreen(this);
 		//setContentView(f);
-		mL.removeAllViews();		
+		//System.out.println("CREATING NEW LAYIUT");
+		/*LinearLayout ll = new LinearLayout(this);
 		TextView t = new TextView(this);
+		t.setText(R.string.l12_enemies_fended);
+		ll.addView(t);
+		TextView t1 = new TextView(this);
+		t1.setText(mKilledEnemies + " / "+mSpawnedEnemies+"\n\n" );
+		ll.addView(t1);
+		this.setContentView(ll);
+		System.out.println("Content View Set!");
+		
+		System.out.println("REMOVE VIEWS");
+		mL.removeAllViews();
+		System.out.println("REMOVE VIEWS1");
+		mL.removeAllViewsInLayout();
+		System.out.println("REMOVE VIEWS2");*/
+		
+		/*TextView t = new TextView(this);
 		t.setText(R.string.l12_enemies_fended);
 		mL.addView(t);
 		TextView t1 = new TextView(this);
 		t1.setText(mKilledEnemies + " / "+mSpawnedEnemies+"\n\n" );
 		mL.addView(t1);
-		//setContentView(mL);
+		this.setContentView(mL);
+		System.out.println("Content View Set!");*/
 		
 		//the SessionState is a convenience class to set a result
 		SessionState s = new SessionState();
