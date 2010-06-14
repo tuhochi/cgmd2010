@@ -32,6 +32,7 @@ public class textureManager {
 		textureMap = new Hashtable <String, Integer>();
 		gameObjectMap = new Hashtable <String, Tablet>();
 		
+		//add all texture elements
 		createTexture("control", R.drawable.l60_arrows, LevelRenderer.CONTROL_SIZE, LevelRenderer.CONTROL_SIZE, true);
 		
 		createTexture("gold", R.drawable.l00_coin, 20, 20, true);
@@ -62,17 +63,16 @@ public class textureManager {
 		createTexture("TintersectionBottom", R.drawable.l60_t_intersect_bottom, 100, 100);
 		createTexture("TintersectionLeft", R.drawable.l60_t_intersect_left, 100, 100);
 		createTexture("TintersectionRight", R.drawable.l60_t_intersect_right, 100, 100);
-		createTexture("houseGlass", R.drawable.l60_glass, 100, 100);
 		createTexture("houseDoor1", R.drawable.l60_house1, 100, 100);
-		createTexture("houseDoor2", R.drawable.l60_wall, 100, 100);
+		createTexture("houseDoor2", R.drawable.l60_house2, 100, 100);
+		
 		createTexture("houseWall", R.drawable.l60_wall, 100, 100);
-		createTexture("housefl", R.drawable.l60_t_intersect_right, 100, 100);
-		createTexture("housefr", R.drawable.l60_t_intersect_right, 100, 100);
-		createTexture("housebl", R.drawable.l60_t_intersect_right, 100, 100);
-		createTexture("housebr", R.drawable.l60_t_intersect_right, 100, 100);
-		createTexture("housecl", R.drawable.l60_t_intersect_right, 100, 100);
-		createTexture("housecr", R.drawable.l60_t_intersect_right, 100, 100);
+		createTexture("houseSpray", R.drawable.l60_wall_sprayed, 100, 100);
+		createTexture("houseGlass", R.drawable.l60_glass, 100, 100);
+		createTexture("houseBreak", R.drawable.l60_glass_broken, 100, 100);
+		
 		loadTexture("spraytag", R.drawable.l60_spraytag);
+		
 		createTexture("cloud1", R.drawable.l60_cloud1, 50, 50);
 		createTexture("cloud2", R.drawable.l60_cloud2, 50, 50);
 		createTexture("cloud3", R.drawable.l60_cloud3, 50, 50);
@@ -85,8 +85,11 @@ public class textureManager {
 		loadTexture("blow2", R.drawable.l60_blow2);
 		loadTexture("blow3", R.drawable.l60_blow3);
 		loadTexture("blow4", R.drawable.l60_blow4);
-
-		//add all texture elements
+		
+		createTexture("win1", R.drawable.l60_win1, 200, 150, true);
+		createTexture("win2", R.drawable.l60_win2, 200, 150, true);
+		createTexture("lose1", R.drawable.l60_gameover1, 200, 150, true);
+		createTexture("lose2", R.drawable.l60_gameover2, 200, 150, true);
 	}
 	
 	public void createTexture(String name, int texId, int xSize, int ySize, boolean sticky) {
