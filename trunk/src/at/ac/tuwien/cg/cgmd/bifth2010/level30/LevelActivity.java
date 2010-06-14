@@ -505,35 +505,54 @@ public class LevelActivity extends Activity implements OnClickListener {
      * Start music
      */
     public void playMusic() {
-		
+		    	
     	//sounds enabled?
 		Intent callingIntent = getIntent();
 		SessionState s = new SessionState(callingIntent.getExtras());		
 		if (s.isMusicAndSoundOn()==false)
 			return;
 		
-        if (!mp.isPlaying()) {
-        	mp.seekTo(0);
-        	mp.start();
-        }
+		try
+		{
+	        if (!mp.isPlaying()) {
+	        	mp.seekTo(0);
+	        	mp.start();
+	        }
+		}
+		catch (IllegalStateException e)
+		{
+		}
     }
     
     /*
      * Set music volume
      */
     public void setMusicVolume(float volumeTarget) {
+		try
+		{
+			
         if (mp.isPlaying())
         	{
     	    
         		mp.setVolume(volumeTarget,volumeTarget);
         	}
+		}
+		catch (IllegalStateException e)
+		{
+		}
     }
     
     /*
      * pause music
      */
     public void pauseMusic() {
-        if (mp.isPlaying()) mp.pause();
+		try
+		{		
+			if (mp.isPlaying()) mp.pause();
+		}		
+		catch (IllegalStateException e)
+		{
+		}
     }
 
     /*

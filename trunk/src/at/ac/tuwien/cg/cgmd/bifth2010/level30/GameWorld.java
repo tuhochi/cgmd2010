@@ -89,6 +89,7 @@ public class GameWorld extends Thread {
 	private RenderableQuad quad;
 	private int texCoin; //store texture id
 	private int texSteel; //store texture id
+	private int texSteelBlend; //store texture id
 	private Map<Integer,ArrayList<ParticleSystem>> graphToParticleSystems;
 	
 	//keep track of the level state
@@ -430,6 +431,7 @@ public class GameWorld extends Thread {
 	{	
 		texCoin = LoadOneTextures(gl, R.drawable.l30_coin);
 		texSteel = LoadOneTextures(gl, R.drawable.l30_steel);
+		texSteelBlend = LoadOneTextures(gl, R.drawable.l30_steelblend);		
 	}
 	
 	/*
@@ -661,13 +663,13 @@ public class GameWorld extends Thread {
 		GLU.gluLookAt(gl, 0.0f, 1.0f, -3, 0, -0.2f, 1, 0, 1, 0);
 		
 		//initialize lights
-		float[] lightAmbient = {0.5f, 0.5f, 0.5f, 1.0f};
+		float[] lightAmbient = {1.0f, 1.0f, 1.0f, 1.0f};
 		float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};
 		float[] lightPosition = {0.0f, 4.0f, -2.0f, 1.0f};			
 		initLight(gl, GL10.GL_LIGHT0, lightAmbient, lightDiffuse, lightPosition);        		
         gl.glEnable(GL10.GL_LIGHT0);        
 		
-        float[] lightAmbient2 = {0.5f, 0.5f, 0.5f, 1.0f};
+        float[] lightAmbient2 = {1.0f, 1.0f, 1.0f, 1.0f};
 		float[] lightDiffuse2 = {1.0f, 1.0f, 1.0f, 1.0f};
 		float[] lightPosition2 = {2.0f, -4.0f, -2.0f, 1.0f};	
 		initLight(gl, GL10.GL_LIGHT1, lightAmbient2, lightDiffuse2, lightPosition2);        		
@@ -756,6 +758,11 @@ public class GameWorld extends Thread {
 	
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		gl.glDisable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_ONE,
+				GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
 		//Enable the vertex, texture and normal state
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -772,9 +779,10 @@ public class GameWorld extends Thread {
 		float[] green = {ambient,1.0f,ambient, 1.0f};
 		float[] blue = {ambient,ambient,1.0f, 1.0f};
 		float[] orange = {1.0f,0.5f,ambient, 1.0f};		
-		float[] black = {ambient,ambient,ambient, 1.0f};
-		float[] grey = {0.1f,0.1f,0.1f, 1.0f};
+		float[] black = {0.0f,0.0f,0.0f, 0.0f};
+		float[] grey = {0.1f,0.1f,0.1f, 0.1f};
 		
+
     	for (int i=0; i<numGraphs; i++)
 		{
 			if ((gameState<2) && (i>0))
@@ -782,30 +790,45 @@ public class GameWorld extends Thread {
 				break;
 			}
 			
+			int graphToDraw = i;
+			
+			//draw graph 3 before of 2 to enable depth sorting
+			if (i==2)
+				graphToDraw = 3;
+			else if (i==3)
+				graphToDraw = 2;
+			
 			//draw graph
 			//1st: set material
-			switch (i%4)
+			switch (graphToDraw%4)
 			{
-			case 0: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, red,0); break;
-			case 1: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, green,0);break;
-			case 2: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, blue,0);break;
-			case 3: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, orange,0);	break;		
+			case 0: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, red,0); 
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, texSteel);
+				break;
+			case 1: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, green,0);
+				gl.glEnable(GL10.GL_BLEND);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, texSteelBlend);  break;
+			case 2: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, blue,0);
+				gl.glEnable(GL10.GL_BLEND);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, texSteelBlend);  break;
+			case 3: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, orange,0);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, texSteel);  break;		
 			}
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, grey,0);
 		
 	    	gl.glEnable(GL10.GL_TEXTURE_2D);
-	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, texSteel);  
+  
 	    	
 			//calc offset for graph position		 
-			float graphXcoord = CalcGraphXCoord(i);			
+			float graphXcoord = CalcGraphXCoord(graphToDraw);			
 			
 			gl.glPushMatrix();			
 			gl.glTranslatef(graphXcoord, 0.0f, -progress);
 			
 			//Point to our buffers
-			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer[i]);			
-			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBuffer[i]);
-			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texcoordsBuffer[i]);
+			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer[graphToDraw]);			
+			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBuffer[graphToDraw]);
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texcoordsBuffer[graphToDraw]);
 			
 			//Draw the vertices as triangles, based on the Index Buffer information
 			gl.glDrawArrays(GL10.GL_TRIANGLES, 0, numElements*elementsPerObject);
@@ -814,16 +837,21 @@ public class GameWorld extends Thread {
 			gl.glPushMatrix();
 			
 			gl.glDisable(GL10.GL_TEXTURE_2D);
+			gl.glDisable(GL10.GL_BLEND);
+			
+			gl.glDisable(gl.GL_LIGHTING);
 
+			graphXcoord = CalcGraphXCoord(i);	
+			
 			//set material for price indicators
 			switch (i%4)
 			{
-			case 0: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, red,0); break;
-			case 1: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, green,0);break;
-			case 2: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, blue,0);break;
-			case 3: gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, orange,0);	break;		
+			case 0: gl.glColor4f(1.0f, 0.0f, 0.0f, 1.0f); break;
+			case 1: gl.glColor4f(0.0f, 1.0f, 0.0f, 1.0f); break;
+			case 2: gl.glColor4f(0.0f, 0.0f, 1.0f, 1.0f); break;
+			case 3: gl.glColor4f(1.0f, 0.5f, 0.0f, 1.0f);break;		
 			}
-			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, black,0);
+			
 			
 			//draw quads at current price
 			float price = getCurrentPrice(i);
@@ -848,7 +876,9 @@ public class GameWorld extends Thread {
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferIndicator);			
 			gl.glNormalPointer(GL10.GL_FLOAT, 0, normalBufferIndicator);						
 			gl.glDrawArrays(GL10.GL_LINES, 0, 2);			
-			gl.glPopMatrix();		
+			gl.glPopMatrix();
+			
+			gl.glEnable(gl.GL_LIGHTING);
 			
 			//update particle system positions&sizes		
 	        for(ParticleSystem particleSys: graphToParticleSystems.get(i))
