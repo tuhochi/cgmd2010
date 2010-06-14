@@ -2,24 +2,24 @@
 <resources>
 <string name="l12_title">Bye Bye, Bonuses!</string>
 <string name="l12_paragraph01">All the financial institutes owned by our rich bunny have overcome the crisis and are rolling in cash once again. Of course this means huge bonuses for our bunny. The men carrying suitcases full of money are already on their way to bunny\'s home. Stop them to spare him even bigger wealth!</string>
-<string name="l12_paragraph02">In this tower-defense-style level you have to arm bunny\'s front yard to blast those no good money carrying bastards back to where they came from. Spend as much money as possible on mercenaries to stop your minions from reaching your doorstep. But beware: they are determined to hand you your hard earned bonuses and they are coming prepared.</string>
-<string name="l12_paragraph03">The game is played from a bird\'s eye view. Enemies approach from the right side of the screen and try to reach the door on the left. The lawn in the middle can be equipped with various types of soldiers that can be selected from the menu. All you have to do is place them and they will handle the "rest". The game\'s goal is to stop as many money carriers as possible from reaching your house before the counter is running out.</string>
+<string name="l12_paragraph02">In this tower-defense-style level you have to arm bunny\'s front yard to blast those no good money carrying bastards back to where they came from. Hire mercenaries to stop the carriers from reaching your doorstep. But beware: they are determined to hand you your hard earned bonuses and they are coming prepared.</string>
+<string name="l12_paragraph03">The game is played from a bird\'s eye view. Enemies approach from the right side of the screen and try to reach the door on the left. The lawn in the middle can be equipped with various types of soldiers that can be selected from the menu. All you have to do is place them and they will handle the "rest". The game\'s goal is to stop as many money carriers as possible from reaching your house.</string>
 
 <string name="l12_tutorialtitle">Welcome to Bye Bye Bonuses!</string>
-<string name="l12_intro">Place bunny mercs on your lawn to fend of the money carriers. Bunnies get paid with iron (I) that you earn by destroying money carriers.\n \n Available mercenaries:\n</string>
-<string name="l12_basic_tower">Basic cheap mercenary, only small damage and medium shooting rate.\n</string>
-<string name="l12_advanced_tower">Better but more expensive elite soldier. slow projectiles, but good damage and shooting rate. 5 projectiles per volley.\n</string>
-<string name="l12_hyper_tower">RoboBunny3000 fighting with massive power, medium damage bullets but high shooting rate and high bullet velocity. \n</string>
-<string name="l12_freeze_tower">Freeze-Merc, freezes enemy to half speed. No damage, slow bullets.\n</string>
+<string name="l12_intro">Place bunny mercs on your lawn to fend of the money carriers. Bunnies get paid with carrots (C) that you earn by destroying money carriers.\n \n Available mercenaries:\n</string>
+<string name="l12_basic_tower">Basic Mercenary (10C), only small damage\n</string>
+<string name="l12_advanced_tower">Elite Soldier (30C), double damage compared to Basic Mercenary\n</string>
+<string name="l12_hyper_tower">RoboBunny3000 (60C), double damage compared to Elite Soldier\n</string>
+<string name="l12_freeze_tower">Freeze-Merc (60C), freezes enemies to half their speed and HP\n</string>
 <string name="l12_finish">GAME OVER</string>
 <string name="l12_enemies_fended">enemies fended off: </string>
 <string name="l12_points">Money lost: </string>
-<string name="l12_iron">Iron: </string>
+<string name="l12_iron">Carrots: </string>
 <string name="l12_roundsleft">Rounds left: </string>
 <string name="l12_countdown">next Round in: </string>
 <string name="l12_end_game">Game Over:</string>
-<string name="l12_built">Built: </string>
-<string name="l12_you_built">You built </string>
-<string name="l12_towers_destroyed">towers, and </string>
-<string name="l12_have_been">of them have been destroyed without shooting!</string>
+<string name="l12_built">Hired: </string>
+<string name="l12_you_built">You hired </string>
+<string name="l12_towers_destroyed">mercenaries, </string>
+<string name="l12_have_been">of them did not make it..</string>
 </resources>
