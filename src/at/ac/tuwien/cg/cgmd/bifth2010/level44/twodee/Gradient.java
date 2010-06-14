@@ -23,11 +23,17 @@ public class Gradient {
 	float r1, g1, b1;
 	float r2, g2, b2;
 
+	/**
+	 * recalculates the vertex coordinates of the gradient
+	 */
 	private void recalculateVtxCoords() {
 		float[] coords = new float[] { x, y, x, y + height, x + width, y, x + width, y + height, };
 		vtxCoords = Util.floatArrayToBuffer(coords);
 	}
 
+	/**
+	 * recalculates the color values of the gradient
+	 */
 	private void recalculateColors() {
 		float[] colors = new float[] { r1, g1, b1, r2, g2, b2, r1, g1, b1, r2, g2, b2, };
 		colorBuffer = Util.floatArrayToBuffer(colors);
@@ -89,6 +95,10 @@ public class Gradient {
 		recalculateColors();
 	}
 
+	/**
+	 * draw the gradient on the Scene
+	 * @param gl OpenGL
+	 */
 	public void draw(GL10 gl) {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();

@@ -5,14 +5,26 @@ import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * SpriteContainer that represents the CoinBucket of the Rabbit
+ * 
+ * @author thp
+ *
+ */
 public class CoinBucketSprite extends SpriteContainer {
 	/** number of coins at the beginning */
 	public static final int FULL_COIN_COUNT = 10;
-
+	/** Sprite for the front of the bucket */
 	private Sprite bucketFront = null;
+	/** the texture used for creating */
 	private Texture texture = null;
+	/** all coins that are left in the bucket */
 	private Vector<Sprite> coins = new Vector<Sprite>();
 
+	/**
+	 * Helper Method for Creating a new Coin
+	 * @return a Coin with a random position in the bucket
+	 */
 	private Sprite makeCoin() {
 		Random random = new Random();
 		Sprite coin = new Sprite(TextureParts.makeCoin(texture));
@@ -20,6 +32,10 @@ public class CoinBucketSprite extends SpriteContainer {
 		return coin;
 	}
 
+	/**
+	 * Create a CoinBucket from the texture
+	 * @param texture the texture to create the bucket
+	 */
 	public CoinBucketSprite(Texture texture) {
 		super(TextureParts.makeBucketBack(texture));
 		setCenter(30.5f, 0);
@@ -36,10 +52,7 @@ public class CoinBucketSprite extends SpriteContainer {
 	public void setRotation(float angle) {
 		super.setRotation(angle);
 
-		/**
-		 * Rotate the bucket front a bit in addition to rotating the bucket as a
-		 * whole
-		 **/
+		// Rotate the bucket front a bit in addition to rotating the bucket as a whole
 		bucketFront.setRotation(angle / 2);
 	}
 
@@ -54,6 +67,11 @@ public class CoinBucketSprite extends SpriteContainer {
 		}
 	}
 
+	/**
+	 * remove one coin from the bucket
+	 * 
+	 * @return true, if there are no coins left, otherwise false
+	 */
 	public boolean looseCoin() {
 		if (!coins.isEmpty()) {
 			coins.remove(0);
@@ -62,10 +80,17 @@ public class CoinBucketSprite extends SpriteContainer {
 		return coins.isEmpty();
 	}
 
+	/**
+	 * @return the number of coins left
+	 */
 	public int getCoinCount() {
 		return coins.size();
 	}
 
+	/**
+	 * remove all coins and then create new ones
+	 * @param count the number of new coins
+	 */
 	public void setCoinCount(int count) {
 		while (coins.size() > count) {
 			coins.remove(0);

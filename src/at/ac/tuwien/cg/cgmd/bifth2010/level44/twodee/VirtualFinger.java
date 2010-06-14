@@ -2,6 +2,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * Not used anymore, should indicate the gestures in the intro-screen
+ * 
+ * @author Matthias
+ *
+ */
+
 public class VirtualFinger extends Sprite {
 	public enum DemoGesture {
 		NONE, SWIPE_LEFT, SWIPE_RIGHT, DOUBLE_TAP

@@ -10,11 +10,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
+/**
+ * Class that represents the one big texture used
+ * 
+ * @author thp
+ */
+
 public class Texture {
+	/** the name of the opengl-texture */
 	int textureName;
+	/** the width of the texture */
 	int width;
+	/** the height of the texture */
 	int height;
 
+	/**
+	 * Creates the texture
+	 * @param gl OpenGL
+	 * @param context the context used for getting the resource
+	 * @param resource the resource-id of the texture
+	 */
 	public Texture(GL10 gl, Context context, int resource) {
 		InputStream is = context.getResources().openRawResource(resource);
 
@@ -48,14 +63,23 @@ public class Texture {
 		bitmap.recycle();
 	}
 
+	/**
+	 * @return the texture-name
+	 */
 	public int getTextureName() {
 		return textureName;
 	}
 
+	/**
+	 * @return the width of the texture
+	 */
 	public float getWidth() {
 		return width;
 	}
 
+	/**
+	 * @return the height of the texture
+	 */
 	public float getHeight() {
 		return height;
 	}
