@@ -36,7 +36,8 @@ public class BlockRenderer implements Renderer
 	private static String	TAG			= "L77Renderer";
 	private Callback<Void>	timeUp;
 	private float			lastDragX	= 0, lastDragY = 0;
-
+	private Audio			audio;
+	
 	/**
 	 * Constructor for Level 77 Renderer
 	 * 
@@ -44,12 +45,14 @@ public class BlockRenderer implements Renderer
 	 *            The context this renderer lives in
 	 * @param timeUp
 	 *            Callback when the playing time is up
+	 * @param audio 
 	 */
-	public BlockRenderer(Context context, Native nat_jni, Callback<Void> timeUp)
+	public BlockRenderer(Context context, Native nat_jni, Callback<Void> timeUp, Audio audio)
 	{
 		mContext = context;
 		jni = nat_jni;
 		this.timeUp = timeUp;
+		this.audio = audio;
 	}
 
 	private float	percent	= 1.0f;
@@ -71,6 +74,7 @@ public class BlockRenderer implements Renderer
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		gl.glPushMatrix();
 
 		gl.glTranslatef(6.5f, 0.0f, 5.0f);
 		coinBar.draw(percent);
@@ -84,8 +88,9 @@ public class BlockRenderer implements Renderer
 		if (timePercent <= 0)
 			timeUp.onSucces(null);
 
+		gl.glPopMatrix();		
 		gl.glScalef(1.0f, timePercent, 1.0f);
-		gl.glTranslatef(0, 4.75f, 0.0f);
+		gl.glTranslatef(7f, 4.5f, 0.0f);
 		gl.glColor4f(1, 1, 1, 1);
 		timeBar.draw(gl);
 
@@ -126,6 +131,9 @@ public class BlockRenderer implements Renderer
 		// TODO Reduce to 0.2f for the abgabe
 		coinBar.setCoinHeight(0.5f);
 
+		// Play the theme song
+		audio.playSound(Audio.BUNNY_BLOCK_THEME);
+		
 		setStartTime(System.currentTimeMillis() - dateOffset);
 		Log.i("renderer", "initilized");
 	}

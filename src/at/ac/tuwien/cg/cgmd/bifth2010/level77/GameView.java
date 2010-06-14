@@ -65,9 +65,6 @@ public class GameView extends GLSurfaceView
 			}
 		};
 
-		// Play the theme song
-		audio.playSound(Audio.BUNNY_BLOCK_THEME);
-
 		jni = new Native(context, audio, gameEnded, updateScore);
 
 		// native depends on renderer vars initialised
@@ -89,7 +86,7 @@ public class GameView extends GLSurfaceView
 			}
 		};
 
-		renderer = new BlockRenderer(context, jni, timeUp);
+		renderer = new BlockRenderer(context, jni, timeUp, audio);
 		renderer.setDateOffset(startTime);
 		setRenderer(renderer);
 	}
