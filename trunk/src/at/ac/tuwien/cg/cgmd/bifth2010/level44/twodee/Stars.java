@@ -24,6 +24,8 @@ public class Stars {
 	private float scale;
 	/** are the stars visible? */
 	private boolean visible;
+	/** The amount of stars displayed */
+	private static final int STARS = 18;
 
 	/**
 	 * Creates the stars from the big texture
@@ -58,8 +60,8 @@ public class Stars {
 									 * factor
 									 */
 
-		for (int i = 0; i < 12; i++) {
-			gl.glRotatef(360.f / 12.f, 0, 0, 1);
+		for (int i = 0; i < STARS; i++) {
+			gl.glRotatef(360.f / (float)STARS, 0, 0, 1);
 			if (i % 2 == 0) {
 				redStar.draw(gl);
 			} else {
