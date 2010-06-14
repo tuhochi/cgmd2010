@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -36,6 +38,8 @@ public class LevelActivity extends Activity {
 	public static TextView coins;
 	/** Text for the progress indicator */
 	public static TextView progress;
+	private static int deathcnt;
+	private static int coincnt;
 	String fpsString = "";
 	Timer fpsUpdate;
 	
@@ -63,13 +67,14 @@ public class LevelActivity extends Activity {
 		renderer.setVibrator(vibrator);
         
         fps = (TextView) findViewById(R.id.l83_TextFPS);
+        fps.setVisibility(View.INVISIBLE);
         deaths = (TextView) findViewById(R.id.l83_TextDeaths);
         coins = (TextView) findViewById(R.id.l83_TextCoins);
         
         progress = (TextView) findViewById(R.id.l83_TextProgress);
         
         fpsUpdate = new Timer(true);
-        
+       
         fpsUpdate.schedule(new TimerTask() {
 			
 			@Override
@@ -106,6 +111,7 @@ public class LevelActivity extends Activity {
     	public void handleMessage(Message msg) {
     		super.handleMessage(msg);
 			deaths.setText(" x " + msg.what);
+			deathcnt = msg.what;
     	}
     };
     
@@ -117,6 +123,7 @@ public class LevelActivity extends Activity {
     	public void handleMessage(Message msg) {
     		super.handleMessage(msg);
 			coins.setText(" x " + msg.what);
+			coincnt = msg.what;
     	}
     };
     
@@ -132,8 +139,8 @@ public class LevelActivity extends Activity {
     };
    
     /**
-     * Handler to pass the user's points to the framework and finish the level by showing a
-     * {@link FinishDialog}.
+     * Handler to pass the user's points to the framework and finish the level 
+     * by showing a {@link FinishDialog}.
      */
     public static Handler finishLevel = new Handler() {
     	@Override
@@ -193,7 +200,15 @@ public class LevelActivity extends Activity {
     }
     @Override
     protected void onResume() {
-    	new SoundManager(this);
+    	Intent callingIntent = getIntent();
+    	
+    	boolean musicOn = true;
+    	SessionState state = new SessionState(callingIntent.getExtras());
+    	
+    	if(state != null)
+    		musicOn = state.isMusicAndSoundOn();
+    	
+    	new SoundManager(this,musicOn);
     	
     	super.onResume();
     	//MyTextureManager.singleton.reload(this, gl);
@@ -202,5 +217,18 @@ public class LevelActivity extends Activity {
     	
     	
     	Log.d("Main","OnResume");
+    }
+    
+    @Override
+    public void finish() {
+    	Log.d("l83LevelActivity", "finish()");
+    	final SessionState s = new SessionState();
+		int progress = Math.min(Math
+				.max(deathcnt * 20
+						- ((coincnt % 2 == 0) ? coincnt : (coincnt - 1))
+						* 10, 0), 100);
+		s.setProgress(progress);
+		setResult(Activity.RESULT_OK, s.asIntent());
+    	super.finish();
     }
 }
