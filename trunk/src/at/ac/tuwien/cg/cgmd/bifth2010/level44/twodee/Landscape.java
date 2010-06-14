@@ -7,13 +7,17 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.physics.PhysicalRabbit;
 
 /**
+ * The landscape: Meadow, sky, clouds and mountains
+ * 
  * This class encapsulates all assets that are used in the landscape of the game
  * (as decorations mostly).
  * 
  * This will also draw and read the PhysicalRabbit object that can be set with
- * setRabbit().
+ * setRabbit(). We need to draw the rabbit inside this object, because we want
+ * to set it in between the landscape objects (in front of the sky and the
+ * mountains, but behind the meadow and the clouds).
  * 
- * @author thp
+ * @author Thomas Perl
  */
 public class Landscape extends SpriteContainer {
 	private Vector<ParallaxSprite> parallaxSprites = new Vector<ParallaxSprite>();
@@ -84,6 +88,11 @@ public class Landscape extends SpriteContainer {
 		parallaxSprites.add(meadow);
 	}
 
+	/**
+	 * Overridden from Sprite - draw everything "in front"
+	 * 
+	 * @param gl The OpenGL ES context
+	 */
 	@Override
 	protected void onAfterDraw(GL10 gl) {
 		/* Draw the sky background gradient */

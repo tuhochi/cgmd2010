@@ -5,12 +5,18 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
+ * A two-color, vertical gradient
+ * 
  * An object that represents a rectangle that has a color gradient with two
  * different color values (one for the top and one for the bottom color).
  * 
  * This object is used in MireRabbit for the sky background.
  * 
- * @author thp
+ * This works fine in the Emulator and on the HTC Magic, but it does not seem
+ * to draw anything on the Nexus One. Your authors were not able to figure
+ * out what the problem might be in this case, but we're open for suggestions.
+ * 
+ * @author Thomas Perl
  */
 public class Gradient {
 	float width;
@@ -97,7 +103,8 @@ public class Gradient {
 
 	/**
 	 * draw the gradient on the Scene
-	 * @param gl OpenGL
+	 * 
+	 * @param gl The OpenGL ES context to draw on
 	 */
 	public void draw(GL10 gl) {
 		gl.glMatrixMode(GL10.GL_MODELVIEW);

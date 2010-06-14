@@ -3,12 +3,16 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 import java.util.Random;
 
 /**
+ * A Decorative Cloud
+ * 
  * A simple cloud sprite that will position itself at the top of the game
  * environment and will move through the screen. This object is self-contained,
  * will automatically choose a different texture part based on its ID and will
  * move itself if step() is called for every frame.
  * 
- * @author thp
+ * Not to be confused with Cloud Computing.
+ * 
+ * @author Thomas Perl
  */
 public class Cloud extends Sprite {
 	/** the id of the cloud */

@@ -3,6 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
+ * OFAB (Our Fancy Aim Bar)
+ * 
  * This class represents the aiming bar that will appear when the shaman has
  * targetted our rabbit. It consists of a background texture (the "empty bar")
  * and a foreground texture (the "fill") which will be used to compose a bar
@@ -10,7 +12,7 @@ import javax.microedition.khronos.opengles.GL10;
  * 
  * The progress that the bar displays can be set using "setProgress".
  * 
- * @author thp
+ * @author Thomas Perl
  */
 public class AimBar extends SpriteContainer {
 	/** the sprite for the foreground of the AimBar */
@@ -46,6 +48,8 @@ public class AimBar extends SpriteContainer {
 	/**
 	 * This function is overridden to be able to compose the "filled" part of
 	 * the progress bar on top of the bar itself.
+	 * 
+	 * @param gl The OpenGL ES context used to draw the bar
 	 **/
 	@Override
 	protected void onAfterDraw(GL10 gl) {

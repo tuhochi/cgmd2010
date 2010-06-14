@@ -5,9 +5,10 @@ import javax.microedition.khronos.opengles.GL10;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.Swipe;
 
 /**
- * This class is the visual representation of the Rabbit
+ * This class is the visual representation of the Rabbit head
  * 
- * @author Matthias
+ * @author Matthias Tretter
+ * @author Thomas Perl
  * 
  */
 
@@ -253,7 +254,7 @@ public class RabbitSprite extends SpriteContainer {
 	/**
 	 * rotate the rabbit depending on current swipe gesture
 	 * 
-	 * @param swipe
+	 * @param swipe The swipe object (gesture)
 	 */
 	public void rotate(Swipe swipe) {
 		float angleDelta = (swipe.getPower() - Swipe.MIN_LENGTH) / 90.f;
@@ -299,6 +300,8 @@ public class RabbitSprite extends SpriteContainer {
 
 	/**
 	 * loose a coin of the rabbit
+	 * 
+	 * @return true if this was the last coin to be lost (false otherwise)
 	 */
 	public boolean looseCoin() {
 		boolean result = coinBucket.looseCoin();
@@ -332,6 +335,11 @@ public class RabbitSprite extends SpriteContainer {
 		return result;
 	}
 
+	/**
+	 * Internally overridden to draw the stars
+	 * 
+	 * @param gl The OpenGL ES context
+	 */
 	@Override
 	protected void onAfterDraw(GL10 gl) {
 		super.onAfterDraw(gl);
@@ -346,7 +354,7 @@ public class RabbitSprite extends SpriteContainer {
 	}
 
 	/**
-	 * @return the number of left coins
+	 * @return the number of coins left in the bucket
 	 */
 	public int getCoinCount() {
 		return coinBucket.getCoinCount();
