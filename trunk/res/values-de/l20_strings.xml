@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="l20_help_head">Shopping Bunny</string>
-	<string name="l20_help_text">Unser Bunny geht Shoppen!
-	Es muss versuchen möglichst teure Produkte in seinen Einkaufswagen zu packen, um soviel Geld wie möglich auszugeben.
-	Aber Vorsicht! Der Einkaufswagen kann schon voll werden, bevor die Kasse erreicht wird. Also muss darauf geachtet werden,
-	den Wagen nicht mit Sonderangeboten vollzustopfen und auch nicht an rutschigen Stellen am Weg auszurutschen. Werden die
-	Gegenstände, die man auf seiner Einkaufsliste hat, eingesammelt, verliert man ein paar extra Hasentaler.
-	Also, lasst das Shoppen beginnen!
-	</string>
-	<string name="l20_nameofthegame_full">Stufe 20</string>
+	<string name="l20_help_text">Unser Bunny geht Shoppen! Versuch möglichst teure Produkte in deinen Einkaufswagen zu packen, um soviel Geld wie möglich auszugeben. Klick auf ein Produkt im Regal um es genau in den Einkaufswagen fallen zu lassen. Fällt es daneben, ist es verloren. 
+Pass auch auf die herumstehenden Warnschilder auf. Fährst du dagegen, verlierst du wertvolle Shoppingzeit. Klick rechtzeitig auf die Schilder um sie zu entfernen. 
+Also, lasst das Shoppen beginnen!</string>
+	<string name="l20_nameofthegame_full">Level 20</string>
 	<string name="l20_button_start_text">Start!</string>
 	<string name="l20_button_resume_text">Fortfahren!</string>
 	<string name="l20_description_text">Klick die Produkte um sie in den Einkaufswagen zu legen. Wähle eher teure statt billige Produkte.</string>
