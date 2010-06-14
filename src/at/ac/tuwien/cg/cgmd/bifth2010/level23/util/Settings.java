@@ -48,7 +48,7 @@ public class Settings
 	public static final float MAINCHAR_STARTPOSY = 3f;
 	
 	/** Will be multiplied with balloonHeight for Score */
-	public static final float SCOREHEIGHT_MODIFIER = 0.0165f;
+	public static final float SCOREHEIGHT_MODIFIER = 0.0175f;
 	
 	public static final int MAX_HEIGHT = 5000;
 	
