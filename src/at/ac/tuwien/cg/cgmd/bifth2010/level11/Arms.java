@@ -1,27 +1,29 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * The arms (2 arms and 2 hands) are part of every pedestrian. 
+ * Both arms and hands can be be colored separately.
+ * @author g11
+ *
+ */
 public class Arms {
-
-    private static final String LOG_TAG = Arms.class.getSimpleName();
-	
 	private static final int arm_texture_id = R.drawable.l11_pedestrian_arm;
 	private static final int hand_texture_id = R.drawable.l11_pedestrian_hand;
 	
 	private Square left_arm, right_arm, left_hand, right_hand;
 	
 	private Color color_arm, color_skin = new Color();
-	private Vector2 position, position_leftarm, position_rightarm;
+	private Vector2 position;
 	float angle;
 	float arm_position;
 	
 	/**
-	 * arm constructor
+	 * The arm constructor creates four drawable squares,
+	 * resets the arm position to zero and sets the arm and skin colors.
 	 * @param gl
 	 * @param context
 	 */
@@ -41,7 +43,7 @@ public class Arms {
 	}
 	
 	/**
-	 * sets color of arms
+	 * Set arm and skin colors.
 	 * @param c
 	 * @param sc
 	 */
@@ -52,13 +54,12 @@ public class Arms {
 	}
 	
 	/**
-	 * update arm position and rotation
+	 * Update arm position and rotation (pedestrian alignment)
 	 * @param pos
 	 * @param angle
 	 * @param arm_pos
 	 */
 	public void update(Vector2 pos, float angle, float arm_pos) {
-		//Log.i(LOG_TAG, "update()");
 		this.position = pos;
 		this.angle = angle;
 		this.arm_position = 3.0f*arm_pos;
@@ -66,16 +67,11 @@ public class Arms {
 	}
 	
 	/**
-	 * draws arms
+	 * Draw method (arms)
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
-		//Log.i(LOG_TAG, "draw()");
-		
-
-			gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
-		
-		
+		gl.glColor4f(color_arm.r, color_arm.g, color_arm.b, 1.0f);
 		Textures.tex.setTexture(arm_texture_id);
 		
 		// left arm
@@ -123,5 +119,4 @@ public class Arms {
 		gl.glPopMatrix();
 		
 	}
-	
 }
