@@ -183,7 +183,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getChuckTextur()
 	{
-		return generateTexturePart(new Vector2(128 + 0.5f,704), new Vector2(128+128,704+256));
+		return generateTexturePart(new Vector2(128+1f,704), new Vector2(128+128,704+256));
 	}
 	
 	/**
@@ -210,7 +210,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getBoostAnimationTextur()
 	{
-		return generateTexturePart(new Vector2(512,0), new Vector2(512+128,0+256));
+		return generateTexturePart(new Vector2(512,0), new Vector2(512+128,0+256-1f));
 	}
 	
 	/**
@@ -219,7 +219,7 @@ public class TextureAtlas
 	 */
 	public TexturePart getGoldBarAnimationTextur()
 	{
-		return generateTexturePart(new Vector2(256,0), new Vector2(256+128,0+256));
+		return generateTexturePart(new Vector2(256,0), new Vector2(256+128,0+256-1f));
 	}
 	
 	/**
