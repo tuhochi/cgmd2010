@@ -20,13 +20,13 @@ import android.os.Message;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * Main render class - the heart of the level.
+ * @author Georg, Gerald
+ */
+
 public class RenderManager implements Renderer, OnDismissListener {
 
-	/**
-	 * main render class
-	 * @author Georg, Gerald
-	 */
-	
 	/** our {@link LevelActivity}**/
 	private LevelActivity activity;
 	/** our street model**/

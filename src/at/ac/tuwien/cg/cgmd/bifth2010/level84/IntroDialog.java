@@ -11,14 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * Class which shows a dialog at the beginning of the level with short instructions how to play the game.
+ * This class is a extension of {@link AlertDialog}.
+ * @author Gerald
+ */
+
 public class IntroDialog extends AlertDialog implements OnTouchListener {
 
-	/**
-	 * class which shows a dialog at the beginning of the level
-	 * with short instructions how to play the game
-	 * @author Gerald
-	 */
-
+	
 	/** view **/
 	private View view;
 	/** ImageView component for showing images **/
