@@ -3,15 +3,23 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 public class Point {
 	private float x;
 	private float y;
-	
+
 	public static final int IDENT = 0;
 	public static final int UPPER = 1;
 	public static final int LEFT = 2;
 	public static final int RIGHT = 4;
 	public static final int LOWER = 8;
-	
-	public Point() { x=0;y=0; }
-	public Point(float x, float y) { this.x = x; this.y = y; }
+
+	public Point() {
+		x=0;
+		y=0; 
+	}
+
+	public Point(float x, float y) {
+		this.x = x; 
+		this.y = y; 
+	}
+
 	public Point(Point copy) { this.x = copy.getX(); this.y = copy.getY(); }
 	public void setY(float y) { this.y = y; }
 	public void setX(float x) { this.x = x; }
@@ -27,6 +35,7 @@ public class Point {
 	public static float diffY(Point op, Point op2) { return (float)Math.abs(op.getY()-op2.getY()); }
 	public float diffX(Point op) { return (float)Math.abs(op.getX()-x); }
 	public float diffY(Point op) { return (float)Math.abs(op.getY()-y); }
+
 	public static int getRelation(Point op, Point op2) {
 		if (op.getX() > op2.getX()) {
 			if (op.getY() > op2.getY()) return (UPPER | RIGHT);
@@ -42,7 +51,7 @@ public class Point {
 			else return IDENT;
 		}
 	}
-	
+
 	public int getRelation(Point op) {	// returns "i am " ...
 		if (x > op.getX()) {
 			if (y > op.getY()) return (UPPER | RIGHT);

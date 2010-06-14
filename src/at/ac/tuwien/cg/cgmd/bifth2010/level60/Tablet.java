@@ -17,12 +17,13 @@ public class Tablet {
 		      1.0f, 1.0f, 0.0f
 		};
 	private short[] indices = { 0, 1, 2, 0, 2, 3 };
+	private final float epsilon = 0.005f;
 	private float texCoords[] = {
 			
-			0.0f, 0.0f,
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f
+			0.0f+epsilon, 0.0f+epsilon,
+			0.0f+epsilon, 1.0f-epsilon,
+			1.0f-epsilon, 1.0f-epsilon,
+			1.0f-epsilon, 0.0f+epsilon
 
 	};
 	private FloatBuffer vertexBuffer;
