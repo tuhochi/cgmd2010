@@ -53,30 +53,9 @@ public class SoundPlayer {
 	 */
 	public static void createInstance(Context context, boolean musicOn) {
 		if (instance == null) {
-			setContext(context);
+			SoundPlayer.context = context;
 			instance = new SoundPlayer(context, musicOn);
 		}
-	}
-
-	/**
-	 * Get the Singleton-Object
-	 * 
-	 * @param context
-	 *            needed for creation
-	 * @return the SoundPlayer
-	 */
-	public static SoundPlayer getInstance() {
-		return instance;
-	}
-
-	/**
-	 * set the context
-	 * 
-	 * @param c
-	 *            the new context
-	 */
-	public static void setContext(Context c) {
-		SoundPlayer.context = c;
 	}
 
 	/**
@@ -105,7 +84,14 @@ public class SoundPlayer {
 	/**
 	 * releases the memory and resources
 	 */
-	public void release() {
+	public static void release() {
+		if (instance != null) {
+			instance.realRelease();
+		}
+	}
+	
+	/** Internally used; see release() */
+	private void realRelease() {
 		if (soundPool != null) {
 			soundPool.release();
 			soundPool = null;
@@ -139,7 +125,14 @@ public class SoundPlayer {
 	/**
 	 * starts the background-music
 	 */
-	public void startMusic() {
+	public static void startMusic() {
+		if (instance != null) {
+			instance.realStartMusic();
+		}
+	}
+	
+	/** Internally used; see startMusic() */
+	private void realStartMusic() {
 		if (musicOn && mediaPlayer != null) {
 			try {
 				mediaPlayer.start();
@@ -155,7 +148,14 @@ public class SoundPlayer {
 	/**
 	 * stops the background-music
 	 */
-	public void stopMusic() {
+	public static void stopMusic() {
+		if (instance != null) {
+			instance.realStopMusic();
+		}
+	}
+	
+	/** Internally used; see stopMusic() */
+	private void realStopMusic() {
 		if (musicOn && mediaPlayer != null) {
 			try {
 				mediaPlayer.stop();
@@ -179,7 +179,14 @@ public class SoundPlayer {
 	 *            ranges from 0.f to 1.f, where 0.5f means the sound is equally
 	 *            distributed between left and right speaker
 	 */
-	public void play(SoundEffect sound, float position) {
+	public static void play(SoundEffect sound, float position) {
+		if (instance != null) {
+			instance.realPlay(sound, position);
+		}		
+	}
+	
+	/** Internally used; see play() */
+	private void realPlay(SoundEffect sound, float position) {
 		if (musicOn) {
 			if (sound == SoundEffect.DAMN) {
 				if (currentValue % 2 == 0) {
@@ -216,10 +223,4 @@ public class SoundPlayer {
 		}
 	}
 
-	/**
-	 * @return true, if music shall be played, otherwise false
-	 */
-	public boolean isMusicOn() {
-		return musicOn;
-	}
 }

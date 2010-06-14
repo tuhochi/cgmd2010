@@ -170,7 +170,7 @@ public class PhysicalRabbit implements PhysicalObject {
 		// bottom reached -> stop dropping coin
 		else {
 			coinDrops = false;
-			SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.DROP, 0.5f);
+			SoundPlayer.play(SoundPlayer.SoundEffect.DROP, 0.5f);
 		}
 	}
 

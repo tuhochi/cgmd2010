@@ -137,7 +137,7 @@ public class GameThread extends Thread {
 						// screen
 						if (rabbit.hasLanded()) {
 							if (!justLanded ) {
-								SoundPlayer.getInstance().play(SoundEffect.WTF, 0.5f);
+								SoundPlayer.play(SoundEffect.WTF, 0.5f);
 								justLanded = true;
 							}
 							
@@ -232,7 +232,7 @@ public class GameThread extends Thread {
 			
 			long now = System.currentTimeMillis();
 			if (now > lastFlapSound + 500) {
-				SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.FLAP, soundPosition);
+				SoundPlayer.play(SoundPlayer.SoundEffect.FLAP, soundPosition);
 				lastFlapSound = System.currentTimeMillis();
 			}
 		}
@@ -248,9 +248,9 @@ public class GameThread extends Thread {
 					}
 					
 					if (crosshairs.getIsLoaded()) {
-						SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.LOAD, 0.5f);
+						SoundPlayer.play(SoundPlayer.SoundEffect.LOAD, 0.5f);
 					} else {
-						SoundPlayer.getInstance().play(SoundPlayer.SoundEffect.DAMN, 0.5f);
+						SoundPlayer.play(SoundPlayer.SoundEffect.DAMN, 0.5f);
 					}
 				}
 			}).start();
