@@ -14,8 +14,8 @@
 <string name="l33_help_entry4_head">Barrel</string>
 <string name="l33_help_entry5_head">Well</string>
 <string name="l33_level_fps">fps: 0</string>
-<string name="l33_tutorial_goodItems">Sammle alle Gegenstände die mit einem grünen Kreis hinterlegt sind ein um dein Gold zu verlieren</string>
-<string name="l33_tutorial_badItems">Vermeide Gegenstände die mit einem roten Kreis gekennzeichnet sind</string>
+<string name="l33_tutorial_goodItems">Collect all items which are green marked to loose your gold</string>
+<string name="l33_tutorial_badItems">Avoid items which are marked with a red circle</string>
 <string name="l33_tutorial_loadingText">Loading....</string>
-<string name="l33_tutorial_startGame">Berühre den Bildschirm um das Spiel zu starten....</string>
+<string name="l33_tutorial_startGame">Touch the screen to start the game....</string>
 </resources>
