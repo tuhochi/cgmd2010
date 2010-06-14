@@ -482,15 +482,15 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		Log.d(GameManager.class.getName(), String.valueOf(keyCode));
 		
 		switch (keyCode) {
-		case KeyEvent.KEYCODE_SEARCH:
-			
-			curScrollSpeed += 0.02f;
-			return true;
-			
-		case KeyEvent.KEYCODE_MENU:
-			
-			curScrollSpeed -= 0.02f;
-			return true;
+//		case KeyEvent.KEYCODE_SEARCH:
+//			
+//			curScrollSpeed += 0.02f;
+//			return true;
+//			
+//		case KeyEvent.KEYCODE_MENU:
+//			
+//			curScrollSpeed -= 0.02f;
+//			return true;
 		
 		case KeyEvent.KEYCODE_BACK:
 			
@@ -794,8 +794,20 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		numberSprite.y = y + (((float)Math.random()-0.5f)*10);
 		plusSprite.x = numberSprite.x - numberSprite.width;
 		plusSprite.y = numberSprite.y;
-		plusSprite.visible = true;
-		numberSprite.visible = true;
+		
+		// set visibility correctly
+		for (int i = 0; i <= 9; i++) {
+			numberSprite.visible = (i == number);
+		}
+		
+		if (sign == "-") {
+			plusSprite.visible = true;
+			textSprites.getCharSprite("+").visible = false;
+		} else if (sign == "+") {
+			plusSprite.visible = true;
+			textSprites.getCharSprite("-").visible = false;
+		}
+		
 		LineAnimator spriteAnim = new LineAnimator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.5f);
 		spriteAnim.random(50);
 		Animator plusAnim = new LineAnimator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);

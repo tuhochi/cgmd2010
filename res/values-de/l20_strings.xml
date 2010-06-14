@@ -5,7 +5,7 @@
 Pass auch auf die herumstehenden Warnschilder auf. Fährst du dagegen, verlierst du wertvolle Shoppingzeit. Klick rechtzeitig auf die Schilder um sie zu entfernen. 
 Also, lasst das Shoppen beginnen!</string>
 	<string name="l20_nameofthegame_full">Level 20</string>
-	<string name="l20_button_start_text">Start!</string>
-	<string name="l20_button_resume_text">Fortfahren!</string>
+	<string name="l20_button_start_text">Shoppen!</string>
+	<string name="l20_button_resume_text">Weiter Shoppen!</string>
 	<string name="l20_description_text">Klick die Produkte um sie in den Einkaufswagen zu legen. Wähle eher teure statt billige Produkte.</string>
 </resources>
