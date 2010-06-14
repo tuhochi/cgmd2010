@@ -31,6 +31,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
     private float mElapsedSeconds;
     private long mOldTime;
     private long mTime;
+    private float mPlayTime;
     private LevelActivity mContext;
     private float mRotAngle = 0;
 	private Handler mHandler;
@@ -55,8 +56,8 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	private float mBGScale = 0.75f;
 	
 	private Bundle mSavedInstance;
-	
-	
+
+	public static final String REMAINING_TIME = "fallingTime";
     
 	/**
 	 * Creates a new World
@@ -77,7 +78,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
     /**
      * Update the world
      */
-	public synchronized void update()
+	public synchronized void update(boolean wasPaused)
 	{
 		if(mNotInitialized)
 			return;
@@ -86,8 +87,8 @@ public class NormalModeWorld implements World, PlayerStateListener {
         Date date = new Date();
         mTime = date.getTime();
         mElapsedSeconds = (mTime - mOldTime) / 1000.0f;
-        
-        //fpsChanged(1f/mElapsedSeconds);
+        mPlayTime += mElapsedSeconds;
+        playtimeChanged(mPlayTime);
 
         mRotAngle += mElapsedSeconds;
     	Vector3 moveDelta = new Vector3();
@@ -182,6 +183,12 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	{
 		MatrixTrackingGL trackGl = (MatrixTrackingGL)gl;
         GLManager.getInstance().init(trackGl, mContext);
+		mPlayTime = 0f;
+        if(mSavedInstance != null)
+        {
+			if(mSavedInstance.containsKey(REMAINING_TIME))
+				mPlayTime = mSavedInstance.getFloat(REMAINING_TIME);
+        }
         mLevel = new Level(this, mSavedInstance);
         mLevel.getPlayer().addPlayerStateListener(this);
         
@@ -189,7 +196,6 @@ public class NormalModeWorld implements World, PlayerStateListener {
 		mNotInitialized = false;
 
 		mBackground = new Quad(20f,20f);
-		
 	}
 
 
@@ -225,24 +231,24 @@ public class NormalModeWorld implements World, PlayerStateListener {
     	mNewTouchPos = mTouchPos;
     }
 
-    /*
-    private void fpsChanged(float fps)
+    
+    private void playtimeChanged(float playTime)
     {
-		class FPSRunnable implements Runnable{
-        	private float mFps;
-        	public FPSRunnable(float fps)
+		class PTRunnable implements Runnable{
+        	private float mPlayTime;
+        	public PTRunnable(float playTime)
         	{
-        		mFps = fps;
+        		mPlayTime = playTime;
         	}
         	@Override
             public void run() {
-                mContext.updateFPS(mFps);
+                mContext.updatePlayTime(mPlayTime);
             }
         };
         
-        Runnable hprunnable = new FPSRunnable(fps);
+        Runnable hprunnable = new PTRunnable(playTime);
         mHandler.post(hprunnable);
-    }*/
+    }
 
 	@Override
 	public synchronized void playerHPChanged(float hp) {
@@ -287,6 +293,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 
 	@Override
 	public synchronized void onSaveInstanceState(Bundle outState) {
+		outState.putFloat(REMAINING_TIME, mPlayTime);
 		mLevel.onSaveInstanceState(outState);
 	}
 }

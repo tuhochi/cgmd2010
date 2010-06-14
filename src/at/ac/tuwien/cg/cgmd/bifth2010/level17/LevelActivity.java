@@ -38,7 +38,8 @@ public class LevelActivity extends Activity {
 	private TextView mPointsText;
 	private ImageView mHealthIcon;
 	private ImageView mGoldIcon;
-	//private TextView mFPSText;
+	private ImageView mTimeIcon;
+	private TextView mTimeText;
 	private Vibrator mVibrator;
 	private int mCurrentMoney; 
 
@@ -83,12 +84,15 @@ public class LevelActivity extends Activity {
         mPointsText.setTextColor(Color.BLACK);
         mPointsText.setBackgroundResource(R.drawable.l17_text_bg);
         
-        /*mFPSText = new TextView(this);
-        mFPSText.setText("0");
-        mFPSText.setTextSize(25);
-        mFPSText.setGravity(Gravity.CENTER);
-        mFPSText.setTextColor(Color.BLACK);
-        mFPSText.setBackgroundResource(R.drawable.l17_text_bg);*/
+        mTimeIcon = new ImageView(this);
+        mTimeIcon.setImageResource(R.drawable.l17_time);
+        
+        mTimeText = new TextView(this);
+        mTimeText.setText("3:00");
+        mTimeText.setTextSize(25);
+        mTimeText.setGravity(Gravity.CENTER);
+        mTimeText.setTextColor(Color.BLACK);
+        mTimeText.setBackgroundResource(R.drawable.l17_text_bg);
 
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         llparams.weight = 0;
@@ -102,7 +106,8 @@ public class LevelActivity extends Activity {
         llparams2.weight = 1;
         llparams2.setMargins(10, 10, 10, 10);
         llayout.addView(mSpacer, llparams2);
-        //llayout.addView(mFPSText, llparams);
+        llayout.addView(mTimeIcon, llparams3);
+        llayout.addView(mTimeText, llparams);
         llayout.addView(mGoldIcon, llparams3);
         llayout.addView(mPointsText, llparams);
         
@@ -192,10 +197,18 @@ public class LevelActivity extends Activity {
     	mVibrator.vibrate(milliseconds);  
     }    
     
-    /*public void updateFPS(float fps)
+    public void updatePlayTime(float playTime)
     {
-    	mFPSText.setText(Integer.toString((int)fps));
-    }*/
+    	int maxTime = 180;
+    	int remainingTime = maxTime - (int)playTime;
+    	String minutes = Integer.toString(remainingTime/60);
+    	String seconds = Integer.toString(remainingTime%60);
+    	if (seconds.length() == 1)
+    		seconds = "0" + seconds;
+    	mTimeText.setText(minutes + ":" + seconds);
+    	if (playTime >= maxTime)
+    		finish();
+    }
     
 	/**
 	 * Is called when the money of the player changes

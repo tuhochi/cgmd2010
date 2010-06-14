@@ -13,6 +13,7 @@ public class GameThread extends Thread {
 	private World mWorld;
 	private boolean mRunning = true;
 	private boolean mPause = false;
+	private boolean mWasPaused = false;
 	
 	/**
 	 * Creates a new World
@@ -31,7 +32,10 @@ public class GameThread extends Thread {
     	while(mRunning)	
     	{
     		if (!mPause)
-    			mWorld.update(); 
+    		{
+    			mWorld.update(mWasPaused); 
+    			mWasPaused = false;
+    		}
     		try {
 				sleep(20);
 			} catch (InterruptedException e) {
@@ -49,6 +53,8 @@ public class GameThread extends Thread {
     
     public void setPause(boolean pause)
     {
+    	if (mPause && !pause)
+    		mWasPaused = true;
     	mPause = pause;
     }
 
