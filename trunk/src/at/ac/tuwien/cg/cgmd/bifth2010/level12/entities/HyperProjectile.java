@@ -3,9 +3,14 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12.entities;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
-
+/** 
+ * Projectile of the hyper tower
+ * @see HyperTower
+ * @see Projectile
+ */
 public class HyperProjectile extends Projectile {
 
+	/** constructor, initializes the values, adds textures needed */
 	public HyperProjectile(){
 		mSpeed = Definitions.HYPER_PROJECTILE_SPEED;
 		mDmg = Definitions.HYPER_PROJECTILE_DAMAGE;

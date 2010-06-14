@@ -4,8 +4,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/** 
+ * Projectile of the advanced tower
+ * @see AdvancedTower
+ * @see Projectile
+ */
 public class AdvancedProjectile extends Projectile {
 		
+		/** constructor setting values and adding needed textures */
 		public AdvancedProjectile(){
 			mSpeed = Definitions.ADVANCED_PROJECTILE_SPEED;
 			mDmg = Definitions.ADVANCED_PROJECTILE_DAMAGE;

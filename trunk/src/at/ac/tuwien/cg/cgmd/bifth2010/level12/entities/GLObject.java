@@ -7,17 +7,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * skeleton from which every drawn object is inherited
+ */
 public abstract class GLObject {
-	protected FloatBuffer mVerticesBuffer = null;
-	protected FloatBuffer mColorBuffer = null;
-	protected ShortBuffer mIndicesBuffer = null;
-	protected FloatBuffer mTextureBuffer = null;
-	protected float[] mColor = {1.0f, 1.0f, 1.0f, 1.0f };
-	protected int mIndicesCounter = -1;
-	protected int mY = 0;
-	protected int mX = 0;
-	protected boolean mActive = false;
-	protected int mTexture = 0;
+	protected FloatBuffer mVerticesBuffer = null; /** the vertices buffer for opengl */
+	protected FloatBuffer mColorBuffer = null;  /** the color buffer for opengl */
+	protected ShortBuffer mIndicesBuffer = null;  /** the indices buffer for opengl */
+	protected FloatBuffer mTextureBuffer = null;  /** the texture buffer for opengl */
+	protected float[] mColor = {1.0f, 1.0f, 1.0f, 1.0f };  /** color array */
+	protected int mIndicesCounter = -1;  /** counter of the indices */
+	protected int mY = 0;  /** x-coordinate of the center */
+	protected int mX = 0;  /** y-coordinate of the center */
+	protected boolean mActive = false; /** will be drawn or not */
+	protected int mTexture = 0; /** the texture sample to draw on this object */
 	
     /** The initial texture coordinates (u, v) */	
     protected float mTexturePoints[] = {    		
@@ -27,7 +30,7 @@ public abstract class GLObject {
 			1.0f, 0.0f
 	};
 	
-    
+    /** draws the object with or without texture */
 	public void draw( GL10 gl ){		
 		gl.glFrontFace( GL10.GL_CCW );	
 		if( mVerticesBuffer != null && mIndicesBuffer != null && mTextureBuffer != null) {
@@ -64,27 +67,37 @@ public abstract class GLObject {
 		}
 	}
 	
-	
+	/** returns of the object is drawn or not */
 	public boolean getActiveState(){
 		return mActive;
 	}
 	
-	
+	/** sets if the object is to be drawn or not */
 	public void setActiveState( boolean state ){
 		mActive = state;
 	}
 	
-	
+	/** 
+	 * returns the center of the object to be drawed
+	 * @return int the y-coordinate of the center
+	 */
 	public int getY(){
 		return mY;
 	}
 	
-	
+	/** 
+	 * returns the center of the object to be drawed
+	 * @return int the x-coordinate of the center
+	 */
 	public int getX(){
 		return mX;
 	}
 	
 	
+	/** 
+	 * returns the texture sample id
+	 * @return int the sample id
+	 */
 	public int getTexture(){
 		return mTexture;
 	}

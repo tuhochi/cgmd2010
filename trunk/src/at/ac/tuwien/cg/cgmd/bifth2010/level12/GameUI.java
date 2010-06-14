@@ -15,10 +15,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
+/**
+ * class creating, showing the game UI
+ * @see android.view.LinearLayout
+ * @see android.view.View.OnClickListener
+ */
 public class GameUI extends LinearLayout implements OnClickListener{
 	
-	private Context mContext = null;
 	//private static TextView mTV;
 	private static TextView mIron;
 	private static TextView mIrontxt;
@@ -39,7 +42,6 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	
 	private GameUI(Context context, int height, int width) {
 		super(context);	
-		mContext = context;
 		int elementWidth = (int)width / 7;		
 		this.setOrientation(LinearLayout.HORIZONTAL);
 		this.setGravity(Gravity.CENTER_HORIZONTAL);

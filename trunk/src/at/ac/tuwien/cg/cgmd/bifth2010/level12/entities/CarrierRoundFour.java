@@ -5,14 +5,17 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.GameMechanics;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
-
+/**
+ * one enemy
+ * @see MoneyCarrier
+ *
+ */
 public class CarrierRoundFour extends MoneyCarrier {
 
+	/**constuctor setting values and adding needed textures */
 	public CarrierRoundFour(){
 		mHp = Definitions.FOURTH_ROUND_ENEMIE_HP;
-		mStrength = Definitions.FOURTH_ROUND_ENEMIE_STRENGTH;
 		mRadius = (short) Math.floor(  (float)Definitions.FIELD_SEGMENT_LENGTH / 100 * Definitions.FOURTH_ROUND_ENEMIE_RADIUS);
-		mType = 1;
 		mMoney = Definitions.FOURTH_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.FOURTH_ROUND_ENEMIE_SPEED;
 		mColor[0] = 1.0f;
@@ -26,7 +29,6 @@ public class CarrierRoundFour extends MoneyCarrier {
 		TextureManager.getSingletonObject().add(mDyingTextur3);
 		TextureManager.getSingletonObject().add(mDyingTextur4);
 		mSound = R.raw.l12_enemie4_dying;
-		mType = 4;
 		mIronToDrop = Definitions.FOURTH_ROUND_ENEMIE_IRON;
 	}
 }

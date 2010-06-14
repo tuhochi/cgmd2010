@@ -5,13 +5,16 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.SoundHandler;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
+/**
+ * one enemy
+ * @see MoneyCarrier
+ */
 public class CarrierRoundThree extends MoneyCarrier {
 
+	/** constructor setting values and adding needed textures */
 	public CarrierRoundThree(){
 		mHp = Definitions.THIRD_ROUND_ENEMIE_HP;
-		mStrength = Definitions.THIRD_ROUND_ENEMIE_STRENGTH;
 		mRadius = (short)Math.floor( (float)Definitions.FIELD_SEGMENT_LENGTH / 100 * Definitions.THIRD_ROUND_ENEMIE_RADIUS);
-		mType = 1;
 		mMoney = Definitions.THIRD_ROUND_ENEMIE_MONEY;
 		mSpeed = Definitions.THIRD_ROUND_ENEMIE_SPEED;
 		mColor[0] = 1.0f;
@@ -25,7 +28,6 @@ public class CarrierRoundThree extends MoneyCarrier {
 		TextureManager.getSingletonObject().add(mDyingTextur3);
 		TextureManager.getSingletonObject().add(mDyingTextur4);
 		mSound = R.raw.l12_enemie3_dying;
-		mType = 3;
 		mIronToDrop = Definitions.THIRD_ROUND_ENEMIE_IRON;
 	}
 	

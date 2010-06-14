@@ -1,24 +1,25 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
+/** class which handler various game mechanic elements */
 public class GameMechanics {
-	private int mMoney = 0;
-	private int mBurnedMoney = 0;
-	private short mIron = Definitions.STARTING_IRON;
-	private boolean mGameRunning = true;
-	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_START_TIME / 1000);
-	private long mLastCountdownCheck = -1;
-	private short mRound = 0;
-	private long mRoundStartedTime = System.currentTimeMillis();
-	private int mSelectedTower = 0;
-	private long mLastColDetDone = -1;
-	private LevelActivity mGameContext = null;
-	private short mSpawndenemies = 0;
-	private short mKilledenemies = 0;
-	private short mBasicTowerBuilt = 0;
-	private short mAdvancedTowerBuilt = 0;
-	private short mHyperTowerBuilt = 0;
-	private short mFreezeTowerBuilt = 0;
-	private short mTowerDestroyed = 0;
+	private int mMoney = 0; /** money "won" by the player */
+	private int mBurnedMoney = 0;  /** money "lost" by the player */
+	private short mIron = Definitions.STARTING_IRON; /** Iron possesed */
+	private boolean mGameRunning = true; /** is the game running or paused? */
+	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_START_TIME / 1000); /** wait time between the rounds */
+	private long mLastCountdownCheck = -1; /** time when the countdown was last checked */
+	private short mRound = 0; /** round number */
+	private long mRoundStartedTime = System.currentTimeMillis(); /** time the current round started */
+	private int mSelectedTower = 0; /** tower currently selected through the UI */
+	private long mLastColDetDone = -1; /** time when the last collision detection is done */
+	private LevelActivity mGameContext = null; /** the app context (level activity( */
+	private short mSpawndenemies = 0; /** number of enemies spawned */
+	private short mKilledenemies = 0; /** number of enemies killed */
+	private short mBasicTowerBuilt = 0; /** number of basic tower built */
+	private short mAdvancedTowerBuilt = 0; /** number of advanced tower built */
+	private short mHyperTowerBuilt = 0; /** number of hyper tower built */
+	private short mFreezeTowerBuilt = 0; /** number of freeze tower built */
+	private short mTowerDestroyed = 0; /** number of towers destroyed */
 	
 	
 	private static GameMechanics mSingleton = null;
@@ -67,6 +68,7 @@ public class GameMechanics {
 		mMoney = startMoney;	
 	}
 	
+	/** sets the app context (the Level Acitvity ) */
 	public void setGameContext( LevelActivity gc ){
 		mGameContext = gc;
 	}
@@ -76,7 +78,6 @@ public class GameMechanics {
 		mMoney = money;
 		return money;
 	}
-	
 	public static GameMechanics getSingleton(){
 		if( mSingleton == null){
 			mSingleton = new GameMechanics( Definitions.STARTING_MONEY );
@@ -91,7 +92,6 @@ public class GameMechanics {
 	public int removeMoney( int amount){
 		return mBurnedMoney +=amount;
 	}
-	
 	
 	public boolean running(){
 		return mGameRunning;
@@ -109,12 +109,17 @@ public class GameMechanics {
 		mLastCountdownCheck = System.currentTimeMillis();
 	}
 	
+	
 	public void setRoundStartedTime(){
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME / 1000;
 		mRoundStartedTime = System.currentTimeMillis();
 	}
 	
+	/**
+	 * delivers the remaining countdown time
+	 * @return int the reaming seconds
+	 */
 	public int  getRemainingWaitTime(){
 		if( (System.currentTimeMillis() - mLastCountdownCheck > 1000 ) && mGameRunning  ){
 			mSecondsToNextRound--;
@@ -127,10 +132,12 @@ public class GameMechanics {
 		return mRound;
 	}
 	
+	/** sets the values for the next round started */
 	public void nextRound(){
 		mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
 		mRound++;
 	}
+
 
 	public int getMoney() {	
 		return calculateTotalMoney();
@@ -197,6 +204,10 @@ public class GameMechanics {
 		mIron -= price;
 	}
 
+	/**
+	 * how many basic towers can be built with iron possesd
+	 * @return int amount of towers
+	 */
 	public CharSequence getPossibleBasicTowerCount() {
 		Integer count = (int)Math.floor( Definitions.BASIC_TOWER_IRON_NEED / mIron );
 		return count.toString();

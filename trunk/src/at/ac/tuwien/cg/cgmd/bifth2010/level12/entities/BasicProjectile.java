@@ -4,9 +4,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.Definitions;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.TextureManager;
 
-
+/**
+ * projectile of the basic tower
+ * @see BasicTower
+ * @see Projectile
+ */
 public class BasicProjectile extends Projectile {
 	
+	/** constructor setting values and adding needed textures */
 	public BasicProjectile(){
 		mSpeed = Definitions.BASIC_PROJECTILE_SPEED;
 		mDmg = Definitions.BASIC_PROJECTILE_DAMAGE;
