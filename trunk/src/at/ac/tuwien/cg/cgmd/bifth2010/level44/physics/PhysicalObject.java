@@ -10,7 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.io.InputGesture;
  * A physical object is influenced by gravity, can move, draw itself and process
  * input gestures on it
  * 
- * @author Matthias
+ * @author Matthias Tretter
  * 
  */
 

@@ -13,9 +13,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Sprite;
 
 /**
- * This class represents the flying rabbit
+ * This class represents the flying rabbit head
  * 
- * @author Matthias
+ * The movement of the rabbit as well as the bucket and
+ * the dropping coins are modeled by this object.
+ * 
+ * @author Matthias Tretter
+ * @author Thomas Perl
  * 
  */
 
@@ -197,7 +201,7 @@ public class PhysicalRabbit implements PhysicalObject {
 	/**
 	 * Process the next input gesture
 	 * 
-	 * @gesture The Gesture that the user inputs
+	 * @param gesture The Gesture that the user inputs
 	 */
 	public void processGesture(InputGesture gesture) {
 		InputGesture currentGestureToPerform = null;
@@ -290,6 +294,11 @@ public class PhysicalRabbit implements PhysicalObject {
 		inputQueue.clear();
 	}
 
+	/**
+	 * Draw the rabbit onto an OpenGL ES context
+	 * 
+	 * @param gl The OpenGL ES context on which to draw
+	 */
 	@Override
 	public void draw(GL10 gl) {
 		// draw the rabbit-sprite
@@ -303,6 +312,9 @@ public class PhysicalRabbit implements PhysicalObject {
 
 	/**
 	 * set the position of the rabbit
+	 * 
+	 * @param x The X coordinate of the new position
+	 * @param y The Y coordinate of the new position
 	 */
 	@Override
 	public void setPosition(float x, float y) {
@@ -333,6 +345,8 @@ public class PhysicalRabbit implements PhysicalObject {
 
 	/**
 	 * only set positive velocity
+	 * 
+	 * @param velocity The new velocity for this rabbit
 	 */
 	public void setVelocity(float velocity) {
 		if (velocity >= 0.f)
@@ -359,7 +373,9 @@ public class PhysicalRabbit implements PhysicalObject {
 	}
 
 	/**
-	 * @return number of coins left
+	 * Count the coints in the bucket
+	 * 
+	 * @return number of coins left in the bucket
 	 */
 	public int getCoinCount() {
 		return sprite.getCoinCount();
@@ -368,8 +384,8 @@ public class PhysicalRabbit implements PhysicalObject {
 	/**
 	 * is called when the rabbit was shot
 	 * 
-	 * loose a coin, start drawing a dropping coin, jiggle for a short period of
-	 * time
+	 * loose a coin, start drawing a dropping coin,
+	 * jiggle for a short period of time.
 	 */
 	public void looseCoin() {
 		sprite.looseCoin();
@@ -381,6 +397,8 @@ public class PhysicalRabbit implements PhysicalObject {
 	}
 
 	/**
+	 * Check if the rabbit is on the ground
+	 * 
 	 * @return true, if the rabbit has landed at the bottom of the screen
 	 */
 	public boolean hasLanded() {
@@ -388,7 +406,7 @@ public class PhysicalRabbit implements PhysicalObject {
 	}
 
 	/**
-	 * reset all movement-dependent variables to inital values
+	 * reset all movement-related variables to initial values
 	 */
 	@Override
 	public void resetMovement() {
