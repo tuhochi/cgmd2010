@@ -799,14 +799,14 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		for (int i = 0; i <= 9; i++) {
 			numberSprite.visible = (i == number);
 		}
+//		numberSprite.visible = true;
 		
-		if (sign == "-") {
-			plusSprite.visible = true;
+		if (sign.equals("-")) {
 			textSprites.getCharSprite("+").visible = false;
-		} else if (sign == "+") {
-			plusSprite.visible = true;
+		} else if (sign.equals("+")) {
 			textSprites.getCharSprite("-").visible = false;
 		}
+		plusSprite.visible = true;
 		
 		LineAnimator spriteAnim = new LineAnimator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.5f);
 		spriteAnim.random(50);
