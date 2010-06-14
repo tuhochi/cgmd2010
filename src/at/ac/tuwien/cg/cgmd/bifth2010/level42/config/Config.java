@@ -74,7 +74,7 @@ public class Config
 	public static boolean VIBRATE = true;
 	
 	/** The minimum loglevel to display */
-	public static int LOGLEVEL = DEBUG;
+	public static int LOGLEVEL = NONE;
 	
 	/** the total level gametime in ms. */
 	public static long GAMETIME = 120000;
