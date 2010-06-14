@@ -102,7 +102,7 @@ public class LevelActivity extends Activity {
 			SoundPlayer.createInstance(getApplicationContext(), false);
 		}
 
-		System.out.println("##### Music: " + SoundPlayer.getInstance().isMusicOn());
+		SoundPlayer.getInstance().startMusic();
 
 		if (scene != null) {
 			scene.onResume();
@@ -116,6 +116,7 @@ public class LevelActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 
+		SoundPlayer.getInstance().stopMusic();
 		SoundPlayer.getInstance().release();
 
 		if (scene != null) {
