@@ -39,8 +39,8 @@ public class Pedestrian implements Target{
 	private Vector2 bounceVector;
 	private Random rand;
 	private float bounceRadius;
-	private float bounceStrength = 0.0002f;
-	private float maxBounceVectorLength = 1f;
+	private float bounceStrength = 0.0003f;
+	private float maxBounceVectorLength = 0.5f;
 	
 
 	private Square circle;
@@ -51,7 +51,7 @@ public class Pedestrian implements Target{
 	 * @param context
 	 */
 	public Pedestrian(GL10 gl, Context context) {
-		this( 30.0f,10.0f,20.0f,0.01f, 0.3f, gl, context);
+		this( 30.0f,10.0f,30.0f,0.01f, 0.3f, gl, context);
 	}
 	public float getBounceRadius() {
 		return bounceRadius;
@@ -293,8 +293,8 @@ public class Pedestrian implements Target{
 		this.bounceVector.x += x1-x2;
 		this.bounceVector.y += y1-y2;
 		this.bounceVector.mult(bounceStrength/time);
-		if(this.bounceVector.length() > this.maxBounceVectorLength)
-			this.bounceVector.normalize().mult(this.maxBounceVectorLength);
+		/*if(this.bounceVector.length() > this.maxBounceVectorLength)
+			this.bounceVector.normalize().mult(this.maxBounceVectorLength);*/
 		target = null;
 		//System.out.println("bounceVector: "+bounceVector);
 	}
