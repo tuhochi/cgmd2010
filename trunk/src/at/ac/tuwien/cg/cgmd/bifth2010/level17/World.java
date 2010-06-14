@@ -59,12 +59,6 @@ public interface World {
 	 * @param pause The pause state that should be set
 	 */
 	public void setPause(boolean pause);
-
-	/**
-	 * Pauses or resumes the game 
-	 * @param pause The pause state that should be set
-	 */
-	public boolean getPause();
 	
 	/**
 	 * Save the actual gamestate

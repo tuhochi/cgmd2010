@@ -87,7 +87,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
         mTime = date.getTime();
         mElapsedSeconds = (mTime - mOldTime) / 1000.0f;
         
-        fpsChanged(1f/mElapsedSeconds);
+        //fpsChanged(1f/mElapsedSeconds);
 
         mRotAngle += mElapsedSeconds;
     	Vector3 moveDelta = new Vector3();
@@ -225,6 +225,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
     	mNewTouchPos = mTouchPos;
     }
 
+    /*
     private void fpsChanged(float fps)
     {
 		class FPSRunnable implements Runnable{
@@ -241,7 +242,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
         
         Runnable hprunnable = new FPSRunnable(fps);
         mHandler.post(hprunnable);
-    }
+    }*/
 
 	@Override
 	public synchronized void playerHPChanged(float hp) {
@@ -289,12 +290,6 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	public synchronized void setPause(boolean pause) {
 		mPause = pause;
 	}
-	
-	@Override
-	public synchronized boolean getPause() {
-		return mPause;
-	}
-	
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {

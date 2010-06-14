@@ -21,7 +21,6 @@ public class GLView extends GLSurfaceView {
 	//private Vector2 mWindowSize;
 	private GameThread mGame;
 	private World mWorld;
-	private boolean mFirstStart = true;
 	
 	/**
 	 * Creates a new GlView
@@ -122,13 +121,8 @@ public class GLView extends GLSurfaceView {
 
 	@Override
 	public void onResume() {
-		if(mFirstStart)
-			mFirstStart = false;
-		else
-		{
-			if(mWorld != null)
-				mWorld.setPause(false);
-		}
+		//if(mWorld != null)
+			//mWorld.setPause(false);
 		super.onResume();
 	}
 	

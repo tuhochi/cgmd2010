@@ -29,7 +29,6 @@ public class GameThread extends Thread {
     {
     	while(mRunning)	
     	{
-    		if(mWorld != null)
     		mWorld.update(); 
     		try {
 				sleep(20);
