@@ -567,9 +567,12 @@ public class MainChar implements SceneEntity {
 		{
 			position.x = Settings.MAINCHAR_STARTPOSX;
 			position.y = Settings.MAINCHAR_STARTPOSY;
+			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
 		}
 		else
+		{
 			wasRestored = false;
+		}
 	}
 		
 }
