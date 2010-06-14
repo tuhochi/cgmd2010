@@ -40,15 +40,7 @@ public class GLView extends GLSurfaceView {
                 return new MatrixTrackingGL(gl);
             }});
          
-         setRenderer(mRenderer);
-         
-
-         
-         //mWindowSize = size;
-         
-         mGame = new GameThread(world);
-         mGame.start();
-   
+         setRenderer(mRenderer);       
     } 
     
     /**
@@ -114,15 +106,15 @@ public class GLView extends GLSurfaceView {
 
 	@Override
 	public void onPause() {
-		if(mWorld != null)
-			mWorld.setPause(true);
+		if(mGame != null && mGame.isAlive() && mWorld != null)
+			mGame.setPause(true);
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		//if(mWorld != null)
-			//mWorld.setPause(false);
+		if(mGame != null && mGame.isAlive() && mWorld != null)
+			mGame.setPause(false);
 		super.onResume();
 	}
 	
@@ -130,8 +122,11 @@ public class GLView extends GLSurfaceView {
 	 * Is called when the game starts
 	 */
 	public void onStart() {
-		if(mGame != null && !mGame.isAlive() && mWorld != null)
-			mGame.start();
+		if (mWorld != null)
+		{
+	        mGame = new GameThread(mWorld);
+	        mGame.start();
+		}
 	}
 
 
