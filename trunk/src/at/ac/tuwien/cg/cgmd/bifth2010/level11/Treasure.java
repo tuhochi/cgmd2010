@@ -3,7 +3,11 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
+/**
+ * class, representing the treasure object in the level, with a value and a position
+ * @author Fennes
+ *
+ */
 public class Treasure implements Target{
 	private float value;
 	private float attractionRadius;
@@ -35,6 +39,10 @@ public class Treasure implements Target{
 		//audioStream.setRate((float)(Math.random() * 1.5f) + 0.5f);
 		
 	}
+	/**
+	 * returns the radius, at which the pedestrians are attracted to the treasure
+	 * @return
+	 */
 	public float getAttractionRadius(){
 		return this.attractionRadius;
 	}

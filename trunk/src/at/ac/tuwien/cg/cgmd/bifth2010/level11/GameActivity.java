@@ -25,15 +25,41 @@ public class GameActivity extends Activity {
 	public static GameActivity singleton;
 	
 	private static final String LOG_TAG = GameActivity.class.getSimpleName();
+	/**
+	 * renders game
+	 */
     private GameView _gameView;
+    /**
+     * actual game logic object
+     */
     public Level _level;
+    /**
+     * switch for sound
+     */
     public boolean isMusicAndSoundOn;
+    /**
+     * text of the time
+     */
 	private TextView _textTimeLeft;
-	private TextView _textTreasureLeft;
+	/**
+	 * text of the collected treasure
+	 */
+	private TextView _textTreasure;
+	/**
+	 * result of the level
+	 */
 	private int _result = 0;
+	/**
+	 * time interval, when text is updated
+	 */
 	private int textUpdateTime = 100;
+	/**
+	 * resolution of the display screen
+	 */
 	private Vector2 _displayResolution;
-
+	/**
+	 * handler to update text
+	 */
 	private Handler handler = new Handler();
 
 	private Runnable updateTimeTask = new Runnable() {
@@ -89,11 +115,11 @@ public class GameActivity extends Activity {
         _textTimeLeft.setTextColor(Color.BLACK);  
          
          
-        _textTreasureLeft = new TextView(this);
-        _textTreasureLeft.setText("");
-        _textTreasureLeft.setTextSize(25);
-        _textTreasureLeft.setGravity(Gravity.CENTER);
-        _textTreasureLeft.setTextColor(Color.BLACK);
+        _textTreasure = new TextView(this);
+        _textTreasure.setText("");
+        _textTreasure.setTextSize(25);
+        _textTreasure.setGravity(Gravity.CENTER);
+        _textTreasure.setTextColor(Color.BLACK);
         
       /*  _textIntro = new TextView(this);
         _textIntro.setText("");
@@ -107,7 +133,7 @@ public class GameActivity extends Activity {
         
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams2.setMargins(10, 10, 10, 10);
-        llayout.addView(_textTreasureLeft, layoutParams2); 
+        llayout.addView(_textTreasure, layoutParams2); 
         
         LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams3.setMargins(10, 10, 10, 10);
@@ -290,10 +316,13 @@ public class GameActivity extends Activity {
 	public void setResult(float f) {
 		_result = Math.min(100, (int)f);
 	}
+	/**
+	 * updates text (called by a handler)
+	 */
 	public void updateText(){
 		if(_level._isStarted){
 			if(!_level._isFinished){
-				_textTreasureLeft.setText(Integer.toString(Math.round(_level.getGrabbedTreasureValue())));
+				_textTreasure.setText(Integer.toString(Math.round(_level.getGrabbedTreasureValue())));
 				_textTimeLeft.setText(Integer.toString(Math.round(_level.getRemainigTime())));
 			}
 		}
