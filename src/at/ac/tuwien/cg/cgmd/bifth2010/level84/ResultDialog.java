@@ -51,7 +51,7 @@ public class ResultDialog extends AlertDialog implements OnTouchListener {
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.l84_customdialog, null);
 		
-		//get the components of the layout
+		//get the components from the layout
 		text = (TextView) view.findViewById(R.id.l84_dialogtext);
 		image = (ImageView) view.findViewById(R.id.l84_dialogimage);
 		button = (Button) view.findViewById(R.id.l84_dialogbutton);
