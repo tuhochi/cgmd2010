@@ -10,14 +10,35 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
+/**
+ * 
+ * Dialog, that shows up at game start
+ *
+ */
 public class IntroDialog extends AlertDialog implements OnTouchListener {
-
+	/**
+	 * android view of the text
+	 */
 	private View view;
+	/**
+	 * android image view, holding the dialog icon
+	 */
 	private ImageView image;
+	/**
+	 * android view, holding the dialog text
+	 */
 	private TextView text;
+	/**
+	 * button of dialog
+	 */
 	private Button button;
+	/**
+	 * current page of the dialog
+	 */
 	private int introstage = 0;
+	/**
+	 * GameActivity handle to start level, when dialog is closed
+	 */
 	private GameActivity ga;
 	
 	public IntroDialog(Context context)
@@ -50,14 +71,18 @@ public class IntroDialog extends AlertDialog implements OnTouchListener {
 	public void show() {
 		super.show();
 	}
-
+	/**
+	 * set to first page
+	 */
 	public void showFirstIntroStep()
 	{
 		introstage = 0;
 		text.setText(R.string.l11_intro_01);
 		image.setImageResource(R.drawable.l11_icon);
 	}
-	
+	/**
+	 * set to next page
+	 */
 	public void showNextIntroStep()
 	{
 		introstage++;

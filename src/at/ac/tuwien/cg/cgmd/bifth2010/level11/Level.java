@@ -63,7 +63,7 @@ public class Level extends Thread {
 	//public Rect bounceRect = new Rect();
 	
 	/**
-	 * Level constructor
+	 * Level constructor, generates level
 	 * @param sizeX
 	 * @param sizeY
 	 */
@@ -94,7 +94,7 @@ public class Level extends Thread {
 	}
 	
 	/**
-	 * inits level, generates level, set opengl contex, init textures
+	 * initializes level, set openGL context, initializes textures
 	 * @param gl
 	 * @param context
 	 */
@@ -119,7 +119,9 @@ public class Level extends Thread {
 		//f.play();
 		this._isRunning = true;
 	}
-	
+	/**
+	 * initializes sounds
+	 */
 	public void initSounds() {
 		sounds = new Sounds();
 		sounds.add(R.raw.l00_gold01);
@@ -127,7 +129,7 @@ public class Level extends Thread {
 	}
 	
 	/**
-	 * inits textures
+	 * initializes textures
 	 */
 	public void initTextures() {
 		//Log.i(LOG_TAG, "initTextures()");
@@ -202,12 +204,20 @@ public class Level extends Thread {
 	}
 	
 	/**
-	 * adds treasure to the treasurelist
+	 * adds treasure to the level (treasure list)
 	 * @param treasure
 	 */
 	public  void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
 	}
+	/**
+	 * bounces a pedestrian with the given vector
+	 * @param x1 first component of beginning of the bounce vector
+	 * @param y1 second component of beginning of the bounce vector
+	 * @param x2 first component of ending of the bounce vector
+	 * @param y2 second component of ending of the bounce vector
+	 * @param time delta time of the vector
+	 */
 	public void bouncePedestrians(float x1, float y1, float x2, float y2, float time){
 		//calculate implicit linear equation constants
 		//float a = (y2-y1)/(x2-x1);
@@ -253,6 +263,9 @@ public class Level extends Thread {
 		updateStats();
 		
 	}
+	/**
+	 * adds a pedestrain to the level, if intervallOfAddingPed is past
+	 */
 	private void addPedestrian(){
 		if(timeOfLastAddingPed + intervallOfAddingPed < timing.getCurrTime()){
 			Pedestrian pedestrian = new Pedestrian(this.gl, this.context);
@@ -273,6 +286,9 @@ public class Level extends Thread {
 			this.pedestrianList.add(pedestrian);
 		}
 	}
+	/**
+	 * updates all objects positions and states
+	 */
 	private void updateObjects(){
 		//System.out.println(timing.getDeltaTime());
 		for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
@@ -316,6 +332,9 @@ public class Level extends Thread {
 			}
 		}
 	}
+	/**
+	 * updates game states
+	 */
 	private void updateStats(){
 		//calculate already grabbed treasure value
 		this.grabbedTreasureValue = this.grabbedTreasureValueOfDeletedTreasures;
@@ -361,7 +380,7 @@ public class Level extends Thread {
 	}
 	
 	/**
-	 * draws the level
+	 * draws the level and all objects (treasure and pedestrians)
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
@@ -395,7 +414,9 @@ public class Level extends Thread {
 		
 	}
 
-	
+	/**
+	 * a handler to be able to show the outro dialog
+	 */
 	 private Handler showOutroDialog = new Handler() {
 		 	@Override
 	    	public void handleMessage(Message msg) {

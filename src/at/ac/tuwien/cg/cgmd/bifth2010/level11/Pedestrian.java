@@ -28,7 +28,7 @@ public class Pedestrian implements Target{
 	private Color color_skin;
 	private Color color_hair;
 	private Color color_torso;
-	int type_hair;
+	private int type_hair;
 	private float attractionRadius;
 	private float grabSpeed;
 	private float fightingRadius;
@@ -53,14 +53,22 @@ public class Pedestrian implements Target{
 	public Pedestrian(GL10 gl, Context context) {
 		this( 30.0f,10.0f,30.0f,0.01f, 0.3f, gl, context);
 	}
+	/**
+	 * returns the distance at which the pedestrian is hit by bouncing
+	 * @return bounceRadius
+	 */
 	public float getBounceRadius() {
 		return bounceRadius;
 	}
+	/**
+	 * sets the distance at which the pedestrian is hit by bouncing
+	 * @param bounceRadius
+	 */
 	public void setBounceRadius(float bounceRadius) {
 		this.bounceRadius = bounceRadius;
 	}
 	/**
-	 * contructor with additional parameters
+	 * constructor with additional parameters
 	 * @param attractionRadius distance at which the pedestrians react to treasure attraction radius
 	 * @param fightingRadius distance at which the pedestrians start fighting each other
 	 * @param moveSpeed walk speed
@@ -266,7 +274,7 @@ public class Pedestrian implements Target{
 		return this.grabSpeed;
 	}
 	/**
-	 * 
+	 * returns the distance at which the pedestrian starts to fight
 	 * @return
 	 */
 	public float getFightingRadius(){
@@ -289,6 +297,14 @@ public class Pedestrian implements Target{
 	public Target getTarget(){
 		return this.target;
 	}
+	/**
+	 * pushes the pedestrian away
+	 * @param x1 first component of beginning of the bounce vector
+	 * @param y1 second component of beginning of the bounce vector
+	 * @param x2 first component of ending of the bounce vector
+	 * @param y2 second component of ending of the bounce vector
+	 * @param time delta time of the vector
+	 */
 	public void bounce(float x1, float y1, float x2, float y2, float time){
 		this.bounceVector.x += x1-x2;
 		this.bounceVector.y += y1-y2;

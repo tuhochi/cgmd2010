@@ -10,7 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
+/**
+ * Dialog, that shows ub at game end
+ *
+ */
 public class OutroDialog extends AlertDialog implements OnTouchListener {
 
 	private View view;

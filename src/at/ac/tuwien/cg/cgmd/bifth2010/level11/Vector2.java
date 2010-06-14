@@ -1,7 +1,12 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
-
+/**
+ * 2 dimensional float vector. all operations are performed on the calling vector.
+ * when you do not want to modify the calling vector, you have to clone it first, 
+ * @author Fennes
+ *
+ */
 public class Vector2 {
-
+	
 	public float x, y;
 	/**
 	 * x and y is set to 0
@@ -96,6 +101,9 @@ public class Vector2 {
 		vec.set(this.x, this.y);
 		return vec;
 	}
+	/**
+	 * vector values to string
+	 */
 	public String toString(){
 		return "x: "+x+"; y: "+y+"; ";
 	}
