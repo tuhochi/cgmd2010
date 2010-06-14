@@ -157,7 +157,7 @@ public class DecorationManager
 		for(int i=0;i<NR_OF_CLOUDS;i++)
 		{
 
-			currentCloudHeight += randomGenerator.nextInt(200)+150;	
+			currentCloudHeight += randomGenerator.nextInt(100)+100;	
 			clouds.add(new Cloud(currentCloudHeight,randomGenerator.nextInt(4),
 					randomGenerator.nextBoolean(),randomGenerator.nextInt((int)(40*RenderView.instance.getAspectRatio())),
 					randomGenerator.nextInt(2)+1));

@@ -272,7 +272,6 @@ public class ObstacleManager
 				
 				if(testCollisionWithMainChar(tempObstacle) && !gameOver)
 				{
-					RenderView.instance.setGameOver(true);
 					LevelActivity.handler.post(
 							new Runnable()
 							{
@@ -282,6 +281,13 @@ public class ObstacleManager
 						            LevelActivity.instance.triggerVibrate(200);
 						        }
 							});
+					
+					if(tempObstacle.type == 0)
+					{
+						LevelActivity.instance.setScore(RenderView.instance.score);
+					}
+					else
+						RenderView.instance.setGameOver(true);
 				}
 			}
 			i++;
