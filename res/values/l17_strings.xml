@@ -7,4 +7,5 @@
 <string name="l17_HelpActivity_Text3">&quot;Wuahhh! h!!1&quot; is controlled from bird\'s eye view, you look towards the surface while falling. The player jumps between futuristic sky scrapers and has to avoid them. The flight direction is controlled over the touch screen by dragging the level with the finger.</string>
 <string name="l17_HelpActivity_Text4">The level is finished as soon as you approach the surface (after 3 minutes). Hitting a building will cost you a life, if all lives are lost the level ends. If you spent all your money on fines the level ends too.</string>
 <string name="l17_gameover_text">YOU LOST!</string>
+<string name="l17_start_text">Avoid the buildings and try to hit the birds!\nTouch screen to start.</string>
 </resources>

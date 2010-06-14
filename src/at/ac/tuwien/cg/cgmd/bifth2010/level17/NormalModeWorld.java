@@ -224,6 +224,9 @@ public class NormalModeWorld implements World, PlayerStateListener {
     	{
     		mNotInitialized = false;
     		mPlayTime = 0f;
+            Date date = new Date();
+            mTime = date.getTime();
+            mOldTime = mTime;
     	}
     	mTouchPos = new Vector2(pos);
     	mNewTouchPos = mTouchPos;

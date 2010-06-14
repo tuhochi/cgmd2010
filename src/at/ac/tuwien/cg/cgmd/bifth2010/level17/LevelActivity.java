@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class LevelActivity extends Activity {
 	private ImageView mGoldIcon;
 	private ImageView mTimeIcon;
 	private TextView mTimeText;
+	private TextView mStartText;
 	private Vibrator mVibrator;
 	private int mCurrentMoney; 
 
@@ -59,8 +61,14 @@ public class LevelActivity extends Activity {
         LinearLayout llayout = new LinearLayout(this);
         llayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
         llayout.setOrientation(LinearLayout.HORIZONTAL);
+        
+        LinearLayout llayout2 = new LinearLayout(this);
+        llayout2.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        llayout2.setOrientation(LinearLayout.HORIZONTAL);
+        
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
         addContentView(llayout, params);
+        addContentView(llayout2, params);
         
         mHealthIcon = new ImageView(this);
         mHealthIcon.setImageResource(R.drawable.l17_heart);
@@ -93,6 +101,13 @@ public class LevelActivity extends Activity {
         mTimeText.setGravity(Gravity.CENTER);
         mTimeText.setTextColor(Color.BLACK);
         mTimeText.setBackgroundResource(R.drawable.l17_text_bg);
+        
+        mStartText = new TextView(this);
+        mStartText.setText(R.string.l17_start_text);
+        mStartText.setTextSize(35);
+        mStartText.setGravity(Gravity.CENTER);
+        mStartText.setTextColor(Color.BLACK);
+        mStartText.setBackgroundResource(R.drawable.l17_text_bg);
 
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         llparams.weight = 0;
@@ -110,6 +125,7 @@ public class LevelActivity extends Activity {
         llayout.addView(mTimeText, llparams);
         llayout.addView(mGoldIcon, llparams3);
         llayout.addView(mPointsText, llparams);
+        llayout2.addView(mStartText, llparams);
         
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  
         mCurrentMoney = 0;
@@ -153,6 +169,8 @@ public class LevelActivity extends Activity {
 	@Override
     public boolean onTouchEvent (MotionEvent event)
     {
+		if (mStartText.getVisibility() == View.VISIBLE)
+			mStartText.setVisibility(View.INVISIBLE);
     	if(event.getAction() == MotionEvent.ACTION_MOVE)
     	{
     		mNormalModeView.fingerMove(event.getX() / mWindowSize.x, event.getY() / mWindowSize.y);
