@@ -2,7 +2,8 @@
 <resources>
 <string name="l36_help_header">Poor Rubber</string>
 <string name="l36_help_text1">Zwanghaftes Spielen, umgangssprachlich auch als Spielsucht bezeichnet, wird durch die Unfähigkeit eines Betroffenen gekennzeichnet, dem Impuls zum Glücksspiel oder Wetten zu widerstehen, auch wenn dies gravierende Folgen nach sich zu ziehen droht. Der Betroffene verspielt oft sein ganzes Vermögen und steht am Ende ohne jeden Gewinn da. </string>
-<string name="l36_help_text2">Das Schicksal des bedauernswerten Spielers ist es, ein Rubbellos nach dem anderen mithilfe eines Fingers am Touchscreen freizurubbeln. Einerseits kostet jedes Rubbellos einen bestimmten Betrag und andererseits ist es auch möglich einen negativen Gewinn zu erhalten. Das Spiel endet nach spätestens zehn Rubbellosen oder wenn das ganze Geld verspiel wurde.</string>
+<string name="l36_help_text2">Das Schicksal des bedauernswerten Spielers ist es, ein Rubbellos nach dem anderen mithilfe eines Fingers am Touchscreen freizurubbeln. Das Spiel endet, wenn das ganze Geld verspiel wurde oder die Zeit abgelaufen ist.</string>
+<string name="l36_help_text3">Oben siehst du die verbleibende Zeit in der Mitte und rechts die Münzen, die übrig sind. Es ist immer eine einstellige Zahl zum freirubbeln!</string>
 
 
 <string name="l36_GameName">Rubbel dich arm</string>

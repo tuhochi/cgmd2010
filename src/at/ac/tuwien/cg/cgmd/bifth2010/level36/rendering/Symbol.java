@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level36;
+package at.ac.tuwien.cg.cgmd.bifth2010.level36.rendering;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -31,22 +31,22 @@ class Symbol
     	
     	this.vertices[0] = -1.0f;
     	this.vertices[1] = -1.0f;
-    	this.vertices[2] = -0.5f; 
+    	this.vertices[2] = -0.1f; 
     	this.vertices[3] = +1.0f;
     	
     	this.vertices[4] = -1.0f;
     	this.vertices[5] = +1.0f;
-    	this.vertices[6] = -0.5f;
+    	this.vertices[6] = -0.1f;
     	this.vertices[7] = +1.0f;
     	
     	this.vertices[8] = +1.0f;
     	this.vertices[9] = -1.0f;
-    	this.vertices[10] = -0.5f;
+    	this.vertices[10] = -0.1f;
     	this.vertices[11] = +1.0f;
     	
     	this.vertices[12] = +1.0f;
     	this.vertices[13] = +1.0f;
-    	this.vertices[14] = -0.5f;
+    	this.vertices[14] = -0.1f;
     	this.vertices[15] = +1.0f;
         
         float normals[] =  {

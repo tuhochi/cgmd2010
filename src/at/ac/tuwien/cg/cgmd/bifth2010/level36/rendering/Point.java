@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level36;
+package at.ac.tuwien.cg.cgmd.bifth2010.level36.rendering;
 
 import static android.opengl.GLES10.glGetIntegerv;
 import static android.opengl.GLES11.glGetFloatv;
@@ -31,9 +31,9 @@ class Point
     	this.gl = gl;
     	int one = 0x10000;
     	this.vertices = new float[4]; 
-    	this.vertices[0] = 0.0f;
-    	this.vertices[1] = 0.0f;
-    	this.vertices[2] = -1.0f;
+    	this.vertices[0] = 3.0f;
+    	this.vertices[1] = 3.0f;
+    	this.vertices[2] = +2.0f;
     	this.vertices[3] = 1.0f;
 //        float[] vertices = {
 //        		0.0f, 0.0f, -1.0f, 1.0f
@@ -61,7 +61,7 @@ class Point
 //        };
     	
     	float colors[] = {
-    		  1.0f, 0.0f, 0.0f, 1.0f,
+    		 1.0f, 1.0f, 1.0f, 1.0f,
     	};
         
         byte indices[] = {
@@ -121,9 +121,9 @@ class Point
 	}
     
     public void setXY(float x, float y) {
-    	float[] coords = getScreenToWorldCoords(x, y, 0.0f);
-    	this.vertices[0] = coords[0];
-    	this.vertices[1] = coords[1];
+    	//float[] coords = getScreenToWorldCoords(x, y, 0.0f);
+    	this.vertices[0] = x; //coords[0];
+    	this.vertices[1] = y; //coords[1];
         ByteBuffer vbb = ByteBuffer.allocateDirect(this.vertices.length*4);
         vbb.order(ByteOrder.nativeOrder());
         mVertexBuffer = vbb.asFloatBuffer();
