@@ -34,7 +34,7 @@ public class Bird extends LevelElement{
 		float x = (float)Math.cos(mRotation * Math.PI / 180.0f);
 		float z = (float)Math.sin(mRotation * Math.PI / 180.0f);
 
-		mPosition = Vector3.add(mPosition, Vector3.mult(new Vector3(x,0,z), elapsedSeconds * 5.0f));
+		mPosition = Vector3.add(mPosition, Vector3.mult(new Vector3(x,0,z), elapsedSeconds * 3.0f));
 	}
 	
 	/**

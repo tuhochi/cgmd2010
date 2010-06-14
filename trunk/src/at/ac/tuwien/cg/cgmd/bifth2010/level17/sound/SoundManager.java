@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
 /**
  * 
@@ -15,14 +17,14 @@ import android.media.MediaPlayer;
  */
 public class SoundManager {
 	
-	private Context mContext;
+	private Activity mContext;
 	private List<MediaPlayer> mPlayers = new ArrayList<MediaPlayer>();
 
 	/**
 	 * Initializes the Soundmanager
 	 * @param context The app context
 	 */
-	public void init(Context context) {
+	public void init(Activity context) {
 		mContext = context;
 		mPlayers.clear();
 	}
@@ -49,7 +51,19 @@ public class SoundManager {
 	 */
 	public void startPlayer(int id)
 	{
-		mPlayers.get(id).start();
+
+		//get the calling intent
+		Intent callingIntent = mContext.getIntent();
+		//get the session state
+		SessionState state = new SessionState(callingIntent.getExtras());
+		boolean isMusicAndSoundOn = true;
+		if(state!=null){
+			int progress = state.getProgress();
+			int level = state.getLevel();
+			isMusicAndSoundOn = state.isMusicAndSoundOn(); 
+		}
+		if (isMusicAndSoundOn)
+			mPlayers.get(id).start();
 	}
 
 	/**
