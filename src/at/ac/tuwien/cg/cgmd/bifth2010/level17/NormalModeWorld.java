@@ -159,7 +159,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	 * Set the view matrix
 	 * @param trackGl The OpenGL context
 	 */
-	private void SetViewMatrix(MatrixTrackingGL trackGl)
+	private synchronized void SetViewMatrix(MatrixTrackingGL trackGl)
 	{
 		trackGl.glMatrixMode(GL10.GL_MODELVIEW);
 		trackGl.glLoadIdentity();					//Reset The Current Modelview Matrix
@@ -193,7 +193,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	}
 
 
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
+    public synchronized void onSurfaceChanged(GL10 gl, int width, int height) {
 		if(height == 0) { 						//Prevent A Divide By Zero By
 			height = 1; 						//Making Height Equal One
 		}
@@ -264,7 +264,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	}
 	
 	@Override
-	public void playerMoneyChanged(int money, boolean vibrate) {
+	public synchronized void playerMoneyChanged(int money, boolean vibrate) {
 		
 		class MoneyRunnable implements Runnable{
         	private int mMoney;
@@ -292,7 +292,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public synchronized void onSaveInstanceState(Bundle outState) {
 		mLevel.onSaveInstanceState(outState);
 	}
 }
