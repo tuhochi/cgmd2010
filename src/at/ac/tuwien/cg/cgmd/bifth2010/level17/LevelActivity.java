@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
+import android.widget.ImageView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level17.graphics.GLView;
@@ -35,7 +36,9 @@ public class LevelActivity extends Activity {
 	private TextView mHealthText;
 	private TextView mSpacer;
 	private TextView mPointsText;
-	private TextView mFPSText;
+	private ImageView mHealthIcon;
+	private ImageView mGoldIcon;
+	//private TextView mFPSText;
 	private Vibrator mVibrator;
 	private int mCurrentMoney; 
 
@@ -58,6 +61,9 @@ public class LevelActivity extends Activity {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT );
         addContentView(llayout, params);
         
+        mHealthIcon = new ImageView(this);
+        mHealthIcon.setImageResource(R.drawable.l17_heart);
+        
         mHealthText = new TextView(this);
         mHealthText.setText("5");
         mHealthText.setTextSize(25);
@@ -67,29 +73,37 @@ public class LevelActivity extends Activity {
         
         mSpacer = new TextView(this);
         
+        mGoldIcon = new ImageView(this);
+        mGoldIcon.setImageResource(R.drawable.l17_coin);
+        
         mPointsText = new TextView(this);
-        mPointsText.setText("0");
+        mPointsText.setText("100");
         mPointsText.setTextSize(25);
         mPointsText.setGravity(Gravity.CENTER);
         mPointsText.setTextColor(Color.BLACK);
         mPointsText.setBackgroundResource(R.drawable.l17_text_bg);
         
-        mFPSText = new TextView(this);
+        /*mFPSText = new TextView(this);
         mFPSText.setText("0");
         mFPSText.setTextSize(25);
         mFPSText.setGravity(Gravity.CENTER);
         mFPSText.setTextColor(Color.BLACK);
-        mFPSText.setBackgroundResource(R.drawable.l17_text_bg);
-        
+        mFPSText.setBackgroundResource(R.drawable.l17_text_bg);*/
+
         LinearLayout.LayoutParams llparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         llparams.weight = 0;
         llparams.setMargins(10, 10, 10, 10);
+        LinearLayout.LayoutParams llparams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
+        llparams3.weight = 0;
+        llparams3.setMargins(10, 30, 10, 10);
+        llayout.addView(mHealthIcon, llparams3);
         llayout.addView(mHealthText, llparams);
         LinearLayout.LayoutParams llparams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         llparams2.weight = 1;
         llparams2.setMargins(10, 10, 10, 10);
         llayout.addView(mSpacer, llparams2);
-        llayout.addView(mFPSText, llparams);
+        //llayout.addView(mFPSText, llparams);
+        llayout.addView(mGoldIcon, llparams3);
         llayout.addView(mPointsText, llparams);
         
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);  
@@ -178,10 +192,10 @@ public class LevelActivity extends Activity {
     	mVibrator.vibrate(milliseconds);  
     }    
     
-    public void updateFPS(float fps)
+    /*public void updateFPS(float fps)
     {
     	mFPSText.setText(Integer.toString((int)fps));
-    }
+    }*/
     
 	/**
 	 * Is called when the money of the player changes
@@ -189,7 +203,7 @@ public class LevelActivity extends Activity {
 	 */
     public void playerMoneyChanged(int money, boolean vibrate)
     {
-    	mPointsText.setText(Integer.toString(money)); 
+    	mPointsText.setText(Integer.toString(100-money)); 
     	mCurrentMoney = money; 
     	long milliseconds = 30;  
     	if (vibrate)
