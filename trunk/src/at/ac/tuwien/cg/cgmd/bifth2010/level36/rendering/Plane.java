@@ -1,4 +1,4 @@
-package at.ac.tuwien.cg.cgmd.bifth2010.level36;
+package at.ac.tuwien.cg.cgmd.bifth2010.level36.rendering;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -19,7 +19,7 @@ class Plane
     	if (num == 1)
     		z = 0.0f;
     	else 
-    		z = -2.0f;
+    		z = -0.2f;
     	
         float vertices[] = {
         		-5.0f, -5.0f, z, 1.0f,
