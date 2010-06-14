@@ -13,42 +13,46 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.IntroBackground;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Landscape;
 
 /**
- * The Thread running the Game-Logic
+ * Game logic and animation thread for MireRabbit
  * 
- * @author thp
+ * This thread takes care of "moving the game forward", processing input
+ * and transitioning the game forward between states.
+ * 
+ * @author Matthias Tretter
+ * @author Thomas Perl
  * 
  */
 public class GameThread extends Thread {
-	/** the GameScene where everything happens */
+	/** The GameScene associated with this GameThread */
 	private GameScene scene;
-	/** the main character of the game */
+	/** The flying rabbit head with the coin bucket */
 	private PhysicalRabbit rabbit;
-	/** the crosshairs which follow the rabbit */
+	/** The shaman's rifle crosshairs */
 	private Crosshairs crosshairs;
-	/** the landscape to draw */
+	/** Sky, clouds, meadow and mountains */
 	private Landscape landscape;
-	/** the timeManager which controls the elapsed time */
+	/** Time manager taking care of the elapsed time */
 	private TimeManager timeManager;
-	/** the background of the intro-screen */
+	/** The intro screen graphical elements */
 	private IntroBackground introBackground;
-	/** is the thread stopped? */
+	/** Flag to see if this Thread should finish working */
 	private boolean quit;
-	/** the current input-gesture to perform */
+	/** The most recent input gesture that needs processing */
 	private InputGesture gesture = null;
-	/** timestamp of last flap sound */
+	/** Timestamp when the last wing flap sound occurred */
 	private long lastFlapSound = 0;
-	/** indicates whether the rabbit has just landed or not */
+	/** Flag indicating if the rabbit just landed or not */
 	protected boolean justLanded = false;
 
 	/**
-	 * Creates the GameScene
+	 * Create a new GameThread
 	 * 
-	 * @param scene
-	 * @param rabbit
-	 * @param landscape
-	 * @param crosshairs
-	 * @param timeManager
-	 * @param introBackground
+	 * @param scene The GameScene that is associated with this thread
+	 * @param rabbit The flying rabbit head object in the scene
+	 * @param landscape The landscape object of the scene
+	 * @param crosshairs The shaman's crosshairs
+	 * @param timeManager A time manager for counting down
+	 * @param introBackground The intro screen's background
 	 */
 	public GameThread(GameScene scene, PhysicalObject rabbit, Landscape landscape, Crosshairs crosshairs, TimeManager timeManager,
 			IntroBackground introBackground) {
@@ -62,8 +66,10 @@ public class GameThread extends Thread {
 	}
 
 	/**
-	 * Determine if the level has been finished. The level is finished when
-	 * there are no coins left or when the time is up.
+	 * Determine if the level has been finished
+	 * 
+	 * The level is finished when there are no coins
+	 * left or when the time is up.
 	 * 
 	 * @return True if the level has been finished by the user
 	 */
@@ -72,7 +78,10 @@ public class GameThread extends Thread {
 	}
 
 	/**
-	 * the game-logic
+	 * The main loop
+	 * 
+	 * Yeah! Here's where all the fun happens: Input
+	 * processing, animation and state transitions.
 	 */
 	@Override
 	public void run() {
@@ -186,16 +195,24 @@ public class GameThread extends Thread {
 	}
 
 	/**
-	 * indicate that the tread should be stopped
+	 * Request the GameThread to shut down
+	 * 
+	 * If this function is called, the GameThread will
+	 * quit at the next main loop iteration.
 	 */
 	public void doQuit() {
 		this.quit = true;
 	}
 
 	/**
-	 * Plays a SoundEffect when the wings are flapped
+	 * Play sound effects for a given input gesture
 	 * 
-	 * @param gesture
+	 * The sound effect position will be dynamically
+	 * calculated for the most awesome stereo effect
+	 * that you might only be able to experience with
+	 * some fancy stereo headphones.
+	 * 
+	 * @param gesture The gesture for which the sound should be played
 	 */
 	public void playSoundEffects(InputGesture gesture) {
 		float soundPosition = 0.5f;

@@ -8,9 +8,14 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.CoinBucketSprite;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.RabbitSprite;
 
 /**
- * class representing a saved game
+ * Serializable representation of the MireRabbit game state
  * 
- * @author thp
+ * This is a simplified representation of the game state that can
+ * be used to serialize and restore important state information
+ * of a running game, and is used to implement the Android life-cycle
+ * management for the MireRabbit level.
+ * 
+ * @author Thomas Perl
  */
 public class GameState implements Serializable {
 	/** id for serialization */
