@@ -30,5 +30,5 @@
 	<integer name="l20_particle_size">20</integer>						
 	<integer name="l20_particle_life">1000</integer>
 	<bool name="l20_catch_mode">true</bool>
-	<bool name="l20_endgame">false</bool>
+	<bool name="l20_endgame">true</bool>
 </resources>

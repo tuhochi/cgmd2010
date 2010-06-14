@@ -207,12 +207,8 @@ public class RenderView extends GLSurfaceView implements Renderer, OnClickListen
 		
 
 		} catch (Exception e) {
-			
-			
-			Log.e("Exception", "RenderThread", e);
-			
-			int a = 1;
-			
+						
+			Log.e("Exception", "RenderThread", e);			
 		}
 	}
 	
