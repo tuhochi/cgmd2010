@@ -32,7 +32,7 @@ public class ObstacleManager {
 	/** The position where the player crashes into the obstacle. */
 	protected float crashPosition;
 	/** Flag whether the player crashed into the obstacle. */
-	private boolean crashed;
+	protected boolean crashed;
 	/** The duration of the crash scenario. */
 	private int crashDuration;
 
@@ -64,10 +64,11 @@ public class ObstacleManager {
 			updateTime += dt;
 		}			
 		
-		if (!crashed && updateTime >= nextSpawnTime) {
-			spawnObstacle();	
-			nSpawnedObstacles++;		
-		}			
+		// Try spawning obstacle only when player is at the left most position
+//		if (!crashed && updateTime >= nextSpawnTime) {
+//			spawnObstacle();	
+//					
+//		}			
 		
 		if (crashed && updateTime > crashDuration) {
 			removeObstacle();
@@ -91,9 +92,10 @@ public class ObstacleManager {
 			removeObstacle();
 		}
 		
-		// TODO Need some sort of animation that makes more sense.
+		// Need some sort of animation that makes more sense.
+		// Just disvisible it?
 		if(crashed) {
-			obstacle.visible = !obstacle.visible;
+			obstacle.visible = false;
 		}
 	}
 
@@ -115,9 +117,10 @@ public class ObstacleManager {
 		nextSpawnTime = timeInterval;
 	}
 
-	private void spawnObstacle() {
+	protected void spawnObstacle() {
 		obstacle.visible = true;	
 		obstacle.clickable = true;
+		nSpawnedObstacles++;
 	}
 
 	public void createObstacle(GL10 gl) {		

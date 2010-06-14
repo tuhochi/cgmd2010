@@ -18,19 +18,20 @@ public class ProductInfo {
 	 */
 	private static final ProductInfo[] p = new ProductInfo[]{
 		
-		new ProductInfo(0, 	R.drawable.l20_bananamilk, 	1),
-		new ProductInfo(1, 	R.drawable.l20_beer, 		2),
-		new ProductInfo(2, 	R.drawable.l20_broccoli, 	3),
-		new ProductInfo(3, 	R.drawable.l20_cereal, 		4),
-		new ProductInfo(4, 	R.drawable.l20_drink, 		5),
-		new ProductInfo(5, 	R.drawable.l20_icecream, 	6),
-		new ProductInfo(6, 	R.drawable.l20_lollipop, 	7),
-		new ProductInfo(7, 	R.drawable.l20_penne, 		8),
-		new ProductInfo(8, 	R.drawable.l20_pizza, 		9),
-		new ProductInfo(9, 	R.drawable.l20_playbunny, 	0),
-		new ProductInfo(10,	R.drawable.l20_probio, 		7),
-		new ProductInfo(11,	R.drawable.l20_soup, 		6),
-		new ProductInfo(12,	R.drawable.l20_yoghurt, 	9),
+		// type, texture name, price, n products, "amount" for price of "discount" products
+		new ProductInfo(0, 	R.drawable.l20_bananamilk, 	1, 3, 2),
+		new ProductInfo(1, 	R.drawable.l20_beer, 		1, 5, 3),
+		new ProductInfo(2, 	R.drawable.l20_broccoli, 	2, 3, 2),
+		new ProductInfo(3, 	R.drawable.l20_cereal, 		2, 3, 2),
+		new ProductInfo(4, 	R.drawable.l20_drink, 		1, 5, 3),
+		new ProductInfo(5, 	R.drawable.l20_icecream, 	3, 5, 3),
+		new ProductInfo(6, 	R.drawable.l20_lollipop, 	1, 5, 3),
+		new ProductInfo(7, 	R.drawable.l20_penne, 		2, 3, 2),
+		new ProductInfo(8, 	R.drawable.l20_pizza, 		3, 3, 2),
+		new ProductInfo(9, 	R.drawable.l20_playbunny, 	5, 3, 2),
+		new ProductInfo(10,	R.drawable.l20_probio, 		2, 5, 3),
+		new ProductInfo(11,	R.drawable.l20_soup, 		3, 3, 2),
+		new ProductInfo(12,	R.drawable.l20_yoghurt, 	1, 5, 3),
 					
 		};
 	
@@ -48,7 +49,17 @@ public class ProductInfo {
 	/**
 	 * The price of the product
 	 */
-	private float _price;
+	private int _price;
+	
+	/**
+	 * You get "amount" units of this product for the price of "discount" units.
+	 */
+	private int _amount;
+	
+	/**
+	 * You get "amount" units of this product for the price of "discount" units.
+	 */
+	private int _discount;
 	
 	
 	/**
@@ -58,15 +69,19 @@ public class ProductInfo {
 	
 	
 	/**
-	 * @param type
-	 * @param texture
-	 * @param price
+	 * @param type The type of the product
+	 * @param texture The texture name
+	 * @param price The price
+	 * @param amount You get "amount" units of this product for the price of "discount" units. 
+	 * @param discount You get "amount" units of this product for the price of "discount" units. 
 	 */
-	private ProductInfo(int type, int texture, float price) {
+	private ProductInfo(int type, int texture, int price, int amount, int discount) {
 		
 		this._type = type;
 		this._texture = texture;
 		this._price = price;
+		this._amount = amount;
+		this._discount = discount;
 	}
 
 	/**
@@ -97,8 +112,24 @@ public class ProductInfo {
 	 * @param type The product type.
 	 * @return Returns the price of the product.
 	 */
-	public static float price(int type) {
+	public static int price(int type) {
 		return ProductInfo.p[type]._price;
+	}
+	
+	/**
+	 * @param type The product type.
+	 * @return You get "amount" units of this product for the price of "discount" units. 
+	 */
+	public static int amount(int type) {
+		return ProductInfo.p[type]._amount;
+	}
+	
+	/**
+	 * @param type The product type.
+	 * @return You get "amount" units of this product for the price of "discount" units. 
+	 */
+	public static int discount(int type) {
+		return ProductInfo.p[type]._discount;
 	}
 	
 }
