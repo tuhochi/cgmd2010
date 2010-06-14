@@ -19,8 +19,6 @@ public class Cloud extends Sprite {
 	private int id;
 	/** the width of the screen */
 	private float screenWidth;
-	/** the height of the screen */
-	private float screenHeight;
 
 	/**
 	 * Create a new cloud
@@ -40,7 +38,6 @@ public class Cloud extends Sprite {
 
 		this.id = id;
 		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
 
 		Random rand = new Random();
 		setPosition(rand.nextInt((int) screenWidth), rand.nextInt((int) (screenHeight / 2)));
