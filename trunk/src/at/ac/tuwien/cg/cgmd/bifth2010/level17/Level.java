@@ -235,7 +235,7 @@ public class Level {
 			Bird newbird = new Bird(mBird, newPos, rotation);
 			mBirds.add(newbird);
 			
-			mNextBird = (float)Math.random() * 0.8f;
+			mNextBird = (float)Math.random() * 0.5f;
 		}
 		
 		for(Bird bird: mBirds){

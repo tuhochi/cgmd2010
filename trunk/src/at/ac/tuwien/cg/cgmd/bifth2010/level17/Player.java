@@ -53,7 +53,7 @@ public class Player {
 	 * is called when the player hits a bird
 	 */
 	public void hitBird() {
-		mMoney += 10;
+		mMoney += 7;
 		mListener.playerMoneyChanged(mMoney, true);
 		SoundManager.getInstance().startPlayer(mCoinSound);
 	}

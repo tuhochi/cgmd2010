@@ -49,7 +49,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
 	@SuppressWarnings("unused")
 	private OBJRenderable mObject;
 	
-	private boolean mPause = true;
+	private boolean mNotInitialized = true;
 
 	private Quad mBackground;
 	private float mBGScale = 0.75f;
@@ -79,7 +79,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
      */
 	public synchronized void update()
 	{
-		if(mPause)
+		if(mNotInitialized)
 			return;
         mOldTime = mTime;
         
@@ -186,7 +186,7 @@ public class NormalModeWorld implements World, PlayerStateListener {
         mLevel.getPlayer().addPlayerStateListener(this);
         
         GLManager.getInstance().getTextures().loadTextures();
-		mPause = false;
+		mNotInitialized = false;
 
 		mBackground = new Quad(20f,20f);
 		
@@ -283,12 +283,6 @@ public class NormalModeWorld implements World, PlayerStateListener {
         Runnable moneyrunnable = new MoneyRunnable(money, vibrate);
         mHandler.post(moneyrunnable);
 		
-	}
-
-
-	@Override
-	public synchronized void setPause(boolean pause) {
-		mPause = pause;
 	}
 
 	@Override
