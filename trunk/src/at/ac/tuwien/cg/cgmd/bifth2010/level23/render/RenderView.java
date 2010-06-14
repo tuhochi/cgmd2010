@@ -628,7 +628,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		cutScenes.preprocess();
 		obstacleManager.preprocess();
 		decorationManager.preprocess();
-		System.out.println("isInit: " + isInitialized);
+
 		if(!isInitialized)
 		{	
 			hud.reset();
