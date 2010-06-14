@@ -52,7 +52,12 @@
 				android:textSize="@dimen/l17_HelpActivity_TextSize"
 				android:text="@string/l17_HelpActivity_Text2"
 				android:textColor="@color/l17_HelpActivityTextColor"/>
-				
+			<ImageView 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" 
+				android:src="@drawable/l17_vogel_help" 
+				android:layout_gravity="center" 
+				android:padding="3pt"/>
 			<!--Paragraph 3-->
 			<TextView
 				android:layout_width="fill_parent"
@@ -64,7 +69,12 @@
 				android:textSize="@dimen/l17_HelpActivity_TextSize"
 				android:text="@string/l17_HelpActivity_Text3"
 				android:textColor="@color/l17_HelpActivityTextColor"/>
-				
+			<ImageView 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" 
+				android:src="@drawable/l17_3dhouse" 
+				android:layout_gravity="center" 
+				android:padding="3pt"/>
 			<!--Paragraph 4-->
 			<TextView
 				android:layout_width="fill_parent"
