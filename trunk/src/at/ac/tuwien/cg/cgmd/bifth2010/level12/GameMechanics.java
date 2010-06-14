@@ -39,7 +39,6 @@ public class GameMechanics {
 	}
 	
 	public int removeMoney( int amount){
-		System.out.println("Removing Money, amount: "+amount+" sum: "+mBurnedMoney);
 		return mBurnedMoney +=amount;
 	}
 	
@@ -80,7 +79,6 @@ public class GameMechanics {
 	
 	public void nextRound(){
 		mRound++;
-		if( mRound > Definitions.MAX_ROUND_NUMBER) mRound = Definitions.MAX_ROUND_NUMBER;
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
 	}
@@ -113,7 +111,7 @@ public class GameMechanics {
 	public void finishGame(){
 		
 		if( mGameContext != null ) {
-			mGameContext.finish();
+			mGameContext.showFinishDialog();
 		}
 		else System.out.println("Could not end game, no pointer to Context");
 	}

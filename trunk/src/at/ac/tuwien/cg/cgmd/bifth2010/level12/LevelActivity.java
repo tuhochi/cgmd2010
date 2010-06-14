@@ -29,6 +29,7 @@ import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import at.ac.tuwien.cg.cgmd.bifth2010.level83.FinishDialog;
+import at.ac.tuwien.cg.cgmd.bifth2010.level84.ResultDialog;
 
 public class LevelActivity extends Activity{
 	private Display mDisplay = null;
@@ -37,6 +38,8 @@ public class LevelActivity extends Activity{
 	private int mKilledEnemies = 0;
 	private int mSpawnedEnemies = 0;
 	private LinearLayout mL;
+	private Context mContext = this;
+	private Handler mFinish;
 	
 	
     /** Called when the activity is first created. */
@@ -48,6 +51,21 @@ public class LevelActivity extends Activity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);      
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         if( mDisplay == null) mDisplay = wm.getDefaultDisplay(); 
+        mFinish = new Handler() {
+    	 	@Override
+        	public void handleMessage(Message msg) {
+        		FinishDialog resultdialog = new FinishDialog(mContext);
+        		
+        		resultdialog.setOnDismissListener(new OnDismissListener() {
+    				@Override
+    				public void onDismiss(DialogInterface resultdialog) {
+    					finish();
+    				}
+    			});
+        		resultdialog.show();	
+        	}
+        };
+        
     }
     
     @Override
@@ -129,28 +147,35 @@ public class LevelActivity extends Activity{
     	//Debug.stopMethodTracing();
     }
     
+    public void showFinishDialog(){
+    	mFinish.sendEmptyMessage(1);
+    }
+    
 	@Override
 	public void finish() {	
-		//System.out.println("FINISH");
+		System.out.println("FINISH");
+		mFinish.sendEmptyMessage(0);
+		
 		//GameMechanics.getSingleton().pause();
 		//FinishScreen f = new FinishScreen(this);
 		//setContentView(f);
-		//System.out.println("CREATING NEW LAYIUT");
-		/*LinearLayout ll = new LinearLayout(this);
+		System.out.println("CREATING NEW LAYIUT");
+		LinearLayout ll = new LinearLayout(this);
 		TextView t = new TextView(this);
 		t.setText(R.string.l12_enemies_fended);
 		ll.addView(t);
 		TextView t1 = new TextView(this);
 		t1.setText(mKilledEnemies + " / "+mSpawnedEnemies+"\n\n" );
 		ll.addView(t1);
-		this.setContentView(ll);
+		System.out.println("NEW LAYOUT READY");
+		//this.setContentView(t1);
 		System.out.println("Content View Set!");
 		
 		System.out.println("REMOVE VIEWS");
-		mL.removeAllViews();
+		//mL.removeAllViews();
 		System.out.println("REMOVE VIEWS1");
-		mL.removeAllViewsInLayout();
-		System.out.println("REMOVE VIEWS2");*/
+		//mL.removeAllViewsInLayout();
+		System.out.println("REMOVE VIEWS2");
 		
 		/*TextView t = new TextView(this);
 		t.setText(R.string.l12_enemies_fended);
@@ -262,10 +287,10 @@ public class LevelActivity extends Activity{
 		}
 	}
 	
-	private class FinishScreen  extends LinearLayout{
+	private class FinishDialog  extends AlertDialog{
 		Button mBtn;
 
-		protected FinishScreen(Context context) {
+		protected FinishDialog(Context context) {
 			super(context);
 			LinearLayout l = new LinearLayout(context);
 			l.setOrientation(LinearLayout.VERTICAL);
@@ -288,11 +313,11 @@ public class LevelActivity extends Activity{
 			l.addView(mBtn);
 		}
 
-		public void onClick(View v){
+		/*public void onClick(View v){
 			if( v.getId() == mBtn.getId()){
 				finish();
 			}
-		}
+		}*/
 
 		
 	}
