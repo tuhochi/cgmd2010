@@ -3,7 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.io;
 /**
  * This Class wrappes a Swipe-Gesture
  * 
- * @author Matthias
+ * @author Matthias Tretter
  * 
  */
 

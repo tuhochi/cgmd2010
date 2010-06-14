@@ -1,10 +1,11 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.io;
 
 /**
- * Wrapper around the Input Gesture DoubleTap This gesture performs a flap with
- * both wings
+ * Wrapper around the Input Gesture DoubleTap
  * 
- * @author Matthias
+ * This gesture performs a flap with both wings
+ * 
+ * @author Matthias Tretter
  * 
  */
 public class DoubleTap implements InputGesture {
@@ -26,29 +27,53 @@ public class DoubleTap implements InputGesture {
 		this.y = y;
 	}
 
+	/**
+	 * Return the x coordinate of the end touch point
+	 * 
+	 * @return The end X coordinate
+	 */
 	@Override
 	public float getEndX() {
 		return x;
 	}
-
+	
+	/**
+	 * Return the y coordinate of the end touch point
+	 * 
+	 * @return The end Y coordinate
+	 */
 	@Override
 	public float getEndY() {
 		return y;
 	}
 
+	/**
+	 * Return the x coordinate of the start touch point
+	 * 
+	 * @return The start X coordinate
+	 */
 	@Override
 	public float getStartX() {
 		return x;
 	}
 
+	/**
+	 * Return the y coordinate of the start touch point
+	 * 
+	 * @return The start Y coordinate
+	 */
 	@Override
 	public float getStartY() {
 		return y;
 	}
 
 	/**
-	 * A DoubleTap has the strength of a maximum Swipe Therefore the vertical
-	 * movement of the rabbit will be maximal
+	 * A DoubleTap has the strength of a maximum Swipe
+	 * 
+	 * The vertical movement of the rabbit will
+	 * therefore be maximal.
+	 * 
+	 * @return The power value of this gesture
 	 */
 	@Override
 	public float getPower() {

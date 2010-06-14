@@ -1,9 +1,14 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44;
 
 /**
- * Game duration manager
+ * Interruptable countdown timer manager
  * 
- * @author Matthias
+ * This class abstracts the game countdown / duration and
+ * provides ways to interrupt the timeout, restore the
+ * timeout and determine if the time is already up.
+ * 
+ * @author Matthias Tretter
+ * @author Thomas Perl
  */
 public class TimeManager {
 	/** update interval of the time */
@@ -51,6 +56,8 @@ public class TimeManager {
 	}
 
 	/**
+	 * Get the remaining milliseconds in the current game
+	 * 
 	 * @return the remaining time in milliseconds for the level
 	 */
 	public long getRemainingTimeMillis() {
@@ -58,12 +65,19 @@ public class TimeManager {
 	}
 
 	/**
-	 * @return the duration of the current game
+	 * Get the total duration of the game (in milliseconds)
+	 * 
+	 * @return the duration of the current game in milliseconds
 	 */
 	public long getDuration() {
 		return duration;
 	}
 
+	/**
+	 * String representation of the remaining time in seconds
+	 * 
+	 * @return A user-readable string of the remaining seconds
+	 */
 	@Override
 	public String toString() {
 		long millis = this.getRemainingTimeMillis();
@@ -72,22 +86,27 @@ public class TimeManager {
 	}
 
 	/**
-	 * @return true, if there is no time left
+	 * Check if the game is already over
+	 * 
+	 * @return true if there is no time left, false otherwise
 	 */
 	public boolean timeIsUp() {
 		return getRemainingTimeMillis() == 0;
 	}
 
 	/**
-	 * @return the elapsed time in milliseconds
+	 * Get the elapsed time in the current game (in milliseconds)
+	 * 
+	 * @return The elapsed time in milliseconds
 	 */
 	public long getElapsed() {
 		return elapsed;
 	}
 
 	/**
-	 * set the elapsed time
-	 * @param elapsed the new elapsed time
+	 * Set the elapsed time in the current game (in milliseconds)
+	 * 
+	 * @param elapsed The new elapsed time in milliseconds
 	 */
 	public void setElapsed(long elapsed) {
 		this.elapsed = elapsed;

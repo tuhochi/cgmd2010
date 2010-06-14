@@ -7,7 +7,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.GameScene;
 /**
  * InputListener to detect various Gestures (Fling/Swipe, Tap)
  * 
- * @author Matthias
+ * @author Matthias Tretter
  * 
  */
 
@@ -41,6 +41,15 @@ public class InputListener extends SimpleOnGestureListener {
 		this.height = height;
 	}
 
+	/**
+	 * Event handler for a fling gesture
+	 * 
+	 * @param e1 The first motion event
+	 * @param e2 The second motion event
+	 * @param velocityX The swipe velocity along the X axis
+	 * @param velocityY The swipe velocity along the X axis
+	 * @return true if the swpie is straight
+	 */
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		InputGesture.Position position;
@@ -71,6 +80,12 @@ public class InputListener extends SimpleOnGestureListener {
 		return true;
 	}
 
+	/**
+	 * Event handler for a double-tap
+	 * 
+	 * @param e The MotionEvent of this double tap
+	 * @return Always true
+	 */
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
 		// TODO: remove
@@ -79,6 +94,12 @@ public class InputListener extends SimpleOnGestureListener {
 		return true;
 	}
 
+	/**
+	 * Event handler for a confirmed single tap
+	 * 
+	 * @param e The MotionEvent of this single tap
+	 * @return Always true
+	 */
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent e) {
 		scene.addInputGesture(new SingleTap(e.getX(), e.getY()));
