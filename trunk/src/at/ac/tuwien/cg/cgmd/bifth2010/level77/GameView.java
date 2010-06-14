@@ -1,37 +1,29 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
-import java.io.BufferedInputStream;
-import java.util.Date;
-import java.util.prefs.Preferences;
-
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
-import android.preference.Preference;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 /**
- * GameView is the view of the game implementation of group 77. 
+ * GameView is the view of the game implementation of group 77.
+ * 
  * @author Gerd Katzenbeisser
- *
+ * 
  */
 public class GameView extends GLSurfaceView
 {
 
 	protected static final String	TAG	= "GameView";
-	L77Renderer renderer;
-	private Context context;
-	private final Callback<Integer> gameEnded;
-	
-	Native jni;
-	Audio audio;
-	private int score;
+	BlockRenderer					renderer;
+	Native							jni;
+	Audio							audio;
+	private long					startTime;
+	private int						score;
+
 	/**
 	 * @return the score
 	 */
@@ -40,33 +32,31 @@ public class GameView extends GLSurfaceView
 		return score;
 	}
 
-
-	private Callback<Integer> deleteMe;
-	private SharedPreferences prefs;
-	private SessionState sessionState;
-	private long startTime;
-	
+	/**
+	 * Constructor for a GameView. It initializes Audio and uses a BlockRenderer
+	 * as the renderer.
+	 * 
+	 * @param context
+	 *            The context this GameView lives in
+	 * @param gameEnded
+	 *            Callback when game has ended
+	 * @param sessionState
+	 *            The session state
+	 */
 	public GameView(Context context, final Callback<Integer> gameEnded, SessionState sessionState)
 	{
 		super(context);
-		this.context = context;
-		this.gameEnded = gameEnded;
-		this.sessionState = sessionState;
-	
-		
 		audio = new Audio(context, sessionState);
-		deleteMe = gameEnded;
-		
 		Callback<Integer> updateScore = new Callback<Integer>()
 		{
-			
+
 			@Override
 			public void onSucces(Integer result)
 			{
 				Log.i(TAG, "Received new score: " + result);
 				updateScore(result);
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught)
 			{
@@ -74,25 +64,23 @@ public class GameView extends GLSurfaceView
 				caught.printStackTrace();
 			}
 		};
-		
-		 
-		
+
 		// Play the theme song
 		audio.playSound(Audio.BUNNY_BLOCK_THEME);
-		
+
 		jni = new Native(context, audio, gameEnded, updateScore);
-		
+
 		// native depends on renderer vars initialised
 		Callback<Void> timeUp = new Callback<Void>()
 		{
-			
+
 			@Override
 			public void onSucces(Void result)
 			{
-				
+
 				gameEnded.onSucces(getScore());
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught)
 			{
@@ -100,87 +88,90 @@ public class GameView extends GLSurfaceView
 				caught.printStackTrace();
 			}
 		};
-		renderer = new L77Renderer(true, context, jni, timeUp);
+
+		renderer = new BlockRenderer(context, jni, timeUp);
 		renderer.setDateOffset(startTime);
 		setRenderer(renderer);
-		
 	}
-	
+
 	/**
-	 * TODO Javadoc
-	 * @param sharedPreferences 
+	 * Saves the game state.
+	 * 
+	 * @param sharedPreferences
 	 */
-	public void onPause(SharedPreferences sharedPreferences) {
+	public void onPause(SharedPreferences sharedPreferences)
+	{
 		super.onPause();
 		SharedPreferences.Editor ed = sharedPreferences.edit();
 		String state = jni.nativeGetSavedState();
 		audio.stopAllSounds();
 		Log.i(TAG + " onPause", "Length of serialized game data: " + state.length());
-		//this does not work in java: if (state != "")
+		// this does not work in java: if (state != "")
 		if (state.length() != 0)
 		{
 			ed.putString("native", state);
 		}
-	Log.v(TAG, "onPause receives length " + state.length());
-	
+		Log.v(TAG, "onPause receives length " + state.length());
+
 		ed.putInt("score", score);
 		ed.putLong("dateOffset", System.currentTimeMillis() - startTime);
 		ed.commit();
 	}
 
 	/**
-	 * TODO Javadoc
+	 * Restores the game state
 	 */
-	public void onResume(SharedPreferences sharedPreferences) {
+	public void onResume(SharedPreferences sharedPreferences)
+	{
 		super.onResume();
 		score = sharedPreferences.getInt("score", 0);
 		String state = sharedPreferences.getString("native", "");
 		Log.v(TAG, "*received from native state length " + state.length());
 		jni.nativeRestoreSavedState(state);
 		long dateOffset = sharedPreferences.getLong("dateOffset", 0);
-		renderer.setDateOffset(startTime);
+		renderer.setDateOffset(dateOffset);
 	}
-	
+
 	/**
-	 * Touch Events are catched and sent to a native call.
+	 * Touch Events are catched and sent to a native handler.
 	 */
 	@Override
 	public boolean onTouchEvent(final MotionEvent event)
 	{
 		float x = event.getX(), y = event.getY();
-		
+
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
 			jni.touchesBegan(x, y);
 		if (event.getAction() == MotionEvent.ACTION_MOVE)
 			jni.touchesMoved(x, y);
 		if (event.getAction() == MotionEvent.ACTION_UP)
 			jni.touchesEnded(x, y);
-		
+
 		// For development only
 		renderer.onTouchEvent(event);
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * 
+	 * Not implemented
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)
 	{
 		Log.d(TAG, "Key down: " + keyCode);
-		
+
 		return true;
 	}
-	
-	
+
 	/**
 	 * Updates the current score
+	 * 
 	 * @param score
+	 *            the new score value
 	 */
 	private void updateScore(int score)
 	{
 		this.score = score;
-		// TODO Display score
 	}
 }

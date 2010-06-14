@@ -5,8 +5,9 @@ import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * The HelpActivity for test level 00. This activity only demonstrates how a HelpActivity shall be used by each level. 
+ * The HelpActivity for level 77. This activity only displays the HelpActivity. 
  * @author Peter
+ * @author Gerd Katzenbeisser
  */
 public class HelpActivity extends Activity {
 

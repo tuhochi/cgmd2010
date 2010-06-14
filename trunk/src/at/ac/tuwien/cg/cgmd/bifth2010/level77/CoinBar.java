@@ -10,7 +10,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.Cylinder;
 
 /**
  * A progress bar consisting of BIFTH gold coins.
- * @author gerd
+ * @author Gerd Katzenbeisser
  *
  */
 public class CoinBar
@@ -30,7 +30,7 @@ public class CoinBar
 	 * @param variance Maximum x-offset of the coins on the coin stack
 	 * @param rotation Rotation of the coins
 	 * @param context The android context
-	 * @param gl The opengl context
+	 * @param gl The OpenGl context
 	 */
 	public CoinBar(float width, float height, float variance, float rotation, Context context, GL10 gl)
 	{
@@ -46,6 +46,9 @@ public class CoinBar
 		initializeBar();
 	}
 
+	/**
+	 * Initializes the CoinBar. It sets default measures, the texture and the coin positions.
+	 */
 	private void initializeBar()
 	{
 		// Initialize the coinBar
@@ -58,6 +61,10 @@ public class CoinBar
 
 		initializeVariance();
 	}
+	
+	/**
+	 * Initializes vertical coin positions.
+	 */
 	private void initializeVariance()
 	{
 
@@ -69,11 +76,18 @@ public class CoinBar
 			coinPositions.add(new Float((Math.random() - 0.5) * variance));
 	}
 
+	/**
+	 * @return the amount of coins for this bar.
+	 */
 	public int getCointCount()
 	{
 		return (int) (height / coinHeight);
 	}
 	
+	/**
+	 * Draws the CoinBar
+	 * @param percent Indicates the percent of coins to draw
+	 */
 	public void draw(double percent)
 	{
 		int i = 0;		

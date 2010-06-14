@@ -16,6 +16,10 @@ public class IntroActivity extends Activity implements OnTouchListener{
 
 	private static String TAG = "IntroActivity";
 	
+	/**
+	 * Sets this class as OnTouchListener for the view frame and the viewed image.
+	 */
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "Starting IntroActivity");
@@ -27,6 +31,9 @@ public class IntroActivity extends Activity implements OnTouchListener{
 	}
 
 
+	/**
+	 * finishes this activity
+	 */
 	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{
