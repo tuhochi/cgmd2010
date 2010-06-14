@@ -5,7 +5,7 @@ public class GameMechanics {
 	private int mBurnedMoney = 0;
 	private short mIron = Definitions.STARTING_IRON;
 	private boolean mGameRunning = true;
-	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
+	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_START_TIME / 1000);
 	private long mLastCountdownCheck = -1;
 	private short mRound = 0;
 	private long mRoundStartedTime = System.currentTimeMillis();
@@ -78,9 +78,8 @@ public class GameMechanics {
 	}
 	
 	public void nextRound(){
-		mRound++;
-		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = (int)Math.floor( Definitions.GAME_ROUND_WAIT_TIME / 1000);
+		mRound++;
 	}
 
 	public int getMoney() {	

@@ -158,7 +158,9 @@ public abstract class Tower extends GLObject {
 		for( int i = 0; i < mProjectiles.length; i++){
 			if( mProjectiles[i].getActiveState() && (mProjectiles[i].getX() >= carrier.getX()) && mProjectiles[i].isExploding() == false ){
 				carrier.hit( mProjectiles[i].getDamage(), mProjectiles[i].getSlow() );
-				mProjectiles[i].die();
+				mProjectiles[i].remove();//die();
+				mReadyToRemove = true;
+				
 			}
 		}
 	}
