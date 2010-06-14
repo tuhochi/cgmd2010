@@ -1,9 +1,17 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 /**
- * class that provides static methods for creating TextureParts of the one big Texture
+ * TexturePart factory for the MireRabbit game
  * 
- * @author thp
+ * This is a game-specific and texture-specific factory
+ * class for generating TexturePart objects for all the
+ * objects that appear in the MireRabbit game.
+ * 
+ * The coordinates are measured directly from the source
+ * SVG image. If you change the graphics, update their
+ * coordinates here.
+ * 
+ * @author Thomas Perl
  *
  */
 public class TextureParts {

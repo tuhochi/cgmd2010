@@ -5,8 +5,22 @@ import java.util.Vector;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Class that acts as a Container for a bunch of Sprites
- * @author thp
+ * A container for multiple child Sprites
+ * 
+ * This subclass of Sprite provides all functionality of a
+ * normal sprite, but in addition to that also provides an
+ * object-oriented way of adding child Sprites to this object
+ * that will be "attached" to this sprite, and can be positioned
+ * relative to their container.
+ * 
+ * Children can be placed behind the container (addChildBack)
+ * and in front of the container (addChildFront).
+ * 
+ * Child sprites will automatically be scaled, rotated and moved
+ * the same way as their container - they are "attached" to the
+ * container.
+ * 
+ * @author Thomas Perl
  *
  */
 
@@ -67,6 +81,8 @@ public class SpriteContainer extends Sprite {
 
 	/**
 	 * draws all children that are behind the actual sprite
+	 * 
+	 * @param gl The Open GL ES context
 	 */
 	@Override
 	protected void onBeforeDraw(GL10 gl) {
@@ -78,6 +94,8 @@ public class SpriteContainer extends Sprite {
 
 	/**
 	 * draws all children that are in front of the actual sprite
+	 * 
+	 * @param gl The Open GL ES context
 	 */
 	@Override
 	protected void onAfterDraw(GL10 gl) {

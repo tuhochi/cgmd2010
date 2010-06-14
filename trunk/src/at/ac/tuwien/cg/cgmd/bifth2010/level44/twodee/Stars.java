@@ -3,9 +3,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Class that represent the stars that appear, when the Rabbit was shot
+ * An "exploding" circle of small stars
  * 
- * @author thp
+ * When our rabbit head gets shot, that hurts. And of course,
+ * apart from the vibrating feeling we get, there has to be
+ * some kind of visual representation of that hurt: Stars!
+ * 
+ * @author Thomas Perl
  *
  */
 

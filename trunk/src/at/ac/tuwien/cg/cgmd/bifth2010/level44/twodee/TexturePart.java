@@ -3,9 +3,16 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 import java.nio.FloatBuffer;
 
 /**
- * Class that represents one part of the big texture
+ * A rectangular sub-part of a Texture
  * 
- * @author Matthias
+ * This class can be used to describe a rectangular
+ * sub-part of a bigger Texture object.
+ * 
+ * See the TextureParts class for an example on how
+ * to create a TexturePart object from a Texture.
+ * 
+ * @author Matthias Tretter
+ * @author Thomas Perl
  */
 
 public class TexturePart {
