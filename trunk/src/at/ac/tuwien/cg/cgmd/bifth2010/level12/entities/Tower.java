@@ -188,6 +188,7 @@ public abstract class Tower extends GLObject {
 	public void die(){
 		if( mStartDyingTime == -1 ){
 			mStartDyingTime = System.currentTimeMillis();
+			GameMechanics.getSingleton().addTowerDestroyed();
 		}
 	}
 	

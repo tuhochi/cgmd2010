@@ -7,14 +7,19 @@
 
 <string name="l12_tutorialtitle">Welcome to Bye Bye Bonuses!</string>
 <string name="l12_intro">Place bunny mercs on your lawn to fend of the money carriers. Bunnies get paid with iron (I) that you earn by destroying money carriers.\n \n Available mercenaries:\n</string>
-<string name="l12_basic_tower">Basic cheap mercenary, only small damage and medium shooting rate.</string>
-<string name="l12_advanced_tower">Better but more expensive elite soldier. slow projectiles, but good damage and shooting rate. 5 projectiles per volley.</string>
-<string name="l12_hyper_tower">RoboBunny3000 fighting with massive power, medium damage bullets but high shooting rate and high bullet velocity. </string>
-<string name="l12_freeze_tower">Freeze-Merc, freezes enemy to half speed. No damage, slow bullets.</string>
+<string name="l12_basic_tower">Basic cheap mercenary, only small damage and medium shooting rate.\n</string>
+<string name="l12_advanced_tower">Better but more expensive elite soldier. slow projectiles, but good damage and shooting rate. 5 projectiles per volley.\n</string>
+<string name="l12_hyper_tower">RoboBunny3000 fighting with massive power, medium damage bullets but high shooting rate and high bullet velocity. \n</string>
+<string name="l12_freeze_tower">Freeze-Merc, freezes enemy to half speed. No damage, slow bullets.\n</string>
 <string name="l12_finish">GAME OVER</string>
 <string name="l12_enemies_fended">enemies fended off: </string>
 <string name="l12_points">Money lost: </string>
 <string name="l12_iron">Iron: </string>
 <string name="l12_roundsleft">Rounds left: </string>
 <string name="l12_countdown">next Round in: </string>
+<string name="l12_end_game">Game Over:</string>
+<string name="l12_built">Built: </string>
+<string name="l12_you_built">You built </string>
+<string name="l12_towers_destroyed">towers, and </string>
+<string name="l12_have_been">of them have been destroyed without shooting!</string>
 </resources>

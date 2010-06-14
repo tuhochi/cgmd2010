@@ -6,14 +6,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -28,18 +25,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-import at.ac.tuwien.cg.cgmd.bifth2010.level83.FinishDialog;
-import at.ac.tuwien.cg.cgmd.bifth2010.level84.ResultDialog;
+
 
 public class LevelActivity extends Activity{
 	private Display mDisplay = null;
 	private GLRenderer mRenderer = null;
 	private boolean mTutShowed = false;
-	private int mKilledEnemies = 0;
-	private int mSpawnedEnemies = 0;
 	private LinearLayout mL;
 	private Context mContext = this;
 	private Handler mFinish;
+	private boolean mFinished = false;
 	
 	
     /** Called when the activity is first created. */
@@ -54,15 +49,15 @@ public class LevelActivity extends Activity{
         mFinish = new Handler() {
     	 	@Override
         	public void handleMessage(Message msg) {
-        		FinishDialog resultdialog = new FinishDialog(mContext);
+        		FinishDialog fd = new FinishDialog(mContext);
         		
-        		resultdialog.setOnDismissListener(new OnDismissListener() {
+        		fd.setOnDismissListener(new OnDismissListener() {
     				@Override
     				public void onDismiss(DialogInterface resultdialog) {
     					finish();
     				}
     			});
-        		resultdialog.show();	
+        		fd.show();	
         	}
         };
         
@@ -148,28 +143,15 @@ public class LevelActivity extends Activity{
     }
     
     public void showFinishDialog(){
-    	mFinish.sendEmptyMessage(1);
+    	if( !mFinished ){
+    		mFinished = true;
+        	mFinish.sendEmptyMessage(0);
+    	}
     }
     
 	@Override
-	public void finish() {	
+	public void finish() {
 		System.out.println("FINISH");
-		mFinish.sendEmptyMessage(0);
-		
-		//GameMechanics.getSingleton().pause();
-		//FinishScreen f = new FinishScreen(this);
-		//setContentView(f);
-		System.out.println("CREATING NEW LAYIUT");
-		LinearLayout ll = new LinearLayout(this);
-		TextView t = new TextView(this);
-		t.setText(R.string.l12_enemies_fended);
-		ll.addView(t);
-		TextView t1 = new TextView(this);
-		t1.setText(mKilledEnemies + " / "+mSpawnedEnemies+"\n\n" );
-		ll.addView(t1);
-		System.out.println("NEW LAYOUT READY");
-		//this.setContentView(t1);
-		System.out.println("Content View Set!");
 		
 		System.out.println("REMOVE VIEWS");
 		//mL.removeAllViews();
@@ -287,39 +269,82 @@ public class LevelActivity extends Activity{
 		}
 	}
 	
-	private class FinishDialog  extends AlertDialog{
+	private class FinishDialog  extends AlertDialog  implements android.view.View.OnClickListener{
 		Button mBtn;
 
 		protected FinishDialog(Context context) {
 			super(context);
+			this.setIcon(R.drawable.l12_icon);
+			this.setTitle(R.string.l12_end_game);
+			
 			LinearLayout l = new LinearLayout(context);
+			ScrollView sc = new ScrollView(context);
 			l.setOrientation(LinearLayout.VERTICAL);
 			
 			TextView t = new TextView(context);
-			t.setText(R.string.l12_enemies_fended);
+			t.setText( context.getString(R.string.l12_enemies_fended)+"		"+GameMechanics.getSingleton().getKilledEnemies() + "	 / 	"+GameMechanics.getSingleton().getSpawnedEnemies()+"\n" );
 			l.addView(t);
-			TextView t1 = new TextView(context);
-			t1.setText(mKilledEnemies + " / "+mSpawnedEnemies+"\n\n" );
 			
-			/*TextView t2 = new TextView(context);
-			t.setText(R.string.l12_points);
+			TextView t2 = new TextView(context);
+			int gainedMoney = GameMechanics.getSingleton().getMoney();
+			int burnedMoney = GameMechanics.getSingleton().getBurnedMoney();
+			float proz = (gainedMoney + burnedMoney)*0.01f; 
+			t2.setText( context.getString(R.string.l12_points)+"	"+proz+ "	 /		100\n");
 			l.addView(t2);
-			TextView t3 = new TextView(context);
-			t3.setText(GameMechanics.getSingleton().getBurnedMoney() + " / 100\n\n");*/
+			
+			
+			LinearLayout l3 = new LinearLayout(context);
+			ImageView ib = new ImageView(context);
+			ib.setImageResource(R.drawable.l12_bunny1_icon);
+			l3.addView(ib);
+			TextView t4 = new TextView(context);
+			t4.setText(context.getString(R.string.l12_built)+" "+GameMechanics.getSingleton().getBasicTowerBuilt()+"	\n");
+			l3.addView(t4);
+
+			ImageView ia = new ImageView(context);
+			ia.setImageResource(R.drawable.l12_bunny2_icon);
+			l3.addView(ia);
+			TextView t5 = new TextView(context);
+			t5.setText( context.getString(R.string.l12_built)+" "+GameMechanics.getSingleton().getAdvancedTowerBuilt()+"	\n");
+			l3.addView(t5);
+			l.addView(l3);
+			
+			LinearLayout l5 = new LinearLayout(context);
+			ImageView ih = new ImageView(context);
+			ih.setImageResource(R.drawable.l12_bunny3_icon);
+			l5.addView(ih);
+			TextView t6 = new TextView(context);
+			t6.setText( context.getString(R.string.l12_built)+" "+GameMechanics.getSingleton().getHyperTowerBuild()+"	\n");
+			l5.addView(t6);
+		
+			ImageView ig = new ImageView(context);
+			ig.setImageResource(R.drawable.l12_bunny4_icon);
+			l5.addView(ig);
+			TextView t7 = new TextView(context);
+			t7.setText( context.getString(R.string.l12_built)+" "+GameMechanics.getSingleton().getFreezeTowerBuilt()+"	\n");
+			l5.addView(t7);
+			l.addView(l5);
+			
+			TextView tsum = new TextView(context);
+			int sum = GameMechanics.getSingleton().getBasicTowerBuilt() + GameMechanics.getSingleton().getAdvancedTowerBuilt() + GameMechanics.getSingleton().getHyperTowerBuild()+GameMechanics.getSingleton().getFreezeTowerBuilt();
+			tsum.setText( context.getString(R.string.l12_you_built)+" "+sum+" "+context.getString(R.string.l12_towers_destroyed)+" "+GameMechanics.getSingleton().getTowerDestroyed()+" "+context.getString(R.string.l12_have_been)+" \n");
+			l.addView(tsum);
+			
 			
 			mBtn = new Button(context);
 			mBtn.setText("End");
 			mBtn.setId(1);
+			mBtn.setOnClickListener( this );
 			l.addView(mBtn);
+			sc.addView(l);
+			this.setView(sc);
+			
 		}
 
-		/*public void onClick(View v){
-			if( v.getId() == mBtn.getId()){
-				finish();
-			}
-		}*/
-
-		
+		@Override
+		public void onClick(View v) {
+			if( v.getId() == mBtn.getId() ) this.dismiss();
+		}
 	}
 		  
 }

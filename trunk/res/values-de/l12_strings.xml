@@ -6,15 +6,20 @@
 <string name="l12_paragraph03">Das Spiel wird aus der Vogelperspektive gesteuert. Die Gegner kommen vom rechten Bildschirmrand und versuchen die am linken Bildschirmrand befindliche Haustüre zu erreichen. Der dazwischen liegende Vorgarten kann mit diversen Verteidigungsvorrichtungen ausgestattet werden, die man aus einem Menü auswählt und dann platziert. Der Spieler muss sich nur um die Positionierung und Wartung dieser Geräte kümmern, den „Rest“ erledigen sie von selbst. Ziel des Spiels ist es, möglichst viele Geldboten davor abzuhalten, das Haus zu erreichen, bevor die Zeit abgelaufen ist.</string>
 
 <string name="l12_tutorialtitle">Willkommen zu Bye Bye Boni!</string>
-<string name="l12_intro">Platziere Hasen in deinem Vorgarten, um die eintreffenden Geldtransporter zu stoppen. Hasen können mit Eisen (I) bezahlt werden, das man durch Zerstören der Geldtransporter erhält\n \n Hasen:\n</string>
-<string name="l12_basic_tower">Billiger Söldner, wenig Schaden, mittlere Schussrate</string>
-<string name="l12_advanced_tower">Elite Söldner, gute Schussrate, hoher Schaden, aber langsame Projetile. 5 Schüsse per Salve.</string>
-<string name="l12_hyper_tower">RoboHase3000, teuer aber gute Schussrate bei schnellen Projektilen und mittlerem Schaden.</string>
-<string name="l12_freeze_tower">Eis-Söldner, friert Gegner ein, so dass sie nur mit der Hälfte der Geschwindigkeit laufen. Kein Schaden, langsame Projektile.</string>
+<string name="l12_intro">Platziere Hasen in deinem Vorgarten, um die eintreffenden Geldtransporter zu stoppen. Hasen können mit Eisen (I) bezahlt werden, das man durch Zerstören der Geldtransporter erhält\n \n Hasen:\n\n</string>
+<string name="l12_basic_tower">Billiger Söldner, wenig Schaden, mittlere Schussrate\n</string>
+<string name="l12_advanced_tower">Elite Söldner, gute Schussrate, hoher Schaden, aber langsame Projetile. 5 Schüsse per Salve.\n</string>
+<string name="l12_hyper_tower">RoboHase3000, teuer aber gute Schussrate bei schnellen Projektilen und mittlerem Schaden.\n</string>
+<string name="l12_freeze_tower">Eis-Söldner, friert Gegner ein, so dass sie nur mit der Hälfte der Geschwindigkeit laufen. Kein Schaden, langsame Projektile.\n</string>
 <string name="l12_finish">GAME OVER</string>
 <string name="l12_enemies_fended">Gegner abgewehrt: </string>
 <string name="l12_points">Geld verloren: </string>
 <string name="l12_iron">Metall: </string>
 <string name="l12_roundsleft">noch Runden: </string>
 <string name="l12_countdown">nächste Runde in: </string>
+<string name="l12_end_game">Ende des Spiels:</string>
+<string name="l12_built">Gebaut: </string>
+<string name="l12_you_built">Du hast </string>
+<string name="l12_towers_destroyed">Türme, davon wurden </string>
+<string name="l12_have_been">zerstört ohne zu schiessen!</string>
 </resources>

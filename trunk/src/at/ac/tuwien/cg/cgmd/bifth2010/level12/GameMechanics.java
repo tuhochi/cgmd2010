@@ -12,11 +12,56 @@ public class GameMechanics {
 	private int mSelectedTower = 0;
 	private long mLastColDetDone = -1;
 	private LevelActivity mGameContext = null;
-	private int mSpawndenemies = 0;
-	private int mKilledenemies = 0;
+	private short mSpawndenemies = 0;
+	private short mKilledenemies = 0;
+	private short mBasicTowerBuilt = 0;
+	private short mAdvancedTowerBuilt = 0;
+	private short mHyperTowerBuilt = 0;
+	private short mFreezeTowerBuilt = 0;
+	private short mTowerDestroyed = 0;
 	
 	
 	private static GameMechanics mSingleton = null;
+	
+	public void addBasicTowerBuilt(){
+		this.mBasicTowerBuilt++;
+	}
+	
+	public short getBasicTowerBuilt(){
+		return this.mBasicTowerBuilt;
+	}
+	
+	public void addAdvancedTowerBuilt(){
+		this.mAdvancedTowerBuilt++;
+	}
+	
+	public short getAdvancedTowerBuilt(){
+		return this.mAdvancedTowerBuilt;
+	}
+	
+	public void addHyperTowerBuilt(){
+		this.mHyperTowerBuilt++;
+	}
+	
+	public short getHyperTowerBuild(){
+		return this.mHyperTowerBuilt;
+	}
+	
+	public void addFreezeTowerBuilt(){
+		this.mFreezeTowerBuilt++;
+	}
+	
+	public short getFreezeTowerBuilt(){
+		return this.mFreezeTowerBuilt;
+	}
+	
+	public void addTowerDestroyed(){
+		this.mTowerDestroyed++;
+	}
+	
+	public short getTowerDestroyed(){
+		return this.mTowerDestroyed;
+	}
 	
 	private GameMechanics( int startMoney ){
 		mMoney = startMoney;	
