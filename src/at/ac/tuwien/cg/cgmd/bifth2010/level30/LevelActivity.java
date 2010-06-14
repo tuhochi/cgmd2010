@@ -306,6 +306,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
+		updateProgressResult();
 		super.onSaveInstanceState(outState);
 		//Log.d("l30","onSaveInstanceState");
 	}
@@ -319,6 +320,7 @@ public class LevelActivity extends Activity implements OnClickListener {
 	
 	@Override
 	protected void onDestroy() {
+		updateProgressResult();
 		releaseMusic();		
 		super.onDestroy();
 		//Log.d("l30","onDestroy");
@@ -355,8 +357,9 @@ public class LevelActivity extends Activity implements OnClickListener {
 	 */
     @Override
 	public void finish() {
-    		pauseMusic();
- 			super.finish();
+    	updateProgressResult();
+    	pauseMusic();
+ 		super.finish();
 	}
     
 	/*
