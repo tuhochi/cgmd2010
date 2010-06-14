@@ -10,9 +10,15 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.Texture;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee.TextureParts;
 
 /**
- * CLass representing the crosshairs that follow the rabbit
+ * The crosshairs that follows the rabbit
  * 
- * @author Matthias
+ * This class implements the behaviour of the crosshairs of
+ * the shaman's rifle. It takes care of drawing the correct
+ * sprite, of moving the crosshairs around randomly and of
+ * aiming and shooting the rifle if the rabbit is near.
+ * 
+ * @author Matthias Tretter
+ * @author Thomas Perl
  *
  */
 public class Crosshairs {
@@ -86,8 +92,9 @@ public class Crosshairs {
 	}
 
 	/**
-	 * draw the crosshairs
-	 * @param gl OpenGL
+	 * Draw the crosshairs into the scene
+	 * 
+	 * @param gl OpenGL ES context
 	 */
 	public void draw(GL10 gl) {
 		// if the crosshairs are near the rabbit and the time since the last
@@ -179,7 +186,7 @@ public class Crosshairs {
 	}
 
 	/**
-	 * @return true, if the crosshairs are allowed to shoot
+	 * @return true, if the crosshairs are allowed to shoot/aim
 	 */
 	private boolean allowedToShoot() {
 		return (timeOfLastShot == -1 || (System.currentTimeMillis() - timeOfLastShot) > WAIT_TIME_BETWEEN_SHOTS);
@@ -259,6 +266,9 @@ public class Crosshairs {
 
 	/**
 	 * shoot on the rabbit
+	 * 
+	 * Plays all required sounds, executes the recoil movement
+	 * and finally makes the rabbit lose a coin and vibrate.
 	 */
 	public void shoot() {
 		// play shooting sound
