@@ -8,4 +8,5 @@
 <string name="l77_paragraph03">Wenn über den Steinen die du auflöst weitere Steine liegen, fallen diese herunter. 
 Wenn ein heruntergefallener Block wieder mit den Nachbarblöcken eine gleichfarbige Linie bildet hast du eine Kette geschafft und verlierst noch mehr Gold. 
 Versuche so viele Ketten wie möglich hintereinander zu schaffen.</string>
+<string name="l77_paragraph04">Neue steine kommen automatisch von unten dazu. Du kannst dir auch schneller neue Steine holen indem du rechts neben den Steinen mit dem Finger nach oben schiebst.</string>
 </resources>

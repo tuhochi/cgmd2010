@@ -26,7 +26,8 @@ public class GameView extends GLSurfaceView
 
 	protected static final String	TAG	= "GameView";
 	L77Renderer renderer;
-	
+	private Context context;
+	private final Callback<Integer> gameEnded;
 	
 	Native jni;
 	Audio audio;
@@ -48,7 +49,8 @@ public class GameView extends GLSurfaceView
 	public GameView(Context context, final Callback<Integer> gameEnded, SessionState sessionState)
 	{
 		super(context);
-		
+		this.context = context;
+		this.gameEnded = gameEnded;
 		this.sessionState = sessionState;
 	
 		
@@ -73,6 +75,14 @@ public class GameView extends GLSurfaceView
 			}
 		};
 		
+		 
+		
+		// Play the theme song
+		audio.playSound(Audio.BUNNY_BLOCK_THEME);
+		
+		jni = new Native(context, audio, gameEnded, updateScore);
+		
+		// native depends on renderer vars initialised
 		Callback<Void> timeUp = new Callback<Void>()
 		{
 			
@@ -89,19 +99,9 @@ public class GameView extends GLSurfaceView
 				Log.e(TAG, "Error when ending game");
 				caught.printStackTrace();
 			}
-		}; 
-		
-		// Play the theme song
-		audio.playSound(Audio.BUNNY_BLOCK_THEME);
-		
-		// Set startDate
-		startTime = System.currentTimeMillis();
-
-		jni = new Native(context, audio, gameEnded, updateScore);
-		
-		// native depends on renderer vars initialised
+		};
 		renderer = new L77Renderer(true, context, jni, timeUp);
-		renderer.setStartTime(startTime);
+		renderer.setDateOffset(startTime);
 		setRenderer(renderer);
 		
 	}
@@ -137,8 +137,8 @@ public class GameView extends GLSurfaceView
 		String state = sharedPreferences.getString("native", "");
 		Log.v(TAG, "*received from native state length " + state.length());
 		jni.nativeRestoreSavedState(state);
-		startTime = System.currentTimeMillis() - sharedPreferences.getLong("dateOffset", 0);
-		renderer.setStartTime(startTime);
+		long dateOffset = sharedPreferences.getLong("dateOffset", 0);
+		renderer.setDateOffset(startTime);
 	}
 	
 	/**
