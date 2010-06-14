@@ -30,6 +30,10 @@ public class L77Renderer implements Renderer
 	private Rectangle timeBar;
 	private CoinBar coinBar;
 	private long startTime;
+	private long dateOffset = 0;
+	private Rectangle clock;
+	
+	private boolean clockInitialized = false;
 	
 	private static String TAG = "L77Renderer";
 	private Callback<Void> timeUp;
@@ -70,14 +74,19 @@ public class L77Renderer implements Renderer
 		
 		gl.glTranslatef(6.5f, 0.0f, 5.0f);
 		coinBar.draw(percent);
+		gl.glColor4f(1, 1, 1, 1);
+		gl.glTranslatef(0.5f, 0.25f, 0);
+		clock.draw(gl);
 			
-		gl.glTranslatef(0.5f, 4.5f, 0.0f);
+		
 		long currentTime = System.currentTimeMillis();
-		float timePercent = 1.0f - ((float) (currentTime - startTime)) / 1000f / 120f; 
-//		if (timePercent <= 0)
-//			timeUp.onSucces(null);
+		float timePercent = 1.0f - ((float) (currentTime - startTime)) / 1000f / 120f;
+		Log.d(TAG, "Time percent: " + timePercent);
+		if (timePercent <= 0)
+			timeUp.onSucces(null);
 		
 		gl.glScalef(1.0f, timePercent, 1.0f);
+		gl.glTranslatef(0, 4.75f, 0.0f);
 		gl.glColor4f(1, 1, 1, 1);
 		timeBar.draw(gl);
 		
@@ -94,15 +103,22 @@ public class L77Renderer implements Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		Log.i("renderer", "initiliased");
 		// init first part of jni stuff
 		jni.init();
 		jni.init2();
 
 		timeBar = new Rectangle(0.25f, 9.0f);
 		timeBar.setTexture(gl, mContext.getResources(), R.drawable.l77_time_bar);	
+		clock = new Rectangle (0.25f, 0.25f);
+		clock.setTexture(gl, mContext.getResources(), R.drawable.l77_clock);
 		coinBar = new CoinBar(0.5f, 9.0f, 0.1f, -42.0f, mContext, gl);
+		
+		// TODO Reduce to 0.2f for the abgabe
+		coinBar.setCoinHeight(0.5f);
 
+		clockInitialized = true;
+		setStartTime(System.currentTimeMillis() - dateOffset);
+		Log.i("renderer", "initilized");
 	}
 
 	public void finalize()
@@ -140,6 +156,11 @@ public class L77Renderer implements Renderer
 	public void setStartTime(long startTime)
 	{
 		this.startTime = startTime;
+	}
+
+	public void setDateOffset(long dateOffset)
+	{
+		this.dateOffset = dateOffset;		
 	}
 
 }
