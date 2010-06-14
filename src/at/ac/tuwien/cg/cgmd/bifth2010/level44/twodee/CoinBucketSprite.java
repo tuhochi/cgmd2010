@@ -8,7 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * SpriteContainer that represents the CoinBucket of the Rabbit
  * 
- * @author thp
+ * @author Thomas Perl
  *
  */
 public class CoinBucketSprite extends SpriteContainer {
@@ -48,6 +48,11 @@ public class CoinBucketSprite extends SpriteContainer {
 		bucketFront.setPosition(0, 35);
 	}
 
+	/**
+	 * Rotate the bucket (due to gravity, maybe?)
+	 * 
+	 * @param angle The (absolute) angle of the rotation
+	 */
 	@Override
 	public void setRotation(float angle) {
 		super.setRotation(angle);
@@ -56,6 +61,11 @@ public class CoinBucketSprite extends SpriteContainer {
 		bucketFront.setRotation(angle / 2);
 	}
 
+	/**
+	 * Overridden method of Sprite to draw the bucket front and coins
+	 * 
+	 * @param gl The OpenGL ES context
+	 */
 	@Override
 	protected void onAfterDraw(GL10 gl) {
 		for (Sprite coin : coins) {
@@ -68,9 +78,9 @@ public class CoinBucketSprite extends SpriteContainer {
 	}
 
 	/**
-	 * remove one coin from the bucket
+	 * Remove one coin from the bucket
 	 * 
-	 * @return true, if there are no coins left, otherwise false
+	 * @return true, if there are no coins left, false otherwise
 	 */
 	public boolean looseCoin() {
 		if (!coins.isEmpty()) {
@@ -81,6 +91,8 @@ public class CoinBucketSprite extends SpriteContainer {
 	}
 
 	/**
+	 * Count the coins in the bucket
+	 * 
 	 * @return the number of coins left
 	 */
 	public int getCoinCount() {
@@ -88,7 +100,13 @@ public class CoinBucketSprite extends SpriteContainer {
 	}
 
 	/**
-	 * remove all coins and then create new ones
+	 * Add or remove coins to set the coin size
+	 * 
+	 * This will first remove as much coins as necessary
+	 * and then add more coins so that the coin count at
+	 * the end of the function will be equal to the "count"
+	 * parameter.
+	 * 
 	 * @param count the number of new coins
 	 */
 	public void setCoinCount(int count) {

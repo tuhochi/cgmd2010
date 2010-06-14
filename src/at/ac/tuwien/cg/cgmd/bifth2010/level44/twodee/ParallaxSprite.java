@@ -1,6 +1,8 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 /**
+ * Background assets moving with the viewport
+ * 
  * The ParallaxSprite class is a special Sprite that has the ability to pan
  * along the X and Y axis of the screen to achieve a parallax effect without the
  * need for sophisticated 3D effects. This fits well with the comic style of
@@ -8,7 +10,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
  * 
  * More information about the effect: http://en.wikipedia.org/wiki/Parallax
  * 
- * @author thp
+ * @author Thomas Perl
  */
 public class ParallaxSprite extends Sprite {
 	private float screenWidth;

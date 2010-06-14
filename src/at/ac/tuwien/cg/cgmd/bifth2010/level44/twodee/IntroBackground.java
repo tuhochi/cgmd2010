@@ -1,9 +1,13 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level44.twodee;
 
 /**
- * Container that represents the Intro-Screen
+ * The intro screen with its fancy, moving arrows
  * 
- * @author thp
+ * The screen will automatically scale so that it fits the
+ * screen height, and should work in both the 1:1.5 and 1:1.666
+ * screen aspect ratios (tested on HTC Magic and Nexus One).
+ * 
+ * @author Thomas Perl
  *
  */
 
@@ -83,7 +87,7 @@ public class IntroBackground extends SpriteContainer {
 	}
 
 	/**
-	 * move the arrows one step further
+	 * Step the arrow animation
 	 */
 	public void step() {
 		deltaValue += 1;
