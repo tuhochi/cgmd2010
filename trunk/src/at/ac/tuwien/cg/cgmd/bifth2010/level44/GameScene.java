@@ -401,8 +401,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	 * @param outState A bundle into which to store the state
 	 */
 	public void saveInstanceState(Bundle outState) {
-		System.err.println("Saving instance state");
-		
 		gameState = new GameState();
 		gameState.saveTimeManger(timeManager);
 		gameState.saveCrosshairs(crosshairs);
@@ -427,8 +425,6 @@ public class GameScene extends GLSurfaceView implements Renderer {
 	 * @param savedInstanceState A bundle containing our stored state
 	 */
 	public void restoreInstanceState(Bundle savedInstanceState) {
-		System.err.println("Restoring instance state");
-		
 		Serializable restoredState = savedInstanceState.getSerializable(GameState.KEY);
 		
 		if (restoredState != null && restoredState instanceof GameState) {

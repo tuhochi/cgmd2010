@@ -216,7 +216,6 @@ public class Sprite {
 	 * @param gl OpenGL
 	 */
 	public void draw(GL10 gl) {
-		// System.err.println("drawing item: " + this.toString());
 		/* Save the current Model-View matrix */
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
