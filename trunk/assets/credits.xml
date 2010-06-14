@@ -121,6 +121,57 @@
 	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
 	usage="map texture" license="CC" />
 
+<!-- Level 30 -->	
+<credit type="sound" author="pierrecartoons1979" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=88774" 
+	usage="l30_ohno" 
+	license="CC Sampling Plus 1.0" 
+	name="Oh No!">
+</credit>
+
+<credit type="sound" author="totya" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=19446" 
+	usage="l30_yeah" 
+	license="CC Sampling Plus 1.0" 
+	name="yeah">
+</credit>
+
+<credit type="sound" author="acclivity" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=32243" 
+	usage="l30_outoftime" 
+	license="CC Sampling Plus 1.0" 
+	name="OutOfTime">
+</credit>
+
+<credit type="sound" author="acclivity" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=22952" 
+	usage="l30_win" 
+	license="CC Sampling Plus 1.0" 
+	name="Cheer">
+</credit>
+
+<credit type="sound" author="TicTacShutUp" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=406" 
+	usage="l30_click" 
+	license="CC Sampling Plus 1.0" 
+	name="click 1 d">
+</credit>
+
+<credit type="sound" author="Wolfsinger" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=25762" 
+	usage="l30_lose" 
+	license="CC Sampling Plus 1.0" 
+	name="wap wap wap wap waaaaaah">
+</credit>
+
+<credit type="sound" author="tedthetrumpet" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=15813" 
+	usage="l30_beep" 
+	license="CC Sampling Plus 1.0" 
+	name="alarmclockbeeps">
+</credit>
+
+
 <!-- Level 33 -->	
 <credit type="sound" name="Never Heard a Rhyme Like This Before" author="scottaltham"
 	url="http://dig.ccmixter.org/music_for_games?dig-lic=safe"
