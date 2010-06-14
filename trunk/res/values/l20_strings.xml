@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="l20_help_head">Shopping Bunny</string>
-	<string name="l20_help_text">Our bunny goes shopping! It has to try to collect the more
-	expensive products into its shopping cart to spend as much money as possible. But watch out! The
-	shopping cart might get full before the bunny is even at the register. So make sure not
-	to stuff the cart with bargain offers and watch out for slippery floor. Try to loose extra
-	money by collecting the items on your shopping list. So let the shopping begin! 
+	<string name="l20_help_text">Our bunny goes shopping! It has to try to buy the more
+	expensive products to spend as much money as possible. Click on a product to
+	kick it off the shelf so that it falls directly into the moving shopping cart. 
+	If you miss the product it gets lost. 
+	Also watch out for slippery floor. The bunny may crash into the warning sign and loose
+	precious shopping time. Avoid the signs by clicking on them. 
+    Let the shopping begin! 
 	</string>
 	<string name="l20_nameofthegame_full">Level 20</string>
 	<string name="l20_button_start_text">Start!</string>
