@@ -200,7 +200,7 @@ public class LevelActivity extends Activity{
 		if(totalMoneyPercent == 0.0f) s.setProgress(0);
 		else{
 			score = (int)(burnedMoney/totalMoneyPercent);
-			s.setProgress((int)(progress*score));//burnedMoney/totalMoneyPercent
+			s.setProgress((int)(score));//burnedMoney/totalMoneyPercent
 		}
 		
 		//we call the activity's setResult method 
@@ -336,7 +336,7 @@ public class LevelActivity extends Activity{
 			
 			int gainedMoney = GameMechanics.getSingleton().getMoney();
 			int burnedMoney = GameMechanics.getSingleton().getBurnedMoney();
-			float totalMoneyPercent = (gainedMoney)*0.01f;
+			float totalMoneyPercent = gainedMoney*0.01f;
 			if(totalMoneyPercent == 0.0f) score = 0;
 			else score = (int)(burnedMoney/totalMoneyPercent);
 			
@@ -353,7 +353,7 @@ public class LevelActivity extends Activity{
 			l3.addView(t4);
 
 			ImageView ia = new ImageView(context);
-			ia.setImageResource(R.drawable.l12_bunny2_icon);
+			ia.setImageResource(R.drawable.l12_bunny3_icon);
 			l3.addView(ia);
 			TextView t5 = new TextView(context);
 			t5.setText( context.getString(R.string.l12_built)+" "+GameMechanics.getSingleton().getAdvancedTowerBuilt()+"	\n");
@@ -362,7 +362,7 @@ public class LevelActivity extends Activity{
 			
 			LinearLayout l5 = new LinearLayout(context);
 			ImageView ih = new ImageView(context);
-			ih.setImageResource(R.drawable.l12_bunny3_icon);
+			ih.setImageResource(R.drawable.l12_bunny2_icon);
 			l5.addView(ih);
 			TextView t6 = new TextView(context);
 			t6.setText( context.getString(R.string.l12_built)+" "+GameMechanics.getSingleton().getHyperTowerBuild()+"	\n");

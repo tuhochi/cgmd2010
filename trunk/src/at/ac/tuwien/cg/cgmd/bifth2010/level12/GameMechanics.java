@@ -71,6 +71,11 @@ public class GameMechanics {
 		mGameContext = gc;
 	}
 	
+	public int calculateTotalMoney(){
+		int money = Definitions.FIRST_ROUND_ENEMIE_MONEY * (Definitions.FIRST_ROUND_ENEMIE_NUMBER + Definitions.SECOND_ROUND_ENEMIE_NUMBER + Definitions.THIRD_ROUND_ENEMIE_NUMBER + Definitions.FOURTH_ROUND_ENEMIE_NUMBER + Definitions.FIFTH_ROUND_ENEMIE_NUMBER + Definitions.SIXTH_ROUND_ENEMIE_NUMBER);
+		mMoney = money;
+		return money;
+	}
 	
 	public static GameMechanics getSingleton(){
 		if( mSingleton == null){
@@ -128,7 +133,7 @@ public class GameMechanics {
 	}
 
 	public int getMoney() {	
-		return mMoney;
+		return calculateTotalMoney();
 	}
 	
 	public int getBurnedMoney() {	
