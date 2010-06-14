@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 
 /**
  * Level 77 BunnyBlock
@@ -41,6 +42,7 @@ public class LevelActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
 
 		// TODO Show info Screen
 		showsInitScreen = true;
@@ -129,6 +131,13 @@ public class LevelActivity extends Activity
 		super.onStop();
 		setResult(RESULT_CANCELED);
 		Log.i("l77_state", "**stop activity");
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		newConfig.orientation = Configuration.ORIENTATION_PORTRAIT;
+		super.onConfigurationChanged(newConfig);
 	}
 
 }
