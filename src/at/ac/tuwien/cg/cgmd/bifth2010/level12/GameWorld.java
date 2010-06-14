@@ -100,6 +100,7 @@ public class GameWorld {
 								last = true;
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron( mBasicTower[i].getPrice());
+								GameMechanics.getSingleton().addBasicTowerBuilt();
 								break;
 							}
 						if ( i == mBasicTower.length -1 ) last = true;
@@ -114,6 +115,7 @@ public class GameWorld {
 								last = true;
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron(mAdvancedTower[i].getPrice());
+								GameMechanics.getSingleton().addAdvancedTowerBuilt();
 								break;
 							}
 							if ( i == mAdvancedTower.length -1 ) last = true;
@@ -128,6 +130,7 @@ public class GameWorld {
 								last = true;
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron(mHyperTower[i].getPrice());
+								GameMechanics.getSingleton().addHyperTowerBuilt();
 								break;
 							}
 							if ( i == mHyperTower.length -1 ) last = true;
@@ -142,6 +145,7 @@ public class GameWorld {
 								last = true;
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron(mFreezeTower[i].getPrice());
+								GameMechanics.getSingleton().addFreezeTowerBuilt();
 								break;
 							}
 							if ( i == mFreezeTower.length -1 ) last = true;
