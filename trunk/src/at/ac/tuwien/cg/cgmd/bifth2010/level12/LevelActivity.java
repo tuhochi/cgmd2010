@@ -41,7 +41,7 @@ public class LevelActivity extends Activity{
 	private Context mContext = this; /** pointer to the level activity itself which is also the app context */  
 	private Handler mFinish; /** Handler for showing the finish dialog and finishing the game */
 	private boolean mFinished = false; /** is the game finished? */
-	
+	private int score = 0;
 	
     /** Called when the activity is first created. 
      * Inherited from the android.app.Activiy class, sets the level to fullscreen and created the handler which gets called when the game is finished.
@@ -195,9 +195,13 @@ public class LevelActivity extends Activity{
 		//we set the progress the user has made (must be between 0-100)
 		int gainedMoney = GameMechanics.getSingleton().getMoney();
 		int burnedMoney = GameMechanics.getSingleton().getBurnedMoney();
-		float totalMoneyPercent = (gainedMoney + burnedMoney)*0.01f;
+		float totalMoneyPercent = (gainedMoney )*0.01f;
+		float progress = GameMechanics.getSingleton().getRoundNumber()/(float)(Definitions.MAX_ROUND_NUMBER+1);
 		if(totalMoneyPercent == 0.0f) s.setProgress(0);
-		else s.setProgress((int)(burnedMoney/totalMoneyPercent));
+		else{
+			score = (int)(burnedMoney/totalMoneyPercent);
+			s.setProgress((int)(progress*score));//burnedMoney/totalMoneyPercent
+		}
 		
 		//we call the activity's setResult method 
 		setResult(Activity.RESULT_OK, s.asIntent());
@@ -329,10 +333,14 @@ public class LevelActivity extends Activity{
 			l.addView(t);
 			
 			TextView t2 = new TextView(context);
+			
 			int gainedMoney = GameMechanics.getSingleton().getMoney();
 			int burnedMoney = GameMechanics.getSingleton().getBurnedMoney();
-			float proz = (gainedMoney + burnedMoney)*0.01f; 
-			t2.setText( context.getString(R.string.l12_points)+"	"+proz+ "	 /		100\n");
+			float totalMoneyPercent = (gainedMoney)*0.01f;
+			if(totalMoneyPercent == 0.0f) score = 0;
+			else score = (int)(burnedMoney/totalMoneyPercent);
+			
+			t2.setText( context.getString(R.string.l12_points)+"	"+score+ "%\n");
 			l.addView(t2);
 			
 			

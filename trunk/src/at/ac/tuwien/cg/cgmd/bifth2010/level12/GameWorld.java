@@ -320,7 +320,7 @@ public class GameWorld {
 				for( int i = 0; i < Definitions.SEVENTH_ROUND_ENEMIE_NUMBER; i++){
 					 carrierTwoChance = 0;
 					 carrierThreeChance = 0;
-					 carrierFourChance = 0;
+					 carrierFourChance = 1;
 					MoneyCarrier carrier;
 					if( carrierTwoChance >= carrierThreeChance && carrierTwoChance >= carrierFourChance ) carrier = new CarrierRoundTwo();
 					else if( carrierThreeChance > carrierTwoChance && carrierThreeChance > carrierFourChance) carrier = new CarrierRoundThree();
@@ -473,7 +473,7 @@ public class GameWorld {
                 remove = false;
                 mEnemies.get(i).draw(gl);
                 if( mEnemies.get(i).getX() <= 1.0f) {
-                    GameMechanics.getSingleton().addMoney( mEnemies.get(i).getMoney() );
+                    //GameMechanics.getSingleton().addMoney( mEnemies.get(i).getMoney() );
                     mEnemies.get(i).deactivate();
                     mEnemies.remove(i);
                     i--;
