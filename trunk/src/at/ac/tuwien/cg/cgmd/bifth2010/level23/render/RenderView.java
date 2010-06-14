@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.widget.ProgressBar;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.LevelActivity;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.entities.Background;
@@ -24,6 +25,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.GeometryManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ObstacleManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.OrientationManager;
+import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.ProgressVisibilityHandle;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Serializer;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.Settings;
 import at.ac.tuwien.cg.cgmd.bifth2010.level23.util.SoundManager;
@@ -161,8 +163,13 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 	/** Manager for decoration rendering (clouds etc.). */
 	private DecorationManager decorationManager;
 	
+	/** The Handle for setting the progress for the boost progressbar. */
+	private ProgressVisibilityHandle progressVisibilityHandle;
+	
+	/** position of the startaudio in milliseconds */
 	private int startAudioPosition = -1;
 	
+	/** true if the intro audio was playing when a pause accured */
 	private boolean startAudioWasPlaying;
 	
 //	private float fixedStep = 25;
@@ -206,7 +213,8 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
         hud = new Hud();
 		
 		background = new Background();
-		
+		progressVisibilityHandle = new ProgressVisibilityHandle();
+		progressVisibilityHandle.visibility = ProgressBar.INVISIBLE;
 		startAudioId = SoundManager.instance.requestPlayer(R.raw.l23_timerandstart, false);
 		firstStart = true; 
 	}
@@ -599,6 +607,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 		{
 			soundManager.pauseAllAudio();
 			gameState = GAMEOVER;
+			LevelActivity.handler.post(progressVisibilityHandle);
 		}
 		
 		mainChar.setGameOver(gameOver);	
@@ -636,7 +645,6 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			obstacleManager.reset();
 			decorationManager.reset();
 			timer.resetTimers();
-			Settings.BALLOON_SPEED = Settings.BALLOON_STARTSPEED;
 //			gameState = INTRO;
 			isInitialized = true;
 		}
@@ -654,6 +662,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			dos.writeInt(mainCharMoveDir);
 			dos.writeFloat(balloonHeight);
 			dos.writeBoolean(gameOver);
+			dos.writeFloat(Settings.BALLOON_SPEED);
 			
 			// remote
 			dos.writeFloat(timer.getAccFrameTimes());
@@ -713,6 +722,7 @@ public class RenderView extends GLSurfaceView implements GLSurfaceView.Renderer 
 			mainCharMoveDir = dis.readInt(); 
 			balloonHeight = dis.readFloat(); 
 			gameOver = dis.readBoolean();
+			Settings.BALLOON_SPEED = dis.readFloat();
 			
 			timer.setAccFrameTime(dis.readFloat()); 
 			hud.setMoneyButtonActive(dis.readBoolean());
