@@ -5,9 +5,17 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Class representing a Sprite used for displaying on the GameScene
+ * A single, textured rectangle for drawing objects
  * 
- * @author thp
+ * This is the base class of all our OpenGL ES-based drawing, and
+ * represents an easy abstraction of a 2D drawing area where parts
+ * of the texture can be drawn to the screen one over the other.
+ * 
+ * The class provides hooks for subclasses (onBeforeDraw and
+ * onAfterDraw) as well as extensive functionality for modifying
+ * the position, rotation and size of the object itself.
+ * 
+ * @author Thomas Perl
  *
  */
 

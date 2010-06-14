@@ -11,9 +11,13 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
 /**
- * Class that represents the one big texture used
+ * High-level abstraction of a texture
  * 
- * @author thp
+ * This class provides the necessary abstraction for
+ * simply using drawable resources as textures in an
+ * OpenGL context.
+ * 
+ * @author Thomas Perl
  */
 
 public class Texture {
@@ -25,10 +29,11 @@ public class Texture {
 	int height;
 
 	/**
-	 * Creates the texture
-	 * @param gl OpenGL
-	 * @param context the context used for getting the resource
-	 * @param resource the resource-id of the texture
+	 * Allocate and load a new texture from a given drawable
+	 * 
+	 * @param gl The OpenGL ES context into which to load the texture
+	 * @param context The context used for getting the resource
+	 * @param resource The ID of the drawable texture resource
 	 */
 	public Texture(GL10 gl, Context context, int resource) {
 		InputStream is = context.getResources().openRawResource(resource);
@@ -64,21 +69,21 @@ public class Texture {
 	}
 
 	/**
-	 * @return the texture-name
+	 * @return The ID (OpenGL "texture name") used for binding
 	 */
 	public int getTextureName() {
 		return textureName;
 	}
 
 	/**
-	 * @return the width of the texture
+	 * @return the width of the texture in pixels
 	 */
 	public float getWidth() {
 		return width;
 	}
 
 	/**
-	 * @return the height of the texture
+	 * @return the height of the texture in pixels
 	 */
 	public float getHeight() {
 		return height;

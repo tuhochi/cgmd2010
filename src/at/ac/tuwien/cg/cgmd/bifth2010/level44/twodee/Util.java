@@ -5,9 +5,12 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
- * Class that provides common functionality
+ * Utility functions
  * 
- * @author thp
+ * Functions used for converting data structures into a
+ * format that is utilized by the Android OpenGL ES code.
+ * 
+ * @author Thomas Perl
  * 
  */
 public class Util {

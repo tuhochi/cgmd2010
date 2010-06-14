@@ -7,9 +7,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level44.TimeManager;
 import at.ac.tuwien.cg.cgmd.bifth2010.level44.sound.SoundPlayer;
 
 /**
- * Class used for displaying the left time
+ * The "time cake" for visualizing remaining time
  * 
- * @author thp
+ * A circle in the form of a cake that visualizes the
+ * remaining time in the game, and shows a countdown
+ * in the last several seconds.
+ * 
+ * @author Thomas Perl
  *
  */
 
