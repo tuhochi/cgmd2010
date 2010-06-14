@@ -89,16 +89,12 @@ public class GameWorld extends Thread {
 	private RenderableQuad quad;
 	private int texCoin; //store texture id
 	private int texSteel; //store texture id
-	private int texTable; //store texture id
 	private Map<Integer,ArrayList<ParticleSystem>> graphToParticleSystems;
 	
 	//keep track of the level state
 	private int gameState = 0;
 	boolean quitThread;	
 	boolean soundEnabled = true;
-
-	//cylinder for stockmarket texture
-	FFModel cylinder;
 	
 	//speed of level
 	float progressScale = 0.5f;
@@ -269,8 +265,7 @@ public class GameWorld extends Thread {
         //init sounds
         initSounds();        
     	soundEnabled = _soundEnabled;
-    	
-    	cylinder = new FFModel(1.0f,1.0f,2);
+    
        
     }	
     
@@ -435,7 +430,6 @@ public class GameWorld extends Thread {
 	{	
 		texCoin = LoadOneTextures(gl, R.drawable.l30_coin);
 		texSteel = LoadOneTextures(gl, R.drawable.l30_steel);
-		texTable = LoadOneTextures(gl, R.drawable.l30_table);	
 	}
 	
 	/*
@@ -669,13 +663,13 @@ public class GameWorld extends Thread {
 		//initialize lights
 		float[] lightAmbient = {0.5f, 0.5f, 0.5f, 1.0f};
 		float[] lightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};
-		float[] lightPosition = {0.0f, 4.0f, 2.0f, 1.0f};			
+		float[] lightPosition = {0.0f, 4.0f, -2.0f, 1.0f};			
 		initLight(gl, GL10.GL_LIGHT0, lightAmbient, lightDiffuse, lightPosition);        		
         gl.glEnable(GL10.GL_LIGHT0);        
 		
         float[] lightAmbient2 = {0.5f, 0.5f, 0.5f, 1.0f};
 		float[] lightDiffuse2 = {1.0f, 1.0f, 1.0f, 1.0f};
-		float[] lightPosition2 = {2.0f, -4.0f, 2.0f, 1.0f};	
+		float[] lightPosition2 = {2.0f, -4.0f, -2.0f, 1.0f};	
 		initLight(gl, GL10.GL_LIGHT1, lightAmbient2, lightDiffuse2, lightPosition2);        		
         gl.glEnable(GL10.GL_LIGHT1);
         
@@ -781,21 +775,7 @@ public class GameWorld extends Thread {
 		float[] black = {ambient,ambient,ambient, 1.0f};
 		float[] grey = {0.1f,0.1f,0.1f, 1.0f};
 		
-    	gl.glEnable(GL10.GL_TEXTURE_2D);
-    	gl.glBindTexture(GL10.GL_TEXTURE_2D, texTable);  
-    	
-    	gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    	
-    	gl.glPushMatrix();
-		//draw the rotating background
-    	
-    	gl.glRotatef((float) Math.PI, 0.0f, 1.0f, 0.0f);
-		//cylinder.draw(gl);
-		
-		gl.glPopMatrix();
-		gl.glDisable(GL10.GL_TEXTURE_2D);
-
-		for (int i=0; i<numGraphs; i++)
+    	for (int i=0; i<numGraphs; i++)
 		{
 			if ((gameState<2) && (i>0))
 			{
