@@ -53,12 +53,6 @@ public interface World {
 	 * @param pos The last position the player touched the screen in screen coords
 	 */
 	public void fingerUp(Vector2 pos);
-
-	/**
-	 * Pauses or resumes the game 
-	 * @param pause The pause state that should be set
-	 */
-	public void setPause(boolean pause);
 	
 	/**
 	 * Save the actual gamestate
