@@ -11,27 +11,29 @@ import android.media.MediaPlayer.OnErrorListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * main-class for handling soundeffects and music
+ * Main-class for handling soundeffects and music.
+ * Uses {@link SoundPool} for soundeffects and {@link MediaPlayer} for background music.
  * @author Gerald
  */
 
 public class SoundManager {
 
+	/** our {@link Context} **/
 	private Context context;
 	
 	/** enumeration of existing soundeffects **/
 	public enum SoundFX {BUTTON, HIT, MISS, BREAK, SWOOSH};
 	
-	/** amount of sounds - numer of sounds of the enumeration **/
+	/** number of sounds of the enumeration **/
 	private int soundsamount = 5;
 	
-	/** soundpool for playing soundeffects **/
+	/** SoundPool for playing soundeffects **/
 	private SoundPool soundPool;
 	
-	/** hashmap with all available soundeffects **/
+	/** HashMap with all available soundeffects **/
 	private HashMap<SoundFX, Integer> soundMap;
 	
-	/** mediaplayer for playing background sounds **/
+	/** MediaPlayer for playing background sounds **/
 	private MediaPlayer musicPlayerBG;
 	private MediaPlayer musicPlayerNature;
 	

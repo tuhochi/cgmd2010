@@ -13,7 +13,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.StopTimer;
 
 /**
- * class which shows results at the end of the level
+ * Class which shows results in form of a dialog at the end of the level.
+ * This class is a extension of {@link AlertDialog}.
+ * 
  * @author Gerald
  */
 

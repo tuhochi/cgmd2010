@@ -3,7 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level84;
 import android.app.Activity;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 /**
- * main class for handling statistics and results
+ * main class for handling statistics and results.
+ * This class is a extension of {@link SessionState}.
  * @author Gerald, Georg
  */
 
