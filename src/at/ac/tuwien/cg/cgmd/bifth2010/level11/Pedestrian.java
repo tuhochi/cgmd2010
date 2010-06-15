@@ -95,7 +95,7 @@ public class Pedestrian implements Target{
 	 * @param context
 	 */
 	public Pedestrian(GL10 gl, Context context) {
-		this( 30.0f,10.0f,30.0f,0.01f, 0.3f, gl, context);
+		this( 30.0f,10.0f,20.0f,0.01f, 0.3f, gl, context);
 	}
 	/**
 	 * returns the distance at which the pedestrian is hit by bouncing
