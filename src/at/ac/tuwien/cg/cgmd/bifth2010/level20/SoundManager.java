@@ -43,8 +43,7 @@ public class SoundManager {
 	public SoundManager(Context context) {
 		soundOn = true;
 		isInit = false;
-		volume = 1.0f;
-		sounds = new HashMap<SOUNDS, Integer>(SOUNDS.values().length);
+		volume = 1.0f;		
 		init(context);
 	}
 	
@@ -55,25 +54,29 @@ public class SoundManager {
 	 */
 	public void init(Context context)
 	{
-		if (isInit) destroy();
+		if (isInit) {
+			// Get the calling intent & the session state
+			Intent callingIntent = LevelActivity.instance.getIntent();
+			SessionState state = new SessionState(callingIntent.getExtras());
+			
+			if (state != null) {
+				soundOn = state.isMusicAndSoundOn(); 
+			}		
+			
+			AudioManager audioM = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+			volume = (float)audioM.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+			musicPlayer.setVolume(volume, volume);
+			return;
+		}
+		
+		sounds = new HashMap<SOUNDS, Integer>(SOUNDS.values().length);
+		
 		soundPool = new SoundPool(SOUNDS.values().length, AudioManager.STREAM_MUSIC, 100);
 		loadSounds(LevelActivity.instance);
 		
 		musicPlayer = MediaPlayer.create(context, R.raw.l20_music);
 		musicPlayer.setLooping(true);	
-				
-		// Get the calling intent & the session state
-		Intent callingIntent = LevelActivity.instance.getIntent();
-		SessionState state = new SessionState(callingIntent.getExtras());
-		
-		if (state != null) {
-			soundOn = state.isMusicAndSoundOn(); 
-		}		
-		
-		AudioManager audioM = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-		volume = (float)audioM.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		musicPlayer.setVolume(volume, volume);
-		
+							
 		isInit = true;
 	}
 	
@@ -81,7 +84,7 @@ public class SoundManager {
 	 * Loads the used sounds into the manager.
 	 * @param context The context needed to load the resources.
 	 */
-	private void loadSounds(Context context)
+	public void loadSounds(Context context)
 	{	
 		sounds.put(SOUNDS.LAUGH_1, soundPool.load(context,R.raw.l20_bunny_laugh1, 1));
 		sounds.put(SOUNDS.LAUGH_2, soundPool.load(context,R.raw.l20_bunny_laugh2, 1));

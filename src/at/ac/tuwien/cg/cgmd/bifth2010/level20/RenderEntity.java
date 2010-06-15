@@ -143,7 +143,7 @@ public class RenderEntity extends GameEntity implements Renderable, Clickable {
 	 */
 	@Override
 	public boolean hitTest(float hitX, float hitY) {
-		if (!visible) return false;
+		if (!visible || !clickable) return false;
 		
 		return (hitX >= x - bb_hWidth && hitX < x + bb_hWidth && hitY >= y - bb_hHeight && hitY < y + bb_hHeight);
 	}

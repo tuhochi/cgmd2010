@@ -217,10 +217,12 @@ public class ProductManager{
 				//Mark neighbors as not clickable too
 				for (int i = 0; i < pe.neighbors.length; i++) {					
 					ProductEntity ne = products.get(pe.neighbors[i]);
-					ne.clickable = false;					
-					ne.visible = false;
-					// And remove them after this frame
-					removeFromProducts.add(ne);
+					if (ne != null) {
+						ne.clickable = false;					
+						ne.visible = false;
+						// And remove them after this frame
+						removeFromProducts.add(ne);
+					}
 				}				
 				break;
 			}
@@ -312,17 +314,15 @@ public class ProductManager{
 	 */
 	public void collisionTest(ShoppingCart cart) {
 		Enumeration<Integer> keys = products.keys();		
-		while(keys.hasMoreElements()) {
-			
-			// TODO: We could cycle through animators instead :-/
+		while(keys.hasMoreElements()) {			
 			ProductEntity pe = products.get(keys.nextElement());
 			
 			// Product was collected and is falling down.
 			if (pe.animated) {
 				float halfWidth = pe.width * 0.5f;
 				float halfHeight = pe.height * 0.5f;
-				//if (cart.collisionTest(pe.x-halfWidth, pe.y-halfHeight, pe.x+halfWidth, pe.y+halfHeight)) {
-				if (cart.hitTest(pe.x, pe.y)) {
+				if (cart.collisionTest(pe.x-halfWidth, pe.y-halfHeight, pe.x+halfWidth, pe.y+halfHeight)) {
+				//if (cart.hitTest(pe.x, pe.y)) {
 					EventManager.getInstance().dispatchEvent(EventManager.PRODUCT_HIT_CART, pe);
 				}
 				
