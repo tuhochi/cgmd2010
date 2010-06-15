@@ -130,7 +130,7 @@ public class LevelActivity extends Activity{
     	TextureManager.getSingletonObject().add(R.drawable.l12_icon);			
  
     	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE );
-    	int fieldheight = (int)( mDisplay.getHeight() - 70 ) ;
+    	int fieldheight = (int)( mDisplay.getHeight() - 65 ) ;
     	int menuheight = mDisplay.getHeight() - fieldheight;
     	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
