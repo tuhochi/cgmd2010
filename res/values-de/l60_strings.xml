@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="l60_HelpActivity_Title">Rabbit Rampage</string>
+	<string name="l60_HelpActivity_Title">Rabbit Rampage</string>
 
-<string name="l60_HelpActivity_Part1">Am meisten Spaß macht immer das was eigentlich verboten ist. Wenn doch nur die Strafen nicht wären... Doch was wenn die Strafen plötzlich etwas Gutes sind?</string><string name="l60_HelpActivity_Part2">Überall im Level verstreut findet man Tatwaffen die man verwenden kann um einen Pfad der Zerstörung zu hinterlassen.</string><string name="l60_HelpActivity_Part3">In diesem Spiel geht es ja darum Geld zu verlieren, versuche also so viele Strafen wie möglich zu bekommen.</string>
+	<string name="l60_HelpActivity_Part1">
+		Was nicht erlaubt ist macht oft grad am meisten Spaß! Leider
+		wird man dafür jedoch meist bestraft... Ausnahmsweise sind diese
+		Strafen aber sogar erwünscht!
+	</string>
+	<string name="l60_HelpActivity_Part2">
+		Unser Häschen ist mit seinem Reichtum völlig unglücklich und
+		möchte sein ganzes Geld endlich loswerden. Hilf ihm dabei indem
+		du Verbrechen begehst und dich von der Polizei dafür bestrafen
+		lässt. Versuche alle 100 Goldmünzen loszuwerden vor die Zeit um
+		ist.
+	</string>
+	<string name="l60_HelpActivity_Part3">
+		Es gibt drei zerstörerische Aktionen die du ausführen kannst:
+		Wände mit Graffities besprühen, Schaufenster einschlagen und Autos
+		in die Luft jagen. Es sind jedoch nicht alle Objekte zerstörbar
+		- finde heraus wo Schaden angerichtet werden kann. Gib jedoch
+		Acht, denn wenn du allzu viele Verbrechen begehst, ist das
+		gesamte Polizeiaufgebot hinter dir her!
+	</string>
 
+	<string name="l60_HelpActivity_Part4">
+		Du kannst den Hasen mit den Pfeiltasten durch die Stadt steuern.
+		Verwende den x-Kopf in der Mitte des Controls um Aktionen
+		auszuführen.
+	</string>
 
-
-<string name="l60_HelpActivity_Part4">Viel Spaß beim Randalieren!!</string>
+	<string name="l60_HelpActivity_Part5">
+		Viel Spaß beim Randalieren!!
+	</string>
 </resources>

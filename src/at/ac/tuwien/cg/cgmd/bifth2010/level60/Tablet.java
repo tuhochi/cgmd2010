@@ -9,6 +9,12 @@ import java.util.Iterator;
 
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * Tablet for level 60. Tablets are texture object which can be displayed.
+ * 
+ * @author      Martin Schenk
+ * @author      Tiare Feuchtner
+ */
 public class Tablet {
 	private float vertices[] = {
 		      0.0f,  1.0f, 0.0f,

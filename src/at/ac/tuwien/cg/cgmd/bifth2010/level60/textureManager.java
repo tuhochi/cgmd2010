@@ -15,7 +15,12 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-
+/**
+ * TextureManager for level 60. This class loads all needed textures for the game.
+ * 
+ * @author      Martin Schenk
+ * @author      Tiare Feuchtner
+ */
 public class textureManager {
 	GL10 gl;
 	Context context;
@@ -25,7 +30,11 @@ public class textureManager {
 	Hashtable <String, Integer> textureMap;
 	Hashtable <String, Tablet> gameObjectMap;
 	
-	
+	/**
+	 * Constructor for the TextureManager. Loads all textures for later use.
+	 * @param context
+	 * @param gl
+	 */
 	public textureManager(Context context, GL10 gl) {
 		this.gl = gl;
 		this.context = context;

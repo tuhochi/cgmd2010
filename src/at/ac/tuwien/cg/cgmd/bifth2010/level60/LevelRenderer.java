@@ -104,6 +104,7 @@ public class LevelRenderer implements Renderer {
 	private final static String PAUSETIME = "PAUSETIME";
 
 	private ArrayList<Tablet> actiontextures;
+	private int levelMapToRestore[][];
 
 
 	/**
@@ -163,7 +164,7 @@ public class LevelRenderer implements Renderer {
 	 * Constructor of the rendering class.
 	 * @param context Context of the LevelActivity where the Renderer was created.
 	 * @param msavedinstance Instance state
-	 * @param glv Surface view
+	 * @param gl   the GL interfacev Surface view
 	 */
 	public LevelRenderer(Context context, Bundle msavedinstance, LevelSurfaceView glv) {
 		this.context = context;
@@ -174,6 +175,9 @@ public class LevelRenderer implements Renderer {
 		actiontextures = new ArrayList<Tablet>();
 		cops = new ArrayList<Tablet>();
 		cars = new ArrayList<GameObject>();
+
+		levelMapToRestore = new int[LEVEL_HEIGHT][LEVEL_WIDTH];
+		copyLevelMap(levelMap, levelMapToRestore);
 	}
 
 	/**
@@ -189,7 +193,8 @@ public class LevelRenderer implements Renderer {
 	public void releaseKey(int code) { keystates[code] = 0; }
 
 	/**
-	 * Handles interactions via touch screen. Only the designated area of the screen functions as control for the game.
+	 * Handles interactions via touch screen. Only the designated area of the screen
+	 * functions as control for the game.
 	 * @param event
 	 */
 	public void onTouch(MotionEvent event) {
@@ -223,7 +228,13 @@ public class LevelRenderer implements Renderer {
 		}
 	}
 
-
+	/**
+	 * Called to check if the bunny is close to a house where he can perform an action. Actions
+	 * are considered either spraying a wall or smashing a window - these are possible either on
+	 * the empty wall (house with only one window) or the large shop window.
+	 * 
+	 * @return 0..no action possible, 1..close to wall that can be sprayed, 2..can shatter nearby window
+	 */
 	public int isCloseToHouse() {
 		int isClose = 0;
 		//position of tile that needs checking
@@ -267,6 +278,7 @@ public class LevelRenderer implements Renderer {
 		}
 		return isClose;
 	}
+
 	/**
 	 * Called when the bunny is in proximity to some event-field and the player presses the 'action' button.
 	 * The taken action depends on the type of event-field which was triggered.
@@ -278,17 +290,10 @@ public class LevelRenderer implements Renderer {
 		Point bunnyPos = new Point(xPos, yPos);
 
 		Iterator<Tablet> it = actiontextures.iterator();
-//		boolean proximity = false;
 		boolean acted = false;
-
-		while(it.hasNext()) {
-			Tablet t = it.next();
-			//if (Math.abs(t.getX() - xPos) < LEVEL_TILESIZE/2 && Math.abs(t.getY() - yPos) < LEVEL_TILESIZE/2) proximity = true; 
-		}
 
 
 		//BLOW UP CAR
-//		if (!proximity && !drawLock) {
 		if (!drawLock) {
 
 			Iterator<GameObject>carIterator = cars.iterator();
@@ -587,21 +592,31 @@ public class LevelRenderer implements Renderer {
 		return result;
 	}
 
+	/**
+	 * Checks if the cop has caught the bunny. It is considered caught when the cop is close enough
+	 * so that the textures of both touch.
+	 */
 	private void bunnyWasCaught () {
-		score -= crime*((float)crimeCounter/(float)crimeCounter+2);
+		score -= (crime + crime*(Math.floor(crimeCounter/3)));
 		crimeCounter = 0;
 		crime = 0;
 		copCounter = 0;
-		//poff
+		
+		//poff - cops vanish
 		makeCopsPuff = 1;
 		if (score <= 0) {
 			endScreen1 = manager.getGameObject("win1");
 			endScreen2 = manager.getGameObject("win2");
-//			endGame();
 		}
 		updateScore();
 	}
 
+	/**
+	 * Handles the cops movement and animation. The cop starts following the bunny as soon as it has
+	 * committed a crime. As the number of crimes increases, more cops are generated.
+	 * 
+	 * @param cop
+	 */
 	private void handleCop(Tablet cop) {
 		if (crime > 0) {
 			float bx = bunny.getX();
@@ -617,18 +632,18 @@ public class LevelRenderer implements Renderer {
 			dy /= d_len;
 
 			if (frameCounter%10==0) {
-				if (dy<0){// && (cop.getTexture() == manager.getTexture("cop_back_l") || cop.getTexture() == manager.getTexture("cop_back_r"))) {
+				if (dy<0){
 					cop.changeTexture(manager.getTexture("cop_front_l"));
 					cop.setXY(cop.getX()-5*scale, cop.getY());
-				} else if (dy>=0){// && (cop.getTexture() == manager.getTexture("cop_front_l") || cop.getTexture() == manager.getTexture("cop_front_r"))) {
+				} else if (dy>=0){
 					cop.changeTexture(manager.getTexture("cop_back_l"));
 					cop.setXY(cop.getX()+5*scale, cop.getY());
 				}
 			} else if (frameCounter%10==5) {
-				if (dy<0){// && (cop.getTexture() == manager.getTexture("cop_back_l") || cop.getTexture() == manager.getTexture("cop_back_r"))) {
+				if (dy<0){
 					cop.changeTexture(manager.getTexture("cop_front_r"));
 					cop.setXY(cop.getX()-5*scale, cop.getY());
-				} else if (dy>=0){// && (cop.getTexture() == manager.getTexture("cop_front_l") || cop.getTexture() == manager.getTexture("cop_front_r"))) {
+				} else if (dy>=0){
 					cop.changeTexture(manager.getTexture("cop_back_r"));
 					cop.setXY(cop.getX()+5*scale, cop.getY());
 				}
@@ -641,11 +656,26 @@ public class LevelRenderer implements Renderer {
 		}
 	}
 
+	/**
+	 * Displays the score. Each time the screen is refreshed the digits displaying the score are
+	 * updated. There are textures for the numbers 1 through 9 and the score consisting of three
+	 * digits is composed of these, each set with a certain offset.
+	 * 
+	 * @param gl   the GL interface
+	 * @param position	defines which number is to be displayed
+	 * @param offset	offset at which the current digit is displayed.
+	 */
 	private void drawDigit(GL10 gl, int position, int offset) {
 		manager.getGameObject(goldLUT.get(position)).setXY(offset*scale,screenHeight-(int)(30.0f*scale));		
 		manager.getGameObject(goldLUT.get(position)).draw(gl);
 	}
 
+	/**
+	 * There is a time limit in this level and this method displays the count down.
+	 * 
+	 * @param minutes remaining
+	 * @param seconds remaining
+	 */
 	private void drawTime(int minutes, int seconds) {
 		int seconds_0 = seconds % 10;
 		int seconds_00 = (int)((float)seconds/10.0f);
@@ -657,6 +687,11 @@ public class LevelRenderer implements Renderer {
 		manager.getGameObject(goldLUT.get(seconds_0)).draw(gl);
 	}
 
+	/**
+	 * When all money is lost the game is won and a win-screen is displayed. Analogous there is a
+	 * game over-screen displayed when you've run out of time.
+	 * @param gl   the GL interface
+	 */
 	private void drawEndScreen(GL10 gl) {
 
 		if(frameCounter%10>5){
@@ -666,19 +701,45 @@ public class LevelRenderer implements Renderer {
 		if(frameCounter%10<=5) {
 			endScreen2.draw(gl);
 		}
-		
+
 		if (countdown == 0)
 			endGame();
 	}
 
+	/**
+	 * To restore the level map in case the game is interrupted or ended, it needs to be copied.
+	 * 
+	 * @param copyFrom	array currently containing the correct values
+	 * @param copyTo	array to which the values shall be copied
+	 */
+	private void copyLevelMap(int[][] copyFrom, int [][] copyTo) {
+		
+		for (int i = 0; i < LEVEL_WIDTH; i++) {
+			for (int j = 0; j < LEVEL_HEIGHT; j++) {
+				copyTo[j][i] = copyFrom[j][i];
+			}
+		}
+	}
+	
+	/**
+	 * Called when either all money is lost (game is won), or time's up (game is lost). This method takes 
+	 * care of saving the session state, resetting the level map and returning the result.
+	 */
 	private void endGame() {
 		currentTime = 120;
-
+		copyLevelMap(levelMapToRestore, levelMap);
+		
 		SessionState sessionState = glv.getState();
 		((LevelActivity)context).setResult(Activity.RESULT_OK, sessionState.asIntent());
 		((LevelActivity)context).finish();
 	}
 
+	/**
+	 * Called automatically to draw each frame. All textures on the screen are refreshed, keystates are checked
+	 * and the frameCounter is increased.
+	 * 
+	 * @param gl   the GL interface
+	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		int seconds = 0;
@@ -695,7 +756,6 @@ public class LevelRenderer implements Renderer {
 		} else {
 			endScreen1 = manager.getGameObject("lose1");
 			endScreen2 = manager.getGameObject("lose2");
-//			endGame();
 		}
 
 		if (frameCounter%10==9) {
@@ -808,6 +868,14 @@ public class LevelRenderer implements Renderer {
 		frameCounter++;
 	}
 
+	/**
+	 * Called after the surface is created and whenever the OpenGL ES surface size changes. If called the
+	 * first time all game objects are scaled to the appropriate size for the given resolution
+	 * 
+	 * @param gl	the GL interface
+	 * @param with	screen width
+	 * @param heigh	screen height
+	 */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		this.gl = gl;
@@ -831,6 +899,13 @@ public class LevelRenderer implements Renderer {
 		gl.glLoadIdentity();		
 	}
 
+	/**
+	 *  Called when the surface is first created.
+	 * Sets OpenGL states and initializes all textures.
+	 * 
+	 * @param gl	the GL interface
+	 * @param paramEGLConfig
+	 */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig paramEGLConfig) {
 		this.gl = gl;
@@ -913,10 +988,13 @@ public class LevelRenderer implements Renderer {
 		}
 	}
 
-	public int getScore() {
-		return score;
-	}
 
+	/**
+	 * Called when the game is interrupted and the instance state needs to be saved.
+	 * All critical values are put in the bundle to save.
+	 * 
+	 * @param outState bundle in which the state is saved
+	 */
 	public void onSaveInstanceState(Bundle outState) {
 		mSavedInstance = outState;
 		outState.putFloat(BUNNY_Y, bunny.getY());
@@ -939,6 +1017,19 @@ public class LevelRenderer implements Renderer {
 		}
 	}
 
+	/**
+	 * Getter for the current game score.
+	 * 
+	 * @return	game score
+	 */
+	public int getScore() {
+		return score;
+	}
+	
+	/**
+	 * Called when the score has changed. In this case the textures for the score are
+	 * refreshed.
+	 */
 	private void updateScore () {
 		if (score < 0) score = 0;
 		int hundred = (int)Math.floor(score/100);
@@ -948,6 +1039,5 @@ public class LevelRenderer implements Renderer {
 		gold_000 = hundred;
 		gold_00 = ten;
 		gold_0 = one;
-
 	}
 }

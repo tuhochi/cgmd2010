@@ -6,7 +6,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * The HelpActivity for level 60. 
- * @author Group 60
+ * 
+ * @author      Martin Schenk
+ * @author      Tiare Feuchtner
  */
 public class HelpActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {

@@ -22,7 +22,7 @@ public class LevelActivity extends Activity {
 	private LevelSurfaceView glv;
 	SharedPreferences prefs;
 	private Bundle myState;
-	MediaPlayer player;
+//	MediaPlayer player;
 	public boolean soundOn = false;
 
 	private final static String BUNNY_X = "BUNNY_X";
@@ -68,10 +68,10 @@ public class LevelActivity extends Activity {
 		super.onPause();
 		glv.onPause();
 
-		if (player!=null) {
-			if (player.isPlaying())
-				player.stop();
-		}
+//		if (player!=null) {
+//		if (player.isPlaying())
+//		player.stop();
+//		}
 	}
 
 
@@ -84,62 +84,62 @@ public class LevelActivity extends Activity {
 		super.onResume();
 		glv.onResume();
 
-		if (soundOn) {
-			if (player!=null)
-				player.release();
-			player = MediaPlayer.create(this, R.raw.l50_music);
-			player.setLooping(true);
-			player.start();
+//		if (soundOn) {
+//		if (player!=null)
+//		player.release();
+//		player = MediaPlayer.create(this, R.raw.l50_music);
+//		player.setLooping(true);
+//		player.start();
+//	}
+}
+
+/**
+ * Performs final cleanup before an activity is destroyed. 
+ */
+@Override
+protected void onDestroy() {
+	super.onDestroy();
+
+
+//	if (player!=null) {
+//		if (player.isPlaying())
+//			player.stop();
+//		player.release();
+//	}
+}
+
+/**
+ * Called when a key was pressed down and not handled by any of the views inside of the activity. 
+ * 
+ * @param keyCode Code of the key that has been pressed.
+ * @param event Event triggered by keystroke
+ */
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+	if(keyCode==KeyEvent.KEYCODE_BACK) { 
+		sessionState = glv.getState();
+		setResult(Activity.RESULT_OK, sessionState.asIntent());
+
+		if (myState != null) {
+			myState.putFloat(BUNNY_Y, 0.0f);
+			myState.putFloat(BUNNY_X, 0.0f);
+			myState.putFloat(MAP_OFFSET_X, 0.0f);
+			myState.putFloat(MAP_OFFSET_Y, 0.0f);
 		}
+		finish();
 	}
+	return super.onKeyDown(keyCode, event);
+}
 
-	/**
-	 * Performs final cleanup before an activity is destroyed. 
-	 */
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
-
-		if (player!=null) {
-			if (player.isPlaying())
-				player.stop();
-			player.release();
-		}
-	}
-
-	/**
-	 * Called when a key was pressed down and not handled by any of the views inside of the activity. 
-	 * 
-	 * @param keyCode Code of the key that has been pressed.
-	 * @param event Event triggered by keystroke
-	 */
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode==KeyEvent.KEYCODE_BACK) { 
-			sessionState = glv.getState();
-			setResult(Activity.RESULT_OK, sessionState.asIntent());
-
-			if (myState != null) {
-				myState.putFloat(BUNNY_Y, 0.0f);
-				myState.putFloat(BUNNY_X, 0.0f);
-				myState.putFloat(MAP_OFFSET_X, 0.0f);
-				myState.putFloat(MAP_OFFSET_Y, 0.0f);
-			}
-			finish();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	/**
-	 * Called to retrieve per-instance state from an activity before being killed so that the state
-	 * can be restored in onCreate(Bundle).
-	 * 
-	 * @param outState Bundle containing the state of the activity.
-	 */
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		myState = outState;
-		glv.onSaveInstanceState(outState);
-		super.onSaveInstanceState(outState);
-	}
+/**
+ * Called to retrieve per-instance state from an activity before being killed so that the state
+ * can be restored in onCreate(Bundle).
+ * 
+ * @param outState Bundle containing the state of the activity.
+ */
+@Override
+protected void onSaveInstanceState(Bundle outState) {
+	myState = outState;
+	glv.onSaveInstanceState(outState);
+	super.onSaveInstanceState(outState);
+}
 }
