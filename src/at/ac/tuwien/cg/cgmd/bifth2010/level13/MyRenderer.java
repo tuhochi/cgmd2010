@@ -240,7 +240,9 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 		gl.glViewport(0, 0, width, height);
 		
 		//create all game objects
-		gameControl.createGameObjects();
+		if(gameControl.getGameObjects().isEmpty()) {
+			gameControl.createGameObjects();
+		}
 
 		//start background music
 		SoundManager.init(context);

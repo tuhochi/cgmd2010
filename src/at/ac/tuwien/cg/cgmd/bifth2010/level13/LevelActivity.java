@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -269,7 +268,8 @@ public class LevelActivity extends Activity {
 	 * 
 	 * @see super{@link #onKeyUp(int, KeyEvent)}
 	 */
-	@Override
+	//runs in emulator, but crashes on n1
+	/*@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_MENU) {
 			//toggle fps-display with menu-button
@@ -277,5 +277,5 @@ public class LevelActivity extends Activity {
 			return true;
 		}
 		return false;
-	}
+	}*/
 }
