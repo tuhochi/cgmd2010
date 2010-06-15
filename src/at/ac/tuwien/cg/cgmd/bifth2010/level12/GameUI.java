@@ -33,7 +33,6 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	private static ImageButton mHyperTowerButton; /** the hyper tower button */
 	private static ImageButton mFreezeTowerButton; /** the freeze tower button */
 	private static final Handler mHandler = new Handler(); /** the handler which is responsible for updating the texts */
-	
 	private static GameUI mSingleton = null; /** the UI singleton */
 	
 	/** 
@@ -80,6 +79,7 @@ public class GameUI extends LinearLayout implements OnClickListener{
 
 	    LinearLayout ltxt = new LinearLayout(context);
 	    ltxt.setOrientation(LinearLayout.VERTICAL);
+	    int h = ltxt.getHeight();
 	    
 	    LinearLayout li = new LinearLayout(context);
 	    li.setOrientation(LinearLayout.HORIZONTAL);
