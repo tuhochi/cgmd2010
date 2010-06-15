@@ -503,34 +503,59 @@ public class LevelHandler {
 
 
 	/**
-	 * 
-	 * @param pos of the desired Entry
+	 * this method return the Entry of the desired position
+	 * @param pos Vector of the desired Entry
 	 * @return the Entry
 	 */
 	public int[] getWorldEntry(Vector2i pos){		
 		return worldEntry.get(getWorldId(pos));
 	}
+	
 	/**
-	 * look to getWorldEntry(Vector2i pos)
+	 * look to getWorldEntry(Vector2i pos) 
+	 * @param x		x-coordiante
+	 * @param y		y-coordiante
+	 * @return	the Entry
 	 */
 	public int[] getWorldEntry(int x, int y){
 		return getWorldEntry(new Vector2i(x,y));
 	}
 	
+	/**
+	 * look at getWorldId(Vector2i pos)
+	 * @param x		x-coordiante
+	 * @param y		y-coordiante
+	 * @return	the Entry
+	 */
 	public int getWorldId(int x, int y){
 		return getWorldId(new Vector2i(x,y));
 	}
 	
+	/**
+	 * this method first calculates the real world coordinate and then it return the wordid
+	 * @param pos the position witch can be not a real world coordinate
+	 * @return the world id from the calculated real world position
+	 */
 	private int getWorldId(Vector2i pos) {
 		Vector2i real= getRealWorldCoordinate(pos);
 		return	real.y*worldDim.x+real.x;
 	}
 
+	/**
+	 * calculate the real world coordinate, eg.: calculate modulo
+	 * @param pos witch can be not a real world coordinate
+	 * @return the real wordl coordinate
+	 */
 	private Vector2i getRealWorldCoordinate(Vector2i pos) {
 		Vector2f real= getRealWorldCoordinate(new Vector2f(pos.x, pos.y));
 		return new Vector2i((int)real.x,(int)real.y);
 	}
 	
+	/**
+	 * look at getRealWorldCoordinate(Vector2f to)
+	 * @param pos is the array field Number
+	 * @return the real wordl coordinate
+	 */
 	public Vector2i getWorldCoordinate(int fieldNumber){
 		Vector2i position = new Vector2i(fieldNumber%worldDim.x,fieldNumber/worldDim.x);
 		return position;
@@ -578,7 +603,7 @@ public class LevelHandler {
 	}
 	
 	/**
-	 * 
+	 * calculate the real world coordinate, eg.: calculate modulo
 	 * @param to desired Point
 	 * @return Point in Real World Coordinate
 	 */
@@ -666,7 +691,7 @@ public class LevelHandler {
 		return false;
 	}
 	/**
-	 * this method steer the Caracter to the desired position
+	 * this method steer the Character to the desired position
 	 * @param horizontal, if true go horizontal (x-axis), else vertical (y-axis)
 	 * @param length how long (length of the path) should he go
 	 * @return if the way is possible
@@ -703,6 +728,10 @@ public class LevelHandler {
 		return false;
 	}
 	
+	/**
+	 * this method calculates the possible desired ways and steer it if possible
+	 * @param lastTouch the actual touch position x,y [0..1]
+	 */
 	public void steerTouchEvent(Vector2f lastTouch) {
 		
 		// calculate Position 
