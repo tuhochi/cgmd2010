@@ -83,6 +83,10 @@ public class Pedestrian implements Target{
 	 */
 	private float bounceStrength = 0.0002f;
 	/**
+	 * variable to make bouncing delta time independent
+	 */
+	private float bounceDeltaTime = 0;
+	/**
 	 * sound id
 	 */
 	private static final int mine_sound_01 = R.raw.l11_mine01;
@@ -229,8 +233,15 @@ public class Pedestrian implements Target{
 	public void update(float time, float deltaTime) {
 		if(bounceVector.length()>0.0000001){
 			//System.out.println("bounce");
+			bounceDeltaTime += deltaTime;
+			while(bounceDeltaTime > 0.01){
+				bounceVector.mult((float)(1/Math.pow((1+bounceDeltaTime),2)));
+				bounceDeltaTime -= 0.01;
+			}
+			temp.set(bounceVector.x, bounceVector.y);
+			temp.mult(deltaTime);
 			position.add(bounceVector);
-			bounceVector.mult((float)(1/Math.pow((1+deltaTime),2)));
+			
 			legs.update(position, angle, 0.0f);
 			arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
 			torso.update(position, angle);
@@ -238,6 +249,7 @@ public class Pedestrian implements Target{
 			hair.update(position, angle);
 			
 		}else{
+			bounceDeltaTime = 0;
 			if(target != null){//target exists
 				if(target instanceof Pedestrian){
 					legs.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
