@@ -1,5 +1,13 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 
+/**
+ * GameObject class for level 60. This is a special type of Tablet with which the player can interact.
+ * This object is randomly placed across the level and not positioned in the level map like the
+ * other tablets.
+ * 
+ * @author      Martin Schenk
+ * @author      Tiare Feuchtner
+ */
 public class GameObject extends Tablet {
 	public static final int OBJECTCLASS_CAR = 1; 
 	public static final float BLOW_WIDTH = 60.0f;
@@ -11,6 +19,18 @@ public class GameObject extends Tablet {
 	private String textureBaseName;
 	private textureManager texman;
 	
+	/**
+	 * Constructor of the GameObject which assigns it a texture manager and a texture depending
+	 * on the objectClass. In addition the height, width and position are defined.
+	 * 
+	 * @param objectClass
+	 * @param width
+	 * @param height
+	 * @param x
+	 * @param y
+	 * @param texture
+	 * @param texman textureManager
+	 */
 	public GameObject(int objectClass, int width, int height, float x, float y, int texture, textureManager texman) {
 		super(width, height, x, y, texture);
 		this.objectClass = objectClass;
@@ -26,12 +46,26 @@ public class GameObject extends Tablet {
 		}
 	}
 	
+	/**
+	 * Returns the object class.
+	 * @return objectClass
+	 */
 	public int getObjectClass() { return objectClass; }
 	
+	/**
+	 * Sets the flag isBeingDestroyed to true. Since the interaction in the game results in the
+	 * destruction of an object, this flag triggers the animation of  it.
+	 */
 	public void destroy() {
 		isBeingDestroyed = true;
 	}
 	
+	/**
+	 * Called to display the explosion when an object is destruyed. Textures of flame and smoke are
+	 * overlaid, finally revealing the remnants of the destroyed object.
+	 * 
+	 * @return true if the object has been destroyed
+	 */
 	public boolean update() {
 		if (isBeingDestroyed) {
 			framenr++;

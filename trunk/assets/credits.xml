@@ -276,6 +276,11 @@
 	url="http://www.freesfx.co.uk/users/gr8sfx/"
 	usage="level 50 - winning tune" license="EULA Freesfx.co.uk" />
 	
+<!-- Level 60 -->
+<credit type="sound" name="Large Glass Window Being Smashed" author="gr8sfx"
+	url="http://www.freesfx.co.uk/users/gr8sfx/"
+	usage="level 60 - smashing window" license="EULA Freesfx.co.uk" />
+
 <!-- Level 70 - credits -->
 <credit type="sound" name="Short swish button sound." author="junggle"
 	url="http://www.freesound.org/download/28819/28819_junggle_btn009.wav"
