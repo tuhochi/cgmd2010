@@ -15,27 +15,31 @@ import java.util.Set;
 
 import android.opengl.GLUtils;
 
+/** Manages the textures of the game, sets texture to active , loads the samples */
 public class TextureManager {
 
-	public static HashMap <Integer, Integer> mTextureMap = null; 
-	private GL10 mGl;
-	private Context mContext;
-	private static TextureManager singletonObject = null;
-	private int mTextures[] = null;
+	public static HashMap <Integer, Integer> mTextureMap = null; /** keys == texture sample ID, values == int identifying the loaded texture */
+	private GL10 mGl; /** opengl context */
+	private Context mContext; /** acitvity context */
+	private static TextureManager singletonObject = null; /** singleton of the texture manager */
+	private int mTextures[] = null; /**the texture array for opengl */
 	
+	/** sets the opengl context */
 	public void initializeGL(GL10 gl){		
 		mGl = gl;
 	}
 	
-
+	/** constructor, initializes the texture hashmap */
 	private TextureManager() {
 		mTextureMap = new HashMap<Integer, Integer>();
 	}
 	
+	/** sets the activity context */
 	public void initializeContext( Context context ){
 		mContext = context;
 	}
 	
+	/** returns, and creats the first time, the singleton */
 	public static TextureManager getSingletonObject() {
 		if (singletonObject == null) {
 			singletonObject = new TextureManager();
@@ -43,9 +47,9 @@ public class TextureManager {
 		return singletonObject;
 	}
 	
+	
 	/**
 	 * Add a resource to the textureFile array
-	 * 
 	 * @param resource
 	 */
 	public void add(int resID) {	
@@ -55,7 +59,6 @@ public class TextureManager {
 	
 	/**
 	 * Load all textures and put them into the textureMap
-	 * 
 	 */
 	public void loadTextures() {
 		Set<Integer> keys = mTextureMap.keySet();
