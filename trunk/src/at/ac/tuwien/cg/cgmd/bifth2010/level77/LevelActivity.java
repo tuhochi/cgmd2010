@@ -93,6 +93,9 @@ public class LevelActivity extends Activity
 		Editor ed = this.getPreferences(MODE_PRIVATE).edit();
 		ed.clear();
 		ed.commit();
+		
+		//free native DSs
+		gameView.onDestoy();
 	}
 
 	/**
