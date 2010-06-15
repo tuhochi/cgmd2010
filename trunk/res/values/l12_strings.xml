@@ -23,4 +23,9 @@
 <string name="l12_towers_destroyed">mercenaries, </string>
 <string name="l12_have_been">of them did not make it..</string>
 <string name="l12_fun">Have fun!</string>
+<string name="l12_enemies">Your enemies, these bad people try to give you money! For free!!!\n</string>
+<string name="l12_enemie0desc">At first the bank tries to get rid of their small coins and sends them to you!\n</string>
+<string name="l12_enemie1desc">This time the bank sends you a money courier! Surely tougher than those small money coins!\n</string>
+<string name="l12_enemie2desc">This time the money courier is driving by motorbike. Get him!!!\n</string>
+<string name="l12_enemie3desc">Tough son of a b#&amp;%*! A armored money transporter!\n</string>
 </resources>
