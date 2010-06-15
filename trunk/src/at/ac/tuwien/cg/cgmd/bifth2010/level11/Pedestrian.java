@@ -240,7 +240,7 @@ public class Pedestrian implements Target{
 			}
 			temp.set(bounceVector.x, bounceVector.y);
 			temp.mult(deltaTime);
-			position.add(bounceVector);
+			position.add(temp);
 			
 			legs.update(position, angle, 0.0f);
 			arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
