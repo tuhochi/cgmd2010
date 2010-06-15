@@ -22,6 +22,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 		gl.glLoadIdentity();	
 		GameWorld.getSingleton().getGamefield().draw(gl);
 		//GameWorld.getSingleton().calcCollisions();	
+	if(GameMechanics.getSingleton().running()){
 		if( System.currentTimeMillis() - GameMechanics.getSingleton().getLastCollDetDoneTime() > Definitions.COLLISION_DETECTION_TIMEOUT ){
 			GameWorld.getSingleton().calcCollisions();
 			GameMechanics.getSingleton().setCollDetTime();
@@ -36,7 +37,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 				GameWorld.getSingleton().playCTDSound();
 				mCDTSoundPlayed = true;
 			}	
-			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+4000 ){
+			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME ){
 				GameWorld.getSingleton().initEnemies();
 				GameMechanics.getSingleton().setRoundStartedTime();
 				GameMechanics.getSingleton().nextRound();
@@ -54,6 +55,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 		GameWorld.getSingleton().drawTowers(gl);
 		GameWorld.getSingleton().drawEnemies(gl);
 		//FPSCounter.getSingleton().addFrame();
+	}
 	}
 
 	/** called from the app activity on resume, initializes the viewing perspective and opengl functions */
