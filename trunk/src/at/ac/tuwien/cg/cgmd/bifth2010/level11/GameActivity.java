@@ -76,7 +76,7 @@ public class GameActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		System.out.println("Create");
+		//System.out.println("Create");
 		super.onCreate(savedInstanceState);
 
 		GameActivity.singleton = this;
@@ -148,7 +148,7 @@ public class GameActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		System.out.println("Resume at "+_level.getRemainigTime());
+		//System.out.println("Resume at "+_level.getRemainigTime());
 		_level.resume_level();
 		_gameView.onResume();
 		super.onResume();
@@ -158,7 +158,7 @@ public class GameActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		System.out.println("Paused at "+_level.getRemainigTime());
+		//System.out.println("Paused at "+_level.getRemainigTime());
 		_level.pause_level();
 		_gameView.onPause();
 		super.onPause();
@@ -167,19 +167,21 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onStart() {
 		//System.out.println("Start");
+		_level.resume_level();
 		super.onStart();
 	}
 
 	@Override
 	protected void onStop() {
 		//System.out.println("Stop");
+		_level.pause_level();
 		super.onStop();
 		handler.removeCallbacks(updateTimeTask);
 	}
 
 	@Override
 	protected void onDestroy() {
-		System.out.println("Destroy");
+		//System.out.println("Destroy");
 		super.onDestroy();
 		if ( handler != null )
 			handler.removeCallbacks(updateTimeTask);
@@ -199,7 +201,7 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) 
 	{
-		System.out.println("Save");
+		//System.out.println("Save");
 		Timing timing = this._level.getTiming();
 		timing.pause();
 		outState.putFloat("startTimeStamp", timing.getStartTime());
@@ -227,7 +229,7 @@ public class GameActivity extends Activity {
 	}
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		System.out.println("Restore");
+		//System.out.println("Restore");
 		super.onRestoreInstanceState(savedInstanceState);
 
 		Timing timing = new Timing();
