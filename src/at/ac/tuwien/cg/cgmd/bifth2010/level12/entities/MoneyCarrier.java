@@ -142,10 +142,8 @@ public abstract class MoneyCarrier extends GLObject {
 			//System.out.println("DYT: "+dyt+" cycle time: "+Definitions.DIE_ANIMTE_CYCLE_TIME);
 			if( dyt > (0 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur1 );
 			if( dyt > (1 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur2 );
-			if( dyt > (2 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur3 );
-			if( dyt > (3 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
-			if( dyt > (4 * Definitions.ANIMTE_CYCLE_TIME) ) {
-				TextureManager.getSingletonObject().setTexture( mDyingTextur4 );
+			if( dyt > (2 * Definitions.ANIMTE_CYCLE_TIME) ){
+				TextureManager.getSingletonObject().setTexture( mDyingTextur3 );
 				mReadyToRemove = true;
 			}
 		}

@@ -25,13 +25,15 @@ public class CarrierRoundOne extends MoneyCarrier {
 		mTexture = R.drawable.l12_enemie_lvl0;
 		mTexture1 = R.drawable.l12_enemie_lvl0_1;
 		mTexture2 = R.drawable.l12_enemie_lvl0_2;
+		mDyingTextur1 = R.drawable.l12_enemie_lvl0_die;
+		mDyingTextur2 = R.drawable.l12_enemie_lvl0_die1;
+		mDyingTextur3 = R.drawable.l12_enemie_lvl0_die2;
 		TextureManager.getSingletonObject().add(mTexture);
 		TextureManager.getSingletonObject().add(mTexture1);
 		TextureManager.getSingletonObject().add(mTexture2);
 		TextureManager.getSingletonObject().add(mDyingTextur1);
 		TextureManager.getSingletonObject().add(mDyingTextur2);
 		TextureManager.getSingletonObject().add(mDyingTextur3);
-		TextureManager.getSingletonObject().add(mDyingTextur4);
 		mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
 		SoundHandler.getSingleton().addResource(mSound);
 	}
