@@ -81,7 +81,7 @@ public class Pedestrian implements Target{
 	/**
 	 * factor for the bounce vector
 	 */
-	private float bounceStrength = 0.0003f;
+	private float bounceStrength = 0.0002f;
 	/**
 	 * sound id
 	 */
@@ -229,8 +229,8 @@ public class Pedestrian implements Target{
 	public void update(float time, float deltaTime) {
 		if(bounceVector.length()>0.0000001){
 			//System.out.println("bounce");
-			bounceVector.mult((float)(1/Math.pow((1+deltaTime),2)));
 			position.add(bounceVector);
+			bounceVector.mult((float)(1/Math.pow((1+deltaTime),2)));
 			legs.update(position, angle, 0.0f);
 			arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
 			torso.update(position, angle);
