@@ -13,6 +13,7 @@ public class GameView extends GLSurfaceView {
     private long moveTime =0;
     private float _x = 0;
     private float _y = 0;
+    private Vector2 _position;
     private float _value = 0.0f;
     private boolean isBouncing = false;
     private int minTouchTimeToDropTreasure = 500;
@@ -25,6 +26,7 @@ public class GameView extends GLSurfaceView {
         setRenderer(_renderer);
         this.touchedTime = 0;  
         isDown = false;
+        _position = new Vector2();
     }
     /**
      * places a treasure by touch and hold and release display at the release positions.
@@ -45,6 +47,7 @@ public class GameView extends GLSurfaceView {
     	}*/
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
         	isDown = true;
+        	_position.set(event.getX(), event.getY());
             _x = event.getX();
             _y = event.getY();
             this.touchedTime = System.currentTimeMillis();     
@@ -59,6 +62,7 @@ public class GameView extends GLSurfaceView {
         }
         
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
+        	Vector2 position = new Vector2(event.getX(), event.getY());
         	float x = event.getX();
         	float y = event.getY();
         	
@@ -74,11 +78,13 @@ public class GameView extends GLSurfaceView {
         	double delta = Math.sqrt(Math.pow(Math.abs(_x-x),2)+Math.pow(Math.abs(_y-y), 2)); 
         	if(delta/time>50 && delta > 10){
         		isBouncing = true;
+        	//if ((position - _position) ) {
         		//System.out.println("in");
         		((GameActivity)_renderer.context)._level.bouncePedestrians(x/_renderer._width*Level.sizeX, Level.ratioFix*Level.sizeY-(y/_renderer._height*Level.sizeY), _x/_renderer._width*Level.sizeX, Level.ratioFix*Level.sizeY-(_y/_renderer._height*Level.sizeY), time);
         		_x = x;
                 _y = y;
                 this.moveTime = System.currentTimeMillis();
+                
         	}
             /*queueEvent(new Runnable() {
                 public void run() {
@@ -102,10 +108,12 @@ public class GameView extends GLSurfaceView {
 		        			new Vector2(_x/_renderer._width*Level.sizeX,
 		        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY)))));
 		        	
-		        	HUD.singleton.setDrawTouchTreasureCircle(false);
         		}
 	        	//((GameActivity)_renderer.context).setTextTreasureGrabbed(_value);
+
+	        	HUD.singleton.setDrawTouchTreasureCircle(false);
         	}else{
+	        	HUD.singleton.setDrawTouchTreasureCircle(false);
         		isBouncing = false;
         	}
         	this.moveTime = 0;
