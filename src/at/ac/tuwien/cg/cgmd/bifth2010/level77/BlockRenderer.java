@@ -4,7 +4,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView.Renderer;
-import android.util.Log;
 import android.view.MotionEvent;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.Rectangle;
@@ -33,7 +32,7 @@ public class BlockRenderer implements Renderer
 	private long			startTime;
 	private long			dateOffset	= 0;
 	private Rectangle		clock;
-	private static String	TAG			= "L77Renderer";
+	private static String	TAG			= "BlockRenderer";
 	private Callback<Void>	timeUp;
 	private float			lastDragX	= 0, lastDragY = 0;
 	private Audio			audio;
@@ -84,10 +83,12 @@ public class BlockRenderer implements Renderer
 
 		long currentTime = System.currentTimeMillis();
 		float timePercent = 1.0f - ((float) (currentTime - startTime)) / 1000f / 120f;
-		Log.d(TAG, "Time percent: " + timePercent);
 		if (timePercent <= 0)
+		{
 			timeUp.onSucces(null);
-
+			Log.i(TAG, "Game Time Up!");
+		}
+			
 		gl.glPopMatrix();		
 		gl.glScalef(1.0f, timePercent, 1.0f);
 		gl.glTranslatef(7f, 4.5f, 0.0f);
@@ -135,7 +136,7 @@ public class BlockRenderer implements Renderer
 		audio.playSound(Audio.BUNNY_BLOCK_THEME);
 		
 		setStartTime(System.currentTimeMillis() - dateOffset);
-		Log.i("renderer", "initilized");
+		Log.i("renderer", "initialized");
 	}
 
 	// TODO @Mike is this the right place for deInit() ??
@@ -173,6 +174,7 @@ public class BlockRenderer implements Renderer
 			percent = percent - distanceX / 100.0f;
 			Log.v(TAG, "percent: " + percent);
 			Log.v(TAG, "distanceY: " + distanceY);
+			
 		}
 	}
 
@@ -184,6 +186,7 @@ public class BlockRenderer implements Renderer
 	private void setStartTime(long startTime)
 	{
 		this.startTime = startTime;
+		Log.d(TAG, "StartTime: " + startTime + " CurrentTime: " + System.currentTimeMillis());
 	}
 
 	/**
@@ -194,7 +197,12 @@ public class BlockRenderer implements Renderer
 	 */
 	public void setDateOffset(long dateOffset)
 	{
+		// TODO fix DIRTY 
+		if (dateOffset > 10000000)
+			dateOffset = 0;
+		
 		this.dateOffset = dateOffset;
+		
 	}
 
 }

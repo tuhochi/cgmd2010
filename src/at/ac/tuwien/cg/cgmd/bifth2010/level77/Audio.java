@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 
@@ -164,6 +163,7 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 			} else
 				Log.e(TAG, "Error MediaPlayer is NULL");
 		Log.d(TAG, "Playback of soundid " + soundid + " started");
+			
 	}
 
 	/**

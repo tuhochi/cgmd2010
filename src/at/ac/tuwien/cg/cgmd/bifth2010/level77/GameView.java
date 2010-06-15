@@ -4,7 +4,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
