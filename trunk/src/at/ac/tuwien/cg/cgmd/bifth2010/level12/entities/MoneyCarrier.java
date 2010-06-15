@@ -43,7 +43,6 @@ public abstract class MoneyCarrier extends GLObject {
 		mReadyToRemove = false;
 		mStartDyingTime = -1;
 		mSlowed = 0;
-		//GameMechanics.getSingleton().addMoney( mMoney );
 	}
 
 	/** deactivads (removes the enemy from the gamefield), setting default values */

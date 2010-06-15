@@ -28,8 +28,8 @@ public class CarrierRoundOne extends MoneyCarrier {
 		TextureManager.getSingletonObject().add(mDyingTextur2);
 		TextureManager.getSingletonObject().add(mDyingTextur3);
 		TextureManager.getSingletonObject().add(mDyingTextur4);
-		mSound = R.raw.l12_enemie1_dying;
 		mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON;
+		SoundHandler.getSingleton().addResource(mSound);
 	}
 
 }

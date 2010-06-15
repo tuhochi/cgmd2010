@@ -27,8 +27,8 @@ public class CarrierRoundThree extends MoneyCarrier {
 		TextureManager.getSingletonObject().add(mDyingTextur2);
 		TextureManager.getSingletonObject().add(mDyingTextur3);
 		TextureManager.getSingletonObject().add(mDyingTextur4);
-		mSound = R.raw.l12_enemie3_dying;
 		mIronToDrop = Definitions.THIRD_ROUND_ENEMIE_IRON;
+		SoundHandler.getSingleton().addResource(mSound);
 	}
 	
 }

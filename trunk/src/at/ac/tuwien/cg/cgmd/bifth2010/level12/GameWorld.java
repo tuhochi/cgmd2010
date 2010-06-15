@@ -40,7 +40,7 @@ public class GameWorld {
 	private int carrierThreeChance = 0;
 	private int carrierFourChance = 0;
 	
-	private static int mCTDsound = R.raw.l12_ctd;
+	//private static int mCTDsound = R.raw.l12_ctd;
 	
 	/** constructor, initializes the gamefield, the towerpools and one enemy of each enemy to for adding the textures */
 	private GameWorld(){
@@ -52,12 +52,12 @@ public class GameWorld {
 		c = new CarrierRoundThree();
 		c = new CarrierRoundFour();
 
-		SoundHandler.getSingleton().addResource(mCTDsound);
+		//SoundHandler.getSingleton().addResource(mCTDsound);
 	}
 	
 	/** playing the CTD-sound */
 	public void playCTDSound(){
-		SoundHandler.getSingleton().play(mCTDsound);
+		//SoundHandler.getSingleton().play(mCTDsound);
 	}
 	
 	/** setting the display size == size of gamefield */

@@ -132,6 +132,7 @@ public class LevelActivity extends Activity{
     	int menuheight = mDisplay.getHeight() - fieldheight;
     	GameWorld.setDisplay( fieldheight, mDisplay.getWidth());
     	GameWorld.getSingleton().initVBOs();
+    	
     	SoundHandler.getSingleton().reloadSamples();
 	
  	   	GLSurfaceView glview = new GLSurfaceView(this);

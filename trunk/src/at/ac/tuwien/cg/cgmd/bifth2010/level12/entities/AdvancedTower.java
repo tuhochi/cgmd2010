@@ -32,6 +32,7 @@ public class AdvancedTower extends Tower {
 		TextureManager.getSingletonObject().add(mShootingTextur2);
 		TextureManager.getSingletonObject().add(mShootingTextur3);
 		mSound = R.raw.l12_advanced_tower_shooting_sound;
+		SoundHandler.getSingleton().addResource(mSound);
 		mPrice = Definitions.ADVANCED_TOWER_IRON_NEED;
 		mShootingInterval = Definitions.ADVANCED_TOWER_SHOOTING_INTERVALL;
 		initProjectiles();
