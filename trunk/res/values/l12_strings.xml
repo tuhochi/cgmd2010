@@ -13,10 +13,10 @@
 <string name="l12_freeze_tower">Freeze-Merc (60C), freezes enemies to half their speed and HP\n</string>
 <string name="l12_finish">GAME OVER</string>
 <string name="l12_enemies_fended">enemies fended off: </string>
-<string name="l12_points">Money lost: </string>
+<string name="l12_points">Remaining Money: </string>
 <string name="l12_iron">Carrots: </string>
 <string name="l12_roundsleft">Rounds left: </string>
-<string name="l12_countdown">next Round in: </string>
+<string name="l12_countdown">Next Round in: </string>
 <string name="l12_end_game">Game Over:</string>
 <string name="l12_built">Hired: </string>
 <string name="l12_you_built">You hired </string>
