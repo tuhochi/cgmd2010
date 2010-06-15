@@ -181,7 +181,7 @@ public abstract class Tower extends GLObject {
 	 */
 	public void collideX( MoneyCarrier carrier ){
 		for( int i = 0; i < mProjectiles.length; i++){
-			if( mProjectiles[i].getActiveState() && (mProjectiles[i].getX() >= carrier.getX()) && mProjectiles[i].isExploding() == false ){
+			if( mProjectiles[i].getActiveState() && (mProjectiles[i].getX() >= carrier.getX()) && mProjectiles[i].isExploding() == false && carrier.mIsExploding == false){
 				carrier.hit( mProjectiles[i].getDamage(), mProjectiles[i].getSlow() );
 				mProjectiles[i].reset();//die();
 				mReadyToRemove = true;

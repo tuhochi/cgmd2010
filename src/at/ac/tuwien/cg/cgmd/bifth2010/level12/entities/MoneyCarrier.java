@@ -27,15 +27,16 @@ public abstract class MoneyCarrier extends GLObject {
 	protected int mDyingTextur2 = R.drawable.l12_enemie_dying2;
 	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
 	protected int mDyingTextur4 = R.drawable.l12_enemie_dying4;
-	protected int mSound = R.raw.l12_enemie1_dying; /** sound sample played when this enemy dies */
+	protected int mSound = R.raw.l00_gold01; /** sound sample played when this enemy dies */
 	protected short mSlowed = 0; /** enemy got slowed this much percent by freeze tower */
 	protected short mMoney = 10; /** money got added when the enemy reaches the house */
 	protected short mSpeed = 5; /** speed on which the enemy moves */
 	protected int mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON; /** how much iron drops when enemy dies */
 	protected long mStartDyingTime = -1; /** starting time for the dying animation texture cycle */
 	boolean mReadyToRemove = false; /** is ready to remove */
+	public boolean mIsExploding = false;
 	
-	/** activeds (spawns) the enemy and initializes the values used */
+	/** activates (spawns) the enemy and initializes the values used */
 	public void activate(){
 		super.setActiveState(true);
 		mLastFrametime = System.currentTimeMillis();
@@ -186,6 +187,7 @@ public abstract class MoneyCarrier extends GLObject {
 			SoundHandler.getSingleton().play(mSound);
 			GameMechanics.getSingleton().addIron(mIronToDrop);
 			mStartDyingTime = System.currentTimeMillis();
+			mIsExploding = true;
 		}
 	}
 

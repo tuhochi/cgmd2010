@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.AdvancedTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.BasicTower;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.CarrierRoundFour;
@@ -39,6 +40,8 @@ public class GameWorld {
 	private int carrierThreeChance = 0;
 	private int carrierFourChance = 0;
 	
+	private static int mCTDsound = R.raw.l12_ctd;
+	
 	private GameWorld(){
 		initGameField();
 		initTower();
@@ -47,6 +50,12 @@ public class GameWorld {
 		c = new CarrierRoundTwo();
 		c = new CarrierRoundThree();
 		c = new CarrierRoundFour();
+
+		SoundHandler.getSingleton().addResource(mCTDsound);
+	}
+	
+	public static void playCTDSound(){
+		SoundHandler.getSingleton().play(mCTDsound);
 	}
 	
 	public static void setDisplay( int height, int width){

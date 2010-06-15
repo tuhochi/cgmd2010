@@ -26,7 +26,8 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 			return;
 		}
 		if( GameMechanics.getSingleton().getRoundNumber() == 0) {
-			
+			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+2000 )
+				GameWorld.getSingleton().playCTDSound();
 			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+4000 ){
 				GameWorld.getSingleton().initEnemies();
 				GameMechanics.getSingleton().setRoundStartedTime();
