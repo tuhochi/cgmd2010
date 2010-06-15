@@ -6,7 +6,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
  *
  */
 public class Vector2 {
-	
+	/**
+	 * first and second component of the vector
+	 */
 	public float x, y;
 	/**
 	 * x and y is set to 0

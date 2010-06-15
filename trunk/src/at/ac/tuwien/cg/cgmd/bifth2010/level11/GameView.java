@@ -116,8 +116,8 @@ public class GameView extends GLSurfaceView {
             _y = event.getY();
             float value = (System.currentTimeMillis()-this.touchedTime)/1000.0f*treasureDroppedPerSecond;
             HUD.singleton.setTouchTreasureCircleRadius(value*Treasure.attractionRadiusMultiplacator);
-            HUD.singleton.setTouchTreasureCirclePositon(new Vector2(_x/_renderer._width*Level.sizeX,
-        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY))));
+            HUD.singleton.setTouchTreasureCirclePositon(_x/_renderer._width*Level.sizeX,
+        			Level.ratioFix*(Level.sizeY-(_y/_renderer._height*Level.sizeY)));
             
         
         }

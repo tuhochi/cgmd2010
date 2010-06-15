@@ -1,24 +1,36 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import javax.microedition.khronos.opengles.GL10;
-import java.util.Random;
 
 import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
+/**
+ * class, representing the head sprite of a pedestrian
+ *
+ */
 public class Head {
 
     private static final String LOG_TAG = Hair.class.getSimpleName();
-    
+    /**
+     * position of the head in world coordinates
+     */
 	private Vector2 position;
+	/**
+	 * orientation of the head in the level
+	 */
 	private float angle;
-
+	/**
+	 * texture id
+	 */
 	public static int head_texture_id = R.drawable.l11_pedestrian_head;
-	
+	/**
+	 * square onto which the texture is rendered
+	 */
 	private Square head;
-	private Textures texture;
-	
+	/**
+	 * color of the head = skin color
+	 */
 	private Color color;
 	
 	/**

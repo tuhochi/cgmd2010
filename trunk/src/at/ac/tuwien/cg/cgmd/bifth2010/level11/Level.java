@@ -25,40 +25,91 @@ import android.util.Log;
 public class Level extends Thread {
 
     private static final String LOG_TAG = Level.class.getSimpleName();
+    /**
+     * true if the thread of the level is running
+     */
 	public boolean _isRunning;
-	private boolean isPaused; 
-    public boolean _isActive;
+	/**
+	 * true, if level/thread is paused
+	 */
+	private boolean isPaused;
+	/**
+	 * true, if level was started previously
+	 */
     public boolean _isStarted;
+    /**
+     * true, if level has finished
+     */
     public boolean _isFinished;
-    
+    /**
+     * textures of the level
+     */
 	private Textures textures;
+	/**
+	 * sounds of the level
+	 */
 	private Sounds sounds;
-	
-	
-	private Pedestrian pedestrian;
-	
+	/**
+	 * square onto which the background texture is rendered
+	 */
 	private Square background;
-	
+	/**
+	 * maximal time to play
+	 */
 	private float maxPlayTime;
-	
+	/**
+	 * ratio, to correct level ratio to screen ratio
+	 */
 	public static float ratioFix;
-	
-
+	/**
+	 * list containing the treasures, lying on the ground
+	 */
 	private LinkedList<Treasure> treasureList;
+	/**
+	 * list containing the pedestrians
+	 */
 	private LinkedList<Pedestrian> pedestrianList;
+	/**
+	 * level size x in world coordinates
+	 */
 	public static float sizeX;
+	/**
+	 * level size y in world coordinates
+	 */
 	public static float sizeY;
+	/**
+	 * gl context
+	 */
 	private GL10 gl;
+	/**
+	 * android context
+	 */
 	private Context context;
-	
+	/**
+	 * displays attraction circle and scoreboard icons
+	 */
 	private HUD hud;
 	
 	//public static SoundFile f;
-	
+	/**
+	 * timing of the level
+	 */
 	private Timing timing;
+	/**
+	 * already grabbed treasure of totally collected treasure. used for score calculation
+	 */
 	private float grabbedTreasureValueOfDeletedTreasures;
+	/**
+	 * current score
+	 */
 	private float grabbedTreasureValue;
+	/**
+	 * interval in seconds, at which a new pedestrian is added
+	 */
 	private float intervallOfAddingPed = 10;
+	/**
+	 * time, when last pedestrian was added
+	 */
 	private float timeOfLastAddingPed = 0;
 	//public Rect bounceRect = new Rect();
 	
@@ -79,7 +130,6 @@ public class Level extends Thread {
 		
 		this._isRunning = false;
 		this.isPaused = false;
-		this._isActive = true;
 		this._isStarted = false;
 		
 		this.maxPlayTime = 120;
@@ -165,22 +215,10 @@ public class Level extends Thread {
 		this._isStarted = true;
 		this.timing.resume();
 		//this.timing.update();
-		while (_isActive) {
-			while (_isRunning) {
-				while (isPaused) {
-					/*try {
-						sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}*/
-				}
-				update();
-				/*try {
-					sleep(0);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}*/
+		while (_isRunning) {
+			while (isPaused) {
 			}
+			update();
 		}
 	}
 	
@@ -345,7 +383,6 @@ public class Level extends Thread {
 		((GameActivity)context).setResult(this.getGrabbedTreasureValue());
 		if(this.timing.getCurrTime() > this.maxPlayTime || this.grabbedTreasureValue>100) {
 			this._isRunning = false;
-			this._isActive = false;
 			this._isFinished = true;
 			showOutroDialog.sendEmptyMessage(0);
 		}

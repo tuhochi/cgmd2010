@@ -16,10 +16,25 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class OutroDialog extends AlertDialog implements OnTouchListener {
 
+	/**
+	 * android view of the text
+	 */
 	private View view;
+	/**
+	 * android image view, holding the dialog icon
+	 */
 	private ImageView image;
+	/**
+	 * android view, holding the dialog text
+	 */
 	private TextView text;
+	/**
+	 * button of dialog
+	 */
 	private Button button;
+	/**
+	 * GameActivity handle to start level, when dialog is closed
+	 */
 	private GameActivity ga;
 	
 	public OutroDialog(Context context, boolean hasWon)

@@ -5,11 +5,11 @@ import android.os.Bundle;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
- * The HelpActivity for test level 00. This activity only demonstrates how a HelpActivity shall be used by each level. 
+ * The HelpActivity of level 11. 
  * @author Peter
  */
 public class HelpActivity extends Activity {
-
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.l11_help);

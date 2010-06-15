@@ -9,15 +9,33 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class Torso {
 
     private static final String LOG_TAG = Torso.class.getSimpleName();
+    /**
+     * position of the torso in world coordinates
+     */
 	private Vector2 position;
+	/**
+	 * orientation of the torso in the level
+	 */
 	private float angle;
-	
+	/**
+	 * color of the torso
+	 */
 	private Color color;
-
+	/**
+	 * texture id
+	 */
 	private static final int torso_texture_id = R.drawable.l11_pedestrian_torso;
+	/**
+	 * texture id of the shadow
+	 */
 	private static final int shadow_texture_id = R.drawable.l11_pedestrian_shadow;
-	
+	/**
+	 * square, onto which the texture is rendered
+	 */
 	private Square torso;
+	/**
+	 * square, onto which the shadow texture is rendered
+	 */
 	private Square shadow;
 	
 	/**
