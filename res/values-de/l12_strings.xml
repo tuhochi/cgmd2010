@@ -13,7 +13,7 @@
 <string name="l12_freeze_tower">Eis-Söldner (60K), friert Gegner ein -> halbiert HP und Geschwindigkeit\n</string>
 <string name="l12_finish">GAME OVER</string>
 <string name="l12_enemies_fended">Gegner abgewehrt: </string>
-<string name="l12_points">verbleibendes Geld: </string>
+<string name="l12_points">Geld: </string>
 <string name="l12_iron">Karotten: </string>
 <string name="l12_roundsleft">noch Runden: </string>
 <string name="l12_countdown">nächste Runde in: </string>
