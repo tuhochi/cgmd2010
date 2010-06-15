@@ -13,7 +13,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  */
 public class Arms {
 	/**
-	 * openGL texture id
+	 * texture id
 	 */
 	private static final int arm_texture_id = R.drawable.l11_pedestrian_arm;
 	/**

@@ -7,7 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 //import android.R;
 import android.content.Context;
 import android.util.Log;
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * class pedestrians, who walk around, move towards a target, fight and grab treasure
@@ -16,34 +15,79 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 public class Pedestrian implements Target{
 
     private static final String LOG_TAG = Pedestrian.class.getSimpleName();
-    
+    /**
+     * hair sprite
+     */
 	private Hair hair;
+	/**
+	 * head sprite
+	 */
 	private Head head;
+	/**
+	 * torso sprite
+	 */
 	private Torso torso;
+	/**
+	 * arm sprite
+	 */
 	private Arms arms;
+	/**
+	 * leg sprite
+	 */
 	private Legs legs;	
-	
+	/**
+	 * position of the pedestrian in world coordinates
+	 */
 	private Vector2 position;
-	
-	private Color color_skin;
-	private Color color_hair;
-	private Color color_torso;
-	private int type_hair;
+	/**
+	 * radius, at which the pedestrian is attracted by a treasure
+	 */
 	private float attractionRadius;
+	/**
+	 * speed, at which the pedestrian grabs treasure
+	 */
 	private float grabSpeed;
+	/**
+	 * radius, at which two pedestrians start to fight each other
+	 */
 	private float fightingRadius;
+	/**
+	 * walk speed
+	 */
 	private float moveSpeed;
+	/**
+	 * orientation of the pedestrian in the level
+	 */
 	private float angle;
+	/**
+	 * target of the pedestrian. if target is of type pedestrian, they start to fight.
+	 * if it is of type treasure, the pedestrian movestowards it, when it is in its attraction radius,
+	 * and collects the treasure, if it is near enough.
+	 */
 	private Target target;
+	/**
+	 * temporary vector for position calculation purpose to avoid creating a new object.
+	 */
 	private Vector2 temp;
+	/**
+	 * force, that effects pedestrian's position
+	 */
 	private Vector2 bounceVector;
+	/**
+	 * random number generator for pedestrian's appearance and walk orientation change
+	 */
 	private Random rand;
+	/**
+	 * distance, at which the pedestrian reacts to bouncing
+	 */
 	private float bounceRadius;
+	/**
+	 * factor for the bounce vector
+	 */
 	private float bounceStrength = 0.0003f;
-	private float maxBounceVectorLength = 0.5f;
+	//private float maxBounceVectorLength = 0.5f;
 	
 
-	private Square circle;
 	
 	/**
 	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
@@ -90,7 +134,6 @@ public class Pedestrian implements Target{
 		
 		rand = new Random();
 		
-		circle = new Square();
 		
 		this.angle = (float)(Math.random()*360.0);
 		this.moveSpeed = 4.0f;

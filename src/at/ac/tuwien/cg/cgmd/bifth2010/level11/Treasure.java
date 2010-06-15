@@ -9,16 +9,38 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  *
  */
 public class Treasure implements Target{
+	/**
+	 * current value of the treasure
+	 */
 	private float value;
+	/**
+	 * distance at which pedestrians are attracted
+	 */
 	private float attractionRadius;
+	/**
+	 * position of the treasure in world coordinates
+	 */
 	private Vector2 position;
+	/**
+	 * texture id
+	 */
 	private static final int treasure_texture_id = R.drawable.l11_treasure;
+	/**
+	 * sound id of the sound played when dropping the treasure
+	 */
 	private static final int treasure_sound_01 = R.raw.l00_gold01;
+	/**
+	 * factor, that resizes the attraction circle at creation
+	 */
 	public static final float attractionRadiusMultiplacator = 40.0f; 
+	/**
+	 * square, onto which the texture is rendered
+	 */
 	private Square sprite;
+	/**
+	 * value at time of creation
+	 */
 	private float startingValue;
-	
-	private Square circle;
 	
 
 	
@@ -32,7 +54,6 @@ public class Treasure implements Target{
 		this.position = position;
 		this.sprite = new Square();
 		
-		circle = new Square();
 		
 		Sounds.singleton.play(treasure_sound_01);
 		

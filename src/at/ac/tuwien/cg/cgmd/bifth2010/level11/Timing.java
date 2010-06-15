@@ -3,11 +3,15 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 import android.util.Log;
 
 /**
- * class for gametime
+ * class for game time
  */
 public class Timing {
 
     private static final String LOG_TAG = Timing.class.getSimpleName();
+    /**
+     * variables, to perform timing, starting , pausing,
+     *  resuming and temporarily saving passed time and FPS
+     */
 	private float startTime, currTime, currFPS, lastFrameTime, deltaFrameTime, pauseTimeStamp, pausedTime;
 	/**
 	 * time is set to 0 and already starts timer

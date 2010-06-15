@@ -12,25 +12,45 @@ import java.io.InputStream;
 import java.lang.Integer;
 import android.opengl.GLUtils;
 import android.util.Log;
-
+/**
+ * class to manage the openGL textures
+ *
+ */
 public class Textures {
 	private static final String LOG_TAG = Textures.class.getSimpleName();
-	
-	public static java.util.HashMap <Integer, Integer> textureMap; 
+	/**
+	 * maps android ids to texture-array index, that holds the openGL textures
+	 */
+	public static java.util.HashMap <Integer, Integer> textureMap;
+	/**
+	 * singleton pointer
+	 */
 	public static Textures tex;
+	/**
+	 * android texture id list, to load files
+	 */
 	private int[] textureFiles;
+	/**
+	 * openGL context
+	 */
 	private GL10 gl;
+	/**
+	 * android context
+	 */
 	private Context context;
+	/**
+	 * array, that holds the openGL texture ids
+	 */
 	private int[] textures;
 	
 	public Textures(GL10 gl,Context context) {
 		//Log.i(LOG_TAG, "Textures()");
 		
-		this.tex = this;
+		Textures.tex = this;
 		
 		this.gl = gl;
 		this.context = context;
-		this.textureMap = new java.util.HashMap<Integer, Integer> ();
+		Textures.textureMap = new java.util.HashMap<Integer, Integer> ();
 	}
 	
 	/**
@@ -90,7 +110,7 @@ public class Textures {
 			
 			
 
-			this.textureMap.put(new Integer(textureFiles[i]),new Integer(i));
+			Textures.textureMap.put(new Integer(textureFiles[i]),new Integer(i));
 			
 			//...and bind it to our array
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[i]);
@@ -117,7 +137,7 @@ public class Textures {
 		//Log.i(LOG_TAG, "setTexture()");
 		
 		try {
-			int textureid = this.textureMap.get((Integer)id).intValue();
+			int textureid = Textures.textureMap.get((Integer)id).intValue();
 	    	gl.glBindTexture(GL10.GL_TEXTURE_2D, this.textures[textureid]);
 		
 		}

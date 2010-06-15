@@ -5,19 +5,35 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
+/**
+ * class, representing the legs sprite of pedestrians
+ *
+ */
 public class Legs {
 	
 	private static final int leg_texture_id = R.drawable.l11_pedestrian_leg;
+	/**
+	 * square onto which the texture is rendered
+	 */
 	private Square left_leg, right_leg;
 	
     private static final String LOG_TAG = Legs.class.getSimpleName();
-    
+    /**
+     * position of the legs in worldcoordinates
+     */
 	private Vector2 position;
+	/**
+	 * orientation of the legs in the level
+	 */
 	private float angle;
+	/**
+	 * relative position of the legs = animation
+	 */
 	private float leg_position;
-	
-	Color color;
+	/**
+	 * color of the legs
+	 */
+	private Color color;
 	
 	/**
 	 * legs constructor

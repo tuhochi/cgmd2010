@@ -5,16 +5,22 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
  * 
  */
 public class SoundFile {
-	
+	/**
+	 * id of the sound
+	 */
 	private int _id;
-	private int result;
+	/**
+	 * stream, at which the sound file is played
+	 */
 	private AudioStream audioStream;
-	private boolean res;
 	
 	public SoundFile(int streamId) {
 		_id = streamId;
 	}
-	
+	/**
+	 * 
+	 * @return returns the id of the sound file
+	 */
 	public int getId() {
 		return _id;
 	}
@@ -26,7 +32,7 @@ public class SoundFile {
 		if(GameAudio.mute)
 			return null;
 		
-		result = 0;
+		int result = 0;
 		if (GameAudio.singleton.getSoundPool() != null) {
 			result = GameAudio.singleton.getSoundPool().play(_id, GameAudio.singleton.getMasterVolume(), GameAudio.singleton.getMasterVolume(), 1, 0, 1f);
 		}
@@ -56,6 +62,6 @@ public class SoundFile {
 	 * Removes this file from the memory. Should be used when this file is no longer needed.
 	 */
 	public void unload() {
-		res = GameAudio.singleton.getSoundPool().unload(_id);
+		GameAudio.singleton.getSoundPool().unload(_id);
 	}
 }

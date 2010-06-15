@@ -26,7 +26,7 @@ public class Hair {
 	 */
 	private Color color;
 	/**
-	 * openGL texture id
+	 * texture id
 	 */
 	private static int hair_01_texture_id = R.drawable.l11_pedestrian_hair_01;
 	//private static int hair_02_texture_id = R.drawable.l11_pedestrian_hair_02;
