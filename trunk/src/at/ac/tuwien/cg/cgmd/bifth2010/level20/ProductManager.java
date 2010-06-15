@@ -252,18 +252,30 @@ public class ProductManager{
 		bbY *= GameManager.screenRatio;
 		
 		for (int i = 0; i < NUMBER_PRODUCTS; i++) {			
-			// TODO: Spawn rare products more often
 			int productType = (int)(Math.random() * ProductInfo.length);
+			
+			// Not more than one of the same product in the same column.
+			int idx = 0;
+			ProductEntity previous = products.get(GameEntity.count-1);
+			while (idx < i) {								
+				// if the same type generate new one.
+				if (null != previous && previous.type == productType) {
+					productType = (int)(Math.random() * ProductInfo.length);
+				} else {
+					idx++;
+					previous = products.get(GameEntity.count-(idx+1));
+				}				
+			}
+			
 			// Try: Little offset so the products aren't in a straight line (not so boring)
-			float offset = (float) (Math.random()-0.5f * GameManager.screenRatio * 20f);
+			float offset = (float) (Math.random()-0.5f * GameManager.screenRatio * 30f);
 			ProductEntity pe = ProductInfo.createEntity(productType, productSpawnX + offset, productSpawnY[i], 1, productSize);
 			pe.setBBDim(bbX, bbY);
 			
 			// Declaring neighbors
 			// INFO: This might be unsafe, because we are declaring ids which haven't been created yet. But should work for now			
 			int nIndex = 0;			
-			for (int j = 0; j < NUMBER_PRODUCTS; j++) {
-				
+			for (int j = 0; j < NUMBER_PRODUCTS; j++) {				
 				// Don't mark yourself as neighbor
 				if (i != j) {				
 					pe.neighbors[nIndex] = pe.id + j - i;

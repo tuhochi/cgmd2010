@@ -23,11 +23,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
 public class SoundManager {
 	
 	/** Enumeration of used sounds. **/
-	protected enum SOUNDS { LAUGH_1, LAUGH_2, LAUGH_3, CRASH };
+	protected enum SOUNDS { LAUGH_1, LAUGH_2, LAUGH_3, CRASH, FALL, BING, KATSCHING };
 	/** MediaPlayer responsible for playing the background music. */
 	private MediaPlayer musicPlayer;
-	/** MediaPlayer responsible for playing the running sound. */
-	private MediaPlayer runningPlayer;
 	/** Necessary for playing sounds. **/
 	private SoundPool soundPool;
 	/** Stores the loaded sounds. */
@@ -36,9 +34,15 @@ public class SoundManager {
 	private boolean soundOn;
 	/** The global volume of the sounds and music. */
 	float volume;
+	/** Whether the manager was already initialized or not. */
+	boolean isInit;
 	
+	/**
+	 * Constructor of SoundManager. 
+	 * @param context The context to create resources with. */
 	public SoundManager(Context context) {
 		soundOn = true;
+		isInit = false;
 		volume = 1.0f;
 		sounds = new HashMap<SOUNDS, Integer>(SOUNDS.values().length);
 		init(context);
@@ -49,17 +53,15 @@ public class SoundManager {
 	 * Initializes the SoundManager.
 	 * @param context The context of the game.
 	 */
-	private void init(Context context)
+	public void init(Context context)
 	{
+		if (isInit) destroy();
 		soundPool = new SoundPool(SOUNDS.values().length, AudioManager.STREAM_MUSIC, 100);
 		loadSounds(LevelActivity.instance);
 		
 		musicPlayer = MediaPlayer.create(context, R.raw.l20_music);
 		musicPlayer.setLooping(true);	
-		
-		runningPlayer = MediaPlayer.create(context, R.raw.l20_bunny_run);
-		runningPlayer.setLooping(true);			
-		
+				
 		// Get the calling intent & the session state
 		Intent callingIntent = LevelActivity.instance.getIntent();
 		SessionState state = new SessionState(callingIntent.getExtras());
@@ -71,7 +73,8 @@ public class SoundManager {
 		AudioManager audioM = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 		volume = (float)audioM.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		musicPlayer.setVolume(volume, volume);
-		runningPlayer.setVolume(volume*0.3f, volume*0.3f);
+		
+		isInit = true;
 	}
 	
 	/**
@@ -83,18 +86,12 @@ public class SoundManager {
 		sounds.put(SOUNDS.LAUGH_1, soundPool.load(context,R.raw.l20_bunny_laugh1, 1));
 		sounds.put(SOUNDS.LAUGH_2, soundPool.load(context,R.raw.l20_bunny_laugh2, 1));
 		sounds.put(SOUNDS.LAUGH_3, soundPool.load(context, R.raw.l20_bunny_laugh3, 1));
-		sounds.put(SOUNDS.CRASH, soundPool.load(context, R.raw.l20_bunny_crash, 2));
+		sounds.put(SOUNDS.CRASH, soundPool.load(context, R.raw.l20_bunny_crash, 1));
+		sounds.put(SOUNDS.FALL, soundPool.load(context, R.raw.l20_fall, 1));
+		sounds.put(SOUNDS.BING, soundPool.load(context, R.raw.l20_bing, 1));
+		sounds.put(SOUNDS.KATSCHING, soundPool.load(context, R.raw.l20_katsching, 1));
 		
 	}
-	
-	/**	SoundPool.play  (int soundID, float leftVolume, float rightVolume, int priority, int loop, float rate)
-		soundID 	a soundID returned by the load() function
-		leftVolume 	left volume value (range = 0.0 to 1.0)
-		rightVolume 	right volume value (range = 0.0 to 1.0)
-		priority 	stream priority (0 = lowest priority)
-		loop 	loop mode (0 = no loop, -1 = loop forever)
-		rate 	playback rate (1.0 = normal playback, range 0.5 to 2.0)
-	**/
 	
 	/**
 	 * Starts/continues playing the specified sound.
@@ -130,7 +127,6 @@ public class SoundManager {
 	/** Stops running sounds.*/
 	public void stopSounds() {
 		stopMusic();
-		stopRunSound();
 	}
 	
 	/**
@@ -166,26 +162,8 @@ public class SoundManager {
 	public void stopMusic() {		
 		if(musicPlayer != null)
 			musicPlayer.stop();		
-	}
-	
-	/**
-	 * Starts the MediaPlayer which plays the background music.
-	 */
-	public void startRunSound() {		
-//		if(runningPlayer != null && !runningPlayer.isPlaying() )
-//		{
-//			runningPlayer.start();
-//		}
-	}
-	
-	
-	/**
-	 * Stops the MediaPlayer which plays the background music.
-	 */
-	public void stopRunSound() {		
-		if(runningPlayer != null)
-			runningPlayer.stop();		
-	}
+	}	
+
 	
 	/**
 	 * Releases the MediaPlayer which plays the background music.
@@ -199,15 +177,10 @@ public class SoundManager {
 			musicPlayer.release();
 			musicPlayer = null;
 		}
-		if (runningPlayer != null ) {
-			if (runningPlayer.isPlaying())
-				runningPlayer.stop();
-			runningPlayer.release();
-			runningPlayer = null;
-		}
 		
 		//Release the SoundPool
 		soundPool.release();
-		
+		sounds.clear();
+		isInit = false;
 	}
 }
