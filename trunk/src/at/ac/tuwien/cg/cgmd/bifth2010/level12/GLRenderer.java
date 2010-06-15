@@ -34,6 +34,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 		}
 		if( GameMechanics.getSingleton().getRoundNumber() == 0) {
 			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME-2000 && !mCDTSoundPlayed){
+				System.out.println("PLAYING CDT");
 				GameWorld.getSingleton().playCTDSound();
 				mCDTSoundPlayed = true;
 			}	

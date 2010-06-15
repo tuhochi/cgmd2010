@@ -23,7 +23,11 @@ public class CarrierRoundFour extends MoneyCarrier {
 		mColor[2] = 1.0f;
 		mColor[3] = 1.0f;
 		mTexture = R.drawable.l12_enemie_lvl3;
+		mTexture1 = R.drawable.l12_enemie_lvl3_1;
+		mTexture2 = R.drawable.l12_enemie_lvl3_2;
 		TextureManager.getSingletonObject().add(mTexture);
+		TextureManager.getSingletonObject().add(mTexture1);
+		TextureManager.getSingletonObject().add(mTexture2);
 		TextureManager.getSingletonObject().add(mDyingTextur1);
 		TextureManager.getSingletonObject().add(mDyingTextur2);
 		TextureManager.getSingletonObject().add(mDyingTextur3);
