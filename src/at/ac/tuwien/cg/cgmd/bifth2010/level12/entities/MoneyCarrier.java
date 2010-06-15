@@ -23,6 +23,8 @@ public abstract class MoneyCarrier extends GLObject {
 	private int mStartPos; /** initial position where this enemy got spawned */
 	protected short mHp = 10; /** hitpoints of the enemy */
 	protected int mTexture = R.drawable.l12_enemie_lvl0;  /** normal enemy texture */
+	protected int mTexture1 = R.drawable.l12_enemie_lvl1;
+	protected int mTexture2 = R.drawable.l12_enemie_lvl2;
 	protected int mDyingTextur1 = R.drawable.l12_enemie_dying1; /** enemy dying texture used in dying animation texture cycle */
 	protected int mDyingTextur2 = R.drawable.l12_enemie_dying2;
 	protected int mDyingTextur3 = R.drawable.l12_enemie_dying3;
@@ -33,6 +35,7 @@ public abstract class MoneyCarrier extends GLObject {
 	protected short mSpeed = 5; /** speed on which the enemy moves */
 	protected int mIronToDrop = Definitions.FIRST_ROUND_ENEMIE_IRON; /** how much iron drops when enemy dies */
 	protected long mStartDyingTime = -1; /** starting time for the dying animation texture cycle */
+	protected long mStartMovingTime = -1;
 	boolean mReadyToRemove = false; /** is ready to remove */
 	public boolean mIsExploding = false;
 	
@@ -43,6 +46,7 @@ public abstract class MoneyCarrier extends GLObject {
 		mReadyToRemove = false;
 		mStartDyingTime = -1;
 		mSlowed = 0;
+		mStartMovingTime = System.currentTimeMillis();
 	}
 
 	/** deactivads (removes the enemy from the gamefield), setting default values */
@@ -124,7 +128,15 @@ public abstract class MoneyCarrier extends GLObject {
 		gl.glPushMatrix();
 		gl.glTranslatef(mMovePos, 0.0f, 0.0f);
 		
-		if( mStartDyingTime == -1) TextureManager.getSingletonObject().setTexture( mTexture );
+		if( mStartDyingTime == -1){
+			long dyt = System.currentTimeMillis() - mStartMovingTime;
+			if( dyt > (0 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mTexture );
+			if( dyt > (1 * Definitions.ANIMTE_CYCLE_TIME) )  TextureManager.getSingletonObject().setTexture( mTexture1 );
+			if( dyt > (2 * Definitions.ANIMTE_CYCLE_TIME) ){
+				TextureManager.getSingletonObject().setTexture( mTexture2 );
+				mStartMovingTime = System.currentTimeMillis();
+			}
+		}
 		else{
 			long dyt = System.currentTimeMillis() - mStartDyingTime;
 			//System.out.println("DYT: "+dyt+" cycle time: "+Definitions.DIE_ANIMTE_CYCLE_TIME);

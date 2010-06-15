@@ -80,7 +80,7 @@ public final class Definitions {
 
 		/** first enemy stats */
 		public static final short FIRST_ROUND_ENEMIE_HP = 10; /** hitpoints */
-		public static final short FIRST_ROUND_ENEMIE_RADIUS = 20; /** quad radius */
+		public static final short FIRST_ROUND_ENEMIE_RADIUS = 55; /** quad radius */
 		public static final short FIRST_ROUND_ENEMIE_MONEY = 50; /** money the enemy carries */
 		public static final short FIRST_ROUND_ENEMIE_SPEED = 60; /** speed at which the enemy travels */
 		public static final short FIRST_ROUND_ENEMIE_IRON = 15; /** iron dropped when the enemy is killed */
@@ -88,7 +88,7 @@ public final class Definitions {
 		/** seconds enemy stats */
 		public static final short SECOND_ROUND_ENEMIE_HP = 30;
 		public static final short SECOND_ROUND_ENEMIE_STRENGTH = 20;
-		public static final short SECOND_ROUND_ENEMIE_RADIUS = 25;
+		public static final short SECOND_ROUND_ENEMIE_RADIUS = 55;
 		public static final short SECOND_ROUND_ENEMIE_MONEY = 50;
 		public static final short SECOND_ROUND_ENEMIE_SPEED = 70;
 		public static final short SECOND_ROUND_ENEMIE_IRON = 40;
@@ -96,7 +96,7 @@ public final class Definitions {
 		//Round Three:
 		public static final short THIRD_ROUND_ENEMIE_HP = 60;
 		public static final short THIRD_ROUND_ENEMIE_STRENGTH = 30;
-		public static final short THIRD_ROUND_ENEMIE_RADIUS = 20;
+		public static final short THIRD_ROUND_ENEMIE_RADIUS = 55;
 		public static final short THIRD_ROUND_ENEMIE_MONEY = 50;
 		public static final short THIRD_ROUND_ENEMIE_SPEED = 70;
 		public static final short THIRD_ROUND_ENEMIE_IRON = 70;
@@ -104,7 +104,7 @@ public final class Definitions {
 		//Round Four:
 		public static final short FOURTH_ROUND_ENEMIE_HP = 150;
 		public static final short FOURTH_ROUND_ENEMIE_STRENGTH = 40;
-		public static final short FOURTH_ROUND_ENEMIE_RADIUS = 20;
+		public static final short FOURTH_ROUND_ENEMIE_RADIUS = 60;
 		public static final short FOURTH_ROUND_ENEMIE_MONEY = 50;
 		public static final short FOURTH_ROUND_ENEMIE_SPEED = 90;
 		public static final short FOURTH_ROUND_ENEMIE_IRON = 120;
