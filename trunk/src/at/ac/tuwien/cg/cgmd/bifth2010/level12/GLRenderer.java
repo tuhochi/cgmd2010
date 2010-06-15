@@ -41,14 +41,20 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 				GameWorld.getSingleton().initEnemies();
 				GameMechanics.getSingleton().setRoundStartedTime();
 				GameMechanics.getSingleton().nextRound();
+				mCDTSoundPlayed = false;
 			}
 		}
 		else if( GameMechanics.getSingleton().getRoundNumber() <= Definitions.MAX_ROUND_NUMBER ) {
+			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_ROUND_WAIT_TIME-2000 && !mCDTSoundPlayed){
+				GameWorld.getSingleton().playCTDSound();
+				mCDTSoundPlayed = true;
+			}	
 			
 			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_ROUND_WAIT_TIME ){
 				GameWorld.getSingleton().initEnemies();
 				GameMechanics.getSingleton().setRoundStartedTime();
 				GameMechanics.getSingleton().nextRound();
+				mCDTSoundPlayed = false;
 			}
 		}
 		
