@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;

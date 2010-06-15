@@ -3,14 +3,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level77;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.R.string;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
