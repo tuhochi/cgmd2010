@@ -366,9 +366,12 @@ public class SceneGraph  {
 			lTtutorialTabel.setVisibility(TableLayout.INVISIBLE);
 			lTutorialBottom.setVisibility(LinearLayout.INVISIBLE);
 			
+			
 			lLevelTableTop.setVisibility(TableLayout.VISIBLE);
 			lLevelTableMiddel.setVisibility(TableLayout.VISIBLE);
 		}});
+		
+		
 	}
 
 	
@@ -546,7 +549,13 @@ public class SceneGraph  {
 			//Anzeige
 			 
 			 */
-			activity.finish();
+			
+			activity.runOnUiThread(new Runnable() {public void run() {
+				activity.showDialog(0);		
+			}});
+			
+		
+			
 		}
 		else
 		{

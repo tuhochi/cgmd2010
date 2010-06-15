@@ -1,7 +1,10 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level33;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -183,6 +186,29 @@ public class LevelActivity extends Activity implements OnGestureListener{
 		super.finish();
 	}
 	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		
+		String message;
+		
+		if(progressHandler.isLevelCompleted)
+			message=this.getString(R.string.l33_dialog);
+		else
+			message=this.getString(R.string.l33_dialog2)+" "+progressHandler.getActualllyProgress()+"%";
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(message)
+		       .setCancelable(false)
+		       .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   SceneGraph.activity.finish();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+	
+		return alert;
+
+	}
 	
 	
 
