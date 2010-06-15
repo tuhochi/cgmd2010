@@ -81,7 +81,7 @@ public class Pedestrian implements Target{
 	/**
 	 * factor for the bounce vector
 	 */
-	private float bounceStrength = 0.0002f;
+	private float bounceStrength = 0.04f;
 	/**
 	 * variable to make bouncing delta time independent
 	 */
@@ -351,12 +351,6 @@ public class Pedestrian implements Target{
 	public void setTarget(Target target){
 		this.target = target;
 		this.angle = (float)Math.atan2(target.getPosition().y - this.position.y, target.getPosition().x - this.position.x) * (180.0f/(float)Math.PI);
-		//this.angle = (float)Math.atan( (treasurePosition.y - this.position.y) / (treasurePosition.x - this.position.x) )
-		//Sounds.singleton.play(mine_sound_01);
-		//GameMusic.play(mine_sound_01, false);
-		
-
-		
 	}
 	
 	/**
@@ -369,7 +363,7 @@ public class Pedestrian implements Target{
 			float f = r.nextFloat();
 			if (f < 0.3f) {
 				Sounds.singleton.play(mine_sound_01);
-			} else if (f < 0.7f) {
+			} else if (f < 0.6f) {
 				Sounds.singleton.play(mine_sound_02);
 			} else if (f < 0.9f) {
 				Sounds.singleton.play(mine_sound_03);

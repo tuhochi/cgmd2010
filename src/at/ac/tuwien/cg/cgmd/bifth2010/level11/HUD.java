@@ -92,7 +92,7 @@ public class HUD {
 				gl.glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
 				Textures.tex.setTexture(circle_texture_id);
 				gl.glTranslatef(touchTreasureCirclePositon.x, touchTreasureCirclePositon.y, 0.0f);
-				gl.glScalef(touchTreasureCircleRadius, touchTreasureCircleRadius, 1.0f);
+				gl.glScalef(20.0f+touchTreasureCircleRadius, 20.0f+touchTreasureCircleRadius, 1.0f);
 				treasureCircle.draw(gl);
 			gl.glPopMatrix();
 			
@@ -102,11 +102,11 @@ public class HUD {
 	
 	public void draw_ontop(GL10 gl) {
 		// draw hud graphics
-		gl.glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+		gl.glColor4f(0.8f, 0.8f, 0.8f, 0.7f);
 		gl.glPushMatrix();
 			Textures.tex.setTexture(circle_texture_id);
 			gl.glTranslatef(0.0f, 0.0f, 0.0f);
-			gl.glScalef(50.0f, 50.0f, 1.0f);
+			gl.glScalef(70.0f, 70.0f, 1.0f);
 			treasureCircle.draw(gl);
 		gl.glPopMatrix();
 		

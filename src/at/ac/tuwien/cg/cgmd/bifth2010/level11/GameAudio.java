@@ -19,7 +19,7 @@ public class GameAudio {
 	/**
 	 * maximal streams of the sound pool
 	 */
-	public static final int MAX_STREAMS = 5;
+	public static final int MAX_STREAMS = 200;
 	/**
 	 * singleton, points to this
 	 */
@@ -93,13 +93,12 @@ public class GameAudio {
 	}
 	
 	/**
-	 * Loads a file from the /assets/ folder in your APK, ready to be played
+	 * Loads a file, ready to be played
 	 * @param filename
-	 * @return 
+	 * @return SoundFile
 	 */
 	public SoundFile createSoundFile(int file) {
 		try {
-			//int id = _soundPool.load(GameActivity.singleton.getAssets().openFd(file), 0);
 			int id = _soundPool.load(GameActivity.singleton, file, 0);
 			SoundFile soundFile = new SoundFile(id);
 			int j = -1;

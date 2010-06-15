@@ -118,21 +118,21 @@ public class GameActivity extends Activity {
         _textTimeLeft.setText("");
         _textTimeLeft.setTextSize(20);
         _textTimeLeft.setGravity(Gravity.LEFT);
-        _textTimeLeft.setTextColor(0x66000000);  
+        _textTimeLeft.setTextColor(0x99000000);  
          
          
         _textTreasure = new TextView(this);
         _textTreasure.setText("");
         _textTreasure.setTextSize(20);
         _textTreasure.setGravity(Gravity.LEFT);
-        _textTreasure.setTextColor(0xC0000000);
+        _textTreasure.setTextColor(0x99000000);
          
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams.setMargins(10, 10, 10, 10);
         timeLeftLayout.addView(_textTimeLeft, layoutParams);
         
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
-        layoutParams2.setMargins(0, 10, 0, 10);
+        layoutParams2.setMargins(10, 10, 0, 0);
         treasureSpentLayout.addView(_textTreasure, layoutParams2); 
         
 

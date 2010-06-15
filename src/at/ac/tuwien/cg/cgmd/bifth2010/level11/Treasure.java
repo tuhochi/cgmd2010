@@ -49,7 +49,7 @@ public class Treasure implements Target{
 	public Treasure(float value, float startingValue, Vector2 position){
 		this.startingValue = value;
 		this.value = this.startingValue;
-		this.attractionRadius = value*attractionRadiusMultiplacator;
+		this.attractionRadius = 20+value*attractionRadiusMultiplacator;
 		this.position = position;
 		this.sprite = new Square();
 		Sounds.singleton.play(treasure_sound_01);
