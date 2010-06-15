@@ -52,7 +52,11 @@ public class SoundHandler {
 	/** (re)loads the samples in the hashmap and sets as values the IDs of the loaded sample */
 	public void reloadSamples(){
 		Set<Integer> keys = mSoundIDs.keySet();
-		if( keys.isEmpty() ) return;
+		System.out.println("REALODE SOUNDSAMPLES, #KEYS: "+keys.size());
+		if( keys.isEmpty() ){
+			System.out.println("NO SOUNDSAMPLE TO LOAD, NO KEYS IN HASHMAP");
+			return;
+		}
 		Iterator<Integer> keysiter = keys.iterator();
 		do{
 			int resID = keysiter.next();
