@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView;
 
 /** class responsible for drawing the opengl elements */
 public class GLRenderer implements GLSurfaceView.Renderer{
+	private boolean mCDTSoundPlayed = false;
 	
 	/**
 	 * method called to draw on each frame, checks if its time to do the collision detection, calls the UI update method, 
@@ -31,8 +32,10 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 			return;
 		}
 		if( GameMechanics.getSingleton().getRoundNumber() == 0) {
-			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+2000 )
+			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+2000 && !mCDTSoundPlayed){
 				GameWorld.getSingleton().playCTDSound();
+				mCDTSoundPlayed = true;
+			}	
 			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+4000 ){
 				GameWorld.getSingleton().initEnemies();
 				GameMechanics.getSingleton().setRoundStartedTime();

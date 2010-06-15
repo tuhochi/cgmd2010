@@ -148,7 +148,6 @@ public class LevelActivity extends Activity{
         mL.addView( glview );
         
         setContentView( mL );
-    	//SoundHandler.getSingleton().playLoop(R.raw.l12_music);
         super.onResume();
     }
     
