@@ -49,7 +49,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	protected SoundManager soundManager;
 	
 	/** Responsible for creating and managing particle systems. */
-	// couldn't compile: protected ParticleEngine particleEngine;   
+	protected ParticleEngine particleEngine;   
 	
 	/** Provides sprites containing characters for rendering. */
 	protected TextSprites textSprites;
@@ -139,11 +139,14 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		productManager = new ProductManager();	
 		textSprites = new TextSprites();
 		
-		soundManager = new SoundManager((Context)LevelActivity.instance);	
-		// couldn't compile: particleEngine = new ParticleEngine();
-		// couldn't compile: particleEngine.speed = activity.getResources().getInteger(R.integer.l20_particle_speed);
-		// couldn't compile: particleEngine.nParticles = activity.getResources().getInteger(R.integer.l20_particle_count);
-		// couldn't compile: particleEngine.lifetime = activity.getResources().getInteger(R.integer.l20_particle_life);
+		soundManager = new SoundManager((Context) LevelActivity.instance);
+		particleEngine = new ParticleEngine();
+		particleEngine.speed = activity.getResources().getInteger(
+				R.integer.l20_particle_speed);
+		particleEngine.nParticles = activity.getResources().getInteger(
+				R.integer.l20_particle_count);
+		particleEngine.lifetime = activity.getResources().getInteger(
+				R.integer.l20_particle_life);
 		
 		obstacleManager = new ObstacleManager();
 		
@@ -186,7 +189,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		float heightPercent = height * 0.01f;
 		screenRatio = height / 480.f;
 		
-		shelf = new Shelf(width*0.5f, height*0.5f, -1, width, height);
+		shelf = new Shelf(width*0.5f, height*0.5f, 0, width, height);
 		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);		
 
 		// Preload product textures
@@ -202,9 +205,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		int[] texIds = new int[2];
 		texIds[0] = renderView.getTexture(R.drawable.l88_stash_yellow, gl);
 		texIds[1] = renderView.getTexture(R.drawable.l88_stash_orange, gl);		
-		//texIds[2] = renderView.getTexture(R.drawable.l88_stash_red, gl);
-		// couldn't compile: particleEngine.textureIds = texIds;		
-		// couldn't compile: particleEngine.size = (int) (activity.getResources().getInteger(R.integer.l20_particle_size) * screenRatio);
+		particleEngine.textureIds = texIds;		
+		particleEngine.size = (int) (activity.getResources().getInteger(R.integer.l20_particle_size) * screenRatio);
 		
 		// Create bunny.
 		int[] bunnySequence = new int[RenderView.TEXTURE_BUNNY.length];
@@ -265,7 +267,6 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		// Set crash pos for obstacle to the right of the shopping cart.
 		obstacleManager.setCrashPosition(shoppingCarts[0]);	
-		
 		productManager.initProductSpawn();
 		// Pixel per second
 		animationSpeed = activity.getResources().getInteger(R.integer.l20_animation_speed) * widthPercent;
@@ -321,7 +322,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		bunny.setAnimationSequence(bunnySequence);
 		
 		productManager.initProductSpawn();
-		
+				
+		soundManager.init(LevelActivity.instance);
 		obstacleManager.init(gl);			
 		productManager.init();
 		bunny.curseBubble.texture = renderView.getTexture(R.drawable.l20_bunny_curse, gl);
@@ -331,8 +333,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		int[] texIds = new int[2];
 		texIds[0] = renderView.getTexture(R.drawable.l88_stash_yellow, gl);
 		texIds[1] = renderView.getTexture(R.drawable.l88_stash_orange, gl);		
-		//texIds[2] = renderView.getTexture(R.drawable.l88_stash_red, gl);
-		// couldn't compile: particleEngine.textureIds = texIds;
+		particleEngine.textureIds = texIds;
 		
 		// Discount Pop-Ups.
 		discountPopUps[0].texture = renderView.getTexture(R.drawable.l20_discount, gl);
@@ -364,7 +365,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		obstacleManager.update(dt, scroll);
 		
-		// couldn't compile: particleEngine.update(dt);
+		particleEngine.update(dt);
 		
 		bunny.update(dt);		
  
@@ -410,19 +411,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	 * If called, the activity finishes and returns the result.
 	 */
 	private void gameOver() {
+		soundManager.playSound(SOUNDS.KATSCHING);
 		stop();
 		
 		SessionState s = new SessionState();
 		s.setProgress(100 - (int)totalMoney); 
 		activity.setResult(Activity.RESULT_OK, s.asIntent());
-		
-		// Hopefully this will kill the game for sure
-		// No, theres a crash
-//		LevelActivity.instance = null;
-//		LevelActivity.gameManager = null;
-//		LevelActivity.renderView = null;
-		
-		
+	
 		if (finish) {
 			activity.finish();
 		}
@@ -505,10 +500,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	
 	
 
+
 	/* (non-Javadoc)
 	 * @see at.ac.tuwien.cg.cgmd.bifth2010.level20.EventListener#handleEvent(int, java.lang.Object)
 	 */
-	@Override
 	public void handleEvent(int eventId, Object eventData) {
 		
 		switch (eventId) {
@@ -549,6 +544,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				// Falling to the ground.
 				Animator a = new FallAnimator(pe, fallAcceleration);
 				animators.put(a.id, a);
+				soundManager.playSound(SOUNDS.FALL);
 			} else {
 				
 				//INFO: Don't disable catch mode anymore!!!
@@ -576,10 +572,11 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				}
 				
 				createTextAnimation(pe.x, pe.y, "-", price);
+				soundManager.playSound(SOUNDS.BING);
 			}
 			
 			// Create Particle System.
-			// couldn't compile: particleEngine.createParticleSystem(pe.x, pe.y);
+			particleEngine.createParticleSystem(pe.x, pe.y);
 
 		}
 		break;
@@ -621,6 +618,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 				scrollSpeedIncr = true;
 				// Now create a text label displaying the price or discount
 				createTextAnimation(pe.x, pe.y, (price >= 0 ? "-" : "+"), price);
+				
+				soundManager.playSound(SOUNDS.BING);
 			}
 		}
 		break;
@@ -660,8 +659,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		case EventManager.BUNNY_MOST_LEFT:
 		{
 			// Here, the bunny is at it's left most position. Spawn an obstacle only here			
-			// Spawn only if not crashed and the first time after collecting 6 products
-			if (!obstacleManager.crashed && shoppingCarts[0].products.size() >= 6) {
+			// Spawn only if not crashed and the first time after collecting 6 products or after 15 seconds.
+			if (!obstacleManager.crashed && (shoppingCarts[0].products.size() >= 6 || time.getTotalTimeInSeconds() >= 15)) {
 				obstacleManager.spawnObstacle();
 			}
 		}
@@ -688,15 +687,14 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		break;
 		
 		case EventManager.OBSTACLE_CRASH: {
-			curScrollSpeed = defaultScrollSpeed;
-			soundManager.stopRunSound();
+			curScrollSpeed = defaultScrollSpeed;			
 			soundManager.playSound(SOUNDS.CRASH);
 			bunny.crash();					
 		}
 		break;			
 		
 		case EventManager.BUNNY_RUN: {
-			soundManager.startRunSound();				
+					
 		}
 		break;		
 		
@@ -706,19 +704,26 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 	}
 	
+	/**
+	 * Pauses the GameManager.
+	 */
 	public void pause() {
 		soundManager.pauseMusic();
-		soundManager.stopRunSound();
 	}
 	
+	/**
+	 * Stops the GameManager.
+	 */
 	public void stop() {
 		soundManager.stopSounds();
 		soundManager.destroy();
 	}
 	
+	/**
+	 * Resumes the GameManager.
+	 */
 	public void resume() {
 		time.reset();
-		soundManager.startRunSound();
 		soundManager.startMusic();
 	}
 	
@@ -774,7 +779,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			}
 		}
 		
-		// couldn't compile: particleEngine.render(gl);
+		particleEngine.render(gl);
 		textSprites.render(gl);
 		
 	}

@@ -1,7 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 /**
- * This Animator moves its RenderEntity down, according to scrool speed
+ * This Animator moves its RenderEntity down, according to scroll speed.
  *
  * @author Ferdinand Pilz
  * @author Reinhard Sprung
@@ -42,7 +42,7 @@ public class FallAnimator extends Animator {
 		re.setPos(dx, dy);
 		
 		if (dy <= -re.height) {
-			// Trigger an event or whatever
+			// Trigger an event
 			EventManager.getInstance().dispatchEvent(EventManager.ANIMATION_COMPLETE, this);
 			re = null;
 			return;

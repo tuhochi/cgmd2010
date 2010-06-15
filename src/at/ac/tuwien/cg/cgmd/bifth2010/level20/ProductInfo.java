@@ -19,20 +19,20 @@ public class ProductInfo {
 	private static final ProductInfo[] p = new ProductInfo[]{
 		
 		// type, texture name, price, n products, "amount" for price of "discount" products
-		new ProductInfo(0, 	R.drawable.l20_bananamilk, 	1, 3, 2),
+		new ProductInfo(0, 	R.drawable.l20_pineapple, 	1, 3, 2),
 		new ProductInfo(1, 	R.drawable.l20_beer, 		1, 5, 3),
 		new ProductInfo(2, 	R.drawable.l20_broccoli, 	2, 3, 2),
-		new ProductInfo(3, 	R.drawable.l20_cereal, 		2, 3, 2),
+		new ProductInfo(3, 	R.drawable.l20_hotdog, 		2, 3, 2),
 		new ProductInfo(4, 	R.drawable.l20_drink, 		1, 5, 3),
 		new ProductInfo(5, 	R.drawable.l20_icecream, 	3, 5, 3),
 		new ProductInfo(6, 	R.drawable.l20_lollipop, 	1, 5, 3),
-		new ProductInfo(7, 	R.drawable.l20_penne, 		2, 3, 2),
+		new ProductInfo(7, 	R.drawable.l20_burger, 		2, 3, 2),
 		new ProductInfo(8, 	R.drawable.l20_pizza, 		3, 3, 2),
 		new ProductInfo(9, 	R.drawable.l20_playbunny, 	5, 3, 2),
-		new ProductInfo(10,	R.drawable.l20_probio, 		2, 5, 3),
-		new ProductInfo(11,	R.drawable.l20_soup, 		3, 3, 2),
-		new ProductInfo(12,	R.drawable.l20_yoghurt, 	1, 5, 3),
-					
+		new ProductInfo(10,	R.drawable.l20_cheese, 		2, 5, 3),
+		new ProductInfo(11,	R.drawable.l20_cupcake, 	3, 3, 2),
+		new ProductInfo(12,	R.drawable.l20_washingpowder, 	4, 5, 3),
+
 		};
 	
 

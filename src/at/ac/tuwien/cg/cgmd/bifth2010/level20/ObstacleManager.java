@@ -95,7 +95,7 @@ public class ObstacleManager {
 		// Need some sort of animation that makes more sense.
 		// Just disvisible it?
 		if(crashed) {
-			obstacle.visible = false;
+			//obstacle.visible = false;
 		}
 	}
 
@@ -106,8 +106,7 @@ public class ObstacleManager {
 			obstacle.clickable = false;		
 			removeObstacle();
 			EventManager.getInstance().dispatchEvent(EventManager.OBSTACLE_AVOIDED, obstacle);
-		}
-	
+		}	
 	}
 	
 	public void removeObstacle() {

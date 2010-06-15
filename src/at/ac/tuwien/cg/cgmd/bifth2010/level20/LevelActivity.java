@@ -55,7 +55,7 @@ public class LevelActivity extends Activity {
 		// Create text view for display of time left.		
         renderView.timeText = (TextView)findViewById(R.id.l20_TimeText);
         
-        renderView.descriptionText = (TextView)findViewById(R.id.l20_DescriptionText);
+        renderView.descriptionText = (TextView)findViewById(R.id.l20_DescriptionText);        
 		
         renderView.startButton = (Button)findViewById(R.id.l20_ButtonStart);
         renderView.startButton.setOnClickListener(renderView);

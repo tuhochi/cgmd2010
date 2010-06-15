@@ -95,15 +95,11 @@ public class SpriteAnimationEntity extends RenderEntity {
 			}
 			
 			// move the bunny
-			// FERDI: (I think the error occurs, when the frame following the direction switch is not long enough to move the bunny out of the deadzone, thus reverting the direction again)
-			// Let's try this: 
 			if (GameManager.catchMode) {
 				
 				// Move the bunny first
 				float pos = speed * dt / 1000f; 
-				x += pos;
-				
-				
+				x += pos;							
 				
 				// If the bunny is over maxPosX
 				if (x > maxPosX) {					
