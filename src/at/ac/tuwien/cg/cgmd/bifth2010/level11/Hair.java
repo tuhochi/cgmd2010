@@ -6,21 +6,38 @@ import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
-
+/**
+ * hair sprite of a pedestrian
+ *
+ */
 public class Hair {
 
     private static final String LOG_TAG = Hair.class.getSimpleName();
+    /**
+     * position in world coordinates
+     */
 	private Vector2 position;
+	/**
+	 * orientation in the level
+	 */
 	private float angle;
-	
+	/**
+	 * hair color
+	 */
 	private Color color;
-
+	/**
+	 * openGL texture id
+	 */
 	private static int hair_01_texture_id = R.drawable.l11_pedestrian_hair_01;
-	//public static int hair_02_texture_id = R.drawable.l11_pedestrian_hair_02;
-	//public static int hair_03_texture_id = R.drawable.l11_pedestrian_hair_03;
-	
+	//private static int hair_02_texture_id = R.drawable.l11_pedestrian_hair_02;
+	//private static int hair_03_texture_id = R.drawable.l11_pedestrian_hair_03;
+	/**
+	 * square on that the texture is rendered
+	 */
 	private Square hair;
-	
+	/**
+	 * determines the texture of the hair
+	 */
 	private int hair_type;
 	
 	/**
@@ -32,6 +49,7 @@ public class Hair {
 		hair = new Square();
 		
 		hair_type = 0;
+		//hair_type = Math.round(Math.random()*3);
 		color = new Color();
 	}
 	
@@ -60,21 +78,16 @@ public class Hair {
 	 * @param gl
 	 */
 	public void draw(GL10 gl) {
-		
 
 		gl.glColor4f(color.r, color.g, color.b, 1.0f);
 		if (hair_type == 0) {	
 			Textures.tex.setTexture(hair_01_texture_id);
-			
-
-			
-	//	} else if () {
-			
-	//	} else if () }
-			//this.texture.setTexture(hair_03_texture_id);
-			
+		/*} else if (hair_type == 1) {
+			this.texture.setTexture(hair_02_texture_id);
+		} else if (hair_type == 2) }
+			this.texture.setTexture(hair_03_texture_id);
+			*/
 		}
-
 
 		gl.glPushMatrix();
 			gl.glTranslatef(position.x, position.y, 0.0f);

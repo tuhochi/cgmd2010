@@ -5,20 +5,38 @@ import android.content.Context;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
+ * Class, representing arm sprites.
  * The arms (2 arms and 2 hands) are part of every pedestrian. 
  * Both arms and hands can be be colored separately.
  * @author g11
  *
  */
 public class Arms {
+	/**
+	 * openGL texture id
+	 */
 	private static final int arm_texture_id = R.drawable.l11_pedestrian_arm;
+	/**
+	 * openGL texture id
+	 */
 	private static final int hand_texture_id = R.drawable.l11_pedestrian_hand;
 	
 	private Square left_arm, right_arm, left_hand, right_hand;
-	
+	/**
+	 * color of the arm and the hand skin
+	 */
 	private Color color_arm, color_skin = new Color();
+	/**
+	 * position in world coordinates
+	 */
 	private Vector2 position;
+	/**
+	 * orientation in the level
+	 */
 	float angle;
+	/**
+	 * relative position of the arm = animation
+	 */
 	float arm_position;
 	
 	/**

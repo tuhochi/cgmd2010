@@ -12,17 +12,33 @@ import android.media.SoundPool;
  * 
  */
 public class GameAudio {
-
+	/**
+	 * allocated sounds number
+	 */
 	public static final int MAX_SOUNDS = 50;
+	/**
+	 * maximal streams of the sound pool
+	 */
 	public static final int MAX_STREAMS = 5;
-	
+	/**
+	 * singleton, points to this
+	 */
 	public static GameAudio singleton;
-	private int i, j;
-	
+	/**
+	 * master volume of all sounds
+	 */
 	private float _masterVolume;
+	/**
+	 * pool, that holds the sounds and load them
+	 */
 	private SoundPool _soundPool;
+	/**
+	 * array for the sound files
+	 */
 	private SoundFile[] soundArr = new SoundFile[MAX_SOUNDS];
-	
+	/**
+	 * true if sound is muted
+	 */
 	public static boolean mute = false;
 	
 	public GameAudio() {
@@ -30,15 +46,22 @@ public class GameAudio {
 		_soundPool = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 100);
 		_masterVolume = 1;
 	}
-	
+	/**
+	 * mutes the sound
+	 */
 	public void mute() {
 		mute = true;
 	}
-	
+	/**
+	 * unmutes the sound
+	 */
 	public void unmute() {
 		mute = false;
 	}
-	
+	/**
+	 * 
+	 * @return returns true, if sound is muted
+	 */
 	public boolean isMuted() {
 		return mute;
 	}
@@ -48,7 +71,7 @@ public class GameAudio {
 	 */
 	public void destroy() {
 		try {
-			for(i = 0; i < MAX_STREAMS; i++)
+			for(int i = 0; i < MAX_STREAMS; i++)
 				soundArr[i].unload();
 			_soundPool.release();
 		} catch (Exception e) { }
@@ -79,8 +102,8 @@ public class GameAudio {
 			//int id = _soundPool.load(GameActivity.singleton.getAssets().openFd(file), 0);
 			int id = _soundPool.load(GameActivity.singleton, file, 0);
 			SoundFile soundFile = new SoundFile(id);
-			j = -1;
-			for(i = 0; i < MAX_SOUNDS; i++)
+			int j = -1;
+			for(int i = 0; i < MAX_SOUNDS; i++)
 				if(soundArr[i] == null)
 					j = i;
 			if(j == -1) {
@@ -101,7 +124,7 @@ public class GameAudio {
 	 */
 	public void removeSoundFile(SoundFile soundFile) {
 		_soundPool.unload(soundFile.getId());
-		for(i = 0; i < MAX_SOUNDS; i++)
+		for(int i = 0; i < MAX_SOUNDS; i++)
 			if(soundArr[i] != null)
 				if(soundArr[i].equals(soundFile))
 					soundArr[i] = null;
@@ -111,7 +134,7 @@ public class GameAudio {
 	 * Removes all SoundFile's from the memory
 	 */
 	public void removeAllSoundFiles() {
-		for(i = 0; i < MAX_SOUNDS; i++)
+		for(int i = 0; i < MAX_SOUNDS; i++)
 			soundArr[i] = null;
 		_soundPool.release();
 	}
