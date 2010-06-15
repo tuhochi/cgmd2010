@@ -30,7 +30,7 @@ public class MyRenderer extends GLSurfaceView implements Renderer, IPersistence 
 	private static final float ROTATIONINC = 4.5f;
 	
 	/** limit for discarding track ball events */
-	private static final float TRACKBALLSENSITIVITY = 0.5f;
+	private static final float TRACKBALLSENSITIVITY = 0.15f;
 
 	/** width of screen */
 	private static int screenWidth;
