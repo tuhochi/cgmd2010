@@ -23,9 +23,9 @@
 <string name="l12_towers_destroyed">Söldner angeheuert, davon sind </string>
 <string name="l12_have_been">umgekommen..</string>
 <string name="l12_fun">Viel Spaß!\n</string>
-<string name="l12_enemies">Diese bösen Leute wollen dir Geld geben! Und das auch noch umsonst!!!\m</string>
-<string name="l12_enemie0desc">Zuerst versuch die Bank ihr ganzes Kleingeld loszuwerden und schickt es dir!\n</string>
-<string name="l12_enemie1desc">Diese mal schickt dir die Bank Geldkuriere! Keine so leichten Gegner mehr!\n</string>
-<string name="ll12_enemie2desc">Jetzt sind motorisierte Geldkuriere an der Reihe. Halte sie auf!!!\n</string>
+<string name="l12_enemies">Diese bösen Leute wollen dir Geld geben!\m</string>
+<string name="l12_enemie0desc">Zuerst versucht die Bank ihr ganzes Kleingeld loszuwerden und schickt es dir!\n</string>
+<string name="l12_enemie1desc">Dieses Mal schickt dir die Bank Geldkuriere! Keine so leichten Gegner mehr!\n</string>
+<string name="l12_enemie2desc">Jetzt sind motorisierte Geldkuriere an der Reihe. Halte sie auf!!!\n</string>
 <string name="l12_enemie3desc">Verdammte Sch#%$§&amp;, gepanzerte Geldtransporter!\n</string>
 </resources>
