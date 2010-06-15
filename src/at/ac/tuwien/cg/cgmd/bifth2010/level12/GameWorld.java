@@ -41,6 +41,8 @@ public class GameWorld {
 	private int carrierFourChance = 0;
 	
 	private static int mCTDsound = R.raw.l12_ctd;
+	private static int mBuzz = R.raw.l12_buzz;
+	private static int mReload = R.raw.l12_reload;
 	
 	/** constructor, initializes the gamefield, the towerpools and one enemy of each enemy to for adding the textures */
 	private GameWorld(){
@@ -53,11 +55,23 @@ public class GameWorld {
 		c = new CarrierRoundFour();
 
 		SoundHandler.getSingleton().addResource(mCTDsound);
+		SoundHandler.getSingleton().addResource(mBuzz);
+		SoundHandler.getSingleton().addResource(mReload);
 	}
 	
 	/** playing the CTD-sound */
 	public void playCTDSound(){
 		SoundHandler.getSingleton().play(mCTDsound);
+	}
+	
+	/** playing the buzz-sound */
+	public void playBuzz(){
+		SoundHandler.getSingleton().play(mBuzz);
+	}
+
+	/** playing the reload-sound */
+	public void playReload(){
+		SoundHandler.getSingleton().play(mReload);
 	}
 	
 	/** setting the display size == size of gamefield */
@@ -129,7 +143,7 @@ public class GameWorld {
 	 * @param ypos y-picking-coordinate
 	 */
 	public void setXYpos(int xpos, int ypos) {
-		if( mGamefield.getOccupied( xpos, ypos )) return;
+		if( mGamefield.getOccupied( xpos, ypos )){playBuzz(); return;}
 		int[] correctXYpos = mGamefield.correctXYpos( xpos, ypos);
 		mXPos = correctXYpos[0];
 		mYPos = correctXYpos[1];
@@ -144,11 +158,13 @@ public class GameWorld {
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron( mBasicTower[i].getPrice());
 								GameMechanics.getSingleton().addBasicTowerBuilt();
+								playReload();
 								break;
 							}
 						if ( i == mBasicTower.length -1 ) last = true;
 						}
 					}
+					else playBuzz();
 					break;
 				case Definitions.ADVANCED_TOWER:
 					if( mAdvancedTower[0].getPrice() <= GameMechanics.getSingleton().getIron()){
@@ -159,11 +175,13 @@ public class GameWorld {
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron(mAdvancedTower[i].getPrice());
 								GameMechanics.getSingleton().addAdvancedTowerBuilt();
+								playReload();
 								break;
 							}
 							if ( i == mAdvancedTower.length -1 ) last = true;
 						}
 					}
+					else playBuzz();
 					break;
 				case Definitions.HYPER_TOWER:
 					if( mHyperTower[0].getPrice() <= GameMechanics.getSingleton().getIron()){
@@ -174,11 +192,13 @@ public class GameWorld {
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron(mHyperTower[i].getPrice());
 								GameMechanics.getSingleton().addHyperTowerBuilt();
+								playReload();
 								break;
 							}
 							if ( i == mHyperTower.length -1 ) last = true;
 						}
 					}
+					else playBuzz();
 					break;
 				case Definitions.FREEZE_TOWER:
 					if( mFreezeTower[0].getPrice() <= GameMechanics.getSingleton().getIron()){
@@ -189,11 +209,13 @@ public class GameWorld {
 								mGamefield.setFieldOccupied(mXPos, mYPos);
 								GameMechanics.getSingleton().subIron(mFreezeTower[i].getPrice());
 								GameMechanics.getSingleton().addFreezeTowerBuilt();
+								playReload();
 								break;
 							}
 							if ( i == mFreezeTower.length -1 ) last = true;
 						}
 					}
+					else playBuzz();
 					break;
 				default:
 					System.out.println("Selected TowerType not found!");
