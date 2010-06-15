@@ -17,4 +17,6 @@
 <string name="l33_tutorial_badItems">Vermeide Gegenstände die mit einem roten Kreis gekennzeichnet sind</string>
 <string name="l33_tutorial_loadingText">Ladevorgang läuft....</string>
 <string name="l33_tutorial_startGame">Berühre den Bildschirm um das Spiel zu starten....</string>
+<string name="l33_dialog">Level abgeschlossen! Du hast gewonnen!</string>
+<string name="l33_dialog2">Level-Fortschritt: </string>
 </resources>
