@@ -128,6 +128,15 @@ public class GameView extends GLSurfaceView
 		long dateOffset = sharedPreferences.getLong("dateOffset", 0);
 		renderer.setDateOffset(dateOffset);
 	}
+	
+	/**
+	 * Releases DSs of the game
+	 */
+	public void onDestoy() 
+	{
+		//de-init
+		jni.deInit();
+	}
 
 	/**
 	 * Touch Events are catched and sent to a native handler.
