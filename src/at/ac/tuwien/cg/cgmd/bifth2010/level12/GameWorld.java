@@ -18,20 +18,20 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.MoneyCarrier;
 import at.ac.tuwien.cg.cgmd.bifth2010.level12.entities.Tower;
 
 public class GameWorld {
-	private static GameWorld mSingleton = null;
+	private static GameWorld mSingleton = null; /** Gamefield singleton */
 	
-	private Vector< MoneyCarrier > mEnemies = null;
-	private Gamefield mGamefield = null;
+	private Vector< MoneyCarrier > mEnemies = null; /** Enemies on the field */
+	private Gamefield mGamefield = null; /** the gamefield */ 
 	
-	private BasicTower[] mBasicTower = null; //tower types, wo gezeichnet in der towerklasse
-	private AdvancedTower[] mAdvancedTower = null;
-	private HyperTower[] mHyperTower = null;
-	private FreezeTower[] mFreezeTower = null;
+	private BasicTower[] mBasicTower = null; /** basic tower pool */
+	private AdvancedTower[] mAdvancedTower = null; /** advanced tower pool */
+	private HyperTower[] mHyperTower = null; /** hyper tower pool */
+	private FreezeTower[] mFreezeTower = null; /** freeze tower pool */
 	
-	private int mXPos, mYPos; //picking	
-	private static int mWidth = -1;
-	private static int mHeight = -1; //viewport
-	static int res[];
+	private int mXPos, mYPos; /** forwarded picking coordinate */
+	private static int mWidth = -1; /** width of the gamefield */
+	private static int mHeight = -1; /**height of the gamefield */
+	static int res[]; 
 	        
 	boolean remove;
 	
@@ -40,8 +40,9 @@ public class GameWorld {
 	private int carrierThreeChance = 0;
 	private int carrierFourChance = 0;
 	
-	private static int mCTDsound = R.raw.l12_ctd;
+	//private static int mCTDsound = R.raw.l12_ctd;
 	
+	/** constructor, initializes the gamefield, the towerpools and one enemy of each enemy to for adding the textures */
 	private GameWorld(){
 		initGameField();
 		initTower();
@@ -51,18 +52,21 @@ public class GameWorld {
 		c = new CarrierRoundThree();
 		c = new CarrierRoundFour();
 
-		SoundHandler.getSingleton().addResource(mCTDsound);
+		//SoundHandler.getSingleton().addResource(mCTDsound);
 	}
 	
+	/** playing the CTD-sound */
 	public static void playCTDSound(){
-		SoundHandler.getSingleton().play(mCTDsound);
+		//SoundHandler.getSingleton().play(mCTDsound);
 	}
 	
+	/** setting the display size == size of gamefield */
 	public static void setDisplay( int height, int width){
 		mWidth = width;
 		mHeight = height;
 	}
 	
+	/** returning the resolution */
 	public static int[] getRes(){
 		res = new int[2];
 		res[0] = mWidth;
@@ -70,12 +74,13 @@ public class GameWorld {
 		return res;
 	}
 	
+	/** returns the gameworld singleton, and creates one first is there is none */
 	public static GameWorld getSingleton(){
 		if( mSingleton == null && mHeight > 0) mSingleton = new GameWorld();
 		return mSingleton;
 	}
 	
-	
+	/** (re)creates the opengl VBOs, calls the initVBOs method of each enemie on the field and each tower */
 	public void initVBOs(){
 		//if( mEnemies != null )System.out.println("On Resume - Enemies count: "+mEnemies.size());
 		if( mEnemies != null ) {
@@ -83,13 +88,32 @@ public class GameWorld {
 				for( int i = 0; i < mEnemies.size(); i++) mEnemies.get(i).initVBOs();
 			}	
 		}
-		if( mBasicTower != null) for( int i = 0; i < mBasicTower.length; i++) mBasicTower[i].initVBOs();
-		if( mAdvancedTower != null ) for( int i = 0; i < mAdvancedTower.length; i++) mAdvancedTower[i].initVBOs();
-		if( mHyperTower != null ) for( int i = 0; i < mHyperTower.length; i++) mHyperTower[i].initVBOs();
-		if( mFreezeTower != null ) for( int i = 0; i < mFreezeTower.length; i++) mFreezeTower[i].initVBOs();
+		if( mBasicTower != null){
+			for( int i = 0; i < mBasicTower.length; i++) {
+				if( mBasicTower[i].getActiveState())mBasicTower[i].initVBOs();
+			}
+		}
+		if( mAdvancedTower != null ){
+			for( int i = 0; i < mAdvancedTower.length; i++){
+				if( mAdvancedTower[i].getActiveState())mAdvancedTower[i].initVBOs();
+			}
+		}
+		if( mHyperTower != null ){
+			for( int i = 0; i < mHyperTower.length; i++){
+				if( mHyperTower[i].getActiveState())mHyperTower[i].initVBOs();
+			}
+		}
+		if( mFreezeTower != null ){
+			for( int i = 0; i < mFreezeTower.length; i++){
+				if( mFreezeTower[i].getActiveState())mFreezeTower[i].initVBOs();
+			}
+		}
 		if( mGamefield != null) mGamefield.onResume();
 	}
 	
+	/** 
+	 * initializes the gamefield with the defined segment count in the x-direction and the defined lane count (y-directional segments)
+	 */
 	public void initGameField(){
 		int ySegCount = Definitions.FIELD_HEIGHT_SEGMENTS;
 		float segLength = mHeight / ySegCount;
@@ -98,6 +122,12 @@ public class GameWorld {
 		if( mGamefield == null) mGamefield = new Gamefield( xSegCount, ySegCount, segLength );
 	}
 	
+	/**
+	 * corrects the forwarded x-, y-coordinates from the picking to the center of the field in which the coordinates lie, and sets the next unused tower from the tower pool. 
+	 * Type of the tower which gets setted is chosen through the GameUI
+	 * @param xpos x-picking-coordinate
+	 * @param ypos y-picking-coordinate
+	 */
 	public void setXYpos(int xpos, int ypos) {
 		if( mGamefield.getOccupied( xpos, ypos )) return;
 		int[] correctXYpos = mGamefield.correctXYpos( xpos, ypos);
@@ -171,7 +201,9 @@ public class GameWorld {
 			}
 	}
 	
-	
+	/**
+	 * Initializes enemies at each beginning round. In every round each enemy has a procentual chance to be spawned and set on a random lane (y-coordinate) and a random x-position random off screen.
+	 */
 	public void initEnemies(){
 		short roundnr = GameMechanics.getSingleton().getRoundNumber();
 		if( mEnemies == null ) mEnemies = new Vector< MoneyCarrier >();
@@ -352,7 +384,10 @@ public class GameWorld {
 		}	
 		
 	}
-		
+	
+	/**
+	 * Creates a pool of towers at the beginning of the game.
+	 */
 	public void initTower(){
 		//BasicTower init
 		if( mBasicTower == null){
@@ -373,7 +408,12 @@ public class GameWorld {
 		}
 	}
 	
-	
+	/**
+	 * On every call the collision detection is done by stepping through each tower on the gamefield, 
+	 * checking if there is an enemy on the lane (y-coordinate is the same as the tower's), and if more than one which is the nearest enemy. 
+	 * Then the found enemy is collided by the tower's projectile in the tower's collideX method. If the enemy is in the tower's quad the 
+	 * tower starts the dying animation cycle. 
+	 */
 	public void calcCollisions(){
 		if( mEnemies == null ) return;
 		//simple stupid way
@@ -451,11 +491,19 @@ public class GameWorld {
 		}
 	}
 	
+	
+	/**
+	 * returns the gamefield
+	 * @return GameField the gamefield
+	 */
 	public Gamefield getGamefield(){
 		return mGamefield;
 	}
 
-	
+	/**
+	 * returns all towers on the field
+	 * @return vector<Tower> the towers
+	 */
 	public Vector<Tower> getTower(){
 		Vector<Tower> ret = new Vector<Tower>();	
 		for ( int i = 0; i < mBasicTower.length; i++){
@@ -474,7 +522,12 @@ public class GameWorld {
 	}
 	
 	
-
+	
+	/** 
+	 * For every enemy on the field, at first it is checked if the enemy has reached the house, if so money is added in the gamemechanics, and the enemy is removed.
+	 * next the enemy is checked if it hast 0 (or lower) hitpoints, if so the enemy starts the dying animation texture cycle. If this cycle has finished, the enemy gets removes from the field.
+	 * else the draw method is called.
+	 */
  	public void drawEnemies(GL10 gl){
         if( mEnemies == null ) return;
         synchronized( mEnemies ){
@@ -501,6 +554,7 @@ public class GameWorld {
         }
 }
 
+ 	/** calls the draw method of each tower	 */
    public void drawTowers(GL10 gl){
         for ( int i = 0; i < mBasicTower.length; i++){
             if( mBasicTower[i].getActiveState()){
@@ -524,12 +578,16 @@ public class GameWorld {
         }
     }
    
+   /**
+    * delivers the number of enemies on the gamefield
+    * @return int the size of the enemy vector
+    */
    public int getEnemiesSize(){
 	   return mEnemies.size();
    }
 
 	
-
+   /** destroyes the gameworld singleton */
 	public static void destroySingleton() {
 		mSingleton = null;	
 	}

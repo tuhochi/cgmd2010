@@ -7,9 +7,14 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
 
-
+/** class responsible for drawing the opengl elements */
 public class GLRenderer implements GLSurfaceView.Renderer{
 	
+	/**
+	 * method called to draw on each frame, checks if its time to do the collision detection, calls the UI update method, 
+	 * checks if its time to finish the game( last round number, no enemies on the gamefield anymore), or if its time to start a new round.
+	 * Then all active globjects are drawn.
+	 */
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -45,9 +50,10 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 		
 		GameWorld.getSingleton().drawTowers(gl);
 		GameWorld.getSingleton().drawEnemies(gl);
-		FPSCounter.getSingleton().addFrame();
+		//FPSCounter.getSingleton().addFrame();
 	}
 
+	/** called from the app activity on resume, initializes the viewing perspective and opengl functions */
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		 gl.glMatrixMode(GL10.GL_PROJECTION);    
@@ -68,6 +74,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 	     gl.glDisable(GL10.GL_DITHER);
 	}
 
+	/**  called before onSurfaceChanges, forwards the opengl context to the texture manager and (re)loades the texture samples */
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		TextureManager.getSingletonObject().initializeGL(gl);
