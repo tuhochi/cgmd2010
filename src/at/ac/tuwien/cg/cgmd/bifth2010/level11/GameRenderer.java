@@ -7,8 +7,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 /**
  * renders the level
- * @author Fennes
- *
+ * @author g11
  */
 public class GameRenderer implements Renderer {
 	private static final String LOG_TAG = GameRenderer.class.getSimpleName();

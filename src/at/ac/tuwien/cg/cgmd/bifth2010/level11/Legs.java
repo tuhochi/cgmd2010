@@ -7,7 +7,7 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 /**
  * class, representing the legs sprite of pedestrians
- *
+ * @author g11
  */
 public class Legs {
 	

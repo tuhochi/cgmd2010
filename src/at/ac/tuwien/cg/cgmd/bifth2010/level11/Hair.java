@@ -8,7 +8,7 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * hair sprite of a pedestrian
- *
+ * @author g11
  */
 public class Hair {
 

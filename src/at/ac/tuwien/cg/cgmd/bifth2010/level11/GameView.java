@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 /**
  * class for touch screen inputs
- *
+ * @author g11
  */
 public class GameView extends GLSurfaceView {
 

@@ -2,7 +2,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 /**
  * AudioFile contains sounds which have been loaded into the class.
- * 
+ * @author g11
  */
 public class SoundFile {
 	/**

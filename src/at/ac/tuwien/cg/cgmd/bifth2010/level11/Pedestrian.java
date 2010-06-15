@@ -4,17 +4,14 @@ import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
-//import android.R;
 import android.content.Context;
-import android.util.Log;
+import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 /**
  * class pedestrians, who walk around, move towards a target, fight and grab treasure
- *
+ * @author g11
  */
 public class Pedestrian implements Target{
-
-    private static final String LOG_TAG = Pedestrian.class.getSimpleName();
     /**
      * hair sprite
      */
@@ -85,9 +82,22 @@ public class Pedestrian implements Target{
 	 * factor for the bounce vector
 	 */
 	private float bounceStrength = 0.0003f;
-	//private float maxBounceVectorLength = 0.5f;
-	
-
+	/**
+	 * sound id
+	 */
+	private static final int mine_sound_01 = R.raw.l11_mine01;
+	/**
+	 * sound id
+	 */
+	private static final int mine_sound_02 = R.raw.l11_mine02;
+	/**
+	 * sound id
+	 */
+	private static final int mine_sound_03 = R.raw.l11_mine03;
+	/**
+	 * sound id
+	 */
+	private static final int mine_sound_04 = R.raw.l11_mine04;
 	
 	/**
 	 * constructor with following default values: this( 30.0f,10.0f,0.01f, 2.0f, gl, context)
@@ -95,7 +105,7 @@ public class Pedestrian implements Target{
 	 * @param context
 	 */
 	public Pedestrian(GL10 gl, Context context) {
-		this( 30.0f,10.0f,20.0f,0.01f, 0.3f, gl, context);
+		this( 30.0f,10.0f,30.0f,0.01f, 0.3f, gl, context);
 	}
 	/**
 	 * returns the distance at which the pedestrian is hit by bouncing
@@ -133,14 +143,13 @@ public class Pedestrian implements Target{
 		arms = new Arms(gl, context);
 		
 		rand = new Random();
-		
-		
 		this.angle = (float)(Math.random()*360.0);
 		this.moveSpeed = 4.0f;
 		this.target = null;
 		this.setColors();
 		this.temp = new Vector2();
 		this.bounceVector = new Vector2();
+		
 	}
 	/**
 	 * generates the color of the pedestrian randomly
@@ -303,7 +312,7 @@ public class Pedestrian implements Target{
 			hair.draw(gl);
 	}
 	/**
-	 * returns attraction radius (istance at which the pedestrians react to treasure attraction radius)
+	 * returns attraction radius (distance at which the pedestrians react to treasure attraction radius)
 	 * @return attractionRadius
 	 */
 	public float getAttractionRadius(){
@@ -331,10 +340,35 @@ public class Pedestrian implements Target{
 		this.target = target;
 		this.angle = (float)Math.atan2(target.getPosition().y - this.position.y, target.getPosition().x - this.position.x) * (180.0f/(float)Math.PI);
 		//this.angle = (float)Math.atan( (treasurePosition.y - this.position.y) / (treasurePosition.x - this.position.x) )
-	
+		//Sounds.singleton.play(mine_sound_01);
+		//GameMusic.play(mine_sound_01, false);
+		
+
+		
 	}
+	
 	/**
-	 * returns the current targe. null if no target is set
+	 * plays a sound on target change
+	 */
+	public void playSound() {
+		if(target instanceof Treasure){
+			
+			Random r = new Random();
+			float f = r.nextFloat();
+			if (f < 0.3f) {
+				Sounds.singleton.play(mine_sound_01);
+			} else if (f < 0.7f) {
+				Sounds.singleton.play(mine_sound_02);
+			} else if (f < 0.9f) {
+				Sounds.singleton.play(mine_sound_03);
+			} else if (f < 1.0f) {
+				Sounds.singleton.play(mine_sound_04);
+			}
+		}
+	}
+	
+	/**
+	 * returns the current target. null if no target is set
 	 * @return target
 	 */
 	public Target getTarget(){

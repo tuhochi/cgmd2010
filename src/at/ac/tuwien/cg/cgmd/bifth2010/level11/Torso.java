@@ -6,9 +6,11 @@ import android.content.Context;
 import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
+/**
+ * Torso, part of the pedestrian's body
+ * @author g11
+ */
 public class Torso {
-
-    private static final String LOG_TAG = Torso.class.getSimpleName();
     /**
      * position of the torso in world coordinates
      */

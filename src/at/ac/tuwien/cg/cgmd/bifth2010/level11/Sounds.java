@@ -3,8 +3,8 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 import android.util.Log;
 
 /**
- *  Sounds manages all in game sounds. 
- * 
+ * manages all in game sounds. 
+ * @author g11
  */
 public class Sounds {
     private static final String LOG_TAG = Sounds.class.getSimpleName();
