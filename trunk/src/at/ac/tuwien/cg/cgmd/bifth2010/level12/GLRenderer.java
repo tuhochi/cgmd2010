@@ -33,7 +33,7 @@ public class GLRenderer implements GLSurfaceView.Renderer{
 			return;
 		}
 		if( GameMechanics.getSingleton().getRoundNumber() == 0) {
-			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME+2000 && !mCDTSoundPlayed){
+			if( System.currentTimeMillis() - GameMechanics.getSingleton().getRoundStartedTime() > Definitions.GAME_START_TIME-2000 && !mCDTSoundPlayed){
 				GameWorld.getSingleton().playCTDSound();
 				mCDTSoundPlayed = true;
 			}	
