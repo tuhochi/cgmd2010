@@ -1,8 +1,7 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 /**
  * interface for targets of pedestrians
- * @author felix.fleisz
- *
+ * @author g11
  */
 public interface Target {
 	/**

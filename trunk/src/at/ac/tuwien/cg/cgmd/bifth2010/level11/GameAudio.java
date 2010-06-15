@@ -9,7 +9,7 @@ import android.media.SoundPool;
  * relatively low file size limit exists.
  * 
  * The GameAudio class uses SoundPool to manage its sounds.
- * 
+ * @author g11
  */
 public class GameAudio {
 	/**

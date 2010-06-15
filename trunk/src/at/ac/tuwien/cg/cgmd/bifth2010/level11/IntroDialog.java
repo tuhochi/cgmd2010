@@ -10,10 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+
 /**
- * 
  * Dialog, that shows up at game start
- *
+ * @author g11
  */
 public class IntroDialog extends AlertDialog implements OnTouchListener {
 	/**

@@ -9,7 +9,6 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * The arms (2 arms and 2 hands) are part of every pedestrian. 
  * Both arms and hands can be be colored separately.
  * @author g11
- *
  */
 public class Arms {
 	/**

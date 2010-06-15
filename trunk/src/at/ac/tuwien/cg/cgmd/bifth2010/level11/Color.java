@@ -1,10 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 /**
- * Color Object, predefined skin colors are caucasian, asian, african, p
- * redefined hair colors are blonde black and brown;
+ * Color Object, predefined skin colors are caucasian, asian, african, 
+ * predefined hair colors are blonde black and brown;
  * @author g11
- *
  */
 public class Color {
 	/**

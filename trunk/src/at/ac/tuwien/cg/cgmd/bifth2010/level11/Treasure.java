@@ -3,10 +3,10 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 import javax.microedition.khronos.opengles.GL10;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+
 /**
  * class, representing the treasure object in the level, with a value and a position
- * @author Fennes
- *
+ * @author g11
  */
 public class Treasure implements Target{
 	/**
@@ -42,22 +42,17 @@ public class Treasure implements Target{
 	 */
 	private float startingValue;
 	
-
-	
 	public Treasure(float value, Vector2 position){
 		this(value, value, position);
 	}
+
 	public Treasure(float value, float startingValue, Vector2 position){
 		this.startingValue = value;
 		this.value = this.startingValue;
 		this.attractionRadius = value*attractionRadiusMultiplacator;
 		this.position = position;
 		this.sprite = new Square();
-		
-		
 		Sounds.singleton.play(treasure_sound_01);
-		
-		//audioStream.setRate((float)(Math.random() * 1.5f) + 0.5f);
 		
 	}
 	/**

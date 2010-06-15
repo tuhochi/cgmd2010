@@ -1,11 +1,11 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import javax.microedition.khronos.opengles.GL10;
-
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
+
 /**
- * class, displaying the icons of the scoreboard and the attraction circle of the currently placed treasure
- *
+ * class, displaying the icons of the score board and the attraction circle of the currently placed treasure
+ * @author g11
  */
 public class HUD {
 	/**
@@ -25,6 +25,10 @@ public class HUD {
 	 */
 	private Square treasureCircle;
 	/**
+	 * treasure symbol for treasure text
+	 */
+	private Square treasureIcon;
+	/**
 	 * singleton, that points to this
 	 */
 	public static HUD singleton;
@@ -32,6 +36,10 @@ public class HUD {
 	 * texture id
 	 */
 	private static final int circle_texture_id = R.drawable.l11_circle;
+	/**
+	 * texture id
+	 */
+	private static final int treasure_texture_id = R.drawable.l11_treasure;
 	
 	public HUD() {
 		HUD.singleton = this;
@@ -40,6 +48,8 @@ public class HUD {
 		touchTreasureCirclePositon = new Vector2();
 		
 		treasureCircle = new Square();
+		treasureIcon = new Square();
+		
 	}
 	/**
 	 * if set to  true, attraction circle of the currently placed treasure is drawn
@@ -87,6 +97,28 @@ public class HUD {
 			gl.glPopMatrix();
 			
 			//touchTreasureCircleRadius+=1.0f;
+		
+	}
+	
+	public void draw_ontop(GL10 gl) {
+		// draw hud graphics
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+		gl.glPushMatrix();
+			Textures.tex.setTexture(circle_texture_id);
+			gl.glTranslatef(0.0f, 0.0f, 0.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+			treasureCircle.draw(gl);
+		gl.glPopMatrix();
+		
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+		gl.glPushMatrix();
+			Textures.tex.setTexture(treasure_texture_id);
+			gl.glTranslatef(15.0f, 15.0f, 0.0f);
+			gl.glScalef(50.0f, 50.0f, 1.0f);
+			treasureIcon.draw(gl);
+		gl.glPopMatrix();
+		
+			
 		
 	}
 }

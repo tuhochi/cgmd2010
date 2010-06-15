@@ -20,7 +20,7 @@ import android.util.Log;
 
 /**
  * holds game, level and gameloop
- * @author felix.fleisz
+ * @author g11
  */
 public class Level extends Thread {
 
@@ -113,6 +113,9 @@ public class Level extends Thread {
 	private float timeOfLastAddingPed = 0;
 	//public Rect bounceRect = new Rect();
 	
+
+	private static final int level_music = R.raw.l00_menu;
+	
 	/**
 	 * Level constructor, generates level
 	 * @param sizeX
@@ -132,7 +135,7 @@ public class Level extends Thread {
 		this.isPaused = false;
 		this._isStarted = false;
 		
-		this.maxPlayTime = 120;
+		this.maxPlayTime = 120.00f;
 		timing = new Timing();
 		timing.start();
 		timeOfLastAddingPed = this.timing.getCurrTime();
@@ -175,7 +178,10 @@ public class Level extends Thread {
 	public void initSounds() {
 		sounds = new Sounds();
 		sounds.add(R.raw.l00_gold01);
-		sounds.add(R.raw.l00_menu);
+		sounds.add(R.raw.l11_mine01);
+		sounds.add(R.raw.l11_mine02);
+		sounds.add(R.raw.l11_mine03);
+		sounds.add(R.raw.l11_mine04);
 	}
 	
 	/**
@@ -204,8 +210,6 @@ public class Level extends Thread {
     	
     	textures.loadTextures();
     	
-    	//textures.add(pedestrian.hair.hair_02_texture_id);
-    	//textures.add(pedestrian.hair.hair_03_texture_id);
 	}
 	
 	/**
@@ -214,7 +218,7 @@ public class Level extends Thread {
 	public void run() {
 		this._isStarted = true;
 		this.timing.resume();
-		//this.timing.update();
+		GameMusic.play(level_music, true);
 		while (_isRunning) {
 			while (isPaused) {
 			}
@@ -229,6 +233,7 @@ public class Level extends Thread {
 	public void pause_level() {
 		this.isPaused = true;
 		this.timing.pause();
+		GameMusic.pause();
 	}
 	
 	/**
@@ -239,6 +244,7 @@ public class Level extends Thread {
 		if(this.isPaused)
 			this.timing.resume();
 		this.isPaused = false;	
+		GameMusic.resume();
 	}
 	
 	/**
@@ -309,14 +315,14 @@ public class Level extends Thread {
 			Pedestrian pedestrian = new Pedestrian(this.gl, this.context);
 			if(Math.random()>Level.sizeX/Level.sizeY){
 				if(Math.random()>0.5)
-					pedestrian.setPosition(new Vector2((float)Math.random()*Level.sizeX, 0));
+					pedestrian.setPosition(new Vector2((float)Math.random()*Level.sizeX, -10.f));
 				else
-					pedestrian.setPosition(new Vector2((float)Math.random()*Level.sizeX, Level.sizeY));
+					pedestrian.setPosition(new Vector2((float)Math.random()*Level.sizeX+10.0f, Level.sizeY+10.0f));
 			}else{
 				if(Math.random()>0.5)
-					pedestrian.setPosition(new Vector2(0, (float)Math.random()*Level.sizeY));
+					pedestrian.setPosition(new Vector2(-10.0f, (float)Math.random()*Level.sizeY+10.0f));
 				else
-					pedestrian.setPosition(new Vector2(Level.sizeX, (float)Math.random()*Level.sizeY));
+					pedestrian.setPosition(new Vector2(Level.sizeX+10.0f, (float)Math.random()*Level.sizeY+10.0f));
 				
 			}
 			timeOfLastAddingPed = timing.getCurrTime();
@@ -328,8 +334,10 @@ public class Level extends Thread {
 	 * updates all objects positions and states
 	 */
 	private void updateObjects(){
+		
 		//System.out.println(timing.getDeltaTime());
 		for (int i=0; i < pedestrianList.size(); i++) {//for every pedestrian
+			boolean targetChange = false;
 			Pedestrian pedestrian = ((Pedestrian)pedestrianList.get(i));
 			pedestrian.update(timing.getCurrTime(), timing.getDeltaTime());
 			float bestRating = Float.MAX_VALUE;
@@ -351,8 +359,12 @@ public class Level extends Thread {
 						< bestRating){
 					//if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttractionRadius()){
 					if (tempDist < treasure.getAttractionRadius()/2) {
-						pedestrian.setTarget(treasure);
-						bestRating = rating;
+						if (pedestrian.getTarget() != treasure) {
+							pedestrian.setTarget(treasure);
+							bestRating = rating;
+							targetChange = true;
+							pedestrian.playSound();
+						}
 					}
 				}
 			}
@@ -363,12 +375,14 @@ public class Level extends Thread {
 						//System.out.println(otherPedestrian.getPosition().distance(pedestrian.getPosition()));
 						if(otherPedestrian.getPosition().distance(pedestrian.getPosition()) < 20.0f){
 							//System.out.println("Too close");
+							targetChange = true;
 							pedestrian.setTarget(otherPedestrian);
 						}
 					}
 				}
 			}
 		}
+		
 	}
 	/**
 	 * updates game states
@@ -447,6 +461,9 @@ public class Level extends Thread {
 		for (int i=0; i < pedestrianList.size(); i++) {
 			((Pedestrian)pedestrianList.get(i)).draw(gl);
 		}
+		
+		HUD.singleton.draw_ontop(gl);
+
 		gl.glDisable(GL10.GL_BLEND);
 		
 	}

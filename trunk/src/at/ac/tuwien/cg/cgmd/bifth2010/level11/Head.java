@@ -7,7 +7,7 @@ import android.util.Log;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 /**
  * class, representing the head sprite of a pedestrian
- *
+ * @author g11
  */
 public class Head {
 

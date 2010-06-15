@@ -1,8 +1,9 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
+
 /**
  * 2 dimensional float vector. all operations are performed on the calling vector.
  * when you do not want to modify the calling vector, you have to clone it first, 
- * @author Fennes
+ * @author g11
  *
  */
 public class Vector2 {
@@ -10,15 +11,16 @@ public class Vector2 {
 	 * first and second component of the vector
 	 */
 	public float x, y;
+	
 	/**
-	 * x and y is set to 0
+	 * Default vector, x and y is set to 0
 	 */
 	public Vector2 () {
 		x = 0.0f;
 		y = 0.0f;
 	}
 	/**
-	 * vector constructor. sets x and y component to the given parameters
+	 * Vector constructor. Sets x and y component to the given parameters
 	 * @param x x
 	 * @param y y
 	 */
@@ -27,7 +29,7 @@ public class Vector2 {
 		this.y = y;
 	}
 	/**
-	 * sets x and y component to the given parameters
+	 * Sets x and y component to the given parameters
 	 * @param x x
 	 * @param y y
 	 */
@@ -36,7 +38,7 @@ public class Vector2 {
 		this.y = y;
 	}
 	/**
-	 * calculates the distance between the two points specified by this vector and other
+	 * Return the calculated distance between the two points specified by this vector and another
 	 * @param other other vector interpreted as point
 	 * @return distance
 	 */
@@ -44,7 +46,7 @@ public class Vector2 {
 		return (float)Math.sqrt(Math.pow(this.x-other.x,2) + Math.pow(this.y-other.y,2));
 	}
 	/**
-	 * normalizes this vector
+	 * Returns the normalized vector
 	 * @return this
 	 */
 	public Vector2 normalize(){
@@ -54,7 +56,7 @@ public class Vector2 {
 		return this;
 	}
 	/**
-	 * returns the length of the vector
+	 * Returns the length of the vector
 	 * @return length
 	 */
 	public float length(){
@@ -66,7 +68,7 @@ public class Vector2 {
 		return this;
 	}
 	/**
-	 * subtracts this from other and stores result in this
+	 * Subtracts this from other and stores result in this
 	 * @param other vector from which this is subtracted
 	 * @return this
 	 */
@@ -76,7 +78,7 @@ public class Vector2 {
 		return this;
 	}
 	/**
-	 * adds this to other vector and stores result in this
+	 * Adds this to other vector and stores result in this
 	 * @param other other vector that is added
 	 * @return this
 	 */
@@ -86,7 +88,7 @@ public class Vector2 {
 		return this;
 	}
 	/**
-	 * multiplicates this with skalar and stores result in this
+	 * Multiplicates this with skalar and stores result in this
 	 * @param skalar 
 	 * @return
 	 */

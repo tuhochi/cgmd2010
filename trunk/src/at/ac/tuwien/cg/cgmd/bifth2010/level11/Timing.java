@@ -4,6 +4,7 @@ import android.util.Log;
 
 /**
  * class for game time
+ * @author g11
  */
 public class Timing {
 

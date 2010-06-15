@@ -14,7 +14,7 @@ import android.opengl.GLUtils;
 import android.util.Log;
 /**
  * class to manage the openGL textures
- *
+ * @author g11
  */
 public class Textures {
 	private static final String LOG_TAG = Textures.class.getSimpleName();

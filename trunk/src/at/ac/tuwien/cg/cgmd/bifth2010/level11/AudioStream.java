@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 /**
  * Handles a stream of sound, launched through GameAudio.
  * Each time a SoundFile is played it is given a unique AudioStream
+ * @author g11
  */
 public class AudioStream {
 	/**

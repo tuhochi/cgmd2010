@@ -19,8 +19,7 @@ import android.opengl.GLUtils;
  * a Square containing the vertex information,
  * texture coordinates, the vertex indices
  * and drawing functionality.
- * 
- * @author Albors
+ * @author g11
  */
 public class Square {
 
