@@ -100,7 +100,8 @@ public class ShoppingCart extends RenderEntity implements Clickable {
 		float[] pos = new float[2];
 		int nrProducts = getNumberProducts();		
 		int row = nrProducts / 8; // Integer division is fun :D
-		float width = this.width * 0.5f - 100;
+		float width = this.width * 0.5f - 150;
+		width = (int)(width * GameManager.screenRatio);
 		pos[0] = (float) (x - width + Math.random()* width*2);
 		pos[1] = y + row*15;
 		return pos;

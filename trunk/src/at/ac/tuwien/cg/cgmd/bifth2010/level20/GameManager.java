@@ -156,8 +156,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		discountPopUps = new RenderEntity[2];
 		discountTime = -1;
-		discountPopUpsIndex = -1;
-		
+		discountPopUpsIndex = -1;		
 		
 		EventManager.getInstance().addListener(this);			
 		
@@ -190,7 +189,12 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		screenRatio = height / 480.f;
 		
 		shelf = new Shelf(width*0.5f, height*0.5f, 0, width, height);
-		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);		
+		if (activity.getResources().getBoolean(R.bool.l20_emulator)) {
+			shelf.texture = renderView.getTexture(R.drawable.l20_backg_emu, gl);
+		} else {
+			shelf.texture = renderView.getTexture(R.drawable.l20_backg, gl);
+		}
+				
 
 		// Preload product textures
 		for (int i = 0; i < ProductInfo.length; i++) {
@@ -227,7 +231,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		bunny.maxPosX = activity.getResources().getInteger(R.integer.l20_bunny_max_x) * screenRatio;		
 		bunny.speed = activity.getResources().getInteger(R.integer.l20_bunny_speed) * widthPercent;
 		
-		float bubbleSize = activity.getResources().getInteger(R.integer.l20_bubble_size) * screenRatio;
+		float bubbleSize = (int) (activity.getResources().getInteger(R.integer.l20_bubble_size) * screenRatio);
 		float bubblePos = bunnyPosY+bunnySize*0.4f + bubbleSize*0.5f;
 		bunny.curseBubble = new RenderEntity(bunny.x + bubbleSize*0.5f, bubblePos, 3, bubbleSize, bubbleSize);
 		bunny.curseBubble.texture = renderView.getTexture(R.drawable.l20_bunny_curse, gl);
@@ -324,6 +328,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		productManager.initProductSpawn();
 				
 		soundManager.init(LevelActivity.instance);
+		soundManager.startMusic();
+		
 		obstacleManager.init(gl);			
 		productManager.init();
 		bunny.curseBubble.texture = renderView.getTexture(R.drawable.l20_bunny_curse, gl);
@@ -411,8 +417,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	 * If called, the activity finishes and returns the result.
 	 */
 	private void gameOver() {
-		soundManager.playSound(SOUNDS.KATSCHING);
+		//soundManager.playSound(SOUNDS.KATSCHING);
+		shoppingCarts[0].quantities = new int[ProductInfo.length];
+		shoppingCarts[0].products.clear();
+		
 		stop();
+		soundManager.destroy();
+		EventManager.getInstance().removeListener(this);		
 		
 		SessionState s = new SessionState();
 		s.setProgress(100 - (int)totalMoney); 
@@ -715,8 +726,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	 * Stops the GameManager.
 	 */
 	public void stop() {
-		soundManager.stopSounds();
-		soundManager.destroy();
+		soundManager.stopSounds();		
 	}
 	
 	/**
@@ -724,6 +734,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	 */
 	public void resume() {
 		time.reset();
+		soundManager.init(LevelActivity.instance);
 		soundManager.startMusic();
 	}
 	
@@ -742,7 +753,6 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 			}
 		}
 	}
-
 
 	/**
 	 * Renders all objects the GameManager is responsible for.
@@ -801,10 +811,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		plusSprite.y = numberSprite.y;
 		
 		// set visibility correctly
-		for (int i = 0; i <= 9; i++) {
-			numberSprite.visible = (i == number);
-		}
-//		numberSprite.visible = true;
+//		for (int i = 0; i <= 9; i++) {
+//			numberSprite.visible = (i == number);
+//		}
+		numberSprite.visible = true;
 		
 		if (sign.equals("-")) {
 			textSprites.getCharSprite("+").visible = false;
@@ -813,7 +823,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		}
 		plusSprite.visible = true;
 		
-		LineAnimator spriteAnim = new LineAnimator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.5f);
+		LineAnimator spriteAnim = new LineAnimator(numberSprite, numberSprite.x, numberSprite.y, animationSpeed*0.25f);
 		spriteAnim.random(50);
 		Animator plusAnim = new LineAnimator(plusSprite, spriteAnim.destX - numberSprite.width, spriteAnim.destY, spriteAnim.speed);
 		animators.put(numberSprite.id, spriteAnim);

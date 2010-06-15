@@ -101,6 +101,7 @@ public class ObstacleManager {
 
 	
 	public void touchEvent(float x, float y) {
+		if (crashed || !obstacle.visible) return;
 		if (obstacle.hitTest(x, y)) {
 			nAvoidedObstacles++;
 			obstacle.clickable = false;		

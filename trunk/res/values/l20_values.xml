@@ -3,7 +3,7 @@
 	<integer name="l20_level_time">60</integer>
 	<integer name="l20_scroll_speed">25</integer>
 	<integer name="l20_scroll_speed_incr">1</integer>
-	<integer name="l20_animation_speed">40</integer>
+	<integer name="l20_animation_speed">25</integer>
 	<integer name="l20_fall_acceleration">0</integer>
 	<integer name="l20_shopping_cart_default_size">290</integer>
 	<integer name="l20_shopping_cart_bb_default_size_x">200</integer>
@@ -31,4 +31,5 @@
 	<integer name="l20_particle_life">1000</integer>
 	<bool name="l20_catch_mode">true</bool>
 	<bool name="l20_endgame">true</bool>
+	<bool name="l20_emulator">false</bool>
 </resources>
