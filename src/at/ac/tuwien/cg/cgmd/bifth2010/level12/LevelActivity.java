@@ -114,6 +114,8 @@ public class LevelActivity extends Activity{
      */
     @Override
     protected void onResume() {
+    	if(GameMechanics.getSingleton().getRoundNumber() > 0)
+    		GameMechanics.getSingleton().unpause();
     	SoundHandler.setContext(this);
     	
 		Intent callingIntent = getIntent();
@@ -148,6 +150,7 @@ public class LevelActivity extends Activity{
         mL.addView( glview );
         
         setContentView( mL );
+        //if(GameMechanics.getSingleton().getRoundNumber() > 0)
         super.onResume();
     }
     
@@ -303,6 +306,7 @@ public class LevelActivity extends Activity{
 		public void onClick(View v) {
 			if( v.getId() == mBtn.getId() ){
 				GameMechanics.getSingleton().unpause();
+				GameMechanics.getSingleton().setFIRSTRoundStartedTime();
 				this.dismiss();	
 			}
 		}

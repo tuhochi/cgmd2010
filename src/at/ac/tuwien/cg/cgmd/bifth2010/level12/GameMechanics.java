@@ -9,7 +9,7 @@ public class GameMechanics {
 	private int mSecondsToNextRound = (int)Math.floor( Definitions.GAME_START_TIME / 1000); /** wait time between the rounds */
 	private long mLastCountdownCheck = -1; /** time when the countdown was last checked */
 	private short mRound = 0; /** round number */
-	private long mRoundStartedTime = System.currentTimeMillis(); /** time the current round started */
+	private long mRoundStartedTime = 0;// = System.currentTimeMillis(); /** time the current round started */
 	private int mSelectedTower = 0; /** tower currently selected through the UI */
 	private long mLastColDetDone = -1; /** time when the last collision detection is done */
 	private LevelActivity mGameContext = null; /** the app context (level activity( */
@@ -109,7 +109,11 @@ public class GameMechanics {
 		mLastCountdownCheck = System.currentTimeMillis();
 	}
 	
-	
+	public void setFIRSTRoundStartedTime(){
+		mLastCountdownCheck = System.currentTimeMillis();
+		mSecondsToNextRound = Definitions.GAME_START_TIME / 1000;
+		mRoundStartedTime = System.currentTimeMillis();
+	}
 	public void setRoundStartedTime(){
 		mLastCountdownCheck = System.currentTimeMillis();
 		mSecondsToNextRound = Definitions.GAME_ROUND_WAIT_TIME / 1000;
