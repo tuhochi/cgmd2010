@@ -17,8 +17,22 @@
 </LinearLayout>
 <LinearLayout android:id="@+id/LinearLayout05" android:layout_width="wrap_content" android:layout_height="wrap_content"><ImageView android:id="@+id/ImageView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l12_bunny4_icon"></ImageView>
 <TextView android:id="@+id/TextView06" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l12_freeze_tower" android:textColor="@color/l13_helpTextColor"></TextView>
+
+</LinearLayout><TextView android:id="@+id/TextView07" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l12_enemies" android:textColor="@color/l13_helpTextColor"></TextView><LinearLayout android:id="@+id/LinearLayout06" android:layout_width="wrap_content" android:layout_height="wrap_content"><ImageView android:id="@+id/ImageView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l12_enemie_lvl0_icon"></ImageView>
+<TextView android:id="@+id/TextView08" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/l13_helpTextColor" android:text="@string/l12_enemie0desc"></TextView>
+</LinearLayout><LinearLayout android:id="@+id/LinearLayout07" android:layout_width="wrap_content" android:layout_height="wrap_content"><ImageView android:id="@+id/ImageView06" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l12_enemie_lvl1_icon"></ImageView>
+<TextView android:id="@+id/TextView09" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l12_enemie1desc" android:textColor="@color/l13_helpTextColor"></TextView>
+
+</LinearLayout><LinearLayout android:id="@+id/LinearLayout08" android:layout_width="wrap_content" android:layout_height="wrap_content"><ImageView android:id="@+id/ImageView07" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l12_enemie_lvl2_icon"></ImageView>
+<TextView android:id="@+id/TextView10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l12_enemie2desc" android:textColor="@color/l13_helpTextColor"></TextView>
+
+</LinearLayout><LinearLayout android:id="@+id/LinearLayout09" android:layout_width="wrap_content" android:layout_height="wrap_content"><ImageView android:id="@+id/ImageView08" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l12_enemie_lvl3_icon"></ImageView>
+<TextView android:id="@+id/TextView11" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l12_enemie3desc" android:textColor="@color/l13_helpTextColor"></TextView>
 </LinearLayout><TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l12_fun" android:textColor="@color/l13_helpTextColor"></TextView>
 
 
+
+
 </LinearLayout>
+
 </ScrollView>
