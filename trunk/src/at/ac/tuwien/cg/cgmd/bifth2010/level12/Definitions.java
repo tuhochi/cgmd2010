@@ -32,7 +32,7 @@ public final class Definitions {
 		public static final short BASIC_PROJECTILE_POOL = 1; /** pool of projectiles created */
 		public static final short BASIC_PROJECTILE_SPEED = 60; /** speed of the projectile */
 		public static final short BASIC_PROJECTILE_RADIUS = 15; /** radius of the projectile quad */
-		public static final int BASIC_TOWER_SHOOTING_INTERVALL = 50; /** shooting intervall of the tower */
+		public static final int BASIC_TOWER_SHOOTING_INTERVALL = 500; /** shooting intervall of the tower */
 		public static final short BASIC_PROJECTILE_DAMAGE = 10; /** projectile damage */
 		public static final short BASIC_TOWER_IRON_NEED = 10; /** price of a basic tower */
 		
@@ -41,7 +41,7 @@ public final class Definitions {
 		public static final short ADVANCED_PROJECTILE_POOL = 1;
 		public static final short ADVANCED_PROJECTILE_SPEED = 50;
 		public static final short ADVANCED_PROJECTILE_RADIUS = 25;
-		public static final int ADVANCED_TOWER_SHOOTING_INTERVALL = 50;
+		public static final int ADVANCED_TOWER_SHOOTING_INTERVALL = 500;
 		public static final short ADVANCED_PROJECTILE_DAMAGE = 30;
 		public static final short ADVANCED_TOWER_IRON_NEED = 30;
 		
@@ -50,7 +50,7 @@ public final class Definitions {
 		public static final short HYPER_PROJECTILE_POOL = 1;
 		public static final short HYPER_PROJECTILE_SPEED = 75;
 		public static final short HYPER_PROJECTILE_RADIUS = 17;
-		public static final int HYPER_TOWER_SHOOTING_INTERVALL = 50;
+		public static final int HYPER_TOWER_SHOOTING_INTERVALL = 500;
 		public static final short HYPER_PROJECTILE_DAMAGE = 60;
 		public static final short HYPER_TOWER_IRON_NEED = 60;
 		
@@ -59,7 +59,7 @@ public final class Definitions {
 		public static final short FREEZE_PROJECTILE_POOL = 1;
 		public static final short FREEZE_PROJECTILE_SPEED = 75;
 		public static final short FREEZE_PROJECTILE_RADIUS = 17;
-		public static final int FREEZE_TOWER_SHOOTING_INTERVALL = 50;
+		public static final int FREEZE_TOWER_SHOOTING_INTERVALL = 500;
 		public static final short FREEZE_PROJECTILE_DAMAGE = 0;
 		public static final short FREEZE_PROJECTILE_SLOWING = 70; /** how much percent is the enemie slown */
 		public static final short FREEZE_TOWER_IRON_NEED = 60;
