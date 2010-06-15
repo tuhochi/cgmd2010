@@ -19,14 +19,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import at.ac.tuwien.cg.cgmd.bifth2010.framework.SessionState;
-
+/**
+ * android activity, that holds the level, the GameView, and manages framework integration
+ *
+ */
 public class GameActivity extends Activity {
-
+	/**
+	 * singleton, pointer to this
+	 */
 	public static GameActivity singleton;
 	
 	private static final String LOG_TAG = GameActivity.class.getSimpleName();
 	/**
-	 * renders game
+	 * holds the renderer and handles user touch input
 	 */
     private GameView _gameView;
     /**
@@ -74,7 +79,7 @@ public class GameActivity extends Activity {
 		System.out.println("Create");
         super.onCreate(savedInstanceState);
         
-        this.singleton = this;
+        GameActivity.singleton = this;
         
         // set to fullscreen and no bars
         requestWindowFeature(Window.FEATURE_NO_TITLE); 
@@ -120,12 +125,6 @@ public class GameActivity extends Activity {
         _textTreasure.setTextSize(25);
         _textTreasure.setGravity(Gravity.CENTER);
         _textTreasure.setTextColor(Color.BLACK);
-        
-      /*  _textIntro = new TextView(this);
-        _textIntro.setText("");
-        _textIntro.setTextSize(25);
-        _textIntro.setGravity(Gravity.CENTER);
-        _textIntro.setTextColor(Color.BLACK);*/
          
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams.setMargins(10, 10, 10, 10);
@@ -137,21 +136,14 @@ public class GameActivity extends Activity {
         
         LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         layoutParams3.setMargins(10, 10, 10, 10);
-        //llayout.addView(_textIntro, layoutParams3);
-        /*if(savedInstanceState.containsKey("isLoadable"))
-        	this.onRestoreInstanceState(savedInstanceState);*/
-        //_level.start();
         handler.removeCallbacks(updateTimeTask);
         handler.postDelayed(updateTimeTask, textUpdateTime);
-        //_level.start();
-        //toast.show();
+
         if(savedInstanceState == null){
         	new IntroDialog(this).show();
         }else{
         	_level.start();
         }
-        //IntroDialog introDialog = new IntroDialog(this);
-        //introDialog.show();
     }
     
     @Override
@@ -277,37 +269,6 @@ public class GameActivity extends Activity {
     public Level getLevel() {
     	return _level;
     }
-	
-    /**
-     * updates text to show how much time in the level is left
-     * @param f
-     */
-	/*public void setTextTimeLeft(float f) {
-		
-		float minutes = f % 60;
-		
-		String s = Float.toString(minutes)+":"+Float.toString(Math.round(f-(minutes*60.f)));
-		_textTimeLeft.setText("test");
-		
-		if (f <= 0.0f) {
-			finish();
-		} 
-	}*/
-	
-	
-	/**
-	 * updates treasure grabbed text
-	 * @param f
-	 */
-	/*public void setTextTreasureGrabbed(float f) {
-		_textTreasureLeft.setText(Float.toString(f));
-		
-		_result+=f;
-		if (_result >= 100)
-		{
-			_result = 100;
-		}
-	}*/
 
 	/**
 	 * sets result (grabbed treasure) 

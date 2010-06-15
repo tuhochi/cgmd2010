@@ -5,11 +5,25 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
  * Each time a SoundFile is played it is given a unique AudioStream
  */
 public class AudioStream {
-	
+	/**
+	 * volume of the stream
+	 */
 	private float _volume;
+	/**
+	 * id of the stream
+	 */
 	private int _id;
+	/**
+	 * true if stream is paused
+	 */
 	private boolean _paused;
+	/**
+	 * true if looped
+	 */
 	private boolean _continuous;
+	/**
+	 * speed at which the stream is played back
+	 */
 	private float _rate;
 	
 	/**

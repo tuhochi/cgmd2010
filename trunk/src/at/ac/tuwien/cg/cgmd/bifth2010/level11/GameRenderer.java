@@ -1,31 +1,32 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
-import at.ac.tuwien.cg.cgmd.bifth2010.R;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
-import android.util.Log;
-
+/**
+ * renders the level
+ * @author Fennes
+ *
+ */
 public class GameRenderer implements Renderer {
 	private static final String LOG_TAG = GameRenderer.class.getSimpleName();
-    
+    /**
+     * screen width
+     */
     public float _width = 480.0f;
+    /**
+     * screen height
+     */
     public float _height = 320.0f;
-    
-    GL10 _gl;
-   
-    Textures texture;
-    Context context;
-	
+    /**
+     * android context
+     */
+    public Context context;
+    /**
+     * level to be rendered
+     */
 	public Level level;
 	
 	public GameRenderer(Context context, Vector2 resolution) {
@@ -41,8 +42,6 @@ public class GameRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //Log.i(LOG_TAG, "onSurfaceCreated()");
-    	
-        this._gl = gl;
         
         this.level.init(gl, this.context);
 
@@ -75,33 +74,24 @@ public class GameRenderer implements Renderer {
 		gl.glClearDepthf(1.0f); 					//Depth Buffer Setup
 		gl.glEnable(GL10.GL_DEPTH_TEST); 			//Enables Depth Testing
 		gl.glDepthFunc(GL10.GL_LEQUAL); 			//The Type Of Depth Testing To Do
+
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f); //sets the clear color
  
     }
 
 	@Override
     public void onSurfaceChanged(GL10 gl, int w, int h) {
 		//Log.i(LOG_TAG, "onSurfaceChanged()");
-		
-        
-        //gl.glOrthof(0.0f, _width, 0.0f, _height, -1.0f, 100.0f);
-        //gl.glViewport(0, 0, w, h);
+		//do nothing
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
 		//Log.i(LOG_TAG, "onDrawFrame()");
-
-        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		//Clear Screen And Depth Buffer
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);	
-		gl.glLoadIdentity();					//Reset The Current Modelview Matrix
-		//if(this.level._isStarted){
-			//if (this.level._isRunning) {
-	
-				//((GameActivity)this.context).setTextTimeLeft(this.level.getRemainigTime());
-				this.level.draw(gl);
-			
-			//}
-		//}
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		//Reset The Current Modelview Matrix
+		gl.glLoadIdentity();					
+		this.level.draw(gl);
     }
 }

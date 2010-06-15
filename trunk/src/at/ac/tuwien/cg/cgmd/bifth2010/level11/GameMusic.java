@@ -2,7 +2,6 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level11;
 
 import java.io.IOException;
 
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
@@ -15,7 +14,9 @@ import android.media.MediaPlayer;
  * 
  */
 public class GameMusic {
-	
+	/**
+	 * player, that plays back the sound
+	 */
 	private static MediaPlayer _mediaPlayer;
 	
 	/**
@@ -32,7 +33,7 @@ public class GameMusic {
 				setContinuous(true);
 			//AssetFileDescriptor afd = GameActivity.singleton.getAssets().openFd(filename);
 			//_mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-			_mediaPlayer.create(GameActivity.singleton, id);
+			MediaPlayer.create(GameActivity.singleton, id);
 			_mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
 			_mediaPlayer.prepare();
 			_mediaPlayer.start();
@@ -40,35 +41,56 @@ public class GameMusic {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * 
+	 * @return returns  true if the player loops the sound
+	 */
 	public static boolean isContinuous() {
 		return _mediaPlayer.isLooping();
 	}
-	
+	/**
+	 * 
+	 * @return retuns true if the player is currently playing back
+	 */
 	public static boolean isPlaying() {
 		return _mediaPlayer.isPlaying();
 	}
-	
+	/**
+	 * set true, if sound that is played back in the player shall be looped
+	 * @param continuous
+	 */
 	public static void setContinuous(boolean continuous) {
 		_mediaPlayer.setLooping(continuous);
 	}
-	
+	/**
+	 * sets the volume of the player
+	 * @param volume new volume of the player
+	 */
 	public static void setVolume(float volume) {
 		_mediaPlayer.setVolume(volume, volume);
 	}
-	
+	/**
+	 * pauses the player
+	 */
 	public static void pause() {
 		_mediaPlayer.pause();
 	}
-	
+	/**
+	 * restarts the player
+	 */
 	public static void restart() {
 		_mediaPlayer.seekTo(0);
 	}
-	
+	/**
+	 * stops the player
+	 */
 	public static void stop() {
 		_mediaPlayer.stop();
 	}
-	
+	/**
+	 * 
+	 * @return returns the player object of type MediaPlayer
+	 */
 	public static MediaPlayer getMediaPlayer() {
 		return _mediaPlayer;
 	}
