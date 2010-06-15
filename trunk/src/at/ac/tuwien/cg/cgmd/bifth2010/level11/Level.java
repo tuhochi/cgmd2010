@@ -251,7 +251,7 @@ public class Level extends Thread {
 	 * adds treasure to the level (treasure list)
 	 * @param treasure
 	 */
-	public  void addTreasure(Treasure treasure){
+	public void addTreasure(Treasure treasure){
 		this.treasureList.add(treasure);
 	}
 	/**
@@ -343,6 +343,7 @@ public class Level extends Thread {
 			float bestRating = Float.MAX_VALUE;
 			float tempDist = 0;
 			float rating = 0;
+			Treasure bestTreasure = null;
 			for (int j=0; j < treasureList.size(); j++){//search the current target
 				Treasure treasure = ((Treasure)treasureList.get(j));
 				if(treasure.getValue() == 0.0f){
@@ -359,14 +360,16 @@ public class Level extends Thread {
 						< bestRating){
 					//if(tempDist < pedestrian.getAttractionRadius()+treasure.getAttractionRadius()){
 					if (tempDist < treasure.getAttractionRadius()/2) {
-						if (pedestrian.getTarget() != treasure) {
-							pedestrian.setTarget(treasure);
-							bestRating = rating;
-							targetChange = true;
-							pedestrian.playSound();
-						}
+						bestTreasure = treasure;
+						bestRating = rating;
 					}
 				}
+			}
+			if ((pedestrian.getTarget() instanceof Treasure || pedestrian.getTarget() == null) && pedestrian.getTarget() != bestTreasure) {
+				if(bestTreasure != null)
+					pedestrian.setTarget(bestTreasure);
+				targetChange = true;
+				pedestrian.playSound();
 			}
 			if(pedestrian.getTarget() != null){
 				for (int j=0; j < pedestrianList.size(); j++) {//check if another one is too close
