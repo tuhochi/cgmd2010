@@ -1,11 +1,31 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level60;
 
+/**
+ * Rectangle class for level 60. Handles rectangular regions for collision detection.
+ * 
+ * @author      Martin Schenk
+ * @author      Tiare Feuchtner
+ */
 public class Rectangle {
 	private Point lowerLeft;
 	private Point upperRight;
 	
+	/**
+	 * Default Constructor
+	 */
 	public Rectangle() { lowerLeft = new Point(0, 0); upperRight = new Point(1, 1); }
+	
+	/**
+	 * Overloaded constructor setting the rectangle of a certain size to a specified position
+	 * @param lowerLeft		point on lower left corner
+	 * @param upperRight	point on upper right corner
+	 */
 	public Rectangle(Point lowerLeft, Point upperRight) { this.lowerLeft = lowerLeft; this.upperRight = upperRight; }
+	
+	/**
+	 * Copy constructor
+	 * @param copy	rectangle to be copied
+	 */
 	public Rectangle(Rectangle copy) { lowerLeft = copy.getLowerLeft(); upperRight = copy.getUpperRight(); }
 	public Rectangle(Point lowerLeft, float width, float height) { this.lowerLeft = lowerLeft; this.upperRight = new Point(lowerLeft.getX()+width, lowerLeft.getY()+height); }
 	public Point getLowerLeft() { return lowerLeft; }

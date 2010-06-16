@@ -96,6 +96,10 @@ public class LevelRenderer implements Renderer {
 	private final static String COP_NUMBER = "COP_NUMBER";
 	private final static String COP_X = "COP_X";
 	private final static String COP_Y = "COP_Y";
+	private final static String CAR_NUMBER = "CAR_NUMBER";
+	private final static String CAR_X = "CAR_X";
+	private final static String CAR_Y = "CAR_Y";
+	private final static String CAR_STATE = "CAR_STATE";
 	private final static String MAP_OFFSET_X = "MAP_OFFSET_X";
 	private final static String MAP_OFFSET_Y = "MAP_OFFSET_Y";
 	private final static String SCORE = "SCORE";
@@ -380,24 +384,24 @@ public class LevelRenderer implements Renderer {
 		float myX = 0;
 		float myY = 0;
 
-		if (frameCounter%10==0) {
+		if (frameCounter%10<5) {
 			if (y<0){
 				bunny.changeTexture(manager.getTexture("bunny_front_l"));
-				bunny.setXY(bunny.getX()+5*scale, bunny.getY());
+				//bunny.setXY(bunny.getX()+5*scale, bunny.getY());
 
 			} else if (y>=0){
 				bunny.changeTexture(manager.getTexture("bunny_back_l"));
-				bunny.setXY(bunny.getX()-5*scale, bunny.getY());
+				//bunny.setXY(bunny.getX()-5*scale, bunny.getY());
 
 			}
 
-		} else if (frameCounter%10==5) {
+		} else if (frameCounter%10>=5) {
 			if (y<0){
 				bunny.changeTexture(manager.getTexture("bunny_front_r"));
-				bunny.setXY(bunny.getX()+5*scale, bunny.getY());
+				//bunny.setXY(bunny.getX()+5*scale, bunny.getY());
 			} else if (y>=0){
 				bunny.changeTexture(manager.getTexture("bunny_back_r"));
-				bunny.setXY(bunny.getX()-5*scale, bunny.getY());
+				//bunny.setXY(bunny.getX()-5*scale, bunny.getY());
 			}
 		}
 
@@ -420,13 +424,37 @@ public class LevelRenderer implements Renderer {
 			bunny.move(newX, newY);
 			myX = newX; myY = newY;
 		}
-
+		
+		xPos = bunny.getX();
+		yPos = bunny.getY();
+		
 		//move map
-		if (xPos*scale > screenWidth/2 && xPos < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale))
-			moveMap(myX, 0);
+		moveMap(myX, myY);
+		
+		myX = mapOffset_x;
+		myY = mapOffset_y;
+		
+		if (xPos*scale < screenWidth/2)
+			myX = 0;
+		else if(xPos > (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale))
+			myX = -LEVEL_WIDTH*LEVEL_TILESIZE+screenWidth/scale;
 
-		if (yPos*scale > screenHeight/2 && yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale))
-			moveMap(0, myY);
+		if (yPos*scale < screenHeight/2)
+			myY = 0;
+		else if (yPos > (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale))
+			myY = -LEVEL_HEIGHT*LEVEL_TILESIZE+screenHeight/scale;
+			
+		setMap(myX,myY);
+			
+						
+				
+//		if ((xPos*scale > screenWidth/2 || bunny.getX()*scale > screenWidth/2) &&
+//				(xPos < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale) || bunny.getX() < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale)))
+//			moveMap(myX, 0);
+//
+//		if ((yPos*scale > screenHeight/2 || bunny.getY()*scale > screenHeight/2) &&
+//				(yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale) || bunny.getY() < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale)))
+//			moveMap(0, myY);
 	}
 
 	/**
@@ -521,6 +549,18 @@ public class LevelRenderer implements Renderer {
 		mapOffset_x -= x;
 		mapOffset_y -= y;
 	}
+	
+	/**
+	 * When the bunny walks close the the level's border the level map is set to ensure 
+	 * a good view of the following parts of the map.
+	 * @param x offset to which the map is set
+	 * @param y offset to which the map is set
+	 */
+	private void setMap(float x, float y) {
+		Tablet.setMapOffset(x, y);
+		mapOffset_x = x;
+		mapOffset_y = y;
+	}
 
 	/**
 	 * Checks the collision of the bunny with all other objects in the game. The bunny collides
@@ -601,7 +641,7 @@ public class LevelRenderer implements Renderer {
 		crimeCounter = 0;
 		crime = 0;
 		copCounter = 0;
-		
+
 		//poff - cops vanish
 		makeCopsPuff = 1;
 		if (score <= 0) {
@@ -631,21 +671,28 @@ public class LevelRenderer implements Renderer {
 			dx /= d_len;
 			dy /= d_len;
 
-			if (frameCounter%10==0) {
+			if (frameCounter%10<5) {
 				if (dy<0){
 					cop.changeTexture(manager.getTexture("cop_front_l"));
-					cop.setXY(cop.getX()-5*scale, cop.getY());
+
+					//if changed from back to front
+					//if (cop.getTexture() == manager.getTexture("cop_back_l") || cop.getTexture() == manager.getTexture("cop_back_r"))
+					//	cop.setXY(cop.getX()-5*scale, cop.getY());
+
 				} else if (dy>=0){
 					cop.changeTexture(manager.getTexture("cop_back_l"));
-					cop.setXY(cop.getX()+5*scale, cop.getY());
+
+					//if changed from back to front
+					//if (cop.getTexture() == manager.getTexture("cop_front_l") || cop.getTexture() == manager.getTexture("cop_front_r"))
+					//	cop.setXY(cop.getX()+5*scale, cop.getY());
 				}
-			} else if (frameCounter%10==5) {
+			} else if (frameCounter%10>=5) {
 				if (dy<0){
 					cop.changeTexture(manager.getTexture("cop_front_r"));
-					cop.setXY(cop.getX()-5*scale, cop.getY());
+					//cop.setXY(cop.getX()-5*scale, cop.getY());
 				} else if (dy>=0){
 					cop.changeTexture(manager.getTexture("cop_back_r"));
-					cop.setXY(cop.getX()+5*scale, cop.getY());
+					//cop.setXY(cop.getX()+5*scale, cop.getY());
 				}
 			}
 
@@ -713,14 +760,14 @@ public class LevelRenderer implements Renderer {
 	 * @param copyTo	array to which the values shall be copied
 	 */
 	private void copyLevelMap(int[][] copyFrom, int [][] copyTo) {
-		
+
 		for (int i = 0; i < LEVEL_WIDTH; i++) {
 			for (int j = 0; j < LEVEL_HEIGHT; j++) {
 				copyTo[j][i] = copyFrom[j][i];
 			}
 		}
 	}
-	
+
 	/**
 	 * Called when either all money is lost (game is won), or time's up (game is lost). This method takes 
 	 * care of saving the session state, resetting the level map and returning the result.
@@ -728,7 +775,7 @@ public class LevelRenderer implements Renderer {
 	private void endGame() {
 		currentTime = 120;
 		copyLevelMap(levelMapToRestore, levelMap);
-		
+
 		SessionState sessionState = glv.getState();
 		((LevelActivity)context).setResult(Activity.RESULT_OK, sessionState.asIntent());
 		((LevelActivity)context).finish();
@@ -1015,6 +1062,19 @@ public class LevelRenderer implements Renderer {
 			outState.putFloat(COP_Y + i, c.getY());
 			i++;
 		}
+		
+//		outState.putInt(CAR_NUMBER, cars.size());
+//		
+//		Iterator<GameObject> carIt = cars.iterator();
+//		int j = 0;
+//		while (carIt.hasNext()) {
+//			GameObject n = carIt.next();
+//			
+//			outState.putFloat(CAR_X + j, n.getX());
+//			outState.putFloat(CAR_Y + j, n.getY());
+//			outState.putInt(CAR_STATE + j, n.framenr);
+//			j++;
+//		}
 	}
 
 	/**
@@ -1025,7 +1085,7 @@ public class LevelRenderer implements Renderer {
 	public int getScore() {
 		return score;
 	}
-	
+
 	/**
 	 * Called when the score has changed. In this case the textures for the score are
 	 * refreshed.
