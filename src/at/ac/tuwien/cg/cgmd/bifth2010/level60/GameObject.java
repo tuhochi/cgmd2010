@@ -12,8 +12,11 @@ public class GameObject extends Tablet {
 	public static final int OBJECTCLASS_CAR = 1; 
 	public static final float BLOW_WIDTH = 60.0f;
 	public static final float BLOW_HEIGHT = 60.0f;
+	public boolean rotated;
+	public boolean destroyed;
+	
 	private int objectClass;
-	public int framenr;
+	private int framenr;
 	private boolean isBeingDestroyed;
 	private int maxFrame;
 	private String textureBaseName;
@@ -36,6 +39,8 @@ public class GameObject extends Tablet {
 		this.objectClass = objectClass;
 		this.texman = texman;
 		isBeingDestroyed = false;
+		rotated = false;
+		destroyed = false;
 		framenr = 0;
 		switch (objectClass) {
 		case OBJECTCLASS_CAR:
@@ -77,6 +82,7 @@ public class GameObject extends Tablet {
 					if (!this.overlays.isEmpty()) overlays.clear();
 					overlays.add(new Tablet(BLOW_WIDTH, BLOW_HEIGHT, this.getX()+(this.getWidth()/2.0f)-BLOW_WIDTH/2.0f, this.getY()+(this.getHeight()/2.0f)-BLOW_HEIGHT/2.0f, texman.getTexture("blow"+(framenr-1))));
 				}
+				destroyed = true;
 			}
 			else {
 				isBeingDestroyed = false;
@@ -84,5 +90,16 @@ public class GameObject extends Tablet {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Called to update the texture after game has been resumed. If an animation was initiated at
+	 * interruption, it gets set to the state when the animation is over.
+	 */
+	public void refresh() {
+		if (destroyed) {
+			framenr = maxFrame;
+			this.changeTexture(texman.getTexture(textureBaseName + "1"));
+		}
 	}
 }

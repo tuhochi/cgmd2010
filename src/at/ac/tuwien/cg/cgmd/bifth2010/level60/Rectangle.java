@@ -41,6 +41,12 @@ public class Rectangle {
 			op.getY() >= lowerLeft.getY() && op.getY() <= upperRight.getY()) return true;
 		else return false;
 	}
+	
+	/**
+	 * Returns the side on which op overlaps the current rectangle.
+	 * @param op
+	 * @return
+	 */
 	public int overlap(Rectangle op) {
 		int result = Point.IDENT;
 		if (pointInside(op.getLowerLeft())) result |= (Point.LOWER | Point.LEFT);
@@ -49,11 +55,25 @@ public class Rectangle {
 		if (pointInside(op.getLowerRight())) result |= (Point.LOWER | Point.RIGHT);
 		return result;
 	}
+	
+	/**
+	 * Checks if the point op lies inside the rectangle r
+	 * @param r
+	 * @param op
+	 * @return
+	 */
 	public static boolean pointInside(Rectangle r, Point op) {
 		if (op.getX() >= r.getLowerLeft().getX() && op.getX() <= r.getUpperRight().getX() &&
 			op.getY() >= r.getLowerLeft().getY() && op.getY() <= r.getUpperRight().getY()) return true;
 		else return false;
 	}
+	
+	/**
+	 * Checks if two rectangles op and op2 overlap each other
+	 * @param op
+	 * @param op2
+	 * @return
+	 */
 	public static boolean checkOverlap(Rectangle op, Rectangle op2) {
 		if (pointInside(op2, op.getLowerLeft()) || pointInside(op2, op.getUpperRight()) || 
 				pointInside(op2, op.getUpperLeft()) || pointInside(op2, op.getLowerRight())) return true;

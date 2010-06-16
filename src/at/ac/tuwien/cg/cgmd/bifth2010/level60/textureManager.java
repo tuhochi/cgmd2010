@@ -101,6 +101,14 @@ public class textureManager {
 		createTexture("lose2", R.drawable.l60_gameover2, 200, 150, true);
 	}
 	
+	/**
+	 * Creates a sticky tablet with the specified texture.
+	 * @param name
+	 * @param texId
+	 * @param xSize
+	 * @param ySize
+	 * @param sticky
+	 */
 	public void createTexture(String name, int texId, int xSize, int ySize, boolean sticky) {
 		loadTexture (name, texId);
 		Tablet tex = new Tablet(xSize, ySize, 0, 0, texture.get(0), sticky);
@@ -110,11 +118,22 @@ public class textureManager {
 		}
 	}
 	
+	/**
+	 *  Creates a non-sticky tablet with the specified texture.
+	 * @param name
+	 * @param texId
+	 * @param xSize
+	 * @param ySize
+	 */
 	public void createTexture (String name, int texId, int xSize, int ySize) {
 		createTexture(name, texId, xSize, ySize, false);
 	}
 	
-	
+	/**
+	 * Create a texture from an image file.
+	 * @param name
+	 * @param texId
+	 */
 	public void loadTexture (String name, int texId) {
 		gl.glGenTextures(1, texture);
 		
@@ -137,6 +156,11 @@ public class textureManager {
 		}
 	}
 	
+	/**
+	 * Returns the texture with the name specified.
+	 * @param name
+	 * @return
+	 */
 	public int getTexture (String name) {
 		if (textureMap.containsKey(name))
 			return (Integer)textureMap.get(name); //?????
@@ -144,6 +168,11 @@ public class textureManager {
 			return -1;
 	}
 	
+	/**
+	 * Returns the tablet with the name specified
+	 * @param name
+	 * @return
+	 */
 	public Tablet getGameObject (String name) {
 		return (Tablet)gameObjectMap.get(name);
 	}
