@@ -96,10 +96,11 @@ public class LevelRenderer implements Renderer {
 	private final static String COP_NUMBER = "COP_NUMBER";
 	private final static String COP_X = "COP_X";
 	private final static String COP_Y = "COP_Y";
-	private final static String CAR_NUMBER = "CAR_NUMBER";
 	private final static String CAR_X = "CAR_X";
 	private final static String CAR_Y = "CAR_Y";
 	private final static String CAR_STATE = "CAR_STATE";
+	private final static String CAR_ROT = "CAR_ROT";
+	private final static String CAR_DESTROYED = "CAR_DESTROYED";
 	private final static String MAP_OFFSET_X = "MAP_OFFSET_X";
 	private final static String MAP_OFFSET_Y = "MAP_OFFSET_Y";
 	private final static String SCORE = "SCORE";
@@ -181,7 +182,7 @@ public class LevelRenderer implements Renderer {
 		cars = new ArrayList<GameObject>();
 
 		levelMapToRestore = new int[LEVEL_HEIGHT][LEVEL_WIDTH];
-		copyLevelMap(levelMap, levelMapToRestore);
+		levelMapToRestore = copyLevelMap(levelMap, levelMapToRestore);
 	}
 
 	/**
@@ -297,9 +298,8 @@ public class LevelRenderer implements Renderer {
 		boolean acted = false;
 
 
-		//BLOW UP CAR
 		if (!drawLock) {
-
+			//BLOW UP CAR
 			Iterator<GameObject>carIterator = cars.iterator();
 			float leastdistance = LEVEL_WIDTH*LEVEL_TILESIZE;
 			GameObject n = cars.get(0); 
@@ -313,7 +313,7 @@ public class LevelRenderer implements Renderer {
 				}
 			}
 
-			if (leastdistance <= LEVEL_TILESIZE/1.5 && n.getTexture() == manager.getTexture("car0")) {
+			if (leastdistance <= LEVEL_TILESIZE/1.5 && !n.destroyed) {
 				//destroy the car
 				n.destroy();
 				acted = true;
@@ -351,7 +351,7 @@ public class LevelRenderer implements Renderer {
 
 			if (acted) {	
 				//GENERATE NEW COP IF ENOUGH CRIMES
-				if (copCounter == 0 || Math.ceil((float)crime/20.0f)>copCounter) {
+				if (copCounter == 0 || crimeCounter>=copCounter+2) {
 					cops.add(new Tablet(COP_WIDTH, COP_HEIGHT, 10, 10, manager.getTexture("cop_front_l")));
 					copCounter++;
 					// sound for new cop			
@@ -424,16 +424,16 @@ public class LevelRenderer implements Renderer {
 			bunny.move(newX, newY);
 			myX = newX; myY = newY;
 		}
-		
+
 		xPos = bunny.getX();
 		yPos = bunny.getY();
-		
+
 		//move map
 		moveMap(myX, myY);
-		
+
 		myX = mapOffset_x;
 		myY = mapOffset_y;
-		
+
 		if (xPos*scale < screenWidth/2)
 			myX = 0;
 		else if(xPos > (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale))
@@ -443,18 +443,8 @@ public class LevelRenderer implements Renderer {
 			myY = 0;
 		else if (yPos > (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale))
 			myY = -LEVEL_HEIGHT*LEVEL_TILESIZE+screenHeight/scale;
-			
+
 		setMap(myX,myY);
-			
-						
-				
-//		if ((xPos*scale > screenWidth/2 || bunny.getX()*scale > screenWidth/2) &&
-//				(xPos < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale) || bunny.getX() < (LEVEL_WIDTH*LEVEL_TILESIZE)-screenWidth/(2*scale)))
-//			moveMap(myX, 0);
-//
-//		if ((yPos*scale > screenHeight/2 || bunny.getY()*scale > screenHeight/2) &&
-//				(yPos < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale) || bunny.getY() < (LEVEL_HEIGHT*LEVEL_TILESIZE)-screenHeight/(2*scale)))
-//			moveMap(0, myY);
 	}
 
 	/**
@@ -549,7 +539,7 @@ public class LevelRenderer implements Renderer {
 		mapOffset_x -= x;
 		mapOffset_y -= y;
 	}
-	
+
 	/**
 	 * When the bunny walks close the the level's border the level map is set to ensure 
 	 * a good view of the following parts of the map.
@@ -637,7 +627,7 @@ public class LevelRenderer implements Renderer {
 	 * so that the textures of both touch.
 	 */
 	private void bunnyWasCaught () {
-		score -= (crime + crime*(Math.floor(crimeCounter/3)));
+		score -= crime;
 		crimeCounter = 0;
 		crime = 0;
 		copCounter = 0;
@@ -647,6 +637,7 @@ public class LevelRenderer implements Renderer {
 		if (score <= 0) {
 			endScreen1 = manager.getGameObject("win1");
 			endScreen2 = manager.getGameObject("win2");
+			levelMap = copyLevelMap(levelMapToRestore, levelMap);
 		}
 		updateScore();
 	}
@@ -740,7 +731,7 @@ public class LevelRenderer implements Renderer {
 	 * @param gl   the GL interface
 	 */
 	private void drawEndScreen(GL10 gl) {
-
+		
 		if(frameCounter%10>5){
 			endScreen1.draw(gl);
 			countdown--;
@@ -759,13 +750,14 @@ public class LevelRenderer implements Renderer {
 	 * @param copyFrom	array currently containing the correct values
 	 * @param copyTo	array to which the values shall be copied
 	 */
-	private void copyLevelMap(int[][] copyFrom, int [][] copyTo) {
+	private int[][] copyLevelMap(int[][] copyFrom, int [][] copyTo) {
 
 		for (int i = 0; i < LEVEL_WIDTH; i++) {
 			for (int j = 0; j < LEVEL_HEIGHT; j++) {
 				copyTo[j][i] = copyFrom[j][i];
 			}
 		}
+		return copyTo;
 	}
 
 	/**
@@ -774,7 +766,6 @@ public class LevelRenderer implements Renderer {
 	 */
 	private void endGame() {
 		currentTime = 120;
-		copyLevelMap(levelMapToRestore, levelMap);
 
 		SessionState sessionState = glv.getState();
 		((LevelActivity)context).setResult(Activity.RESULT_OK, sessionState.asIntent());
@@ -793,6 +784,7 @@ public class LevelRenderer implements Renderer {
 		int minutes = 0;
 
 		if (startFrameTime == 0) startFrameTime = System.currentTimeMillis();
+
 		currentTime = (int)(System.currentTimeMillis()-startFrameTime) / 1000;
 		if (currentTime < 60) {
 			minutes = 1;
@@ -803,6 +795,7 @@ public class LevelRenderer implements Renderer {
 		} else {
 			endScreen1 = manager.getGameObject("lose1");
 			endScreen2 = manager.getGameObject("lose2");
+			levelMap = copyLevelMap(levelMapToRestore, levelMap);
 		}
 
 		if (frameCounter%10==9) {
@@ -842,6 +835,7 @@ public class LevelRenderer implements Renderer {
 		}
 
 		//draw cars
+		drawLock = true;
 		Iterator<GameObject> it = cars.iterator();
 		while (it.hasNext()) {
 			GameObject n = it.next();
@@ -850,7 +844,6 @@ public class LevelRenderer implements Renderer {
 		}
 
 		//draw action stuff
-		drawLock = true;
 		Iterator<Tablet> tit = actiontextures.iterator();
 		while (tit.hasNext()) {
 			tit.next().draw(gl);
@@ -880,11 +873,13 @@ public class LevelRenderer implements Renderer {
 				currentCop.draw(gl);
 		}
 
-		drawLock = false;
 		if (makeCopsPuff == 3) {
 			cops.clear();
+			copCounter = 0;
 			makeCopsPuff = 0;
 		}
+
+		drawLock = false;
 
 		//write score
 		gold.draw(gl);
@@ -991,7 +986,7 @@ public class LevelRenderer implements Renderer {
 			mapOffset_x = mSavedInstance.getFloat(MAP_OFFSET_X);
 			mapOffset_y = mSavedInstance.getFloat(MAP_OFFSET_Y);
 
-			startFrameTime = mSavedInstance.getLong(STARTFRAMETIME) - (System.currentTimeMillis() - mSavedInstance.getLong(PAUSETIME)); 
+			startFrameTime = System.currentTimeMillis() - (mSavedInstance.getLong(PAUSETIME)-mSavedInstance.getLong(STARTFRAMETIME)); 
 
 			Tablet.setMapOffset(mapOffset_x, mapOffset_y);
 
@@ -1000,6 +995,25 @@ public class LevelRenderer implements Renderer {
 
 			for (int i=0;i<copCounter;i++)
 				cops.add(new Tablet(COP_WIDTH, COP_HEIGHT, mSavedInstance.getFloat(COP_X + i), mSavedInstance.getFloat(COP_Y + i), manager.getTexture("cop_front_l")));
+
+			for (int i=0;i<NUMBER_OF_CARS;i++) {
+				GameObject newCar = new GameObject(GameObject.OBJECTCLASS_CAR, CAR_WIDTH, CAR_LENGTH, mSavedInstance.getFloat(CAR_X + i), mSavedInstance.getFloat(CAR_Y + i), manager.getTexture("car0"), manager);
+
+				if(mSavedInstance.getInt(CAR_ROT + i) == 1)
+					newCar.rotated = true;
+				if(mSavedInstance.getInt(CAR_DESTROYED + i) == 1)
+					newCar.destroyed = true;
+
+				newCar.refresh();
+
+				if (newCar.rotated) {
+					newCar.rotate(90.0f);
+					newCar.setWidthHeight(CAR_LENGTH, CAR_WIDTH);
+					newCar.setOffset(CAR_LENGTH, 0);
+				}
+
+				cars.add(newCar);
+			}
 
 			score = mSavedInstance.getInt(SCORE);
 			crime = mSavedInstance.getInt(CRIME);
@@ -1029,6 +1043,7 @@ public class LevelRenderer implements Renderer {
 					newcar.rotate(90.0f);
 					newcar.setWidthHeight(CAR_LENGTH, CAR_WIDTH);
 					newcar.setOffset(CAR_LENGTH, 0);
+					newcar.rotated = true;
 				}
 				cars.add(newcar);
 			}
@@ -1062,19 +1077,27 @@ public class LevelRenderer implements Renderer {
 			outState.putFloat(COP_Y + i, c.getY());
 			i++;
 		}
-		
-//		outState.putInt(CAR_NUMBER, cars.size());
-//		
-//		Iterator<GameObject> carIt = cars.iterator();
-//		int j = 0;
-//		while (carIt.hasNext()) {
-//			GameObject n = carIt.next();
-//			
-//			outState.putFloat(CAR_X + j, n.getX());
-//			outState.putFloat(CAR_Y + j, n.getY());
-//			outState.putInt(CAR_STATE + j, n.framenr);
-//			j++;
-//		}
+
+		Iterator<GameObject> carIt = cars.iterator();
+		int j = 0;
+		while (carIt.hasNext()) {
+			GameObject n = carIt.next();
+
+			outState.putFloat(CAR_X + j, n.getX());
+			outState.putFloat(CAR_Y + j, n.getY());
+
+			if(n.rotated)
+				outState.putInt(CAR_ROT + j, 1);
+			else
+				outState.putInt(CAR_ROT + j, 0);
+
+			if(n.destroyed)
+				outState.putInt(CAR_DESTROYED + j, 1);
+			else
+				outState.putInt(CAR_DESTROYED + j, 0);
+
+			j++;
+		}
 	}
 
 	/**
