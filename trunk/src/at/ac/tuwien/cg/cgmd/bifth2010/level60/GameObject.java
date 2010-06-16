@@ -13,7 +13,7 @@ public class GameObject extends Tablet {
 	public static final float BLOW_WIDTH = 60.0f;
 	public static final float BLOW_HEIGHT = 60.0f;
 	private int objectClass;
-	private int framenr;
+	public int framenr;
 	private boolean isBeingDestroyed;
 	private int maxFrame;
 	private String textureBaseName;

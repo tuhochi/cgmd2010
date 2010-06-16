@@ -14,7 +14,7 @@ import android.content.Context;
  * @author      Tiare Feuchtner
  */
 public class Cop extends Tablet {
-	private textureManager texman;
+	public textureManager texman;
 	
 	/**
 	 * Constructor of the cop class.
