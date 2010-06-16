@@ -294,6 +294,8 @@ public class Native
 	@SuppressWarnings("unused")
 	private void playSound(int soundid)
 	{
+		Log.i("l77clsNative", "playing sound " + soundid);
+		
 		switch (soundid)
 		{
 			case BLOCK_DROPPED_SOUND:
@@ -318,7 +320,7 @@ public class Native
 				audio.playSound(Audio.BLOCK_SOLVE_SOUND);
 				break;
 			default:
-				System.out.println("Request to play unknown soundid " + soundid);
+				Log.e("l77", "Request to play unknown soundid " + soundid);
 				break;
 		}
 	}
@@ -349,6 +351,19 @@ public class Native
 			callbackGameEnded.onSucces(score);
 		else
 			callbackGameEnded.onFailure(new Throwable("Game ended with negative score: " + score));
+	}
+	
+	//debuggin
+	public int callback1()
+	{
+		Log.d("l77callback", "*callback1");
+		return 10;
+	}
+	
+	public static int callback2()
+	{
+		Log.d("l77callback", "*callback2 (static)");
+		return 11;
 	}
 
 }

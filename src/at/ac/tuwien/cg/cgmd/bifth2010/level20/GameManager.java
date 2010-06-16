@@ -190,7 +190,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		shelf = new Shelf(width*0.5f, height*0.5f, 0, width, height);
 		if (activity.getResources().getBoolean(R.bool.l20_emulator)) {
-			shelf.texture = renderView.getTexture(R.drawable.l20_backg_emu, gl);
+			shelf.texture = renderView.getTexture(R.drawable.l20_backg, gl);
 		} else {
 			shelf.texture = renderView.getTexture(R.drawable.l20_backg, gl);
 		}
