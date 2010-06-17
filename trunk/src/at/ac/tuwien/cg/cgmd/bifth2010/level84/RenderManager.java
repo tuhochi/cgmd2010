@@ -169,6 +169,7 @@ public class RenderManager implements Renderer, OnDismissListener {
 			street.update(deltaTime, accelerometer.getOrientation());
 
 			checkStreetEnd(street.getStreetPos()); //check if the street end is reached
+			checkMoney(); //check if there is any money left
 			
 			//Log.i("streetPos", "position: " + street.getStreetPos());
 			
@@ -189,7 +190,24 @@ public class RenderManager implements Renderer, OnDismissListener {
 		}
 	}
 	
+	private void finishGame()
+	{
+		//stop the animation and rendering of the street 
+		gamefinished = true;
+		street.stopStreet();
 
+		//show the results
+		showResultDialog.sendEmptyMessage(0);
+	}
+	
+	/**
+	 * check if there is any money left
+	*/
+	private void checkMoney()
+	{
+		if (progman.isMoneyLeft() == false ) { 	finishGame();	}
+	}
+	
 	
 	/**
 	 * check if the end of the level has been reached
@@ -197,15 +215,7 @@ public class RenderManager implements Renderer, OnDismissListener {
 	 */
 	private void checkStreetEnd(float streetPos)
 	{
-		if (streetMeter < 1)
-		{
-			//stop the animation and rendering of the street 
-			gamefinished = true;
-			street.stopStreet();
-
-			//show the results
-			showResultDialog.sendEmptyMessage(0);
-		}
+		if (streetMeter < 1) { finishGame(); }
 	}
 	
 	/**

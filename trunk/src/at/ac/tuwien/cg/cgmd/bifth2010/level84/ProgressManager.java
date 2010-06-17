@@ -22,6 +22,9 @@ public class ProgressManager extends SessionState {
 	/** array for storing statistics of breaks per gem type **/
 	private int[] gemsBreak = new int[4];
 	
+	/** indicates if there is money left to lose or not **/
+	private boolean moneyLeft = true;
+	
 	/**
 	 * create a new ProgressManager
 	 * @param activity
@@ -38,6 +41,7 @@ public class ProgressManager extends SessionState {
 	{
 		totalValue = moneyToSpend;
 		remainingValue = moneyToSpend;
+		moneyLeft = true;
 	}
 	
 	/**
@@ -65,10 +69,10 @@ public class ProgressManager extends SessionState {
 	public void loseMoneyByHit(int drainType) {
 		remainingValue -= drainType * LevelActivity.GEM_BASE_VALUE;
 		updateGemStatsByHit(drainType);
-//		if (remainingValue <= 0) {
-//			remainingValue = 0;
-//			this.activity.finish();
-//		}
+		if (remainingValue <= 0) {
+			remainingValue = 0;
+			moneyLeft = false;
+		}
 	}
 	
 	/**
@@ -79,10 +83,19 @@ public class ProgressManager extends SessionState {
 	{
 		remainingValue -= drainType * LevelActivity.GEM_BASE_VALUE / 10;
 		updateGemStatsByBreak(drainType);
-//		if (remainingValue <= 0) {
-//			remainingValue = 0;
-//			this.activity.finish();
-//		}
+		if (remainingValue <= 0) {
+			remainingValue = 0;
+			moneyLeft = false;
+		}
+	}
+	
+	/**
+	 * indicates if there is any money left to lose
+	 * @return
+	 */
+	public boolean isMoneyLeft()
+	{
+		return moneyLeft;
 	}
 	
 	/**
