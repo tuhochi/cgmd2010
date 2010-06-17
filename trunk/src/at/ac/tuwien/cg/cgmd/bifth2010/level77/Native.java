@@ -294,7 +294,7 @@ public class Native
 	@SuppressWarnings("unused")
 	private void playSound(int soundid)
 	{
-		Log.i("l77clsNative", "playing sound " + soundid);
+		Log.i("l77callback", "playing sound " + soundid);
 		
 		switch (soundid)
 		{
@@ -325,6 +325,14 @@ public class Native
 		}
 	}
 
+	private float scores_percent = 1.0f;
+	private final int scores_max = 1000;
+	
+	public float getScoresPercent()
+	{
+		return scores_percent;
+	}
+	
 	/**
 	 * Called by native code to update the score
 	 * 
@@ -334,7 +342,12 @@ public class Native
 	private void updateScore(int score)
 	{
 		if (score >= 0)
-			callbackUpdateScore.onSucces(score);
+		{
+			//FIXME: Gerd - dooes not seem to update GameView.score!
+			//callbackUpdateScore.onSucces(score);
+			Log.i("l77callback", "scores now " + score);
+			scores_percent = score > scores_max ? 0.0f : (1.0f - (float)score / scores_max);
+		}
 		else
 			callbackUpdateScore.onFailure(new Throwable("Native code sent negative score: " + score));
 	}
