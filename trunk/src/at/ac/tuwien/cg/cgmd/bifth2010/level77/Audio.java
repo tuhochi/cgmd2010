@@ -147,22 +147,23 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 	 */
 	public void playSound(int soundid, boolean stopSound)
 	{
-		Log.d(TAG, "Start playback of soundid " + soundid);
-
+		
 		MediaPlayer mp = mps.get(soundid);
 
-		if (mp != null)
+		if (sessionState.isMusicAndSoundOn() && mp != null)
 			if (mp.isPlaying() && stopSound && !mpBlocked.get(mp))
 			{
 				mpBlocked.put(mp, true);
 				mp.stop();
 				mp.prepareAsync();
+				Log.d(TAG, "Playback after stop of sound " + soundid + " started");
 			} else if (!mp.isPlaying())
-			{
+			{				
 				mp.start();
+				Log.d(TAG, "Playback of sound " + soundid + " started");
 			} else
 				Log.e(TAG, "Error MediaPlayer is NULL");
-		Log.d(TAG, "Playback of soundid " + soundid + " started");
+		
 			
 	}
 

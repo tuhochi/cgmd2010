@@ -8,7 +8,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level77;
  */
 public class Log
 {
-	private static boolean	enabled	= false;
+	private static boolean	enabled	= true;
 
 	/**
 	 * @see android.util.Log#d(String, String)
