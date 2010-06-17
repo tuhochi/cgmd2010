@@ -76,7 +76,7 @@ public class BlockRenderer implements Renderer
 		gl.glPushMatrix();
 
 		gl.glTranslatef(6.5f, 0.0f, 5.0f);
-		coinBar.draw(percent);
+		coinBar.draw( jni.getScoresPercent() );
 		gl.glColor4f(1, 1, 1, 1);
 		gl.glTranslatef(0.5f, 0.25f, 0);
 		clock.draw(gl);

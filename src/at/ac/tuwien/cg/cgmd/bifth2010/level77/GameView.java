@@ -21,7 +21,7 @@ public class GameView extends GLSurfaceView
 	Native							jni;
 	Audio							audio;
 	private long					startTime;
-	private int						score;
+	public int						score;
 
 	/**
 	 * @return the score
@@ -178,5 +178,6 @@ public class GameView extends GLSurfaceView
 	private void updateScore(int score)
 	{
 		this.score = score;
+		Log.i("l77callback", "scores now "+ score);
 	}
 }
