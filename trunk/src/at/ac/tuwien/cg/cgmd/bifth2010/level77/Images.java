@@ -34,10 +34,7 @@ public class Images
 	{
 		loadBitmap(R.drawable.l77_multi_blocks, "l77_multi_blocks.png");
 		loadBitmap(R.drawable.l77_paused, "l77_paused.png");
-		loadBitmap(R.drawable.l77_grey_box, "l77_grey_box.png");
-		loadBitmap(R.drawable.l77_grey_bar, "l77_grey_bar.png");
-		
-		
+		loadBitmap(R.drawable.l77_grey_box, "l77_grey_box.png");		
 	}
 	
 	/**
