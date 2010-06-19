@@ -64,6 +64,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 	private float perCentDiscovered;
 	private boolean drawing;
 	
+	private float[] projectionMatrix;
+	private float[] modelViewMatrix;
+	
     public GameRenderer(boolean useTranslucentBackground, Context context, int initRandNumber) {
         this.mTranslucentBackground = useTranslucentBackground;
         this.context = context;
@@ -72,6 +75,8 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         this.hittedPoints = new HashMap<String, float[]>();
         this.perCentDiscovered = 0f;
         this.drawing = true;
+        this.projectionMatrix = new float[16];
+        this.modelViewMatrix = new float[16];
         //this.cam = new Camera();
        	//this.cam.lookAt(0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
        
@@ -252,9 +257,9 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 
     
     public float[] getRubberArea() {
-    	//Log.d("++++++", "++++++");
     	float[] model = getMatrix(GL_MODELVIEW);
     	float[] project = getMatrix(GL_PROJECTION);
+    	
     	int[] view = new int[4];
     	view[0] = 0;
     	view[1] = 0;
@@ -277,12 +282,17 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     	//Log.d("xxxxxxxxx", objCoords[0]+" "+objCoords[1]+" "+objCoords[2]);
     	//Log.d("------", "-------");
     	//float[] winCoords = new float[3];
-    	float[] coords_X_Y = project(-5.0f, -5.0f, -0.2f, model, 0, project, 0, view, 0);
+    	
+    	//float[] coords_X_Y = project(-5.0f, -5.0f, -0.2f, model, 0, project, 0, view, 0);
+    	float[] coords_X_Y = project(-5.0f, -5.0f, -0.2f, this.modelViewMatrix, 0, this.projectionMatrix, 0, view, 0);
+    	
 //    	project(-5.0f, +5.0f, -0.2f, model, 0, project, 0, view, 0, winCoords, 0);
 //    	float[] coords_XY = winCoords;
 //    	project(+5.0f, -5.0f, -0.2f, model, 0, project, 0, view, 0, winCoords, 0);
 //    	float[] coordsX_Y = winCoords;
-    	float[] coordsXY = project(+5.0f, +5.0f, -0.2f, model, 0, project, 0, view, 0);
+    	
+    	//float[] coordsXY = project(+5.0f, +5.0f, -0.2f, model, 0, project, 0, view, 0);
+    	float[] coordsXY = project(+5.0f, +5.0f, -0.2f, this.modelViewMatrix, 0, this.projectionMatrix, 0, view, 0);
     	
     	float[] field = new float[4]; //minXminY,maxXmaxY Paar
     	//Log.d("++++++++", coords_X_Y[0]+" "+coordsXY[0]);
@@ -381,6 +391,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 	    int oesMode;
 	    switch (mMatrixMode) {
 	    case GL_MODELVIEW:
+	    	//Log.d("IIIII", ""+GL11.GL_MODELVIEW_MATRIX_FLOAT_AS_INT_BITS_OES);
 	        oesMode = GL11.GL_MODELVIEW_MATRIX_FLOAT_AS_INT_BITS_OES;
 	        break;
 	    case GL_PROJECTION:
@@ -401,9 +412,15 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 	    }
 	    
 	    glGetIntegerv(oesMode, mByteBuffer.asIntBuffer());
-//	    Log.d("-------", "FloatBufferOutput:");
+	    
+//	    if (mMatrixMode == GL_MODELVIEW) {
+//	    	Log.d("-------", "ModelMatrix ");
+//	    }
+//	    if (mMatrixMode == GL_PROJECTION) {
+//	    	Log.d("-------", "ProjectionMatrix");
+//	    }
 	    for(int i = 0; i < 16; i++) {
-//	    	Log.d("#######", ""+mFloatBuffer.get(i));
+	    	//Log.d("#######", ""+mFloatBuffer.get(i));
 	        mCurrent[i] = mFloatBuffer.get(i);
 	    }
 	    return mCurrent;
@@ -476,7 +493,14 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //Camera
         //glMultMatrixf(this.cam.getMatrix().getArray(), 0);
         gluLookAt(gl, 0, 0, -20, 0, 0, 0, 0, 1, 0  ); 
-//        getMatrix(GL_MODELVIEW);    
+//        getMatrix(GL_MODELVIEW);
+        Matrix.setIdentityM(this.modelViewMatrix, 0);
+        this.modelViewMatrix[0] = -1.0f;
+        this.modelViewMatrix[5] = 1.0f;
+        this.modelViewMatrix[10] = -1.0f;
+        this.modelViewMatrix[14] = -20.0f;
+        this.modelViewMatrix[15] = 1.0f;
+        
      
         gl.glBlendFunc(GL_ONE, GL_ZERO);
 
@@ -563,8 +587,6 @@ public class GameRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-    	
-    	
     	glViewport(0, 0, width, height);
     	viewWidth = width;
     	viewHeight = height;
@@ -588,14 +610,30 @@ public class GameRenderer implements GLSurfaceView.Renderer {
           * each time we draw, but usually a new projection needs to
           * be set when the viewport is resized.
           */
-        float ratio = (float) width / height;
+        float ratio = (float) width / (float) height;
         //this.showNotification("Width: "+width + " Height: "+height + " Ratio: "+ratio);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         
         //gl.glFrustumf(-ratio, ratio, -1, 1, 1, 10);
         gluPerspective(gl, 45.0f, ratio, 0.9f, 100.0f);
-        //gluOrtho2D(gl, -100.0f, 100.0f, -100.0f/ratio, 100.0f/ratio);      
+        //gluOrtho2D(gl, -100.0f, 100.0f, -100.0f/ratio, 100.0f/ratio);
+        Matrix.setIdentityM(this.projectionMatrix, 0);
+        if (ratio < 1) {
+	        this.projectionMatrix[0] = 3.244096f;
+	        this.projectionMatrix[5] = 2.4142134f;
+	        this.projectionMatrix[10] = -1.0181636f;
+	        this.projectionMatrix[11] = -1.0f;
+	        this.projectionMatrix[14] = -1.8163472f;
+	        this.projectionMatrix[15] = 0.0f;
+        } else {
+	        this.projectionMatrix[0] = 1.357995f;
+	        this.projectionMatrix[5] = 2.4142134f;
+	        this.projectionMatrix[10] = -1.0181636f;
+	        this.projectionMatrix[11] = -1.0f;
+	        this.projectionMatrix[14] = -1.8163472f;
+	        this.projectionMatrix[15] = 0.0f;
+        }
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
