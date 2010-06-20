@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="l36_help_header">Poor Rubber</string>
-<string name="l36_help_text1">Zwanghaftes Spielen, umgangssprachlich auch als Spielsucht bezeichnet, wird durch die Unfähigkeit eines Betroffenen gekennzeichnet, dem Impuls zum Glücksspiel oder Wetten zu widerstehen, auch wenn dies gravierende Folgen nach sich zu ziehen droht. Der Betroffene verspielt oft sein ganzes Vermögen und steht am Ende ohne jeden Gewinn da. </string>
-<string name="l36_help_text2">Das Schicksal des bedauernswerten Spielers ist es, ein Rubbellos nach dem anderen mithilfe eines Fingers am Touchscreen freizurubbeln. Das Spiel endet, wenn das ganze Geld verspiel wurde oder die Zeit abgelaufen ist.</string>
-<string name="l36_help_text3">Oben siehst du die verbleibende Zeit in der Mitte und rechts die Münzen, die übrig sind. Es ist immer eine einstellige Zahl zum freirubbeln!</string>
+<string name="l36_help_text1">Gaming can be real problem. With this game it is the same. The user cannot stop playing and is loosing money until there is nothing left.</string>
+<string name="l36_help_text2">The aim is to start rubbing with your finger on the touchscreen and revealing the amount of coins the gamer is loosing. The gamer can loose money until the time is over or no money is left.</string>
+<string name="l36_help_text3">On the top of the screen an information area is shown - in the middle the gamer can see the time and on the right the amount of money is shown. Only coins between 0-10 can be lost.</string>
 
 
 <string name="l36_GameName">Rubbel dich arm</string>

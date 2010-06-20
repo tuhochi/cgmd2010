@@ -97,7 +97,7 @@ public class GameLogic extends Thread {
 		}
 		this.gv.getGameRenderer().disableDrawing();
 		this.gv.disableSound();
-		this.notificationText = "Ihr Score: "+this.coins;
+		this.notificationText = "Ihr Score: "+(100-this.coins);
 		this.handler.sendEmptyMessage(2);
 		startTimer(5000L);
 		while (this.getActualCounter() >= 0L) {
