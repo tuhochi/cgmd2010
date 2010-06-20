@@ -373,7 +373,7 @@ public class GameRenderer implements GLSurfaceView.Renderer {
 ////		Log.d("RATIO:", ""+perCentDiscovered);
 ////    	Log.d("HittedPoints:", ""+getNumOfHittedPoints());
 ////    	Log.d("NumOfTexels:", ""+getNumOfTexels());
-    	if (perCentDiscovered > 0.036f) {
+    	if (perCentDiscovered > 0.10f) {
 //    		//Log.d("JUHUJUHUJUHU", "---------");
     		return true;
     	} else {
@@ -452,20 +452,24 @@ public class GameRenderer implements GLSurfaceView.Renderer {
         //gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBindTexture(GL_TEXTURE_2D, this.texId);
         
-        if ((xPos+5) > bitmap1.getHeight()) 
-        	xPos = xPos-5;
-        if ((xPos-5) < 0)
-        	xPos = xPos+5;
-        if ((yPos+5) > bitmap1.getWidth())
-        	yPos = yPos-5;
-        if ((yPos-5) < 0)
-        	yPos = yPos+5;
+        if ((xPos+15) > bitmap1.getHeight()) 
+        	xPos = xPos-15;
+        if ((xPos-15) < 0)
+        	xPos = xPos+15;
+        if ((yPos+15) > bitmap1.getWidth())
+        	yPos = yPos-15;
+        if ((yPos-15) < 0)
+        	yPos = yPos+15;
         
-        for (int i = xPos-5; i < xPos+5; i++) {
-        	for (int j = yPos-5; j < yPos+5; j++) {
-        		String hittedPoint = i+"_"+j;
+        for (int i = xPos-15; i < xPos+15; i++) {
+        	for (int j = yPos-15; j < yPos+15; j++) {
+         		String hittedPoint = i+"_"+j;
         		if(!this.hittedPoints.containsKey(hittedPoint))
-        			bitmap1.setPixel(i, j, Color.argb(0, 0, 0, 0));
+        			try {
+        				bitmap1.setPixel(i, j, Color.argb(0, 0, 0, 0));
+        			} catch (Exception e) {
+        				
+        			}
         		setHittedPoint(i, j); //Zur Berechnung wie viel aufgedeckt ist
         	}
         }

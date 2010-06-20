@@ -216,7 +216,7 @@ public class LevelActivity extends Activity {
 	public void quit ()
 	{
 		SessionState quitState = new SessionState();
-		quitState.setProgress( this.gl.getCoins() );
+		quitState.setProgress( 100-this.gl.getCoins() );
 		setResult(Activity.RESULT_OK, quitState.asIntent());
 		//this.sm.stopPlayer();
 		this.finish();
