@@ -413,6 +413,7 @@ public class DecorationManager
 		clouds.clear();
 		generateRandomCloudPosition();
 		mountainPositionY = -RenderView.instance.getTopBounds()/4f;
+		mountainMoveDir=1;
 		treePositionY = 0f;
 		mountainTexture = TextureAtlas.instance.getMountainTextur();
 		mountainDelay = 400;
