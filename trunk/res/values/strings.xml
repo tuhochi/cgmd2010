@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="l00_nameofthegame_full">The Big Incredible and Funny Treasure Hunt 2.0 with 30% more Fun - For Free</string>
+    <string name="l00_nameofthegame_full">The Big Incredible and Funny Inverse Treasure Hunt 2.0 with 30% more Fun - For Free</string>
     
     <string name="l00_error_audio">"Audio replay is currently not working. Restarting the game or phone might help."</string>
   
@@ -8,17 +8,33 @@
     <string name="l00_help_part02">To lose part of your treasure play the level of your choice by pressing its icon. Levels that are marked with a question mark cannot be played yet. </string>
     <string name="l00_help_part01">Choose one of the menu items to continue the last game, to start a new game, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to lose your treasure.</string>
     
-    <string name="l00_nameofthegame_middle">The Big Incredible and Funny Treasure Hunt</string><string name="l00_nameofthegame_short">BIFTH</string><string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string><string name="l01_hello">Level01 Hello World </string>
+    <string name="l00_nameofthegame_middle">The Big Incredible and Funny Inverse Treasure Hunt</string><string name="l00_nameofthegame_short">BIFTH</string><string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string><string name="l01_hello">Level01 Hello World </string>
     <string name="l00_about_01">"was created by students at"</string>
-    <string name="l00_about_02">"Vienna University of Technology."</string>
-    <string name="l00_about_03">"TODO TODO TODO TODO TODO TODO"</string>
-    <string name="l00_about_04">"TODO TODO TODO TODO TODO TODO"</string>
-    <string name="l00_about_05">"TODO TODO TODO TODO TODO TODO"</string>
-    <string name="l00_about_06">"TODO TODO TODO TODO TODO TODO"</string>
-    <string name="l00_about_07">"TODO TODO TODO TODO TODO TODO"</string>
-    <string name="l00_about_08">"TODO TODO TODO TODO TODO TODO"</string>
-    <string name="l00_about_09">"TODO TODO TODO TODO TODO TODO"</string>
-    <string name="l00_about_10">"For credits press menu"</string>
+    <string name="l00_about_02">"Vienna University of Technology, Austria:"</string>
+    <string name="l00_about_03">Albors Askari, Felix Fleiß,</string>
+    <string name="l00_about_04">Markus Töpfer, Johannes Sorger,</string>
+    <string name="l00_about_05">Arthur Oberhauser, Sebastian Sippl,</string>
+    <string name="l00_about_06">Johannes Scharl, Matthias Maschek,</string>
+    <string name="l00_about_07">Ferdinand Pilz, Reinhard Sprung,</string>
+    <string name="l00_about_08">Michal Domanski,</string>
+    <string name="l00_about_09">Markus Ernst, Florian Felberbauer,</string> 
+    <string name="l00_about_10">Markus Lipp,</string>
+    <string name="l00_about_11">Christoph Fuchs, Roman Hochstöger,</string> 
+    <string name="l00_about_12">Christian Tomaschitz,</string>
+    <string name="l00_about_13">Alex Druml, Lukas Rössler,</string>
+    <string name="l00_about_14">Thomas Perl, Matthias Tretter,</string>
+    <string name="l00_about_15">Michael Benda, Alexander Fritz,</string>
+    <string name="l00_about_16">Wolfgang Knecht, Martin Knecht,</string>
+    <string name="l00_about_17">Tiare Feuchtner, Martin Schenk,</string>
+    <string name="l00_about_18">Dominic Windisch, Martin Brachmann,</string>
+    <string name="l00_about_19">Winklhofer Christoph,</string>
+    <string name="l00_about_20">Gerd Katzenbeisser, Mike Vasiljevs,</string>
+    <string name="l00_about_21">Thomas Schulz, Manuel Keglevic,</string>
+    <string name="l00_about_22">Gerald Sollböck, Georg Molzer,</string>
+    <string name="l00_about_23">Ingo Radax, Michael Asperger,</string>
+    <string name="l00_about_24">Michael Hanzl, Peter Rautek.</string>
+    
+    <string name="l00_about_25">"For credits press menu"</string>
     
     <string name="l00_help_01">that\'s you</string>
     <string name="l00_help_02">not allowed level</string>
@@ -58,7 +74,7 @@
     <string name="l00_menu_01">"Music is on now."</string>
     <string name="l00_menu_02">"Music is off now."</string>
 
-    <string name="l00_menu_03">Continue Game</string>
+    <string name="l00_menu_03">Play!</string>
     <string name="l00_menu_04">New Game</string>
     <string name="l00_menu_05">Help</string>
     <string name="l00_menu_06">About</string>

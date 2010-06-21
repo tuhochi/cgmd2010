@@ -76,6 +76,60 @@ public static int getLevelIconResource(int id) {
 		//shouldn't occur
 		return R.drawable.l00_levelicon_start;
 	}
+
+
+
+public static int getLevelTitleResource(int id) {
+	switch(id){
+	case 0:
+		return R.string.l00_nameofthegame_short;
+	case 11:
+		return R.string.l11_title;
+	case 12:
+		return R.string.l12_title;
+	case 13:
+		return R.string.l13_GameName;
+	case 17:
+		return R.string.l17_nameofthegame_full;
+	case 20:
+		return R.string.l20_help_head;
+	case 22:
+		return R.string.L22HelpTitle;
+	case 23:
+		return R.string.l23_nameofthegame_full;
+	case 30:
+		return R.string.l30_nameofthegame_full;
+	case 33:
+		return R.string.l33_help_headline;
+	case 36:
+		return R.string.l36_help_header;
+	case 42:
+		return R.string.l42_nameofthegame_full;
+	case 44:
+		return R.string.l44_GameName;
+	case 50:
+		return R.string.l50_GameName;
+	case 55:
+		return R.string.l55_HelpTitle;
+	case 60:
+		return R.string.l60_HelpActivity_Title;
+	case 66:
+		return R.string.l66_help_title;
+	case 70:
+		return R.string.l70_GameName;
+	case 77:
+		return R.string.l77_title;
+	case 83:
+		return R.string.l83_title;
+	case 84:
+		return R.string.l84_help_title;
+	case 88:
+		return R.string.l88_help_title;
+		
+	}
+	//shouldn't occur
+	return R.string.l00_nameofthegame_short;
+}
 	
 	public static String[] LEVELIDS = {
 		"11", "12", "13", "17", "20", "22", "23", "30", "33", "36", "42", 

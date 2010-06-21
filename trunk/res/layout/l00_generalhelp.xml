@@ -1,27 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content"
-	android:orientation="vertical" android:layout_width="fill_parent">
-	
-	<ScrollView android:layout_height="wrap_content" android:padding="10px" android:background="@drawable/l00_menuebackground" android:layout_width="fill_parent">
-		<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical"><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/l00_buttonBackground" android:text="@string/l00_help_part01" android:id="@+id/l00_TextViewHelp01"></TextView><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center_horizontal" android:layout_margin="10dip"><ImageView android:id="@+id/ImageView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_red" android:layout_gravity="center_horizontal"></ImageView>
-<TextView android:id="@+id/TextView03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/l00_buttonBackground" android:text="@string/l00_help_01"></TextView>
-</LinearLayout><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_TextViewHelp02" android:textColor="@color/l00_buttonBackground" android:text="@string/l00_help_part02"></TextView>
-<LinearLayout android:id="@+id/LinearLayout02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center_horizontal" android:layout_margin="10dip"><ImageView android:id="@+id/ImageView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:background="@drawable/l00_levelicon_questionmark"></ImageView><TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/l00_buttonBackground" android:layout_gravity="center_horizontal" android:text="@string/l00_help_02"></TextView>
-</LinearLayout>
+	android:layout_height="wrap_content" android:orientation="vertical"
+	android:layout_width="fill_parent">
+
+	<ScrollView android:layout_height="wrap_content"
+		android:padding="10px" android:background="@drawable/l00_menuebackground"
+		android:layout_width="fill_parent">
+		<LinearLayout android:id="@+id/LinearLayout01"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical">
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:textColor="@color/l00_buttonBackground"
+				android:text="@string/l00_help_part01" android:id="@+id/l00_TextViewHelp01"></TextView>
+			<LinearLayout android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:orientation="vertical"
+				android:layout_gravity="center_horizontal" android:layout_margin="10dip">
+				<ImageView android:id="@+id/ImageView02"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:background="@drawable/l00_red" android:layout_gravity="center_horizontal"></ImageView>
+				<TextView android:id="@+id/TextView03"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="@color/l00_buttonBackground" android:text="@string/l00_help_01"></TextView>
+			</LinearLayout>
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/l00_TextViewHelp02"
+				android:textColor="@color/l00_buttonBackground" android:text="@string/l00_help_part02"></TextView>
+			<LinearLayout android:id="@+id/LinearLayout02"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:orientation="vertical" android:layout_gravity="center_horizontal"
+				android:layout_margin="10dip">
+				<ImageView android:id="@+id/ImageView01"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal" android:background="@drawable/l00_levelicon_questionmark"></ImageView>
+				<TextView android:id="@+id/TextView01"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:textColor="@color/l00_buttonBackground"
+					android:layout_gravity="center_horizontal" android:text="@string/l00_help_02"></TextView>
+			</LinearLayout>
 
 
-<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/l00_buttonBackground" android:text="@string/l00_help_part03"></TextView><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center_horizontal"><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_margin="15dip">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
-</LinearLayout><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_margin="15dip">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
-</LinearLayout><LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_margin="15dip">
-<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin"></ImageView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="The Super Duper Test Level" android:textColor="@color/l00_buttonBackground"></TextView>
-</LinearLayout></LinearLayout>
-</LinearLayout>
-	
+			<TextView android:id="@+id/TextView02" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:textColor="@color/l00_buttonBackground"
+				android:text="@string/l00_help_part03"></TextView>
+			<LinearLayout android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:orientation="vertical"
+				android:layout_gravity="center_horizontal" android:id="@+id/l00_LinearLayoutHelp_AllLevels">
+			</LinearLayout>
+		</LinearLayout>
 
-</ScrollView>
+
+	</ScrollView>
 
 
 

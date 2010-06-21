@@ -10,7 +10,22 @@
 		* license: the used license 
 		* acknowledgement: the text that the author requires to be printed
 	-->
+	
 <credits>
+	
+<credit type="texture" author="Luis Olavarria" 
+	url="http://www.deviantart.com" 
+	usage="icon" 
+	license="CC" 
+	name="Dead rabbits everywhere">
+</credit>
+
+
+<credit type="music" author="David Kostenwein" 
+	name="backgroud loops"
+	usage="background music" 
+	license="CC" >
+</credit>
 
 <!--  level 13 -->
 <credit type="music" author="harri" 
@@ -121,6 +136,8 @@
 	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
 	usage="map texture" license="CC" />
 
+
+
 <!-- Level 30 -->	
 <credit type="sound" author="pierrecartoons1979" 
 	url="http://www.freesound.org/samplesViewSingle.php?id=88774" 
@@ -198,7 +215,7 @@
 	usage="l33 - spring" license="CC" />
 	
 <credit type="3D model" name="White Rabbit" author="artist-3d.com"
-	url="http://artist-3d.com/free_3d_models/dnm/model_disp.php?uid=1825&ad=&op=op"
+	url="http://artist-3d.com/free_3d_models/dnm/model_disp.php?uid=1825&amp;ad=&amp;op=op"
 	usage="l33 - Character" license="CC" />
 
 <credit type="texture" name="Sunburnt" author="pareeerica" 
