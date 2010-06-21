@@ -19,6 +19,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -739,6 +741,22 @@ public class MapActivity extends Activity implements ShakeListener {
 		mUiUpdateHandler.sendEmptyMessage(MESSAGE_UPDATE_UI);
 		storeGameState();
 	}
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 0, 0, getResources().getString(R.string.l00_menu_05));
+	    return true;
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		if(featureId==0){
+			Intent intentHelp = new Intent(getApplicationContext(), HelpActivity.class);
+			startActivity(intentHelp);
+		    
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
+
 
 
 }

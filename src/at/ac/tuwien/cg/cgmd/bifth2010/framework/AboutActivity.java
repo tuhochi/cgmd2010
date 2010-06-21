@@ -228,7 +228,7 @@ public class AboutActivity extends Activity {
 			p.setTextSize(24);
 			p.setTextAlign(Align.CENTER);
 			
-			String[] s1 = new String[14];
+			String[] s1 = new String[29];
 			s1[0]= getResources().getString(R.string.l00_nameofthegame_middle);
 			s1[1]= getResources().getString(R.string.l00_about_01);
 			s1[2]= getResources().getString(R.string.l00_about_02);
@@ -240,9 +240,24 @@ public class AboutActivity extends Activity {
 			s1[8]= getResources().getString(R.string.l00_about_07);
 			s1[9]= getResources().getString(R.string.l00_about_08);
 			s1[10]= getResources().getString(R.string.l00_about_09);
-			s1[11]="";
-			s1[12]= getResources().getString(R.string.l00_about_10);
-			s1[13]="";
+			s1[11]= getResources().getString(R.string.l00_about_10);
+			s1[12]= getResources().getString(R.string.l00_about_11);
+			s1[13]= getResources().getString(R.string.l00_about_12);
+			s1[14]= getResources().getString(R.string.l00_about_13);
+			s1[15]= getResources().getString(R.string.l00_about_14);
+			s1[16]= getResources().getString(R.string.l00_about_15);
+			s1[17]= getResources().getString(R.string.l00_about_16);
+			s1[18]= getResources().getString(R.string.l00_about_17);
+			s1[19]= getResources().getString(R.string.l00_about_18);
+			s1[20]= getResources().getString(R.string.l00_about_19);
+			s1[21]= getResources().getString(R.string.l00_about_20);
+			s1[22]= getResources().getString(R.string.l00_about_21);
+			s1[23]= getResources().getString(R.string.l00_about_22);
+			s1[24]= getResources().getString(R.string.l00_about_23);
+			s1[25]= getResources().getString(R.string.l00_about_24);
+			s1[26]="";
+			s1[27]= getResources().getString(R.string.l00_about_25);
+			s1[28]="";
 			Label3D label = new Label3D(3.5f);
 			label.setText(gl, p, s1, 6);
 			mLabels.add(label);
