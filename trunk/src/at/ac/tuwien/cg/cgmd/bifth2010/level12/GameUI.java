@@ -3,6 +3,7 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level12;
 
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 import android.content.Context;
+import android.graphics.Color;
 
 import android.os.Handler;
 import android.view.Gravity;
@@ -87,12 +88,17 @@ public class GameUI extends LinearLayout implements OnClickListener{
 	    mIron = new TextView(context);
 	    mIron.setText(R.string.l12_iron);
 	    mIrontxt = new TextView(context);
+	    mIron.setTextColor(Color.rgb(255, 153, 0));
+		mIrontxt.setTextColor(Color.rgb(255, 153, 0));
+	    
 	    li.addView(mIron);
 	    li.addView(mIrontxt);
 	    
 	    mMoney = new TextView(context);
 	    mMoney.setText(R.string.l12_points);
 	    mMoneytxt = new TextView(context);
+	    mMoney.setTextColor(Color.rgb(255, 255, 10));
+	    mMoneytxt.setTextColor(Color.rgb(255, 255, 10));
 	    li.addView(mMoney);
 	    li.addView(mMoneytxt);
 	    
