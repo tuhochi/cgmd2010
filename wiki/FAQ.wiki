@@ -54,3 +54,10 @@ where #AVD_NAME# is the name of your emulator.
 == How do I solve the "Type Conversion to Dalvik format failed: Unable to execute dex:null" error? ==
 If you get that error permanently edit the eclipse.ini which is located at your Eclipse installation directory. Alter the values for the Java heap size: "-Xms256m
 -Xmx1024m". After that you have to restart Eclipse. (see [http://www.informatik-forum.at/showthread.php?80744-Type-Conversion-to-Dalvik-format-failed-Unable-to-execute-dex-null this thread] for more information)
+
+== How do I take a Screenshot of my OpenGL app (DDMS has vsync problems)? ==
+You can use the following method:
+
+at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.OGLManager.saveScreenshot(final int x, final int y, final int w, final int h, final OutputStream fos)
+
+x, y, w, h specify the window to snap in pixels, the screenshot will be written into fos, and fos will be closed.
