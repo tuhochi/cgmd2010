@@ -51,11 +51,8 @@ public class LevelActivity extends Activity
 		super.onCreate(savedInstanceState);
 
 		// TODO Show info Screen
-		showsInitScreen = true;
-		Intent i = new Intent("at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_INTRO");
-		this.startActivity(i);
-		Log.d(TAG, "Starting LevelActivity 77");
-		showsInitScreen = false;
+//		showsInitScreen = true;
+
 
 		setResult(RESULT_CANCELED);
 
@@ -85,6 +82,11 @@ public class LevelActivity extends Activity
 
 		setContentView(gameView);
 		gameView.requestFocus();
+		
+		Intent i = new Intent("at.ac.tuwien.cg.cgmd.bifth2010.level77.LAUNCH_INTRO");
+		this.startActivity(i);
+		Log.d(TAG, "Starting LevelActivity 77");
+		showsInitScreen = false;
 	}
 
 	/**
@@ -143,12 +145,4 @@ public class LevelActivity extends Activity
 		setResult(RESULT_CANCELED);
 		Log.i("l77_state", "**stop activity");
 	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
-		newConfig.orientation = Configuration.ORIENTATION_PORTRAIT;
-		super.onConfigurationChanged(newConfig);
-	}
-
 }

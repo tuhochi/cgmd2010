@@ -46,6 +46,7 @@ public class GameView extends GLSurfaceView
 	{
 		super(context);
 		audio = new Audio(context, sessionState);
+
 		Callback<Integer> updateScore = new Callback<Integer>()
 		{
 
@@ -100,7 +101,7 @@ public class GameView extends GLSurfaceView
 		super.onPause();
 		SharedPreferences.Editor ed = sharedPreferences.edit();
 		String state = jni.nativeGetSavedState();
-		audio.stopAllSounds();
+		//audio.stopAllSounds();
 		Log.i(TAG + " onPause", "Length of serialized game data: " + state.length());
 		// this does not work in java: if (state != "")
 		if (state.length() != 0)
@@ -120,6 +121,7 @@ public class GameView extends GLSurfaceView
 	public void onResume(SharedPreferences sharedPreferences)
 	{
 		super.onResume();
+		audio.resumePausedSaunds();
 		score = sharedPreferences.getInt("score", 0);
 		String state = sharedPreferences.getString("native", "");
 		Log.v(TAG, "*received from native state length " + state.length());
