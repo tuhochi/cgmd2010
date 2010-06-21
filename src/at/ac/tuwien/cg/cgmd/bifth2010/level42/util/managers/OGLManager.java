@@ -2,9 +2,9 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers;
 
 import static android.opengl.GLES10.*;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.Buffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import android.graphics.Bitmap;
@@ -24,37 +24,39 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level42.util.datastructures.Triple;
  */
 public class OGLManager
 {
+	static
+	{
+		System.loadLibrary("l42signanzorbit");
+	}
+	
 	/** The Constant instance. */
 	public static final OGLManager instance = new OGLManager();
 
-	/** whether the vertex client state is set */
+	/** whether the vertex client state is set. */
 	private boolean clientStateVertices;
 	
-	/** whether the normal client state is set */
+	/** whether the normal client state is set. */
 	private boolean clientStateNormals;
 	
-	/** whether the texcoord client state is set */
+	/** whether the texcoord client state is set. */
 	private boolean clientStateTexcoords;
 	
-	/** 
-	 * Pointers to the Buffers, along with their offsets (Second part of the Triple)
-	 * and their sizes in Bytes (Third part of the Triple)
-	 */
+	/** Pointers to the Buffers, along with their offsets (Second part of the Triple) and their sizes in Bytes (Third part of the Triple). */
 	private ArrayList<Triple<Integer, Integer, Buffer>> vboBuffers;
 	
-	/** holds the current vbo offset, needed during assembling of the vbo */
+	/** holds the current vbo offset, needed during assembling of the vbo. */
 	private int currentVBOoffset;
 	
-	/** The VBO's id */
+	/** The VBO's id. */
 	private int vbo;
 
-	/** The modelview matrix */
+	/** The modelview matrix. */
 	private Matrix44 modelview;
 	
-	/** The projection matrix */
+	/** The projection matrix. */
 	private Matrix44 projection;
 	
-	/** The viewport as returned by glViewport */
+	/** The viewport as returned by glViewport. */
 	private int[] viewport;
 
 	//temp vars for unproject
@@ -109,6 +111,10 @@ public class OGLManager
 	/**
 	 * adds a buffer to the vbo, the buffer will be compiled
 	 * into the vbo as soon as compileVBO is called.
+	 *
+	 * @param buffer the buffer
+	 * @param bytes the bytes
+	 * @return the int
 	 */
 	public int addBufferToVBO(Buffer buffer, int bytes)
 	{
@@ -119,7 +125,7 @@ public class OGLManager
 	}
 	
 	/**
-	 * Compiles all added Buffers into a single VBO
+	 * Compiles all added Buffers into a single VBO.
 	 */
 	public void init()
 	{
@@ -142,6 +148,9 @@ public class OGLManager
 		}
 	}
 	
+	/**
+	 * De init.
+	 */
 	public void deInit()
 	{
 		GLES11.glDeleteBuffers(1, new int[]{vbo}, 0);
@@ -149,7 +158,7 @@ public class OGLManager
 	}
 	
 	/**
-	 * sets Client states, minimizes state changes
+	 * sets Client states, minimizes state changes.
 	 *
 	 * @param vertices whether the vertex client state should be enabled
 	 * @param normals whether the normal client state should be enabled
@@ -304,62 +313,75 @@ public class OGLManager
         return unprojectedPosVec;
 	}
 	
+	/**
+	 * Save screenshot.
+	 *
+	 * @param fos the fos
+	 */
 	public void saveScreenshot(OutputStream fos)
 	{
 		saveScreenshot(viewport[0], viewport[1], viewport[2], viewport[3], fos);
 	}
 	
-	public static void saveScreenshot(int x, int y, int w, int h, OutputStream fos)
+	/**
+	 * Save screenshot natively.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param w the w
+	 * @param h the h
+	 * @param fos the fos
+	 */
+	public static void saveScreenshot(final int x, final int y, final int w, final int h, final OutputStream fos)
 	{
-		Bitmap bmp = getPixels(x,y,w,h);
-		try
+		final int[] pixels = getPixelsNative(x,y,w,h);
+		new Thread()
 		{
-			bmp.compress(CompressFormat.PNG, 100, fos);
-			fos.flush();
-		}
-		catch(Throwable t)
-		{
-			LogManager.eTag("ScreenShot","Saving PNG failed", t);
-		}
-	}
-
-	private static Bitmap getPixels(int x, int y, int w, int h)
-	{
-		int bitmap_ogl[] = new int[w*h];
-		for(int i=0; i<bitmap_ogl.length; i++)
-			bitmap_ogl[i] = -1;
-		int bitmap_android[] = new int[w*h];
-		IntBuffer bitmap_ogl_wrapper = IntBuffer.wrap(bitmap_ogl);
-		bitmap_ogl_wrapper.position(0);
-		
-		glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, bitmap_ogl_wrapper);
-		
-		/*
-		 * Pixelformat correction from OpenGLs ABGR to Android ARGB
-		 */
-		for(int i=0; i<h; i++)
-		{
-			for(int j=0; j<w; j++)
+			public void run()
 			{
-				int color_ABGR = bitmap_ogl[i*w+j];
-				
-				int alpha	= (color_ABGR >> 24) & 0xff;
-				int blue	= (color_ABGR >> 16) & 0xff;
-				int green	= (color_ABGR >>  8) & 0xff;
-				int red		= (color_ABGR >>  0) & 0xff;
-				
-				int color_ARGB =	((alpha	& 0xff) << 24) |
-									((red	& 0xff) << 16) |
-									((green	& 0xff) <<  8) |
-									((blue	& 0xff) <<  0);
-				
-				// Android starts in the upper left corner, OpenGL starts in the lower left corner..
-				bitmap_android[(h-i-1)*w+j] = color_ARGB;
-			}
-		}
-		
-		Bitmap sb = Bitmap.createBitmap(bitmap_android, w, h, Config.ARGB_8888);
-		
-		return sb;
+				Bitmap bmp = Bitmap.createBitmap(pixels, w, h, Config.ARGB_8888);
+				try
+				{
+					bmp.compress(CompressFormat.PNG, 100, fos);
+					fos.flush();
+				}
+				catch(Throwable t)
+				{
+					LogManager.eTag("ScreenShot","Saving PNG failed", t);
+				}
+				finally
+				{
+					try
+					{
+						fos.close();
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			};
+		}.start();
 	}
+	
+	/**
+	 * Gets the pixels.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @param w the w
+	 * @param h the h
+	 * @return the pixels
+	 */
+	private static native int[] getPixelsNative(int x, int y, int w, int h);
+	
+	/**
+	 * Convert an image from ABGR to ARGB.
+	 *
+	 * @param w the width of the image
+	 * @param h the height of the image
+	 * @param bitmap_ogl the bitmap in OpenGL ES format (ABGR)
+	 * @param bitmap_android the bitmap in Android format (ARGB) will be written into this
+	 */
+	public static native void convertPixelFormatABGRtoARGB(int w, int h, int[] bitmap_ogl, int[] bitmap_android);
 }
