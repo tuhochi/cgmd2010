@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import android.content.Context;
@@ -66,6 +67,7 @@ public class SoundManager {
 			AudioManager audioM = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 			volume = (float)audioM.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 			musicPlayer.setVolume(volume, volume);
+			musicPlayer.setLooping(true);	
 			return;
 		}
 		
@@ -74,8 +76,7 @@ public class SoundManager {
 		soundPool = new SoundPool(SOUNDS.values().length, AudioManager.STREAM_MUSIC, 100);
 		loadSounds(LevelActivity.instance);
 		
-		musicPlayer = MediaPlayer.create(context, R.raw.l20_music);
-		musicPlayer.setLooping(true);	
+		createMusicPlayer();
 							
 		isInit = true;
 	}
@@ -137,11 +138,37 @@ public class SoundManager {
 	 */
 	public void startMusic() {		
 		if (soundOn && musicPlayer != null && !musicPlayer.isPlaying())
-		{
+		{			
 			musicPlayer.start();
 		}
 	}
 	
+	
+	/**
+	 * Creates the media player object responsible for playing the background music.
+	 */
+	private void createMusicPlayer() {
+		if(null != musicPlayer) musicPlayer.reset();		
+		Context context = (Context)LevelActivity.instance;
+		musicPlayer = MediaPlayer.create(context, R.raw.l20_music);
+		musicPlayer.setOnErrorListener(new MyErrorListener());
+		// Get the calling intent & the session state
+		Intent callingIntent = LevelActivity.instance.getIntent();
+		SessionState state = new SessionState(callingIntent.getExtras());
+		
+		if (state != null) {
+			soundOn = state.isMusicAndSoundOn(); 
+		}		
+		
+		AudioManager audioM = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+		volume = (float)audioM.getStreamVolume(AudioManager.STREAM_MUSIC)/(float)audioM.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		musicPlayer.setVolume(volume, volume);
+		musicPlayer.setLooping(true);	
+		
+		
+	}
+
+
 	/**
 	 * Pauses the MediaPlayer which plays the background music.
 	 */
@@ -163,8 +190,19 @@ public class SoundManager {
 	 * Stops the MediaPlayer which plays the background music.
 	 */
 	public void stopMusic() {		
-		if(musicPlayer != null)
-			musicPlayer.stop();		
+		if(musicPlayer != null) {
+			musicPlayer.stop();
+			
+			try {
+				musicPlayer.prepare();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}	
 
 	
@@ -185,5 +223,15 @@ public class SoundManager {
 		soundPool.release();
 		sounds.clear();
 		isInit = false;
+	}
+	
+	private class MyErrorListener implements OnErrorListener {
+
+		@Override
+		public boolean onError(MediaPlayer arg0, int arg1, int arg2) {
+
+			return false;
+		}		
+		
 	}
 }

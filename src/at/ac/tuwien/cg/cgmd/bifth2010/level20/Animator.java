@@ -13,13 +13,12 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level11.Vector2;
  */
 public abstract class Animator {
 	
-	// This counter increases by 1 every time a new animator is created. 
+	/** Counts the number of created Animators and is assigned as ID. */
 	protected static int count = 0;
-
+	/** The unique Id of the Animator. */
 	protected int id;
-	protected RenderEntity re;
-	
-	
+	/** The RenderEntity the Animator controlls. */
+	protected RenderEntity re;	
 	
 	/**
 	 * @param re

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package at.ac.tuwien.cg.cgmd.bifth2010.level20;
 
 import java.util.LinkedList;
@@ -17,14 +14,23 @@ import java.util.ListIterator;
  */
 public class EventManager {
 	
+	/** Event dispatched when an Animator finished its animation. */
 	public static final int ANIMATION_COMPLETE = 1;
+	/** Event dispatched when a product was collected. */
 	public static final int PRODUCT_COLLECTED = 2;
+	/** Event dispatched when a new shopping cart was picked up. */
 	public static final int SHOPPING_CART_COLLECTED = 3;
+	/** Event dispatched when the bunny crashed into an obstacle. */
 	public static final int OBSTACLE_CRASH = 4;
+	/** Event dispatched when the bunny continues running after a crash. */
 	public static final int BUNNY_RUN = 5;
+	/** Event dispatched when an obstacle was avoided. */
 	public static final int OBSTACLE_AVOIDED = 6;	
+	/** Event dispatched when a product fell into the shopping cart. */
 	public static final int PRODUCT_HIT_CART = 7;	
+	/** Event dispatched when a quantity of a product requiring a discount was collected. */
 	public static final int DISCOUNT_ACQUIRED = 8;	
+	/** Event dispatched when the bunny is at its most left position. */
 	public static final int BUNNY_MOST_LEFT = 9;
 	
 	/**
