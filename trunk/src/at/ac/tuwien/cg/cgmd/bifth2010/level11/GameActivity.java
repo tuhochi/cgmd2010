@@ -316,7 +316,7 @@ public class GameActivity extends Activity {
 	public void updateText(){
 		if(_level._isStarted){
 			if(!_level._isFinished){
-				_textTreasure.setText(Integer.toString(Math.round(_level.getGrabbedTreasureValue())));
+				_textTreasure.setText(Integer.toString((int)(_level.getGrabbedTreasureValue())));
 				_textTimeLeft.setText(Float.toString(Math.round(_level.getRemainigTime()*10.0f)/10.0f));
 			}
 		}

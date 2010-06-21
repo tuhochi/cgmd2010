@@ -233,14 +233,15 @@ public class Pedestrian implements Target{
 	public void update(float time, float deltaTime) {
 		if(bounceVector.length()>0.0000001){
 			//System.out.println("bounce");
+			temp.set(bounceVector.x, bounceVector.y);
+			temp.mult(deltaTime);
+			position.add(temp);
+			
 			bounceDeltaTime += deltaTime;
 			while(bounceDeltaTime > 0.01){
 				bounceVector.mult((float)(1/Math.pow((1+bounceDeltaTime),2)));
 				bounceDeltaTime -= 0.01;
 			}
-			temp.set(bounceVector.x, bounceVector.y);
-			temp.mult(deltaTime);
-			position.add(temp);
 			
 			legs.update(position, angle, 0.0f);
 			arms.update(position, angle, (float)(Math.sin(time*moveSpeed*10.0f)));
