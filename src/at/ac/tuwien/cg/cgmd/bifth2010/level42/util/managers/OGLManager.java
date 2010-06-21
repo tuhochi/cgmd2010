@@ -316,11 +316,11 @@ public class OGLManager
 	/**
 	 * Save screenshot.
 	 *
-	 * @param fos the fos
+	 * @param os the fos
 	 */
-	public void saveScreenshot(OutputStream fos)
+	public void saveScreenshot(OutputStream os)
 	{
-		saveScreenshot(viewport[0], viewport[1], viewport[2], viewport[3], fos);
+		saveScreenshot(viewport[0], viewport[1], viewport[2], viewport[3], os);
 	}
 	
 	/**
@@ -330,9 +330,9 @@ public class OGLManager
 	 * @param y the y
 	 * @param w the w
 	 * @param h the h
-	 * @param fos the fos
+	 * @param os the fos
 	 */
-	public static void saveScreenshot(final int x, final int y, final int w, final int h, final OutputStream fos)
+	public static void saveScreenshot(final int x, final int y, final int w, final int h, final OutputStream os)
 	{
 		final int[] pixels = getPixelsNative(x,y,w,h);
 		new Thread()
@@ -342,8 +342,8 @@ public class OGLManager
 				Bitmap bmp = Bitmap.createBitmap(pixels, w, h, Config.ARGB_8888);
 				try
 				{
-					bmp.compress(CompressFormat.PNG, 100, fos);
-					fos.flush();
+					bmp.compress(CompressFormat.PNG, 100, os);
+					os.flush();
 				}
 				catch(Throwable t)
 				{
@@ -353,7 +353,7 @@ public class OGLManager
 				{
 					try
 					{
-						fos.close();
+						os.close();
 					}
 					catch (IOException e)
 					{
