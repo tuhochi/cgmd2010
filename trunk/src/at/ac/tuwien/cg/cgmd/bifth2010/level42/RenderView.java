@@ -4,7 +4,6 @@ import static android.opengl.GLES10.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 
@@ -454,16 +453,11 @@ public class RenderView extends GLSurfaceView implements Renderer
 			
 			fos = new FileOutputStream(screenshotFile);
 			oglManager.saveScreenshot(fos);
-			LogManager.i("Saved Screenshot to " + screenshotFile.getAbsolutePath());
+			LogManager.i("Saving Screenshot to " + screenshotFile.getAbsolutePath());
 		}
 		catch(Throwable t)
 		{
 			LogManager.e("Error creating screenshot",t);
-		}
-		finally
-		{
-			if(fos != null)
-				try { fos.close(); } catch (IOException e){}
 		}
 	}
 	
