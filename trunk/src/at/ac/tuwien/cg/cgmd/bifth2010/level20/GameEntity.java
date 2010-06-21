@@ -7,17 +7,21 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
  */
 public class GameEntity {
 	
-	/**
-	 * This counter increases by 1 everytime a new entity is created. 
-	 */
+	/**	This counter increases every time a new entity is created and is assigned as unique ID. */ 	 
 	protected static int count = 0;
-
+	/** The Id of the entity. */
 	protected int id;
+	/** The x-position of the entity. */
 	protected float x;
+	/** The y-position of the entity. */
 	protected float y;
+	/** The z-position of the entity. */
 	protected float z;
+	/** The width of the entity. */
 	protected float width;
+	/** The height of the entity. */
 	protected float height;
+	/** The angle of the entity. */
 	protected float angle;			
 
 	/**

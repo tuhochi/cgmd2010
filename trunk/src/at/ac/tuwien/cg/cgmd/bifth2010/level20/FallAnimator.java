@@ -8,10 +8,14 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
  */
 public class FallAnimator extends Animator {
 
+	/** The acceleration of the animation. */
 	float acceleration;
+	/** The velocity of the animation. */
 	float velocity;
 	
 	/**
+	 * Constructor of FallAnimator.
+	 * 
 	 * @param re
 	 * @param speed
 	 */

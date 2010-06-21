@@ -14,6 +14,10 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
  * @author Reinhard Sprung
  *
  */
+/**
+ * @author Pilzinho
+ *
+ */
 public class ObstacleManager {
 	/** The obstacle entity to spawn. */
 	private RenderEntity obstacle;
@@ -100,6 +104,12 @@ public class ObstacleManager {
 	}
 
 	
+	/**
+	 * Checks if an obstacle was clicked.
+	 * 
+	 * @param x The x-position of the click.
+	 * @param y The y-position of the click.
+	 */
 	public void touchEvent(float x, float y) {
 		if (crashed || !obstacle.visible) return;
 		if (obstacle.hitTest(x, y)) {
@@ -110,6 +120,9 @@ public class ObstacleManager {
 		}	
 	}
 	
+	/**
+	 * Removes the obstacle from the screen.
+	 */
 	public void removeObstacle() {
 		obstacle.visible = false;
 		obstacle.x = spawnPos;
@@ -117,12 +130,21 @@ public class ObstacleManager {
 		nextSpawnTime = timeInterval;
 	}
 
+	/**
+	 * Spawns the obstacle at the right side of the screen.
+	 */
 	protected void spawnObstacle() {
 		obstacle.visible = true;	
 		obstacle.clickable = true;
 		nSpawnedObstacles++;
 	}
 
+	
+	/**
+	 * Creates the obstacle object by loading resources and initializing values.
+	 * 
+	 * @param gl The OpenGL Context for loading resources.
+	 */
 	public void createObstacle(GL10 gl) {		
 		float size = LevelActivity.instance.getResources().getInteger(R.integer.l20_obstacle_size);
 		// Round the float value.
@@ -134,10 +156,18 @@ public class ObstacleManager {
 		obstacle.texture = LevelActivity.renderView.getTexture(R.drawable.l20_obstacle, gl);		
 	}
 	
+	/**
+	 * Renders the visible obstacles.
+	 * @param gl	The OpenGL Context used for rendering.
+	 */
 	public void render(GL10 gl) {
 		obstacle.render(gl);	
 	}
 	
+	/**
+	 * Sets the current position where the player would crash into the obstacle.
+	 * @param cart The right most shopping cart used to determine the crash position. 
+	 */
 	public void setCrashPosition(ShoppingCart cart) {
 		crashPosition = cart.x + cart.width*0.5f - LevelActivity.renderView.getWidth()*0.1f;
 	}

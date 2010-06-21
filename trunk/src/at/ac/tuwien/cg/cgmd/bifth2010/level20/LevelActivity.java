@@ -30,12 +30,13 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView;
  */
 public class LevelActivity extends Activity {
 
+	/** The RenderView for the game.*/
 	protected static RenderView renderView;
+	/** Manages the resources and loop of the game.*/
 	protected static GameManager gameManager;
-	
+	/** Accessible instance of the LevelActivity.*/
 	protected static LevelActivity instance;
-	
-	
+		
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

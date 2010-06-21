@@ -31,8 +31,12 @@ public class ParticleEntity extends RenderEntity {
 	    lifetime = 1500;
 	}
 	
-	  // Method to update location
-	  void update(float dt) {		  	    
+		
+	 /**
+	  * Updates the ParticleEntity. 
+	  * @param dt the passed time since the last frame.
+	  */
+	void update(float dt) {		  	    
 	    x += vel.x;
 	    y += vel.y;
 	    lifetime -= dt;

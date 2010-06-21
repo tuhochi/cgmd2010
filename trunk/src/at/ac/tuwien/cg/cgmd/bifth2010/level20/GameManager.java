@@ -29,8 +29,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.level20.SoundManager.SOUNDS;
  * @author Reinhard Sprung
  */
 public class GameManager implements EventListener, OnTouchListener, OnKeyListener {
-
+	/** The LevelActivity the GameManager lives in. */
 	protected LevelActivity activity;
+	/** The RenderView of the LevelActivity. */
 	protected RenderView renderView;
 	
 	/** Manages all time related stuff */
@@ -103,13 +104,13 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	protected SpriteAnimationEntity bunny;
 	
 	/** Ratio to multiply object sizes with for proper size dependent on the current screen resolution. */
-	protected static float screenRatio;
-		
-	
+	protected static float screenRatio;		
 
-	/** If there's a touch on the screen */
+	/** Flag if there's a touch on the screen. */
 	protected boolean touchDown;
+	/** The x-position of a touch. */
 	protected float touchX;
+	/** the y-position of a touch. */
 	protected float touchY;
 	
 	/** If this is false, the game won't stop after the finish is reached */
@@ -122,8 +123,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	static protected boolean catchMode;
 	
 	/**
-	 * @param gl
-	 * @param context
+	 * The Constructor of GameManager.
 	 */
 	public GameManager() {
 		
@@ -172,9 +172,10 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		finish = activity.getResources().getBoolean(R.bool.l20_endgame);
 	}
 	
-	
+		
 	/**
-	 * Invoked at the beginning of the game
+	 * Invoked at the beginning of the game to create and initialize all resources.
+	 * @param gl The OpenGL context to create resources with.
 	 */
 	public void createEntities(GL10 gl) {
 		
@@ -190,7 +191,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		
 		shelf = new Shelf(width*0.5f, height*0.5f, 0, width, height);
 		if (activity.getResources().getBoolean(R.bool.l20_emulator)) {
-			shelf.texture = renderView.getTexture(R.drawable.l20_backg, gl);
+			shelf.texture = renderView.getTexture(R.drawable.l20_backg_emu, gl);
 		} else {
 			shelf.texture = renderView.getTexture(R.drawable.l20_backg, gl);
 		}
@@ -285,7 +286,8 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	}
 	
 	/**
-	 * Invoked, everytime the RenderView looses focus. (Textures need to be recreated)
+	 * Invoked when the RenderView looses focus and resources need to be reinitialized.
+	 * @param gl The OpenGL context to create resources with.
 	 */
 	public void reCreateEntities(GL10 gl) {
 		
@@ -293,7 +295,11 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 		renderView.textures.clear();
 		
 		// Create background shelf
-		shelf.texture = renderView.getTexture(RenderView.TEXTURE_SHELF, gl);			
+		if (activity.getResources().getBoolean(R.bool.l20_emulator)) {
+			shelf.texture = renderView.getTexture(R.drawable.l20_backg_emu, gl);
+		} else {
+			shelf.texture = renderView.getTexture(R.drawable.l20_backg, gl);
+		}			
 
 		// Preload textures
 		for (int i = 0; i < ProductInfo.length; i++) {
@@ -348,7 +354,7 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 
 
 	/**
-	 * Handles all updates for this frame
+	 * Handles all updates for one frame.
 	 */
 	public void update() {
 		if (!renderView.running) return;
@@ -417,7 +423,6 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	 * If called, the activity finishes and returns the result.
 	 */
 	private void gameOver() {
-		//soundManager.playSound(SOUNDS.KATSCHING);
 		shoppingCarts[0].quantities = new int[ProductInfo.length];
 		shoppingCarts[0].products.clear();
 		
@@ -431,11 +436,9 @@ public class GameManager implements EventListener, OnTouchListener, OnKeyListene
 	
 		if (finish) {
 			activity.finish();
-		}
-		
+		}		
 	}
 
-	
 	
 	
 	// Interface methods

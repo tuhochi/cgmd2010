@@ -8,14 +8,13 @@ package at.ac.tuwien.cg.cgmd.bifth2010.level20;
  * @author Reinhard Sprung
  */
 public class LineAnimator extends Animator {
-
-
-	protected float destX; 
+	/** Final x-position of the animation. */
+	protected float destX;
+	/** Final y-position of the animation. */
 	protected float destY;
+	/** Speed of the animation. */ 
 	protected float speed;
-	
-	
-	
+		
 	/** 
 	 * @param re
 	 * @param destX
