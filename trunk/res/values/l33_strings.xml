@@ -18,4 +18,6 @@
 <string name="l33_tutorial_badItems">Avoid items which are marked with a red circle</string>
 <string name="l33_tutorial_loadingText">Loading....</string>
 <string name="l33_tutorial_startGame">Touch the screen to start the game....</string>
+<string name="l33_dialog">Level completed! You won!</string>
+<string name="l33_dialog2">Level-progress: </string>
 </resources>
