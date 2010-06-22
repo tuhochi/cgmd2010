@@ -42,7 +42,7 @@ public class GameView extends GLSurfaceView
 	 * @param sessionState
 	 *            The session state
 	 */
-	public GameView(Context context, final Callback<Integer> gameEnded, SessionState sessionState)
+	public GameView(Context context, final Callback<Integer> gameEnded, SessionState sessionState, SharedPreferences sharedPreferences)
 	{
 		super(context);
 		audio = new Audio(context, sessionState);
@@ -89,6 +89,14 @@ public class GameView extends GLSurfaceView
 		renderer = new BlockRenderer(context, jni, timeUp, audio);
 		renderer.setDateOffset(startTime);
 		setRenderer(renderer);
+		
+		//restore some stuff
+		score = sharedPreferences.getInt("score", 0);
+		String state = sharedPreferences.getString("native", "");
+		Log.v(TAG, "*received from native state length " + state.length());
+		
+		if (state.length() > 0)
+			jni.nativeRestoreSavedState(state);
 	}
 
 	/**
@@ -99,18 +107,8 @@ public class GameView extends GLSurfaceView
 	public void onPause(SharedPreferences sharedPreferences)
 	{
 		super.onPause();
+		
 		SharedPreferences.Editor ed = sharedPreferences.edit();
-		String state = jni.nativeGetSavedState();
-		//audio.stopAllSounds();
-		Log.i(TAG + " onPause", "Length of serialized game data: " + state.length());
-		// this does not work in java: if (state != "")
-		if (state.length() != 0)
-		{
-			ed.putString("native", state);
-		}
-		Log.v(TAG, "onPause receives length " + state.length());
-
-		ed.putInt("score", score);
 		ed.putLong("dateOffset", System.currentTimeMillis() - startTime);
 		ed.commit();
 	}
@@ -121,11 +119,9 @@ public class GameView extends GLSurfaceView
 	public void onResume(SharedPreferences sharedPreferences)
 	{
 		super.onResume();
-		audio.resumePausedSaunds();
-		score = sharedPreferences.getInt("score", 0);
-		String state = sharedPreferences.getString("native", "");
-		Log.v(TAG, "*received from native state length " + state.length());
-		jni.nativeRestoreSavedState(state);
+		
+		//audio.resumePausedSounds();
+
 		long dateOffset = sharedPreferences.getLong("dateOffset", 0);
 		renderer.setDateOffset(dateOffset);
 	}
@@ -133,10 +129,32 @@ public class GameView extends GLSurfaceView
 	/**
 	 * Releases DSs of the game
 	 */
-	public void onDestoy() 
+	public void onDestroy(SharedPreferences sharedPreferences) 
 	{
-		//de-init
+		//serialised playboard, destroy it and with it other classes!
 		jni.deInit();
+		
+		SharedPreferences.Editor ed = sharedPreferences.edit();
+		String state = jni.nativeGetSavedState();
+		audio.stopAllSounds();
+		Log.i(TAG + " onPause", "Length of serialized game data: " + state.length());
+		// this does not work in java: if (state != "")
+		if (state.length() != 0)
+		{
+			ed.putString("native", state);
+		}
+		Log.v(TAG, "onPause receives length " + state.length());
+
+		ed.putInt("score", score);
+		ed.commit();
+	}
+	
+	/*
+	 * initialises playboard of game
+	 */
+	public void onCreate()
+	{
+		Log.v(TAG, "GameView::onCreate()");
 	}
 
 	/**

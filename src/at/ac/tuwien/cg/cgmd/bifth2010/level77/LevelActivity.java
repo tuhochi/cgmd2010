@@ -76,7 +76,7 @@ public class LevelActivity extends Activity
 			}
 		};
 
-		gameView = new GameView(this, gameEnded, new SessionState(getIntent().getExtras()));
+		gameView = new GameView(this, gameEnded, new SessionState(getIntent().getExtras()), this.getPreferences(MODE_PRIVATE));
 		gameView.setClickable(true);
 		gameView.setFocusable(true);
 
@@ -97,12 +97,12 @@ public class LevelActivity extends Activity
 	{
 		super.onDestroy();
 		Log.d(TAG, "onDestroy");
-		Editor ed = this.getPreferences(MODE_PRIVATE).edit();
-		ed.clear();
-		ed.commit();
+		//Editor ed = this.getPreferences(MODE_PRIVATE).edit();
+		//ed.clear();
+		//ed.commit();
 
 		// free native DSs
-		gameView.onDestoy();
+		gameView.onDestroy(this.getPreferences(MODE_PRIVATE));
 	}
 
 	/**
