@@ -92,7 +92,7 @@ public class LevelActivity extends Activity {
         if ( savedInstanceState != null )	{
         	GameLogic.init( savedInstanceState, this, 8000, 100, this );
         } else {	
-        	GameLogic.init( null, this, 8000, 100, this );
+        	GameLogic.init( null, this, 11000, 100, this );
         }
 		
 		gameThread = new GameLogic();
@@ -273,7 +273,6 @@ public class LevelActivity extends Activity {
 		
 		SoundManager.uninit();
 		SpamRenderer.deactivate();	
-		SoundManager.uninit();
 		GameLogic.kill();
 		
 		SessionState quitState = new SessionState();

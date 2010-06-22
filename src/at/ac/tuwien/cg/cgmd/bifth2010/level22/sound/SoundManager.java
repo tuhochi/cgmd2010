@@ -11,7 +11,7 @@ public class SoundManager {
 	
 	public static void init ( Context srcContext )
 	{
-		
+		unint = false;
 		myContextRef = srcContext;
 		
 		musicProcessor = MediaPlayer.create( srcContext, R.raw.l22_music );
@@ -52,7 +52,7 @@ public class SoundManager {
 	public static void pauseMusic()
 	{
 		
-		musicProcessor.pause();
+		if ( !unint )	musicProcessor.stop();
 	}
 	
 	public static void continueMusic()
@@ -64,10 +64,12 @@ public class SoundManager {
 	public static void uninit()
 	{
 		
-		if ( musicProcessor.isPlaying() ) musicProcessor.stop();
+		musicProcessor.stop();
 		
 		soundFXPool.release();
 		musicProcessor.release();
+		
+		unint = true;
 	}
 	
 	private static MediaPlayer musicProcessor;
@@ -78,6 +80,6 @@ public class SoundManager {
 	
 	private static int loseSound;
 	private static int winSound;
-	
+	private static boolean unint;
 	private static float audioManVolume;
 }
