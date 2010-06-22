@@ -57,7 +57,7 @@ If you get that error permanently edit the eclipse.ini which is located at your 
 
 == How do I take a Screenshot of my OpenGL app (DDMS has vsync problems)? ==
 You can use the following method:
-
+{{{
 at.ac.tuwien.cg.cgmd.bifth2010.level42.util.managers.OGLManager.saveScreenshot(final int x, final int y, final int w, final int h, final OutputStream os)
-
+}}}
 x, y, w, h specify the window to snap in pixels, the screenshot will be written into os, and os will be closed.
