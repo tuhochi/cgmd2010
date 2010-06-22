@@ -147,6 +147,9 @@ public class GameView extends GLSurfaceView
 
 		ed.putInt("score", score);
 		ed.commit();
+		
+		//stop playing all sounds
+		audio.stopAllSounds();
 	}
 	
 	/*

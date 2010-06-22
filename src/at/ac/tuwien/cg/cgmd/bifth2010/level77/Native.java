@@ -294,7 +294,7 @@ public class Native
 	@SuppressWarnings("unused")
 	private void playSound(int soundid)
 	{
-		Log.i("l77callback", "playing sound " + soundid);
+		Log.i("l77callback", "***playing sound " + soundid);
 		
 		switch (soundid)
 		{

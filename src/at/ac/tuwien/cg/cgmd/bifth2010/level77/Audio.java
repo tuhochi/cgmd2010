@@ -82,23 +82,6 @@ public class Audio implements OnErrorListener, OnCompletionListener, OnPreparedL
 		}
 	}
 
-	// TODO @Mike plz check if this can be removed
-	public void voidTest()
-	{
-		Log.d("l77native", "--jne debug callback, voidTest()--");
-	}
-
-	// TODO @Mike plz check if this can be removed. This seems to be called
-	// never - or is it called by native code? - If so plz write it into the
-	// javadoc
-	/**
-	 * Registers audio callback with jni
-	 */
-	public void registerNativeCall()
-	{
-		nativeRegisterAudio();
-	}
-
 	/**
 	 * Adds an Mediaplayer to the map mp identified by the resid
 	 * 
