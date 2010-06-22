@@ -408,8 +408,9 @@ public class MailSceneObject
 		renderContext.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 		
 		float colors[] = { 1, 1, 1, 1 };
+		float specularColor[] = { 0, 0, 0, 0 };
 		renderContext.glMaterialfv( GL10.GL_FRONT_AND_BACK, GL_DIFFUSE, colors, 0 );
-
+		renderContext.glMaterialfv( GL10.GL_FRONT_AND_BACK, GL_SPECULAR, specularColor, 0 );
 		renderContext.glFrontFace(GL10.GL_CCW );
 		
 		renderContext.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexPositions );
