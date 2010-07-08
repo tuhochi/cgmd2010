@@ -325,7 +325,9 @@
 <credit type="sound" name="Voices bie bie I'll be off then"
 	author="ingsey101" url="http://www.freesound.org/samplesViewSingle.php?id=49981"
 	usage="Lenny Must Die: by by lenny" license="CC" />
-
+<credit type="texture" name="Lenny"
+	author="Robert Leitl" usage="Lenny Must Die: Lenny" license="CC"/>
+	
 <!-- Level 84 -->	
 <credit type="sound" name="RBH Glass_Break 01" author="RHumpries"
 	url="http://www.freesound.org/samplesViewSingle.php?id=977" usage="Level 84 - Gem sound - breaking"
