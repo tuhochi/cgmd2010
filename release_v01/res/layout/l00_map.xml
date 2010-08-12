@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:id="@+id/l00_FrameLayout"
+	android:layout_height="fill_parent" android:layout_width="fill_parent" android:background="@drawable/l00_map">
+
+
+<!-- TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 1" android:id="@+id/l00_Level1"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel01"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 2" android:id="@+id/l00_Level2"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel02"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 3" android:id="@+id/l00_Level3"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel03"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 4" android:id="@+id/l00_Level4"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="20pt" android:id="@+id/l00_ImageButtonLevel04"></ImageButton>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Level 5" android:id="@+id/l00_Level5"></TextView><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ImageButtonLevel5" android:minWidth="20pt"></ImageButton-->
+
+<AbsoluteLayout android:id="@+id/l00_AbsoluteLayout" android:layout_height="fill_parent" android:layout_width="fill_parent">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Map Activity" android:id="@+id/l00_TextViewFps"></TextView>
+
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel00" android:background="@drawable/l00_levelicon_start" android:layout_x="53px" android:layout_y="105px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel01" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="110px" android:layout_y="25px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel02" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="300px" android:layout_y="40px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel03" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="110px" android:layout_y="115px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonWayPoint01" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="300px" android:layout_y="90px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel04" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="340px" android:layout_y="145px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonWayPoint02" android:background="@drawable/l00_levelicon_questionmark" android:layout_y="150px" android:layout_x="160px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel05" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="380px" android:layout_y="20px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonWayPoint03" android:background="@drawable/l00_levelicon_questionmark" android:layout_y="75px" android:layout_x="430px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel06" android:background="@drawable/l00_levelicon_questionmark" android:layout_y="190px" android:layout_x="390px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonWayPoint04" android:background="@drawable/l00_levelicon_questionmark" android:layout_x="30px" android:layout_y="200px"></ImageButton>
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonLevel07" android:background="@drawable/l00_treasure" android:layout_y="125px" android:layout_x="10px"></ImageButton>
+
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageButtonPlayer" android:layout_x="53px" android:layout_y="113px" android:background="@drawable/l00_red"></ImageView>
+
+
+</AbsoluteLayout>
+</FrameLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    
+    <string name="l00_error_audio">"Audiowiedergabe funktioniert derzeit nicht. Starten sie das Spiel oder das Gerät neu um Audiowiedergabe möglicherweise wieder herzustellen."</string>
+  
+    <string name="l00_help_part03">Die Anordnung der Levels wird zufällig erstellt wenn sie ein neues Spiel starten. Hier folgt eine Liste von allen Levels. Um die Hilfe eines bestimmten Levels aufzurufen, clicken sie auf das zugehörige Icon.</string>
+    <string name="l00_help_part02">Um einen Teil ihres Vermögens zu verlieren müssen sie ein Level ihrer Wahl spielen. Clicken sie dazu auf das Icon in der Übersichtskarte. Levels die mit einem Fragezeichen markiert sind können noch nicht gespielt werden und müssen erst freigespielt werden.</string>
+    <string name="l00_help_part01">Wählen sie einen der Menüpunkte aus um ein altes Spiel fortzusetzen, ein neues Spiel zu starten, oder um die Credits zu sehen. Wenn sie ein Spiel gestartet haben werden sie eine Übersichtskarte sehen. Auf dieser Karte können sie die derzeit spielbaren Levels und ihren Fortschritt beim Verlieren ihres Vermögens sehen.</string>
+    
+    <string name="l00_nameofthegame_middle">The Big Incredible and Funny Inverse Treasure Hunt</string>
+    <string name="l00_nameofthegame_short">BIFTH</string>
+    
+    <string name="l00_unallowedLevel">Soweit sind sie noch nicht! Spielen sie ein anderes Level!</string>
+        
+    <string name="l00_about_01">"wurde von Studenten der Technischen "</string>
+    <string name="l00_about_02">"Universität Wien programmiert:"</string>
+    
+    <string name="l00_about_03">Albors Askari, Felix Fleiß,</string>
+    <string name="l00_about_04">Markus Töpfer, Johannes Sorger,</string>
+    <string name="l00_about_05">Arthur Oberhauser, Sebastian Sippl,</string>
+    <string name="l00_about_06">Johannes Scharl, Matthias Maschek,</string>
+    <string name="l00_about_07">Ferdinand Pilz, Reinhard Sprung,</string>
+    <string name="l00_about_08">Michal Domanski,</string>
+    <string name="l00_about_09">Markus Ernst, Florian Felberbauer,</string> 
+    <string name="l00_about_10">Markus Lipp,</string>
+    <string name="l00_about_11">Christoph Fuchs, Roman Hochstöger,</string> 
+    <string name="l00_about_12">Christian Tomaschitz,</string>
+    <string name="l00_about_13">Alex Druml, Lukas Rössler,</string>
+    <string name="l00_about_14">Thomas Perl, Matthias Tretter,</string>
+    <string name="l00_about_15">Michael Benda, Alexander Fritz,</string>
+    <string name="l00_about_16">Wolfgang Knecht, Martin Knecht,</string>
+    <string name="l00_about_17">Tiare Feuchtner, Martin Schenk,</string>
+    <string name="l00_about_18">Dominic Windisch, Martin Brachmann,</string>
+    <string name="l00_about_19">Winklhofer Christoph,</string>
+    <string name="l00_about_20">Gerd Katzenbeisser, Mike Vasiljevs,</string>
+    <string name="l00_about_21">Thomas Schulz, Manuel Keglevic,</string>
+    <string name="l00_about_22">Gerald Sollböck, Georg Molzer,</string>
+    <string name="l00_about_23">Ingo Radax, Michael Asperger,</string>
+    <string name="l00_about_24">Michael Hanzl, Peter Rautek.</string>
+    
+    <string name="l00_about_25">"Um die Credits zu sehen drücken sie Menü"</string>
+    
+    <string name="l00_help_01">das sind sie</string>
+    <string name="l00_help_02">noch nicht erreichtes Level</string>
+    <string name="l00_help_03"></string>
+    <string name="l00_help_04"></string>
+    <string name="l00_help_05"></string>
+    
+    <string name="l00_credits_01">" hat folgende Textur(en) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_02">"Vertrieben unter der Lizenz "</string>
+    <string name="l00_credits_03">" hat folgende Artwork(s) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_04">" hat folgende Sound(s) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_05">" hat folgende Musik zur Verfügung gestellt: "</string>
+    <string name="l00_credits_06">" hat folgende 3D Modell(e) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_07">" hat folgende Foto(s) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_08">" hat folgende Text(e) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_09">" hat folgende Arbeit(en) zur Verfügung gestellt: "</string>
+    <string name="l00_credits_10">"Danke an alle die zu diesem Projekt beigetragen haben:"</string>
+    <string name="l00_credits_11">"und alle anderen."</string>
+    <string name="l00_credits_12">"Musik:"</string>
+    <string name="l00_credits_13">"Sounds:"</string>
+    <string name="l00_credits_14">"3D Modelle:"</string>
+    <string name="l00_credits_15">"Texturen:"</string>
+    <string name="l00_credits_16">"Artwork:"</string>
+    <string name="l00_credits_17">"Text:"</string>
+    <string name="l00_credits_18">"Photos:"</string>
+    <string name="l00_credits_19">"Anderes:"</string>
+    
+    <string name="l00_map_01">"Um ein Level zu starten drücken sie ein Icon das am Weg liegt und schon sichtbar ist!"</string>
+    <string name="l00_map_02">"Um hierher zu kommen müssen sie etwas Geld verlieren! Starten sie dazu ein Level das schon sichtbar ist!"</string>
+    <string name="l00_map_03">"Level nicht gefunden!"</string>
+    <string name="l00_map_04">" Gold übrig"</string>
+    
+    <string name="l00_map_06">"Super! Sie haben "</string>
+    <string name="l00_map_07">" Gold verloren!"</string>
+    <string name="l00_map_08">"Glückwunsch sie haben all ihre Reichtümer verloren! Fühlen sie schon ihre neu erstandene Freiheit!?"</string>
+    
+    <string name="l00_menu_01">"Die Musik ist jetzt an!"</string>
+    <string name="l00_menu_02">"Die Musik ist jetzt aus!"</string>
+
+    <string name="l00_menu_03">Spielen!</string>
+    <string name="l00_menu_04">Neues Spiel</string>
+    <string name="l00_menu_05">Hilfe</string>
+    <string name="l00_menu_06">Über</string>
+    <string name="l00_menu_07">Credits</string>
+    <string name="l00_menu_08">   Sound</string>
+    
+    
+    <string name="l55_HelpTitle">Heldenhelfer</string>
+	<string name="l55_HelpText_1">Jeder kennt die Situation: Man spielt ein Jump \’n\’ Run Level und sammelt fleißig Münzen. Doch kaum einer hat sich schon einmal Gedanken darüber gemacht, wer diese ganzen Levels für den nächsten Helden befüllt.\n\nGenau hier bist Du gefragt! Bestücke das leergeräumte Level wieder mit Münzen und zwar so schnell wie möglich. Denn etwas haben Helden nicht – und das ist Geduld!\n\nSteuer deinen Heldenhelfer mit dem rechten Daumen durch das Level.</string>
+	<string name="l55_HelpText_2">Die „Left“ und „Right“ Buttons bewegen die Spielfigur nach links bzw. rechts. Der Jump-Button ist in drei Teile unterteil. Wähle die Mitte um einfach nur zu springen. Links beziehungsweise rechts davon kannst Du gleichzeitig springen und dich in die gewählte Richtung bewegen.\n\nZwei verschiedene Arten von Münzen gibt’s zu verteilen.</string>
+	<string name="l55_HelpText_3">Diese Münzen sind einfach zu verteilen. Sind sie einmal im Level, bleiben sie auch dort. Ganz im Gegensatz zu den Diamanten.</string>
+	<string name="l55_HelpText_4">Diese verschwinden bei wiederholtem reinspringen in das Feld wieder! Wie auch immer Du dich anstellst, springe NICHT in die Stacheln!!!\n\nViel Spaß beim spielen!</string>
+</resources>

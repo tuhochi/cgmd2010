@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="l84_help_title">I throw my gems into the drain</string>
+    <string name="l84_help_subtitle">
+    One day walking along a quiet street, you suddenly get the urge to get rid of
+    your gem collection. Luckily the street has plenty of drains, each of them with
+    holes in different shapes. In short: Not every gem fits every drain. But even if you choose the correct gem, 
+    it will have to be aligned correctly!</string>
+    <string name="l84_help_content1">
+    You walk towards the right side of the game area. From time to time you pass drains with holes in different
+    shapes - you have to find the right gem in your inventory. Therefore, on the left of the screen, you have an overview 
+    of your four different gem types that obviously differ in shape.
+    </string>    
+     <string name="l84_help_content2a">
+     Choose the right type of gem by pressing with your finger and the gem\'s shape is displayed at the center of the 
+     screen. As long as you hold your finger, you can change the gem\'s orientation. 
+     </string>
+     <string name="l84_help_content2b">
+     As soon as you lift your finger, the gem drops. If you aligned it correctly, the gem will fall into the drain! 
+     Remember that it takes the gem a while to reach the ground, so get a feeling for an appropriate drop-off timing!
+     </string> 
+     <string name="l84_help_content3">
+     If you hit, you lose the gem\'s total worth (round gem: $1.000,- eight-sided gem: $2.000,- 
+     four-sided gem: $3.000,- and finally diamond: $4.000,-). If the gem breaks (e.g., hitting the wrong 
+     drain or the correct drain but misaligned), you lose a tenth of the gem\'s value. Hitting the dusty road doesn\'t 
+     destroy the gem - so you won\'t lose anything. 
+     </string> 
+     <string name="l84_help_content4">
+     The game is finished if you reach the end of the road or if you get rid of your whole gem collection
+    </string> 
+    <string name="l84_help_content5">
+     Have fun!
+    </string> 
+    
+    
+    <string name="l84_intro_title">How to play</string>
+    <string name="l84_intro_step1">Choose a gem from the left by holding a button</string>
+    <string name="l84_intro_step2">Rotate your device to align the gem to the drain</string>
+    <string name="l84_intro_step3">Release the gem to through it into the drain</string>
+    <string name="l84_result_title">Results</string>
+    <string name="l84_result_hits">Hit(s)</string>
+    <string name="l84_result_breaks">Breaks</string>
+    <string name="l84_result_mtotal">Total: </string>
+    <string name="l84_result_mremaining">Remaining: </string>
+    <string name="l84_result_mlost">Lost: </string>
+</resources>

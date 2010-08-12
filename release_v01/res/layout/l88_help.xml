@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+
+
+
+
+
+<ScrollView android:id="@+id/ScrollView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_menuebackground">
+
+	<TableLayout
+		android:id="@+id/TableLayout01"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="left"
+		android:layout_marginLeft="5px">
+
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:textSize="11pt" android:textColor="#000000"
+			android:text="@string/l88_help_title">
+			</TextView>
+	</TableRow>
+
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_subtitle">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<ImageView
+			android:layout_gravity="center"
+			android:scaleType="fitXY" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/l88_bunny">
+			</ImageView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_introtext">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<ImageView
+			android:layout_gravity="center"
+			android:scaleType="fitXY" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/l88_help_stashes">
+			</ImageView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_stashes">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<ImageView
+			android:layout_gravity="center"
+			android:scaleType="fitXY" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/l88_police">
+			</ImageView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_game_end">
+			</TextView>
+	</TableRow>
+
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:textSize="9pt" android:textColor="#000000"
+			android:text="@string/l88_help_controls_title">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_controls_moving_bunny">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_controls_pause">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:textSize="9pt" android:textColor="#000000"
+			android:text="@string/l88_help_powerups_title">
+			</TextView>
+	</TableRow>
+
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_powerups_shortcuts">
+			</TextView>
+	</TableRow>
+		
+	<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<ImageView
+			android:layout_gravity="center"
+			android:scaleType="fitXY" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/l88_help_bunny_shortcut">
+			</ImageView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_powerups_bunny_shortcuts">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<ImageView
+			android:layout_gravity="center"
+			android:scaleType="fitXY" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/l88_help_police_shortcut">
+			</ImageView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_powerups_police_shortcuts">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:id="@+id/TableRow07" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<ImageView
+			android:layout_gravity="center"
+			android:scaleType="fitXY" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:src="@drawable/l88_help_gallows">
+			</ImageView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="@string/l88_help_powerups_speed">
+			</TextView>
+	</TableRow>
+	
+	<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="72px">
+		<TextView
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="#000000"
+			android:text="">
+			</TextView>
+	</TableRow>
+
+</TableLayout>
+</ScrollView>
+</LinearLayout>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+ android:id="@+id/l33_FrameLayout01"
+ xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent">
+
+<android.opengl.GLSurfaceView
+ android:id="@+id/l33_openglview" 
+ android:layout_width="fill_parent" 
+ android:layout_height="fill_parent"
+ />
+ 
+<TableLayout
+android:id="@+id/l33_TableLayoutTop" 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="3pt" 
+android:layout_marginLeft="3pt"
+android:layout_marginRight="3pt"
+android:stretchColumns="1"
+android:visibility="invisible"
+>
+
+ 
+<TableRow>
+        <TextView
+        	android:layout_above="@+id/l33_openglview" 
+            android:text="3 min 00 sec"
+            android:padding="3dip" 
+            android:gravity="center"
+            android:id="@+id/l33_level_time"
+            android:background="@layout/l33_background_round"           
+            />
+                       
+
+             <!-- http://www.helloandroid.com/tutorials/custom-view-horizontalslider -->
+             
+             <!-- 
+         <at.ac.tuwien.cg.cgmd.bifth2010.level33.tools.layout.HorizontalSlider
+                android:id="@+id/slider"
+                android:layout_width="100dip"
+                android:layout_height="26dip"
+               android:color="#FF00"
+                android:max="10000"
+                android:layout_centerHorizontal="true" 
+                            android:gravity="center"
+            android:padding="3dip"
+            android:background="@layout/l33_background_round"
+            
+            <ImageView
+		android:id="@+id/l33_item_icon"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="@layout/l33_background_round"
+		android:padding="3dip" 
+		>
+	</ImageView>
+                />
+                 -->
+        <TextView 
+		 android:layout_above="@+id/l33_gold" 
+		 android:text="Gold:" 
+		 android:id="@+id/l33_gold"
+		 android:gravity="center"
+		 android:background="@layout/l33_background_round"
+		 android:padding="3dip"
+		 
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:layout_gravity="right"
+		 />        
+        <ProgressBar  	   
+			android:layout_above="@+id/l33_openglview" 
+			android:id="@+id/l33_ProgressBar"
+		    android:indeterminateOnly="false" 
+		    android:progressDrawable="@drawable/l33_progress_horizontal" 
+		    android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal" 
+		    android:padding="3dip"
+		    android:background="@layout/l33_background_round"
+		    android:minHeight="20dip" 
+		    android:maxHeight="20dip"
+		    android:minWidth="100dip"
+		    android:layout_gravity="right"
+		    android:max="100"
+		    />  
+                              
+</TableRow>
+
+<!--
+<TableRow>
+	 <TextView 
+		 android:layout_above="@+id/l33_openglview" 
+		 android:text="fps:" 
+		 android:id="@+id/l33_level_fps"
+		 android:layout_marginTop="3pt"  
+		 >
+	 </TextView> 
+	 
+</TableRow>
+  -->
+
+</TableLayout>
+
+
+<TableLayout
+android:id="@+id/l33_TableLayoutMiddle" 
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginLeft="3pt"
+android:layout_marginRight="3pt"
+android:layout_marginBottom="3pt"
+android:layout_marginTop="3pt"
+android:layout_below="@id/l33_TableLayoutTop"
+android:stretchColumns="1"
+android:visibility="invisible"
+>
+
+<TableRow>
+	
+	<ImageView
+		android:id="@+id/l33_item_icon"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="@layout/l33_background_round"
+		android:padding="3dip"
+		android:layout_gravity="left"
+		android:gravity="center_vertical"
+		android:src="@drawable/l33_stone_small"
+		>
+	</ImageView>
+	<TextView 
+		 android:text="x 00" 
+		 android:id="@+id/l33_goodies_Count"
+		 android:background="@layout/l33_background_round"
+		 android:padding="3dip"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:layout_gravity="left"
+		 android:layout_marginLeft="3pt"
+		 android:gravity="center_vertical"
+		 
+		 >
+	 </TextView> 
+</TableRow>
+
+<TableRow>
+	
+	<ImageView
+		android:id="@+id/l33_map_timer_icon"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="@layout/l33_background_round"
+		android:padding="3dip"
+		android:layout_gravity="left"
+		android:visibility="invisible"
+		android:layout_marginTop="3pt"
+		android:gravity="center_vertical"
+		android:src="@drawable/l33_arrow_small"
+		>
+	</ImageView>
+	<TextView 
+		 android:layout_above="@+id/l33_openglview" 
+		 android:text="  00"
+		 android:visibility="invisible" 
+		 android:id="@+id/l33_map_timer"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:background="@layout/l33_background_round"
+		 android:padding="3dip"
+		 android:layout_gravity="left" 
+		 android:layout_marginTop="3pt"
+		 android:layout_marginLeft="3pt"
+		 android:gravity="center_vertical"
+		 >
+	</TextView> 
+</TableRow>
+
+</TableLayout>
+
+
+
+
+<TableLayout
+android:id="@+id/l33_TableLayoutBottom" 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginLeft="3pt"
+android:layout_marginRight="3pt"
+android:layout_marginBottom="3pt"
+android:layout_alignParentBottom="true"
+android:stretchColumns="1"
+
+
+>
+
+<TableRow>
+		<ImageButton
+        	android:layout_above="@+id/l33_openglview" 
+            android:text="KARTE"
+            android:gravity="center"
+            android:padding="3dip"
+            android:background="@layout/l33_background_round"
+            android:layout_gravity="bottom|left"
+            android:id="@+id/l33_Map_Image_Button"
+            android:layout_width="wrap_content"
+		 	android:layout_height="wrap_content"
+		    android:visibility="invisible"
+		    android:src="@drawable/l33_overview_map"
+             />
+
+		<ImageButton
+        	android:layout_above="@+id/l33_openglview" 
+            android:text="WEG"
+            android:gravity="center"
+            android:padding="3dip"
+            android:background="@layout/l33_background_round"
+            android:layout_gravity="bottom|right"
+            android:id="@+id/l33_Path_Image_Button"
+            android:layout_width="wrap_content"
+		 	android:layout_height="wrap_content"
+		    android:visibility="invisible"
+		    android:src="@drawable/l33_map"
+             />	
+</TableRow>
+<TableRow>
+	<TextView 
+		 android:layout_above="@+id/l33_openglview" 
+		 android:text=""
+		 >
+	</TextView>
+	<TextView 
+		 android:layout_above="@+id/l33_openglview" 
+		 android:text=" x 00"
+		 android:visibility="invisible" 
+		 android:id="@+id/l33_path_counter"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:background="@layout/l33_background_round"
+		 android:padding="3dip"
+		 android:layout_gravity="right"
+		 android:gravity="center" 
+		 >
+	</TextView>
+</TableRow>
+	
+
+</TableLayout>
+
+
+<LinearLayout
+  	android:id="@+id/l33_TutorialTop"
+  	android:layout_height="wrap_content"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	>
+				
+	<TextView 	android:gravity="center" android:textStyle="bold"
+				android:layout_height="wrap_content" android:text="@string/l33_help_headline"
+			    android:layout_width="fill_parent"
+				android:textSize="@dimen/l33_help_headSize" android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding">
+	</TextView>			
+			
+  </LinearLayout>
+  
+  <TableLayout
+ 	android:id="@+id/l33_TutorialTableLayout" 
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="3pt" 
+	android:layout_marginLeft="3pt"
+	android:layout_marginRight="3pt"
+	android:stretchColumns="1"
+	android:layout_below="@id/l33_TutorialTop"
+  >
+  
+  	<TableRow>
+	<TextView 
+		 android:text="@string/l33_tutorial_goodItems"
+		 android:padding="3dip"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:layout_gravity="left"
+		 android:layout_marginLeft="3pt"
+		 android:gravity="center_vertical"
+		 
+		 >
+	 </TextView> 
+	</TableRow>
+	
+	<TableRow>
+	<ImageView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:padding="3dip"
+		android:layout_gravity="center"
+		android:gravity="center_vertical"
+		android:src="@drawable/l33_circle_green"
+		>
+	 </ImageView>
+	</TableRow>
+	
+	<TableRow>
+	<TextView 
+		 android:text="@string/l33_tutorial_badItems"
+		 android:padding="3dip"
+		 android:layout_width="wrap_content"
+		 android:layout_height="wrap_content"
+		 android:layout_gravity="left"
+		 android:layout_marginLeft="3pt"
+		 android:gravity="center_vertical"
+		 
+		 >
+	 </TextView> 
+	</TableRow>
+	
+	<TableRow>
+	<ImageView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:padding="3dip"
+		android:layout_gravity="center"
+		android:gravity="center_vertical"
+		android:src="@drawable/l33_circle_red"
+		>
+	 </ImageView>
+	</TableRow>
+  
+  </TableLayout>
+  
+  <LinearLayout
+  	android:id="@+id/l33_TutorialBottom"
+  	android:layout_height="wrap_content"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_below="@id/l33_TutorialTableLayout"
+	android:layout_marginTop="10dip">
+	
+	
+	
+	<ProgressBar  	    
+		    android:indeterminateOnly="true" 
+		    android:padding="3dip"
+		    android:layout_gravity="center"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:minHeight="80dip" 
+		    android:minWidth="80dip"
+		    android:id="@+id/l33_loading_bar"
+		    />
+				
+	<TextView 	android:id="@+id/l33_loadingScreen_statusText"
+				android:gravity="center" 
+				android:layout_height="wrap_content" android:text="@string/l33_tutorial_loadingText"
+			    android:layout_width="fill_parent"
+			    android:paddingBottom="@dimen/l33_help_headPadding"
+				android:paddingLeft="@dimen/l33_help_headPadding"
+				android:paddingRight="@dimen/l33_help_headPadding"
+				android:paddingTop="@dimen/l33_help_headPadding">
+	</TextView>			
+			
+  </LinearLayout>
+
+
+<!-- and now a fullscreen ImageView android:background="@drawable/l00_red"  -->
+<ImageView 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content" 
+android:id="@+id/l33_FullscreenImage"
+></ImageView>
+
+
+</RelativeLayout>
+

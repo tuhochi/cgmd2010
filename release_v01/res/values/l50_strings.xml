@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+<string name="l50_GameName">Rewind</string>
+
+
+<string name="l50_HelpActivity1">Try to place your coins. It is possible to get rid of all. Just pass the following symbol and you will be broke soon.</string>
+
+
+
+
+
+
+<string name="l50_HelpActivity2">But be aware of your enemies! You cannot conquer them, but your bunny is fast and swift – just avoid them.</string>
+<string name="l50_HelpActivity3">To go left and right, just touch the screen on the according side. If you want to jump, hit the screen at the upper part. To simplify controls, it is possible to jump left and right by touching the left upper or right upper corner.</string>
+</resources>

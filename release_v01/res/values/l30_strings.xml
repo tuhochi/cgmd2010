@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string name="l30_nameofthegame_full">Stockmarket Loser</string>
+<string name="l30_HelpActivity_Title">Stockmarket Loser</string>
+<string name="l30_HelpActivity_Text1">What\'s the quickest way to lose money? Right, invest it in the stock market! Your goal is to lose a lot of money by buying and selling company shares.</string>
+<string name="l30_HelpActivity_Text2">Multiple graphs of stock prices fly towards you in glorious 3D. In contrast to reality you can see a little bit in the future how the market price develops. Buy and sell shares by hitting the buttons. Try to buy when the market price is high, and sell when the price is low.\n
+To better evaluate the stock prices, helper lines are employed. Before you buy, they indicate the current stock price. After you buy, they indicate the buying stock price.
+</string>
+<string name="l30_HelpActivity_Text3">After you buy a share, coins appear to indicate if you lose or win money. When the coins are red, you make money, when they are green you lose money. The size of the coins indicate how much money you lose or win.</string>
+<string name="l30_finished">WOW, you lost all the money!</string>
+<string name="l30_buy">Buy</string>
+<string name="l30_sell">Sell</string>
+<string name="l30_more">MORE!</string>
+<string name="l30_faster">FASTER!</string>
+<string name="l30_hurry">HURRY UP!</string>
+<string name="l30_gameover">Game Over \n still some money left\n :(</string>
+<string name="l30_intro">buy high\n and \n sell low</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+<string name="l50_GameName">Rewind</string>
+
+
+<string name="l50_HelpActivity1">Versuche deine Münzen an ihren Platz zu bringen. Berühre einfach das folgende Symbol...</string>
+
+
+
+
+
+
+<string name="l50_HelpActivity2">und du wirst dein Geld schneller los als dir lieb ist. Sei jedoch vor deinen Gegnern auf der Hut.  Sie zu bezwingen ist für dich unmöglich, aber wenn du schnell genug bist, wird deinem Häschen nichts passieren</string>
+<string name="l50_HelpActivity3">Um dich nach links oder rechts zu bewegen, tippe einfach auf der entsprechenden Seite des Displays. Springen kannst du indem du oben in der Mitte den Monitor deines Android Devices berührst. Um das Springen über weite Distanzen zu vereinfachen, versuche mal das Display links, oder rechts oben zu berühren.</string>
+</resources>

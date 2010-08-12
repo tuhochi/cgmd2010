@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="l23_Help_Text1">Help the obsessively insubstantial rabbit to blow his money.In this section, the rabbit decided to go for a ride in his hot-air balloon. The more gold you use as fuel, the faster the balloon takes you to the sky. But hurry up, a clutch of rabbit virgins is waiting for you. </string>
+<string name="l23_Help_Text2">The goal of this chapter is to cover a preferably long distance towards the goal in as little time as possible.  Therefor, the balloon has to arise continously and concurrently dodge the obstacles. To increase the climb rate, the rabbit can scorch money. To gain a short boost, there is a bunch of banknotes to burn. By ejecting a bullion, the climb rate of the balloon is going to be increased until the end of the level is reached. The more bullions ejected, the faster the balloon will arise. The faster the end of the level is reached, the higher the score will be. But be aware of obstacles! If you collide with them, your balloon will be ruined and the rabbit will be abandoned with his wealth. </string>
+<string name="l23_Help_Text3">Controls are pretty easy: the balloon is arising slowly towards the sky.  By touching the left or right side of the balloon, you can steer the balloon to that direction. By tapping on the icons middle left and right, the climb rate is going to be increased temporary and permanently respectively.  In menu, you can switch from touch input to motion sensor steering. When motion steering is activated, the balloon can be steered by rolling the phone.</string>
+<string name="l23_Help_Title">PimpStyle Airways</string>
+<string name="l23_nameofthegame_full">PimpStyle Airways</string>
+<string name="l23_controls_text">Controls</string>
+</resources>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l83_tutorial_root"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+        
+    <ImageView
+        android:id="@+id/l83_finish_ImageDeaths"
+        android:src="@drawable/l83_lenny_w90"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:paddingBottom="5dp">
+    </ImageView>
+    
+    <TextView 
+        android:text=" x 0" 
+        android:id="@+id/l83_finish_TextDeaths" 
+        android:layout_width="60dp" 
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/l83_finish_ImageDeaths"
+        android:textColor="#FFF"
+        android:textSize="21dp">
+    </TextView>
+    
+    <ImageView
+        android:id="@+id/l83_finish_ImageCoins"
+        android:src="@drawable/l83_dollarsign"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/l83_finish_ImageDeaths">
+    </ImageView>
+    
+    <TextView 
+        android:text=" x 0" 
+        android:id="@+id/l83_finish_TextCoins" 
+        android:layout_width="60dp" 
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/l83_finish_ImageCoins"
+        android:layout_below="@+id/l83_finish_ImageDeaths"
+        android:textColor="#FFF"
+        android:textSize="21dp">
+    </TextView>
+    
+    <TextView 
+        android:text="@string/l83_finsh_text" 
+        android:id="@+id/l83_finishdialog_text"
+        android:layout_width="180sp"
+        android:layout_height="70sp"
+        android:layout_toRightOf="@+id/l83_finish_TextCoins"
+        android:textColor="#FFF"
+        android:textSize="16dp">
+    </TextView>    
+</RelativeLayout>

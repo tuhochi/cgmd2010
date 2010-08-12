@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="@drawable/l00_menuebackground">
+	
+
+
+<TableLayout android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_gravity="center_vertical|center_horizontal|center" android:gravity="center_vertical|center_horizontal">
+<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
+<Button android:id="@+id/l00_ButtonContinueGame" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt" android:text="@string/l00_menu_03"></Button>
+</TableRow><TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
+<Button android:id="@+id/l00_ButtonNewGame" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt" android:text="@string/l00_menu_04"></Button>
+</TableRow>
+
+<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
+<Button android:id="@+id/l00_ButtonHelp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt" android:text="@string/l00_menu_05"></Button>
+</TableRow>
+<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
+<Button android:id="@+id/l00_ButtonAbout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt" android:text="@string/l00_menu_06"></Button>
+</TableRow>
+<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical" android:visibility="visible"></ImageView>
+<Button android:id="@+id/l00_ButtonCredits" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt" android:soundEffectsEnabled="false" android:ellipsize="none" android:text="@string/l00_menu_07"></Button>
+</TableRow>
+
+<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_CheckBoxSound" android:typeface="sans" android:textColor="@color/l00_buttonBackground" android:checked="true" android:layout_marginLeft="35dip" android:text="@string/l00_menu_08"></CheckBox>
+</TableLayout>
+</LinearLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:orientation="vertical" android:layout_width="fill_parent">
+<ScrollView android:background="@drawable/l00_menuebackground" android:layout_height="fill_parent" android:layout_width="fill_parent">
+	<LinearLayout android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:textColor="#000000" android:text="@string/l36_help_header" android:textStyle="bold" android:typeface="normal" android:layout_width="fill_parent" android:gravity="center" android:textSize="35dip"></TextView>
+		<TextView android:id="@+id/TextView02" android:layout_height="wrap_content" android:text="@string/l36_help_text1" android:textColor="#000000" android:layout_width="fill_parent" android:paddingTop="10dip" android:textSize="20dip"></TextView>
+		<TextView android:id="@+id/TextView02" android:layout_height="wrap_content" android:text="@string/l36_help_text2" android:textColor="#000000" android:layout_width="fill_parent" android:paddingTop="10dip" android:textSize="20dip"></TextView>
+		<TextView android:layout_height="wrap_content" android:textColor="#000000" android:layout_width="fill_parent" android:id="@+id/TextView03" android:text="@string/l36_help_text3" android:paddingTop="10dip" android:textSize="20dip"></TextView>
+	</LinearLayout>
+</ScrollView>
+</LinearLayout>

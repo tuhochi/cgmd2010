@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:layout_height="fill_parent" android:layout_width="fill_parent">
+	
+	<ScrollView 
+		android:layout_height="fill_parent" 
+		android:layout_width="fill_parent" 
+		android:background="@drawable/l00_menuebackground">
+		
+		<LinearLayout 
+			android:layout_height="wrap_content" 
+			android:orientation="vertical" 
+			android:layout_width="fill_parent">
+			
+			<!--GameName-->			
+			<TextView 
+				android:id="@+id/TextView01" 
+				android:layout_height="wrap_content" 
+				android:text="@string/l70_GameName" 
+				android:gravity="center" 
+				android:layout_width="fill_parent" 
+				android:textSize="30dip" 
+				android:textColor="#000000"
+				android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop" />
+						
+			<!--Description 1-->	
+			<TextView 
+				android:id="@+id/TextView02" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" 
+				android:text="@string/l70_GameDescription_01" 
+				android:textColor="#000000" 
+				android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"
+				android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight"
+				android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop" />
+			
+			
+			<!--Description 2-->
+			<TextView 
+				android:id="@+id/TextView03" 
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" 
+				android:text="@string/l70_GameDescription_02" 
+				android:textColor="#000000" 
+				android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"
+				android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight"
+				android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop" /><TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft" android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight" android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop"><ImageView android:id="@+id/ImageView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l70_help_select"></ImageView><TextView android:id="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l70_help_select" android:textColor="#000000" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"></TextView></TableRow>
+			
+		
+
+
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft" android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight" android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop">
+<ImageView android:id="@+id/ImageView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l70_help_switch"></ImageView><TextView android:id="@+id/TextView05" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l70_help_switch" android:textColor="#000000" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"></TextView></TableRow><TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft" android:paddingRight="@dimen/l70_HelpActivity_TextPaddingRight" android:paddingTop="@dimen/l70_HelpActivity_TextPaddingTop"><ImageView android:id="@+id/ImageView03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/l70_help_obstacle"></ImageView><TextView android:id="@+id/TextView06" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/l70_help_obstacle" android:textColor="#000000" android:paddingLeft="@dimen/l70_HelpActivity_TextPaddingLeft"></TextView>
+</TableRow>
+</LinearLayout>
+	
+
+
+</ScrollView>
+</LinearLayout>

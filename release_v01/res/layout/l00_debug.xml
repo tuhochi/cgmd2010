@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content" android:orientation="vertical"
+	android:layout_width="fill_parent" android:padding="5pt">
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Use this activity to debug your level"></TextView>
+	<ScrollView 
+		android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<LinearLayout 
+			android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent">
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/l00_TextViewHelp"
+		android:layout_marginTop="5pt" android:text="Debug Help Activity"></TextView>
+	
+	<LinearLayout android:id="@+id/LinearLayout01"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="70sp" android:id="@+id/l00_SpinnerHelp"></Spinner>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Start"
+			android:minWidth="30pt" android:id="@+id/l00_ButtonStartHelp"></Button>
+	
+</LinearLayout><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Debug Level Activity"></TextView><LinearLayout android:id="@+id/LinearLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		
+		<Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="70sp" android:id="@+id/l00_SpinnerDebug"></Spinner><Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Start" android:minWidth="30pt" android:id="@+id/l00_ButtonStartLevel"></Button><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Result: none" android:id="@+id/l00_TextViewLevelResult"></TextView>
+	
+
+</LinearLayout><CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_CheckBoxAlwaysStartLevel" android:text="Always automatically start the above specified level"></CheckBox>
+
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Debug Levels For Map Activity"></TextView>
+	<LinearLayout android:id="@+id/LinearLayout02"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity01" android:hint="id"
+			android:minWidth="45sp" android:maxWidth="45sp"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity02" android:hint="id"
+			android:maxWidth="45sp" android:minWidth="45sp"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity03" android:hint="id"
+			android:maxWidth="45sp" android:minWidth="45sp"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity04" android:hint="id"
+			android:maxWidth="45sp" android:minWidth="45sp"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity05" android:hint="id"
+			android:maxWidth="45sp" android:minWidth="45sp"></EditText>
+		<EditText android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:inputType="number"
+			android:id="@+id/l00_EditViewDebugLevelActivity06" android:hint="id"
+			android:maxWidth="45sp" android:minWidth="45sp"></EditText>
+	
+
+</LinearLayout>
+
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ButtonStartMenu" android:text="Start Menu Activity"></Button>
+
+
+</LinearLayout>
+	</ScrollView>
+
+</LinearLayout>

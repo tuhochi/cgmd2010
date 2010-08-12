@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/l84_FrameLayout01"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" android:layout_width="fill_parent">
+	
+	<android.opengl.GLSurfaceView android:id="@+id/l84_openglview"
+		android:layout_width="fill_parent" android:layout_height="fill_parent" />
+
+	
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewRoundBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewOctBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewRectBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewDiamondBreak" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewWatersplash" />
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_aniViewDust" />
+		
+		
+	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="160dp" android:layout_height="160dp" 
+		android:layout_gravity="center" 
+		android:id="@+id/l84_crosshair" 
+		 android:background="@drawable/l84_crosshair" />
+		 
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/l84_TableLayout" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:padding="7dp">
+		
+		<TextView 
+			android:text="Points" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:id="@+id/l84_PointsShadow"
+			android:layout_alignParentRight="true" 
+			android:textColor="@color/l84_colorBlack" android:textSize="15pt" android:textStyle="bold"></TextView>
+		<TextView 
+			android:text="Points" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:id="@+id/l84_Points"
+			android:layout_alignParentRight="true"
+			android:layout_marginRight="2dp" 
+			android:layout_marginTop="-3dp" 
+			android:textColor="@color/l84_colorWhite" android:textSize="15pt" android:textStyle="bold"></TextView>
+		
+		<TextView 
+			android:layout_above="@+id/l84_openglview"
+			android:text="fps" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:id="@+id/l84_TfFps"
+			android:layout_marginTop="3pt"
+			android:layout_alignParentRight="true" 
+			android:textColor="@color/l84_colorWhite" 
+			 android:textStyle="bold" 
+			android:layout_below="@+id/l84_Points"></TextView>
+		
+		<ImageButton 
+			android:layout_width="@dimen/l84_gemButtonWidth" 
+			android:layout_height="@dimen/l84_gemButtonWidth" 
+			android:background="@drawable/l84_button_gem_round"
+			android:layout_marginBottom="@dimen/l84_gemButtonMargin" 
+			android:layout_marginTop="27dp" 
+			android:id="@+id/l84_ButtonGemRound">
+		</ImageButton>
+		<ImageButton 
+			android:layout_width="@dimen/l84_gemButtonWidth"
+			android:layout_height="@dimen/l84_gemButtonWidth" 
+			android:background="@drawable/l84_button_gem_oct"
+			android:layout_marginBottom="@dimen/l84_gemButtonMargin" 
+			android:id="@+id/l84_ButtonGemOct"
+			android:layout_below="@+id/l84_ButtonGemRound">
+		</ImageButton>
+		<ImageButton 
+			android:layout_width="@dimen/l84_gemButtonWidth" 
+			android:layout_height="@dimen/l84_gemButtonWidth" 
+			android:background="@drawable/l84_button_gem_rect"
+			android:layout_marginBottom="@dimen/l84_gemButtonMargin" 
+			android:id="@+id/l84_ButtonGemRect" 
+			android:layout_below="@+id/l84_ButtonGemOct">
+		</ImageButton>
+		<ImageButton
+			android:layout_width="@dimen/l84_gemButtonWidth" 
+			android:layout_height="@dimen/l84_gemButtonWidth"  
+			android:background="@drawable/l84_button_gem_diamond"
+			android:id="@+id/l84_ButtonGemDiamond" 
+			android:layout_below="@+id/l84_ButtonGemRect">
+		</ImageButton>
+		
+		<SeekBar 
+			android:layout_below="@+id/l84_openglview"
+			android:layout_height="wrap_content" 
+			android:layout_width="wrap_content"
+			android:scrollbarAlwaysDrawHorizontalTrack="true" 
+			android:minWidth="100pt"
+			android:layout_alignParentRight="true" 
+			android:layout_alignParentBottom="true" 
+			android:id="@+id/l84_AccelBar"
+			android:max="360" 
+			android:progress="180"></SeekBar>
+			
+	
+</RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8" ?>
+	<!--
+		use this file to describe the used resources (licensed under CC, special permission, etc.). 
+		Fields: 
+		* type: [texture, sound, 3D model, photo, artwork, music, text] 
+		* name: the name of the resource (provided by the author) 
+		* author: the name of the author
+		* url: a url to the resource 
+		* usage: indicate how and where it was used
+		* license: the used license 
+		* acknowledgement: the text that the author requires to be printed
+	-->
+	
+<credits>
+	
+<credit type="texture" author="Luis Olavarria" 
+	url="http://www.deviantart.com" 
+	usage="icon" 
+	license="CC" 
+	name="Dead rabbits everywhere">
+</credit>
+
+
+<credit type="music" author="David Kostenwein" 
+	name="backgroud loops"
+	usage="background music" 
+	license="CC" >
+</credit>
+
+<!--  level 13 -->
+<credit type="music" author="harri" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=16174" 
+	usage="l13 - background music" 
+	license="CC Sampling Plus 1.0" 
+	name="digibass_loop_170bpm">
+</credit>
+<credit type="sound" author="epanody" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=86683" 
+	usage="l13 - prostitute sound" 
+	license="CC Sampling Plus 1.0" 
+	name="epanody--orgasm_and_breathing">
+</credit>
+<credit type="sound" author="NoiseCollector" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=63476" 
+	usage="l13 - beer sound" 
+	license="CC Sampling Plus 1.0" 
+	name="burpnice">
+</credit>
+<credit type="texture" author="Silveira Neto" 
+	url="http://silveiraneto.net/tag/tileset/" 
+	usage="l13 - background map" 
+	license="CC" 
+	name="My free Tileset, version 10">
+</credit>
+<credit type="texture" author="Nesusvet" 
+	url="http://commons.wikimedia.org/wiki/File:Beer_template.gif" 
+	usage="l13 - beer texture, level icon, wasted texture" 
+	license="Public domain" 
+	name="Beer_template">
+</credit>
+<credit type="texture" author="Ltljltlj" 
+	url="http://commons.wikimedia.org/wiki/File:Stop_sign_MUTCD.svg" 
+	usage="l13 - censored texture" 
+	license="Public domain" 
+	name="Stop_sign_MUTCD">
+</credit>
+<credit type="texture" author="Olek Remesz" 
+	url="http://commons.wikimedia.org/wiki/File:Police_handcuffs_alt.jpg" 
+	usage="l13 - busted texture" 
+	license=" GNU Free Documentation License, Version 1.2" 
+	name="Police_handcuffs">
+</credit>
+
+<credit type="sound" author="hanstimm" 
+	url="http://www.freesound.org" 
+	usage="l13 - Wasted sound" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_wasted_pt2">
+</credit>
+
+
+<credit type="sound" author="Paracelsus" 
+	url="http://www.freesound.org" 
+	usage="l13 - Wasted sound" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_wasted_pt1">
+</credit>
+
+
+<credit type="sound" author="ERH" 
+	url="http://www.freesound.org" 
+	usage="l13 - Police" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_police_pt2">
+</credit>
+
+<credit type="sound" author="Siren" 
+	url="http://www.freesound.org" 
+	usage="l13 - Police" 
+	license="Creative Commons Sampling Plus 1.0" 
+	name="l13_police_pt1">
+</credit>
+
+
+
+<!-- Level 23 --> 
+<credit type="sound" author="shawshank73" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=87380" 
+	usage="l23 - starting sound" 
+	license="CC Sampling Plus 1.0" 
+	name="Let it begin ">
+</credit>
+
+<credit type="sound" author="Dynamicell" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=17548" 
+	usage="l23 - temporary boost" 
+	license="CC Sampling Plus 1.0" 
+	name="Temporary boost">
+</credit>
+
+<credit type="sound" author="Tomlija" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=97669" 
+	usage="l23 - permanent boost" 
+	license="CC Sampling Plus 1.0" 
+	name="Permanent boost">
+</credit>
+
+<credit type="photography" author="ronnie44052" 
+	url="http://www.flickr.com/photos/ronnie44052/2730972472/" 
+	usage="l23 - balloon texture" 
+	license="CC" 
+	name="balloon">
+</credit>
+
+<credit type="texture" name="vintage grunge textures" author="princess-of-shadows"
+	url="http://princess-of-shadows.deviantart.com/art/vintage-grunge-textures-79040200"
+	usage="map texture" license="CC" />
+
+
+
+<!-- Level 30 -->	
+<credit type="sound" author="pierrecartoons1979" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=88774" 
+	usage="l30_ohno" 
+	license="CC Sampling Plus 1.0" 
+	name="Oh No!">
+</credit>
+
+<credit type="sound" author="totya" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=19446" 
+	usage="l30_yeah" 
+	license="CC Sampling Plus 1.0" 
+	name="yeah">
+</credit>
+
+<credit type="sound" author="acclivity" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=32243" 
+	usage="l30_outoftime" 
+	license="CC Sampling Plus 1.0" 
+	name="OutOfTime">
+</credit>
+
+<credit type="sound" author="acclivity" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=22952" 
+	usage="l30_win" 
+	license="CC Sampling Plus 1.0" 
+	name="Cheer">
+</credit>
+
+<credit type="sound" author="TicTacShutUp" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=406" 
+	usage="l30_click" 
+	license="CC Sampling Plus 1.0" 
+	name="click 1 d">
+</credit>
+
+<credit type="sound" author="Wolfsinger" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=25762" 
+	usage="l30_lose" 
+	license="CC Sampling Plus 1.0" 
+	name="wap wap wap wap waaaaaah">
+</credit>
+
+<credit type="sound" author="tedthetrumpet" 
+	url="http://www.freesound.org/samplesViewSingle.php?id=15813" 
+	usage="l30_beep" 
+	license="CC Sampling Plus 1.0" 
+	name="alarmclockbeeps">
+</credit>
+
+
+<!-- Level 33 -->	
+<credit type="sound" name="Never Heard a Rhyme Like This Before" author="scottaltham"
+	url="http://dig.ccmixter.org/music_for_games?dig-lic=safe"
+	usage="l33 - level_music" license="CC" />
+	
+<credit type="sound" name="Door opens and shuts" author="FreqMan"
+	url="http://www.freesound.org/samplesViewSingle.php?id=23168"
+	usage="l33 - trash" license="CC" />
+	
+<credit type="sound" name="Unrolling And Rolling Map" author="Benboncan"
+	url="http://www.freesound.org/samplesViewSingle.php?id=77319"
+	usage="l33 - map" license="CC" />
+	
+<credit type="sound" name="money down the toilet" author="juskiddink"
+	url="http://www.freesound.org/samplesViewSingle.php?id=61287"
+	usage="l33 - spring" license="CC" />
+
+<credit type="sound" name="spinning_coin" author="morgantj"
+	url="http://www.freesound.org/samplesViewSingle.php?id=58924"
+	usage="l33 - spring" license="CC" />
+
+<credit type="sound" name="d_chimes2" author="BristolStories"
+	url="http://www.freesound.org/samplesViewSingle.php?id=51695"
+	usage="l33 - spring" license="CC" />
+	
+<credit type="3D model" name="White Rabbit" author="artist-3d.com"
+	url="http://artist-3d.com/free_3d_models/dnm/model_disp.php?uid=1825&amp;ad=&amp;op=op"
+	usage="l33 - Character" license="CC" />
+
+<credit type="texture" name="Sunburnt" author="pareeerica" 
+	url="http://free3dstextures.com/texture/*_Sunburnt_*/3279735323" 
+	usage="l33 - textur - floor" license="CC" />
+	
+	
+
+<!-- Level 42 -->	
+<credit type="sound" name="possiblelazer" author="aust_paul"
+	url="http://www.freesound.org/samplesViewSingle.php?id=30935"
+	usage="level 42 - force effect" license="CC" />
+	
+<credit type="sound" name="Blast" author="Benboncan"
+	url="http://www.freesound.org/samplesViewSingle.php?id=73005"
+	usage="level 42 - collision effect" license="CC" />
+	
+<credit type="sound" name="yeah" author="totya"
+	url="http://www.freesound.org/samplesViewSingle.php?id=19446"
+	usage="level 42 - level finish" license="CC" />
+	
+<credit type="sound" name="phaser2" author="impactuniversal"
+	url="http://www.freesound.org/samplesViewSingle.php?id=63373"
+	usage="level 42 - collision sound" license="CC" />
+
+<credit type="sound" name="Explosion" author="steveygos93"
+	url="http://www.freesound.org/samplesViewSingle.php?id=80400"
+	usage="level 42 - collision sound" license="CC" />
+
+<credit type="3D model" name="Dolphin Small3" author="hoeq"
+	url="http://www.3dvia.com/models/8D79B18395A7B98B"
+	usage="level 42 - Satellite" license="CC" />
+	
+<credit type="3D model" name="Ducky" author="ratafu"
+	url="http://www.3dvia.com/models/0496283A0C1E3002"
+	usage="level 42 - Satellite" license="CC" />
+	
+<credit type="texture" name="S.P.A.C.E. Photoshop Brushes" author="JaneDoeStock"
+	url="http://janedoestock.deviantart.com/art/S-P-A-C-E-Photoshop-Brushes-55948175"
+	usage="level 42 - space texture" license="Credit" />
+
+<credit type="texture" name="Rabies Star" author="Rabieshund"
+	url="http://qbrushes.net/nature/rabies-star-ps-brush/"
+	usage="level 42 - space texture" license="CC" />
+
+
+<!-- Level 44 -->
+<credit type="music" name="Flowers Simplistic Beats 2" author="hello_flowers"
+  url="http://www.freesound.org/samplesViewSingle.php?id=34517"
+  usage="Level 44 - Music" license="CC Sampling Plus 1.0"/>
+<credit type="sound" name="Ding Ding" author="ljudman"
+  url="http://www.freesound.org/samplesViewSingle.php?id=33244"
+  usage="Level 44 - End Ding" license="CC Sampling Plus 1.0"/>
+<credit type="sound" name="Wings Low" author="franchus"
+  url="http://www.freesound.org/samplesViewSingle.php?id=48647"
+  usage="Level 44 - Wing Flap" license="CC Sampling Plus 1.0"/>
+<credit type="sound" name="Laugh, Damn and WTF" author="thp"
+  url="http://thpinfo.com/2010/mirerabbit/"
+  usage="Level 44 - Shaman's Voice" license="CC-BY-SA 3.0"/>
+<credit type="texture" name="MireRabbit" author="thp"
+  url="http://thpinfo.com/2010/mirerabbit/"
+  usage="Level 44 - Visual Assets" license="CC-BY-SA 3.0"/>
+<!-- tbd: shot, beep, load, drop -->
+<!-- End Level 44 -->
+
+
+<!-- Level 50 -->
+<credit type="sound" name="Vacance" author="internetfilm"
+	url="http://www.freesfx.co.uk/users/internetfilm/"
+	usage="level 50 - background sound" license="CC" />
+<credit type="sound" name="Comedy Trumpet Playing Sad Song Wah Wah Wah Wah" author="gr8sfx"
+	url="http://www.freesfx.co.uk/users/gr8sfx/"
+	usage="level 50 - losing sound" license="EULA Freesfx.co.uk" />
+<credit type="sound" name="Comedy Music Mexican Jumping Bean" author="gr8sfx"
+	url="http://www.freesfx.co.uk/users/gr8sfx/"
+	usage="level 50 - winning tune" license="EULA Freesfx.co.uk" />
+	
+<!-- Level 60 -->
+<credit type="sound" name="Large Glass Window Being Smashed" author="gr8sfx"
+	url="http://www.freesfx.co.uk/users/gr8sfx/"
+	usage="level 60 - smashing window" license="EULA Freesfx.co.uk" />
+
+<!-- Level 70 - credits -->
+<credit type="sound" name="Short swish button sound." author="junggle"
+	url="http://www.freesound.org/download/28819/28819_junggle_btn009.wav"
+	usage="level 70 - Switching rail fields." license="CC" />
+<credit type="sound" name="Short button click sound." author="junggle"
+	url="http://www.freesound.org/download/29304/29304_junggle_btn124.wav"
+	usage="level 70 - Selecting cloud or train field." license="CC" />	
+<credit type="sound" name="Quick air horn with echo." author="guitarguy1985"
+	url="http://www.freesound.org/download/68999/68999_guitarguy1985_airhorn_short.wav"
+	usage="level 70 - Train horn." license="CC" />
+	
+<!-- Level 83 -->	
+<credit type="sound" name="if you see kat...120bpm" author="hello_flowers"
+	url="http://www.freesound.org/samplesViewSingle.php?id=41021" usage="Lenny Must Die: background loop"
+	license="CC" />
+<credit type="sound" name="Chip013" author="HardPCM"
+	url="http://www.freesound.org/samplesViewSingle.php?id=31853" usage="Lenny Must Die: money pickup"
+	license="CC" />
+<credit type="sound" name="Chip077" author="HardPCM"
+	url="http://www.freesound.org/samplesViewSingle.php?id=33217" usage="Lenny Must Die: item drop"
+	license="CC" />
+<credit type="sound" name="countdown" author="meatball4u"
+	url="http://www.freesound.org/samplesViewSingle.php?id=17216" usage="Lenny Must Die: bomb countdown"
+	license="CC" />
+<credit type="sound" name="Voices bie bie I'll be off then"
+	author="ingsey101" url="http://www.freesound.org/samplesViewSingle.php?id=49981"
+	usage="Lenny Must Die: by by lenny" license="CC" />
+<credit type="texture" name="Lenny"
+	author="Robert Leitl" usage="Lenny Must Die: Lenny" license="CC"/>
+	
+<!-- Level 84 -->	
+<credit type="sound" name="RBH Glass_Break 01" author="RHumpries"
+	url="http://www.freesound.org/samplesViewSingle.php?id=977" usage="Level 84 - Gem sound - breaking"
+	license="CC Sampling Plus 1.0" />
+<credit type="sound" name="button-19" author="www.soundjay.com"
+	url="http://www.soundjay.com/button/sounds/button-19.mp3" usage="Level 84 - Button sound"
+	license="Credit" />
+<credit type="sound" name="water-splash-3" author="www.soundjay.com"
+	url="http://www.soundjay.com/nature/sounds/water-splash-3.mp3" usage="Level 84 - Gem sound - hitting a drain"
+	license="Credit" />
+<credit type="sound" name="Concrete block hitting the ground" author="CFEffex"
+	url="http://www.freesound.org/samplesViewSingle.php?id=93959" usage="Level 84 - Gem sound - hitting ground"
+	license="CC Sampling Plus 1.0" />
+<credit type="sound" name="spring-weather-1" author="www.soundjay.com"
+	url="http://www.soundjay.com/ambient/sounds/spring-weather-1.mp3" usage="Level 84 - Ambient background noise"
+	license="Credit" />
+<credit type="sound" name="swosh-26" author="qubodup"
+	url="http://www.freesound.org/samplesViewSingle.php?id=60013" usage="Level 84 - Gem sound - falling"
+	license="CC Sampling Plus 1.0" />
+	
+<!--Level 88 - credits-->
+<credit
+		type="texture"
+		name="RPG map symbols"
+		author="nicubunu"
+		url="http://www.openclipart.org, [search for: rpg map]"
+		usage="The game map"
+		license="CC">
+</credit>
+<credit
+		type="texture"
+		name="Crossed swords"
+		author="zeimusu"
+		url="http://www.openclipart.org/detail/3058"
+		usage="Icon for the police"
+		license="CC">
+</credit>
+<credit
+		type="texture"
+		name="Star"
+		author="nicubunu"
+		url="http://www.openclipart.org/detail/22428"
+		usage="Icon for stashes"
+		license="CC">
+
+</credit>
+	<credit
+		type="sound" name="Discount Funk Bass Riff _D_G_F_85 -01" author="enoe" url="http://audio.ibeat.org/?ccm=/files/enoe/617" usage="Bunny Heist: Background loop" license="CC">
+</credit>
+	<credit
+		type="sound" name="Ta Da" author="Mike Koenig" url="http://soundbible.com/1003-Ta-Da.html" usage="Bunny Heist: Winning" license="CC">
+</credit>
+	<credit
+		type="sound" name="Police Siren Sounds Sound Effect" author="FreeSounds.info" url="http://free-loops.com/download-free-loop-4823.html" usage="Bunny Heist: Getting caught by the police" license="CC">
+</credit>
+	
+
+</credits>

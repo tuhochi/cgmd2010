@@ -1,0 +1,6 @@
+/./bin/
+/./gen/
+/.settings
+/bin
+/gen
+.DS_Store

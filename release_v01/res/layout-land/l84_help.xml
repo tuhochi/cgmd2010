@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:background="@drawable/l84_help_bg_landscape">
+
+	<ScrollView android:id="@+id/ScrollView01"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:paddingLeft="55dp" android:paddingRight="55dp"
+		android:paddingTop="10dp">
+		<TableLayout android:id="@+id/TableLayout01"
+			android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TableRow>
+				<TextView android:id="@+id/TextView01"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_title" android:textSize="10pt"
+					android:typeface="serif"
+					android:textColor="@color/l84_colorBrown" android:layout_marginBottom="10dp"></TextView>
+			</TableRow>
+			<TableRow>
+				<ImageView android:layout_width="210dp"
+					android:layout_gravity="center_horizontal" android:background="@drawable/l84_drain_diamond" android:layout_height="250dp"></ImageView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView01"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_subtitle" android:textStyle="bold"
+					android:typeface="serif"
+					android:textColor="@color/l84_colorDarkBrown"
+					android:layout_marginTop="10dp" android:layout_marginBottom="10dp"></TextView>
+			</TableRow>
+			<TableRow>
+				<ImageView android:layout_gravity="center_horizontal" android:background="@drawable/l84_separator" android:layout_width="210dp" android:layout_height="60dp"></ImageView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView02"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_content1" android:textColor="@color/l84_colorBlack"
+					android:typeface="serif" android:layout_marginTop="10dp" android:layout_marginBottom="20dp"></TextView>
+			</TableRow>
+			<TableRow>
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="20dp">
+					<ImageView android:layout_width="45dp"
+						android:background="@drawable/l84_button_gem_round"
+						android:layout_height="45dp"></ImageView>
+					<ImageView android:layout_width="45dp"
+						android:background="@drawable/l84_button_gem_oct"
+						android:layout_height="45dp" android:layout_marginLeft="9dp"></ImageView>
+					<ImageView android:layout_width="45dp"
+						android:background="@drawable/l84_button_gem_rect"
+						android:layout_height="45dp" android:layout_marginLeft="9dp"></ImageView>
+					<ImageView android:layout_width="45dp"
+						android:background="@drawable/l84_button_gem_diamond"
+						android:layout_height="45dp" android:layout_marginLeft="9dp"></ImageView>
+				</LinearLayout>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView03"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_content2a" android:textColor="@color/l84_colorBlack"
+					android:typeface="serif"></TextView>
+			</TableRow>
+			<TableRow>
+				<ImageView android:layout_width="210dp"
+					android:layout_gravity="center_horizontal" android:background="@drawable/l84_tex_gemshape_rect" 
+					android:layout_height="250dp"></ImageView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView04"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_content2b" android:textColor="@color/l84_colorBlack"
+					android:typeface="serif"></TextView>
+			</TableRow>
+			<TableRow>
+				<ImageView android:layout_width="210dp"
+					android:layout_gravity="center_horizontal" android:background="@drawable/l84_tex_gem_rect" 
+					android:layout_height="250dp"></ImageView>
+			</TableRow>
+			
+			<TableRow>
+				<TextView android:id="@+id/TextView05"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_content3" android:textColor="@color/l84_colorBlack"
+					android:typeface="serif" android:layout_marginBottom="10dp"></TextView>
+			</TableRow>
+			<TableRow>
+				<ImageView android:layout_gravity="center_horizontal" android:background="@drawable/l84_separator" android:layout_width="210dp" android:layout_height="60dp"></ImageView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView06"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_content4" android:textColor="@color/l84_colorBlack"
+					android:typeface="serif" android:layout_marginTop="10dp" android:layout_marginBottom="10dp"></TextView>
+			</TableRow>
+			<TableRow>
+				<ImageView android:layout_gravity="center_horizontal" android:background="@drawable/l84_separator" android:layout_width="210dp" android:layout_height="60dp"></ImageView>
+			</TableRow>
+			<TableRow>
+				<TextView android:id="@+id/TextView07"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/l84_help_content5" android:textColor="@color/l84_colorBlack"
+					 android:textStyle="bold"
+					android:typeface="serif" android:layout_marginTop="10dp" android:layout_marginBottom="20dp"></TextView>
+			</TableRow>
+		</TableLayout>
+	</ScrollView>
+</LinearLayout>

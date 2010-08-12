@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l20_FrameLayout" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <at.ac.tuwien.cg.cgmd.bifth2010.level20.RenderView
+		android:id="@+id/l20_RenderView"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"/>
+    
+		
+    <TextView
+   		android:id="@+id/l20_MoneyText" 
+        android:layout_width="wrap_content" 
+        android:layout_gravity="right|top"
+        android:padding="2dip"
+        android:textColor="#ffffffff"        
+        android:text="100$" 
+        android:editable="false" 
+        android:layout_height="wrap_content" 
+        android:drawableLeft="@drawable/l17_coin" 
+        android:maxHeight="24dip" android:height="24dip" 
+        android:background="#AA000000" 
+        android:drawablePadding="6dip"/>     
+
+
+   <TextView
+   		android:id="@+id/l20_TimeText" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_marginBottom="2dip"
+        android:layout_gravity="left|top"
+        android:padding="2dip"        
+        android:background="#AA000000"
+        android:textColor="#ffffffff"        
+        android:text="1:00" 
+        android:drawableLeft="@drawable/l20_watch" 
+        android:drawablePadding="4dip" android:height="24dip" 
+        android:width="70dip"/>
+        
+    <TextView 
+        android:id="@+id/l20_DescriptionText"
+        android:text="@string/l20_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:background="#AA000000"
+        android:textColor="#ffffffff"
+        
+    android:singleLine="false" android:layout_gravity="center" android:maxWidth="400dip" android:paddingBottom="10dip" android:paddingLeft="10dip" android:paddingRight="10dip" android:paddingTop="10dip"></TextView>
+        
+	<Button 
+		android:id="@+id/l20_ButtonStart" 
+		android:text="@string/l20_button_start_text" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:layout_gravity="center|bottom" 
+        android:layout_marginBottom="20dip"
+        android:paddingLeft="30dip"
+        android:paddingRight="30dip"
+		android:clickable="true"
+        
+	></Button>
+	
+
+
+
+</FrameLayout>

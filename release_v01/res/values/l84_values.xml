@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<color name="l84_colorBlack">#000</color>
+<color name="l84_colorWhite">#fff</color>
+<color name="l84_colorBrown">#6f3f14</color>
+<color name="l84_colorDarkBrown">#321a04</color>
+<dimen name="l84_gemButtonWidth">60dp</dimen>
+<dimen name="l84_gemButtonMargin">3dp</dimen>
+</resources>

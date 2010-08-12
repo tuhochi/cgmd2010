@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="L22HelpTitle">Level 22 - Mailbomber</string>
+<string name="L22HelpPart1">Bei Mailbomber geht es um einen armen Bürohengst, der ständig mit Spammails zugemüllt wird. Viele dieser Emails zeigen ihm vielversprechende Wege, wie er schnell reich werden kann. Andere Mails hingegen befassen sich damit, wo sich unser Protagonist mit Viagra versorgen kann. Unser armer Held will sich nun ausreichend mit diesen Aufputschmitteln versorgen. Doch vorsicht, gewinnt er Geld, könnte er ja womöglich noch auf andere Gedanken kommen.</string>
+<string name="L22HelpPart2">Ziel des Spieles ist demnach, Mach-mich-reich-Mails zu ignorieren, gleichzeitig aber Viagra Mails bewusst zur Kenntnis zu nehmen. Dies funktioniert folgendermaßen : </string>
+<string name="L22HelpPart3">Der Protagonist sitzt gerade vor seinem Monitor, auf welchem sich ständig Mails aus weiter Entfernung auf ihn zubewegen. Dies ist auch, was der Spieler gerade sieht. Auf den Mails sind kurze Begriffe in L33t Speak geschrieben. Ziel ist es nun, diese Begriffe einzutippen, ehe die Mails den Monitorrand erreichen. Doch dies ist nicht alles : Viagramails müssen von L33tspeak auf Englisch übersetzt werden, während Mach-mich-reich-Mails in L33tspeak eingetippt werden müssen. Für jeden Misserfolg gewinnt der Spieler Geld, da er den falschen Dingen Aufmerksamkeit geschenkt hat. Analog dazu verliert er Geld für zunehmende Viagrabestände, sprich, das korrekte übersetzen des Begriffes bevor die Mail dem Spieler ins Gesicht knallt. Viagramails unterscheiden sich von Mach-mich-reich-Mails anhand markanter Begriffe, die korrekte Interpretation ist dem Spieler überlassen. </string>
+
+<string name="L22nameofthegame">Mail Bomber</string>
+</resources>

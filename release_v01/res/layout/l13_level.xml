@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content"
+	android:id="@+id/l13_levelLayout">
+	
+	<at.ac.tuwien.cg.cgmd.bifth2010.level13.MyRenderer
+		android:id="@+id/l13_MyRenderer"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"/>
+		
+	<TextView 
+		android:id="@+id/l13_fpsTextView"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="#AA000000"
+        android:textColor="#ffffffff"  
+		android:layout_gravity="top|center"
+		android:padding="2dip"
+		android:layout_marginBottom="2dip">
+	</TextView>
+	
+	<TextView 
+		android:id="@+id/l13_timeText"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:layout_gravity="top|left"
+		android:background="#AA000000"
+        android:textColor="#ffffffff"        
+        android:text="Time: 1:00" 
+        android:padding="2dip"
+        android:layout_marginBottom="2dip">
+	</TextView>
+	
+	<TextView 
+		android:id="@+id/l13_moneyText"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:layout_gravity="top|right"
+		android:background="#AA000000"
+        android:textColor="#ffffffff"        
+        android:text="Money: 0$" 
+        android:padding="2dip"
+        android:layout_marginBottom="2dip">
+	</TextView>
+</FrameLayout>

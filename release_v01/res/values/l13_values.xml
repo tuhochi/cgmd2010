@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="l13_helpTitlePadding">6dip</dimen>
+	<dimen name="l13_helpTextPadding">6dip</dimen>
+	<dimen name="l13_helpTitleSize">20dip</dimen>
+	<dimen name="l13_helpTextSize">15dip</dimen>
+	<dimen name="l13_helpImagePadding">40dip</dimen>
+</resources>

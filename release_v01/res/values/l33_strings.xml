@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="l33_help_headline">The mysterious labyrinth</string>
+<string name="l33_help_main">Carrying a huge treasure in the luggage one is on the run and arrives/lands in a mysterious labyrinth. Move across the labyrinth with the aid of the cursor keys or by using the touch-screen and try to leave as much of your gold as possible at suitable places within the time span of three minutes. However, do not be afraid if you are confronted with strange things on your way.</string>
+<string name="l33_GameName">The mysterious labyrinth</string>
+<string name="l33_help_entry1">Try to avoid the treasure, because otherwise you will be punished with wealth.</string>
+<string name="l33_help_entry2">This old map will help you to find your way before it finally disintegrates.</string>
+<string name="l33_help_entry3">Under a stone you can safely deposit a small part of your gold.</string>
+<string name="l33_help_entry4">You are already exhausted by carrying heavy stocks of your gold? In this barrel you can hide a large amount of your load.</string>
+<string name="l33_help_entry5">This well is a magic wishing well. Just/Only for a small part of your gold something unpredictable/unforeseeable will happen. But be aware of the fact that it doesn’t need to be in your favour!</string>
+<string name="l33_help_entry1_head">Treasure</string>
+<string name="l33_help_entry2_head">Map</string>
+<string name="l33_help_entry3_head">Stone</string>
+<string name="l33_help_entry4_head">Barrel</string>
+<string name="l33_help_entry5_head">Well</string>
+<string name="l33_level_fps">fps: 0</string>
+<string name="l33_tutorial_goodItems">Collect all items which are green marked to loose your gold</string>
+<string name="l33_tutorial_badItems">Avoid items which are marked with a red circle</string>
+<string name="l33_tutorial_loadingText">Loading....</string>
+<string name="l33_tutorial_startGame">Touch the screen to start the game....</string>
+<string name="l33_dialog">Level completed! You won!</string>
+<string name="l33_dialog2">Level-progress: </string>
+</resources>

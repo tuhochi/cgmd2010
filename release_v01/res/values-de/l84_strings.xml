@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="l84_help_title">Ich werfe meine Juwelen in den Kanal</string>
+    <string name="l84_help_subtitle">
+     Als Sie eines Tages eine ruhige Straße entlang wandern, 
+     verspüren Sie plötzlich den akuten Drang, Ihre Juwelensammlung loszuwerden. 
+     Geld macht schließlich nicht glücklich. 
+     Die Straße verfügt erfreulicherweise über zahlreiche Kanaldeckel, deren 
+     Öffnungen jedoch verschieden geformt sind. Kurzum: Nicht jedes Juwel 
+     passt überall rein. Falls aber doch, muss es beim Abwurf noch passend 
+     ausgerichtet sein!</string>
+    <string name="l84_help_content1">
+     Sie wandern in Richtung des rechten Spielfeldrandes. Nach der Reihe finden Sie verschieden 
+     gegossene Kanaldeckel und müssen somit den entsprechenden Edelstein erwischen. Dazu haben Sie
+     am linken Bildschirmrand Ihre verschiedenen Juwelentypen im Überblick (4 an der Zahl) - 
+     die sich in ihrer Form unterscheiden.
+     </string> 
+     <string name="l84_help_content2a">
+     Wählen Sie den aktuell passenden Typ durch 
+     Berührung aus. Der Edelstein wird daraufhin transparent in der Bildmitte eingeblendet. Solange Sie 
+     den Finger gedrückt halten, wird der Edelstein \"gehalten\" (eingeblendet) und sie können durch Device-Rotation dessen Ausrichtung 
+     ändern.
+     </string>
+     <string name="l84_help_content2b">
+     Wenn Sie loslassen, fällt der Stein – hoffentlich passend – in den Kanal. Bedenken Sie, dass 
+     der Fall eine gewisse Zeit in anspruch nimmt und Sie den Abwurf dementsprechend timen müssen.
+     </string> 
+     <string name="l84_help_content3">
+     Für den Fall, dass Sie treffen, verlieren Sie dessen Wert zur Gänze (Runder Stein: $1.000,- Achteckiger: $2.000,- 
+     Rechteckiger: $3.000,- und letztlich der Diamant: $4.000,-). Zerbricht der Stein (z.B. durch falsche Ausrichtung 
+     oder Abwurf beim falschen Kanaldeckel), verlieren Sie ein zehntel des Wertes. Ein Aufprall auf der staubigen Straße 
+     zerstört den Stein nicht - sie verlieren daher gar nichts.
+     </string> 
+     <string name="l84_help_content4">
+     Das Spiel endet, wenn sie das Ende der Straße erreicht haben, oder Ihre gesamte Juwelensammlung losgeworden sind.
+    </string> 
+    <string name="l84_help_content5">
+     Viel Spaß!
+    </string> 
+    <string name="l84_intro_title">Spielanleitung</string>
+    <string name="l84_intro_step1">Wähle einen Edelstein von links durch Halten des Buttons aus</string>
+    <string name="l84_intro_step2">Rotiere das Smartphone, um den Edelstein auszurichten</string>
+    <string name="l84_intro_step3">Lass den Edelstein in den Kanal fallen</string>
+    <string name="l84_result_title">Resultat</string>
+    <string name="l84_result_hits">Treffer</string>
+    <string name="l84_result_breaks">Brüche</string>
+    <string name="l84_result_mtotal">Startbetrag: </string>
+    <string name="l84_result_mremaining">Restbetrag: </string>
+    <string name="l84_result_mlost">Verloren: </string>
+</resources>
