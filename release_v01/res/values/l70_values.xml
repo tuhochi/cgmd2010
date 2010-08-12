@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-<dimen name="l70_HelpActivity_TextPaddingLeft">8dip</dimen>
-<dimen name="l70_HelpActivity_TextPaddingRight">4dip</dimen>
-<dimen name="l70_HelpActivity_TextPaddingTop">15dip</dimen>
-</resources>
