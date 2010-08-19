@@ -11,7 +11,6 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,8 +28,9 @@ import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 public class MenuActivity extends Activity {
     
-	
+	/* deprecated for release:
 	private static final String CLASS_TAG = MenuActivity.class.getSimpleName();
+	*/
 	
 	/**
 	 * the name of the preference file that stores global user settings 
@@ -79,7 +79,6 @@ public class MenuActivity extends Activity {
 		    			mAudioPlayer.pause();
 		    		}
 		       	}
-				//TODO turn music off/on
 		    }
 		}    	
     };
@@ -101,14 +100,18 @@ public class MenuActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.l00_menu);
+        /*  deprecated for release:
         Button buttonNewGame = (Button) findViewById(R.id.l00_ButtonNewGame);
         buttonNewGame.setOnClickListener(mStartClickListener);
+        */
         Button buttonContinueGame = (Button) findViewById(R.id.l00_ButtonContinueGame);
         buttonContinueGame.setOnClickListener(mStartClickListener);
         Button buttonHelp = (Button) findViewById(R.id.l00_ButtonHelp);
         buttonHelp.setOnClickListener(mStartClickListener);
+        /* deprecated for release:
         Button buttonAbout = (Button) findViewById(R.id.l00_ButtonAbout);
         buttonAbout.setOnClickListener(mStartClickListener);
+        */
         Button buttonCredit = (Button) findViewById(R.id.l00_ButtonCredits);
         buttonCredit.setOnClickListener(mStartClickListener);
         mCheckboxMusic = (CheckBox) findViewById(R.id.l00_CheckBoxSound);
@@ -137,11 +140,13 @@ public class MenuActivity extends Activity {
 		public void onClick(View v) {
 			SharedPreferences settings = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_SETTINGS_FILE, 0);
 			boolean bMusic = settings.getBoolean(PREFERENCE_MUSIC, true);
+			/*  deprecated for release:
 			if(v.getId()== R.id.l00_ButtonNewGame){
+			 
 				
 				
 				Intent intentMap = new Intent(getApplicationContext(), MapActivity.class);
-				intentMap.putExtra(MapActivity.EXTRA_STARTNEW, true);
+				// deprecated for release: intentMap.putExtra(MapActivity.EXTRA_STARTNEW, true);
 				intentMap.putExtra(MapActivity.EXTRA_MUSIC_ON, bMusic);
 				SharedPreferences state = getSharedPreferences(EntryPoint.SHAREDPREFERENCES_FRAMEWORK_DEBUGSETTINGS, 0);
 				if(state.getBoolean(EntryPoint.PREFERENCE_DEBUG_ENABLED, false)){
@@ -152,14 +157,17 @@ public class MenuActivity extends Activity {
 					iLevel[3] = state.getInt(EntryPoint.PREFERENCE_LEVEL_04, -1);
 					iLevel[4] = state.getInt(EntryPoint.PREFERENCE_LEVEL_05, -1);
 					iLevel[5] = state.getInt(EntryPoint.PREFERENCE_LEVEL_06, -1);
-					intentMap.putExtra(MapActivity.EXTRA_DEBUG_LEVELASSIGNMENT, iLevel);
+			        // deprecated for release: intentMap.putExtra(MapActivity.EXTRA_DEBUG_LEVELASSIGNMENT, iLevel);
+					
 				}
 				
 				
 				startActivity(intentMap);
-			} else if(v.getId()== R.id.l00_ButtonContinueGame){
+			} else */
+			
+			if(v.getId()== R.id.l00_ButtonContinueGame){
 				Intent intentMap = new Intent(getApplicationContext(), MapActivity.class);
-				intentMap.putExtra(MapActivity.EXTRA_STARTNEW, false);
+				// deprecated for release: intentMap.putExtra(MapActivity.EXTRA_STARTNEW, false);
 				intentMap.putExtra(MapActivity.EXTRA_MUSIC_ON, bMusic);
 				startActivity(intentMap);
 			}  else if(v.getId()== R.id.l00_ButtonCredits){
@@ -168,11 +176,14 @@ public class MenuActivity extends Activity {
 			}  else if(v.getId()== R.id.l00_ButtonHelp){
 				Intent intentHelp = new Intent(getApplicationContext(), HelpActivity.class);
 				startActivity(intentHelp);
-			}  else if(v.getId()== R.id.l00_ButtonAbout){
+			} 
+			/*  deprecated for release:
+			else if(v.getId()== R.id.l00_ButtonAbout){
+			
 				Intent intentAbout = new Intent(getApplicationContext(), AboutActivity.class);
 				intentAbout.putExtra(AboutActivity.EXTRA_MUSIC_ON, bMusic);
 				startActivity(intentAbout);
-			} 
+			} */ 
 		}
     };
     
@@ -233,6 +244,7 @@ public class MenuActivity extends Activity {
 		super.onDestroy();
 	}
 
+	/* deprecated for release:
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, 0, "Debugging On/Off");
@@ -262,6 +274,7 @@ public class MenuActivity extends Activity {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
+	*/
 
 
 }
