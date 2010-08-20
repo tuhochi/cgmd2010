@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/l00_FrameLayoutMenu">
+	
+
+
+<LinearLayout 
 	android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="@drawable/l00_menuebackground">
 	
@@ -24,7 +29,10 @@
 
 <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_CheckBoxSound" android:typeface="sans" android:textColor="@color/l00_buttonBackground" android:checked="true" android:layout_marginLeft="35dip" android:text="@string/l00_menu_08"></CheckBox>
 </TableLayout>
-<AbsoluteLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/l00_AbsoluteLayoutAnimation" android:layout_marginTop="50dp"><ImageView android:id="@+id/l00_ImageViewAnimation" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_rm_00"></ImageView>
+<AbsoluteLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/l00_AbsoluteLayoutAnimation" android:layout_marginTop="50dp">
 
+<LinearLayout android:layout_width="wrap_content" android:id="@+id/l00_LinearLayoutAnimation" android:orientation="horizontal" android:layout_height="fill_parent"><ImageView android:id="@+id/l00_ImageViewAnimationCopyOfGl" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_animation_run"></ImageView><ImageView android:id="@+id/l00_ImageViewAnimation" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_animation_run"></ImageView></LinearLayout>
 </AbsoluteLayout>
 </LinearLayout>
+<ImageView android:scaleType="fitCenter" android:src="@drawable/l00_rabit_256" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:id="@+id/l00_ImageViewSplash"/>
+</FrameLayout>

@@ -1,22 +1,39 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.framework;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -47,6 +64,16 @@ public class MenuActivity extends Activity {
 	
 	private MediaPlayer mAudioPlayer = null;
 	private CheckBox mCheckboxMusic = null; 
+	
+	AnimationDrawable mRunningAnimation = null;
+	ImageView mImage = null;
+	TranslateAnimation mTranslationAnimation = null;
+	
+	private GLSurfaceView mGLSurfaceView=null;
+	
+	CoinRenderer mCoinsRenderer = null;
+	
+	
     private OnCheckedChangeListener mSoundSettingChangedListener = new OnCheckedChangeListener(){
 
 		@Override
@@ -95,11 +122,61 @@ public class MenuActivity extends Activity {
 		    }
 		}
     };
-
+    
+    
+    private Handler splashHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+                //remove SplashScreen from view
+        		ImageView v = (ImageView) findViewById(R.id.l00_ImageViewSplash);
+        		if(v!=null){
+        			v.setVisibility(View.GONE);
+        		}
+                super.handleMessage(msg);
+        }
+    };
+    
+    Handler mHandlerAnimation = new Handler(){
+    	public void handleMessage(android.os.Message msg) {
+    		AbsoluteLayout al =  (AbsoluteLayout) findViewById(R.id.l00_AbsoluteLayoutAnimation);
+    		LinearLayout ll = (LinearLayout) findViewById(R.id.l00_LinearLayoutAnimation);
+    		if(ll!=null){
+    			AbsoluteLayout.LayoutParams lp = 
+					(AbsoluteLayout.LayoutParams) ll.getLayoutParams();
+    			
+    			
+        		
+    			lp.x+=3;
+    			int width = al.getWidth();
+    			if(lp.x>width){
+    				lp.x = ll.getWidth() * -1;
+    				
+    			}
+    			al.requestLayout();
+    		}
+    		
+    		AbsoluteLayout.LayoutParams lp2 = (AbsoluteLayout.LayoutParams) mGLSurfaceView.getLayoutParams();
+    		lp2.x = al.getWidth()-1;
+    		
+    		
+    		if( ! mCoinsRenderer.mBitmaps.isEmpty()){
+    			ImageView animationImageView = (ImageView) findViewById(R.id.l00_ImageViewAnimationCopyOfGl);
+    			BitmapDrawable d = new BitmapDrawable(mCoinsRenderer.mBitmaps.poll());
+    			animationImageView.setBackgroundDrawable(d);
+    			mCoinsRenderer.mBitmaps.clear();
+    		}
+    	};
+    };
+    
+   
+    
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.l00_menu);
+        splashHandler.sendMessageDelayed(new Message(), 2500);
+                
         /*  deprecated for release:
         Button buttonNewGame = (Button) findViewById(R.id.l00_ButtonNewGame);
         buttonNewGame.setOnClickListener(mStartClickListener);
@@ -132,6 +209,46 @@ public class MenuActivity extends Activity {
 			}
         });
         
+       
+        mGLSurfaceView = new GLSurfaceView(this);
+        mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        mGLSurfaceView.setLayoutParams(new LayoutParams(150, 150));
+        mCoinsRenderer = new CoinRenderer(getResources());//getResources());
+		SurfaceHolder holder = mGLSurfaceView.getHolder();
+		holder.setFormat(PixelFormat.TRANSLUCENT); 
+		mGLSurfaceView.setRenderer(mCoinsRenderer);
+
+        mImage = (ImageView) findViewById(R.id.l00_ImageViewAnimation);
+        mImage.setBackgroundResource(R.drawable.l00_animation_run);
+
+        mRunningAnimation = (AnimationDrawable) mImage.getBackground();
+        
+		AbsoluteLayout al =  (AbsoluteLayout) findViewById(R.id.l00_AbsoluteLayoutAnimation);
+		al.addView(mGLSurfaceView, 0);
+		
+		Timer t = new Timer();
+        t.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				mRunningAnimation.start();
+				
+			}
+        	
+        }, 250);
+        
+        t.schedule(new TimerTask() {
+			
+        	int counter = 0;
+			@Override
+			public void run() {
+				counter++;
+				mHandlerAnimation.sendEmptyMessage(counter);
+				
+			}
+		}, 100, 20);
+
+       
     }
     
     private OnClickListener mStartClickListener = new OnClickListener(){
@@ -217,6 +334,18 @@ public class MenuActivity extends Activity {
 				e.printStackTrace();
 			}
        	}
+       	
+    	if(mGLSurfaceView!=null)
+			mGLSurfaceView.onResume();
+       	
+      /*  //triggering the animation
+       	mAnimationTimer = new Timer();
+        mAnimationTimer.schedule(new TimerTask(){
+			@Override
+			public void run() {
+				mAnimationHandler.sendEmptyMessage(0);				
+			}
+        }, 0, 250);*/
 		super.onResume();
 	}
 	
@@ -228,6 +357,11 @@ public class MenuActivity extends Activity {
 				mAudioPlayer.pause();
 			}
 		}
+		
+		if(mGLSurfaceView!=null)
+			mGLSurfaceView.onPause();
+	
+		
 		super.onPause();
 	}
 	
