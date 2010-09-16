@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/l00_FrameLayoutMenu">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:id="@+id/l00_FrameLayoutMenu" android:background="@drawable/l00_menuebackground">
 	
-
-
 <LinearLayout 
 	android:orientation="vertical"
-	android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="@drawable/l00_menuebackground">
-	
-
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:visibility="gone" android:id="@+id/l00_LinearLayoutMenu">
 
 <TableLayout android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:gravity="center_vertical|center_horizontal" android:layout_height="wrap_content" android:layout_marginTop="100dp">
 <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
@@ -31,8 +27,8 @@
 </TableLayout>
 <AbsoluteLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/l00_AbsoluteLayoutAnimation" android:layout_marginTop="50dp">
 
-<LinearLayout android:layout_width="wrap_content" android:id="@+id/l00_LinearLayoutAnimation" android:orientation="horizontal" android:layout_height="fill_parent"><ImageView android:id="@+id/l00_ImageViewAnimationCopyOfGl" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_animation_run"></ImageView><ImageView android:id="@+id/l00_ImageViewAnimation" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_animation_run"></ImageView></LinearLayout>
+<LinearLayout android:layout_width="wrap_content" android:id="@+id/l00_LinearLayoutAnimation" android:orientation="horizontal" android:layout_height="fill_parent"><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageViewAnimationCoin" android:background="@drawable/l00_animation_coin"></ImageView><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_animation_run" android:id="@+id/l00_ImageViewAnimationRun"></ImageView></LinearLayout>
 </AbsoluteLayout>
 </LinearLayout>
-<ImageView android:scaleType="fitCenter" android:src="@drawable/l00_rabit_256" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:id="@+id/l00_ImageViewSplash"/>
+<ImageView android:scaleType="fitCenter" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:id="@+id/l00_ImageViewSplash" android:src="@drawable/l00_splashscreen_high"/>
 </FrameLayout>

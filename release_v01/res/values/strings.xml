@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="l00_nameofthegame_full">The Big Incredible and Funny Inverse Treasure Hunt 2.0 with 30% more Fun - For Free</string>
+    <string name="l00_nameofthegame_full">The Big Incredibly Funny Inverse Treasure Hunt 2.0 with 30% more Fun - For Free</string>
     
     <string name="l00_error_audio">"Audio replay is currently not working. Restarting the game or phone might help."</string>
   
     <string name="l00_help_part03">The placement of the levels is randomly chosen when you start a game. Here is a list of all possible levels. To see the help for an individual level click on its icon!</string>
     <string name="l00_help_part02">To lose part of your treasure play the level of your choice by pressing its icon. Levels that are marked with a question mark cannot be played yet. </string>
-    <string name="l00_help_part01">Choose one of the menu items to continue the last game, to start a new game, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to lose your treasure.</string>
+    <string name="l00_help_part01">Choose one of the menu items to play, get some help, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to lose your treasure.</string>
     
-    <string name="l00_nameofthegame_middle">The Big Incredible and Funny Inverse Treasure Hunt</string><string name="l00_nameofthegame_short">BIFTH</string><string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string><string name="l01_hello">Level01 Hello World </string>
+    <string name="l00_nameofthegame_middle">The Big Incredibly Funny Inverse Treasure Hunt</string>
+    <string name="l00_nameofthegame_short">BIFTH</string><string name="l00_unallowedLevel">Not there yet! Play a different level to get there!</string><string name="l01_hello">Level01 Hello World </string>
     <string name="l00_about_01">"was created by students at"</string>
     <string name="l00_about_02">"Vienna University of Technology, Austria:"</string>
     <string name="l00_about_03">Albors Askari, Felix Fleiß,</string>
@@ -32,7 +33,7 @@
     <string name="l00_about_21">Thomas Schulz, Manuel Keglevic,</string>
     <string name="l00_about_22">Gerald Sollböck, Georg Molzer,</string>
     <string name="l00_about_23">Ingo Radax, Michael Asperger,</string>
-    <string name="l00_about_24">Michael Hanzl, Peter Rautek.</string>
+    <string name="l00_about_24">Michael Hanzl, Peter Rautek</string>
     
     <string name="l00_about_25">"For credits press menu"</string>
     
@@ -42,6 +43,12 @@
     <string name="l00_help_04"></string>
     <string name="l00_help_05"></string>
     
+    <string name="l00_credits_00">
+    This game was developed during the course Computer Graphics on Mobile Devices, at Vienna University of Technology with the help of many people, open source projects and creative commons (CC) artwork. 
+    The full version of this game consists of many more levels. 
+    The source code of the game (including all levels) can be found at the <a href="http://code.google.com/p/cgmd2010/">public source code repository</a>.
+    At the web page of the Institute of Computergraphics and Algorithms, more information about the course <a href="http://www.cg.tuwien.ac.at/courses/CGMD/">Computer Graphics on Mobile Devices</a> can be found.
+    </string>
     <string name="l00_credits_01">" shared the texture(s) "</string>
     <string name="l00_credits_02">"Distributed under the license "</string>
     <string name="l00_credits_03">" shared the artwork(s) "</string>
@@ -51,7 +58,7 @@
     <string name="l00_credits_07">" shared the photo(s) "</string>
     <string name="l00_credits_08">" shared the text(s) "</string>
     <string name="l00_credits_09">" shared the work(s) "</string>
-    <string name="l00_credits_10">"Thanks to everybody who contributed to this project:"</string>
+    <string name="l00_credits_10">Thanks to everybody who contributed to this project:</string>
     <string name="l00_credits_11">"and anybody else."</string>
     <string name="l00_credits_12">"Music:"</string>
     <string name="l00_credits_13">"Sounds:"</string>

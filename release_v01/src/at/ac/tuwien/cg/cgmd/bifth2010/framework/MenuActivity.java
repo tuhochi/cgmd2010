@@ -18,20 +18,15 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsoluteLayout;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -66,12 +61,13 @@ public class MenuActivity extends Activity {
 	private CheckBox mCheckboxMusic = null; 
 	
 	AnimationDrawable mRunningAnimation = null;
-	ImageView mImage = null;
+	AnimationDrawable mCoinAnimation = null;
+	ImageView mImageRun = null;
+	ImageView mImageCoin = null;
 	TranslateAnimation mTranslationAnimation = null;
 	
-	private GLSurfaceView mGLSurfaceView=null;
 	
-	CoinRenderer mCoinsRenderer = null;
+	
 	
 	
     private OnCheckedChangeListener mSoundSettingChangedListener = new OnCheckedChangeListener(){
@@ -132,6 +128,11 @@ public class MenuActivity extends Activity {
         		if(v!=null){
         			v.setVisibility(View.GONE);
         		}
+        		LinearLayout vMenu = (LinearLayout) findViewById(R.id.l00_LinearLayoutMenu);
+        		if(vMenu!=null){
+        			vMenu.setVisibility(View.VISIBLE);
+        		}
+                
                 super.handleMessage(msg);
         }
     };
@@ -150,20 +151,8 @@ public class MenuActivity extends Activity {
     			int width = al.getWidth();
     			if(lp.x>width){
     				lp.x = ll.getWidth() * -1;
-    				
     			}
     			al.requestLayout();
-    		}
-    		
-    		AbsoluteLayout.LayoutParams lp2 = (AbsoluteLayout.LayoutParams) mGLSurfaceView.getLayoutParams();
-    		lp2.x = al.getWidth()-1;
-    		
-    		
-    		if( ! mCoinsRenderer.mBitmaps.isEmpty()){
-    			ImageView animationImageView = (ImageView) findViewById(R.id.l00_ImageViewAnimationCopyOfGl);
-    			BitmapDrawable d = new BitmapDrawable(mCoinsRenderer.mBitmaps.poll());
-    			animationImageView.setBackgroundDrawable(d);
-    			mCoinsRenderer.mBitmaps.clear();
     		}
     	};
     };
@@ -175,7 +164,7 @@ public class MenuActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.l00_menu);
-        splashHandler.sendMessageDelayed(new Message(), 2500);
+        splashHandler.sendMessageDelayed(new Message(), 3000);
                 
         /*  deprecated for release:
         Button buttonNewGame = (Button) findViewById(R.id.l00_ButtonNewGame);
@@ -210,28 +199,24 @@ public class MenuActivity extends Activity {
         });
         
        
-        mGLSurfaceView = new GLSurfaceView(this);
-        mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        mGLSurfaceView.setLayoutParams(new LayoutParams(150, 150));
-        mCoinsRenderer = new CoinRenderer(getResources());//getResources());
-		SurfaceHolder holder = mGLSurfaceView.getHolder();
-		holder.setFormat(PixelFormat.TRANSLUCENT); 
-		mGLSurfaceView.setRenderer(mCoinsRenderer);
-
-        mImage = (ImageView) findViewById(R.id.l00_ImageViewAnimation);
-        mImage.setBackgroundResource(R.drawable.l00_animation_run);
-
-        mRunningAnimation = (AnimationDrawable) mImage.getBackground();
         
-		AbsoluteLayout al =  (AbsoluteLayout) findViewById(R.id.l00_AbsoluteLayoutAnimation);
-		al.addView(mGLSurfaceView, 0);
-		
+        mImageRun = (ImageView) findViewById(R.id.l00_ImageViewAnimationRun);
+        mImageRun.setBackgroundResource(R.drawable.l00_animation_run);
+
+        mRunningAnimation = (AnimationDrawable) mImageRun.getBackground();
+        
+        mImageCoin = (ImageView) findViewById(R.id.l00_ImageViewAnimationCoin);
+        mImageCoin.setBackgroundResource(R.drawable.l00_animation_coin);
+
+        mCoinAnimation = (AnimationDrawable) mImageCoin.getBackground();
+        
 		Timer t = new Timer();
         t.schedule(new TimerTask(){
 
 			@Override
 			public void run() {
 				mRunningAnimation.start();
+				mCoinAnimation.start();
 				
 			}
         	
@@ -335,8 +320,6 @@ public class MenuActivity extends Activity {
 			}
        	}
        	
-    	if(mGLSurfaceView!=null)
-			mGLSurfaceView.onResume();
        	
       /*  //triggering the animation
        	mAnimationTimer = new Timer();
@@ -358,9 +341,6 @@ public class MenuActivity extends Activity {
 			}
 		}
 		
-		if(mGLSurfaceView!=null)
-			mGLSurfaceView.onPause();
-	
 		
 		super.onPause();
 	}

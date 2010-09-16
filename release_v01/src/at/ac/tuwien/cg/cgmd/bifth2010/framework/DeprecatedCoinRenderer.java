@@ -1,5 +1,6 @@
 package at.ac.tuwien.cg.cgmd.bifth2010.framework;
 
+import java.io.FileOutputStream;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,10 +15,10 @@ import android.opengl.GLSurfaceView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
 
 
-public class CoinRenderer implements GLSurfaceView.Renderer {
+public class DeprecatedCoinRenderer implements GLSurfaceView.Renderer {
 
-	private long mLastTime = 0;
-	private int mFrameCounter = 0; 
+	//private long mLastTime = 0;
+	//private int mFrameCounter = 0; 
 	
 	int mWidth=0;
 	int mHeight=0;
@@ -26,7 +27,7 @@ public class CoinRenderer implements GLSurfaceView.Renderer {
 	
 	public ConcurrentLinkedQueue<Bitmap> mBitmaps = new ConcurrentLinkedQueue<Bitmap>();
 	
-	public CoinRenderer(Resources resources){
+	public DeprecatedCoinRenderer(Resources resources){
 		mResources = resources;
 	
 	}
@@ -74,20 +75,20 @@ public class CoinRenderer implements GLSurfaceView.Renderer {
 		//gl.glColor4f(1,1,1,1);
 
 
-		mAngle += 5;
+		//mAngle +=  ;
 
-		mFrameCounter++;
+		//mFrameCounter++;
 
-		long elapsed = now-mLastTime; 
+		/*long elapsed = now-mLastTime; 
 		if(elapsed > 3000){
 			float millisPerFrame = (float)elapsed / (float)mFrameCounter;
 			float fps = 1000.f / millisPerFrame;
 			//Log.d(CLASS_TAG, "fps: "+fps);
 			mFrameCounter=0;
 			mLastTime = System.currentTimeMillis();
-		}
+		}*/
 		
-		Bitmap screen = SavePixels(0, 0, getWidth(), getHeight(), gl);
+		Bitmap screen = SavePixels(0, 0, getWidth(), getHeight(), "lala.png", gl);
 		mBitmaps.add(screen);		
 		
 		
@@ -101,14 +102,11 @@ public class CoinRenderer implements GLSurfaceView.Renderer {
 		return mHeight;
 	}
 	
-	protected Bitmap SavePixels(int x, int y, int w, int h, GL10 gl)
-	 
+	protected Bitmap SavePixels(int x, int y, int w, int h, String filename, GL10 gl)
     {  
-
-		
          int b[]=new int[w*h];
 
-         int bt[]=new int[w*h];
+         int bt[]=new int[w*h];                                                                                                                                                                                                                                                                                                                                                                                     
 
          IntBuffer ib=IntBuffer.wrap(b);
 
@@ -144,6 +142,12 @@ public class CoinRenderer implements GLSurfaceView.Renderer {
 
          
          Bitmap sb=Bitmap.createBitmap(bt, w, h, Bitmap.Config.ARGB_8888);
+         try {
+             FileOutputStream out = new FileOutputStream(filename);
+             sb.compress(Bitmap.CompressFormat.PNG, 90, out);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
 
          return sb;
 

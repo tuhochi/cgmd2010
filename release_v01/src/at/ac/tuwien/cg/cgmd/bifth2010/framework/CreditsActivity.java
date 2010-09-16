@@ -17,6 +17,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
 import at.ac.tuwien.cg.cgmd.bifth2010.R;
@@ -108,6 +109,10 @@ public class CreditsActivity extends Activity {
 		}
 
 		setContentView(R.layout.l00_credits);
+		
+		TextView v = (TextView) findViewById(R.id.l00_TextViewCredits02);
+        v.setMovementMethod(LinkMovementMethod.getInstance());
+        
 		TextView t = (TextView)findViewById(R.id.l00_TextViewCredits);
 		ArrayList<Credit> list = mCreditsParser.getCreditsList();
 
@@ -228,12 +233,35 @@ public class CreditsActivity extends Activity {
 			}
 		}
 
-		String alltext = getResources().getString(R.string.l00_credits_10) + " \n";
+		String alltext = "";
 
 		alltext += "\n";
 		for(String m : authors) {
 			alltext+= m +", ";
 		}
+		alltext+="\n";
+		alltext+=getResources().getString(R.string.l00_about_03)+" ";
+		alltext+=getResources().getString(R.string.l00_about_04)+" ";
+		alltext+=getResources().getString(R.string.l00_about_05)+" ";
+		alltext+=getResources().getString(R.string.l00_about_06)+" ";
+		alltext+=getResources().getString(R.string.l00_about_07)+" ";
+		alltext+=getResources().getString(R.string.l00_about_08)+" ";
+		alltext+=getResources().getString(R.string.l00_about_09)+" ";
+		alltext+=getResources().getString(R.string.l00_about_10)+" ";
+		alltext+=getResources().getString(R.string.l00_about_11)+" ";
+		alltext+=getResources().getString(R.string.l00_about_12)+" ";
+		alltext+=getResources().getString(R.string.l00_about_13)+" ";
+		alltext+=getResources().getString(R.string.l00_about_14)+" ";
+		alltext+=getResources().getString(R.string.l00_about_15)+" ";
+		alltext+=getResources().getString(R.string.l00_about_16)+" ";
+		alltext+=getResources().getString(R.string.l00_about_17)+" ";
+		alltext+=getResources().getString(R.string.l00_about_18)+" ";
+		alltext+=getResources().getString(R.string.l00_about_19)+" ";
+		alltext+=getResources().getString(R.string.l00_about_20)+" ";
+		alltext+=getResources().getString(R.string.l00_about_21)+" ";
+		alltext+=getResources().getString(R.string.l00_about_22)+" ";
+		alltext+=getResources().getString(R.string.l00_about_23)+" ";
+		alltext+=getResources().getString(R.string.l00_about_24)+"\n";
 		alltext+= getResources().getString(R.string.l00_credits_11) +"\n\n\n";
 
 		if(!music.isEmpty()){

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+	android:oneshot="false">
+	<item android:drawable="@drawable/l00_coin0" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin1" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin2" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin3" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin4" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin5" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin6" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin7" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin8" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin9" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin10" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin11" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin12" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin13" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin14" android:duration="40" />
+	<item android:drawable="@drawable/l00_coin15" android:duration="40" />
+</animation-list>
