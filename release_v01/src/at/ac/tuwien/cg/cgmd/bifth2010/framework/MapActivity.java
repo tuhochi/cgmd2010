@@ -155,9 +155,9 @@ public class MapActivity extends Activity implements ShakeListener {
 	/**
 	 * shake detector  
 	 */
-	private ShakeDetector mShakeDetector = null;
+	//private ShakeDetector mShakeDetector = null;
 
-	
+
 	/* deprecated for release: 
 	 * is this game restarted or a new one
 	 */
@@ -176,7 +176,7 @@ public class MapActivity extends Activity implements ShakeListener {
 	 * The level the user already reached. At the start the reached level is 3 (i.e., the first three levels can be played)
 	 *  
 	 */
-	private int mMaxAllowedLevel = DEFAULT_MAXLEVEL;
+	//private int mMaxAllowedLevel = DEFAULT_MAXLEVEL;
 
 
 
@@ -244,58 +244,60 @@ public class MapActivity extends Activity implements ShakeListener {
 				break;
 			case R.id.l00_ImageButtonLevel07:
 				Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_02), Toast.LENGTH_LONG).show();
-				mShakeDetector.resume();
+				/*mShakeDetector.resume();
 				TimerTask tt = new TimerTask(){
 					@Override
 					public void run() {
 						mShakeDetector.pause();
 					}
 				};
-				
+
 				Timer t = new Timer();
-				t.schedule(tt, 3500);
+				t.schedule(tt, 3500);*/
 
 				return;
 			};
 
-			if((iLevel<=mMaxAllowedLevel)&&(iLevel>=1)&&(iLevel<=Constants.NUMBER_OF_LEVELS_TO_PLAY)) {
-				SessionState s = new SessionState();
-				s.setLevel(iLevel);
-				s.setProgress(mProgress);
-				s.setMusicAndSoundOn(mMusicOn);
-				mShakeDetector.resume();
-				//set appropriate level to start
-				String sAction = Constants.getLevelActionString(getLevelAssignment(iLevel-1));
-				Intent levelIntent = new Intent();
-				levelIntent.setAction(sAction);
-				levelIntent.putExtras(s.asBundle());
-				try{
-					startActivityForResult(levelIntent, 1);
-				} catch(ActivityNotFoundException e) {
-					Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_03), Toast.LENGTH_SHORT).show();
+			if((iLevel>=1)&&(iLevel<=Constants.NUMBER_OF_LEVELS_TO_PLAY)){
+				if((iLevel*100<=mProgress)||(iLevel==1)||(iLevel==2)||(iLevel==3)) {
+					SessionState s = new SessionState();
+					s.setLevel(iLevel);
+					s.setProgress(mProgress);
+					s.setMusicAndSoundOn(mMusicOn);
+					//mShakeDetector.resume();
+					//set appropriate level to start
+					String sAction = Constants.getLevelActionString(getLevelAssignment(iLevel-1));
+					Intent levelIntent = new Intent();
+					levelIntent.setAction(sAction);
+					levelIntent.putExtras(s.asBundle());
+					try{
+						startActivityForResult(levelIntent, 1);
+					} catch(ActivityNotFoundException e) {
+						Toast.makeText(MapActivity.this, getResources().getString(R.string.l00_map_03), Toast.LENGTH_SHORT).show();
+					}
+				} else { 
+					if(mMusicOn) {
+						//play "level-unallowed"-sound
+						MediaPlayer soundPlayer = MediaPlayer.create(MapActivity.this, R.raw.l00_unallowed);
+						try {
+							if(soundPlayer!=null){
+								soundPlayer.setOnCompletionListener(new OnCompletionListener(){
+									@Override
+									public void onCompletion(MediaPlayer mp) {
+										mp.release();
+									}
+
+								});
+
+								soundPlayer.start();
+							}
+
+						} catch (IllegalStateException e) {
+							//ignore this case
+						} 				
+					}
+					Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 				}
-			} else { 
-				if(mMusicOn) {
-					//play "level-unallowed"-sound
-					MediaPlayer soundPlayer = MediaPlayer.create(MapActivity.this, R.raw.l00_unallowed);
-					try {
-						if(soundPlayer!=null){
-							soundPlayer.setOnCompletionListener(new OnCompletionListener(){
-								@Override
-								public void onCompletion(MediaPlayer mp) {
-									mp.release();
-								}
-
-							});
-
-							soundPlayer.start();
-						}
-
-					} catch (IllegalStateException e) {
-						//ignore this case
-					} 				
-				}
-				Toast.makeText(getApplicationContext(), R.string.l00_unallowedLevel, Toast.LENGTH_LONG).show();
 			}
 		}
 	};
@@ -307,43 +309,45 @@ public class MapActivity extends Activity implements ShakeListener {
 
 		public void handleMessage(android.os.Message msg) {
 
-						//show level icons for levels <=mMaxAllowedLevel
-			if(mMaxAllowedLevel>=1){
+			//animate players progress
+			int progress = msg.what;
+
+
+			//show level icons for levels <=mMaxAllowedLevel
+			if(true){
 				//get hardcoded values for level icon resources
 				int iLevelIconResource = Constants.getLevelIconResource(getLevelAssignment(0));
 				mLayout.findViewById(R.id.l00_ImageButtonLevel01).setBackgroundResource(iLevelIconResource);
 			}
-			if(mMaxAllowedLevel>=2){
+			if(true){
 				//get hardcoded values for level icon resources
 				int iLevelIconResource = Constants.getLevelIconResource(getLevelAssignment(1));
 				mLayout.findViewById(R.id.l00_ImageButtonLevel02).setBackgroundResource(iLevelIconResource);
 			}
-			if(mMaxAllowedLevel>=3){
+			if(true){
 				//get hardcoded values for level icon resources
 				int iLevelIconResource = Constants.getLevelIconResource(getLevelAssignment(2));
 				mLayout.findViewById(R.id.l00_ImageButtonLevel03).setBackgroundResource(iLevelIconResource);
 			}
-			if(mMaxAllowedLevel>=4){
+			if(progress>=400){
 				//get hardcoded values for level icon resources
 				int iLevelIconResource = Constants.getLevelIconResource(getLevelAssignment(3));
 				mLayout.findViewById(R.id.l00_ImageButtonLevel04).setBackgroundResource(iLevelIconResource);
 			}
-			if(mMaxAllowedLevel>=5){
+			if(progress>=500){
 				//get hardcoded values for level icon resources
 				int iLevelIconResource = Constants.getLevelIconResource(getLevelAssignment(4));
 				mLayout.findViewById(R.id.l00_ImageButtonLevel05).setBackgroundResource(iLevelIconResource);
 			}
-			if(mMaxAllowedLevel>=6){
+			if(progress>=600){
 				//get hardcoded values for level icon resources
 				int iLevelIconResource = Constants.getLevelIconResource(getLevelAssignment(5));
 				mLayout.findViewById(R.id.l00_ImageButtonLevel06).setBackgroundResource(iLevelIconResource);
 			}
 
-			//animate players progress
-			int iCounter = msg.what;
-			
+
 			//if player is passing by a icon play a sound
-			if ((iCounter==100)||(iCounter==200)||(iCounter==300)||(iCounter==400)||(iCounter==500)||(iCounter==600)) {
+			if ((progress==100)||(progress==200)||(progress==300)||(progress==400)||(progress==500)||(progress==600)) {
 				if(mMusicOn) {
 					MediaPlayer soundPlayer = MediaPlayer.create(MapActivity.this, R.raw.l00_newlevel);
 					try {
@@ -364,17 +368,26 @@ public class MapActivity extends Activity implements ShakeListener {
 				}
 			} 
 
-			
-			float fProgress = (float)iCounter / 100.0f; 
+			if(progress==700){
+				//user won
+				//finish game
+				Intent intent = new Intent();
+				intent.setClassName("at.ac.tuwien.cg.cgmd.bifth2010", AboutActivity.class.getCanonicalName());
+				startActivity(intent);
+				finish();
+			}
+
+
+			float fProgress = (float)progress / 100.0f; 
 			PathPoint p = mPath.interpolate(fProgress);
 			mLayout.setRelativePosition(mPlayer, p.mX, p.mY);
-			int iGold = 700 - iCounter;
+			int iGold = 700 - progress;
 			mStateTextView.setText(iGold+getResources().getString(R.string.l00_map_04));
 			mPlayer.invalidate();
 		};
 	};
 
-	
+
 	///////////////////////////////////////////////
 
 
@@ -389,8 +402,8 @@ public class MapActivity extends Activity implements ShakeListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mShakeDetector = new ShakeDetector(this, this, 100, 3000, 5);
-		mShakeDetector.pause();
+		/*mShakeDetector = new ShakeDetector(this, this, 100, 3000, 5);
+		mShakeDetector.pause();*/
 
 
 		/* deprecated for release: 
@@ -399,10 +412,10 @@ public class MapActivity extends Activity implements ShakeListener {
 			bRestart = savedInstanceState.getBoolean(INSTANCESTATE_IS_RESTARTING, false);
 		}*/
 		Intent callingIntent = getIntent();
-		
+
 		/* deprecated for release:
 		if(callingIntent!=null) {
-			 
+
 			if((!bRestart)&&(callingIntent.getBooleanExtra(EXTRA_STARTNEW, false))){
 				//init the game state
 				//int[] iLevelAssignment = callingIntent.getIntArrayExtra(EXTRA_DEBUG_LEVELASSIGNMENT);
@@ -413,8 +426,8 @@ public class MapActivity extends Activity implements ShakeListener {
 				resumeGameState();
 				Log.d(CLASS_TAG, "Resuming game state!");
 			}
-			
-			
+
+
 
 			if(callingIntent.getBooleanExtra(EXTRA_MUSIC_ON, false)){
 				mMusicOn=true;
@@ -426,8 +439,8 @@ public class MapActivity extends Activity implements ShakeListener {
 			//resume game state every time the activity is restarted by the system
 			resumeGameState();
 		}
-		*/
-		
+		 */
+
 		if(callingIntent!=null) {
 			if(callingIntent.getBooleanExtra(EXTRA_MUSIC_ON, false)){
 				mMusicOn=true;
@@ -435,11 +448,11 @@ public class MapActivity extends Activity implements ShakeListener {
 				mMusicOn=false;
 			}
 		}
-		
+
 		if(mProgress>=700){
 			//user won the game already and is starting it again -> initialize variables
 			mProgress = 0;
-			mMaxAllowedLevel = DEFAULT_MAXLEVEL;
+			//mMaxAllowedLevel = DEFAULT_MAXLEVEL;
 			storeGameState();
 		} else {
 			resumeGameState();
@@ -485,7 +498,7 @@ public class MapActivity extends Activity implements ShakeListener {
 		fl.addView(mLayout);
 
 		mPlayer = (ImageView) findViewById(R.id.l00_ImageButtonPlayer);
-		Animation animation = new AlphaAnimation(0.9f,0.6f);
+		Animation animation = new AlphaAnimation(0.9f,0.4f);
 		animation.setInterpolator(new AccelerateInterpolator());
 		animation.setRepeatMode(Animation.REVERSE);
 		animation.setRepeatCount(Animation.INFINITE);
@@ -548,12 +561,12 @@ public class MapActivity extends Activity implements ShakeListener {
 	}
 
 	/* deprecated for release: 
-	 
+
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putBoolean(INSTANCESTATE_IS_RESTARTING, true);
 		super.onSaveInstanceState(outState);
 	}
-	*/
+	 */
 
 	@Override
 	protected void onResume() {
@@ -590,9 +603,9 @@ public class MapActivity extends Activity implements ShakeListener {
 				mLoopPlayer.pause();
 			}
 		}
-		if(mShakeDetector!=null){
+		/*if(mShakeDetector!=null){
 			mShakeDetector.pause();
-		}
+		}*/
 		super.onPause();
 	}
 
@@ -619,13 +632,13 @@ public class MapActivity extends Activity implements ShakeListener {
 			//points must always be in the range 0-100
 			SessionState s = new SessionState(data.getExtras());
 			int iPoints = s.getProgress();
-			
+
 			increaseProgress(iPoints);
 
 			storeGameState();
 
 			if(iPoints > 0){
-				
+
 				String message = "";
 				message+=getResources().getString(R.string.l00_map_06)+iPoints+getResources().getString(R.string.l00_map_07);
 				Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -647,21 +660,18 @@ public class MapActivity extends Activity implements ShakeListener {
 					} 
 				}
 			}
-			
-			
+
+
 
 			if (mProgress >= 700)
 			{
 				//user won
 				//finish game
 				Toast.makeText(this, getResources().getString(R.string.l00_map_08), Toast.LENGTH_LONG).show();
-				Intent intent = new Intent();
-				intent.setClassName("at.ac.tuwien.cg.cgmd.bifth2010", AboutActivity.class.getCanonicalName());
-				startActivity(intent);
-				finish();
+
 			} 
 		}
-		
+
 		Log.d(CLASS_TAG, "Storing game state!");
 
 	}
@@ -671,7 +681,7 @@ public class MapActivity extends Activity implements ShakeListener {
 		SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_GAMESTATE_FILE, 0);
 		SharedPreferences.Editor editor = state.edit();
 		editor.putInt(PREFERENCE_PROGRESS, mProgress);
-		editor.putInt(PREFERENCE_MAXLEVEL, mMaxAllowedLevel);
+		//editor.putInt(PREFERENCE_MAXLEVEL, mMaxAllowedLevel);
 		//deprecated for release: editor.putInt(PREFERENCE_MAXPLAYEDLEVEL, mMaxPlayedLevel);
 		//deprecated for release: although the level assignment is part of the game state it doesn't need to be stored each time the game state changes  
 		editor.commit();
@@ -681,10 +691,10 @@ public class MapActivity extends Activity implements ShakeListener {
 	private void resumeGameState() {
 		SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_GAMESTATE_FILE, 0);
 		mProgress = state.getInt(PREFERENCE_PROGRESS, 0);
-		mMaxAllowedLevel = state.getInt(PREFERENCE_MAXLEVEL, DEFAULT_MAXLEVEL);
+		//mMaxAllowedLevel = state.getInt(PREFERENCE_MAXLEVEL, DEFAULT_MAXLEVEL);
 		if(mProgress>=700){
 			mProgress = 0;
-			mMaxAllowedLevel = DEFAULT_MAXLEVEL;
+			//mMaxAllowedLevel = DEFAULT_MAXLEVEL;
 		}
 		//deprecated for release: mMaxPlayedLevel = state.getInt(PREFERENCE_MAXPLAYEDLEVEL, 0);
 		//deprecated for release: set level assignment of current session
@@ -724,7 +734,7 @@ public class MapActivity extends Activity implements ShakeListener {
 		}
 		editor.commit();
 	}
-*/
+	 */
 
 	/* deprecated for release: 
 	private int[] getNextLevelAssignment(int iStartLevel) {
@@ -741,7 +751,7 @@ public class MapActivity extends Activity implements ShakeListener {
 		}
 		return assignment;
 	}
-	*/
+	 */
 
 	private int getLevelAssignment(int iIndex){
 		return Integer.parseInt(Constants.LEVELIDS[iIndex]);
@@ -751,33 +761,36 @@ public class MapActivity extends Activity implements ShakeListener {
 
 	private void increaseProgress(int iDelta) {
 		int iOldProgress = mProgress;
-		int iOldHundrets = iOldProgress / 100;
+		//int iOldHundrets = iOldProgress / 100;
 
 		mProgress+=iDelta;
-		int iNewHudrets = mProgress / 100;
+		//int iNewHudrets = mProgress / 100;
 
-		if(iOldHundrets != iNewHudrets){
+		/*if(iOldHundrets != iNewHudrets){
 			mMaxAllowedLevel++;
-		}		
-		
-		
+		}		*/
+
+
 		//tell the ui to update the progress
-		
+
+		if(mProgress>700){
+			mProgress=700;
+		}
 		TimerTask task = new AnimationTask(iOldProgress, mProgress);				
 		Timer timer = new Timer();
 		timer.schedule(task, 0, 100);
 	}
-	
+
 	private class AnimationTask extends TimerTask{
-		
+
 		int mCounter = 0;
 		int mEnd = 0;
-		
+
 		public AnimationTask(int iStart, int iEnd){
 			mCounter = iStart;
 			mEnd = iEnd;
 		}
-		
+
 		@Override
 		public void run() {
 			mCounter++;
@@ -800,7 +813,7 @@ public class MapActivity extends Activity implements ShakeListener {
 			mMaxPlayedLevel = 0;
 		}*/
 
-		mMaxAllowedLevel++;
+		//mMaxAllowedLevel++;
 
 
 		if(mMusicOn) {
@@ -823,8 +836,8 @@ public class MapActivity extends Activity implements ShakeListener {
 			} 				
 		}
 
-		SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_GAMESTATE_FILE, 0);
-		SharedPreferences.Editor editor = state.edit();
+		//SharedPreferences state = getSharedPreferences(SHAREDPREFERENCES_FRAMEWORK_GAMESTATE_FILE, 0);
+		//SharedPreferences.Editor editor = state.edit();
 
 		/* deprecated for release: 
 		editor.putInt(PREFERENCE_MAXPLAYEDLEVEL, mMaxPlayedLevel);
@@ -834,8 +847,8 @@ public class MapActivity extends Activity implements ShakeListener {
 		}
 		editor.commit();*/
 
-		editor.putInt(PREFERENCE_MAXLEVEL, mMaxAllowedLevel);
-		editor.commit();
+		//editor.putInt(PREFERENCE_MAXLEVEL, mMaxAllowedLevel);
+		//editor.commit();
 
 		mUiUpdateHandler.sendEmptyMessage(mProgress);
 		storeGameState();

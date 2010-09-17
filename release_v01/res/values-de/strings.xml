@@ -4,7 +4,7 @@
     
     <string name="l00_error_audio">"Audiowiedergabe funktioniert derzeit nicht. Starten sie das Spiel oder das Gerät neu um Audiowiedergabe möglicherweise wieder herzustellen."</string>
   
-    <string name="l00_help_part03">Die Anordnung der Levels wird zufällig erstellt wenn sie ein neues Spiel starten. Hier folgt eine Liste von allen Levels. Um die Hilfe eines bestimmten Levels aufzurufen, clicken sie auf das zugehörige Icon.</string>
+    <string name="l00_help_part03">Hier folgt eine Liste von allen Levels. Um die Hilfe eines bestimmten Levels aufzurufen, clicken sie auf das zugehörige Icon.</string>
     <string name="l00_help_part02">Um einen Teil ihres Vermögens zu verlieren müssen sie ein Level ihrer Wahl spielen. Clicken sie dazu auf das Icon in der Übersichtskarte. Levels die mit einem Fragezeichen markiert sind können noch nicht gespielt werden und müssen erst freigespielt werden.</string>
     <string name="l00_help_part01">Wählen sie einen der Menüpunkte aus um zu spielen, zur Hilfe zu gelangen, oder um die Credits zu sehen. Wenn sie ein Spiel gestartet haben werden sie eine Übersichtskarte sehen. Auf dieser Karte können sie die derzeit spielbaren Levels und ihren Fortschritt beim Verlieren ihres Vermögens sehen.</string>
     

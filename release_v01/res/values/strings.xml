@@ -4,7 +4,7 @@
     
     <string name="l00_error_audio">"Audio replay is currently not working. Restarting the game or phone might help."</string>
   
-    <string name="l00_help_part03">The placement of the levels is randomly chosen when you start a game. Here is a list of all possible levels. To see the help for an individual level click on its icon!</string>
+    <string name="l00_help_part03">Here is a list of all possible levels. To see the help for an individual level click on its icon!</string>
     <string name="l00_help_part02">To lose part of your treasure play the level of your choice by pressing its icon. Levels that are marked with a question mark cannot be played yet. </string>
     <string name="l00_help_part01">Choose one of the menu items to play, get some help, or to see the credits. \nOnce you started a game you will see a map that displays the levels you can currently play and your progress of your quest to lose your treasure.</string>
     

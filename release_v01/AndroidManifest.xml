@@ -8,12 +8,13 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<application
 		android:icon="@drawable/l00_icon"
-		android:label="@string/l00_nameofthegame_full" android:debuggable="true">
+		android:label="@string/l00_nameofthegame_full" android:debuggable="false">
 		
 
 		
 
 		<activity
+			android:theme="@android:style/Theme.NoTitleBar"
 			android:name=".framework.MenuActivity"
 			android:label="@string/l00_nameofthegame_full"
 			android:screenOrientation="portrait">
@@ -27,17 +28,20 @@
 			
 
 		<activity
+			android:theme="@android:style/Theme.NoTitleBar"
 			android:name=".framework.CreditsActivity"
 			android:label="@string/l00_nameofthegame_full">
 			
 		</activity>
 
 		<activity
+			android:theme="@android:style/Theme.NoTitleBar"
 			android:name=".framework.HelpActivity"
 			android:label="@string/l00_nameofthegame_full">
 		</activity>
 
 		<activity
+			android:theme="@android:style/Theme.NoTitleBar"
 			android:name=".framework.AboutActivity"
 			android:label="@string/l00_nameofthegame_full"
 			android:screenOrientation="sensor"

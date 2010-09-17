@@ -4,9 +4,9 @@
 	
 <LinearLayout 
 	android:orientation="vertical"
-	android:layout_width="fill_parent" android:layout_height="fill_parent" android:visibility="gone" android:id="@+id/l00_LinearLayoutMenu">
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/l00_LinearLayoutMenu" android:visibility="visible"><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_title" android:layout_margin="10dip"></ImageView>
 
-<TableLayout android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:gravity="center_vertical|center_horizontal" android:layout_height="wrap_content" android:layout_marginTop="100dp">
+<TableLayout android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:gravity="center_vertical|center_horizontal" android:layout_height="wrap_content" android:layout_marginTop="10dp">
 <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginBottom="1pt">
 <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_coin" android:layout_gravity="center_vertical"></ImageView>
 <Button android:id="@+id/l00_ButtonContinueGame" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="100px" android:layout_gravity="center_vertical" android:layout_marginLeft="5pt" android:layout_marginRight="10pt" android:text="@string/l00_menu_03"></Button>
@@ -25,10 +25,13 @@
 
 <CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_CheckBoxSound" android:typeface="sans" android:textColor="@color/l00_buttonBackground" android:checked="true" android:layout_marginLeft="35dip" android:text="@string/l00_menu_08"></CheckBox>
 </TableLayout>
-<AbsoluteLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/l00_AbsoluteLayoutAnimation" android:layout_marginTop="50dp">
+<AbsoluteLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/l00_AbsoluteLayoutAnimation" android:layout_marginTop="10dip">
 
 <LinearLayout android:layout_width="wrap_content" android:id="@+id/l00_LinearLayoutAnimation" android:orientation="horizontal" android:layout_height="fill_parent"><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/l00_ImageViewAnimationCoin" android:background="@drawable/l00_animation_coin"></ImageView><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/l00_animation_run" android:id="@+id/l00_ImageViewAnimationRun"></ImageView></LinearLayout>
 </AbsoluteLayout>
+
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="centerInside" android:layout_margin="20dip" android:background="@drawable/l00_loose"></ImageView>
 </LinearLayout>
-<ImageView android:scaleType="fitCenter" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:id="@+id/l00_ImageViewSplash" android:src="@drawable/l00_splashscreen_high"/>
+<ImageView android:scaleType="fitCenter" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center_vertical|center_horizontal|center" android:id="@+id/l00_ImageViewSplash" android:src="@drawable/l00_splashscreen_high" android:visibility="gone"/>
+
 </FrameLayout>

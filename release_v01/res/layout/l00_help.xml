@@ -3,7 +3,8 @@
 	android:layout_height="wrap_content"
 	android:orientation="vertical" android:layout_width="fill_parent">
 	
-	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Help of Level 00"></TextView>
+	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_margin="10dip" android:gravity="center" android:textSize="18dip" android:text="@string/l00_menu_05"></TextView><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Help of Level 00"></TextView>
+
 
 
 
